@@ -1,0 +1,7 @@
+[Desktop Entry]
+Comment=MPEG-Layer-3-Audio
+Hidden=false
+Icon=sound
+MimeType=audio/x-mpegurl
+Patterns=*.m3u;*.M3U
+Type=MimeType

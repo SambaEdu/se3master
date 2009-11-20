@@ -1,0 +1,56 @@
+#!/bin/sh -f
+
+# MYSQL
+. /root/.my.cnf 2&>/dev/null
+
+mysql_all_save=$(/usr/bin/mysql --skip-column-names -s -h localhost -u root -p$password se3db -e "select value from params where name='mysql_all_save';")
+
+if [ "$mysql_all_save" == "on" ]; then
+    # List les bases sur le serveur source
+    /usr/bin/mysql -h localhost -u root -p$password  -e "show databases" | grep -v Database > /var/se3/save/bases
+    if [ ! -d /var/se3/save/mysql ]; then
+    	mkdir -p /var/se3/save/mysql
+    fi
+    sleep 5
+    cat /var/se3/save/bases | while read A
+    do
+      if [ "$A" != "mysql" -a "$A" != "se3db" ]
+      then
+      	/usr/bin/mysqldump -cQ --opt --add-drop-table -h localhost -u root -p$password -B $A > /var/se3/save/mysql/$A.sql
+      fi
+    done
+fi
+
+if [ -e /var/www/se3/includes/config.inc.php ]; then
+        dbhost=`cat /var/www/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d '"' -f 2`
+        dbname=`cat /var/www/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d '"' -f 2`
+        dbuser=`cat /var/www/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 |cut -d '"' -f 2`
+        dbpass=`cat /var/www/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 |cut -d '"' -f 2`
+else
+        echo "impossible d acceder aux params mysql"
+        exit 1
+fi
+
+NAS_mntsuffix=`mysql se3db -u $dbuser -p$dbpass -B -N -e "select value from params where name='NAS_mntsuffix'"`
+if [ "$NAS_mntsuffix" = "pc" ]; then
+        repsauve="/var/lib/backuppc/pc"
+else
+        repsauve="/var/lib/backuppc"
+fi
+
+[ -h $repsauve ] && repsauve=`readlink $repsauve`
+for i in $(mount | tr " " "@"); do
+pt_mnt=$(echo $i | cut -d "@" -f3)
+if [ $pt_mnt == $repsauve ]; then
+TESTMNT="ok"
+fi
+done
+
+if [ "$TESTMNT" == "ok" ]; then
+	exec /bin/tar -c $*
+else 
+	echo "Erreur, aucune ressource mont&#233;e sur $repsauve, la sauvegarde backuppc a &#233;chou&#233;e. V&#233;rifiez votre unit&#233; de sauvegarde !!" |
+	mail -s "[SE3] : probl&#232;me avec la sauvegarde backuppc" root
+	exit 1
+fi
+

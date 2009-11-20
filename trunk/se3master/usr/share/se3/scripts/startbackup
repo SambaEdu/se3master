@@ -1,0 +1,45 @@
+#!/bin/sh
+#
+### $Id$ ###
+#
+
+##### Script pour lancer ou stopper  via sudo backuppc #####
+
+[ ! -d /var/lib/backuppc/pc ] && mkdir /var/lib/backuppc/pc
+[ ! -d /var/lib/backuppc/cpool ] && mkdir /var/lib/backuppc/cpool
+
+if [ "$1" = "stop" -o  "$1" = "start"  -o  "$1" = "reload"  -o  "$1" = "restart" ]
+then
+	/etc/init.d/backuppc $1
+else 
+	echo "startbackup [start|stop|reload|restart]"
+	exit 1;
+fi	
+
+if [ "$1" == "stop" ]
+then
+	update-rc.d -f backuppc remove
+	update-rc.d -f backuppc stop 0 1 2 3 4 5 6 .
+
+	# On vérifie (semble pas toujours vouloir stopper)
+	if [ "`/bin/ps awux | grep BackupPC_trashClean | grep -v grep`" != "" ]
+	then
+		killall -9 BackupPC_trashClean
+	fi
+	if [ "`/bin/ps awux | grep BackupPC | grep -v grep`" != "" ]
+	then
+		killall -9 BackupPC
+	fi
+
+fi
+if [ "$1" = "start" ]
+then
+	ps ax|grep BackupPC >/dev/null|| (
+		echo "Correction droits sur backuppc"
+		/usr/share/se3/sbin/droit_backuppc.sh
+		/etc/init.d/backuppc start
+	)
+	update-rc.d -f backuppc remove
+	update-rc.d backuppc defaults
+
+fi	

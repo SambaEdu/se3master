@@ -1,0 +1,19 @@
+Installation
+------------
+Installation should be really simple.. Just untar the package into somewhere
+accessible by your web server, and edit config.inc.php file.
+YALA files can (must??) be read-only for the web server, it only needs write access into CACHE_PATH (defined in config.inc.php) directory.
+
+We assume you already have a web browser working and configured with php
+support.
+
+For help in installing php on your web server, please refer to php.net.
+
+
+
+Upgrading
+---------
+While upgrading don't forget to read the ChangeLog. You'll probably want to
+keep using your old configuration file, but there might've been changes in
+this file in the new version. Such changes will be reported in the 
+ChangeLog.

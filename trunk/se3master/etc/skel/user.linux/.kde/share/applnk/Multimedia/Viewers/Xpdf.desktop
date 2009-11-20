@@ -1,0 +1,8 @@
+[Desktop Entry]
+Comment=Xpdf: Portable Document Format (PDF) file viewer for X
+Exec=/usr/bin/xpdf
+Icon=mime_empty
+MimeType=Application;application/pdf
+Name=Xpdf
+ServiceTypes=
+Type=Application

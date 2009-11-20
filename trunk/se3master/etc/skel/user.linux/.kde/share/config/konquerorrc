@@ -1,0 +1,124 @@
+[FMSettings]
+AlwaysNewWin=false
+DisplayFileSizeInBytes=false
+FileTipsItems=6
+HomeURL=~
+MMBOpensTab=true
+NewTabsInFront=false
+NormalTextColor=0,0,0
+ShowFileTips=true
+ShowPreviewsInFileTips=true
+StandardFont=helvetica,10,-1,5,50,0,0,0,0,0
+UnderlineLinks=false
+WordWrapText=false
+
+[HTML Settings]
+AutoDelayedActions=true
+AutoLoadImages=true
+ChangeCursor=true
+DefaultEncoding=
+FontSize=1
+Fonts=helvetica,,,,,,0
+FormCompletion=true
+HoverLinks=true
+MaxFormCompletionItems=10
+MediumFontSize=10
+MinimumFontSize=7
+ShowAnimations=Enabled
+UnderlineLinks=false
+UserStyleSheet=
+UserStyleSheetEnabled=false
+gb2312.1980-0=helvetica,courier,times,helvetica,helvetica,helvetica
+iso8859-1=helvetica,courier,times,helvetica,helvetica,helvetica
+iso8859-15=helvetica,courier,times,helvetica,helvetica,helvetica
+iso8859-2=helvetica,courier,times,helvetica,helvetica,helvetica
+iso8859-7=helvetica,courier,times,helvetica,helvetica,helvetica
+iso8859-8=helvetica,courier,times,helvetica,helvetica,helvetica
+iso8859-9=helvetica,courier,times,helvetica,helvetica,helvetica
+jisx0208.1983-0=helvetica,courier,times,helvetica,helvetica,helvetica
+koi8-r=helvetica,courier,times,helvetica,helvetica,helvetica
+ksc5601.1987-0=helvetica,courier,times,helvetica,helvetica,helvetica
+
+[HistorySettings]
+Detailed Tooltips=true
+Font olderThan=helvetica,12,-1,5,50,1,0,0,0,0
+Font youngerThan=helvetica,12,-1,5,50,0,0,0,0,0
+Maximum age of History entries=500
+Maximum of History entries=500
+Metric olderThan=days
+Metric youngerThan=days
+Value olderThan=2
+Value youngerThan=1
+
+[Java/JavaScript Settings]
+AppletServerTimeout=60
+DisableWindowOpen=false
+ECMADomainSettings=
+EnableJSDebugOutput=false
+EnableJava=true
+EnableJavaScript=true
+EnablePlugins=true
+JavaArgs=
+JavaDomainSettings=
+JavaPath=java
+ShowJavaConsole=false
+ShutdownAppletServer=true
+UseSecurityManager=true
+WindowOpenPolicy=0
+
+[KonqMainWindow]
+MenuBar=Enabled
+
+[KonqMainWindow Toolbar bookmarkToolBar]
+Hidden=false
+IconSize=16
+IconText=IconTextRight
+Index=3
+NewLine=false
+Offset=-1
+Position=Top
+
+[KonqMainWindow Toolbar extraToolBar]
+Hidden=true
+IconSize=22
+IconText=IconOnly
+Index=0
+NewLine=false
+Offset=-1
+Position=Top
+
+[KonqMainWindow Toolbar locationToolBar]
+Hidden=false
+IconSize=22
+IconText=IconOnly
+Index=2
+NewLine=true
+Offset=0
+Position=Top
+
+[KonqMainWindow Toolbar mainToolBar]
+Hidden=false
+IconSize=22
+IconText=IconOnly
+Index=1
+NewLine=false
+Offset=-1
+Position=Top
+
+[MainView Settings]
+BackRightClick=false
+ToggableViewsShown=
+
+[Settings]
+BgImage=kenwimer.png
+
+[Trash]
+ConfirmDelete=true
+ConfirmShred=true
+ConfirmTrash=true
+
+[kuick-copy]
+ShowRecent=5
+
+[kuick-write]
+ShowRecent=5

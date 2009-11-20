@@ -1,0 +1,463 @@
+##
+## schema file for OpenLdap 2.0.x
+##  
+## Schema to store LTSP's lts.conf parameters
+##
+##
+
+objectIdentifier ofsetOID  1.3.6.1.4.1.17344
+objectIdentifier ltspOID ofsetOID:1
+objectIdentifier ltspAttr ltspOID:1
+objectIdentifier ltspClass ltspOID:2
+
+
+####################
+####################
+##
+## LTSP attributes
+##
+####################
+####################
+
+
+
+##
+## General Attributes
+##
+attributetype ( ltspAttr:1 NAME 'ltspServer'
+    DESC 'server used for the xdm, telnet, xfs and syslog'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64}
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:2 NAME 'ltspBasedir'
+    DESC 'LTSP root filesystems, default is /opt/ltsp'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{255}
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:3 NAME 'ltspSyslogHost'
+    DESC 'specific syslog host, default is ltspServer'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64}
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:4 NAME 'ltspNfsServer'
+    DESC 'specific NFS server, default is ltspServer'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64}
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:5 NAME 'ltspUseNfsSwap'
+    DESC 'use NFS swap'
+    EQUALITY booleanMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:6 NAME 'ltspSwapfileSize'
+    DESC 'size of the nfs swap file, default is 64M'
+    EQUALITY integerMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:7 NAME 'ltspSwapServer'
+    DESC 'specific swap file server, default is ltpsNfsSever'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64}
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:8 NAME 'ltspNfsSwapdir'
+    DESC 'directory exported via NFS, default is /var/opt/ltsp/swapfiles'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{255}
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:9 NAME 'ltspTelnetHost'
+    DESC 'specific host to telnet into for character ui, default is ltspServer'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64}
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:10 NAME 'ltspDnsServer'
+    DESC 'used to build the resolv.conf file'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64}
+    SINGLE-VALUE )
+    
+attributetype ( ltspAttr:11 NAME 'ltspSearchDomain'
+    DESC 'used to build the resolv.conf file'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64}
+    SINGLE-VALUE )
+  
+## It is multi-valued  
+attributetype ( ltspAttr:12 NAME 'ltspModules'
+    DESC 'up to 10 kernel modules can be loaded'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{128} )
+  
+attributetype ( ltspAttr:13 NAME 'ltspRamdiskSize'
+    DESC 'ramdisk size used when booting, changing this value will need to change the ramdisk size within the kernel'
+    EQUALITY integerMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+    SINGLE-VALUE )
+    
+## It is multi-valued
+attributetype ( ltspAttr:14 NAME 'ltspRcfiles'
+    DESC 'RC script(s) to be executed by rc.local'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{128} )
+
+attributetype ( ltspAttr:15 NAME 'ltspSound'
+    DESC 'use the LTSP sound package'
+    EQUALITY booleanMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:16 NAME 'ltspUiMode'
+    DESC 'use graphic (GUI) or text (CHAR) user interface'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{10}
+    SINGLE-VALUE )
+    
+attributetype ( ltspAttr:17 NAME 'ltspFloppy'
+    DESC 'use a LTSP floppy package'
+    EQUALITY booleanMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+    SINGLE-VALUE )
+
+
+##
+## X window attributes
+##
+attributetype ( ltspAttr:18 NAME 'ltspXServer'
+    DESC 'define the X server to use'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64}
+    SINGLE-VALUE )
+
+## It is multi-valued
+attributetype ( ltspAttr:19 NAME 'ltspXModes'
+    DESC 'up to three resolutions or modelines'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64} )
+
+attributetype ( ltspAttr:20 NAME 'ltspXColorDepth'
+    DESC 'number of bits for the color depth. Possible values are 8,15, 16, 24, 32'
+    EQUALITY integerMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:21 NAME 'ltspXdmServer'
+    DESC 'specific server XDM points to, default is ltspServer'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64} 
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:22 NAME 'ltspUseXfs'
+    DESC 'use a font server'
+    EQUALITY booleanMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:23 NAME 'ltspXfsServer'
+    DESC 'specific server XFS, default is ltspServer'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64}
+    SINGLE-VALUE )
+    
+attributetype ( ltspAttr:24 NAME 'ltspXHorzsync'
+    DESC 'set the XFree86 HorizSync configuration parameter, default is to "31-62'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{16}
+    SINGLE-VALUE )
+  
+attributetype ( ltspAttr:25 NAME 'ltspXVertrefresh'
+    DESC 'set the XFree86 VertRefresh configuration parameter, default is to 55-90'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{16}
+    SINGLE-VALUE )
+    
+attributetype ( ltspAttr:26 NAME 'ltspXf86configFile'
+    DESC 'specific XF86Config file in /opt/ltsp/i386/etc'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{16}
+    SINGLE-VALUE )
+    
+## It is multi-valued  
+attributetype ( ltspAttr:27 NAME 'ltspX4Modules'
+    DESC 'specifc X4 module to load'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{16} )
+
+
+##
+## Mouse attributes
+##
+attributetype ( ltspAttr:28 NAME 'ltspXMouseProtocol'
+    DESC 'Possible values are PS/2, auto, IMPS/2, IntelliMouse, Auto, usb, etc. Default is PS/2'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{16}
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:29 NAME 'ltspXMouseDevice'
+    DESC 'device node that the mouse is connected to, possible value are /dev/ttySo, /dev/ttyS1 for serial and /dev/psaux for PS2'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{16}
+    SINGLE-VALUE )
+    
+attributetype ( ltspAttr:30 NAME 'ltspXButtons'
+    DESC 'number of mouse buttons'
+    EQUALITY integerMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:31 NAME 'ltspXMouseEmulation3btn'    
+    DESC 'emulate a 3-button mouse by accepting a click of both the right and left mouse buttons simultaneously'
+    EQUALITY booleanMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:32 NAME 'ltspXMouseResolution'
+    DESC 'this is the Resolution value in the XF86Config  file. A typical value for a serial mouse is 50  and a typical value for a PS/2 mouse would be 400 . The default value for this is 400'
+    EQUALITY integerMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+    SINGLE-VALUE )
+  
+attributetype ( ltspAttr:33 NAME 'ltspXMouseBaud'
+    DESC 'for serial mice, this defines the baud rate, default is 1200'
+    EQUALITY integerMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:34 NAME 'ltspXZAxisMapping'
+    DESC 'set Z_Axis_Mapping possible value is "4 5" with 5 buttons'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{8}
+    SINGLE-VALUE )
+
+
+##
+## Keyboard attributes
+##
+attributetype ( ltspAttr:35 NAME 'ltspXkbdLayout'
+    DESC 'used layout, value are ISO code (fr, fr_CH, it, us, en, etc)'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{8}
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:36 NAME 'ltspXkbdModel'
+    DESC 'used keyboard model, value are pc101, pc102, etc.'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{8}
+    SINGLE-VALUE )
+  
+attributetype ( ltspAttr:37 NAME 'ltspXkbTypes'
+    DESC 'default value is default'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{8}
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:38 NAME 'ltspXkbCompat'
+    DESC 'default value is default'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{8}
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:39 NAME 'ltspXkbSymbols'
+    DESC 'default value is us(pc101)'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{8}
+    SINGLE-VALUE )
+
+
+##
+## Printer attributes
+##
+## All the printer attributes are multi-valued
+## values are stacked up to three printers
+
+attributetype ( ltspAttr:40 NAME 'ltspPrintersDevice'
+    DESC 'printers device name, possible names are /dev/lp0, /dev/ttyS0 or /dev/ttyS1'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{16} )
+
+attributetype ( ltspAttr:41 NAME 'ltspPrintersType'
+    DESC 'type of the printer, possible values are P or for Parallel, and S for Serial'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{1} )
+    
+attributetype ( ltspAttr:42 NAME 'ltspPrintersPort'
+    DESC 'TCP/IP Port number to use, defualt is 9100'
+    EQUALITY integerMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 )
+
+attributetype ( ltspAttr:43 NAME 'ltspPintersSpeed'
+    DESC ' if the printer is serial set its baud rate, default is 9600'
+    EQUALITY integerMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 )
+
+attributetype ( ltspAttr:44 NAME 'ltspPrintersFlowctrl'
+    DESC 'for serial printers set the flow control, S for Software (XON/XOFF) flow control, or H for Hardware (CTS/RTS) flow control, default is S'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{1} )
+
+attributetype ( ltspAttr:45 NAME 'ltspPrintersPariry'
+    DESC  'for serial printers et the Parity,  E for Even, O for Odd or N for None, default is N'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{1} )
+
+attributetype ( ltspAttr:46 NAME 'ltspPrintersDatabits'
+    DESC  'for serial printers, set the number of data bits: 5, 6, 7 or 8, default is 8'
+    EQUALITY integerMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 )
+
+
+##
+## Touch Screen attribtues
+##
+attributetype ( ltspAttr:47 NAME 'ltspUseTouch'
+    DESC 'use a touch screen'
+    EQUALITY booleanMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:48 NAME 'ltspTouchDevice'
+    DESC 'serial port to which is attached the touch screen, possible value are /dev/ttyS0'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{16}
+    SINGLE-VALUE )
+    
+attributetype ( ltspAttr:49 NAME 'ltspTouchMinX'
+    DESC 'calibration for an EloTouch, default is 433'
+    EQUALITY integerMatch 
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:50 NAME 'ltspTouchMaxX'
+    DESC 'calibration for an EloTouch, default is 3588'
+    EQUALITY integerMatch 
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:51 NAME 'ltspTouchMinY'
+    DESC 'calibration for an EloTouch, default is 569'
+    EQUALITY integerMatch 
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:52 NAME 'ltspTouchMaxY'
+    DESC 'calibration for an EloTouch, default is 3526'
+    EQUALITY integerMatch 
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:53 NAME 'ltspTouchUndelay'
+    DESC 'calibration for an EloTouch, default is 10'
+    EQUALITY integerMatch 
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+    SINGLE-VALUE )
+    
+attributetype ( ltspAttr:54 NAME 'ltspTouchRptdelay'
+    DESC 'calibration for an EloTouch, default is 10'
+    EQUALITY integerMatch 
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+    SINGLE-VALUE )
+
+##
+## Local attributes, to run application locally in the thin client
+##
+attributetype ( ltspAttr:55 NAME 'ltspLocalApps'
+    DESC 'run locally applications'
+    EQUALITY booleanMatch
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:56 NAME 'ltspNisDomain'
+    DESC 'nis domain, needed to run application locallly'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64}
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:57 NAME 'ltspNisServer'
+    DESC 'nis server, needed to run application locallly'
+    EQUALITY caseIgnoreIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{64}
+    SINGLE-VALUE )
+
+##
+## Sound attributes
+##
+attributetype ( ltspAttr:58 NAME 'ltspSoundDaemon'
+    DESC 'used daemon, value are nasd or esd'
+    EQUALITY caseExactIA5Match
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{8}
+    SINGLE-VALUE )
+
+attributetype ( ltspAttr:59 NAME 'ltspVolume'
+    DESC 'Speaker & Wave volume percentage, default 100'
+    EQUALITY integerMatch 
+    SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+    SINGLE-VALUE )
+    
+
+#######################
+#######################
+##
+## LTSP object classes
+##
+#######################
+#######################
+
+objectclass ( ltspClass:1 NAME 'ltspGeneral'
+    DESC 'general data'
+    SUP top
+    MUST ltspServer
+    MAY ( ltspBaseDir $ ltspSyslogHost $ ltspNfsServer $
+    ltspUseNfsSwap $ ltspSwapfileSize $ ltspSwapServer $
+    ltspNfsSwapdir $ ltspTelnetHost $ ltspDnsServer $
+    ltspSearchDomain $ ltspModules $ ltspRamdiskSize $
+    ltspRcfiles $ ltspSound $ ltspUiMode $ ltspFloppy ) )
+
+objectclass ( ltspClass:2 NAME 'ltspXwindow'
+    DESC 'Xwindow set up'
+    SUP top
+    MUST ( ltspXServer $ ltspXModes $ ltspXColorDepth)
+    MAY ( ltspXdmServer $ ltspUseXfs $ ltspXfsServer $
+    ltspXHorzsync $ ltspXVertrefresh $ ltspXf86configFile $
+    ltspX4Modules ) )
+
+objectclass ( ltspClass:3 NAME 'ltspXMouse'
+    DESC 'mouse set up for X window'
+    SUP top
+    MUST ( ltspXMouseProtocol $ ltspXMouseDevice $ ltspXButtons $
+    ltspXMouseEmulation3btn )
+    MAY ( ltspXMouseResolution $ ltspXMouseBaud $ ltspXZAxisMapping) )
+
+objectclass ( ltspClass:4 NAME 'ltspXkbd'
+    DESC 'keyboard set up for X window'
+    SUP top
+    MUST ( ltspXkbdLayout $ ltspXkbdModel )
+    MAY ( ltspXkbTypes $ ltspXkbCompat $ ltspXkbSymbols ) )
+
+objectclass ( ltspClass:5 NAME 'ltspPrinters'
+    DESC 'printers set up attached to the thin client'
+    SUP top
+    MAY ( ltspPrintersDevice $ ltspPrintersType $ ltspPrintersPort $
+    ltspPintersSpeed $ ltspPrintersFlowctrl $ ltspPrintersPariry $
+    ltspPrintersDatabits ) )
+
+objectclass ( ltspClass:6 NAME 'ltspTouchScreen'
+    DESC 'touch screen attached to the thin client'
+    SUP top
+    MAY ( ltspUseTouch $ ltspTouchDevice $ ltspTouchMinX $
+    ltspTouchMaxX $ ltspTouchMinY $ ltspTouchMaxY $
+    ltspTouchUndelay $ ltspTouchRptdelay ) )
+
+objectclass ( ltspClass:7 NAME 'ltspLocal'
+    DESC 'set up to run locally applications'
+    MAY ( ltspLocalApps $ ltspNisDomain $ ltspNisServer ) )
+
+objectclass ( ltspClass:8 NAME 'ltspSoundParams'
+    DESC 'Parameters for sound on thinclients'
+    MAY ( ltspSoundDaemon $ ltspVolume ) )

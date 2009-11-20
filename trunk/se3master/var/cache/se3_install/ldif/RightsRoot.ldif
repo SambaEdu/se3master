@@ -1,0 +1,3 @@
+dn: ou=#RIGHTS#,#BASEDN#
+objectClass: organizationalUnit
+ou: #RIGHTS#

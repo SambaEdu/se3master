@@ -1,0 +1,121 @@
+# SambaEdu 3
+
+
+# Global parameters
+[global]
+	workgroup = #DOMAIN#
+	netbios name = #NETBIOSNAME#
+	server string = Serveur SambaEdu 3
+	interfaces = #IPSERVEUR#/#MASK#
+	passdb backend = ldapsam:ldap://#SLAPDIP#
+	log file = /var/log/samba/%m.log
+	socket options = TCP_NODELAY SO_KEEPALIVE SO_SNDBUF=8192 SO_RCVBUF=8192
+	domain logons = Yes
+	os level = 66
+	domain master = Yes
+	dns proxy = No
+	wins support = Yes
+	ldap suffix = #BASEDN#
+	ldap machine suffix = #COMPUTERS#
+	ldap user suffix = #PEOPLE#
+	ldap group suffix = #GROUPS#
+	#ldap idmap suffix = #BASEDN#
+	#ldap filter = "(uid=%u)"
+	ldap admin dn = #ADMINRDN#,#BASEDN#
+	ldap ssl = start_tls
+	create mask = 0700
+	directory mask = 0700
+	inherit acls = Yes
+	printing = cups
+    printcap = cups
+    printer admin = @admins
+    load printers = yes
+	print command = lpr -s -r -P %p %s
+	hide unreadable = Yes
+	hide files = /inventaire/desktop.ini/profil/profile/profile.V2/$RECYCLE.BIN/gpoPASSWD/
+	hide dot files = yes
+	dos charset = 850
+	unix charset = UTF-8
+	lanman auth = yes
+	notify:inotify = false
+	include = /etc/samba/smb_%a.conf
+
+[drivers]
+	root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
+	root preexec close = Yes
+	comment = Pilotes d'imprimante
+	path= /var/se3/drivers
+	read only = no
+	browseable = yes
+	valid users = @admins
+	admin users = @admins
+
+[Docs]
+	root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
+        root preexec close = Yes
+	comment = Partage Documents
+	path = /var/se3/Docs
+	read only = No
+
+[prof]
+	root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
+	root preexec close = Yes
+	comment = Partage prof
+	path = /var/se3/prof
+	valid users = @Profs
+	read only = No
+
+[Progs]
+        root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
+        root preexec close = Yes
+	comment = Partage programmes
+	path = /var/se3/Progs
+	read only = No
+
+[Classes]
+	root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
+        root preexec close = Yes
+	comment = Partage classes
+	path = /var/se3/Classes
+	read only = No
+	vfs object = recycle:repository recycle:keeptree recycle:versions recycle:touch recycle:exclude recycle:exclude_dir recycle:noversions
+	recycle:repository=/home/%u/profil/Bureau/Corbeille_Reseau
+	recycle:keeptree=no
+	recycle:versions=no
+	recycle:touch=no
+	recycle:exclude=?~$*,~$*,*.tmp,index*.pl,index*.htm*,*.temp,*.TMP
+	recycle:exclude_dir=tmp,temp,cache,appdata,AppData,Application Data,profile,profile.V2
+	recycle:noversions=*.*
+	
+[install]
+	root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
+        root preexec close = Yes
+	comment = Partage Unattended
+	path = /var/se3/unattended/install
+	valid users = unattend,@admins,adminse3
+	admin users = @admins
+	read only = No
+	browseable = No
+
+[admse3]
+	root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
+        root preexec close = Yes
+	comment = Administration des partages
+	path = /var/se3
+	valid users = @admins
+	admin users = @admins
+	read only = No
+	browseable = No
+
+[admhomes]
+	root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
+        root preexec close = Yes
+	comment = Administration des homes
+	path = /home
+	valid users = @admins
+	admin users = @admins
+	read only = No
+	browseable = No
+
+include = /etc/samba/printers_se3/%m.inc
+include = /etc/samba/smb_Printers.conf

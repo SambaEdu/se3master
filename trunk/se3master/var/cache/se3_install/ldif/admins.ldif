@@ -1,0 +1,7 @@
+dn: cn=admins,ou=#GROUPS#,#BASEDN#
+objectClass: posixGroup
+objectClass: top
+cn: admins
+userPassword: {crypt}x
+gidNumber: 5000
+memberUid: admin

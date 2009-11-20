@@ -1,0 +1,36 @@
+#! /bin/sh
+
+set -e
+(
+dpkg-divert --package se3 --add --rename --divert /etc/.cron_mrtg.divert /etc/cron.d/mrtg
+dpkg-divert --package se3 --add --rename --divert /etc/mrtg.cfg.divert /etc/mrtg.cfg 
+dpkg-divert --package se3 --add --rename --divert /usr/share/backuppc/image/BackupPC_stnd.css.divert /usr/share/backuppc/image/BackupPC_stnd.css 
+dpkg-divert --package se3 --add --rename --divert /etc/backuppc/apache.conf.divert /etc/backuppc/apache.conf 
+dpkg-divert --package se3 --add --rename --divert /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm.divert /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm 
+dpkg-divert --package se3 --add --rename --divert  /etc/php5/apache2/php.ini.divert /etc/php5/apache2/php.ini 
+dpkg-divert --package se3 --add --rename --divert /etc/php5/cli/php.ini.divert /etc/php5/cli/php.ini 
+dpkg-divert --package se3 --add --rename --divert /etc/default/apache2.divert  /etc/default/apache2 
+
+dpkg-divert --package se3 --add --rename --divert /etc/cups/mime.convs.divert  /etc/cups/mime.convs 
+dpkg-divert --package se3 --add --rename --divert /etc/cups/mime.types.divert  /etc/cups/mime.types 
+dpkg-divert --package se3 --add --rename --divert /etc/syslog.conf.divert /etc/syslog.conf 
+
+dpkg-divert --package se3 --add --rename --divert /usr/share/se3/scripts/start_poste.divert /usr/share/se3/scripts/start_poste.sh
+
+# No rename, may have real conf in place (reinstall for exemple)
+dpkg-divert --package se3 --add --divert /etc/samba/smb.conf.divert  /etc/samba/smb.conf 
+dpkg-divert --package se3 --add --divert  /etc/ssmtp/ssmtp.conf.divert  /etc/ssmtp/ssmtp.conf 
+dpkg-divert --package se3 --add --divert /etc/backuppc/config.pl.divert /etc/backuppc/config.pl 
+dpkg-divert --package se3 --add --divert /etc/backuppc/localhost.pl.divert  /etc/backuppc/localhost.pl
+dpkg-divert --package se3 --add --divert  /etc/ldap/slapd.conf.divert /etc/ldap/slapd.conf
+dpkg-divert --package se3 --add --divert  /etc/ldap/ldap.conf.divert /etc/ldap/ldap.conf 
+dpkg-divert --package se3 --add --divert  /etc/nsswitch.conf.divert /etc/nsswitch.conf 
+dpkg-divert --package se3 --add --divert  /etc/pam_ldap.conf.divert /etc/pam_ldap.conf 
+dpkg-divert --package se3 --add --divert  /etc/libnss-ldap.conf.divert /etc/libnss-ldap.conf 
+) >/dev/null
+[ -d /var/cache/se3_install/reg ] && rm -rf /var/cache/se3_install/reg
+[ -d /var/cache/se3_install/unattended ] && rm -rf /var/cache/se3_install/unattended
+[ -e /usr/share/se3/scripts/verif_client.sh ] && rm -f /usr/share/se3/scripts/verif_client.sh
+[ -e /usr/share/se3/scripts/unattent_appli.sh ] && rm -f /usr/share/se3/scripts/unattent_appli.sh
+
+exit 0

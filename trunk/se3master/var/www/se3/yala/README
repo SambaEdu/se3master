@@ -1,0 +1,79 @@
+YALA (Yet Another LDAP Administrator)
+-------------------------------------
+
+WHAT IS YALA?
+YALA is a web-based LDAP administration GUI. The idea is to simplify 
+the directory administration with a graphical interface and neat 
+features, though to stay a general-purpose directory manager.
+
+The goal is to simplify the administration but not to make the YALA user
+stupid: to achieve this, we try to show the user what YALA does behind the
+scenes, what it sends to the server (unlike Micro$oft Active Directory, for
+example).
+
+
+FEATURES
+- Clear and Simple interface.
+- Cross-Platform: YALA can be accessed from any platform using any modern 
+  browser, and the server-side should work on most OSes & Web Servers.
+- Cute javascript to improve the web-interface, which can be set off if you
+  would like.
+- Theoretically works with any LDAP server, see REQUIREMENTS section for list
+  of supported LDAP servers.
+- Super mega advanced schema reader pro turbo: YALA Reads the schema from
+  the LDAP server and gets lots of useful information off it.
+- Entry Types recognition: You can configure YALA to recognize an entry of
+  objectclasses X & Y, for example, as a user entry, have a special icon for 
+  it, and allow simple creation of new entries of this type (i.e. add a new 
+  user). 
+- Security: Supports LDAP over TLS (Transport Layer Security) if your LDAP 
+  server supports it.
+
+
+
+REQUIREMENTS
+
+Server Side:
+- PHP >= 4.0.5 with LDAP support. If you compile php yourself, you should 
+  enable LDAP support ("./configure --help | grep -i ldap"..)
+  If getting the php as binary, make sure you have also ldap support.
+  (On debian you need to apt-get php3-ldap/php4-ldap, for example)
+
+  Note that you'll need LDAP libraries installed on your system in order to 
+  make PHP support LDAP.
+
+
+- Theoretically YALA should work on ANY platform under ANY web-server
+  that supports PHP. It is known to work well on:
+  Linux   + Apache
+  Solaris + Apache
+  (Mail me if you're using it with another combination)
+
+- Any (either local or remote) standard LDAP Server. YALA is known to work 
+  well with:
+  OpenLDAP
+  Microsoft Active Directory
+  Oracle Internet Directory (OID)
+  (Again, let me know if you have something to add here)
+  
+
+Client Side:
+- The only requirement is a web browser with FRAMES & COOKIES support.
+  Best works on modern web browsers with javascript support, though we use 
+  standard HTML and javascript can be turned off, so YALA should be able to 
+  work even on the 'links' browser.  (lynx does not support frames)
+
+  PNG support is recommended. Any modern browser should support it.
+
+
+INSTALLATION
+See the 'INSTALL' file.
+
+
+LICENSE
+YALA is licensed under the GPL, see the 'COPYING' file.
+
+
+CONTACT/AUTHOR
+For any comment/suggestion/bugs/money, feel free to mail me to
+oren at held.org.il

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Comment=
+Exec=kghostview %u -caption "%c" %i %m
+Icon=kghostview
+MimeType=KParts/ReadOnlyPart;Browser/View;application/pdf;application/postscript;image/x-eps;application/gzpostscript;application/illustrator;Application
+Name=KGhostView
+ServiceTypes=
+Type=Application

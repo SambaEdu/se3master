@@ -1,0 +1,10 @@
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\Network\Logon]
+"MustBeValidated"=dword:00000000
+"LMLogon"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Network]
+"DisablePwdCaching"=dword:00000000
+
+

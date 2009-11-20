@@ -1,0 +1,14 @@
+<!DOCTYPE xbel ><xbel>
+ <folder folded="no" toolbar="yes" >
+  <title>Toolbar</title>
+  <bookmark icon="cdimage" href="file:/cdrom/index.html" >
+   <title>CD-Inhaltsverzeichnis</title>
+  </bookmark>
+  <bookmark icon="favicons/www.knopper.net" href="http://www.knopper.net/knoppix/" >
+   <title>KNOPPIX - Webseite</title>
+  </bookmark>
+  <bookmark icon="favicons/www.linuxtag.org" href="http://www.linuxtag.org/" >
+   <title>LinuxTag - Webseite</title>
+  </bookmark>
+ </folder>
+</xbel>

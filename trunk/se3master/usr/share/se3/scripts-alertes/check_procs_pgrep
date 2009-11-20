@@ -1,0 +1,254 @@
+#! /bin/bash 
+#
+#  This is a Nagios plugin.
+#  Uses pgrep command to find processes by their name.
+#  This plugin has been developed as a drop-in replacement
+#  for the official check_procs plugin. 
+#
+#  check_procs_pgrep -h    will give syntax.
+#
+#
+
+STATE_OK=0
+STATE_WARNING=1
+STATE_CRITICAL=2
+STATE_UNKNOWN=3
+STATE_DEPENDENT=4
+
+DEFAULT_LO_RANGE=0     # if low range not specified
+DEFAULT_HI_RANGE=99999  # if high range not specified 
+
+print_help() {
+  echo ""
+  echo ""
+  echo "check_procs_pgrep (v1.0)"
+  echo ""
+  echo ""
+  echo "This plugin checks the number of currently running processes and"
+  echo "generates WARNING or CRITICAL states if the process count is outside"
+  echo "the specified threshold ranges. The process count can be filtered by"
+  echo "process owner or may be the total number of running processes if process name"
+  echo "arguments are not specified. The plugin is most often used to check if"
+  echo "a specific process is running."
+  echo ""
+  echo "Note to check_procs users: check_procs_pgrep is a drop-in replacement"
+  echo "for the check_procs plugin from the official Nagios plugin distribution."
+  echo "It is a simple bash script that use pgrep command to find processes."
+  echo "Compared to the official plugin only the 'number of processes' metric"
+  echo "is suppported by this plugin. Apart from this the two plugins accept"
+  echo "same parameters and have identical functionality."
+  echo ""
+  echo "Usage: check_procs_pgrep -w <range> -c <range> [-u user] "
+  echo "                               [-a argument-array] [-C command] "
+  echo "                               [-h]"
+  echo ""
+  echo "Required Arguments:"
+  echo " -w, --warning=RANGE"
+  echo "   Generate warning state if metric is outside this range"
+  echo " -c, --critical=RANGE"
+  echo "   Generate critical state if metric is outside this range"
+  echo ""
+  echo "Optional Filters:"
+  echo " -u, --user=USER"
+  echo "   Only scan for processes with user name or ID indicated."
+  echo "   (this translates into -U parameter on pgrep"
+  echo " -a, --argument-array=STRING"
+  echo "   Only scan for processes with args that contain STRING."
+  echo " -C, --command=COMMAND"
+  echo "   Only scan for exact matches of COMMAND (without path)."
+  echo ""
+  echo "Other:"
+  echo " -h, --help"
+  echo "   This text."
+  echo " -v, --verbose"
+  echo "   Print debug information."
+  echo ""
+  echo ""
+  echo "RANGEs are specified 'min:max' or 'min:' or ':max' (or 'max'). If"
+  echo "specified 'max:min', a warning status will be generated if the"
+  echo "count is inside the specified range"
+  echo ""
+  echo ""
+  echo "Examples:"
+  echo " check_procs_pgrep -w 2:2 -c 2:1024 -C portsentry"
+  echo "   Warning if not two processes with command name portsentry. Critical"
+  echo "   if < 2 or > 1024 processes"
+  echo ""
+  echo " check_procs_pgrep -w 10 -c 10 -a '/usr/local/bin/perl' -u root"
+  echo "   Critical alert if > 10 processes with command arguments containing"
+  echo "   '/usr/local/bin/perl' and owned by root. (critical takes precedence"
+  echo "   over warning in this case)"
+  echo ""
+  echo "No support for this plugin since it is dead simple. Feel free to change."
+}
+
+
+
+
+
+# Grab the command line arguments
+
+while test -n "$1"; do
+    case "$1" in
+        --help)
+            print_help
+            exit $STATE_OK
+            ;;
+        -h)
+            print_help
+            exit $STATE_OK
+            ;;
+        -u)
+            username=$2
+            shift
+            ;;
+        --user)
+            username=$2
+            shift
+            ;;
+        -C)
+            command=$2
+            shift
+            ;;
+        --command)
+            command=$2
+            shift
+            ;;
+        -a)
+            argarr=$2
+            shift
+            ;;
+        --argument-array)
+            argarr=$2
+            shift
+            ;;
+        -w)
+            warningrange=$2
+            shift
+            ;;
+        --warning)
+            warningrange=$2
+            shift
+            ;;
+        -c)
+            criticalrange=$2
+            shift
+            ;;
+        --critical)
+            criticalrange=$2
+            shift
+            ;;
+        -v)
+            verbose="yes"
+            ;;
+        --verbose)
+            verbose="yes"
+            ;;
+        *)
+            echo "Unknown argument: $1"
+            print_usage
+            exit $STATE_UNKNOWN
+            ;;
+    esac
+    shift
+done
+
+
+
+if [ -z "$criticalrange" ] || [ -z "$warningrange" ] ; then
+  echo "Syntax error: both -c and -w arguments must be specified."
+  echo "Help on syntax: check_procs_grep -h"
+  exit $STATE_UNKNOWN
+fi
+
+# ****************
+# Parse ranges
+# ****************
+
+critrange1=`echo $criticalrange | awk -F: '{print $1}'`
+critrange2=`echo $criticalrange | awk -F: '{print $2}'`
+warnrange1=`echo $warningrange | awk -F: '{print $1}'`
+warnrange2=`echo $warningrange | awk -F: '{print $2}'`
+
+# if no colon in string
+if [ "$criticalrange" == "$critrange1" ] ; then
+  critrange2="$critrange1"
+  critrange1=$DEFAULT_LO_RANGE 
+fi
+
+if [ -n "$verbose" ] ; then echo "C1 = $critrange1   , C2 = $critrange2" ; fi
+
+if [ -z "$critrange1" ] ; then
+  critrange1=$DEFAULT_LO_RANGE
+fi
+if [ -z "$critrange2" ] ; then
+  critrange2=$DEFAULT_HI_RANGE
+fi
+
+if [ -n "$verbose" ] ; then echo "C1 = $critrange1   , C2 = $critrange2" ; fi
+
+# if no colon in string
+if [ "$warningrange" == "$warnrange1" ] ; then
+  warnrange2="$warnrange1"
+  warnrange1=$DEFAULT_LO_RANGE
+fi
+if [ -n "$verbose" ] ; then echo "W1 = $warnrange1   , W2 = $warnrange2" ; fi
+
+if [ -z "$warnrange1" ] ; then
+  warnrange1=$DEFAULT_LO_RANGE
+fi
+if [ -z "$warnrange2" ] ; then
+  warnrange2=$DEFAULT_HI_RANGE
+fi
+
+if [ -n "$verbose" ] ; then echo "W1 = $warnrange1   , W2 = $warnrange2" ; fi
+
+# ****************
+# end of Parse ranges 
+# ****************
+
+# Find out which pgrep command to use
+PGREP_CMD="pgrep"
+if [ -z "$argarr" ] && [ -z "$command" ] ; then
+  argarr="."
+fi
+
+if [ -n "$username" ] ; then
+  PGREP_CMD="$PGREP_CMD -U $username"
+fi
+if [ -n "$argarr" ] ; then
+  PGREP_CMD="$PGREP_CMD -f"
+  PGREP_ARG="$argarr"
+fi
+if [ -n "$command" ] ; then
+  PGREP_CMD="$PGREP_CMD"
+  PGREP_ARG="$command"
+fi
+
+if [ -n "$verbose" ] ; then echo "Executing    :   $PGREP_CMD \"$PGREP_ARG\"" ; fi    # debug
+
+pgrep_result=`${PGREP_CMD} "${PGREP_ARG}"`
+
+
+if [ -n "$verbose" ] ; then echo "pgrep_result : $pgrep_result" ; fi    # debug
+
+num_procs=`echo $pgrep_result | wc -w`
+
+
+if [ "$critrange1" -gt "$num_procs" ] || [ "$critrange2" -lt "$num_procs" ] ; then
+  echo "Could not find process(es) according to search criteria. Process(es) possibly not running."
+  exit $STATE_CRITICAL
+fi
+
+if [ "$warnrange1" -gt "$num_procs" ] || [ "$warnrange2" -lt "$num_procs" ] ; then
+  echo "Could not find process(es) according to search criteria. Process(es) possibly not running."
+  exit $STATE_WARNING
+fi
+
+if [ "$num_procs" -gt "1" ] ; then 
+  echo "OK. Process(es) exist."
+else
+  echo "OK. Process exist."
+fi
+exit $STATE_OK
+

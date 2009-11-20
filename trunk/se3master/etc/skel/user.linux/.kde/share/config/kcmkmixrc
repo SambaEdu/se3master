@@ -1,0 +1,4 @@
+[Misc]
+maxCards=2
+maxDevices=2
+startkdeRestore=false

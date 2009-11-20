@@ -1,0 +1,9 @@
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders]
+"Desktop"="WINDOWS\\Bureau"
+"Programs"="WINDOWS\\Menu Démarrer\\programmes"
+"Startup"="WINDOWS\\Menu Démarrer\\Démarrage"
+"Start Menu"="WINDOWS\\Menu Démarrer"
+"personal"="Mes Documents"
+"appdata"="WINDOWS\\Application Data"

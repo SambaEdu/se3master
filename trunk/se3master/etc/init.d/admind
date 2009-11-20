@@ -1,0 +1,48 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:             admind
+# Required-Start:    $all
+# Required-Stop:
+# Default-Start:        2 3 4 5
+# Default-Stop:         1
+# Short-Description:    Se3 admind
+### END INIT INFO
+
+
+NAME=admind
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+DAEMON=/usr/sbin/admind
+
+PIDFILE=/var/run/$NAME.pid
+
+trap "" 1
+export LANG=C
+export PATH
+
+test -f $DAEMON || exit 0
+rm -f /var/remote_adm/*.sh
+case "$1" in
+  start)
+    echo -n "Starting SE3 admin daemon : $NAME"
+    start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON &
+    ;;
+
+  stop)
+    echo -n "Stopping SE3 admin daemon : $NAME"
+    #start-stop-daemon --stop --pidfile $PIDFILE --oknodo --exec $DAEMON
+    start-stop-daemon --stop --quiet --pidfile $PIDFILE --exec $DAEMON
+    ;;
+
+  *)
+    echo "Usage: /etc/init.d/$NAME {start|stop}"
+    exit 1
+    ;;
+esac
+
+if [ $? == 0 ]; then
+	echo .
+	exit 0
+else
+	echo " failed"
+	exit 1
+fi

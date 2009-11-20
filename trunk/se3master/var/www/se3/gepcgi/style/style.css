@@ -1,0 +1,83 @@
+body	{
+  background: url(../Images/espperso.jpg) ghostwhite 80% 10% no-repeat fixed;
+  color: #404044;
+  margin: 2%;
+  margin-left: 8%;
+  margin-right: 6%;
+  font-family: arial, helvetica, sans-serif;
+  text-align: justify;
+}
+
+a:link	{color: #0080ff;}
+
+a:link:hover	{
+  color: #ff8f00;
+  text-decoration: underline;
+}
+
+a:link {color: #0080ff;}
+
+a:visited {color: #0080ff;}
+
+address {
+  text-align: right;
+  font-size: small;
+}
+
+h1.navigation {
+  text-align: left;
+  font-size: medium;
+  font-weight: normal;
+}
+
+h1.title {
+  margin-top: 1%;
+  margin-bottom: 3%;
+  text-align: center;
+  font-size: large;
+  color: #0008ff;
+  font-weight: normal;
+}
+
+h2 {
+  margin-left: -4%;
+  color: #0040df;
+  font-weight: normal;
+}
+
+h3 {
+  margin-left: -2%;
+  color: #0040df;
+  font-weight: normal;
+}
+
+
+h4 {
+  color: #0040df;
+  font-weight: normal;
+}
+
+h5 {
+  margin-left: 2%;
+  color: #0040df;
+  font-weight: normal;
+}
+
+h6 {
+  color: #0040df;
+  margin-left: %4;
+  font-weight: normal;
+}
+
+p.copyright {
+  text-align: right
+}
+
+span.abbrev { 
+  font-variant: small-caps;
+}
+
+span.filename { 
+  font-family: fixed, courier, monospace
+  color: #404044
+ }

@@ -1,0 +1,41 @@
+# Example .deskMenurc file
+#
+# Syntax
+#
+# Menu=label
+# Menuitem=label:command
+# divider=
+# ----(etc) (alternate method to create a divider)
+# windowlist=label
+# workspaces=label
+# End 
+#
+#
+# Comments begin with #. They can be indented, but must be on a line by
+# themselves.
+# 
+# All keywords are case-insensitive.
+
+
+Menu=Main 
+    kde=
+#    gnome=
+
+    ---------------------
+
+    Menuitem=XTerm:xterm
+    Menuitem=XCFE4 File Manager:xffm
+
+    ---------------------
+
+    xfwm4-themes=Themes:/usr/share/xfwm4/themes
+
+    ---------------------
+
+    windowlist=Window List
+    workspaces=Workspaces
+
+    ---------------------
+
+    quit=
+End
