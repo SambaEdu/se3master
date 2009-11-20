@@ -1,0 +1,10 @@
+Package: se3
+Version: #VERSION#
+Section: contrib
+Priority: optional
+Architecture: i386
+Depends: ftp, libcgi-pm-perl, liblocale-gettext-perl, libnet-ldap-perl, samba (>= 2.2.8a-se3), mysql-server-4.1, mysql-client-4.1, apache2, libapache2-mod-php4, php4, php4-mysql, php4-ldap,slapd, openldap-utils, libpam-ldap, libnss-ldap, libunicode-string-perl, libunicode-maputf8-perl, gawk, mrtg, fileutils, acl, attr, libattr1, xfsprogs, python, libtext-unaccent-perl, libcrypt-smbhash-perl, libtext-iconv-perl, wget, xfsdump, make, ssh, ntpdate, cupsys, cupsys-client, sudo, cupsomatic-ppd, hp-ppd, less, nut, nut-usb, nut-snmp, smbclient, lpr, quota-se3|quota, host, libfile-rsyncp-perl, par2, bzip2, backuppc, unzip, db4.2-util, openssl, libapache2-mod-perl2, php4-gd, gcc, libnet-ssleay-perl, fping, php4-cli, sysutils, smbfs, nfs-common, se3-logonpy|se3-logonpl
+recommends: se3-dhcp, se3-clonage, se3-clamav, se3-ocs, se3-ocs-clientwin, se3-ocs-clientlinux
+Installed-Size: 1024
+Maintainer: Olivier LECLUSE <olivier.lecluse@crdp.ac-caen.fr>
+Description: Samba Education. Assistance a l'installation d'un serveur de fichiers Samba. Le kit samba-edu est un ensemble de scripts et de fichiers de configuration permettant de fournir aux etablissements scolaires une configuration "cle en main" d'un serveur Samba.

@@ -1,0 +1,24 @@
+Some notes about security
+-------------------------
+
+YALA aims to be as secure as possible, and was initially designed with security in
+mind; However, I (the author) do not 100% trust it, which means that you should
+trust it even less (unless you read its code, then we're equal).
+
+REMEMBER that YALA opens a big new window to your LDAP: the web.
+When you block LDAP ports by firewall but leave YALA accessible to the big evil 
+Internet, you've gained nothing.
+
+I'd suggest the following steps to increase security:
+1. Use web-based authentication mechanism on YALA's directory. If you're using
+apache like the rest of the world, you can check out htaccess.example,
+htpasswd.example.
+
+2. Configure your firewall to allow access to your web server only from allowed hosts, if possible.
+
+3. Don't give anonyomous user permissions to read (I don't even mention write)
+from your LDAP server, if possible. I've found some YALAs accessible from
+the internet, clicked 'anonymous login', and viola.. I've got nice info.
+
+4. Find security holes and lemme know =)
+

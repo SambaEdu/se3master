@@ -1,0 +1,8 @@
+[Desktop Entry]
+Comment=GV
+Exec=/usr/bin/X11/gv
+Icon=/usr/X11R6/include/X11/pixmaps/mini-gv.xpm
+MimeType=Application;application/pdf;application/postscript
+Name=GV
+ServiceTypes=
+Type=Application

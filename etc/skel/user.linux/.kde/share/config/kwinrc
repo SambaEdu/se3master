@@ -1,0 +1,64 @@
+[$Version]
+update_info=kwin.upd:kde3.0r1
+
+[Desktops]
+ControlTab=true
+
+[FakeSession]
+count=0
+
+[MouseBindings]
+CommandActiveTitlebar1=Raise
+CommandActiveTitlebar2=Lower
+CommandActiveTitlebar3=Operations menu
+CommandAll1=Move
+CommandAll2=Toggle raise and lower
+CommandAll3=Resize
+CommandAllKey=Alt
+CommandInactiveTitlebar1=Activate and raise
+CommandInactiveTitlebar2=Activate and lower
+CommandInactiveTitlebar3=Activate
+CommandWindow1=Activate, raise and pass click
+CommandWindow2=Activate and pass click
+CommandWindow3=Activate and pass click
+
+[PopupInfo]
+ShowPopup=false
+
+[Style]
+ButtonsOnLeft=MS
+ButtonsOnRight=HIAX
+CustomButtonPositions=false
+PluginLib=kwin_keramik
+ShowToolTips=true
+
+[TabBox]
+TraverseAll=false
+
+[Windows]
+AltTabStyle=KDE
+AnimateMinimize=true
+AnimateMinimizeSpeed=5
+AnimateShade=true
+AutoRaise=off
+AutoRaiseInterval=0
+BorderSnapZone=10
+ClickRaise=on
+ElectricBorderDelay=150
+ElectricBorders=0
+FocusPolicy=ClickToFocus
+MoveMode=Transparent
+MoveResizeMaximizedWindows=true
+Placement=Smart
+ResizeMode=Transparent
+RollOverDesktops=true
+ShadeHover=on
+ShadeHoverInterval=250
+SnapOnlyWhenOverlapping=false
+TitlebarDoubleClickCommand=Shade
+WindowSnapZone=10
+WindowsPlacement=Smart
+XineramaEnabled=false
+XineramaMaximizeEnabled=false
+XineramaMovementEnabled=false
+XineramaPlacementEnabled=false

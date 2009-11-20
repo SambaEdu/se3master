@@ -1,0 +1,68 @@
+Version 0.29 (4/11/2003)
+------------------------
+- CONFIGURATION FILE(s) WERE CHANGED, please use all the .example files
+  and reconfigure them as you will.
+  configuration is now more modular and was made so next versions you could
+  still use your current configurations.
+
+- objectclass names are now case insensitive. Thanks to Sven Carstens.
+
+- mv yala.php main.php;  to avoid confusions.
+  (config.inc.php must be upgraded for that reason as well)
+
+- Better code, lots of rewrites to avoid php NOTICE warnings.
+  Thanks to Claudio Thomas for pointing that out
+
+- .GIFs -> .PNGs
+
+- Improved schema finding algorithm, we can access Active Directory again now.
+
+- More eye-candy stuff, CSS
+
+
+Version 0.28 (07/10/2003)
+-------------------------
+- Graphic changes (new images, nice error msgs, CSS..)
+
+- Supports non-numerical OIDs.
+ 
+- Added README.security. Read it.
+
+- Other small fixes.
+
+
+Version 0.21 (27/07/2003)
+-------------------------
+- Updated login_form.inc.php which wasn't included in 0.20 by a mistake.
+  0.20 was a bad release (well, even linux had 2.4.11...)
+
+
+Version 0.20 (26/07/2003)
+-------------------------
+- TLS support was added (Thanks to Brian Jones), which also added a new
+  configuration option to config.inc.php: LDAP_TLS.
+
+- Lots of problems with special characters and i18n were fixed,
+  thanks to Dave for both reporting and giving many useful advices.
+
+- the value '0' isn't treated empty anymore, thanks to omegahacker's
+  bug report.
+
+- Few more bugs where fixed
+
+
+Version 0.12 (18/04/2003)
+-------------------------
+- We do NOT require 'register_globals = on' in php.ini anymore. This solves
+  the 'unable to login' problem which was reported by many people.
+
+- The code doesn't check if the icon exist for each icon, but creates a list
+  of icons in advance and increases the efficiency.
+
+- config.inc.php has a new define(), DEFAULT_ICON: please synchronize it
+  with your older configuration.
+
+
+Version 0.11 (14/03/2003)
+-----------------------
+Initial Public Release

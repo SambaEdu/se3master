@@ -1,0 +1,65 @@
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoFavoritesMenu"=dword:00000001 
+"NoSetActiveDesktop"=dword:00000001
+"NoChangeStartMenu"=dword:00000001
+"NoFolderOptions"=dword:00000001
+"NoRecentDocsHistory"=dword:00000001 
+"NoRecentDocsMenu"=dword:00000001
+"NoDriveTypeAutoRun"=hex:95,00,00,00
+"EditLevel"=dword:00000000
+"NoNetHood"=dword:00000001
+"NoActiveDesktop"=dword:00000001
+"NoInternetIcon"=dword:00000001
+"ClassicShell"=dword:00000001
+"NoFileMenu"=dword:00000001
+"NoViewContextMenu"=dword:00000001 
+"NoNetConnectDisconnect"=dword:00000001
+"NoRun"=dword:00000001 
+"NoSetFolders"=dword:00000001
+"NoSetTaskbar"=dword:00000001
+"NoFind"=dword:00000001 
+"NoDrives"=dword:0000000d 
+
+"NoSaveSettings"=dword:00000001
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\RestrictRun]
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System]
+"NoDispCPL"=dword:00000001
+"NoDispBackgroundPage"=dword:00000001
+"NoDispScrSavPage"=dword:00000001
+"NoDispAppearancePage"=dword:00000001
+"NoDispSettingsPage"=dword:00000001
+"NoDevMgrPage"=dword:00000001
+"NoConfigPage"=dword:00000001
+"NoFileSysPage"=dword:00000001
+"NoVirtMemPage"=dword:00000001
+"DisableRegistryTools"=dword:00000001
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\WinOldApp]
+"Disabled"=dword:00000001 
+"NoRealMode"=dword:00000001
+
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer]
+
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel]
+"HomePage"=dword:00000001 
+"Ratings"=dword:00000001
+"Connection Settings"=dword:00000001
+"Proxy"=dword:00000001
+"Autoconfig"=dword:00000001
+"Advanced"=dword:00000001
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\ActiveDesktop]
+"NoCloseDragDropBands"=dword:00000001
+"NoMovingBands"=dword:00000001
+
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Infodelivery]
+
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Infodelivery\Restrictions]
+"NoChannelUI"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoWindowsUpdate"=dword:00000001

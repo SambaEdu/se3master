@@ -1,0 +1,29 @@
+## $Id$ ##
+
+Note sur l'installation d'un client cifs
+
+Sur le serveur :
+
+Sur le serveur il faut executer le script suivant :
+
+create_client_linux.sh qui se trouve dans le dossier /usr/share/se3/sbin/
+(normalement cela est d�j� fait)
+
+Cela va generer les fichiers rejoint_se3_debian_sarge.sh et rejoint_se3_ubuntu-6.06.sh 
+(Les mod�les de trouvent dans /var/cache/se3_install/client_linux)
+
+Les fichiers rejoint_se3_debian_sarge.sh et rejoint_se3_ubuntu-6.06.sh sont alors plac�s dans le dossier /root/
+Plus besoin de configurer samba pour les clients linux cifs.
+
+Sur le client :
+Pour un client debian sarge :
+	A partir du cd cd-install-debian-sarge-clients-linux-se3-0.1.iso, a la fin de l'installation du client un script (install_rejoint_se3.sh) est lancé pour récupérer le script rejoint_se3_debian_sarge.sh (rentrer les paramètres qui sont demandés)
+	Si la récupération échoue il est possible de relancer le script install_rejoint_se3.sh ou de le recupérer directement sur le serveur et de le lancer sur le client.
+
+Pour un client ubuntu 6.06 :
+	Récupérez le fichier rejoint_se3_ubuntu-6.06.sh : scp root@IP_SERVEUR_SE3:/root/rejoint_se3_ubuntu-6.06.sh /root/
+	Executez le script : /root/rejoint_se3_ubuntu-6.06.sh
+
+
+Mickaël POIRAULT
+Mickael.Poirault@ac-versailles.fr

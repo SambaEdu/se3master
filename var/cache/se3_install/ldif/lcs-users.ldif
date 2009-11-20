@@ -1,0 +1,7 @@
+dn: cn=lcs-users,ou=#GROUPS#,#BASEDN#
+objectClass: posixGroup
+objectClass: top
+cn: lcs-users
+userPassword: {crypt}x
+gidNumber: 5005
+memberUid: admin

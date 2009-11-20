@@ -1,0 +1,213 @@
+10/01/2002 15:32:35 NoClear flag is specified.
+
+10/01/2002 15:32:35    COM initialized with S_OK success code.
+
+10/01/2002 15:32:35 Branding Internet Explorer...
+10/01/2002 15:32:35 Command line is "/mode:isp /peruser".
+
+10/01/2002 15:32:35 Global branding settings are:
+10/01/2002 15:32:35    Context is (0x01C00008) "Internet Content Providers, running from per-user stub";
+10/01/2002 15:32:35    Settings file is        "F:\Program Files\Internet Explorer\Signup\install.ins";
+10/01/2002 15:32:35    Target folder path is   "F:\Program Files\Internet Explorer\Signup".
+10/01/2002 15:32:35 Done.
+
+10/01/2002 15:32:35    About to clear previous branding...
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing migration of old settings...
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing wininet setup...
+10/01/2002 15:32:35    There are no connection settings to process!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing deletion of connection settings...
+10/01/2002 15:32:35    Existing connection settings weren't specified to be deleted!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing zones HKCU settings...
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing local machine policies and restrictions...
+10/01/2002 15:32:35    There are no local machine *.inf files to process!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing current user policies and restrictions...
+10/01/2002 15:32:35    There are no current user *.inf files to process!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing legacy policies and restrictions...
+10/01/2002 15:32:35        There are no local machine *.inf files to process!
+10/01/2002 15:32:35        There are no current user *.inf files to process!
+10/01/2002 15:32:35    There are no legacy *.inf files to process!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing general customizations...
+10/01/2002 15:32:35    ! Internal failure. Some of the settings may not get applied.
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing Help->About customization...
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing browser toolbar buttons...
+10/01/2002 15:32:35    There are no toolbar buttons to process!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing root certificates...
+10/01/2002 15:32:35    This feature is for ISPs only!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing deletion of favorites and/or quick links...
+10/01/2002 15:32:35    None of the favorites folders were specified to be deleted!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing favorites...
+10/01/2002 15:32:35    Creating separate thread for processing favorites...
+
+10/01/2002 15:32:35    COM initialized with S_OK success code.
+10/01/2002 15:32:35    Using [FavoritesEx] section...
+
+10/01/2002 15:32:35        Preprocessing "Title1" title key...
+10/01/2002 15:32:35        Preprocessing "URL1" URL key...
+10/01/2002 15:32:35        Adding this favorite:
+10/01/2002 15:32:35            Determining favorites attributes...
+10/01/2002 15:32:35                <Favorites> folder location is "F:\Documents and Settings\jean.chretien\Favoris".
+10/01/2002 15:32:35            Title     - "MSN.com.url",
+10/01/2002 15:32:35            URL       - "http://www.microsoft.com/isapi/redir.dll?prd=ie&pver=6&ar=IStart",
+10/01/2002 15:32:35            with a default icon,
+10/01/2002 15:32:35            not marked IEAK created,
+10/01/2002 15:32:35            not made available offline
+10/01/2002 15:32:35            Done.
+10/01/2002 15:32:35        Done.
+
+10/01/2002 15:32:35        Preprocessing "Title2" title key...
+10/01/2002 15:32:35        Preprocessing "URL2" URL key...
+10/01/2002 15:32:35        Adding this favorite:
+10/01/2002 15:32:35            Determining favorites attributes...
+10/01/2002 15:32:35            Title     - "Guide des stations de radio.url",
+10/01/2002 15:32:35            URL       - "http://www.microsoft.com/isapi/redir.dll?prd=windows&sbp=mediaplayer&plcid=&pver=6.1&os=&over=&olcid=&clcid=&ar=Media&sba=RadioBar&o1=&o2=&o3=",
+10/01/2002 15:32:35            with a default icon,
+10/01/2002 15:32:35            not marked IEAK created,
+10/01/2002 15:32:35            not made available offline
+10/01/2002 15:32:35            Done.
+10/01/2002 15:32:35        Done.
+
+10/01/2002 15:32:35        Preprocessing "Title3" title key...
+10/01/2002 15:32:35        Failed with E_FAIL.
+
+10/01/2002 15:32:35        Preprocessing "Title4" title key...
+10/01/2002 15:32:35        This key doesn't exist indicating that there are no more favorites.
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing ordering of favorites...
+10/01/2002 15:32:35    Favorites will be put into the default position!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing quick links...
+10/01/2002 15:32:35    Creating separate thread for processing quick links...
+
+10/01/2002 15:32:35    COM initialized with S_OK success code.
+10/01/2002 15:32:35        Preprocessing "Quick_Link_1_Name" quick link title key...
+10/01/2002 15:32:35        Preprocessing "Quick_Link_1" quick link URL key...
+10/01/2002 15:32:35        Adding this quick link:
+10/01/2002 15:32:35            Determining favorites attributes...
+10/01/2002 15:32:35            Title     - "Liens\Personnaliser les liens.url",
+10/01/2002 15:32:35            URL       - "http://www.microsoft.com/isapi/redir.dll?prd=ie&pver=6&ar=CLinks",
+10/01/2002 15:32:35            with a default icon,
+10/01/2002 15:32:35            not marked IEAK created,
+10/01/2002 15:32:35            not made available offline
+10/01/2002 15:32:35            Done.
+10/01/2002 15:32:35        Done.
+
+10/01/2002 15:32:35        Preprocessing "Quick_Link_2_Name" quick link title key...
+10/01/2002 15:32:35        Preprocessing "Quick_Link_2" quick link URL key...
+10/01/2002 15:32:35        Adding this quick link:
+10/01/2002 15:32:35            Determining favorites attributes...
+10/01/2002 15:32:35            Title     - "Liens\Hotmail.url",
+10/01/2002 15:32:35            URL       - "http://www.microsoft.com/isapi/redir.dll?prd=ie&ar=hotmail",
+10/01/2002 15:32:35            with a default icon,
+10/01/2002 15:32:35            not marked IEAK created,
+10/01/2002 15:32:35            not made available offline
+10/01/2002 15:32:35            Done.
+10/01/2002 15:32:35        Done.
+
+10/01/2002 15:32:35        Preprocessing "Quick_Link_3_Name" quick link title key...
+10/01/2002 15:32:35        Preprocessing "Quick_Link_3" quick link URL key...
+10/01/2002 15:32:35        Adding this quick link:
+10/01/2002 15:32:35            Determining favorites attributes...
+10/01/2002 15:32:35            Title     - "Liens\Windows.url",
+10/01/2002 15:32:35            URL       - "http://www.microsoft.com/isapi/redir.dll?prd=ie&ar=windows",
+10/01/2002 15:32:35            with a default icon,
+10/01/2002 15:32:35            not marked IEAK created,
+10/01/2002 15:32:35            not made available offline
+10/01/2002 15:32:35            Done.
+10/01/2002 15:32:35        Done.
+
+10/01/2002 15:32:35        Preprocessing "Quick_Link_4_Name" quick link title key...
+10/01/2002 15:32:35        Preprocessing "Quick_Link_4" quick link URL key...
+10/01/2002 15:32:35        Adding this quick link:
+10/01/2002 15:32:35            Determining favorites attributes...
+10/01/2002 15:32:35            Title     - "Liens\Windows Media.url",
+10/01/2002 15:32:35            URL       - "http://www.microsoft.com/isapi/redir.dll?prd=ie&ar=windowsmedia",
+10/01/2002 15:32:35            with a default icon,
+10/01/2002 15:32:35            not marked IEAK created,
+10/01/2002 15:32:35            not made available offline
+10/01/2002 15:32:35            Done.
+10/01/2002 15:32:35        Done.
+
+10/01/2002 15:32:35        Preprocessing "Quick_Link_5_Name" quick link title key...
+10/01/2002 15:32:35        This key doesn't exist indicating that there are no more quick links.
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing ordering of quick links...
+10/01/2002 15:32:35    Quick Links will be put into the default position!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing connection settings...
+10/01/2002 15:32:35    There are no connection settings to process!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing TrustedPublisherLockdown restriction...
+10/01/2002 15:32:35    This restriction is not set!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Registering download URLs as safe for updating IE...
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Deleting links...
+10/01/2002 15:32:35    No links to delete!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Branding Outlook Express...
+10/01/2002 15:32:35    There are no Outlook Express settings to brand!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing active desktop customizations...
+10/01/2002 15:32:35    No desktop customizations to process!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing channels and their categories (if any)...
+10/01/2002 15:32:35    There are no channels to process!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing software update channels...
+10/01/2002 15:32:35        <Web> folder location is "F:\WINDOWS\Web".
+10/01/2002 15:32:35    There are no software update channels to add!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Actual processing of channels by calling webcheck.dll "DllInstall" API...
+10/01/2002 15:32:35    There is no webcheck processing necessary!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Showing channel bar on the desktop...
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Processing subscriptions...
+10/01/2002 15:32:35    There are no subscriptions to process!
+10/01/2002 15:32:35    Done.
+
+10/01/2002 15:32:35    Refreshing browser settings...
+10/01/2002 15:32:35    Broadcasting "Windows settings change" to all top level windows...
+10/01/2002 15:32:35    Done.
+10/01/2002 15:32:35 Done.
+10/01/2002 15:32:35 Done.

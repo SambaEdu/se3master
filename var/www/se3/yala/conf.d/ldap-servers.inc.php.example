@@ -1,0 +1,16 @@
+<?php
+
+#
+# LDAP default stuff
+#
+
+define("LDAP_SERVER",	"ldap.example.com");
+define("LDAP_PORT",	"389");
+define("LDAP_BASEDN",	"dc=example,dc=com");
+define("LDAP_BINDDN",	"cn=root,dc=example,dc=com");
+# No good reason to use LDAPv2, unless an old PHP or LDAP Server
+define("LDAP_VERSION",	"3");
+# Use TLS to encrypt the ldap connection. Must be supported by server.
+define("LDAP_TLS", FALSE);
+
+?>

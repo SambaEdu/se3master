@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="chrome://browser/content/pref/pref-privacy.xul">
+    <NC:persist RDF:resource="chrome://browser/content/pref/pref-privacy.xul#cache"/>
+    <NC:persist RDF:resource="chrome://browser/content/pref/pref-privacy.xul#history"/>
+    <NC:persist RDF:resource="chrome://browser/content/pref/pref-privacy.xul#passwords"/>
+    <NC:persist RDF:resource="chrome://browser/content/pref/pref-privacy.xul#formfill"/>
+    <NC:persist RDF:resource="chrome://browser/content/pref/pref-privacy.xul#downloads"/>
+    <NC:persist RDF:resource="chrome://browser/content/pref/pref-privacy.xul#cookies"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="chrome://browser/content/pref/pref-privacy.xul#history"
+                   open="false" />
+  <RDF:Description RDF:about="chrome://browser/content/pref/pref-privacy.xul#downloads"
+                   open="false" />
+  <RDF:Description RDF:about="chrome://browser/content/pref/pref-privacy.xul#cache"
+                   open="false" />
+  <RDF:Description RDF:about="chrome://browser/content/browser.xul">
+    <NC:persist RDF:resource="chrome://browser/content/browser.xul#main-window"/>
+    <NC:persist RDF:resource="chrome://browser/content/browser.xul#sidebar-box"/>
+    <NC:persist RDF:resource="chrome://browser/content/browser.xul#sidebar-title"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="chrome://browser/content/browser.xul#sidebar-title"
+                   value="" />
+  <RDF:Description RDF:about="chrome://browser/content/pref/pref-privacy.xul#passwords"
+                   open="false" />
+  <RDF:Description RDF:about="chrome://browser/content/browser.xul#sidebar-box"
+                   sidebarcommand=""
+                   width=""
+                   src="" />
+  <RDF:Description RDF:about="chrome://browser/content/pref/pref-privacy.xul#cookies"
+                   open="" />
+  <RDF:Description RDF:about="chrome://browser/content/browser.xul#main-window"
+                   width="994"
+                   height="728"
+                   screenX="4"
+                   screenY="4"
+                   sizemode="normal" />
+  <RDF:Description RDF:about="chrome://browser/content/pref/pref-privacy.xul#formfill"
+                   open="" />
+</RDF:RDF>

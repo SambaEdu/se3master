@@ -1,0 +1,60 @@
+  Tous les scripts renvoient 0 en cas de succès ou un message (gettext) d'erreur.
+  Le groupe principal (Eleves, Profs, Administratifs) est renommé catégorie.
+
+  Le fichier de config, Config.pm contient :
+    - les paramètres globaux :
+      * adminDn
+      * adminPw
+      * baseDn
+    - les paramètres de structure :
+      * peopleDn
+      * groupsDn
+      * droitsDn
+      * computersDn
+      * parcDn
+    - les paramètres optionnels ou induits :
+      * slapdIp
+      * slapdPort
+      * slapdDebug
+      * lcsIp
+
+  4 méta-scripts : ### OK ### -> redéfini : les scripts prennent des dn et non de simples rdn
+    - entryAdd.pl : 		### OK ### -> redéfini : prend un dn et une suite de couple attribut=valeur
+      * prend : 1 rdn (ex : uid=toto,ou=People) et une liste atributs/valeurs
+    - entryDel.pl :		### OK ###
+      * prend : 1 rdn
+    - groupAddEntry.pl : 	### OK ###
+      * prend : 2 rdn
+    - groupDelEntry.pl :	### OK ### -> redéfini : prend 2 dn
+      * prend : 1 rdn et la valeur de l'attribut désignant le membre à supprimer (member ou memberUid)
+
+  7 scripts utilisateurs :
+    - userAdd.pl :		### OK ### 	-> redéfini - prend aussi: 
+								* le sexe (checkbox M ou F),
+								* la date (YYYYMMDD),
+								* et la catégorie
+      * prend : prenom, nom, mot de passe, catégorie
+      * utilise : peopleDn, puis peopleDn et groupsDn
+      * appele : entryAdd.pl puis groupAddEntry
+    - groupAdd.pl :		### OK ###
+      * prend : cn, description
+      * utilise : groupsDn
+      * appelle : entryAdd.pl
+    - userDel.pl :		### OK ###
+      * prend : 1 uid
+      * utilise : peopleDn
+      * appelle : entryDel.pl
+    - groupDel.pl :		### OK ###
+      * prend : 1 cn
+      * utilise : groupsDn
+      * appelle : entryDel.pl
+    - GroupAddUser :		### OK ###
+      * prend : 1 uid et 1 cn
+      * utilise : peopleDn et groupsDn
+      * appelle : groupAddEntry
+    - GroupDelUser :		### OK ###
+      * prend : 1 uid et 1 cn
+      * utilise : peopleDn et groupsDn
+      * appelle : groupDelEntry
+    - userChangePwd.pl :	### OK ###
+      * prend : 1 uid et 1 mot de passe 

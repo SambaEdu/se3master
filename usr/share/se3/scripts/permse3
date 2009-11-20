@@ -1,0 +1,315 @@
+#!/bin/bash
+
+#
+##### Replace les droits dans les différents répertoires importants pour le serveur #####
+#
+### $Id$ ###
+#
+if [ "$1" == "--help" -o "$1" == "-h" ]
+then
+	echo "Aide : Replace les droits dans les différents répertoires"
+	echo "Syntaxe : --full afin de remettre les droits sur tous les répertoires et sous répertoires"
+    echo "Sans argument afin de remettre les droits sur les dossiers les plus importants uniquement."
+    exit 0
+fi
+OPTION=
+[ "$1" == "--full"  ] && OPTION="-R"
+
+dbhost=$(expr "$(grep mysqlServerIp /etc/SeConfig.ph)" : ".*'\(.*\)'.*")
+dbuser=$(expr "$(grep mysqlServerUsername /etc/SeConfig.ph)" : ".*'\(.*\)'.*")
+dbpass=$(expr "$(grep mysqlServerPw /etc/SeConfig.ph)" : ".*'\(.*\)'.*")
+dbname=$(expr "$(grep connexionDb /etc/SeConfig.ph)" : ".*'\(.*\)'.*")
+
+chmod 400 /root/.my.cnf
+
+# Apache
+chmod 544 /etc/default/apache2
+
+# Droits sur la conf de LDAP
+chmod 600 /etc/ldap.secret
+chmod 640 /etc/ldap/slapd.conf
+
+# Droits sur /var/lib/ldap
+if [ -z $(grep "3.1" /etc/debian_version) ]; then
+# /etc/init.d/slapd stop
+# sleep 1
+chown openldap.openldap /var/lib/ldap
+# chown openldap.openldap /var/lib/ldap/*
+# /etc/init.d/slapd start
+fi
+
+# Droits sur admind
+chown root.root /usr/sbin/admind
+chmod 750 /usr/sbin/admind
+
+# Droits sur les scripts
+chmod 550 /usr/share/se3/scripts/*
+chown www-se3.root /usr/share/se3/scripts/*
+chmod 550 /usr/share/se3/sbin/*
+chown www-se3.root /usr/share/se3/sbin/*
+chmod 550 /usr/share/se3/scripts-alertes/*
+chown www-se3.root /usr/share/se3/scripts-alertes/*
+chmod 750 /usr/share/se3/scripts/tarCreate
+
+# Droits sudo
+chmod 0440 /etc/sudoers
+
+# Droits CGI
+chown www-se3.root /usr/lib/cgi-binse/gep*.cgi
+chown www-se3.root /usr/lib/perl5/Se.pm
+
+# Droits sur la sauvegarde
+chmod -R  750 /etc/backuppc
+chown -R www-se3 /etc/backuppc
+chmod -R 750 /etc/save
+chgrp -R admins /var/se3/save
+chown -R www-se3.root /usr/share/backuppc
+[ -e /var/lib/backuppc/cpool ] && chown www-se3 /var/lib/backuppc/cpool
+[ -e /var/lib/backuppc/log ] && chown www-se3 /var/lib/backuppc/log -R
+[ -e /var/lib/backuppc/trash ] && chown www-se3 /var/lib/backuppc/trash -R
+chown www-se3 /var/lib/backuppc
+
+# Droits sur ssmtp
+chown -R www-se3 /etc/ssmtp
+
+# Droits sur cups
+chown -R www-se3.lpadmin /etc/samba/printers_se3
+chmod 770 /etc/samba/printers_se3
+chmod -R  755 /var/lib/samba/printers
+chmod 777 /var/spool/samba
+
+# Droits sur drivers
+chown -R admin:root /var/se3/drivers
+
+# Droits sur les rep www
+chown -R www-se3 /var/www/se3
+chmod 750 -R /var/www/se3
+chmod 400 /var/www/se3/includes/config.inc.php
+[ -e /var/www/se3/includes/dbconfig.inc.php ] && chmod 400 /var/www/se3/includes/dbconfig.inc.php
+if [ -e /var/www/se3/includes/privateKey.pyc ]
+then
+	chmod 440 /var/www/se3/includes/privateKey.pyc
+	chown www-se3.www-data /var/www/se3/includes/privateKey.pyc
+fi
+chmod 770 /var/se3/Docs/deploy
+chown admin.www-data /var/se3/Docs/deploy
+
+# Droits sur la clé
+chown www-se3.root /var/remote_adm
+chmod 770 /var/remote_adm
+chmod -R 700 /var/remote_adm/.ssh
+chown -R www-se3.www-data /var/remote_adm/.ssh
+if [ -f /var/remote_adm/.ssh/id_rsa.pub ]
+then
+	chmod 600 /var/remote_adm/.ssh/id_rsa
+	chmod 640 /var/remote_adm/.ssh/id_rsa.pub
+fi
+
+# droits sur /var/log
+if [ -L /var/log ]; then
+LOGS_DIR="/var/se3/log"
+else
+LOGS_DIR="/var/log"
+fi
+chown root ${LOGS_DIR}
+chown root ${LOGS_DIR}/*
+chown -R  news ${LOGS_DIR}/news
+chown -R  mysql ${LOGS_DIR}/mysql*
+chown -R  www-se3 ${LOGS_DIR}/se3
+chmod -R 750 ${LOGS_DIR}/se3
+
+if [ -e ${LOGS_DIR}/clamav ]; then
+chown -R clamav ${LOGS_DIR}/clamav
+fi
+
+if [ -e ${LOGS_DIR}/squid ]; then
+chown -R proxy ${LOGS_DIR}/squid
+fi
+
+if [ -e ${LOGS_DIR}/dansguardian ]; then
+chown -R nobody /var/log/dansguardian
+fi
+
+if [ -e ${LOGS_DIR}/ocsinventory-NG ]; then
+chown -R www-se3 ${LOGS_DIR}/ocsinventory-NG
+fi
+#droits sur /home/netlogon
+if [ -e /home/netlogon ]; then
+chmod -R 755 /home/netlogon
+chown -R admin:admins /home/netlogon/
+chmod g+s /home/netlogon
+[ ! -f /usr/share/se3/logonpy/logon.py ] && (
+rm -f /home/netlogon/*.bat 
+rm -f /home/netlogon/*.txt 
+)
+# chmod -R 666 /home/netlogon/*.bat 2>/dev/null
+# chmod -R 666 /home/netlogon/*.txt 2>/dev/null
+setfacl -b /home/netlogon/
+fi
+
+if [ -e /home/templates ]; then
+# droits sur les templates
+chown admin /home/templates -R
+[ ! -e /home/templates/skeluser ] && ln -s /etc/skel/user /home/templates/skeluser
+chown -R www-se3 /etc/skel/user
+setfacl -R -m  u:www-se3:rwx /home/templates/ 2> /dev/null
+setfacl -R -m  d:u:www-se3:rwx /home/templates/ 2> /dev/null
+fi
+
+#droits pour nut
+mkdir -p /etc/nut
+chown -R  www-se3 /etc/nut
+chgrp nut /var/run/nut
+chgrp nut /var/lib/nut
+
+
+# droit sur /var/se3/install
+if [ -e /var/se3/Progs/install ]; then
+setfacl -R -m  u:www-se3:rx /var/se3/Progs/install
+setfacl -R -m  d:u:www-se3:rx /var/se3/Progs/install
+setfacl -R -m  g:admins:rwx /var/se3/Progs/install
+setfacl -R -m  d:g:admins:rwx /var/se3/Progs/install
+# accès à CPAU pour installation initiale de : inventaire, wpkg...
+setfacl -m other:x /var/se3/Progs/install
+fi
+
+installdll="/var/se3/Progs/install/installdll"
+if [ -e "$installdll" ]; then 
+setfacl -m other:x $installdll
+if [ -e "$installdll/CPAU.exe" ]; then 
+setfacl -m other:r $installdll/CPAU.exe
+fi
+chgrp -R admins $installdll
+if [ -e "$installdll/confse3.ini" ]; then 
+chown root $installdll/confse3.ini
+chmod 770 $installdll/confse3.ini
+fi
+fi
+
+
+#droits de base sur var/se3 (sauf public enlevé volontairement)
+# setfacl -m d:g::rwx /var/se3/Docs/public
+chgrp admins /var/se3
+
+
+chown admin:admins /var/se3/Progs
+chown admin:admins /var/se3/Progs/ro
+chown admin:admins /var/se3/Progs/rw
+chown admin:admins /var/se3/Progs/install
+
+chmod 775 /var/se3/Progs/rw /var/se3/Progs/ro
+
+chgrp admins /var/se3/Classes >/dev/null
+
+chown admin:admins /var/se3/Docs
+
+
+chmod 700 /var/se3/Docs/trombine
+chown admin.admins /var/se3/Docs/trombine
+setfacl -m g:admins:rwx /var/se3/Docs/trombine
+setfacl -m g:profs:rx /var/se3/Docs/trombine
+setfacl -m d:g:admins:rwx /var/se3/Docs/trombine
+setfacl -m d:g:profs:rx /var/se3/Docs/trombine
+setfacl -m u:www-se3:rx /var/se3/Docs/trombine
+setfacl -m d:u:www-se3:rx /var/se3/Docs/trombine
+
+setfacl $OPTION -m g:admins:rwx /var/se3/Progs
+setfacl $OPTION -m d:g:admins:rwx /var/se3/Progs
+setfacl $OPTION -m g:admins:rwx /var/se3/Docs
+setfacl $OPTION -m d:g:admins:rwx /var/se3/Docs
+
+setfacl -m d:u::rwx /var/se3/Progs/rw
+setfacl -m d:g::rwx /var/se3/Progs/rw
+setfacl -m d:o::rwx /var/se3/Progs/rw
+setfacl -m d:u::rwx /var/se3/Progs/ro
+setfacl -m d:g::rx /var/se3/Progs/ro
+setfacl -m d:o::rx /var/se3/Progs/ro
+
+# inventaire
+if [ -e /var/se3/Progs/ro/inventory ]; then
+chown -R admin:admins /var/se3/Progs/ro/inventory
+setfacl -R -m m:rwx /var/se3/Progs/ro/inventory
+fi
+
+if [ -e /var/se3/prof ]; then
+  chown admin.Profs /var/se3/prof
+  chmod 770 /var/se3/prof
+  setfacl -m g:Profs:rwx /var/se3/prof
+  setfacl -m d:g:Profs:rwx /var/se3/prof
+fi
+
+#unnatended - wpkg
+chmod 755 /var/se3/unattended
+chown admin /var/se3/unattended
+chgrp -R admins /var/se3/unattended
+chown -R www-se3:admins /var/se3/unattended/install
+setfacl -R -m u:www-se3:rwx -m d:u:www-se3:rwx /var/se3/unattended/install
+getent passwd adminse3 >/dev/null && [ -e /var/se3/unattended/install/wpkg/rapports ] && setfacl -R -m u:adminse3:rwx -m d:u:adminse3:rwx /var/se3/unattended/install/wpkg/rapports
+getent passwd adminse3 >/dev/null && [ -e /var/se3/unattended/install/italc_keys ] && setfacl -R -m u:adminse3:rwx -m d:u:adminse3:rwx /var/se3/unattended/install/italc_keys
+setfacl -R -m u::rwx -m g::rx -m o::rx -m d:m:rwx -m d:u::rwx -m d:g::rx -m d:o::rx /var/se3/unattended/install
+
+if [ -e /var/www/se3/wpkg ]; then
+chown -R www-se3:www-data /var/www/se3/wpkg
+chmod 775 /var/www/se3/wpkg/bin/*
+fi
+
+# Création si nécessaire du dossier d'upload des fichiers XML de l'import de comptes:
+chmod 770 /var/lib/se3/import_comptes
+chown www-se3:root /var/lib/se3/import_comptes
+
+# Modification du proprio pour permettre une suppression de config specifique pour un poste par www-se3
+if [ -e "/tftpboot/pxelinux.cfg" ]; then
+  chown www-se3:root /tftpboot/pxelinux.cfg
+fi
+
+# Droits sur CPAU
+chown root:admins /home/netlogon/CPAU.exe
+chmod 775 /home/netlogon/CPAU.exe
+
+# Droits conf ldap
+chmod 644 /etc/pam_ldap.conf
+chown root:root /etc/pam_ldap.conf
+chmod 644 /etc/libnss-ldap.conf
+chown root:root /etc/libnss-ldap.conf
+chmod 600 /etc/ldap.secret
+chown root:root /etc/ldap.secret
+
+# Droits du dossier de mise à disposition des CSV (optionnel) lors de la génération de comptes:
+chmod 770 /var/www/se3/setup/csv
+chown www-se3:root /var/www/se3/setup/csv
+
+
+# Droits si nécessaire du dossier www-tools... utilisé à la place de /var/remote_adm dans plusieurs scripts:
+chmod 770 /etc/se3/www-tools
+chown www-se3:root /etc/se3/www-tools
+
+# Droits si nécessaire du dossier tmp necessaires aux scripts profils FF / TB
+chmod 770 /var/www/se3/tmp
+chown www-se3:root /var/www/se3/tmp
+
+chown $OPTION admin /home/templates
+chown $OPTION admin /var/se3/Progs
+chown $OPTION admin /var/se3/Docs
+chown $OPTION www-se3 /var/se3/Classes
+setfacl $OPTION -m  u:www-se3:rwx /home/templates/ 2>/dev/null
+setfacl $OPTION -m  d:u:www-se3:rwx /home/templates/ 2>/dev/null
+setfacl -m d:g::rwx /var/se3/Docs/public
+setfacl $OPTION -m g:admins:rwx /var/se3/Progs
+setfacl $OPTION -m d:g:admins:rwx /var/se3/Progs
+setfacl $OPTION -m g:admins:rwx /var/se3/Docs
+setfacl $OPTION -m d:g:admins:rwx /var/se3/Docs
+setfacl -m d:u::rwx /var/se3/Progs/rw
+setfacl -m d:g::rwx /var/se3/Progs/rw
+setfacl -m d:o::rwx /var/se3/Progs/rw
+setfacl -m d:u::rwx /var/se3/Progs/ro
+setfacl -m d:g::rx /var/se3/Progs/ro
+setfacl -m d:o::rx /var/se3/Progs/ro
+chown admin.Profs /var/se3/prof
+chmod 770 /var/se3/prof
+setfacl -m g:Profs:rwx /var/se3/prof
+setfacl -m d:g:Profs:rwx /var/se3/prof
+setfacl $OPTION -m  u:www-se3:rx /var/se3/Progs/install
+setfacl $OPTION -m  d:u:www-se3:rx /var/se3/Progs/install
+
+# Droits fond ecran, on empeche les petits camarades de voir les fonds des autres (trombi)
+chmod o=x /var/se3/Docs/media/fonds_ecran

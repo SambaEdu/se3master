@@ -1,0 +1,174 @@
+//BEGIN CE prefs
+
+// Les modifications apportées à ce fichier ( \\se3\install\packages\firefox\firefox-profile.js ) 
+//  seront appliquées aux clients firefox dès leur prochain démarrage
+//
+//  Pour déterminer les noms de variables, tapez dans la barre d'adresse de firefox :   
+//           about:config
+
+// choisir  lockPref()    pour fixer la valeur d'une variable en interdisant à l'utilisateur de la changer
+// choisir  defaultPref() pour définir une valeur par défaut d'une variable
+// choisir  pref()        pour écraser une valeur d'une variable que l'utilisateur a défini
+
+// Les variables suivantes sont prédéfinies :
+//   computername  :  nom du poste sur lequel s'exécute firefox
+//   parcs                 :  Array  des noms de Parcs auxquels la machine appartient
+//   username           :  nom de login de l'utilisateur en cours
+//   userGroups       :  Array contenant les noms des groupes auxquels l'utilisateur appartient (groupOfNames ou posixGroup)
+//   userdomain       :  Nom de domaine utilisé au login de l'utilisateur ( domaine SambaEdu  ou Nom du poste si login local)
+
+// Après modification, faites une copie de sauvegarde de ce fichier
+// car il sera écrasé si vous faites une mise à jour de l'application firefox.xml
+
+try {
+
+    // Pour des infos détaillées sur les paramètres de firefox, voir :
+    // http://kb.mozillazine.org/About:config_entries
+
+// valeur fixe de 4 Mo pour le cache de Firefox
+defaultPref("browser.cache.memory.capacity", 4000);
+// Limitation de la memoire utilisee lorsque firefox est minimisé
+defaultPref("config.trim_on_minimize", true);
+// Libérer la charge mémoire en vidant le cache instentanément.
+defaultPref("browser.turbo.enabled", true);
+// Desactivation du cache de Firefox pour pages suivantes et précédentes
+defaultPref("browser.sessionhistory.max_total_viewers", 0);
+// Augmentation de la vitesse de chargement des pages
+defaultPref("network.http.pipelining", true);
+defaultPref(" network.http.pipelining.maxrequests", 9);
+defaultPref("network.http.proxy.pipelining", true);
+defaultPref("nglayout.initialpaint.delay", 0);
+// optimiser le rendu et le chargement des pages
+defaultPref("content.notify.backoffcount", 5);
+defaultPref("ui.submenuDelay", 0);
+defaultPref("plugin.expose_full_path", true);
+
+    // Disable Safe Browsing functionality pour eviter d'avoir un urlclassifier3.sqlite qui grossit
+    lockPref("browser.safebrowsing.enabled", false);
+
+    // Cache size
+    lockPref("browser.cache.disk.capacity", 0);
+    lockPref("browser.cache.disk.parent_directory", getenv("TMP"));
+    defaultPref("browser.downloadmanager.behavior", 1);
+    //defaultPref("browser.search.defaultengine", "engine://C%3A%5CProgram%20Files%5Cmozilla.org%5CMozilla%5Csearchplugins%5Cgoogle.src");
+    defaultPref("dom.disable_open_during_load", true);
+    defaultPref("dom.disable_window_flip", true);
+    defaultPref("dom.disable_window_move_resize", true);
+    defaultPref("dom.disable_window_open_feature.status", true);
+    defaultPref("dom.disable_window_status_change", true);
+    defaultPref("intl.accept_languages", "fr-fr, en-us, en");
+    // 0 : All cookies are allowed. (Default)
+    // 1 : Only cookies from the originating server are allowed.
+    // 2 : No cookies are allowed.
+    // 3 : Cookies are allowed based on the cookie P3P policy (Mozilla Suite only).
+        defaultPref("network.cookie.cookieBehavior", 1);
+    // 8 character string. The positions of the characters determine the type of sites and the character itself determines the behaviour. (Default: ffffaaaa)
+    // f :flag the cookie (cookie will display an icon in the cookie manager)
+    // d :downgrade the cookie to a session cookie (the cookie will be deleted when the browser closes)
+    // a :accept the cookie
+    // r :reject the cookie 
+    //   1.  First party cookies from sites with no privacy policy
+    //   2. Third party cookies from sites with no privacy policy
+    //   3. First party cookies from sites that collect personal information without permission
+    //   4. Third party cookies from sites that collect personal information without permission
+    //   5. First party cookies from sites that collect personal information only with permission
+    //   6. Third party cookies from sites that collect personal information only with permission
+    //   7. First party cookies from sites that don't collect personal information
+    //   8. Third party cookies from sites that don't collect personal information 
+        //defaultPref("network.cookie.p3p", "ffffaaaa");
+        defaultPref("network.cookie.lifetime.enabled", true);
+        defaultPref("network.ftp.anonymous_password", "user@malherbe.lyc14.ac-caen.fr");
+        defaultPref("security.password_lifetime", 0);
+        defaultPref("update_notifications.enabled", false);
+    // Interdire l'installation d'extensions
+    //defaultPref("xpinstall.enabled", false);
+
+    // Désactivation des de mises à jour
+    defaultPref("app.update.enabled", false);
+    //defaultPref("app.update.lastUpdateTime.addon-background-update-timer", 1181895335);
+    //defaultPref("app.update.lastUpdateTime.background-update-timer", 1181895335);
+    //defaultPref("app.update.lastUpdateTime.blocklist-background-update-timer", 1181895335);
+    //defaultPref("app.update.lastUpdateTime.search-engine-update-timer", 1181895335);
+    // Pas cache disque
+    defaultPref("browser.cache.disk.enable", false);
+    defaultPref("browser.cache.memory.enable", true);
+    defaultPref("browser.download.manager.retention", 0);
+    // Pas de remplissage auto des zones de saise
+    defaultPref("browser.formfill.enable", false);
+    // Pas d'historique
+    defaultPref("browser.history_expire_days", 0);
+    defaultPref("browser.history_expire_days.mirror", 1);
+    // Désactivation des recherches de mises à jour
+    defaultPref("browser.search.update", false);
+    // Pas de contrôle Firefox = navigateur par défaut
+    defaultPref("browser.shell.checkDefaultBrowser", false);
+    defaultPref("browser.tabs.loadInBackground", false);
+    //defaultPref("extensions.lastAppVersion", "2.0.0.7");
+    //defaultPref("extensions.update.enabled", true);
+    defaultPref("intl.charsetmenu.browser.cache", "ISO-8859-1, UTF-8");
+    defaultPref("network.cookie.lifetimePolicy", 2);
+    defaultPref("network.cookie.prefsMigrated", false);
+    defaultPref("pref.browser.homepage.disable_button.current_page", false);
+    defaultPref("privacy.item.cookies", true);
+    // Pas d'affichage des mots de passe
+    defaultPref("privacy.item.passwords", false);
+    defaultPref("security.warn_entering_secure", false);
+    defaultPref("security.warn_entering_secure.show_once", false);
+    defaultPref("security.warn_entering_weak", false);
+    defaultPref("security.warn_entering_weak.show_once", false);
+    defaultPref("security.warn_leaving_secure", false);
+    defaultPref("security.warn_leaving_secure.show_once", false);
+    defaultPref("security.warn_submit_insecure", false);
+    defaultPref("security.warn_submit_insecure.show_once", false);
+    lockPref("signon.rememberSignons", false);
+
+    // Page de démarrage à définir ici
+    //pref("browser.startup.homepage", "http://www.google.fr/ig?hl=fr");
+    
+    // Page to open on browser startup
+    //  0: Blank
+    //  1 (default): Home (a.k.a. browser.startup.homepage)
+    //  2: Last (probably does not work)
+    defaultPref("browser.startup.page", 1);
+    
+    // Page de bienvenue (au 1er démarrage)
+    if (getenv("USERNAME") == 'admin') defaultPref("startup.homepage_welcome_url", "http://www.etab.ac-caen.fr/serveurmalherbe/se3/wpkg/bienvenueFirefox.html");
+    
+    // Configuration Proxy
+        //  Connexion directe à internet
+        defaultPref("network.proxy.type", 0);
+    
+        //  Configuration avec proxy.pac
+        //  lockPref("network.proxy.type", 2);
+        //  lockPref("network.proxy.autoconfig_url", "http://lcs.malherbe.lyc14.ac-caen.fr/proxy.pac");
+        
+        //  Détection automatique des paramètres de proxy pour ce réseau
+        //    lockPref("network.proxy.type", 4);
+        
+        //  Configuration manuelle du proxy
+        //    lockPref("network.proxy.type", 1);
+
+        //    defaultPref("network.proxy.backup.ftp", "");
+        //    defaultPref("network.proxy.backup.ftp_port", 0);
+        //    defaultPref("network.proxy.backup.gopher", "");
+        //    defaultPref("network.proxy.backup.gopher_port", 0);
+        //    defaultPref("network.proxy.backup.socks", "");
+        //    defaultPref("network.proxy.backup.socks_port", 0);
+        //    defaultPref("network.proxy.backup.ssl", "");
+        //    defaultPref("network.proxy.backup.ssl_port", 0);
+        //    defaultPref("network.proxy.ftp", "add.ip.du.proxy");
+        //    defaultPref("network.proxy.ftp_port", 8080);
+        //    defaultPref("network.proxy.gopher", "add.ip.du.proxy");
+        //    defaultPref("network.proxy.gopher_port", 8080);
+        //    defaultPref("network.proxy.http", "add.ip.du.proxy");
+        //    defaultPref("network.proxy.http_port", 8080);
+        //    defaultPref("network.proxy.share_proxy_settings", true);
+        //    defaultPref("network.proxy.socks", "add.ip.du.proxy");
+        //    defaultPref("network.proxy.socks_port", 8080);
+        //    defaultPref("network.proxy.ssl", "add.ip.du.proxy");
+        //    defaultPref("network.proxy.ssl_port", 8080);
+
+
+} catch(e) {
+  displayError("lockedPref", e);
+}

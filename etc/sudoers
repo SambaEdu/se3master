@@ -1,0 +1,46 @@
+# sudoers file.
+#
+# This file MUST be edited with the 'visudo' command as root.
+# See the man page for details on how to write a sudoers file.
+#
+#
+#
+### $Id$ ###
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+Cmnd_Alias SE3CLONAGE=/usr/share/se3/scripts/se3_tftp_boot_pxe.sh,/usr/share/se3/scripts/pxe_gen_cfg.sh,/usr/share/se3/scripts/recup_rapport.php,/usr/share/se3/scripts/se3_tftp_menage_atq.sh
+Cmnd_Alias SE3DHCP=/usr/share/se3/scripts/makedhcpdconf,/usr/share/se3/scripts/move_dhcp_leases.sh
+Cmnd_Alias MOZILLA=/usr/share/se3/scripts/modif_profil_mozilla_ff.sh,/usr/share/se3/scripts/deploy_mozilla_ff_final.sh,/usr/share/se3/scripts/deploy_mozilla_tb_final.sh
+Cmnd_Alias DOSSIERS=/usr/share/se3/scripts/createtemplateparc.sh,/usr/share/se3/scripts/echange_classes.sh, /usr/share/se3/scripts/creer_grpclass.sh,/usr/share/se3/scripts/create_share.sh, /usr/share/se3/scripts/delete_share.sh, /usr/share/se3/scripts/updateClasses.pl,/usr/share/se3/scripts/cleanClasses.pl
+Cmnd_Alias  SE3PRINT= /usr/share/se3/scripts/lpadmin.sh, /usr/share/se3/scripts/sambareload.sh, /usr/share/se3/scripts/printless.sh, /usr/share/se3/scripts/printrm.sh, /usr/share/se3/scripts/lenny_bug.sh, /usr/share/se3/scripts/disable_lenny_bug.sh
+Cmnd_Alias LDAPCLEAN = /usr/share/se3/scripts/delHome.pl, /usr/share/se3/scripts/mv_Trash_Home.sh, /usr/share/se3/scripts/remplacant.pl, /usr/share/se3/scripts/remplace.pl, /usr/share/se3/scripts/mkSlapdConf.sh, /usr/share/se3/sbin/mkslurpd
+Cmnd_Alias ADM = /usr/share/se3/scripts/majzi.sh, /usr/share/se3/scripts/maj.sh, /usr/share/se3/scripts/delegate_parc.sh, /usr/share/se3/scripts/start_client.sh, /usr/share/se3/scripts/update-modules.sh, /usr/share/se3/scripts/update-secu.sh, /usr/share/se3/scripts/start_poste.sh, /usr/share/se3/scripts/modifProxy.sh, /usr/share/se3/scripts/modifPassAdmin.sh, /usr/share/se3/scripts/modifOcs.sh, /usr/share/se3/sbin/settime.sh, /usr/share/se3/sbin/testMySQL.sh, /usr/share/se3/scripts/se3_update_system.sh,  /usr/share/se3/scripts/change_root_smbpass.sh, /usr/share/se3/scripts/install_se3-module.sh, /usr/share/se3/scripts/start_stop_serv.sh,/usr/share/se3/scripts/delEntryClientIni.sh,/usr/share/se3/scripts/testSID.sh,/usr/share/se3/scripts/correctSID.sh, /usr/share/se3/sbin/update-smbconf.sh,/usr/share/se3/scripts/se3-upgrade.sh,/usr/share/se3/scripts/clean_profiles.sh,/usr/share/se3/scripts/permse3,/usr/share/se3/scripts/restore_droits.sh
+Cmnd_Alias UPS= /usr/share/se3/scripts/ups.sh, /usr/share/se3/scripts/services.sh
+Cmnd_Alias ACLS= /usr/share/se3/scripts/acls.sh, /usr/share/se3/scripts/ls.sh, /usr/share/se3/scripts/getfacl.sh, /usr/share/se3/scripts/testfichier.sh, /usr/share/se3/scripts/deploy.sh
+Cmnd_Alias ECHANGES = /usr/share/se3/scripts/copie_fich_distrib.sh, /usr/share/se3/scripts/copie_corrige_distrib.sh,/usr/share/se3/scripts/creer_rep_distrib.sh,/usr/share/se3/scripts/modif_rep_dev.sh,/usr/share/se3/scripts/supp_rep_dev.sh
+Cmnd_Alias ECHANGES1 = /usr/share/se3/scripts/copie_dev.sh,/usr/share/se3/scripts/copie_corrige.sh,/usr/share/se3/scripts/creer_rep_dev.sh,/usr/share/se3/scripts/test_home.sh,/usr/share/se3/sbin/mkhome.pl
+# Cmnd_Alias SE3INVENT = /usr/share/se3/scripts/csv.sh, /usr/share/se3/sbin/vide_tables.sh, /usr/share/se3/scripts/copylogon.sh
+Cmnd_Alias QUOTAS =/usr/share/se3/scripts/quota.sh, /usr/share/se3/scripts/quota_fixer_mysql.sh, /usr/share/se3/scripts/repquota_filtre.sh, /usr/share/se3/scripts/stats_user.sh, /usr/share/se3/scripts/warn_quota.sh, /usr/share/se3/scripts/quota_grace_delai.sh, /usr/sbin/repquota, /usr/share/se3/scripts/du.sh
+Cmnd_Alias BACKUP = /usr/share/se3/scripts/startbackup, /usr/share/se3/scripts/move_rep_backuppc.sh, /usr/share/se3/sbin/testbackup.sh, /usr/share/se3/sbin/diskdetect.sh, /usr/share/se3/sbin/restorebackup.sh, /usr/share/se3/sbin/umountusbdisk.sh, /usr/share/se3/scripts/mk_rsyncconf.sh, /usr/share/se3/scripts/dfbck.sh, /usr/share/se3/sbin/chgbpcuser.sh,/usr/share/se3/scripts/udev_disk_rule.sh,/usr/share/se3/scripts/format_disk.sh
+Cmnd_Alias BACKUP1 = /usr/share/se3/scripts/tarCreate, /usr/share/se3/scripts/tarRestore
+Cmnd_Alias SE3APPLI = /usr/share/se3/scripts/unattended_generate.sh, /usr/share/se3/scripts/italc_generate.sh
+Cmnd_Alias FONDS_ECRAN =/usr/share/se3/scripts/install_imagemagick_et_gsfonts.sh, /usr/share/se3/scripts/genere_fond.sh, /usr/share/se3/scripts/fond_bmp2png.sh, /usr/share/se3/scripts/fonds_modif_smb.sh
+Cmnd_Alias IMPORT_COMPTES = /usr/share/se3/scripts/sauvegarde_ldap_avant_import.sh, /usr/share/se3/scripts/run_import_comptes.sh, /usr/share/se3/scripts/deleteClasses.sh
+
+# Commandes Sudo Lcs
+
+Cmnd_Alias LCS = /usr/share/lcs/scripts/mkhdir.sh, /usr/share/lcs/scripts/webperso.sh, /usr/share/lcs/scripts/chacces.sh
+Cmnd_Alias LCS1 = /usr/share/lcs/scripts/action.sh, /usr/share/lcs/scripts/edit_params.sh
+Cmnd_Alias LCS2 = /usr/share/lcs/scripts/replica.sh, /usr/share/lcs/scripts/replica_log.sh
+# User privilege specification
+root	ALL=(ALL) ALL
+
+# commandes devant être lançées comme root par www-se3
+
+www-se3 ALL=NOPASSWD:MOZILLA,NOPASSWD:QUOTAS,NOPASSWD:DOSSIERS,NOPASSWD:SE3INVENT,NOPASSWD:ECHANGES,NOPASSWD:ECHANGES1,NOPASSWD:SE3PRINT,NOPASSWD:LDAPCLEAN,NOPASSWD:UPS,NOPASSWD:ACLS,NOPASSWD:ADM,NOPASSWD:BACKUP,NOPASSWD:BACKUP1,NOPASSWD:SE3APPLI,NOPASSWD:FONDS_ECRAN,NOPASSWD:SE3DHCP,NOPASSWD:SE3CLONAGE,NOPASSWD:IMPORT_COMPTES
+www-data ALL=NOPASSWD:LCS,NOPASSWD:LCS1,NOPASSWD:LCS2
+backuppc ALL=NOPASSWD:BACKUP1

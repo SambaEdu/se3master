@@ -1,0 +1,44 @@
+# Extinction programmée des postes xp tous les 1/4h
+59,14,29,44 * * * * root /usr/share/se3/sbin/cron_wolstop.pl &>/dev/null
+#
+# Lancement update deux fois par jour pour affichage plus rapide dans page diagnostic et module
+00 06,12 * * * root /usr/bin/apt-get update &>/dev/null
+#
+# vidage de la table session de mysql 1 fois par mois à 22h30
+30 22 1 * * root /usr/share/se3/sbin/clean_session_mysql.sh > /dev/null
+#
+# vidage logs ldap 1h45 tous les dimanches
+30 22 * * 7 root /usr/share/se3/sbin/clean_log_ldap.sh > /dev/null
+#
+
+### Sauvegarde ldap, mysql et acls de /var/se3 tous les jours à 23h15###
+45 18 * * * root /usr/share/se3/sbin/lance_sauve_system.sh > /dev/null 2>&1
+#
+# sauvegarde sur bande 23h50
+50 23 * * 1-5 root /usr/share/se3/sbin/sauve.sh >/dev/null
+#
+# mise à l'heure 23h00
+00 23 * * * root /usr/share/se3/sbin/settime.sh
+# Nettoyage des fichiers de lock logonpl 00h45
+45 0 * * 1-5 root /usr/share/se3/sbin/lckclean.sh 2>/dev/null
+# Scripts d'alertes
+*/5 * * * * root /usr/share/se3/sbin/cron_alertes.pl 2>/dev/null
+10 5 * * * root /usr/share/se3/sbin/warn_invent.pl 2>/dev/null
+#
+# Attribution du droit smbweb_is_open si le mot de passe "date de naissance" a été changé: inactif par défaut.
+30 18 * * * root /usr/share/se3/scripts/smbweb_open_for_passwd_changed.sh > /dev/null 2>&1
+
+# Actualisation d'unattend.csv par rapport à l'annuaire. On pourrait l'intégrer avec un "at" dans machineadd.pl,machinedel...
+29 18 * * * root /usr/share/se3/scripts/unattended_generate.sh > /dev/null 2>&1
+
+### quotas ###
+# Actualisation des messages d'avertissements (alimentation du groupe overfill)
+30 6-19 * * * root /usr/share/se3/scripts/warn_quota.sh >/dev/null
+#
+# Actualisation des quotas sur le disque pour tout le monde en fonction de la base se3db, table quotas.
+# (cause: changements de groupes ne provoquent pas un recalcul des quotas applicables => le soir)
+#
+01 21 * * * root /usr/share/se3/scripts/quota_fixer_mysql.sh Toutlemonde Toutespartitions actu >/dev/null
+
+# purge des elements de la corbeille de + de 8 jours
+0 1  * * *   root    find /home/*/profil/Bureau/Corbeille_Reseau/ -ctime +8 -exec rm -f {} \; >/dev/null 2>&1
