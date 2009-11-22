@@ -88,6 +88,10 @@
 	$tab_comptes_avec_employeeNumber_mis_a_jour=array();
 
 
+	if(file_exists($pathscripts."/creation_branche_Trash.sh")) {
+		exec("/bin/bash ".$pathscripts."/creation_branche_Trash.sh > /dev/null",$retour);
+	}
+
 
 	//my_echo("\$creer_equipes_vides=$creer_equipes_vides<br />");
 
