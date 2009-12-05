@@ -30,7 +30,7 @@ $phpv=$phpv2-0;
 
 /*******************************************************/
 
-$PING_INTERNET="72.14.207.99";
+$PING_INTERNET="195.221.20.10";
 if ($phpv>=4.2) {
 	$PING="ping -c 1 -w 1 $PING_INTERNET | awk '/packet/ {print $6}'";
 } else {
