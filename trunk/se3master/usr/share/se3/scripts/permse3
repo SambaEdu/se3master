@@ -50,6 +50,8 @@ chown www-se3.root /usr/share/se3/sbin/*
 chmod 550 /usr/share/se3/scripts-alertes/*
 chown www-se3.root /usr/share/se3/scripts-alertes/*
 chmod 750 /usr/share/se3/scripts/tarCreate
+chmod 750 /usr/share/se3/includes/*
+chown www-se3.root /usr/share/se3/includes/*
 
 # Droits sudo
 chmod 0440 /etc/sudoers
