@@ -193,7 +193,7 @@ $DEFAULT .= "
                     . ' /usr/bin/env LC_ALL=C \$tarPath -c -v -f - -C \$shareName+'
                     . ' --totals';
 \$Conf{TarFullArgs} = '\$fileList+';
-\$Conf{TarIncrArgs} = '--newer=\$incrDate+ \$fileList+';
+\$Conf{TarIncrArgs} = '--newer=\$incrDate \$fileList+';
 \$Conf{TarClientRestoreCmd} = '\$sshPath -q -x -l root \$host'
 		   . ' /usr/bin/env LC_ALL=C \$tarPath -x -p --numeric-owner --same-owner'
 		   . ' -v -f - -C \$shareName+';
