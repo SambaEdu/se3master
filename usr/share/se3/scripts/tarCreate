@@ -47,7 +47,7 @@ fi
 done
 
 if [ "$TESTMNT" == "ok" ]; then
-	exec /bin/tar -c $*
+	exec /bin/tar -c "$@"
 else 
 	echo "Erreur, aucune ressource mont&#233;e sur $repsauve, la sauvegarde backuppc a &#233;chou&#233;e. V&#233;rifiez votre unit&#233; de sauvegarde !!" |
 	mail -s "[SE3] : probl&#232;me avec la sauvegarde backuppc" root
