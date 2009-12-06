@@ -113,7 +113,17 @@ $HOSTFILE .= "
 }
 $HOSTFILE .= "
 \$Conf{TarFullArgs} = '\$fileList+';
-\$Conf{TarIncrArgs} = '--newer=\$incrDate+ \$fileList+';
+";
+
+if ($HostServer=="localhost") {
+$HOSTFILE .= "\$Conf{TarIncrArgs} = '--newer=\$incrDate \$fileList+';
+";
+} else {
+$HOSTFILE .= "\$Conf{TarIncrArgs} = '--newer=\$incrDate+ \$fileList+';
+";
+}
+
+$HOSTFILE .= "
 \$Conf{TarClientRestoreCmd} = '\$sshPath -q -x -l root \$host'
 		   . ' /usr/bin/env LC_ALL=C \$tarPath -x -p --numeric-owner --same-owner'
 		   . ' -v -f - -C \$shareName+';
