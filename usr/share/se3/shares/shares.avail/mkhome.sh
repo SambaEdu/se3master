@@ -12,7 +12,6 @@
 ##### Crée le répertoire personnel de user #####
 #
 #
-
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
 	echo "Crée le répertoire personnel de user"
@@ -43,6 +42,23 @@ if [ ! -d "/home/$user" ]; then
 	# kz - Ajout pour la construction du fichier de pref de moz TB et fichier de moz FF
 	# 
 	PREF_JS_TB="/home/$user/profil/appdata/Thunderbird/Profiles/default/prefs.js"
+	PREF_JS_FF="/home/$user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js"
+	
+	
+	SlisIp=`echo "SELECT value FROM params WHERE name='slisip'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
+	if [ ! -z "$SlisIp" ]; then
+	sed -e "s/slisip/$SlisIp/" -i $PREF_JS_FF
+	else
+		if [ -e /var/www/se3.pac ]; then
+		
+		SE3IP=$(/sbin/ifconfig eth0 | grep inet |cut -d : -f 2 |cut -d \  -f 1| head -n 1)
+		sed -e "s!http://slisip/cgi-bin/slis.pac!http://$SE3IP/se3.pac!" -i $PREF_JS_FF
+		else
+		sed -e "s!http://slisip/cgi-bin/slis.pac!!" -i $PREF_JS_FF
+		sed -e "/network.proxy.type/d" -i $PREF_JS_FF
+		fi
+	fi
+	
 	MAIL=`ldapsearch -xLLL "uid=$user" | grep mail | cut -d " " -f2`
 	PRENOM=`ldapsearch -xLLL "uid=$user" | grep gecos | cut -d " " -f2`
 	NOM=`ldapsearch -xLLL "uid=$user" | grep gecos | cut -d " " -f3 | cut -d "," -f1`
@@ -87,3 +103,4 @@ else
 	chown -R root:admins /home/$user/profil/Demarrer/* > /dev/null 2>&1
 	fi 
 fi
+
