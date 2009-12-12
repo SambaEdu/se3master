@@ -28,9 +28,105 @@ dpkg-divert --package se3 --add --divert  /etc/nsswitch.conf.divert /etc/nsswitc
 dpkg-divert --package se3 --add --divert  /etc/pam_ldap.conf.divert /etc/pam_ldap.conf 
 dpkg-divert --package se3 --add --divert  /etc/libnss-ldap.conf.divert /etc/libnss-ldap.conf 
 ) >/dev/null
-[ -d /var/cache/se3_install/reg ] && rm -rf /var/cache/se3_install/reg
-[ -d /var/cache/se3_install/unattended ] && rm -rf /var/cache/se3_install/unattended
-[ -e /usr/share/se3/scripts/verif_client.sh ] && rm -f /usr/share/se3/scripts/verif_client.sh
-[ -e /usr/share/se3/scripts/unattent_appli.sh ] && rm -f /usr/share/se3/scripts/unattent_appli.sh
+
+# Nettoyage se3_install
+if [ -d /var/cache/se3_install/reg ]; then
+rm -rf /var/cache/se3_install/reg
+fi
+
+if [ -d /var/cache/se3_install/unattended ]; then
+rm -rf /var/cache/se3_install/unattended
+fi
+
+
+
+# Nettoyage sbin
+
+if [ -e /usr/share/se3/sbin/LcsCanSee.pl ]; then
+rm -f /usr/share/se3/sbin/LcsCanSee.pl
+fi
+
+if [ -e /usr/share/se3/sbin/connexion.pl ]; then
+rm -f /usr/share/se3/sbin/connexion.pl
+fi
+
+if [ -e /usr/share/se3/sbin/connexion.sh ]; then
+rm -f /usr/share/se3/sbin/connexion.sh
+fi
+
+if [ -e /usr/share/se3/sbin/cryptcons ]; then
+rm -f /usr/share/se3/sbin/cryptcons
+fi
+
+if [ -e /usr/share/se3/sbin/deconnexion.pl ]; then
+rm -f /usr/share/se3/sbin/deconnexion.pl
+fi
+
+if [ -e /usr/share/se3/sbin/del_profilsXP.sh ]; then
+rm -f /usr/share/se3/sbin/del_profilsXP.sh
+fi
+
+if [ -e /usr/share/se3/sbin/lanceur_applications.sh ]; then
+rm -f /usr/share/se3/sbin/lanceur_applications.sh
+fi
+
+if [ -e /usr/share/se3/sbin/maj58bis.sh ]; then
+rm -f /usr/share/se3/sbin/maj58bis.sh
+fi
+
+if [ -e /usr/share/se3/sbin/migration_ldap_etch.sh ]; then
+rm -f /usr/share/se3/sbin/migration_ldap_etch.sh
+fi
+
+if [ -e /usr/share/se3/sbin/mkhome.pl ]; then
+rm -f /usr/share/se3/sbin/mkhome.pl
+fi
+
+if [ -e /usr/share/se3/sbin/parti.pl ]; then
+rm -f /usr/share/se3/sbin/parti.pl
+fi
+
+if [ -e /usr/share/se3/sbin/se3_proxy.sh ]; then
+rm -f /usr/share/se3/sbin/se3_proxy.sh
+fi
+
+if [ -e /usr/share/se3/sbin/se3_upgrade_etch.sh ]; then
+rm -f /usr/share/se3/sbin/se3_upgrade_etch.sh
+fi
+
+if [ -e /usr/share/se3/sbin/smb_rootexec.sh ]; then
+rm -f /usr/share/se3/sbin/smb_rootexec.sh
+fi
+
+if [ -e /usr/share/se3/sbin/updatese3.sh ]; then
+rm -f /usr/share/se3/sbin/updatese3.sh
+fi
+
+#if [ -e  ]; then
+#rm -f 
+#fi
+
+# Nettoyage scripts
+
+if [ -e /usr/share/se3/scripts/change_root_smbpass.sh ]; then
+rm -f /usr/share/se3/scripts/change_root_smbpass.sh
+fi
+
+if [ -e /usr/share/se3/scripts/cryptcons ]; then
+rm -f /usr/share/se3/scripts/cryptcons
+fi
+
+if [ -e /usr/share/se3/scripts/maj_zi.sh ]; then
+rm -f /usr/share/se3/scripts/maj_zi.sh
+fi
+
+if [ -e /usr/share/se3/scripts/unattent_appli.sh ]; then
+rm -f /usr/share/se3/scripts/unattent_appli.sh
+fi
+
+if [ -e /usr/share/se3/scripts/verif_client.sh ]; then
+rm -f /usr/share/se3/scripts/verif_client.sh
+fi
+
 
 exit 0
