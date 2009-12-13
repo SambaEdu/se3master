@@ -20,7 +20,7 @@
 
 
 CREATE TABLE IF NOT EXISTS connexions (
-  id mediumint(8) unsigned NOT NULL auto_increment,
+  id bigint(20) unsigned NOT NULL auto_increment,
   username varchar(20) NOT NULL default '',
   ip_address varchar(15) NOT NULL default '',
   netbios_name varchar(15) NOT NULL default '',
