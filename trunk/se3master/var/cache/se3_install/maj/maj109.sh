@@ -88,8 +88,8 @@ cd /var/se3/unattended/install
 unzip -o -q /var/cache/se3_install/unattended/unattended-4.7.zip
 
 # la crontab permet l'actualisation le soir (en attendant de modifier les pages parcs pour qu'elles exécutent unattended-generate.sh en cas de modif)
-cp /var/cache/se3_install/conf/se3-crontab /etc/cron.d/se3
-/etc/init.d/cron restart > /dev/null
+# cp /var/cache/se3_install/conf/se3-crontab /etc/cron.d/se3
+# /etc/init.d/cron restart > /dev/null
 
 # ajout du droit x sur ce fichier car unattended-generate.sh (ci-dessus) en a besoin
 setfacl -m u::rwx -m g::rx -m o::rx /var/se3/unattended/install/tools/prepare
@@ -115,8 +115,8 @@ chmod 700 $AT_SCRIPT
 at now +1 minutes -f $AT_SCRIPT
 
 # Correction de droits
-echo "Remise en place des droits - ex¿cution de permse3"
-/usr/share/se3/sbin/permse3
+# Žcho "Remise en place des droits - ex¿cution de permse3"
+# inutile dans ma 1.5 : /usr/share/se3/sbin/permse3
 
 
 echo "Mise a jour 109:
