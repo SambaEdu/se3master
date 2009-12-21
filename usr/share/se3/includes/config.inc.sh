@@ -17,7 +17,7 @@ function usage {
 	echo "       -m :  parametres masques, ex xppass"
 	echo "       -s :  parametres systemes, ex quota_warn_home "
 	echo "       -d :  parametres dhcp, ex dhcp_iface"
-	echo "       -o :  only : uniquement les variables pour interoger mysql"
+	echo "       -o :  only : uniquement les variables pour interroger mysql"
 	echo "       -h :  show this help"
 	echo "       -v :  mode verbeux : liste les variables initialisees"
 	exit $1
