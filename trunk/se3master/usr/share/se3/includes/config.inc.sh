@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## $Id: config.inc.sh 4852 2009-11-17 16:27:29Z keyser $ ##
+## $Id$ ##
 #
 ##### script permettant la lecture des infos dans la table params de mysql #####
 #
@@ -9,7 +9,7 @@
 # unset CONFIG LDAP PATHSE3 BACKUP SYSTEM HIDE VERSBOSE
 function usage {
 	echo "script permettant la lecture des infos dans la table params de mysql" 
-	echo "usage: $0 -c -l -p -b -h -s -m -d -o"
+	echo "usage: $0 -c -l -p -b -h -s -m -d -o -f"
 	echo "       -c :  parametres de configuration generale, ex urlse3"
 	echo "       -l :  parametres ldap, ex ldap_base_dn"
 	echo "       -p :  chemins, ex path_to_wwwse3"
@@ -20,6 +20,7 @@ function usage {
 	echo "       -o :  only : uniquement les variables pour interroger mysql"
 	echo "       -h :  show this help"
 	echo "       -v :  mode verbeux : liste les variables initialisees"
+	echo "       -f :  ecrit les parametres selectionnes dans les ficihers cache /etc/se3/config_*.cache.sh "
 	exit $1
 }
 
@@ -40,20 +41,17 @@ fi
 
 function getmysql {
 getmypasswd
+[ "$2" == "2" ] && echo "# parametres se3, ne pas modifier" > $3
 for i in $(echo "SELECT name FROM params WHERE cat='$1'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass | grep -v "^name$")
 do
     eval $i="$(echo "SELECT value FROM params WHERE name='$i' " | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N | sed -e "s/[()]//g"|sed -e "s/ /_/g")"
     if [ "$2" == "1" ]; then
-      echo "$i --> ${!i}"
+        echo "$i-->${!i}"
+    elif [ "$2" == "2" ]; then
+        echo "$i=\"${!i}\"" >> $3
     fi
 done
-}
-
-function setmysql {
-# set se3db param
-
-getmypasswd
-echo "insert into params set name='$2',value='$3',descr='$4',cat='$1';" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
+[ "$2" == "2" ] && chmod 700 $3
 }
 
 
@@ -64,7 +62,7 @@ then
 fi
 
 VERSBOSE=0
-while getopts ":clpbmsdvho" cmd
+while getopts ":clpbmsdvhof" cmd
 do
 	case $cmd in	
 	c) CONFIG=1 ;;
@@ -75,83 +73,58 @@ do
 	s) SYSTEM=1 ;;
 	d) DHCP=1 ;;
 	o|v) VERSBOSE=1 ;;
+	f) VERSBOSE=2 ;;
 	h) usage 0 ;;
-	w) WRITE=1 ;;
 	\?) echo "bad option!"
 	usage 1 ;;
 	*) echo "bad option!"
 	usage 1 ;;
 	esac
+	fichier=/etc/se3/config_$cmd.cache.sh
 done
 
-if [ "$WRITE" == "1" ]
-then
-    nom="$3"
-    valeur="$4"
-    descr=$*
-    if [ "$CONFIG" == "1" ]; then
-    setmysql "1" "$nom" "$valeur" "$descr" 
-    fi
-
-    if  [ "$LDAP" == "1" ]; then
-    setmysql "2" "$nom" "$valeur" "$descr" 
-    fi
-
-    if [ "$PATHSE3" == "1" ]; then 
-    setmysql "3" "$nom" "$valeur" "$descr" 
-    fi
-
-    if [ "$BACKUP" == "1" ]; then 
-    setmysql "5" "$nom" "$valeur" "$descr" 
-    fi
-
-    if [ "$HIDE" == "1" ]; then
-    setmysql "4" "$nom" "$valeur" "$descr" 
-    fi
-
-    if [ "$SYSTEM" == "1" ]; then
-    setmysql "6" "$nom" "$valeur" "$descr" 
-    fi
-
-    if [ "$DHCP" == "1" ]; then
-    setmysql "7" "$nom" "$valeur" "$descr" 
-    fi
-else
-
-    if [ "$VERSBOSE" == "1" ]; then
-      getmypasswd
-      echo "dbhost --> ${dbhost}"
-      echo "dbname --> ${dbname}"
-      echo "dbuser --> ${dbuser}"
-      echo "dbpass --> ${dbpass}"
-    fi
-
-    if [ "$CONFIG" == "1" ]; then
-    getmysql "1" $VERSBOSE
-    fi
-
-    if  [ "$LDAP" == "1" ]; then
-    getmysql "2" $VERSBOSE
-    fi
-
-    if [ "$PATHSE3" == "1" ]; then 
-    getmysql "3" $VERSBOSE
-    fi
-
-    if [ "$BACKUP" == "1" ]; then 
-    getmysql "5" $VERSBOSE
-    fi
-
-    if [ "$HIDE" == "1" ]; then
-    getmysql "4" $VERSBOSE
-    fi
-
-    if [ "$SYSTEM" == "1" ]; then
-    getmysql "6" $VERSBOSE
-    fi
-
-    if [ "$DHCP" == "1" ]; then
-    getmysql "7" $VERSBOSE
-    fi
-
+if [ "$VERSBOSE" == "1" ]; then
+    getmypasswd
+    echo "dbhost-->${dbhost}"
+    echo "dbname-->${dbname}"
+    echo "dbuser-->${dbuser}"
+    echo "dbpass-->${dbpass}"
+elif [ "$VERSBOSE" == "2" ]; then
+    getmypasswd
+    fichier=/etc/se3/config_o.cache.sh
+    echo "dbhost=\"${dbhost}\"" > $fichier
+    echo "dbname=\"${dbname}\"" >> $fichier
+    echo "dbuser=\"${dbuser}\"" >> $fichier
+    echo "dbpass=\"${dbpass}\"" >> $fichier
+    chmod 700 $fichier
 fi
+
+if [ "$CONFIG" == "1" ]; then
+    getmysql "1" $VERSBOSE /etc/se3/config_c.cache.sh
+    
+fi
+
+if  [ "$LDAP" == "1" ]; then
+getmysql "2" $VERSBOSE /etc/se3/config_l.cache.sh
+fi
+
+if [ "$PATHSE3" == "1" ]; then 
+getmysql "3" $VERSBOSE /etc/se3/config_p.cache.sh
+fi
+
+if [ "$BACKUP" == "1" ]; then 
+getmysql "5" $VERSBOSE /etc/se3/config_b.cache.sh
+fi
+
+if [ "$HIDE" == "1" ]; then
+getmysql "4" $VERSBOSE /etc/se3/config_m.cache.sh
+fi
+
+if [ "$SYSTEM" == "1" ]; then
+getmysql "6" $VERSBOSE /etc/se3/config_s.cache.sh
+fi
+
+if [ "$DHCP" == "1" ]; then
+getmysql "7" $VERSBOSE /etc/se3/config_d.cache.sh
+fi
+

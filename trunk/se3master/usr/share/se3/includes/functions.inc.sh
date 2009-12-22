@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## $Id:$ ##
+## $Id$ ##
 #
 ##### script permettant l'appel à diverses fonctions #####
 #
@@ -100,11 +100,26 @@ done
 
 function SETMYSQL {
 # set se3db param
+# SETMYSQL nom valeur description categorie
+# categories : config : 1
+#              ldap   : 2
+#              pathse3: 3
+#              backup : 4
+#              cache  : 5
+#              systeme: 6
+#              dhcp   : 7
 
 getmypasswd
 echo "insert into params set name='$1',value='$2',descr='$3',cat='$4';" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
 }
 
+function CHANGEMYSQL {
+# change se3db param
+# ChangeMYSQL nom valeur 
+
+getmypasswd
+echo "UPDATE params SET value='$2' WHERE name='$1';" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
+}
 
 
 
