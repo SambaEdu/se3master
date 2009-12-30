@@ -92,6 +92,7 @@ if (ldap_get_right("Annu_is_admin",$login)=="Y") {
     	echo "<li><a href=\"peoples_desac.php\">".gettext("D&#233;sactiver des comptes.")."</a></li>\n";
      	echo "<li><a href=\"peoples_desac.php?action=activ\">".gettext("Activer des comptes.")."</a></li>\n";
      	echo "<li><a href=\"../infos/infomdp.php\">".gettext("Tester les mots de passe.")."</a></li>\n";
+     	echo "<li><a href=\"reinit_mdp.php\">".gettext("R&#233;initialiser/Modifier les mots de passe.")."</a></li>\n";
      	if (getintlevel()>=1)
        		echo "<li><a href=\"remplace.php\">".gettext("Attribution des droits &#224; un rempla&#231;ant.")."</a></li>\n";
     	echo "</ul>\n";
