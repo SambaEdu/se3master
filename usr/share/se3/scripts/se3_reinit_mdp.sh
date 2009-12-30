@@ -28,7 +28,36 @@ then
 		exit
 fi
 
-. /usr/share/se3/sbin/variables_admin_ldap.sh lib > /dev/null
+if [ -e "/usr/share/se3/includes/config.inc.sh" ]; then
+	#. /usr/share/se3/includes/config.inc.sh -lv
+	. /usr/share/se3/includes/config.inc.sh -l
+
+	LDAPIP="$ldap_server"
+	BASEDN="$ldap_base_dn"
+	ADMINRDN="$adminRdn"
+	ADMINPW="$adminPw"
+
+	#PEOPLERDN="$peopleRdn"
+	#GROUPSRDN="$groupsRdn"
+	#RIGHTSRDN="$rightsRdn"
+
+	ROOTDN=$ADMINRDN,$BASEDN
+	PASSDN=$ADMINPW
+
+	#echo "BASEDN=$BASEDN"
+	#echo "ROOTDN=$ROOTDN"
+	#echo "PASSDN=$PASSDN"
+else
+	LDAPIP=$(grep "^HOST" /etc/ldap/ldap.conf|cut -d" " -f2)
+	if [ -z "$LDAPIP" ]; then
+		echo "ABANDON: L'adresse IP du serveur LDAP n'a pas ete identifiee."
+		exit
+	fi
+
+	if [ -e "/usr/share/se3/sbin/variables_admin_ldap.sh" ]; then
+		. /usr/share/se3/sbin/variables_admin_ldap.sh lib > /dev/null
+	fi
+fi
 
 # Si le variables_admin_ldap.sh n'est pas assez recent
 if [ -z "$BASEDN" -o -z "$ROOTDN" -o -z "$PASSDN" ]; then
@@ -60,6 +89,7 @@ GEN_MDP() {
 }
 
 echo "Sauvegarde de l'annuaire..."
+#echo "ldapsearch -xLLL -D $ROOTDN -w $PASSDN > /var/se3/save/ldap_$(date +%Y%m%d%H%M%S).ldif"
 ldapsearch -xLLL -D $ROOTDN -w $PASSDN > /var/se3/save/ldap_$(date +%Y%m%d%H%M%S).ldif
 
 if [ "$?" != "0" ]; then
@@ -99,6 +129,10 @@ if [ -n "$fichcsv" ]; then
 			fi
 		fi
 	done < $fichcsv
+
+	if echo "$*" | grep -q nettoyage; then
+		rm -f $fichcsv
+	fi
 else
 	ldapsearch -xLLL cn=$groupe | grep memberUid | while read A
 	do
