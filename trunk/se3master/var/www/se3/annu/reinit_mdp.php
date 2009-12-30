@@ -3,7 +3,7 @@
    /**
    
    * Reinitialisation/Modification des mots de passe
-   * @Version $Id: infomdp.php 4187 2009-06-19 09:22:12Z gnumdk $ 
+   * @Version $Id$ 
    
    * @Projet LCS / SambaEdu 
    
