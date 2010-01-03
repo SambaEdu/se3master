@@ -158,29 +158,8 @@ net groupmap list | grep "admins"  > /dev/null 2>&1 || net groupmap  add ntgroup
 net groupmap list | grep "Profs"  > /dev/null 2>&1 || net groupmap add ntgroup="Profs" unixgroup="Profs" type="domain" comment="Profs du domaine"
 net groupmap list | grep "Eleves"  > /dev/null 2>&1 || net groupmap add ntgroup="Eleves" unixgroup="Eleves" type="domain" comment="Eleves du domaine"
 
-# echo "on mappe tous les groupes"
-# echo "voulez vous supprimer les groupes cours ?
-# si vous ne les utilisez pas, le gain de performance peut etre important. 
-# ATTENTION 
-# pour les serveurs en Sarge, un utilisateur ne peut appartenir a plus de 32 groupes
-# Il est donc conseille de supprimer les cours.
-# Pour Etch cette limite n'existe pas
-# o/N"
-# read rep
-# if [ "$rep" == "o" ]; then 
-# 	ldapsearch -xLLL -h $LDAPIP -b $GROUPSRDN,$BASEDN "(cn=Cours_*)" dn | sed "s/dn: //g" | \
-# 		 ldapdelete -x -h $LDAPIP -D $ADMINRDN,$BASEDN -w $ADMINPW
-# 	echo " Groupes cours supprimés"
-# fi
-# 
-# for group in $(ldapsearch -xLLL -h $LDAPIP -b $GROUPSRDN,$BASEDN "(&(objectClass=posixGroup)(!(objectClass=sambaGroupMapping)))" cn | grep "^cn:"  | sed "s/cn: //"); do
-# 
-# 	description=$(ldapsearch -xLLL -h $LDAPIP -b $GROUPSRDN,$BASEDN "(&(objectClass=posixGroup)(!(objectClass=sambaGroupMapping)))" description | grep "^description:"  | sed "s/description: //")
-# 	echo "mappage de $group" #>>/tmp/addposix.ldif
-# 	/usr/share/se3/scripts/group_mapping.sh $group $group $description 
-# done
 
-# mise a jour des parametres caches pour les domaine si besoin ( remplacement confse3.ini )
+# mise a jour des parametres caches pour le domaine si besoin ( remplacement confse3.ini )
 echo " Remplacement du fichier confse3.ini par des parametres dans la base se3db"
 
 if [ -z "$se3_domain" ]; then 
@@ -189,7 +168,7 @@ if [ -z "$se3_domain" ]; then
 fi
 if [ -z "$netbios_name" ]; then 
     eval $(grep "netbios name =" /etc/samba/smb.conf | sed "s/ //g")
-    SETMYSQL netbios_name "$netbiosname" "Nom netbios du serveur"4
+    SETMYSQL netbios_name "$netbiosname" "Nom netbios du serveur" 4
     netbios_name=$netbiosname
 fi
 if [ -z "$se3ip" ]; then 
