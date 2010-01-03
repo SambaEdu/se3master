@@ -102,6 +102,16 @@ if [ -e /usr/share/se3/sbin/updatese3.sh ]; then
 rm -f /usr/share/se3/sbin/updatese3.sh
 fi
 
+
+if [ -e /usr/share/se3/sbin/se3_reinit_mdp.sh ]; then
+rm -f /usr/share/se3/sbin/se3_reinit_mdp.sh
+fi
+
+
+if [ -e /usr/share/se3/sbin/gon2posix.sh ]; then
+rm -f /usr/share/se3/sbin/gon2posix.sh
+fi
+
 #if [ -e  ]; then
 #rm -f 
 #fi
