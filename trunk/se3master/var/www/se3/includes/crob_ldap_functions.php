@@ -1044,7 +1044,8 @@ function get_first_free_uidNumber(){
 
 	// On demarre les uid a 1001, mais admin est en 5000:
 	// unattend est en 1000 chez moi... mais cela peut changer avec des etablissements dont l'annuaire SE3 date d'avant l'ajout d'unattend
-	$first_uidNumber=1000;
+	// on peut aussi avoir un compte de client linux qui n'est pas dans l'annuaire mais a besoin de l'uidNumber 1000... risque de conflit si c'est occupé
+	$first_uidNumber=1001;
 	$last_uidNumber=4999;
 	//$last_uidNumber=1200;
 
