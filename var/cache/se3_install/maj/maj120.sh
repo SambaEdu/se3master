@@ -54,21 +54,14 @@ cat ldif/Samba.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#DOMAINSID#/$DOM
 echo "Modification du SambaPrimaryGroupe en arriere plan dans 2mn"
 AT_SCRIPT=/root/modif_SambaPrimaryGroupe.sh
 echo "#!/bin/bash
-ldapsearch -x -b $PEOPLERDN,$BASEDN '(objectclass=*)' uid | grep -v People | grep -v \# | grep uid: | while read A
+ldapsearch -x -b $PEOPLERDN,$BASEDN '(objectclass=*)' uid | grep -v People | grep -v \# | grep uid: | cut -d\" \" -f2 | while read ID
 do
-
-ID=`echo \$A | cut -d : -f 2 | cut -b 2-`
-        if [ "\$ID" != "" ]
-        then
-ldapmodify -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" > /dev/null 2>&1 <<EOF
+ldapmodify -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
 dn: uid=\$ID,$PEOPLERDN,$BASEDN
 changetype: modify
 replace: sambaPrimaryGroupSID
 sambaPrimaryGroupSID: $DOMAINSID-513
 EOF
-
-	fi
-
 done
 " >$AT_SCRIPT
 chmod 700 $AT_SCRIPT
@@ -154,9 +147,10 @@ net groupmap list | grep "machines"  > /dev/null 2>&1 || net groupmap add ntgrou
 # groupe admins mappé vers -512
 net groupmap list | grep "admins"  > /dev/null 2>&1 || net groupmap  add ntgroup="Admins" rid="512" unixgroup="admins" type="domain"
 
-# groupe profs / eleves rid auto
+# groupe profs / eleves /root rid auto
 net groupmap list | grep "Profs"  > /dev/null 2>&1 || net groupmap add ntgroup="Profs" unixgroup="Profs" type="domain" comment="Profs du domaine"
 net groupmap list | grep "Eleves"  > /dev/null 2>&1 || net groupmap add ntgroup="Eleves" unixgroup="Eleves" type="domain" comment="Eleves du domaine"
+net groupmap list | grep "root"  > /dev/null 2>&1 || net groupmap add ntgroup="root" unixgroup="root" type="domain" comment="membres groupe root du domaine"
 
 
 # mise a jour des parametres caches pour le domaine si besoin ( remplacement confse3.ini )
@@ -185,10 +179,8 @@ CONFSE3_SAV="/var/se3/Progs/install/installdll/confse3.ini-root"
 
 # Sauvegarde fichier avant modif si besoin et init variable smbpass
 if [ -f /var/se3/Progs/install/installdll/confse3.ini-root ]; then
-    SMBPASS=`grep "password_ldap_domain" "$CONFSE3_SAV" | sed -e 's/^$//'| sed -e 's/\r//' |cut -d= -f2`
-    net -U adminse3%"$SMBPASS" rpc rights grant adminse3 SeMachineAccountPrivilege SePrintOperatorPrivilege
-else
-
+ smbpasswd -e root
+fi
 	ldapsearch -xLLL cn=root -b $BASEDN cn | grep "cn=root" > /dev/null 2>&1 || \
 	echo "dn: cn=root,$BASEDN
 cn: root
@@ -227,7 +219,7 @@ sambaSID: $DOMAINSID-1" | ldapadd -x -h $LDAPIP -D $ADMINRDN,$BASEDN -w $ADMINPW
 	  sed -i  "s/compte_ldap_domain=root/compte_ldap_domain=adminse3/" $CONFSE3
 	  sed -i "/password_ldap_domain=/d" $CONFSE3 
 	  echo -e "password_ldap_domain=$xppass\r" >> $CONFSE3
-	  ldapdelete -x -h $LDAPIP -D $ADMINRDN,$BASEDN -w $ADMINPW cn=root,$BASEDN
+	  smbpasswd -d root
 	  echo "Attention, la mise au domaine se fait maintenant avac le compte adminse3.
 Le compte root samba est maintenant desactive"
 	  echo "ATTENTION A VERIFIER
@@ -235,7 +227,6 @@ la mise en pace des privileges d administration peut causer des problemes
 avec les pilotes d imprimantes si vous constatez que les pilotes ne fonctionnent plus,
 c est qu il faut les uploader a nouveau sur le serveur (voir la procedure de la doc)"
     fi
-fi
 
 #Maj scripts clients linux
 #### A intégrer dans se3-domain !!! ###
@@ -256,7 +247,7 @@ echo "Mise a jour 120:
 - Ajout integration vista
 - Ajout des groupes Domain Users et Domain Guests
 - Modification du sambaPrimaryGroupSID
-- ajout des privileges mise au domaine adminse3, abandon de root samba
+- ajout des privileges mise au domaine adminse3 et admin, desativation root samba
 - Migration vers nouveau code de gestion de restrictions
 - correction des scripts imprimantes pour ne donner les droits que pour adminse3" >> $HISTORIQUE_MAJ
 MAIL_REPORT
