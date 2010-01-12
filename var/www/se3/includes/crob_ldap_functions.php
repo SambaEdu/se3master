@@ -1400,6 +1400,7 @@ function add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber){
 	if(!get_first_free_uidNumber()){return false;exit();}
 	$uidNumber=get_first_free_uidNumber();
 	$rid=2*$uidNumber+1000;
+	// On n'utilise plus ce $pgrid: on passe à 513
 	$pgrid=2*$defaultgid+1001;
 
 	fich_debug("\$uidNumber=$uidNumber\n");
@@ -1451,7 +1452,8 @@ function add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber){
 	$attribut["gecos"]="$prenom $nom,$naissance,$sexe,N";
 
 	$attribut["sambaSID"]="$domainsid-$rid";
-        $attribut["sambaPrimaryGroupSID"]="$domainsid-$pgrid";
+	//$attribut["sambaPrimaryGroupSID"]="$domainsid-$pgrid";
+	$attribut["sambaPrimaryGroupSID"]="$domainsid-513";
 
 	$attribut["sambaPwdMustChange"]="2147483647";
 	$attribut["sambaPwdLastSet"]="1";
