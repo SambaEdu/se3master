@@ -141,14 +141,16 @@ INSERT INTO `params` VALUES ('', 'antivirus', '0', 0, 'Désactive l''anti-virus',
 INSERT INTO `params` VALUES ('', 'affiche_etat', '1', 0, 'Affiche la page d''état au lancement de l''interface', 6);
 INSERT INTO `params` VALUES  ('', 'type_Equipe_Matiere', 'posixGroup', 0, 'posixGroup ou groupOfNames', 4);
 
-#INSERT INTO `params` VALUES ('', 'dhcp', '1', 0, 'Activation du dhcp', 6);
-#INSERT INTO `params` VALUES ('', 'wpkg', '1', 0, 'Activation de wpkg', 6);
-
 INSERT INTO params VALUES ('', 'quota_warn_home', '0', '0', 'Avertissement pour dépassement de quota sur /home', '6');
 INSERT INTO params VALUES ('', 'quota_warn_varse3', '0', '0', 'Avertissement pour dépassement de quota sur /var/se3', '6');
 
 INSERT INTO params VALUES ('', 'bck_user', '', '0', 'utilisateur proprietaire backuppc', '5');
 INSERT INTO params VALUES ('', 'bck_uidnumber', '', '0', 'uidnumber proprietaire backuppc', '5');
+
+INSERT INTO `params` VALUES ('', 'se3_domain', '', 0, 'Nom du domaine windows', 4);
+INSERT INTO `params` VALUES ('', 'netbios_name', '', 0, 'Nom netbios du serveur', 4);
+INSERT INTO `params` VALUES ('', 'se3ip', '', 0, 'Adresse IP du serveur', 4);
+
 
 # --------------------------------------------------------
 
