@@ -373,7 +373,7 @@ sub addUserEntry {
 	    'userPassword',   "{crypt}$crypt",
 	    'gecos',          $gecos,
 	    'sambaSID',      "$domainsid-$rid",
-	    'sambaPrimaryGroupSID', "$domainsid-$pgrid",
+	    'sambaPrimaryGroupSID', "$domainsid-513",
 	    'sambaLMPassword',     $lmPassword,
 	    'sambaNTPassword',     $ntPassword,
 	    'sambaPwdMustChange',  '2147483647',
