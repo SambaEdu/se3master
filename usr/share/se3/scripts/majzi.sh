@@ -55,13 +55,11 @@ chmod -R 755 /var/se3/unattended
 	setfacl -R -m d:u:www-se3:rx /var/se3/unattended/install/packages
 )
 
-CRYPT=`/usr/share/se3/sbin/cryptcons $XPPASS1`
-CRYPT=$(echo $CRYPT| sed "s/\\//\\\\\//")
 /bin/cat /var/se3/Progs/install/installdll/confse3.in | /bin/sed -e "s/#XPPASS#/$XPPASS/g" | /bin/sed -e "s/#DOMAIN#/$DOMAIN/g" | /bin/sed -e "s/#IPSE3#/$IPSE3/g" | /bin/sed -e "s/#NETBIOS#/$NETBIOS/g" | /bin/sed -e "s/#WAWA#/$NEWPASS/g" > /var/se3/Progs/install/installdll/confse3.ini
 /bin/cat /home/netlogon/registre.vbs.in | /bin/sed -e "s/#SE3#/$NETBIOS/g" | /bin/sed -e "s/#DOMAIN#/$DOMAIN/g" > /home/netlogon/registre.vbs
 /bin/cat /var/se3/Progs/install/installdll/installcop.ba | /bin/sed -e "s/#IPSE3#/$IPSE3/g" > /var/se3/Progs/install/installdll/installcop.bat
 /bin/sed -e "s/#NETBIOS#/$NETBIOS/g" -i /var/se3/Progs/install/installdll/installcop.bat
-/bin/cat /var/se3/Progs/install/installdll/todo.cm | /bin/sed -e "s/#NETBIOS#/$NETBIOS/g" | /bin/sed -e "s/#PWD#/$CRYPT/g" > /var/se3/Progs/install/installdll/todo.cmd
+
 if [ ! "$SMBVERSION" = "samba3" ]; then
 	/usr/bin/smbpasswd root $NEWPASS
 else
