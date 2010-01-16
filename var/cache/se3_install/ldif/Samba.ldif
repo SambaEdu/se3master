@@ -1,39 +1,3 @@
-dn: cn=domusers,ou=#GROUPS#,#BASEDN#
-objectClass: posixGroup
-objectClass: top
-objectClass: sambaGroupMapping
-cn: domusers
-gidNumber: 513
-sambaSID: #DOMAINSID#-513
-sambaGroupType: 2
-displayName: Domain Users
-description: Utilisateur du domaine
-structuralObjectClass: posixGroup
-
-dn: cn=domguests,ou=#GROUPS#,#BASEDN#
-objectClass: posixGroup
-objectClass: top
-objectClass: sambaGroupMapping
-cn: domguests
-gidNumber: 999
-sambaSID: #DOMAINSID#-514
-sambaGroupType: 2
-displayName: Domain Guests
-description: Invites du domaine
-structuralObjectClass: posixGroup
-
-dn: cn=machines,ou=#GROUPS#,#BASEDN#
-objectClass: posixGroup
-objectClass: top
-objectClass: sambaGroupMapping
-cn: machines
-gidNumber: 65533
-sambaSID: #DOMAINSID#-515
-sambaGroupType: 2
-displayName: Domain Computers
-description: Machines du domaine
-structuralObjectClass: posixGroup
-
 dn: uid=nobody,#PEOPLE#,#BASEDN#
 cn: nobody
 uid: nobody
@@ -72,3 +36,48 @@ sambaSID: S-1-5-32-546
 displayName: nogroup
 cn: nogroup
 memberUid: nobody
+
+dn: cn=invites,ou=#GROUPS#,#BASEDN#
+objectClass: posixGroup
+objectClass: top
+objectClass: sambaGroupMapping
+cn: invites
+gidNumber: 999
+sambaSID: #DOMAINSID#-514
+sambaGroupType: 4
+displayName: Domain Guests
+description: Invites du domaine
+
+dn: cn=machines,ou=#GROUPS#,#BASEDN#
+objectClass: posixGroup
+objectClass: top
+objectClass: sambaGroupMapping
+cn: machines
+gidNumber: 65533
+sambaSID: #DOMAINSID#-515
+sambaGroupType: 4
+displayName: Domain Computers
+description: Machines du domaine
+
+dn: cn=root,ou=#GROUPS#,#BASEDN#
+objectClass: posixGroup
+objectClass: sambaGroupMapping
+gidNumber: 0
+cn: root
+description: groupe root samba
+memberUid: root
+sambaGroupType: 4
+sambaSID: #DOMAINSID#-0
+displayName: Roots 
+
+dn: cn=lcs-users,ou=#GROUPS#,#BASEDN#
+objectClass: posixGroup
+objectClass: top
+objectClass: sambaGroupMapping
+cn: lcs-users
+gidNumber: 5005
+sambaSID: #DOMAINSID#-513
+sambaGroupType: 4
+displayName: Domain Users
+description: Utilisateur du domaine
+userPassword: {crypt}x
