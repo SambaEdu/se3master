@@ -884,9 +884,9 @@ if [ ! "$rep" = "n" ]; then
 		fi
 	fi
 
-if [ "$NTDOM" != "$DEFAULT_DOMAIN" -a "$DEFAULT_DOMAIN" != "SAMBAEDU3" ]; then
-ldapdelete -x -D $ROOTDN -w $PASSDN sambaDomainName=$sambaDomainName,$BASEDN
-fi
+	if [ "$NTDOM" != "$DEFAULT_DOMAIN" -a "$DEFAULT_DOMAIN" != "SAMBAEDU3" ]; then
+	ldapdelete -x -D $ROOTDN -w $PASSDN sambaDomainName=$sambaDomainName,$BASEDN
+	fi
 	# Premiere mise en place de smb.conf, pas possible d'utiliser update-smb.conf
 	echo -e "$COLTXT"
 	echo "Mise en place de la configuration Samba..."
@@ -909,23 +909,33 @@ fi
 	if [ ! "$rep_1T" = "n" ]; then
 		cat ldif/root.ldif | sed -e "s/#BASEDN#/$BASEDN/g" > ldif/root.ldif.2
 		cat ldif/admin.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#PEOPLE#/$PEOPLER/g" | sed -e "s/#DOMAIN#/$DOMNAME/g" | sed -e "s/#DEFAULTGID#/$defaultgid/g" | sed -e "s/#GID1#/$gid1/g" >>ldif/root.ldif.2
-		/usr/share/se3/sbin/convertSambaAccount --sid $DOMAINSID --input ldif/root.ldif.2 --output ldif/root.ldif.3
-		cat ldif/root.ldif.3  | ldapadd -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
-
+		/usr/share/se3/sbin/convertSambaAccount --sid $DOMAINSID --input ldif/root.ldif.2 --output /root/root.ldif.3
+		ldapadd -x -c -D "$ADMINRDN,$BASEDN" -w $ADMINPW -f /root/root.ldif.3
+		sed -e "s/#BASEDN#/$BASEDN/g;s/#DOMAINSID#/$DOMAINSID/g;s/#GROUPS#/$GROUPSR/g;s/#PEOPLE#/$PEOPLERDN/g" ldif/Samba.ldif > /root/Samba.ldif
+		ldapadd -x -c -D "$ADMINRDN,$BASEDN" -w $ADMINPW -f /root/Samba.ldif
 		echo -e "$COLTXT"
-		echo "Mappage des groupes admins, Profs et Eleves..."
+		echo "Mappage des groupes..."
 		echo -e "$COLCMD\c "
 		# ajout dbo pour mappage des groupes de bases
 		net groupmap add sid=$DOMAINSID-512 ntgroup=Admins unixgroup=admins type=domain comment="Administrateurs du domaine"
 		net groupmap add ntgroup=Eleves unixgroup=Eleves type=domain comment="Eleves du domaine"
 		net groupmap add ntgroup=Profs unixgroup=Profs type=domain comment="Profs du domaine"
-# 		net groupmap add sid=$DOMAINSID-535 ntgroup=Profs unixgroup=Profs type=domain comment="Administrateurs du domaine"
-		net groupmap add sid=$DOMAINSID-515 ntgroup="Domain Computers" unixgroup=machines type=domain comment="MAchines du domaine"
+# 		net groupmap add ntgroup=root unixgroup=root type=domain comment="membres groupe root du domaine"
+# 		net groupmap add sid=$DOMAINSID-515 ntgroup="Domain Computers" unixgroup=machines type=domain 		comment="MAchines du domaine"
+
+		echo "UPDATE params SET value=\"$NTDOM\" WHERE name=\"se3_domain\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
+		echo "UPDATE params SET value=\"$NETBIOS\" WHERE name=\"netbios_name\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
+		echo "UPDATE params SET value=\"$ADMINRDN\" WHERE name=\"se3ip\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
+
+
+
 	fi
 	/usr/share/se3/sbin/userChangePwd.pl admin $SE3PW
 	DS=`echo "SELECT value FROM params WHERE name='domainsid'" | mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW -N`
 	if [ -z "$DS" ]; then
 		echo "INSERT INTO params VALUES ('', 'domainsid', \"$DOMAINSID\", 0, 'SID du domaine Samba', 4)" | mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
+	else
+		echo "UPDATE params SET value=\"$DOMAINSID\" WHERE name=\"domainsid\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 	fi
 
 	# Saisie de l'entrée du PDC dans Computers
@@ -952,30 +962,12 @@ fi
 
 
 
-  #
-  # Install unattended
-  #
-  if [ ! -e /etc/se3/unattended-4.7.zip ]; then
-	  wget http://wawadeb.crdp.ac-caen.fr/unattended/unattended-4.7.zip
-	  mv -f unattended-4.7.zip /etc/se3
-  fi
-
-  cd /var/se3/unattended/install
-  unzip -q /etc/se3/unattended-4.7.zip
-  cd /var/cache/se3_install
-
-  # Génération clé rsa root
-  if [ ! -e /root/.ssh/id_rsa.pub ]; then
-    ssh-keygen -t rsa -N "" -f /root/.ssh/id_rsa -q
-  fi
-  cp /root/.ssh/id_rsa.pub /var/se3/Progs/install/installdll
-  # Install ActivePerl && SSH
-#   if [ ! -e reg/ActivePerl-5.8.7.813-MSWin32-x86-148120.msi ]; then
-#     cd reg
-#     wget ftp://wawadeb.crdp.ac-caen.fr/pub/sambaedu/ActivePerl-5.8.7.813-MSWin32-x86-148120.msi
-#     cd ..
-#   fi
-#   cp reg/ActivePerl-5.8.7.813-MSWin32-x86-148120.msi /var/se3/Progs/install/installdll
+	# Génération clé rsa root
+	if [ ! -e /root/.ssh/id_rsa.pub ]; then
+	  ssh-keygen -t rsa -N "" -f /root/.ssh/id_rsa -q
+	fi
+	cp /root/.ssh/id_rsa.pub /var/se3/Progs/install/installdll
+  
  
 fi
 
@@ -1135,19 +1127,7 @@ echo -e "$COLCMD"
 /etc/init.d/apache2 restart
 echo -e "$COLTXT"
 
-
-# installation script intégration clients linux 
-# Lance le script de config des clients Linux
-/usr/share/se3/sbin/create_client_linux.sh >/dev/null && (
-IPSE3=`cat /etc/samba/smb.conf |grep -i interfaces | awk -F' = ' '{ print $2 }'|cut -d '/' -f 1`
-echo -e "$COLINFO"
-echo "Le script d'intégration pour client linux a été installé avec succès dans /root"
-echo "Si vous désirez l'utiliser :"
-echo "- connectez-vous sur le client linux sous root"
-echo "- saisir la commande scp root@$IPSE3:/root/rejoint_se3*.sh ."
-echo "- Lancer le script correspondant à votre distribution"
-echo -e "$COLTXT"
-)
+# installation script intégration clients linux - deplace ds se3-domain
 
 # installation des zorn tools
 echo -e "$COLTITRE"
@@ -1157,10 +1137,11 @@ XPPASS=`echo "SELECT value FROM params WHERE name='xppass'" | mysql -h $MYSQLIP 
 #saisir pass si necessaire
 # a Faire
 if [  -z "$XPPASS" ]; then
-	echo -e "${COLTXT}Lors de la jonction au domaine des machines Win 2000/XP, un compte local adminse3 sera créé.\nVeuillez saisir un mot de passe pour ce compte  [${COLDEFAUT}${SE3PW}${COLTXT}]  ${COLSAISIE}"
+	XPPASS_RDM="$(makepasswd)"
+	echo -e "${COLTXT}Lors de la jonction au domaine des machines Win 2000/XP, un compte local adminse3 sera créé.\nVeuillez saisir un mot de passe pour ce compte  [${COLDEFAUT}${XPPASS_RDM}${COLTXT}]  ${COLSAISIE}"
 	read XPPASS
 	echo -e "${COLTXT}"
-	[  -z "$XPPASS" ] && XPPASS="$SE3PW"
+	[  -z "$XPPASS" ] && XPPASS="$XPPASS_RDM"
 	echo "UPDATE params SET value=\"$XPPASS\" WHERE name=\"xppass\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 fi
 
@@ -1173,9 +1154,37 @@ fi
 ### Creation adminse3 dans annuaire
 /usr/share/se3/sbin/create_adminse3.sh
 
+
+
+echo "mise en place des privileges samba et mise a jour de confse3.ini"
+# 
+CONFSE3="/var/se3/Progs/install/installdll/confse3.ini"
+CONFSE3_SAV="/var/se3/Progs/install/installdll/confse3.ini-root"
+
+#positionnement pass samba root idem adminse3 le temps d'augmenter les privilèges
+echo -e "$XPPASS\N$XPPASS"|(/usr/bin/smbpasswd -s root)
+
+net -U root%"$XPPASS" rpc rights grant admin SeMachineAccountPrivilege SePrintOperatorPrivilege
+net -U root%"$XPPASS" rpc rights grant adminse3 SeMachineAccountPrivilege SePrintOperatorPrivilege
+smbpasswd -d root
+cp $CONFSE3 $CONFSE3_SAV
+sed -i  "s/compte_ldap_domain=root/compte_ldap_domain=adminse3/" $CONFSE3
+sed -i "/password_ldap_domain=/d" $CONFSE3 
+echo -e "password_ldap_domain=$xppass\r" >> $CONFSE3
+smbpasswd -d root
+echo "Attention, la mise au domaine se fait maintenant avac le compte adminse3.
+Le compte root samba est maintenant desactive"
+
+
+# actualisation du cache des parametres : 
+
+/usr/share/se3/includes/config.inc.sh -clpbmsdf 
+
+
 # Lance postinst de nos dependances, ces dernieres ayant besoin de l'execution du script d'install
 [ -f /var/lib/dpkg/info/se3-logonpl.postinst ] && /var/lib/dpkg/info/se3-logonpl.postinst configure
 [ -f /var/lib/dpkg/info/se3-logonpy.postinst ] && /var/lib/dpkg/info/se3-logonpy.postinst configure
+[ -f /var/lib/dpkg/info/se3-domain.postinst ] && /var/lib/dpkg/info/se3-domain.postinst configure
 
 echo -e "$COLTITRE"
 echo "Terminé!"
