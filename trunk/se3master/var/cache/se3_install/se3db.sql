@@ -147,7 +147,7 @@ INSERT INTO params VALUES ('', 'quota_warn_varse3', '0', '0', 'Avertissement pou
 INSERT INTO params VALUES ('', 'bck_user', '', '0', 'utilisateur proprietaire backuppc', '5');
 INSERT INTO params VALUES ('', 'bck_uidnumber', '', '0', 'uidnumber proprietaire backuppc', '5');
 
-INSERT INTO `params` VALUES ('', 'se3_domain', '', 0, 'Nom du domaine windows', 4);
+INSERT INTO `params` VALUES ('', 'se3_domain', '', 0, 'Nom du domaine samba', 4);
 INSERT INTO `params` VALUES ('', 'netbios_name', '', 0, 'Nom netbios du serveur', 4);
 INSERT INTO `params` VALUES ('', 'se3ip', '', 0, 'Adresse IP du serveur', 4);
 
