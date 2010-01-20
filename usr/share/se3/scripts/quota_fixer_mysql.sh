@@ -255,17 +255,12 @@ if [ "$user_grp" == "Toutlemonde" ] ; then
     FIXERQUOTA $partition $quotas $quotah
   fi
 else
-  # efface le groupes ou user de la base si demandé (APRES AVOIR LISTE LES USERS CONCERNES)
-  if [ "$3" = "suppr" ]; then
-          echo "SUPPRESSION DES QUOTAS SUR $user_grp: RECALCUL DES QUOTAS EN FONCTION DES APPARTENANCES A D'AUTRES GROUPES."
-          `echo "DELETE FROM quotas WHERE nom=\"$user_grp\" AND type=\"$type\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-  fi
-
-  TST_GRP=$(ldapsearch -xLLL cn=$1 -b $BASEDN | grep member)
+  TST_GRP=$(ldapsearch -xLLL "cn=$1" -b ou=Groups,$BASEDN)
   if [ -z "$TST_GRP" ]; then
-          TST_UID=$(ldapsearch -xLLL uid="$1")		 
+          TST_UID=$(ldapsearch -xLLL uid="$1")
           if [ -z "$TST_UID" ]; then
-            ERREUR "Impossible de trouver le groupe ou l'utilisateur passé en paramètre dans l'annuaire Ldap"
+            echo "Impossible de trouver le groupe ou l'utilisateur passé en paramètre dans l'annuaire Ldap"
+	    ERREURFLAG=1
           else
             #c'est un user
             liste_users=$1
@@ -274,15 +269,36 @@ else
   else
           #c'est un groupe: on liste les users du groupe
           type="g"
-          TST_GRP_POSIX=$(ldapsearch -xLLL "cn=$1" | grep memberUid)
+          TST_GRP_POSIX=$(ldapsearch -xLLL "cn=$1" -b ou=Groups,$BASEDN | grep memberUid)
           #echo "Liste groupe: $TST_GRP_POSIX"
           if [ -z "$TST_GRP_POSIX" ]; then
-            liste_users=$(ldapsearch -x -LLL cn=$1 -b $BASEDN | grep uid | cut -d " " -f2 |  cut -d "=" -f2 | cut -d "," -f1) # | while read A
+            liste_users=$(ldapsearch -x -LLL cn=$1 -b $BASEDN | grep uid | cut -d " " -f2 |  cut -d "=" -f2 | cut -d "," -f1)
           else
-            liste_users=$(ldapsearch -x -LLL "cn=$1" | grep memberUid | cut -d " " -f2) # | while read A)
+	    TST_GRP_VIDE=$(ldapsearch -xLLL "cn=$1" -b ou=Groups,$BASEDN | grep member)
+	    if [ -z "$TST_GRP_VIDE" ]; then
+		echo "Le groupe passe en argument est vide."
+	    else
+		liste_users=$(ldapsearch -x -LLL "cn=$1" | grep memberUid | cut -d " " -f2)
+	    fi
           fi
   fi
-  
+
+  # efface le groupe ou user de la base si demandé (APRES AVOIR LISTE LES USERS CONCERNES)
+  if [ "$3" = "suppr" ]; then
+          echo "SUPPRESSION DES QUOTAS SUR $user_grp: RECALCUL DES QUOTAS EN FONCTION DES APPARTENANCES A D'AUTRES GROUPES."
+
+	# PATCH pour suppression des users-groupes ayant disparu de l'annuaire : on supprime toute référence de tout "type" dans la table.
+	if [ "$ERREURFLAG" == "1" ]; then
+		`echo "DELETE FROM quotas WHERE nom=\"$user_grp\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
+	else
+		# dans ce cas, on sait si type=u ou g, on supprime uniquement l'entrée correspondante. (un groupe et un utilisateur peuvent avoir le meme nom)
+		`echo "DELETE FROM quotas WHERE nom=\"$user_grp\" AND type=\"$type\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
+	fi
+  fi
+
+# PATCH pour suppression des users-groupes ayant disparu de l'annuaire
+[ "$ERREURFLAG" == "1" ] && echo ERREUR "Sortie."  
+
   # on empeche les betises !
   liste_users="$(echo "$liste_users" | grep -v "^admin$" | grep -v "^www-se3$" | grep -v "^root$" )"
   
@@ -301,9 +317,9 @@ else
   
   #certaines requetes mysql et LDAP placées avant la boucle for qui suit pour éviter de les refaire inutilement
   #liste les users qui sont dans la base: leur quota sera prépondérant sur tout quota appliqué à leurs groupes
-  test_exist_user=`echo "SELECT nom FROM quotas WHERE type=\"u\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
+  #test_exist_user=`echo "SELECT nom FROM quotas WHERE type=\"u\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
   #liste les groupes qui ont encore un quota affecté après les changements -> on regardera si $user appartient à chacun d'eux
-  liste_groupes=`echo "SELECT nom FROM quotas WHERE type=\"g\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
+  #liste_groupes=`echo "SELECT nom FROM quotas WHERE type=\"g\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
   
   if [ "$2" == "Toutespartitions" ]; then
     partition=/home
