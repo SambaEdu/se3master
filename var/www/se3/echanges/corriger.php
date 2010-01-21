@@ -105,7 +105,7 @@ echo "<body >
 $req =" SELECT * FROM $table WHERE id_prof='$login' AND etat ='F' order by date_distrib,date_recup ";
 $resultat=mysql_query($req);
 $nb_devoirs=mysql_num_rows($resultat);
-$nb_devoirs=2;
+// $nb_devoirs=2;
 if ($nb_devoirs ==0) {
  echo "$login ".gettext("n'a pas de corrig&#233;s de devoirs &#224; envoyer en ce moment");
  }
