@@ -87,13 +87,13 @@ COMPL_OVERFILL()
       #patch 2/2 pour affichage dans la page quota_visu des users en depassement
       echo "$nom $utilise $softquota $hardquota $grace"| sed -e "s/ /\t/g" >> /tmp/tmp_quota_$disque
     
-      ismember_test=$(cat $FICHIEROVERFILL | grep "^$nom$" )
+      ismember_test=$(ldapsearch -xLLL "cn=overfill" | grep "^memberUid: $nom$" )
       # si l utilisateur n est pas encore dans overfill, on le rajoute, sinon, rien
       if [ -z "$ismember_test" ]; then
         /usr/share/se3/sbin/groupAddUser.pl $nom overfill
         echo "$nom vient d'etre ajoute dans overfill"
       fi
-      # on enleve $nom de la liste $FICHIEROVERFILL a traiter pour le 2.
+      # on enleve $nom de la liste $FICHIEROVERFILL a traiter pour le 2: resteront dans le fichier ceux a supprimer d'overfill
       sed -i $FICHIEROVERFILL -e "s/^$nom$//g"
     done #fin de la boucle 1.
 
