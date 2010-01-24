@@ -458,18 +458,18 @@ if ($_GET[action] == "list") {
 	
 	echo "</td></tr>\n";
 
-	if ($bck_user == 'www-se3' ) {
-		$test = 'checked';
-		$test2= '';
-	} else {
+//	if ($bck_user == 'www-se3' ) {
+//		$test = 'checked';
+//		$test2= '';
+//	} else {
 		$test ='';
 		$test2 = 'checked';
-	}
+//	}
 
-	$choixUser =  "<input type=\"radio\"  id=\"bck_user1\" name=\"bck_user\" value=\"www-se3\" $test>&nbsp;www-se3</input>";
- 	$choixUser .= "&nbsp;&nbsp;<img onmouseover=\"Tip('Ce choix convient un disque USB.')\" onmouseout=\"UnTip()\" src=\"../elements/images/system-help.png\"></img>";
-	$choixUser .= "<BR /><input type=\"radio\" id=\"bck_user2\"name=\"bck_user\" value=\"backuppc\" $test2>backuppc</input>";
-	$choixUser .= "&nbsp;&nbsp;<img onmouseover=\"Tip('Ce choix convient pour un serveur de sauvegarde NAS.')\" onmouseout=\"UnTip()\" src=\"../elements/images/system-help.png\"></img>";
+	$choixUser =  "<input type=\"hidden\"  id=\"bck_user1\" name=\"bck_user\" value=\"www-se3\" $test></input>";
+// 	$choixUser .= "&nbsp;&nbsp;<img onmouseover=\"Tip('Ce choix convient un disque USB.')\" onmouseout=\"UnTip()\" src=\"../elements/images/system-help.png\"></img>";
+	$choixUser .= "<BR /><input type=\"hidden\" id=\"bck_user2\"name=\"bck_user\" value=\"backuppc\" $test2>backuppc</input>";
+//	$choixUser .= "&nbsp;&nbsp;<img onmouseover=\"Tip('Ce choix convient pour un serveur de sauvegarde NAS.')\" onmouseout=\"UnTip()\" src=\"../elements/images/system-help.png\"></img>";
 
 
 	echo "<tr id=\"ligne_user\" >";
