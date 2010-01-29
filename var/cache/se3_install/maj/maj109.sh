@@ -64,46 +64,46 @@ mkdir -p /var/se3/unattended/install/oldunattended
 [ -e /var/se3/unattended/install/scripts ] && [ ! -e /var/se3/unattended/install/oldunattended/scripts ] && mv /var/se3/unattended/install/scripts /var/se3/unattended/install/oldunattended/scripts
 [ -e /var/se3/unattended/install/site ] && [ ! -e /var/se3/unattended/install/oldunattended/site ] && mv /var/se3/unattended/install/site /var/se3/unattended/install/oldunattended/site
 [ -e /var/se3/unattended/install/tools ] && [ ! -e /var/se3/unattended/install/oldunattended/tools ] && mv /var/se3/unattended/install/tools /var/se3/unattended/install/oldunattended/tools
+# 
+# UNATTENDED_DIR="/var/cache/se3_install/unattended"
+# UNATTENDED_VER="unattended-4.7.zip"
+# UNATTENDED_MD5="unattended-4.7.md5"
+# 
+# mkdir -p $UNATTENDED_DIR
+# cd $UNATTENDED_DIR
+# [ -e "$UNATTENDED_VER" ] && rm "$UNATTENDED_VER"
+# [ -e "$UNATTENDED_MD5" ] && rm "$UNATTENDED_MD5"
 
-UNATTENDED_DIR="/var/cache/se3_install/unattended"
-UNATTENDED_VER="unattended-4.7.zip"
-UNATTENDED_MD5="unattended-4.7.md5"
-
-mkdir -p $UNATTENDED_DIR
-cd $UNATTENDED_DIR
-[ -e "$UNATTENDED_VER" ] && rm "$UNATTENDED_VER"
-[ -e "$UNATTENDED_MD5" ] && rm "$UNATTENDED_MD5"
-
-wget http://wawadeb.crdp.ac-caen.fr/unattended/$UNATTENDED_VER
-wget http://wawadeb.crdp.ac-caen.fr/unattended/$UNATTENDED_MD5
-if [ "$(cat $UNATTENDED_MD5 | awk '{print $1}')" != "$(md5sum $UNATTENDED_VER | awk '{print $1}')" ]; then
-echo "Somme Md5 de l'image téléchargee invalide"
-echo "Veuillez télécharger l'archive $UNATTENDED_VER sur l'url suivante :"
-echo "http://wawadeb.crdp.ac-caen.fr/unattended/$UNATTENDED_VER"
-echo 'Decompressez la puis Deposez la ensuite sur le serveur sur \\se3\install\'
-else
-
-# Decompression des fichiers unattended 4.7
-cd /var/se3/unattended/install
-unzip -o -q /var/cache/se3_install/unattended/unattended-4.7.zip
-
-# la crontab permet l'actualisation le soir (en attendant de modifier les pages parcs pour qu'elles exécutent unattended-generate.sh en cas de modif)
-# cp /var/cache/se3_install/conf/se3-crontab /etc/cron.d/se3
-# /etc/init.d/cron restart > /dev/null
-
-# ajout du droit x sur ce fichier car unattended-generate.sh (ci-dessus) en a besoin
-setfacl -m u::rwx -m g::rx -m o::rx /var/se3/unattended/install/tools/prepare
-# création du unattend.csv initial à partir de l'annuaire se3 actuel et téléchargement des fichiers nécessaires : activeperl, msinstaller,...
-[ -e /usr/share/se3/scripts/makedhcpdconf ] && /usr/share/se3/scripts/unattended_generate.sh 
-cd /var/cache/se3_install
-fi
+# wget http://wawadeb.crdp.ac-caen.fr/unattended/$UNATTENDED_VER
+# wget http://wawadeb.crdp.ac-caen.fr/unattended/$UNATTENDED_MD5
+# if [ "$(cat $UNATTENDED_MD5 | awk '{print $1}')" != "$(md5sum $UNATTENDED_VER | awk '{print $1}')" ]; then
+# echo "Somme Md5 de l'image téléchargee invalide"
+# echo "Veuillez télécharger l'archive $UNATTENDED_VER sur l'url suivante :"
+# echo "http://wawadeb.crdp.ac-caen.fr/unattended/$UNATTENDED_VER"
+# echo 'Decompressez la puis Deposez la ensuite sur le serveur sur \\se3\install\'
+# else
+# 
+# # Decompression des fichiers unattended 4.7
+# cd /var/se3/unattended/install
+# unzip -o -q /var/cache/se3_install/unattended/unattended-4.7.zip
+# 
+# # la crontab permet l'actualisation le soir (en attendant de modifier les pages parcs pour qu'elles exécutent unattended-generate.sh en cas de modif)
+# # cp /var/cache/se3_install/conf/se3-crontab /etc/cron.d/se3
+# # /etc/init.d/cron restart > /dev/null
+# 
+# # ajout du droit x sur ce fichier car unattended-generate.sh (ci-dessus) en a besoin
+# setfacl -m u::rwx -m g::rx -m o::rx /var/se3/unattended/install/tools/prepare
+# # création du unattend.csv initial à partir de l'annuaire se3 actuel et téléchargement des fichiers nécessaires : activeperl, msinstaller,...
+# [ -e /usr/share/se3/scripts/makedhcpdconf ] && /usr/share/se3/scripts/unattended_generate.sh 
+# cd /var/cache/se3_install
+# fi
 # Mise a jour du journal des mises a jour
 
 [ -z "$(grep "bind_policy soft" /etc/libnss-ldap.conf)" ] && echo "bind_policy soft" >> /etc/libnss-ldap.conf
 
-echo "Relance le script pour les clients Linux - Ajout test lancement sur serveur"
-/usr/share/se3/sbin/create_client_linux.sh >/dev/null
-echo ""
+# echo "Relance le script pour les clients Linux - Ajout test lancement sur serveur"
+# /usr/share/se3/sbin/create_client_linux.sh >/dev/null
+# echo ""
 
 #Correction bug gsfont si besoin
 AT_SCRIPT="/root/verif_fondecran.sh"

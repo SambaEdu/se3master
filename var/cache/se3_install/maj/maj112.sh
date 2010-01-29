@@ -38,9 +38,6 @@ echo "Nettoyage anciens logs samba"
 mkdir -p /var/log/samba/old
 rm -f /var/log/samba/*.old
 
-# Correction de droits
-echo "Remise en place des droits - execution de permse3"
-/usr/share/se3/sbin/permse3
 
 echo "Mise a jour 112:
 - Correctif logs samba
