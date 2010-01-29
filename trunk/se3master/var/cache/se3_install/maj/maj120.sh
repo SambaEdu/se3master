@@ -18,6 +18,9 @@ LADATE=$(date +%d-%m-%Y)
 . /usr/share/se3/includes/config.inc.sh -lm
 . /usr/share/se3/includes/functions.inc.sh
 
+mysql -f se3db < /var/cache/se3_install/se3db.sql 2>/dev/null
+
+
 
 MAIL_REPORT()
 {
@@ -155,21 +158,14 @@ net groupmap list | grep "Eleves"  > /dev/null 2>&1 || net groupmap add ntgroup=
 # mise a jour des parametres caches pour le domaine si besoin ( remplacement confse3.ini )
 echo " Remplacement du fichier confse3.ini par des parametres dans la base se3db"
 
-if [ -z "$se3_domain" ]; then 
-    workgroup=$(grep "workgroup =" /etc/samba/smb.conf | grep -v "^#" | cut -d"=" -f2| sed "s/ //g")
-#     eval $(grep "workgroup =" /etc/samba/smb.conf | sed "s/ //g") --> pose pb
-    SETMYSQL se3_domain "$workgroup" "Nom du domaine samba" 4
-fi
+workgroup=$(grep "workgroup =" /etc/samba/smb.conf | grep -v "^#" | cut -d"=" -f2| sed "s/ //g")
+CHANGEMYSQL se3_domain "$workgroup" 
 
-if [ -z "$netbios_name" ]; then 
-    netbiosname=$(grep "netbios name =" /etc/samba/smb.conf |grep -v "^#" | cut -d"=" -f2| sed "s/ //g")
-    SETMYSQL netbios_name "$netbiosname" "Nom netbios du serveur" 4
-fi
+netbiosname=$(grep "netbios name =" /etc/samba/smb.conf |grep -v "^#" | cut -d"=" -f2| sed "s/ //g")
+CHANGEMYSQL netbios_name "$netbiosname" 
 
-if [ -z "$se3ip" ]; then 
-    se3ip=$(nmblookup $netbiosname | grep "$netbiosname<00>" | cut -d " " -f1)
-    SETMYSQL se3ip "$se3ip" "Adresse IP du serveur" 4
-fi
+se3ip=$(nmblookup $netbiosname | grep "$netbiosname<00>" | cut -d " " -f1)
+CHANGEMYSQL se3ip "$se3ip" 
 
 
 echo "mise en place des privileges samba"
@@ -208,13 +204,13 @@ sambaSID: $DOMAINSID-1" | ldapadd -x -h $LDAPIP -D $ADMINRDN,$BASEDN -w $ADMINPW
 
 
 # Sauvegarde fichier avant modif si besoin et init variable smbpass
-if [ -f /var/se3/Progs/install/installdll/confse3.ini-root ]; then
+#if [ -f /var/se3/Progs/install/installdll/confse3.ini-root ]; then
 smbpasswd -e root
 echo -e "$xppass\n$xppass"|(/usr/bin/smbpasswd -s root)
 SMBPASS="$xppass"
-else
- SMBPASS=`grep "password_ldap_domain" "$CONFSE3" | sed -e 's/^$//'| sed -e 's/\r//' |cut -d= -f2`
-fi
+#else
+# SMBPASS=`grep "password_ldap_domain" "$CONFSE3" | sed -e 's/^$//'| sed -e 's/\r//' |cut -d= -f2`
+#fi
 
 # Creation compte adminse3 dans annuaire si besoin est 
 [ -z "$(ldapsearch -xLLL uid=adminse3)" ] && /usr/share/se3/sbin/create_adminse3.sh
