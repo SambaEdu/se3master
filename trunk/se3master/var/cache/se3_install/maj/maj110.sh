@@ -137,10 +137,6 @@ adduser www-se3 www-data 2&>/dev/null
 /etc/init.d/sudo restart
 
 
-# Correction de droits
-echo "Remise en place des droits - ex¿cution de permse3"
-/usr/share/se3/sbin/permse3
-
 echo "Mise a jour 110:
 - Correctif backuppc / NAS" >> $HISTORIQUE_MAJ
 MAIL_REPORT
