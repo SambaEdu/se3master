@@ -1,6 +1,7 @@
 # SambaEdu 3
 
 
+
 # Global parameters
 [global]
 	workgroup = #DOMAIN#
@@ -19,23 +20,21 @@
 	ldap machine suffix = #COMPUTERS#
 	ldap user suffix = #PEOPLE#
 	ldap group suffix = #GROUPS#
-	#ldap idmap suffix = #BASEDN#
-	#ldap filter = "(uid=%u)"
 	ldap admin dn = #ADMINRDN#,#BASEDN#
 	ldap ssl = start_tls
 	create mask = 0700
 	directory mask = 0700
 	inherit acls = Yes
 	printing = cups
-    printcap = cups
-    printer admin = @admins
-    load printers = yes
-	print command = lpr -s -r -P %p %s
+    	printcap = cups
+    	##printer admin = @admins
+    	load printers = yes
+	##print command = lpr -s -r -P %p %s
 	hide unreadable = Yes
 	hide files = /inventaire/desktop.ini/profil/profile/profile.V2/$RECYCLE.BIN/gpoPASSWD/
 	hide dot files = yes
 	dos charset = 850
-	unix charset = UTF-8
+	unix charset = #CHARSET#
 	lanman auth = yes
 	notify:inotify = false
 	include = /etc/samba/smb_%a.conf
