@@ -24,9 +24,11 @@ PEOPLERDN=`echo "SELECT value FROM params WHERE name='peopleRdn'" | mysql -h $db
 GROUPSRDN=`echo "SELECT value FROM params WHERE name='groupsRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 REPLICA_STATUS=`echo "SELECT value FROM params WHERE name='replica_status'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 CORBEILLE=`echo "SELECT value FROM params WHERE name='corbeille'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
+CHARSET=$(grep "unix charset" /etc/samba/smb.conf | cut -d"=" -f2 | sed -e "s/ //")
+[ -z "$CHARSET" ] && CHARSET="UTF-8"
 
 cp -f /etc/samba/smb.conf /tmp
-sed -e "s/#DOMAIN#/$NTDOM/g;s/#NETBIOSNAME#/$NETBIOS/g;s/#IPSERVEUR#/$SE3IP/g;s/#MASK#/$MASK/g;s/#SLAPDIP#/$LDAPIP/g;s/#BASEDN#/$BASEDN/g;s/#ADMINRDN#/$ADMINRDN/g;s/#COMPUTERS#/$COMPUTERSRDN/g;s/#PEOPLE#/$PEOPLERDN/g;s/#GROUPS#/$GROUPSRDN/g" /var/cache/se3_install/conf/smb_3.conf.in >/etc/samba/smb.conf
+sed -e "s/#DOMAIN#/$NTDOM/g;s/#NETBIOSNAME#/$NETBIOS/g;s/#IPSERVEUR#/$SE3IP/g;s/#MASK#/$MASK/g;s/#SLAPDIP#/$LDAPIP/g;s/#BASEDN#/$BASEDN/g;s/#ADMINRDN#/$ADMINRDN/g;s/#COMPUTERS#/$COMPUTERSRDN/g;s/#PEOPLE#/$PEOPLERDN/g;s/#GROUPS#/$GROUPSRDN/g;s/#CHARSET#/$CHARSET/g" /var/cache/se3_install/conf/smb_3.conf.in >/etc/samba/smb.conf
 size=$(wc -l /tmp/smb.conf |cut -d ' ' -f1)
 line=$(grep -m1 -n '<.*>' /tmp/smb.conf |cut -d ':' -f1)
 if [ "$line" != "" ]
