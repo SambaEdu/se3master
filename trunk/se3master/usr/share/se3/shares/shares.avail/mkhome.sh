@@ -1,6 +1,5 @@
 #!/bin/bash
-
-## $Id: mkhome.pl 3544 2009-02-15 00:00:33Z keyser $ ##
+## $Id: mkhome.sh 3544 2009-02-15 00:00:33Z keyser $ ##
 #shares_Win95: homes
 #shares_Win2K: homes
 #shares_WinXP: homes
@@ -12,52 +11,45 @@
 ##### Crée le répertoire personnel de user #####
 #
 #
+
+
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
 	echo "Crée le répertoire personnel de user"
-	echo "Usage : mkhome.pl user"
+	echo "Usage : mkhome.sh user"
 fi	
 	
 user=$1
 # Creation du repertoire perso le cas echeant
 # -------------------------------------------
-if [ ! -d "/home/$user" ]; then
-	WWWPATH="/var/www"
+if [ ! -d "/home/$user" -o ! -d "/home/$user/profil" ]; then
+
+    . /etc/se3/config_c.cache.sh
+	. /etc/se3/config_m.cache.sh
+ 	. /etc/se3/config_o.cache.sh
+	. /etc/se3/config_p.cache.sh
 	
-	if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
-		dbhost=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
-		dbname=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d \" -f 2`
-		dbuser=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 |cut -d \" -f 2`
-		dbpass=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 |cut -d \" -f 2`
-	fi
-	
-	path2UserSkel=`echo "SELECT value FROM params WHERE name='path2UserSkel'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N || echo "pb avec mysql"; path2UserSkel="/etc/skel/user"`
-	if [ -z "$path2UserSkel" ]; then
-		path2UserSkel="/etc/skel/user"
-	fi
-	lcsIp=`echo "SELECT value FROM params WHERE name='lcsIp'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-	
-	cp -a $path2UserSkel/ /home/$user > /dev/null 2>&1
-	
-	# kz - Ajout pour la construction du fichier de pref de moz TB et fichier de moz FF
+    [ -d "/home/$user" ] || mkdir /home/$user
+    cp -a $path2UserSkel/* /home/$user > /dev/null # 2>&1
+
+	# kz - Ajout pour la construction du fichier de pref de moz TB uniquement car FF géré lors des maj
 	# 
 	PREF_JS_TB="/home/$user/profil/appdata/Thunderbird/Profiles/default/prefs.js"
-	PREF_JS_FF="/home/$user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js"
+# 	PREF_JS_FF="/home/$user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js"
 	
 	
 	SlisIp=`echo "SELECT value FROM params WHERE name='slisip'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-	if [ ! -z "$SlisIp" ]; then
-	sed -e "s/slisip/$SlisIp/" -i $PREF_JS_FF
-	else
-		if [ -e /var/www/se3.pac ]; then
-		
-		SE3IP=$(/sbin/ifconfig eth0 | grep inet |cut -d : -f 2 |cut -d \  -f 1| head -n 1)
-		sed -e "s!http://slisip/cgi-bin/slis.pac!http://$SE3IP/se3.pac!" -i $PREF_JS_FF
-		else
-		sed -e "s!http://slisip/cgi-bin/slis.pac!!" -i $PREF_JS_FF
-		sed -e "/network.proxy.type/d" -i $PREF_JS_FF
-		fi
-	fi
+# 	if [ ! -z "$slissp" ]; then
+# 	sed -e "s/slisip/$slisip/" -i $PREF_JS_FF
+# 	else
+# 		if [ -e /var/www/se3.pac ]; then
+# 		
+# 		sed -e "s§http://slisip/cgi-bin/slis.pac§http://$se3ip/se3.pac§" -i $PREF_JS_FF
+# 		else
+# 		sed -e "s§http://slisip/cgi-bin/slis.pac§§" -i $PREF_JS_FF
+# 		sed -e "/network.proxy.type/d" -i $PREF_JS_FF
+# 		fi
+# 	fi
 	
 	MAIL=`ldapsearch -xLLL "uid=$user" | grep mail | cut -d " " -f2`
 	PRENOM=`ldapsearch -xLLL "uid=$user" | grep gecos | cut -d " " -f2`
@@ -96,11 +88,10 @@ if [ ! -d "/home/$user" ]; then
 
 else
 	useruid=`getent passwd $user | gawk -F ':' '{print $3}'`
-	prop=`ls -nld /home/$user | gawk -F ' ' '{print $3}'`
+	prop=`stat -c%u /home/$user`
 	if [ ! "$prop" = "$useruid" ]; then
 	chown -R $user:admins /home/$user > /dev/null 2>&1
 	chown -R root:admins /home/$user/profil/Bureau/* > /dev/null 2>&1
 	chown -R root:admins /home/$user/profil/Demarrer/* > /dev/null 2>&1
 	fi 
 fi
-
