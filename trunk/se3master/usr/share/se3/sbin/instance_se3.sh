@@ -113,23 +113,30 @@ do
 done
 
 # Firefox
+PREF_JS_FF="/etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js"
 sed -i "s/%ip%/$SE3IP/g;s/%se3pdc%/$(hostname -f)/g" /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/hostperm.1
 if [ "$SLISIP" == "" ]
 then
-	if [ -z $http_proxy ]
-	then
-		sed -i 's/%proxytype%/0/g' /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
+	if [ -e /var/www/se3.pac ]; then
+		sed -i 's/%proxytype%/2/g' $PREF_JS_FF
+		sed -i "s/%proxyurl%/http:\/\/$SE3IP\/se3.pac/g" $PREF_JS_FF
 	else
-		sed -i 's/%proxytype%/1/g' /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
+		if [ -z $http_proxy ]
+		then
+			sed -i 's/%proxytype%/0/g' $PREF_JS_FF
+		else
+			sed -i 's/%proxytype%/1/g' $PREF_JS_FF
 		proxyurl=$(echo $http_proxy|sed -e 's/http:\/\///g')
-		sed -i "s/%proxyurl%/$proxyurl/g" /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
-	fi
+			sed -i "s/%proxyurl%/$proxyurl/g" $PREF_JS_FF
+		fi	
+	fi	
+	
 else
 		
-		sed -i 's/%proxytype%/2/g' /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
-		sed -i "s/%proxyurl%/http:\/\/$SLISIP\/cgi-bin\/slis.pac/g" /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
+		sed -i 's/%proxytype%/2/g' $PREF_JS_FF
+		sed -i "s/%proxyurl%/http:\/\/$SLISIP\/cgi-bin\/slis.pac/g" $PREF_JS_FF
 fi
 /etc/init.d/cron reload
 
 # Corrige icone reparer son compte si L: toujours utilise pour Progs
-grep W: /home/templates/base/logon.bat >/dev/null || cp -f /var/cache/se3_install/conf/Réparer\ son\ compte_legacy.lnk /home/templates/base/Bureau/Réparer\ son\ compte.lnk
+grep W: /home/templates/base/logon.bat >/dev/null || cp -f /var/cache/se3_install/conf/Reparer\ son\ compte_legacy.lnk /home/templates/base/Bureau/Reparer\ son\ compte.lnk
