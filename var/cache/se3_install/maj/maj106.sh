@@ -50,13 +50,13 @@ POURSUIVRE()
 #Modif smb.conf afin de ne pas écrire avec groupe root
 [ -z "$(grep "force group" /etc/samba/smb.conf)" ] && sed "s/admin users = @admins/admin users = @admins\n\tforce group = admins/" -i /etc/samba/smb.conf
 echo ""
-echo "Relance le script pour les clients Linux"
-/usr/share/se3/sbin/create_client_linux.sh >/dev/null
+#echo "Relance le script pour les clients Linux"
+#/usr/share/se3/sbin/create_client_linux.sh >/dev/null
 echo ""
 echo "Mise à jour du schéma samba et des index ldap"
 sed "/samba3.schema/d" -i /etc/ldap/slapd.conf
 echo ""
-cp conf/samba_se3etch.schema /etc/ldap/schema/samba.schema
+#cp conf/samba_se3etch.schema /etc/ldap/schema/samba.schema
 /usr/share/se3/scripts/mkSlapdConf.sh index
 
 # Connexion automatique aux imprimantes partagées par le se3 : se3printers.bat
@@ -74,8 +74,8 @@ unix2dos /home/templates/base/logon.bat
 
 
 # Correction de droits
-echo "Résolution de problèmes de droits, nettoyage de /home/netlogon - exécution de permse3"
-/usr/share/se3/sbin/permse3
+#echo "Résolution de problèmes de droits, nettoyage de /home/netlogon - exécution de permse3"
+#/usr/share/se3/sbin/permse3
 echo ""
 # Mise en place des profils FF/TB pour les clients windows
 echo "Mise en place des profils FF/TB par défaut pour les clients Linux"
