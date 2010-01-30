@@ -50,7 +50,7 @@ POURSUIVRE()
 echo "alter table restrictions CHANGE valeur valeur VARCHAR(255) NOT NULL" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 
 # Relance le script pour les clients Linux
-/usr/share/se3/sbin/create_client_linux.sh
+#/usr/share/se3/sbin/create_client_linux.sh
 
 # supression script fond ecran
 rm -f /usr/share/se3/scripts/fonds_modif_smb.sh
@@ -59,8 +59,8 @@ rm -f usr/share/se3/scripts/install_imagemagick_et_gsfonts.sh
 rm -f /usr/share/se3/scripts/svg_se3_v3.sh
 
 # Mise a jour crontab pour se3
-cp conf/se3-crontab /etc/cron.d/se3
-/etc/init.d/cron restart
+#cp conf/se3-crontab /etc/cron.d/se3
+#/etc/init.d/cron restart
 
 # Recuperation de variables LDAP
 BASEDN=`echo "SELECT value FROM params WHERE name='ldap_base_dn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
@@ -118,8 +118,8 @@ echo "Modification smb.conf pour nouvelle version de machineAdd.pl"
 
 
 # Correction de droits
-echo "Remise en place des droits - exécution de permse3"
-/usr/share/se3/sbin/permse3
+#echo "Remise en place des droits - exécution de permse3"
+#/usr/share/se3/sbin/permse3
 
 
 
