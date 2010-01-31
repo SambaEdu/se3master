@@ -14,6 +14,7 @@
 # Cmnd alias specification
 Cmnd_Alias SE3CLONAGE=/usr/share/se3/scripts/se3_tftp_boot_pxe.sh,/usr/share/se3/scripts/pxe_gen_cfg.sh,/usr/share/se3/scripts/recup_rapport.php,/usr/share/se3/scripts/se3_tftp_menage_atq.sh
 Cmnd_Alias SE3DHCP=/usr/share/se3/scripts/makedhcpdconf,/usr/share/se3/scripts/move_dhcp_leases.sh
+Cmnd_Alias SE3DOMAIN=/usr/share/se3/scripts/integreDomaine.sh
 Cmnd_Alias MOZILLA=/usr/share/se3/scripts/modif_profil_mozilla_ff.sh,/usr/share/se3/scripts/deploy_mozilla_ff_final.sh,/usr/share/se3/scripts/deploy_mozilla_tb_final.sh
 Cmnd_Alias DOSSIERS=/usr/share/se3/scripts/createtemplateparc.sh,/usr/share/se3/scripts/echange_classes.sh, /usr/share/se3/scripts/creer_grpclass.sh,/usr/share/se3/scripts/create_share.sh, /usr/share/se3/scripts/delete_share.sh, /usr/share/se3/scripts/updateClasses.pl,/usr/share/se3/scripts/cleanClasses.pl
 Cmnd_Alias  SE3PRINT= /usr/share/se3/scripts/lpadmin.sh, /usr/share/se3/scripts/sambareload.sh, /usr/share/se3/scripts/printless.sh, /usr/share/se3/scripts/printrm.sh, /usr/share/se3/scripts/lenny_bug.sh, /usr/share/se3/scripts/disable_lenny_bug.sh
@@ -40,6 +41,6 @@ root	ALL=(ALL) ALL
 
 # commandes devant être lançées comme root par www-se3
 
-www-se3 ALL=NOPASSWD:MOZILLA,NOPASSWD:QUOTAS,NOPASSWD:DOSSIERS,NOPASSWD:ECHANGES,NOPASSWD:ECHANGES1,NOPASSWD:SE3PRINT,NOPASSWD:LDAPCLEAN,NOPASSWD:UPS,NOPASSWD:ACLS,NOPASSWD:ADM,NOPASSWD:BACKUP,NOPASSWD:BACKUP1,NOPASSWD:SE3APPLI,NOPASSWD:FONDS_ECRAN,NOPASSWD:SE3DHCP,NOPASSWD:SE3CLONAGE,NOPASSWD:IMPORT_COMPTES
+www-se3 ALL=NOPASSWD:MOZILLA,NOPASSWD:QUOTAS,NOPASSWD:DOSSIERS,NOPASSWD:ECHANGES,NOPASSWD:ECHANGES1,NOPASSWD:SE3PRINT,NOPASSWD:LDAPCLEAN,NOPASSWD:UPS,NOPASSWD:ACLS,NOPASSWD:ADM,NOPASSWD:BACKUP,NOPASSWD:BACKUP1,NOPASSWD:SE3APPLI,NOPASSWD:FONDS_ECRAN,NOPASSWD:SE3DHCP,NOPASSWD:SE3CLONAGE,NOPASSWD:IMPORT_COMPTES,NOPASSWD:SE3DOMAIN
 www-data ALL=NOPASSWD:LCS,NOPASSWD:LCS1,NOPASSWD:LCS2
 backuppc ALL=NOPASSWD:BACKUP1
