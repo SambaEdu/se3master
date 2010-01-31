@@ -83,7 +83,7 @@ fi
 			ERREUR "Impossible de trouver le groupe ou l'utilisateur passé en paramètre dans l'annuaire Ldap."
 		else
 			if [ "$OPTION" == "create_homes" ]; then
-				/usr/share/se3/sbin/mkhome.pl "$1"
+				/usr/share/se3/shares/shares.avail/mkhome.sh "$1"
 			fi
 			echo "Je change la page de démarrage pour $1 en lui fixant $2"
 			if [ -e /home/$1 ]; then
@@ -100,7 +100,7 @@ fi
 		ldapsearch -x -LLL cn=$1 -b $BASEDN | grep uid | cut -d " " -f2 |  cut -d "=" -f2 | cut -d "," -f1 | while read A
 		do
 			if [ "$OPTION" == "create_homes" ]; then
-			/usr/share/se3/sbin/mkhome.pl "$A"
+			/usr/share/se3/shares/shares.avail/mkhome.sh "$A"
 			fi
 			
 			if [ -e /home/$A ]; then
@@ -117,7 +117,7 @@ fi
 		ldapsearch -x -LLL "cn=$1" | grep memberUid | cut -d " " -f2 | while read A
 		do 
 			if [ "$OPTION" == "create_homes" ]; then
-			/usr/share/se3/sbin/mkhome.pl "$A"
+			/usr/share/se3/shares/shares.avail/mkhome.sh "$A"
 			fi
 			
 			if [ -e /home/$A ]; then
