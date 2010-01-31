@@ -444,10 +444,10 @@ function HostCoherence() { // Verifie la coherence entre le fichier host et la p
 //=================================================
 
 /**
-* Test si www-se3 a bien les droits pour ecrire dans le repertoire
+* Test si l'interface a bien les droits pour ecrire dans le repertoire
 
-* @Parametres
-* @Return
+* @Parametres : le repertoire a tester
+* @Return : true si on a bien le droit d'ecrire, false sinon.
 */
 
 function TestEcrire($repertoire) { // Test si ww-se3 a bien les droits pour ecrire dans le repertoire
