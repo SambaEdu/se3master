@@ -189,7 +189,7 @@ elseif ($XferMethod=="rsync") {
 	echo gettext("Copier la cl&#233;");
 	echo "</b><br>";
 	echo gettext("Copier la cl&#233; publique qui se trouve sur le serveur Se3 dans")." /var/remote_adm/.ssh/id_rsa.pub,".gettext(" sur la machine que vous souhaitez sauvegarder, dans le r&#233;pertoire")." /root/.ssh/ ".gettext(" et la renomer en authorized_keys. R&#233;duire les droits en faisant un")." chmod 400 /root/.ssh/authozed_keys.";
-	echo "<br><br><b>".gettext("Tester")."</b><br>".gettext("Connectez vous depuis ce serveur vers la machine &#224; sauvegarder, pour cela faites su www-se3, puis ssh root@machine_a_sauvegarder")."<br>".gettext("Vous devez &#234;tre connect&#233; sans avoir &#224; taper un mot de passe.")."<br>";
+	echo "<br><br><b>".gettext("Tester")."</b><br>".gettext("Connectez vous depuis ce serveur vers la machine &#224; sauvegarder, pour cela faites su backuppc, puis ssh root@machine_a_sauvegarder")."<br>".gettext("Vous devez &#234;tre connect&#233; sans avoir &#224; taper un mot de passe.")."<br>";
 }
 
 echo "</td></tr>";
