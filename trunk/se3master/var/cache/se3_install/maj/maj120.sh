@@ -167,6 +167,8 @@ CHANGEMYSQL netbios_name "$netbiosname"
 se3ip=$(nmblookup $netbiosname | grep "$netbiosname<00>" | cut -d " " -f1)
 CHANGEMYSQL se3ip "$se3ip" 
 
+CHANGEMYSQL bck_user "backuppc" 
+
 
 echo "mise en place des privileges samba"
 echo "mise a jour de confse3.ini"
@@ -243,6 +245,10 @@ la mise en pace des privileges d administration peut causer des problemes
 avec les pilotes d imprimantes si vous constatez que les pilotes ne fonctionnent plus,
 c est qu il faut les uploader a nouveau sur le serveur (voir la procedure de la doc)"
 
+
+# bye bye se3printers
+rm -f /var/se3/Progs/ro/printers/se3printers.bat
+sed -i "/se3printers.bat/d" /home/templates/base/logon.bat
 
 # on finit par l'actualisation du cache des parametres : 
 /usr/share/se3/includes/config.inc.sh -clpbmsdf 
