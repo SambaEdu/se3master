@@ -328,13 +328,13 @@ if ($bpcmedia != "1") {
 		$drive="/var/lib/backuppc";
 	}
    
-   	$droits_ok=TestEcrire($drive);
-   	if ($droits_ok!="1") {
-        	echo "<center><font color=\"red\">";
-		echo gettext("Attention, la sauvegarde n'a pas les droits n&#233;cessaires sur le r&#233;pertoire parent.<br>Vous devez modifer les droits en faisant un chown -R backuppc")." $drive.";
-		echo "</center>";
-         	echo "<br><br>";
-        }
+//   	$droits_ok=TestEcrire($drive);
+//   	if ($droits_ok!="1") {
+//        	echo "<center><font color=\"red\">";
+//		echo gettext("Attention, la sauvegarde n'a pas les droits n&#233;cessaires sur le r&#233;pertoire parent.<br>Vous devez modifer les droits en faisant un chown -R backuppc")." $drive.";
+//		echo "</center>";
+//         	echo "<br><br>";
+//        }
 }
 
 // reload la conf

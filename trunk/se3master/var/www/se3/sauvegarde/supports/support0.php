@@ -46,14 +46,14 @@
 			echo "<input type=\"hidden\" name=\"drive\" value=\"$drive\">";
 			echo "<input type=\"hidden\" name=\"action\" value=\"modif\">";
 			echo "<input type=\"text\" name=\"space\" value=\"$drive\" >";
-			$msg10 = "Pour changer le r&#233;pertoire ou disque de la sauvegarde indiquer sont chemin.<br>Le disque doit &#234;tre mont&#233; avant.<br><b> Ne pas oublier de donner les droits &#224; www-se3 sur le r&#233;pertoire de sauvegarde.<br>chown -R ww-se3.root <br></b><br>Attention, cette op&#233;ration est extr&#233;mement longue en fonction des sauvegardes existantes.'";
+			$msg10 = "Pour changer le r&#233;pertoire ou disque de la sauvegarde indiquer sont chemin.<br>Le disque doit &#234;tre mont&#233; avant.<br><b> Ne pas oublier de donner les droits &#224; backuppc sur le r&#233;pertoire de sauvegarde.<br>chown -R ww-se3.root <br></b><br>Attention, cette op&#233;ration est extr&#233;mement longue en fonction des sauvegardes existantes.'";
 			echo "<span onmouseout=\"UnTip();\" onmouseover=\"Tip('$msg10');\">";
 				echo "<input type=\"submit\" value=\"Ok\">\n";
 			echo "</span>";
 			echo "</form>";
 		} else {	
 			echo "<a href=sauv.php?action=change>";
-			$msg11 = "R&#233;pertoire ou se trouve la sauvegarde.<br><br>Pour le changer cliquer sur le lien.<br><br>Attention, cette op&#233;ration est extr&#233;mement longue en fonction des sauvegardes existantes.<br><br><b>Attention : Ne pas oublier de donner les droits au r&#233;pertoire parent, ou vous avez d&#233;placer votre sauvegarde. chown -R www-se3 /mon_repertoire_de_sauvegarde.</b>";
+			$msg11 = "R&#233;pertoire ou se trouve la sauvegarde.<br><br>Pour le changer cliquer sur le lien.<br><br>Attention, cette op&#233;ration est extr&#233;mement longue en fonction des sauvegardes existantes.<br><br><b>Attention : Ne pas oublier de donner les droits au r&#233;pertoire parent, ou vous avez d&#233;placer votre sauvegarde. chown -R backuppc /mon_repertoire_de_sauvegarde.</b>";
 			echo "<span onmouseout=\"UnTip();\" onmouseover=\"Tip('$msg11');\">";
 				echo readlink('/var/lib/backuppc');
 			echo "</span>";
@@ -72,7 +72,7 @@
 			echo "</form>";
 		} else {
 		 	echo "<a href=sauv.php?action=change>";
-			echo "<u onmouseover=\"return escape".gettext("('Attention, la sauvegarde va se faire sur la partition /var.<br><br>Il est vivement conseill&#233; de changer cela et de faire votre sauvegarde, soit sur un autre disque, soit sur un disque externe USB.<br><br>Vous devez penser &#224; donner les droits pour www-se3 au r&#233;pertoire parent.')")."\">";
+			echo "<u onmouseover=\"return escape".gettext("('Attention, la sauvegarde va se faire sur la partition /var.<br><br>Il est vivement conseill&#233; de changer cela et de faire votre sauvegarde, soit sur un autre disque, soit sur un disque externe USB.<br><br>Vous devez penser &#224; donner les droits pour backuppc au r&#233;pertoire parent.')")."\">";
 			echo"<a href=sauv.php?action=change><font color=\"red\">/var/lib/backuppc</font></a>";
 			echo "</u>";
 			echo "</a>";
