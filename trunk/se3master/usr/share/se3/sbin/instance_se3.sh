@@ -112,6 +112,20 @@ do
 	done
 done
 
+
+
+# Backuppc
+debian_vers=$(cat /etc/debian_version)
+cd /usr/share/backuppc/lib/BackupPC/CGI
+rm -f Lib.pm
+if [ "$debian_vers" == "4.0" ]; then
+	ln -s Lib.pm.etch Lib.pm
+else
+	ln -s Lib.pm.lenny Lib.pm
+fi
+cd -
+
+
 # Firefox
 PREF_JS_FF="/etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js"
 sed -i "s/%ip%/$SE3IP/g;s/%se3pdc%/$(hostname -f)/g" /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/hostperm.1
