@@ -186,7 +186,7 @@ sub NewRequest
         "</head></html>\n";
       exit;
     } else {
-      $User = 'www-se3';
+      $User = 'backuppc';
     }
 
     #
