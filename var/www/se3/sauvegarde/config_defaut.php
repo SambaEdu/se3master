@@ -82,9 +82,9 @@ if($_GET['action']=="modif") {
 	if ($hourEnd == "") { $hourEnd = "20.0"; }
 
 	$weekDays = "[$Lundi,$Mardi,$Mercredi,$Jeudi,$Vendredi,$Samedi,$Dimanche]";
-	$weekDays = preg_replace("/,,|,,,|,,,,|,,,,,|,,,,,,/",",",$weekDays);
-	$weekDays = preg_replace("/\[,","[/",$weekDays);
-	$weekDays = preg_replace("/,\]","]/",$weekDays);
+	$weekDays = ereg_replace(",,|,,,|,,,,|,,,,,|,,,,,,",",",$weekDays);
+	$weekDays = ereg_replace("\[,","[",$weekDays);
+	$weekDays = ereg_replace(",\]","]",$weekDays);
 	
 
 	// On ouvre le fichier
@@ -140,7 +140,7 @@ $DEFAULT .= "
 ];";
 }
 $DEFAULT .= "
-\$Conf{BackupPCUser} = 'www-se3';
+\$Conf{BackupPCUser} = 'backuppc';
 \$Conf{CgiDir}       = '/usr/share/backuppc/cgi-bin';
 \$Conf{InstallDir}   = '/usr/share/backuppc';
 \$Conf{BackupPCUserVerify} = 1;
@@ -281,7 +281,7 @@ $DEFAULT .= "
 # (can be overridden in the per-PC config.pl)
 ###########################################################################
 \$Conf{CgiAdminUserGroup} = 'backuppc';
-\$Conf{CgiAdminUsers}     = 'www-se3';
+\$Conf{CgiAdminUsers}     = 'backuppc';
 \$Conf{CgiURL} = 'http://'.\$Conf{ServerHost}.'/backuppc/index.cgi';
 \$Conf{Language} = 'fr';
 \$Conf{CgiUserHomePageCheck} = '';
@@ -331,7 +331,7 @@ if ($bpcmedia != "1") {
    	$droits_ok=TestEcrire($drive);
    	if ($droits_ok!="1") {
         	echo "<center><font color=\"red\">";
-		echo gettext("Attention, la sauvegarde n'a pas les droits n&#233;cessaires sur le r&#233;pertoire parent.<br>Vous devez modifer les droits en faisant un chown -R www-se3")." $drive.";
+		echo gettext("Attention, la sauvegarde n'a pas les droits n&#233;cessaires sur le r&#233;pertoire parent.<br>Vous devez modifer les droits en faisant un chown -R backuppc")." $drive.";
 		echo "</center>";
          	echo "<br><br>";
         }
@@ -364,17 +364,17 @@ if(file_exists("/etc/backuppc/config.pl")) {
   	$weekDays = variables(weekDays,config);
   	$ipAddrBase = variables(ipAddrBase,config);
   	
-	if (preg_match("/'(.*)'/",$ipAddrBase,$reg)) {
+	if (ereg("'(.*)'",$ipAddrBase,$reg)) {
   		$ipAddrBase=trim($reg[1]);
   	}	
   
   	$first = variables(first,config);
-  	if (preg_match("/'(.*)'/",$first,$reg)) {
+  	if (ereg("'(.*)'",$first,$reg)) {
   		$first=trim($reg[1]);
   	}	
   
   	$last = variables(last,config);
-  	if (preg_match("/'(.*)'/",$last,$reg)) {
+  	if (ereg("'(.*)'",$last,$reg)) {
   		$last=trim($reg[1]);
   	}	
 } else {
@@ -391,9 +391,9 @@ if(file_exists("/etc/backuppc/config.pl")) {
 	if ($hourBegin == "") { $hourBegin = "6.0"; }
 	if ($hourEnd == "") { $hourEnd = "20.0"; }
 	$weekDays = "[1,2,3,4,5,,]";
-	$weekDays = preg_replace("/,,|,,,|,,,,|,,,,,|,,,,,,/",",",$weekDays);
-	$weekDays = preg_replace("/\[,/","[",$weekDays);
-	$weekDays = preg_replace("/,\]/","]",$weekDays);
+	$weekDays = ereg_replace(",,|,,,|,,,,|,,,,,|,,,,,,",",",$weekDays);
+	$weekDays = ereg_replace("\[,","[",$weekDays);
+	$weekDays = ereg_replace(",\]","]",$weekDays);
 }	
 	
 /***********************************************************************/
@@ -446,19 +446,19 @@ echo "</td><td><input type=\"text\" name=\"hourBegin\" size=\"8\" value=\"$hourB
 echo "<td>". gettext("Heure de fin")."</td><td><input type=\"text\" name=\"hourEnd\" size=\"8\" value=\"$hourEnd\"></td></tr>\n";
 echo "<tr><td colspan=\"4\" align=\"center\">";
 echo gettext("Lun")."<input type=\"checkbox\" name=\"Lundi\" value=\"1\""; 
-if (preg_match ("/1/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("1",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo gettext(" Mar")." <input type=\"checkbox\" name=\"Mardi\" value=\"2\"";
-if (preg_match ("/2/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("2",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo gettext(" Mer")." <input type=\"checkbox\" name=\"Mercredi\" value=\"3\"";
-if (preg_match ("/3/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("3",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo gettext(" Jeu")."<input type=\"checkbox\" name=\"Jeudi\" value=\"4\"";
-if (preg_match ("/4/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("4",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo gettext(" Ven")."<input type=\"checkbox\" name=\"Vendredi\" value=\"5\"";
-if (preg_match ("/5/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("5",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo gettext(" Sam")." <input type=\"checkbox\" name=\"Samedi\" value=\"6\"";
-if (preg_match ("/6/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("6",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo gettext(" Dim")."<input type=\"checkbox\" name=\"Dimanche\" value=\"7\"";
-if (preg_match ("/7/",$weekDays,$reg)) { echo " checked"; } echo "> ";
+if (ereg ("7",$weekDays,$reg)) { echo " checked"; } echo "> ";
 echo "</td></tr></table><br><br>";
 
 
