@@ -18,11 +18,29 @@ PEOPLERDN=`echo "SELECT value FROM params WHERE name='peopleRdn'" | mysql -h $db
 GROUPSRDN=`echo "SELECT value FROM params WHERE name='groupsRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 SLISIP=`echo "SELECT value FROM params WHERE name='slisIp'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 REPLICA_IP=`echo "SELECT value FROM params WHERE name='replica_ip'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
+NTPSERV=`echo "SELECT value FROM params WHERE name='ntpserv'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
+
 
 # Get network card
 ECARD=$(/sbin/ifconfig | grep eth | sort | head -n 1 | cut -d " " -f 1)
 if [ -z "$ECARD" ]; then
 ECARD=$(/sbin/ifconfig -a | grep eth | sort | head -n 1 | cut -d " " -f 1)
+fi
+
+#Mise a l'heure du serveur
+if [ ! -z "$SLISIP" ]; then
+echo "Mise a l'heure sur le slis via ntp"
+ntpdate $SLISIP 
+else
+
+	if [ ! -z "$NTPSERV" ]; then
+		echo "Mise a l'heure sur le serveur ntp declare dans l'interface"
+		ntpdate $NTPSERV
+	else
+		echo "Pas de serveur ntp declare dasn l'interface, Mise a l'heure sur le serveur de creteil"
+		ntpdate ntp.ac-creteil.fr
+	fi
+
 fi
 
 # openldap pass
