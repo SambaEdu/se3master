@@ -83,7 +83,7 @@ if [ -z $(grep "3.1" /etc/debian_version) ]; then
 	[ $MAJNBR -le 100 ] && MAJNBR=100
 fi
 
-if [ $MAJNBR -le 120 ]; then
+if [ $MAJNBR -le 119 ]; then
 	NEXT_MINOR_MAJ=$MAJNBR
 else
 	NEXT_MINOR_MAJ=$(( $MAJNBR+1 ))
@@ -94,7 +94,7 @@ NEXT_MAJOR_MAJ=$(( (($MAJNBR /10) * 10) + 10 ))
 if [ ! -e maj/maj$NEXT_MINOR_MAJ.sh ] && [ ! -e maj/maj$NEXT_MAJOR_MAJ.sh ] ; then
 	
   if [ ! "$CONT" = "C" ]; then
-	  echo "Aucune mise à jour disponible. Fin du processus."
+	  echo "Pas de script de maj a lancer pour cette fois...."
 	  exit 0
 	fi
 fi
