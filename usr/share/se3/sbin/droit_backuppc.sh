@@ -13,7 +13,7 @@ then
 fi	
 
 bck_user="backuppc"
-bpc_etat=$(ps aux | grep backuppc | grep -v grep)
+test -e /var/run/backuppc/BackupPC.pid && bpc_etat="1"
 
 [ ! -z "$bpc_etat" ] &&  invoke-rc.d backuppc stop
 sed "s/www-se3/backuppc/" -i /etc/init.d/backuppc
@@ -28,5 +28,5 @@ chown $bck_user /usr/share/backuppc/cgi-bin/index.cgi
 chmod u+s /usr/share/backuppc/cgi-bin/index.cgi
 chown -R $bck_user /var/run/backuppc
 getfacl /var/lib/backuppc 2>/dev/null|grep owner|grep $bck_user||chown -R $bck_user /var/lib/backuppc
-[ ! -z "$bpc_etat" ] &&  invoke-rc.d backuppc start
+[ "$bpc_etat" == "1" ] &&  invoke-rc.d backuppc start
 

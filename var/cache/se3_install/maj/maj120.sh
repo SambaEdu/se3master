@@ -215,9 +215,12 @@ SMBPASS="$xppass"
 #fi
 
 # Creation compte adminse3 dans annuaire si besoin est 
-[ -z "$(ldapsearch -xLLL uid=adminse3)" ] && /usr/share/se3/sbin/create_adminse3.sh
-net -U root%"$SMBPASS" rpc rights grant admin SeMachineAccountPrivilege SePrintOperatorPrivilege
-net -U root%"$SMBPASS" rpc rights grant adminse3 SeMachineAccountPrivilege SePrintOperatorPrivilege
+if [ -z "$(ldapsearch -xLLL uid=adminse3)" ]; then  
+	/usr/share/se3/sbin/create_adminse3.sh
+else
+	net -U root%"$SMBPASS" rpc rights grant admin SeMachineAccountPrivilege SePrintOperatorPrivilege
+	net -U root%"$SMBPASS" rpc rights grant adminse3 SeMachineAccountPrivilege SePrintOperatorPrivilege
+fi
 
 if [ $? -eq 0 ]; then 
 	  cp $CONFSE3 $CONFSE3_SAV
