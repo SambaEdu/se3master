@@ -50,7 +50,7 @@ if [ "$1" == "--auto" ]
 then 
         ### mode auto : on installe les deps, on repond oui aux questions, on rend debconf silencieux et on lance un permse3 en mode rapide ###
 
-        option="-y"
+        option="-y --allow-unauthenticated"
         PERMSE3_OPTION="--light"
         DEBIAN_PRIORITY="critical"
         DEBIAN_FRONTEND="noninteractive"
