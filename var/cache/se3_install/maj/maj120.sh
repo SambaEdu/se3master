@@ -48,13 +48,24 @@ GROUPSR=`echo $GROUPSRDN |cut -d = -f 2`
 # Correction nss pour ignorer root et openldap
 [ -z "$(grep "nss_initgroups_ignoreusers" /etc/libnss-ldap.conf)" ] && echo "nss_initgroups_ignoreusers root,openldap,plugdev,disk,kmem,tape,audio,daemon,lp,rdma,fuse,video,dialout,floppy,cdrom,tty" >> /etc/libnss-ldap.conf
 
+# test id backuppc et modif si necessaire
+id_backuppc="$(id backuppc -u)"
+id_wwwse3="$(id www-se3 -u)"
+
+if [ "$id_backuppc" == "$id_wwwse3" ]; then
+usermod -u 104 backuppc
+CHANGEMYSQL bck_uidnumber "104" 
+fi
+
+
 echo  "Ajout des groupes Samba3 obligatoires dans LDAP"
 DOMAINSID=`net getlocalsid | cut -d: -f2 | sed -e "s/ //g"`
 sed -e "s/#BASEDN#/$BASEDN/g;s/#DOMAINSID#/$DOMAINSID/g;s/#GROUPS#/$GROUPSR/g;s/#PEOPLE#/$PEOPLERDN/g" ldif/Samba.ldif > /root/Samba_maj120.ldif
 ldapadd -x -c -D "$ADMINRDN,$BASEDN" -w $ADMINPW -f /root/Samba_maj120.ldif
+echo ""
 
 #Change le SambaPrimaryGroupe
-echo "Modification du SambaPrimaryGroupe en arriere plan dans 2mn"
+echo "Modification du SambaPrimaryGroupe en arriere plan dans 5mn"
 AT_SCRIPT=/root/modif_SambaPrimaryGroupe.sh
 echo "#!/bin/bash
 ldapsearch -x -b $PEOPLERDN,$BASEDN '(objectclass=*)' uid | grep -v People | grep -v \# | grep uid: | cut -d\" \" -f2 | while read ID
@@ -68,8 +79,8 @@ EOF
 done
 " >$AT_SCRIPT
 chmod 700 $AT_SCRIPT
-at now +2 minutes -f $AT_SCRIPT >/dev/null
-
+at now +5 minutes -f $AT_SCRIPT >/dev/null
+echo ""
 # echo  "Ajout des groupes Samba3 obligatoires dans LDAP"
 # # mappage de nobody, root, etc...
 # ldapsearch -xLLL "(&(sambaprimarygroupsid=S-1-5-32-546)(uid=nobody)(sambasid=$DOMAINSID-501))" cn | grep nobody > /dev/null 2>&1 || \
@@ -140,7 +151,7 @@ at now +2 minutes -f $AT_SCRIPT >/dev/null
 
 # mappage des groupes particuliers
 echo "Mapping des groupes particuliers"
-
+echo ""
 # groupe lcs-users mappé vers "utilisateurs du domaine -513"
 net groupmap list | grep "lcs-users"  > /dev/null 2>&1 || net groupmap add ntgroup="Utilisateurs du domaine" rid="513" unixgroup="lcs-users" type="domain"
 
@@ -153,10 +164,10 @@ net groupmap list | grep "admins"  > /dev/null 2>&1 || net groupmap  add ntgroup
 # groupe profs / eleves /root rid auto
 net groupmap list | grep "Profs"  > /dev/null 2>&1 || net groupmap add ntgroup="Profs" unixgroup="Profs" type="domain" comment="Profs du domaine"
 net groupmap list | grep "Eleves"  > /dev/null 2>&1 || net groupmap add ntgroup="Eleves" unixgroup="Eleves" type="domain" comment="Eleves du domaine"
-
+echo ""
 
 # mise a jour des parametres caches pour le domaine si besoin ( remplacement confse3.ini )
-echo " Remplacement du fichier confse3.ini par des parametres dans la base se3db"
+echo "Remplacement du fichier confse3.ini par des parametres dans la base se3db"
 
 workgroup=$(grep "workgroup =" /etc/samba/smb.conf | grep -v "^#" | cut -d"=" -f2| sed "s/ //g")
 CHANGEMYSQL se3_domain "$workgroup" 
@@ -171,7 +182,6 @@ CHANGEMYSQL bck_user "backuppc"
 
 
 echo "mise en place des privileges samba"
-echo "mise a jour de confse3.ini"
 # 
 CONFSE3="/var/se3/Progs/install/installdll/confse3.ini"
 CONFSE3_SAV="/var/se3/Progs/install/installdll/confse3.ini-root"
@@ -239,14 +249,16 @@ else
       net -U root%"$SMBPASS" rpc rights grant adminse3 SeMachineAccountPrivilege SePrintOperatorPrivilege
       smbpasswd -d root
 fi
-
+echo ""
 echo "Attention, la mise au domaine se fait maintenant avac le compte adminse3.
-Le compte root samba est maintenant desactive"
+Le compte root samba est maintenant desactive
+"
 
 echo "ATTENTION A VERIFIER
 la mise en pace des privileges d administration peut causer des problemes 
 avec les pilotes d imprimantes si vous constatez que les pilotes ne fonctionnent plus,
-c est qu il faut les uploader a nouveau sur le serveur (voir la procedure de la doc)"
+c est qu il faut les uploader a nouveau sur le serveur (voir la procedure de la doc)
+"
 
 
 # bye bye se3printers
@@ -267,6 +279,8 @@ echo "Mise a jour 120:
 - Migration vers nouveau code de gestion de restrictions
 - correction des scripts imprimantes pour ne donner les droits que pour adminse3" >> $HISTORIQUE_MAJ
 MAIL_REPORT
-echo "Un mail recapitulatif de la mise à jour sera envoyé"
+echo "
+Un mail recapitulatif de la mise à jour sera envoye
+"
 
 exit 0
