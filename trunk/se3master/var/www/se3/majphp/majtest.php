@@ -44,8 +44,8 @@ if ($action == "majse3") {
 }
 else {
 	echo "<BR><BR>";
-	echo "<H3>Mise &#224; jour de SE3</H3>\n";
-	echo "Pour mettre &#224; jour votre version de SE3 depuis l'interface web, il vous suffit de cliquer sur le bouton ci-dessous<BR>\n";
+	echo "<H3>Mise &#224; jour de SE3 et de ses modules</H3>\n";
+	echo "Pour mettre &#224; jour votre version de SE3 depuis l'interface web, il vous suffit de cliquer sur le bouton ci-dessous<BR>\nTous les modules actifs seront egalement mis &#224; jour si besoin et se3-domain sera install&#233; s'il ne l'est pas encore<BR>\n";
 	echo "<FORM action=\"majtest.php?action=majse3 \"method=\"post\"><CENTER><INPUT type='submit' VALUE='Lancer la mise &#224; jour'></CENTER></FORM>\n";
 }
 # pied de page
