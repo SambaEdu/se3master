@@ -394,7 +394,7 @@
 	<TR>
 		<TD>V&#233;rifie le compte d'int&#233;gration des clients</TD>
 		<TD align="center">
-			<A id="link_client_lien_hs_voir_pourkoi"><IMG id="check_client" style="border: 0px solid ;" SRC="../elements/images/info.png"></A>
+			<A id="link_client"><IMG id="check_client" style="border: 0px solid ;" SRC="../elements/images/info.png"></A>
 		</TD>
 		<TD align="center">
 			<A id="help_client_se3"><img name="action_image2"  src="../elements/images/system-help.png"></A>
