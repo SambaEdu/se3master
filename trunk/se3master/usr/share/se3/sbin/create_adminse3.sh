@@ -20,16 +20,14 @@ if ( getent passwd $ADMINSE3 > /dev/null ) ; then
    /usr/share/se3/sbin/userChangePwd.pl $ADMINSE3 $xppass
 else
    # Creation user adminse3
-   UIDPOLICY=`echo "SELECT value FROM params WHERE name='uidPolicy'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-   if [ "$UIDPOLICY" != "4" ]; then
+   if [ "$uidPolicy" != "4" ]; then
      CHANGEMYSQL uidPolicy 4 
-#       echo "UPDATE params SET value='4' WHERE name='uidPolicy'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass
    fi
    # adminse3 c'est un mâle ;-)
    if ( ! /usr/share/se3/sbin/userAdd.pl 3 adminse $xppass 00000000 M Administratifs ) ; then
       echo "Erreur de création du compte $ADMINSE3"
    fi
-   if [ "$UIDPOLICY" != "4" ]; then
+   if [ "$uidPolicy" != "4" ]; then
       CHANGEMYSQL uidPolicy "$uidPolicy"
       # echo "UPDATE params SET value=\"$UIDPOLICY\" WHERE name='uidPolicy'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
    fi
@@ -40,3 +38,7 @@ echo -e "$xppass\n$xppass"|(/usr/bin/smbpasswd -s root)
 net -U root%"$xppass" rpc rights grant admin SeMachineAccountPrivilege SePrintOperatorPrivilege
 net -U root%"$xppass" rpc rights grant adminse3 SeMachineAccountPrivilege SePrintOperatorPrivilege
 smbpasswd -d root
+
+echo "Attention, la mise au domaine se fait maintenant avac le compte adminse3.
+Le compte root samba est maintenant desactive"
+
