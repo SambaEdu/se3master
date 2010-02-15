@@ -2,9 +2,8 @@
 #
 ## $Id: change_adminse3_smbpass.sh 4757 2009-11-07 17:11:50Z keyser $ ##
 #
-##### script permettant de changer le pass root smb afin qu'il concorde avec celui des outils w$ (confse3.ini)" #####
-#  franck molle 
-# mai 2006
+##### script permettant de changer le pass adminse3 smb afin qu'il concorde avec celui de la bdd #####
+# Auteur : franck molle 
 
 if [ ! -z "$1" ]
 then
@@ -12,14 +11,14 @@ then
 	echo "Usage : Aucune option"
 	exit
 fi	
-cp /var/se3/Progs/install/installdll/confse3.ini /root/
-dos2unix /root/confse3.ini
-NEWPASS="$(cat /root/confse3.ini | grep password_ldap_domain | cut -d"=" -f2)"
-echo -e "$NEWPASS\n$NEWPASS"|(/usr/bin/smbpasswd -D 2 -s adminse3)
-#echo -e ""${NEWPASS}"\n"${NEWPASS}"" | (/usr/bin/smbpasswd -s root)
-rm -f /root/confse3.ini 
-exit 0
+. /usr/share/se3/includes/config.inc.sh -m
 
+echo -e "$xppass\n$xppass"|(/usr/bin/smbpasswd -s adminse3)
+if [  "$?" == "0" ]; then
+	echo "Ok !"
+else
+	echo "Echec !"
+fi
 
 
 
