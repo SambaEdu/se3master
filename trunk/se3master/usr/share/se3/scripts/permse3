@@ -250,6 +250,14 @@ chown -R www-se3:www-data /var/www/se3/wpkg
 chmod 775 /var/www/se3/wpkg/bin/*
 fi
 
+getent passwd unattended >/dev/null && [ -e /var/se3/unattended/install/packages ] && (
+	setfacl -R -m u:unattend:rx /var/se3/unattended/install/packages
+	setfacl -R -m d:u:unattend:rx /var/se3/unattended/install/packages
+	setfacl -R -m u:www-se3:rx /var/se3/unattended/install/packages
+	setfacl -R -m d:u:www-se3:rx /var/se3/unattended/install/packages
+)
+
+
 # Création si nécessaire du dossier d'upload des fichiers XML de l'import de comptes:
 chmod 770 /var/lib/se3/import_comptes
 chown www-se3:root /var/lib/se3/import_comptes
