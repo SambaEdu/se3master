@@ -1131,7 +1131,7 @@ echo -e "$COLTXT"
 
 # installation des zorn tools
 echo -e "$COLTITRE"
-echo "Installation et configuration des outils pour les clients windows XP"
+echo "Configuration du compte adminse3"
 echo -e "$COLTXT"
 XPPASS=`echo "SELECT value FROM params WHERE name='xppass'" | mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW -N`
 #saisir pass si necessaire
@@ -1145,40 +1145,14 @@ if [  -z "$XPPASS" ]; then
 	echo "UPDATE params SET value=\"$XPPASS\" WHERE name=\"xppass\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 fi
 
-# Conf installdll
-/usr/share/se3/scripts/majzi.sh 
-
 ### remise en place des droits par défaut
 /usr/share/se3/scripts/permse3
 
-### Creation adminse3 dans annuaire
+### Creation adminse3 dans annuaire et mise en place privileges admin-adminse3 pour mise au domaine
 /usr/share/se3/sbin/create_adminse3.sh
-
-
-
-echo "mise en place des privileges samba et mise a jour de confse3.ini"
-# 
-CONFSE3="/var/se3/Progs/install/installdll/confse3.ini"
-CONFSE3_SAV="/var/se3/Progs/install/installdll/confse3.ini-root"
-
-#positionnement pass samba root idem adminse3 le temps d'augmenter les privilèges
-echo -e "$XPPASS\N$XPPASS"|(/usr/bin/smbpasswd -s root)
-
-net -U root%"$XPPASS" rpc rights grant admin SeMachineAccountPrivilege SePrintOperatorPrivilege
-net -U root%"$XPPASS" rpc rights grant adminse3 SeMachineAccountPrivilege SePrintOperatorPrivilege
-smbpasswd -d root
-cp $CONFSE3 $CONFSE3_SAV
-sed -i  "s/compte_ldap_domain=root/compte_ldap_domain=adminse3/" $CONFSE3
-sed -i "/password_ldap_domain=/d" $CONFSE3 
-echo -e "password_ldap_domain=$xppass\r" >> $CONFSE3
-smbpasswd -d root
-echo "Attention, la mise au domaine se fait maintenant avac le compte adminse3.
-Le compte root samba est maintenant desactive"
-
 
 # actualisation du cache des parametres : 
 /usr/share/se3/includes/config.inc.sh -clpbmsdf 
-
 
 # Lance postinst de nos dependances, ces dernieres ayant besoin de l'execution du script d'install
 [ -f /var/lib/dpkg/info/se3-logonpl.postinst ] && /var/lib/dpkg/info/se3-logonpl.postinst configure
