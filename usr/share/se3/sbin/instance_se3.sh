@@ -1,41 +1,31 @@
 #!/bin/bash
+. /usr/share/se3/includes/config.inc.sh -cml
+#. /usr/share/se3/includes/functions.inc.sh
 
-dbhost=$(expr "$(grep mysqlServerIp /etc/SeConfig.ph)" : ".*'\(.*\)'.*")
-dbuser=$(expr "$(grep mysqlServerUsername /etc/SeConfig.ph)" : ".*'\(.*\)'.*")
-dbpass=$(expr "$(grep mysqlServerPw /etc/SeConfig.ph)" : ".*'\(.*\)'.*")
-dbname=$(expr "$(grep connexionDb /etc/SeConfig.ph)" : ".*'\(.*\)'.*")
+[ -z "$netbios_name" ] && netbios_name=$(grep "netbios name" /etc/samba/smb.conf|cut -d '=' -f2|sed -e 's/ //g')
+[ -z "$se3ip" ] && se3ip="$(LC_ALL=C grep address /etc/network/interfaces | sort | head -n1 | cut -d" " -f2)"
+MASK=$(grep netmask  /etc/network/interfaces | head -n1 | sed -e "s/netmask//g" | tr "\t" " " | sed -e "s/ //g")
 
-NTDOM=$(grep "workgroup" /etc/samba/smb.conf|cut -d '=' -f2|sed -e 's/ //g')
-NETBIOS=$(grep "netbios name" /etc/samba/smb.conf|cut -d '=' -f2|sed -e 's/ //g')
-SE3IP="$(expr "$(LC_ALL=C /sbin/ifconfig eth0 | grep 'inet addr')" : '.*inet addr:\([^ ]*\)')"
-MASK="$(expr "$(LC_ALL=C /sbin/ifconfig eth0 | grep Mask)" : '.*Mask:\(.*\)')"
-LDAPIP=`echo "SELECT value FROM params WHERE name='ldap_server'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-BASEDN=`echo "SELECT value FROM params WHERE name='ldap_base_dn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-ADMINRDN=`echo "SELECT value FROM params WHERE name='adminRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-ADMINPW=`echo "SELECT value FROM params WHERE name='adminPw'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-COMPUTERSRDN=`echo "SELECT value FROM params WHERE name='computersRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-PEOPLERDN=`echo "SELECT value FROM params WHERE name='peopleRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-GROUPSRDN=`echo "SELECT value FROM params WHERE name='groupsRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-SLISIP=`echo "SELECT value FROM params WHERE name='slisIp'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-REPLICA_IP=`echo "SELECT value FROM params WHERE name='replica_ip'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-NTPSERV=`echo "SELECT value FROM params WHERE name='ntpserv'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-
+if [ -z "$adminPw" ]; then
+	echo "impossible de lire la parametre adminPw"
+	exit 1
+fi
 
 # Get network card
-ECARD=$(/sbin/ifconfig | grep eth | sort | head -n 1 | cut -d " " -f 1)
+ECARD="$(grep iface /etc/network/interfaces | grep static | sort | head -n1 | awk '{print $2}')"
 if [ -z "$ECARD" ]; then
 ECARD=$(/sbin/ifconfig -a | grep eth | sort | head -n 1 | cut -d " " -f 1)
 fi
 
 #Mise a l'heure du serveur
-if [ ! -z "$SLISIP" ]; then
+if [ ! -z "$slisIp" ]; then
 echo "Mise a l'heure sur le slis via ntp"
-ntpdate $SLISIP 
+ntpdate $slisIp 
 else
 
-	if [ ! -z "$NTPSERV" ]; then
+	if [ ! -z "$ntpserv" ]; then
 		echo "Mise a l'heure sur le serveur ntp declare dans l'interface"
-		ntpdate $NTPSERV
+		ntpdate $ntpserv
 	else
 		echo "Pas de serveur ntp declare dasn l'interface, Mise a l'heure sur le serveur de creteil"
 		ntpdate ntp.ac-creteil.fr
@@ -44,12 +34,12 @@ else
 fi
 
 # openldap pass
-echo $ADMINPW >/etc/ldap.secret
+echo $adminPw >/etc/ldap.secret
 
 # Conf firefox
-[ ! -f /var/se3/unattended/install/packages/firefox/firefox-profile.js ] && (
+if [ ! -f /var/se3/unattended/install/packages/firefox/firefox-profile.js ]; then 
     cp -f /var/se3/unattended/install/packages/firefox/firefox-profile.ori /var/se3/unattended/install/packages/firefox/firefox-profile.js
-)
+fi
 
 # Mrtg
 sed -i "s/eth0/$ECARD/g" /etc/mrtg.cfg
@@ -60,12 +50,13 @@ env LANG=C /usr/bin/mrtg /etc/mrtg.cfg 2>/dev/null
 env LANG=C /usr/bin/mrtg /etc/mrtg.cfg 2>/dev/null
 
 # Build Encode::compat
+(
 cd /usr/src/Encode-compat-0.05
 perl Makefile.PL
 make
 make install
 cd -
-
+) >/dev/null
 (
 # Apache2se
 update-rc.d -f apache2se remove .
@@ -80,10 +71,10 @@ update-rc.d admind defaults 99 99
 # SSH
 update-rc.d -f ssh remove .
 update-rc.d ssh defaults 16 16
-) 2>/dev/null
+) >/dev/null
 
 # Cron
-/etc/init.d/cron restart
+#/etc/init.d/cron restart ---> plus bas
 
 # Logs
 touch /var/log/se3/auth.log
@@ -101,10 +92,10 @@ fi
 sed -i "s/#MYSQLIP#/$MYSQLIP/g;s/#SE3DBPASS#/$SE3PW/g" /usr/share/se3/sbin/mkslurpd
 
 # Syslog
-/etc/init.d/sysklogd restart 2>/dev/null
+/etc/init.d/sysklogd restart 
 
-# Smb conf
-smbpasswd -w $ADMINPW
+echo "update de la configuration samba"
+smbpasswd -w $adminPw
 /usr/share/se3/sbin/update-smbconf.sh
 
 # Shares conf
@@ -125,7 +116,7 @@ do
 		dst=$(expr $logon : '.*\.\([^/]*\).bat')
 		if [ ! -f /home/templates/$template/$dst.bat ]
 		then
-			sed -e "s/%se3pdc%/$NETBIOS/g" $logon >/home/templates/$template/$dst.bat
+			sed -e "s/%se3pdc%/$netbios_name/g" $logon >/home/templates/$template/$dst.bat
 		fi
 	done
 done
@@ -141,17 +132,17 @@ if [ "$debian_vers" == "4.0" ]; then
 else
 	ln -s Lib.pm.lenny Lib.pm
 fi
-cd -
+cd - >/dev/null
 
 
 # Firefox
 PREF_JS_FF="/etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js"
-sed -i "s/%ip%/$SE3IP/g;s/%se3pdc%/$(hostname -f)/g" /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/hostperm.1
-if [ "$SLISIP" == "" ]
+sed -i "s/%ip%/$se3ip/g;s/%se3pdc%/$(hostname -f)/g" /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/hostperm.1
+if [ "$slisIp" == "" ]
 then
 	if [ -e /var/www/se3.pac ]; then
 		sed -i 's/%proxytype%/2/g' $PREF_JS_FF
-		sed -i "s/%proxyurl%/http:\/\/$SE3IP\/se3.pac/g" $PREF_JS_FF
+		sed -i "s/%proxyurl%/http:\/\/$se3ip\/se3.pac/g" $PREF_JS_FF
 	else
 		if [ -z $http_proxy ]
 		then
@@ -166,7 +157,7 @@ then
 else
 		
 		sed -i 's/%proxytype%/2/g' $PREF_JS_FF
-		sed -i "s/%proxyurl%/http:\/\/$SLISIP\/cgi-bin\/slis.pac/g" $PREF_JS_FF
+		sed -i "s/%proxyurl%/http:\/\/$slisIp\/cgi-bin\/slis.pac/g" $PREF_JS_FF
 fi
 /etc/init.d/cron reload
 
