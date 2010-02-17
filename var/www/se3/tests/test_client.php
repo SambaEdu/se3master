@@ -24,11 +24,9 @@
 
 
 require_once('entete_ajax.inc.php');
-copy("/var/se3/Progs/install/installdll/confse3.ini", "/tmp/confse3.ini");
-exec ("dos2unix /tmp/confse3.ini");
-$compte=exec("cat /tmp/confse3.ini | grep password_ldap_domain | cut -d= -f2",$out,$retour);
-unlink("/tmp/confse3.ini");
-$cmd_smb="smbclient -L localhost -U adminse3%$compte && echo \$?";
+require_once('config.inc.php');
+
+$cmd_smb="smbclient -L localhost -U adminse3%$xppass && echo \$?";
 $samba_root=exec("$cmd_smb",$out,$retour2);
 // echo "$cmd_smb";
 	if ($retour2 == "0") {
