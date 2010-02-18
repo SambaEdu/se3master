@@ -44,7 +44,7 @@ case "$1" in
 		
 		/usr/share/se3/scripts/permse3
 	    echo "Instanciation en cours..."
-		/usr/share/se3/sbin/instance_se3.sh >/dev/null
+		/usr/share/se3/sbin/instance_se3.sh 
 	else
     		./$install_script
 	fi
