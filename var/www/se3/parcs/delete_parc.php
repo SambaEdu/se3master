@@ -343,8 +343,6 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 							exec ("/usr/share/se3/sbin/entryDel.pl cn=$computer,".$dn["computers"],$output,$returnval);
 							exec ("/usr/share/se3/sbin/entryDel.pl uid=$computer$,".$dn["computers"]);
 							
-							// vire de client.ini
-							exec ("/usr/bin/sudo /usr/share/se3/scripts/delEntryClientIni.sh $computer");
 						}
 					}	
 				}	
