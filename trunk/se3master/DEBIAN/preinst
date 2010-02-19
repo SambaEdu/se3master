@@ -112,6 +112,12 @@ if [ -e /usr/share/se3/sbin/gon2posix.sh ]; then
 rm -f /usr/share/se3/sbin/gon2posix.sh
 fi
 
+
+if [ -e /usr/share/se3/sbin/permse3 ]; then
+rm -f /usr/share/se3/sbin/permse3
+ln -s /usr/share/se3/scripts/permse3 /usr/share/se3/sbin/permse3 
+fi
+
 #if [ -e  ]; then
 #rm -f 
 #fi
@@ -138,5 +144,8 @@ if [ -e /usr/share/se3/scripts/verif_client.sh ]; then
 rm -f /usr/share/se3/scripts/verif_client.sh
 fi
 
+if [ -e /usr/share/se3/scripts/delEntryClientIni.sh ]; then
+rm -f /usr/share/se3/scripts/delEntryClientIni.sh
+fi
 
 exit 0
