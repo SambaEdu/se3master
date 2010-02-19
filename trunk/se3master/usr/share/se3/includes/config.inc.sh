@@ -41,7 +41,10 @@ fi
 
 function getmysql {
 getmypasswd
-[ "$2" == "2" ] && echo "# parametres se3, ne pas modifier" > $3
+if [ "$2" == "2" ]; then
+	echo "# parametres se3, ne pas modifier" > $3
+fi
+
 for i in $(echo "SELECT name FROM params WHERE cat='$1'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass | grep -v "^name$")
 do
     eval $i="$(echo "SELECT value FROM params WHERE name='$i' " | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N | sed -e "s/[()]//g"|sed -e "s/ /_/g")"
@@ -51,7 +54,10 @@ do
         echo "$i=\"${!i}\"" >> $3
     fi
 done
-[ "$2" == "2" ] && chmod 700 $3
+if [ "$2" == "2" ]; then
+	chmod 700 $3
+fi
+
 }
 
 
