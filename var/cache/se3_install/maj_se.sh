@@ -30,7 +30,7 @@ echo "* SCRIPT DE MISE A JOUR *"
 echo "*     DE SAMBAEDU3      *"
 echo "*************************"
 
-echo -e "$COLCMD\c "
+echo ""
 cat /etc/passwd | grep www-se3 > /dev/null || ADDWWWSE3="1"
 
 if [ "$ADDWWWSE3" = "1" ]; then
@@ -100,7 +100,7 @@ if [ "$registred" = "1" ]; then
 	wget http://wawadeb.crdp.ac-caen.fr/majse3/regmaj.php?newv=$MAJNBR
 	/bin/rm regmaj.php*
 fi
-echo -e "$COLTXT"
+echo ""
 
 # on finit par l'actualisation du cache des parametres : 
 /usr/share/se3/includes/config.inc.sh -clpbmsdf 
