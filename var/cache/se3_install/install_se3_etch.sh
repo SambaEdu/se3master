@@ -892,7 +892,8 @@ if [ ! "$rep" = "n" ]; then
 	echo "Mise en place de la configuration Samba..."
 	echo -e "$COLCMD\c "
 	$INITDSAMBA stop
-	cat conf/$SMBCONFIN | sed -e "s/#IPSERVEUR#/$SE3IP/g" | sed -e "s/#MASK#/$SE3MASK/g" | sed -e "s/#NETBIOSNAME#/$NETBIOS/g" | sed -e "s/#DOMAIN#/$NTDOM/g" | sed -e "s/#SLAPDIP#/$LDAPIP/g" | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#ADMINRDN#/$ADMINRDN/g" | sed -e "s/#ADMINPW#/$ADMINPW/g" | sed -e "s/#PEOPLE#/$PEOPLERDN/g" | sed -e "s/#GROUPS#/$GROUPSRDN/g" | sed -e "s/#COMPUTERS#/$COMPUTERSRDN/g"> $SMBCONF
+	CHARSET="UTF-8"
+	sed -e "s/#IPSERVEUR#/$SE3IP/g;s/#MASK#/$SE3MASK/g;s/#NETBIOSNAME#/$NETBIOS/g;s/#DOMAIN#/$NTDOM/g;s/#SLAPDIP#/$LDAPIP/g;s/#BASEDN#/$BASEDN/g;s/#ADMINRDN#/$ADMINRDN/g;s/#ADMINPW#/$ADMINPW/g;s/#PEOPLE#/$PEOPLERDN/g;s/#GROUPS#/$GROUPSRDN/g;s/#COMPUTERS#/$COMPUTERSRDN/g;s/#CHARSET#/$UTF-8/g" conf/$SMBCONFIN > $SMBCONF
 	smbpasswd -w $ADMINPW
 
 	echo -e "$COLTXT"
@@ -925,7 +926,7 @@ if [ ! "$rep" = "n" ]; then
 
 		echo "UPDATE params SET value=\"$NTDOM\" WHERE name=\"se3_domain\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 		echo "UPDATE params SET value=\"$NETBIOS\" WHERE name=\"netbios_name\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
-		echo "UPDATE params SET value=\"$ADMINRDN\" WHERE name=\"se3ip\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
+		echo "UPDATE params SET value=\"$SE3IP\" WHERE name=\"se3ip\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 
 
 
@@ -1119,7 +1120,7 @@ setfacl -m d:o::rwx /var/se3/Docs/public
 
 # Instanciation
 echo "Instanciation en cours..."
-/usr/share/se3/sbin/instance_se3.sh >/dev/null
+/usr/share/se3/sbin/instance_se3.sh
 
 # Relance apache2se
 echo -e "$COLCMD"
@@ -1156,7 +1157,6 @@ fi
 
 
 # Lance postinst de nos dependances, ces dernieres ayant besoin de l'execution du script d'install
-[ -f /var/lib/dpkg/info/se3-logonpl.postinst ] && /var/lib/dpkg/info/se3-logonpl.postinst configure
 [ -f /var/lib/dpkg/info/se3-logonpy.postinst ] && /var/lib/dpkg/info/se3-logonpy.postinst configure
 [ -f /var/lib/dpkg/info/se3-domain.postinst ] && /var/lib/dpkg/info/se3-domain.postinst configure
 
