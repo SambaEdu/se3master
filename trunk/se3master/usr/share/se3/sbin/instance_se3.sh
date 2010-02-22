@@ -1,7 +1,7 @@
 #!/bin/bash
 . /usr/share/se3/includes/config.inc.sh -cml
 #. /usr/share/se3/includes/functions.inc.sh
-
+debian_vers=$(cat /etc/debian_version)
 [ -z "$netbios_name" ] && netbios_name=$(grep "netbios name" /etc/samba/smb.conf|cut -d '=' -f2|sed -e 's/ //g')
 [ -z "$se3ip" ] && se3ip="$(LC_ALL=C grep address /etc/network/interfaces | sort | head -n1 | cut -d" " -f2)"
 MASK=$(grep netmask  /etc/network/interfaces | head -n1 | sed -e "s/netmask//g" | tr "\t" " " | sed -e "s/ //g")
@@ -92,7 +92,11 @@ fi
 sed -i "s/#MYSQLIP#/$MYSQLIP/g;s/#SE3DBPASS#/$SE3PW/g" /usr/share/se3/sbin/mkslurpd
 
 # Syslog
-/etc/init.d/sysklogd restart 
+if [ "$debian_vers" == "4.0" ]; then
+	/etc/init.d/sysklogd restart 
+else
+	/etc/init.d/rsyslog restart
+fi
 
 echo "update de la configuration samba"
 smbpasswd -w $adminPw
@@ -124,7 +128,7 @@ done
 
 
 # Backuppc
-debian_vers=$(cat /etc/debian_version)
+
 cd /usr/share/backuppc/lib/BackupPC/CGI
 rm -f Lib.pm
 if [ "$debian_vers" == "4.0" ]; then
