@@ -168,6 +168,31 @@ if ($_GET[action] == "change") {
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
+		// conf internet
+		case "internet":
+			$valeur_internet=($_GET['valeur']==1) ? 1 : 0;
+			$resultat=mysql_query("SELECT * FROM params WHERE name='internet'");
+			if(mysql_num_rows($resultat)==0){
+				$sql = "INSERT INTO params VALUES('','internet','1','','Activation ou désactivation module se3-internet','6')";
+			} else {
+				$sql = "UPDATE params SET value='$valeur_internet' where name='menu_fond_ecran'";
+			}
+			
+			if ($valeur_internet == 1) {
+				system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh se3-internet",$return);
+				if($return==0) {
+				mysql_query($sql);
+				echo "Module $module activ&#233;.<br>\n";
+				}
+				else{
+				echo "Un probl&#232;me est survenu lors de l'installation de $module.<br>\n";
+				}
+				
+			} else{
+				mysql_query($sql);
+				echo "Module $module d&#233;sactiv&#233;.<br>\n";
+			}
+			break;
 		// Conf de WPKG
 		case "wpkg":
 			if($_GET[valeur]=="1") { //si on veut l'activer
@@ -217,7 +242,11 @@ for ($i=0; $i< count($files); $i++) {
 	} elseif ($files[$i] == "/var/lock/se3-wpkg.lck") {
 		$wpkg_lock="yes";
 		echo "<br><center>".gettext("Attention : installation du paquet se3-wpkg en cours.")."</center>";
+	} elseif ($files[$i] == "/var/lock/se3-internet.lck") {
+		$wpkg_lock="yes";
+		echo "<br><center>".gettext("Attention : installation du paquet se3-internet en cours.")."</center>";
 	}
+	
 }
 
 // Fait un update pour rafraichir
@@ -561,7 +590,40 @@ if (($wpkg!="1") || ($wpkg_actif!="1")) {
 echo "</td></tr>\n";
 
 
+// Module internet
+$internet_actif = exec("dpkg -s se3-internet | grep \"Status: install ok\"> /dev/null && echo 1");
+echo "<TR><TD>".gettext("Installation de stations")."</TD>";
 
+// On teste si on a bien la derniere version
+$internet_version_install = exec("apt-cache policy se3-internet | grep \"Install\" | cut -d\":\" -f2");
+$internet_version_dispo = exec("apt-cache policy se3-internet | grep \"Candidat\" | cut -d\":\" -f2");
+echo "<TD align=\"center\">$internet_version_install</TD>";
+if ("$internet_version_install" == "$internet_version_dispo") {
+	echo "<TD align=\"center\">";
+	echo "<u onmouseover=\"return escape".gettext("('Pas de nouvelle version de ce module')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\"></u>";
+	echo "</TD>";
+} else {
+	echo "<TD align=\"center\">";
+	echo "<u onmouseover=\"return escape".gettext("('Mise &#224; jour version $internet_version_dispo disponible.<br>Cliquer ici pour lancer la mise &#224; jour de ce module.')")."\"><a href=conf_modules.php?action=update&varb=internet&valeur=1><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/warning.png\"></a></u>";
+	echo "</TD>";
+}
+  
+echo "<TD align=\"center\">";
+if (($internet!="1") || ($internet_actif !="1")) {
+	if($internet_actif!="1") { 
+		$internet_message=gettext("<b>Attention : </b>Le paquet n\'est pas install&#233; sur ce serveur. Cliquer sur la croix rouge pour l\'installer.");
+		$internet_alert="onClick=\"alert('Installation du packet se3-internet. Cela peut prendre un peu de temps. Vous devez avoir une connexion internet active')\""; 
+	} else { 
+		$internet_message=gettext("<b>Etat : D&#233;sactiv&#233;</b><br>Cliquer sur la croix rouge pour activer ce module. <br>Pour en savoir plus sur ce module voir la documentation en ligne."); 
+	}
+	echo "<u onmouseover=\"return escape('".$internet_message."')\">";
+	echo "<a href=conf_modules.php?action=change&varb=internet&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" \"$internet_alert\"></a>";
+	echo "</u>";
+} else {
+	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Module d\'installation de stations actif')")."\">";
+	echo "<a href=conf_modules.php?action=change&varb=internet&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" ></a>";
+	echo "</u>";
+}
 /************************* Fin modules ****************************************************/
 
 echo "</td></tr>\n";
