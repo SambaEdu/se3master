@@ -39,17 +39,21 @@
 	$_SESSION["pageaide"]="Informations_syst%C3%A8me#Diagnostic";
 
 	// Si pas se3_is_admin
-	if (ldap_get_right("se3_is_admin",$login)=="Y")  {
+	
 
-		if ($_GET[action] == "setadminse3smbpass") {
+if (ldap_get_right("se3_is_admin",$login)!="Y")
+        die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
+//	if (ldap_get_right("se3_is_admin",$login)=="Y")  {
+
+	if ($_GET[action] == "setadminse3smbpass") {
 			exec('/usr/bin/sudo /usr/share/se3/scripts/change_adminse3_smbpass.sh');
-		}
+	}
 
 		//if ($_GET[action] == "updatesystem") {
 		//	exec('/usr/bin/sudo /usr/share/se3/scripts/se3_update_system.sh --auto');
 		//    unset($action);
 		// }
-		if ($_GET[action] == "updatesystem") {
+	if ($_GET[action] == "updatesystem") {
 		$info_1 = gettext("Mise &#224; jour syst&#232;me lanc&#233;e, ne fermez pas cette fen&#234;tre avant que le script ne soit termin&#233;. vous recevrez un mail r&#233;capitulatif de tout ce qui sera effectu&#233;...");
 		echo $info_1;
 		system('sleep 1; /usr/bin/sudo /usr/share/se3/scripts/se3_update_system.sh --auto &');
@@ -61,6 +65,12 @@
 	if ($_GET[action] == "startsamba") {
 		exec('/usr/bin/sudo /usr/share/se3/scripts/services.sh samba restart');
 	}
+	if ($_GET[action] == "installse3-domain") {
+		$info_1 = gettext("Mise &#224; jour lanc&#233;e, ne fermez pas cette fen&#234;tre avant que le script ne soit termin&#233;. vous recevrez un mail r&#233;capitulatif de tout ce qui sera effectu&#233;...");
+	echo $info_1;
+	system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh se3-domain");
+	}
+	
 	if ($action == "exim_mod") {
 		$fichier = "/etc/ssmtp/ssmtp.conf";
 		$fp=fopen("$fichier","w+");
@@ -191,7 +201,7 @@
 		</TD>
 	</TR>
 	<TR>
-		<TD>Contr&#244;le la pr&#233;sence des VBS</TD>
+		<TD>Contr&#244;le la pr&#233;sence de Se3-domain</TD>
 		<TD align="center">
 			<a id=link_vbs href="#"><IMG id="check_vbs" style="border: 0px solid ;" SRC="../elements/images/info.png" /></a>
 		</TD>
@@ -411,6 +421,6 @@
 <?php
 	echo "</center>";
 	require ("pdp2.inc.php");
-	} // fin de pas se3_is_admin
+//	} // fin de pas se3_is_admin
 
 ?>
