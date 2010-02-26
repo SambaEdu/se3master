@@ -175,7 +175,7 @@ if ($_GET[action] == "change") {
 			if(mysql_num_rows($resultat)==0){
 				$sql = "INSERT INTO params VALUES('','internet','1','','Activation ou désactivation module se3-internet','6')";
 			} else {
-				$sql = "UPDATE params SET value='$valeur_internet' where name='menu_fond_ecran'";
+				$sql = "UPDATE params SET value='$valeur_internet' where name='internet'";
 			}
 			
 			if ($valeur_internet == 1) {
