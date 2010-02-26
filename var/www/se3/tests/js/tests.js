@@ -110,7 +110,7 @@
 				this.onmouseout=function() { UnTip(); }
 				}
 
-			$('link_vbs').href = link_keys_ko;
+			$('link_vbs').href = link_vbs_ko;
 
 			}
 		}});
