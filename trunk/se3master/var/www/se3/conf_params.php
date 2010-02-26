@@ -71,7 +71,7 @@ if ($action == "change") {
 		exec ("/usr/share/se3/sbin/changeShellAllUsers.pl $shell_orig $shell_mod",$AllOutPut,$ReturnValue);
 	
 	}
-
+exec('/usr/bin/sudo /usr/share/se3/scripts/refresh_cache_params.sh');
 }
 
 
