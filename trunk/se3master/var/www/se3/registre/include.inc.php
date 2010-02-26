@@ -468,17 +468,18 @@ function test_bdd_registre() {
 function test_zorn_tools()
 {
 	// Controle l'installation des vbs
-	$DIR_VBS="/var/se3/Progs/install/installdll/rejoin_se3_XP.vbs";
-	if(@is_dir("/var/se3/Progs/install/installdll")) {
+	$DIR_VBS="/var/se3/Progs/install/domscripts/rejointSE3.bat";
+	if(@is_dir("/var/se3/Progs/install/domscripts")) {
 		return true;
 	} else {
 		// echo "<h1>".gettext("Controle de l'installation du module Clients Windows (Deuxi&#232;me &#233;tape)")."</h1>";
-		echo "<table><TR><TD>";
-		echo gettext("Contr&#244;le la pr&#233;sence des outils clients windows (VBS)");
-		echo "</TD><TD align=\"center\"><font color=#FF0000> &nbsp;".gettext("Non effectu&#233;e")."</font>";
-		echo "</TD><TD>";
-		echo "&nbsp;<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('Vous n\'avez pas install&#233 les scripts vbs afin de pouvoir faire rejoindre le domaine &#224 vos clients Windows. Pour cela aller dans <a href=\'gestion_interface.php\'>Gestion des clients Windows</a> puis effectuer la mise &#224 jour de l\'installeur DLL et de registre.vbs')")."\">".gettext("Aide")."</u>";
-		echo "</TD></TR></table>\n";
+		//echo "<table><TR><TD>";
+		echo gettext("Attention, paquet se3-domain");
+		echo "<font color=#FF0000> &nbsp;".gettext("Non install&#233;")."</font><br>";
+		//echo "</TD><TD>";
+		echo gettext("Cliquez <a href=../test.php?action=installse3-domain>ici</a> pour lancer l'installation du paquet.");
+		//echo "&nbsp;<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('Vous n\'avez pas install&#233 le paquet se3-domain. Pour ce faire, cliquez <a href=\'../test.php?action=installse3-domain\'>ici</a>')")."\">".gettext("Aide")."</u>";
+		//echo "</TD></TR></table>\n";
 		include ("pdp.inc.php");
 		return false;
 	}
