@@ -42,9 +42,10 @@
 
 // Controle l'installation des vbs
 	
-	$tests_msg['msg_vbs_ko'] = 'Cliquer ici pour installer les scripts VBS';
-	$tests_msg['msg_vbs_nocx'] = 'Impossible de mettre &#224; jour les scripts VBS, sans connexion &#224; internet';
-	$tests_msg['msg_vbs_info'] = 'Les scripts VBS sont les scripts qui permettent de configurer vos clients Windows afin qu\'ils int&#233;grent facilement le domaine. <br><br>Vous devez installer ces scripts avant d\'ajouter une machine au domaine<br><br>Une fois les scripts install&#233;s, pour ajouter une machine XP, connectez vous en administrateur local sur la machine, puis recherchez le serveur SambaEdu. Puis allez dans /Progs/install/installdll/ et lancer le script rejoins_XP.<br><br>La gestion des scripts se fait dans <a href=\"'.$tests_msg['link_keys_ko'].'\">Gestion des clients Windows</a>';
+	$tests_msg['link_vbs_ko'] = '../test.php?action=installse3-domain';
+	$tests_msg['msg_vbs_ko'] = 'Cliquer ici pour installer le paquet se3-domain';
+	$tests_msg['msg_vbs_nocx'] = 'Impossible de mettre &#224; jour se3-domain, sans connexion &#224; internet';
+	$tests_msg['msg_vbs_info'] = 'Les scripts d\'int&#233;gration permettent de configurer vos clients Windows afin qu\'ils joignent facilement le domaine. <br><br>Vous devez installer Se3-domain afin de disposer de ces scripts <br><br>Une fois les scripts install&#233;s, pour ajouter une machine XP, connectez vous en administrateur local sur la machine, puis recherchez le serveur SambaEdu. Puis allez dans /Progs/install/domscripts/ et lancez le script rejoinSE3.bat_XP.<br><br>L\'installation de se3-domain se fait avec cette <a href=\"'.$tests_msg['link_vbs_ko'].'\">page</a>';
 
 //########################### CONNEXIONS ################################################/
 
@@ -130,10 +131,10 @@
 	$tests_msg['msg_secu_info'] ='Teste si ce serveur est bien &#224; jour par rapport au serveur de s&#233;curit&#233; de Debian.<br><br>Pour mettre &#224; jour votre serveur, utilisez l\'interface ou lancez le script <b>se3_update_system.sh</b> dans une console<br><br>Attention, cela entraine aussi la mise &#224; jour des paquets Se3';
 
 // Clients
-	$tests_msg['msg_client_ko']='Le mot de passe ne correspond pas avec le contenu de confse3.ini, voir l\'aide pour pour corriger le probl&#232;me';
+	$tests_msg['msg_client_ko']='Le mot de passe samba du compte adminse3 correspond pas avec le contenu de se3db, voir l\'aide pour pour corriger le probl&#232;me';
 	$tests_msg['link_client_ko'] ='../test.php?action=setadminse3smbpass';
 
-	$tests_msg['msg_client_info']='V&#233;rifie que le mot de passe contenu dans /var/se3/Progs/install/installdll/confse3.ini est correct.<br><br>Si ce n\'est pas le cas, vous ne pourrez pas int&#233;grer de nouvelles machines.<br><br>Dans ce cas pour reforcer ce mot de passe, aller dans /var/se3/Progs/install/installdll/confse3.ini pour connaitre le mot de passe &#224; mettre et taper la commande : <br><br><b>smbpasswd adminse3</b><br><br>Puis taper le mot de passe qui correspond &#224; la ligne <b>password_ldap_domain</b>.';
+	$tests_msg['msg_client_info']='V&#233;rifie que le mot de passe samba du compte adminse3 .<br><br>Si ce n\'est pas le cas, vous ne pourrez pas int&#233;grer de nouvelles machines.<br><br>Dans ce cas pour reforcer ce mot de passe, taper la commande : <br><br><b>smbpasswd adminse3</b><br><br>Puis taper le mot de passe qui correspond &#224; celui de la BDD.';
 	
 	
 ?>
