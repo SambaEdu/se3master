@@ -215,6 +215,14 @@ se3-unattended)
 install_module
 ;;
 
+se3-domain)
+install_module
+;;
+
+se3-internet)
+install_module
+;;
+
 se3-fondecran)
 SE3MODULE="gsfonts"
 M2="imagemagick"
@@ -252,5 +260,6 @@ MAIL_REPORT
 ;;
 esac
 echo "</pre>"
+/usr/share/se3/scripts/refresh_cache_params.sh
 exit 0
 
