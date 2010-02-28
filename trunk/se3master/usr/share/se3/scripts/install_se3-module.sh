@@ -7,7 +7,7 @@
 SE3MODULE="$1"
 M2="$2"
 M3="$3"
-set -x
+
 if [ "$1" = "--help" -o "$1" = "" -o "$1" = "-h" ]
 then
 	echo "Script permettant l'installion ou l'activation de $SE3MODULE"
@@ -27,14 +27,15 @@ export  DEBIAN_PRIORITY
 
 opt="--allow-unauthenticated"
 
-
+#debug="-s"
+  echo "<pre>"
 . /etc/profile 2>/dev/null
 MAIL_REPORT()
 {
 [ -e /etc/ssmtp/ssmtp.conf ] && MAIL_ADMIN=$(cat /etc/ssmtp/ssmtp.conf | grep root | cut -d= -f2)
 if [ ! -z "$MAIL_ADMIN" ]; then
 	REPORT=$(cat $REPORT_FILE)
-cat $REPORT_FILE
+#cat $REPORT_FILE
 	#On envoie un mail à l'admin
 	echo "$REPORT"  | mail -s "[SE3] Résultat de $0" $MAIL_ADMIN
 fi
@@ -97,7 +98,7 @@ fi
 }
 install_module()
 {
-echo "Installation / Activation $SE3MODULE" | tee -a $REPORT_FILE
+echo "Installation ou MAJ de $SE3MODULE" | tee -a $REPORT_FILE
 echo "Mise à jour de la liste des paquets disponibles ....." | tee -a $REPORT_FILE
 LINE_TEST
 TEST_LOCK
@@ -116,16 +117,44 @@ echo "Installation du paquet complémentaire $M3" | tee -a $REPORT_FILE
 apt-get install $M3 -y --force-yes $opt | tee -a $REPORT_FILE
 fi
 
-echo "Installation terminée, suppression du fichier verrou" | tee -a $REPORT_FILE
-rm -f $fich_lock
 # L'envoi d'un mail est superflu
 #MAIL_REPORT
 }
-echo "<pre>"
+
+
 ## on installe quoi comme module ?
 case "$1" in
 se3)
 install_module
+#echo "<br/>"
+se3domain_ok=$(dpkg -s se3-domain | grep "Status: install ok")
+if [ -z "$se3domain_ok" ]; then
+  echo ""
+  echo "Installation de se3-domain" | tee -a $REPORT_FILE
+  apt-get install se3-domain -y --force-yes $opt | tee -a $REPORT_FILE 
+  
+fi
+
+# UPDATE PARTIE MODULES 
+(
+dpkg -l|grep se3-|cut -d ' ' -f3|while read package
+do
+LC_ALL=C apt-get -s install $package|grep newest >/dev/null|| echo $package
+done
+)>/root/se3_update_list
+
+list_module=$(cat /root/se3_update_list)
+if [ -n "$list_module" ]; then
+  echo ""
+  echo "Mise a jour des modules" | tee -a $REPORT_FILE
+  apt-get install $list_module $debug -y --force-yes $opt | tee -a $REPORT_FILE 
+##
+##apt-get install $(cat /tmp/se3_update_list) --allow-unauthenticated -y -o Dpkg::Options::=--force-confold 2>&1 | tee -a $REPORT_FILE 
+#  rm -f /root/se3_update_list
+  
+fi
+
+MAIL_REPORT
 ;;
 
 se3-dhcp)
@@ -260,6 +289,8 @@ MAIL_REPORT
 ;;
 esac
 echo "</pre>"
+echo "Installation terminée, suppression du fichier verrou" | tee -a $REPORT_FILE
+rm -f $fich_lock
 /usr/share/se3/scripts/refresh_cache_params.sh
 exit 0
 
