@@ -40,7 +40,7 @@ if ($action == "majse3") {
 	$info_1 = gettext("Mise &#224; jour lanc&#233;e, ne fermez pas cette fen&#234;tre avant que le script ne soit termin&#233;. vous recevrez un mail r&#233;capitulatif de tout ce qui sera effectu&#233;...");
 	echo $info_1;
 
-	system('sleep 1; /usr/bin/sudo /usr/share/se3/scripts/se3-upgrade.sh');
+	system('sleep 1; /usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh se3 &');
 }
 else {
 	echo "<BR><BR>";
