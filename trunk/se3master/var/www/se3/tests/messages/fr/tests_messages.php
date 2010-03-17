@@ -45,7 +45,7 @@
 	$tests_msg['link_vbs_ko'] = '../test.php?action=installse3-domain';
 	$tests_msg['msg_vbs_ko'] = 'Cliquer ici pour installer le paquet se3-domain';
 	$tests_msg['msg_vbs_nocx'] = 'Impossible de mettre &#224; jour se3-domain, sans connexion &#224; internet';
-	$tests_msg['msg_vbs_info'] = 'Les scripts d\'int&#233;gration permettent de configurer vos clients Windows afin qu\'ils joignent facilement le domaine. <br><br>Vous devez installer Se3-domain afin de disposer de ces scripts <br><br>Une fois les scripts install&#233;s, pour ajouter une machine XP, connectez vous en administrateur local sur la machine, puis recherchez le serveur SambaEdu. Puis allez dans /Progs/install/domscripts/ et lancez le script rejoinSE3.bat_XP.<br><br>L\'installation de se3-domain se fait avec cette <a href=\"'.$tests_msg['link_vbs_ko'].'\">page</a>';
+	$tests_msg['msg_vbs_info'] = 'Les scripts d\'int&#233;gration permettent de configurer vos clients Windows afin qu\'ils joignent facilement le domaine. <br><br>Vous devez installer Se3-domain afin de disposer de ces scripts <br><br>Une fois les scripts install&#233;s, pour ajouter une machine XP, connectez vous en administrateur local sur la machine, puis recherchez le serveur SambaEdu. Puis allez dans /Progs/install/domscripts/ et lancez le script rejoinSE3.bat.<br><br>L\'installation de se3-domain se fait avec cette <a href=\"'.$tests_msg['link_vbs_ko'].'\">page</a>';
 
 //########################### CONNEXIONS ################################################/
 
