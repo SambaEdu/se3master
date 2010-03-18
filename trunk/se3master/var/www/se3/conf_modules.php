@@ -592,7 +592,7 @@ echo "</td></tr>\n";
 
 // Module internet
 $internet_actif = exec("dpkg -s se3-internet | grep \"Status: install ok\"> /dev/null && echo 1");
-echo "<TR><TD>".gettext("Installation de stations")."</TD>";
+echo "<TR><TD>".gettext("contr&#244;le de l\'acc&#232;s internet")."</TD>";
 
 // On teste si on a bien la derniere version
 $internet_version_install = exec("apt-cache policy se3-internet | grep \"Install\" | cut -d\":\" -f2");
@@ -620,7 +620,7 @@ if (($internet!="1") || ($internet_actif !="1")) {
 	echo "<a href=conf_modules.php?action=change&varb=internet&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" \"$internet_alert\"></a>";
 	echo "</u>";
 } else {
-	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Module d\'installation de stations actif')")."\">";
+	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Module contr&#244;le de l\'acc&#232;s internet des stations actif')")."\">";
 	echo "<a href=conf_modules.php?action=change&varb=internet&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" ></a>";
 	echo "</u>";
 }
