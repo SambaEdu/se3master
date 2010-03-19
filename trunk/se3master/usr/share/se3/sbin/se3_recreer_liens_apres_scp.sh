@@ -5,7 +5,7 @@
 #
 # Auteur: Stephane Boireau (ex-Animateur TICE vire comme un malpropre par un regime qui ne voit que par les faveurs au prive et le degraissage du public)
 #
-## $Id$ ##
+## $Id: se3_recreer_liens_apres_scp.sh 5341 2010-03-17 16:48:16Z dbo $ ##
 #
 # /usr/share/se3/scripts/se3_recreer_liens_apres_scp.sh
 

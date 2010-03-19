@@ -1,6 +1,6 @@
 #!/bin/sh
 
-## $Id: se3_upgrade_lenny.sh 3662 2009-04-12 00:01:42Z keyser $ ##
+## $Id: se3_upgrade_lenny.sh 5341 2010-03-17 16:48:16Z dbo $ ##
 
 #####Script permettant de migrer un serveur Se3 de Sarge en Etch#####
 

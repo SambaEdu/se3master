@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-## $Id$ ##
+## $Id: se3_csv_generer_entrees_computers.sh 5341 2010-03-17 16:48:16Z dbo $ ##
 #
 ##### Import des entrees computers d apres un CSV IP;NOM;MAC #####
 #

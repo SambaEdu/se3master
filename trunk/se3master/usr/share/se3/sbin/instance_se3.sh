@@ -167,3 +167,4 @@ fi
 
 # Corrige icone reparer son compte si L: toujours utilise pour Progs
 grep W: /home/templates/base/logon.bat >/dev/null || cp -f /var/cache/se3_install/conf/Reparer\ son\ compte_legacy.lnk /home/templates/base/Bureau/Reparer\ son\ compte.lnk
+. /usr/share/se3/includes/config.inc.sh -clpbmsdf
