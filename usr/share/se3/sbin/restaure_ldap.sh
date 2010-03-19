@@ -63,10 +63,20 @@ POURSUIVRE_OU_CORRIGER()
 	done
 }
 
+. /usr/share/se3/includes/config.inc.sh -lm
 
-BASEDN=$(cat /etc/ldap/ldap.conf | grep "^BASE" | tr "\t" " " | sed -e "s/ \{2,\}/ /g" | cut -d" " -f2)
-ROOTDN=$(cat /etc/ldap/slapd.conf | grep "^rootdn" | tr "\t" " " | cut -d'"' -f2)
-PASSDN=$(cat /etc/ldap.secret)
+BASEDN="$ldap_base_dn"
+ADMINRDN="$adminRdn"
+ADMINPW="$adminPw"
+PEOPLERDN="$peopleRdn"
+GROUPSRDN="$groupsRdn"
+RIGHTSRDN="$rightsRdn"
+
+PEOPLER=`echo $PEOPLERDN |cut -d = -f 2`
+RIGHTSR=`echo $RIGHTSRDN |cut -d = -f 2`
+GROUPSR=`echo $GROUPSRDN |cut -d = -f 2`
+
+
 
 dossier=/var/se3/save/ldap
 mkdir -p ${dossier}
@@ -77,7 +87,7 @@ ladate=$(date "+%Y%m%d.%H%M%S")
 echo -e "$COLTXT"
 echo "Sauvegarde préalable de l'annuaire dans son état actuel..."
 echo -e "$COLCMD\c"
-ldapsearch -xLLL -D $ROOTDN -w $PASSDN > $dossier/svg_${ladate}.ldif
+ldapsearch -xLLL -D "$ADMINRDN,$BASEDN" -w $ADMINPW > $dossier/svg_${ladate}.ldif
 
 if [ "$?" = "0" ]; then
 	echo -e "$COLTXT"
@@ -187,7 +197,7 @@ do
 		if [ "$REPONSE" = "n" ]; then
 			echo -e "$COLERREUR"
 			echo "Abandon."
-			exit
+			exit 1
 		fi
 	else
 		REP="OK"
@@ -229,10 +239,11 @@ if [ "$?" = "0" ]; then
 		echo -e "$COLTXT"
 		echo "Rédémarrage du service slapd réussi."
 	fi
+	  
 	echo -e "$COLTXT"
 	echo "Après redémarrage du LDAP, redémarrez si nécessaire les services samba"
 	echo "et apache2se."
-	exit
+	
 else
 	echo -e "$COLERREUR"
 	echo "La commande a renvoyé un code d'erreur."
@@ -272,15 +283,33 @@ else
 		echo -e "$COLTXT"
 		echo "Après redémarrage du LDAP, redémarrez si nécessaire les services samba"
 		echo "et apache2se."
-		exit
+		exit 1
 	else
 		echo -e "$COLERREUR"
 		echo "L'opération a échoué."
 		echo "Le serveur d'annuaire LDAP n'a pas été redémarré."
 		echo -e "$COLTXT"
-		exit
+		exit 1
 	fi
 
 fi
+
+DOMAINSID=`net getlocalsid | cut -d: -f2 | sed -e "s/ //g"`
+#Change le SambaPrimaryGroupe
+echo "Modification du SambaPrimaryGroupe en arriere plan dans 2mn"
+AT_SCRIPT=/root/modif_SambaPrimaryGroupe.sh
+echo "#!/bin/bash
+ldapsearch -x -b $PEOPLERDN,$BASEDN '(objectclass=*)' uid | grep -v People | grep -v \# | grep uid: | cut -d\" \" -f2 | while read ID
+do
+ldapmodify -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+dn: uid=\$ID,$PEOPLERDN,$BASEDN
+changetype: modify
+replace: sambaPrimaryGroupSID
+sambaPrimaryGroupSID: $DOMAINSID-513
+EOF
+done
+" >$AT_SCRIPT
+chmod 700 $AT_SCRIPT
+at now +2 minutes -f $AT_SCRIPT >/dev/null
 
 #rm -rf /var/lib/ldap
