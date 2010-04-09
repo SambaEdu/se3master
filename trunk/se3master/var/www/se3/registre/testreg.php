@@ -45,7 +45,7 @@ if (test_bdd_registre()==false) {
 if (is_admin("computers_is_admin",$login)=="Y") {
     	
   	//aide 
-  	$_SESSION["pageaide"]="Gestion_des_clients_windows";
+  	$_SESSION["pageaide"]="Gestion_des_clients_windowsNG#Test_des_restrictions";
 	
 	echo "<H1>".gettext("Simulation de cl&#233s de registre appliqu&#233es")."</H1>\n";
     	

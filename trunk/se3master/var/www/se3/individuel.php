@@ -37,7 +37,7 @@ if ($login == "") header("Location:$urlauth");
 
 
 //aide 
-$_SESSION["pageaide"]="L%27interface_%C3%A9l%C3%A8ve#Voir_ma_fiche";
+$_SESSION["pageaide"]="L%27interface_%C3%A9l%C3%A8ve#Mon_Espace_personnel";
 
 //user authentifie
 //else header("Location:people.php?uid=$login");
