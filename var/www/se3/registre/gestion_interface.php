@@ -48,8 +48,8 @@ include "ihm.inc.php";
 
 if (ldap_get_right("computers_is_admin",$login)!="Y")
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
-$_SESSION["pageaide"]="Gestion_des_clients_windows#Description_du_processus_de_configuration_du_registre_Windows";
-
+$_SESSION["pageaide"]="Gestion_des_clients_windowsNG#Description_du_processus_de_configuration_du_registre_Windows";
+	
 //require ("functions.inc.php");
 $testniveau=getintlevel();
 $afficheniveau=afficheniveau($testniveau);

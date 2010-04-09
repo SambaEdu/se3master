@@ -33,7 +33,7 @@ textdomain ('se3-core');
 
 
 //aide 
-$_SESSION["pageaide"]="Table_des_mati%C3%A8res";
+$_SESSION["pageaide"]="L\'interface_web_administrateur#Action_serveur";
 
 
 $texte_alert="Vous allez stopper ou redémarrer le serveur. Voulez vous vraiment continuer ?";

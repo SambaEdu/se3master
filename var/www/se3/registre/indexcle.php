@@ -36,7 +36,7 @@ textdomain ('se3-registre');
 
 if ((is_admin("computers_is_admin",$login)!="Y") or (is_admin("parc_can_manage",$login)!="Y"))
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
-	$_SESSION["pageaide"]="Gestion_des_clients_windows#Description_du_processus_de_configuration_du_registre_Windows";
+	$_SESSION["pageaide"]="Gestion_des_clients_windowsNG#Le_menu_Attribution_des_cl.C3.A9s";
 
 $testniveau=getintlevel();
 require "include.inc.php";

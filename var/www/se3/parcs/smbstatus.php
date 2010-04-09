@@ -37,7 +37,7 @@ textdomain ('se3-parcs');
 $tri=$_GET['tri'];
 
 //aide
-$_SESSION["pageaide"]="Gestion_des_parcs#Connexions_samba";
+$_SESSION["pageaide"]="Informations_syst%C3%A8me#Connexions_actives";
 
 if (is_admin("system_is_admin",$login)!="Y")
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
