@@ -24,6 +24,9 @@
 	bindtextdomain('se3-fond',"/var/www/se3/locale");
 	textdomain ('se3-fond');
 
+	//aide
+	$_SESSION["pageaide"]="Le_module_Syst%C3%A8me_fond_d\'%C3%A9cran#Param.C3.A8trage";
+	
 	// Chemin à récupérer par la suite depuis MySQL (ou depuis un fichier texte)
 	//$chemin_param_fond="/usr/share/se3/etc/fonds_ecran";
 	$chemin_param_fond="/etc/se3/fonds_ecran";

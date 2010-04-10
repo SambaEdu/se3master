@@ -48,7 +48,7 @@ $user=$_GET['user'];
 $mpenc=$_GET['mpenc'];
 
 //aide
-$_SESSION["pageaide"]="Gestion_des_parcs#Etat_par_nom_de_machine";
+$_SESSION["pageaide"]="Informations_syst%C3%A8me#Historique";
 
 
 // Affichage du formulaire de saisie d'adresse IP
