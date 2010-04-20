@@ -184,7 +184,14 @@ function avoir_systemid($nom_machine) { // retourne l'ID de $nom_machine ou 0 a 
 
 function fping($ip)
 {
-	return exec("ping ".$ip." -c 1 -w 1 | grep received | awk '{print $4}'");
+//	return exec("ping ".$ip." -c 1 -w 1 | grep received | awk '{print $4}'");
+    system("ping ".$ip." -c 1 -w 1 > /dev/null", $ret);
+    if ( $ret == 0 ) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 
@@ -416,7 +423,7 @@ function jour_check($parcf,$jourf,$type_actionf)
 
 function detail_parc($parc)
 {
-	include "printers.inc.php";
+	require_once ("printers.inc.php");
 
 	global $smbversion;
 	echo "\n<br>\n<CENTER>\n";
@@ -436,7 +443,7 @@ function detail_parc($parc)
                 $mpcount=count($mp_all);
                 for ($loop=0; $loop < count($mp_all); $loop++) {
                 	$mach=$mp_all[$loop];
-                   	if (preg_match("/$filtrecomp/",$mach)) $mp[$lmloop++]=$mach;
+                   	if (ereg($filtrecomp,$mach)) $mp[$lmloop++]=$mach;
                 }
         }
 
@@ -494,7 +501,7 @@ function detail_parc($parc)
 					echo "<tr>";
 					// Affichage de l'icone informatique
 					// Type d'icone en fonction de l'OS
-					include_once("fonc_outils.inc.php");
+					require_once("fonc_outils.inc.php");
 					$retourOs = type_os($mpenc);
 					if($retourOs == "0") { $icone="computer.png"; }
 					elseif($retourOs == "Linux") { $icone="linux.png"; }
@@ -550,7 +557,7 @@ function detail_parc_printer($parc)
                 $mpcount=count($mp_all);
                 for ($loop=0; $loop < count($mp_all); $loop++) {
                 	$mach=$mp_all[$loop];
-                   	if (preg_match("/$filtrecomp/",$mach)) $mp[$lmloop++]=$mach;
+                   	if (ereg($filtrecomp,$mach)) $mp[$lmloop++]=$mach;
                 }
         }
 
@@ -651,8 +658,8 @@ function deja_valid($mpenc)
 function enleveantislash($string)
 {
             $temp=rawurlencode($string);
-            $temp1=preg_replace("/%5C%27/","%27",$temp);
-            $temp2=preg_replace("/%5C%22/","%22",$temp1);
+            $temp1=ereg_replace("%5C%27","%27",$temp);
+            $temp2=ereg_replace("%5C%22","%22",$temp1);
             $final=rawurldecode($temp2);
 return $final;
 }
@@ -669,7 +676,7 @@ return $final;
 function enlevedoublebarre($string)
 {
             $temp=rawurlencode($string);
-            $temp1=preg_replace("/%5C%5C/","%5C",$temp);
+            $temp1=ereg_replace("%5C%5C","%5C",$temp);
             $final=rawurldecode($temp1);
 return $final;
 }
@@ -782,7 +789,7 @@ function test_log($machine)
     		$tab = file($fichier_log);
     
     		$inverse_tab=array_reverse($tab);
-    		if (preg_match('/A)bort/i',$inverse_tab[0])) { 
+    		if (eregi('A)bort',$inverse_tab[0])) { 
     			return true;
 		} else {
     			return false;
@@ -790,6 +797,27 @@ function test_log($machine)
 	}
 }
 
+/**
+* Ajoute une machine dans un parc
+
+* @Parametres $name : nom de la machine - $parc : Parc dans lequel on veut ajouter la machine
+
+* @Return Affichage HTML d'un message d'ajout
+
+*/
+
+function add_machine_parc($name,$parc)
+{
+	include("config.inc.php");
+	$ret .= "Ajout de l'ordinateur $name au parc <U>$parc</U><BR>";
+	$cDn = "cn=".$name.",".$computersRdn.",".$ldap_base_dn;
+	$pDn = "cn=".$parc.",".$parcsRdn.",".$ldap_base_dn;
+	exec ("/usr/share/se3/sbin/groupAddEntry.pl \"$cDn\" \"$pDn\"");
+	// #NJ 10-2004 reconstruction des partages imprimantes par parc
+	exec ("/usr/share/se3/sbin/printers_group.pl");
+	update_wpkg();
+	return $ret;
+}
 
 /**
 
@@ -801,8 +829,9 @@ function test_log($machine)
 
 function supprime_machine_parc($mpenc,$parc) {
 	include "config.inc.php";
-	include_once "printers.inc.php";
-
+    require_once ("ihm.inc.php");
+	require_once("ldap.inc.php");
+	require_once("printers.inc.php");
 	// On compte si la demande ne porte pas sur toutes les machines
 	$mp_all=gof_members($parc,"parcs",1);
 	$mpcount=count($mp_all);
@@ -832,7 +861,33 @@ function supprime_machine_parc($mpenc,$parc) {
 		// on supprime
 		exec ("/usr/share/se3/sbin/groupDelEntry.pl \"$cDn\" \"$pDn\"");
 	}
+	update_wpkg();
 }
+
+/**
+
+* renomme une machine dans tous ses parcs
+
+* @Parametres  $oldname $name
+* @Return  affichage html
+*/
+
+
+function renomme_machine_parcs($oldname,$name)
+{
+    require_once ("ihm.inc.php");
+	require_once ("ldap.inc.php");
+	$ret="renommage de $oldname en $name dans :<br>";
+	$parc=search_parcs($oldname);
+	if (isset($parc)) {
+		foreach($parc as $key=>$value) {
+		 	$ret .=	add_machine_parc($name,$parc[$key]['cn']);
+			supprime_machine_parc($oldname,$parc[$key]['cn']);
+		}
+	}
+    return $ret;
+}
+
 
 
 /**
@@ -910,36 +965,6 @@ function update_wpkg() {
 }
 
 
-/**
-* Supprime une reservation dans DHCP et relance du dhcp
-* @Parametres $name : Nom de la machine
-* @Return Message d'erreur SQL en cas de non suppression
-
-*/
-
-function suppr_reservation($name)
-{
-	include "config.inc.php";
-	// On teste si la table existe
-	$exec = mysql_query("SHOW TABLES FROM `se3db` LIKE 'se3_dhcp'");
-	$tables =array();
-	while($row = mysql_fetch_row($exec)) {
-		$tables[] = $row[0];
-	}
-	if(in_array('se3_dhcp',$tables)){
-	        $dhcp_ok = 1;
-	}
-	if ($dhcp_ok==1) {
-               $error="Suppression de l'entr&#233;e pour $ip<br>";
-               $suppr_query = "DELETE FROM `se3_dhcp` where `name` = '$name'";
-               mysql_query($suppr_query);
-               return $error;
-               // On relance dhcp si celui-ci est active.
-               if($dhcp=="1") {
-                     exec("sudo /usr/share/se3/scripts/makedhcpdconf",$ret);
-               }
-	}
-}
 
 /**
 * Supprime une machine de l'inventaire

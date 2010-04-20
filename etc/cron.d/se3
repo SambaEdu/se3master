@@ -1,3 +1,4 @@
+## $Id: se3 5395 2010-04-12 17:09:27Z dbo $ ##
 # Extinction programmée des postes xp tous les 1/4h
 59,14,29,44 * * * * root /usr/share/se3/sbin/cron_wolstop.pl &>/dev/null
 #
@@ -40,5 +41,11 @@
 #
 01 21 * * * root /usr/share/se3/scripts/quota_fixer_mysql.sh Toutlemonde Toutespartitions actu >/dev/null
 
-# purge des elements de la corbeille de + de 8 jours
-0 1  * * *   root    find /home/*/profil/Bureau/Corbeille_Reseau/ -ctime +8 -exec rm -f {} \; >/dev/null 2>&1
+# purge des elements de la corbeille de + de 2 jours ou overfill
+0 1  * * *   root  /usr/share/se3/sbin/vide_corbeille.sh >/dev/null 2>&1
+
+# actualisation du cache des parametres
+01,16,31,46 6-20 * * * root /usr/share/se3/scripts/refresh_cache_params.sh
+
+# actualisation du csv si besoin
+*/5 * * * * root /usr/share/se3/sbin/update-csv.sh >/dev/null 2>&1

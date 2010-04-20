@@ -390,7 +390,7 @@ if [ ! "$rep" = "n" ]; then
 		else
 			echo "UPDATE params SET value=\"http://$FQHN:909\" WHERE name=\"urlse3\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 		fi
-
+        /usr/share/se3/includes/config.inc.sh -clpbmsdf
 	fi
 
 	if [ "$rep" = "n" ]; then
@@ -633,6 +633,7 @@ if [ ! "$rep" = "n" ]; then
 		echo "UPDATE params SET value=\"ou=$RIGHTSRDN\" WHERE name=\"rightsRdn\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 		echo "UPDATE params SET value=\"ou=$PRINTERSRDN\" WHERE name=\"printersRdn\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 		echo "UPDATE params SET value=\"ou=$TRASHRDN\" WHERE name=\"trashRdn\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
+		/usr/share/se3/includes/config.inc.sh -clpbmsdf
 	fi
 fi
 
@@ -917,12 +918,20 @@ if [ ! "$rep" = "n" ]; then
 		echo -e "$COLTXT"
 		echo "Mappage des groupes..."
 		echo -e "$COLCMD\c "
-		# ajout dbo pour mappage des groupes de bases
-		net groupmap add sid=$DOMAINSID-512 ntgroup=Admins unixgroup=admins type=domain comment="Administrateurs du domaine"
-		net groupmap add ntgroup=Eleves unixgroup=Eleves type=domain comment="Eleves du domaine"
-		net groupmap add ntgroup=Profs unixgroup=Profs type=domain comment="Profs du domaine"
-# 		net groupmap add ntgroup=root unixgroup=root type=domain comment="membres groupe root du domaine"
-# 		net groupmap add sid=$DOMAINSID-515 ntgroup="Domain Computers" unixgroup=machines type=domain 		comment="MAchines du domaine"
+		# ajout dbo pour mappage des groupes de bases :  normalement c'est deja fait...
+		
+        # groupe lcs-users mappé vers "utilisateurs du domaine -513"
+        net groupmap list | grep -q "lcs-users" || net groupmap add ntgroup="Utilisateurs du domaine" rid="513" unixgroup="lcs-users" type="domain"
+
+        # groupe machines mappé vers -515
+        net groupmap list | grep -q "machines" || net groupmap add ntgroup="machines" rid="515" unixgroup="machines" type="domain"
+
+        # groupe admins mappé vers -512
+        net groupmap list | grep -q "admins" || net groupmap  add ntgroup="Admins" rid="512" unixgroup="admins" type="domain"
+
+        # groupe profs / eleves /root rid auto
+        net groupmap list | grep -q "Profs" || net groupmap add ntgroup="Profs" unixgroup="Profs" type="domain" comment="Profs du domaine"
+        net groupmap list | grep -q "Eleves" || net groupmap add ntgroup="Eleves" unixgroup="Eleves" type="domain" comment="Eleves du domaine"
 
 		echo "UPDATE params SET value=\"$NTDOM\" WHERE name=\"se3_domain\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 		echo "UPDATE params SET value=\"$NETBIOS\" WHERE name=\"netbios_name\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
@@ -968,7 +977,7 @@ if [ ! "$rep" = "n" ]; then
 	  ssh-keygen -t rsa -N "" -f /root/.ssh/id_rsa -q
 	fi
 	cp /root/.ssh/id_rsa.pub /var/se3/Progs/install/installdll
-  
+    /usr/share/se3/includes/config.inc.sh -clpbmsdf
  
 fi
 
@@ -1153,7 +1162,7 @@ fi
 /usr/share/se3/sbin/create_adminse3.sh
 
 # actualisation du cache des parametres : 
-/usr/share/se3/includes/config.inc.sh -clpbmsdf 
+/usr/share/se3/includes/config.inc.sh -clpbmsdf
 
 
 # Lance postinst de nos dependances, ces dernieres ayant besoin de l'execution du script d'install

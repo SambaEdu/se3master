@@ -110,7 +110,12 @@ function SETMYSQL {
 #              dhcp   : 7
 
 getmypasswd
-echo "insert into params set name='$1',value='$2',descr='$3',cat='$4';" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
+test_exist=`echo "SELECT id FROM params WHERE name='$1'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
+if [ "X$test_exist" = "X" ]; then # if empty
+    echo "insert into params set name='$1',value='$2',descr='$3',cat='$4';" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
+else
+    echo "UPDATE params SET value='$2' WHERE name='$1';" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
+fi
 }
 
 function CHANGEMYSQL {

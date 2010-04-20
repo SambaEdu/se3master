@@ -57,7 +57,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
 	$ici=$repinf;
 	$repinf=explode("/",$repinf);
 	$repinf=end($repinf);
-	$ici=preg_replace("/$repinf/","",$ici);
+	$ici=ereg_replace($repinf,"",$ici);
 	$test=$ici;
 	$test=substr("$test",0,-1);
     }
