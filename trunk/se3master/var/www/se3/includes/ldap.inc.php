@@ -685,7 +685,8 @@ function search_machines ($filter,$branch) {
   	if ("$branch"=="computers")
     		$ldap_computer_attr = array (
     			"cn",
-    			"ipHostNumber",   // ip Host
+    			"iphostnumber",	// ip Host
+				"macaddress", // adresse mac
     			"l",                        // Status de la machine
     			"description"        // Description de la machine
     		);
@@ -706,6 +707,7 @@ function search_machines ($filter,$branch) {
             					$computers[$loop]["cn"] = $info[$loop]["cn"][0];
             					if ("$branch"=="computers") {
                 					$computers[$loop]["ipHostNumber"] = $info[$loop]["iphostnumber"][0];
+									$computers[$loop]["macAddress"] = $info[$loop]["macaddress"][0];
                 					$computers[$loop]["l"] = $info[$loop]["l"][0];
                 					$computers[$loop]["description"] = utf8_decode($info[$loop]["description"][0]);
             					}
@@ -720,6 +722,55 @@ function search_machines ($filter,$branch) {
   	}
 
 	return $computers;
+}
+
+function search_samba ($computername) {
+
+	/**
+	* Recherche des machines windows dan computers
+
+        * @Parametres $computerbname
+	* @Return  true si existe
+
+	*/
+
+	global $ldap_server, $ldap_port, $dn;
+  	global $error;
+  	$error="";
+
+  	//LDAP attributes
+  	$ldap_search_samba_attr = array(
+    		"uid",   // login
+    	  	);
+
+  	$ds = @ldap_connect ( $ldap_server, $ldap_port );
+  	if ( $ds ) {
+    		$r = @ldap_bind ( $ds ); // Bind anonyme
+    		if ($r) {
+      			// Recherche dans la branche people
+      			$result = @ldap_search ( $ds, $dn["computers"], "(uid=".$computername."$)", $ldap_search_samba_attr );
+      			if ($result) {
+        			$info = @ldap_get_entries ( $ds, $result );
+        			if ( $info["count"]) {
+						$ret=TRUE;
+        			}
+				@ldap_free_result ( $result );
+      			} else {
+        			$ret=FALSE;
+					$error = gettext("Erreur de lecture dans l'annuaire LDAP");
+      			}
+
+    		} else {
+      			$error = gettext("Echec du bind anonyme");
+				$ret=FALSE;
+    		}
+
+		@ldap_close ( $ds );
+  	} else {
+    		$error = gettext("Erreur de connection au serveur LDAP");
+			$ret=FALSE;
+  	}
+  	return $ret;
 }
 
 
@@ -814,8 +865,28 @@ function gof_members ($gof,$branch,$extract) {
 	return $ret;
 }
 
+/**
 
+* liste les machines d'un parc
 
+* @Parametres  Nom du parc 
+* @Return  tableau['machines', 'printers']
+*/
+
+function liste_parc($parc) {
+ 	$mp_all=gof_members($parc, "parcs", 1);
+	foreach ( $mp_all as $key => $value ) {
+//	    print $value;
+//	    if (preg_match( "printerName=".$, $value)) {
+//	        $ret['printers'][]=$value;
+//	    }
+//	    else {
+	        $ret['computers'][]=$value;
+//	    }
+	}
+	return $ret;
+}
+	
 
 function tstclass($prof,$eleve) {
 

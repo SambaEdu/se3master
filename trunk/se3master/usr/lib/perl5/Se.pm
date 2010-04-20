@@ -186,14 +186,14 @@ sub sambaAttrs {
 
   my ( $uidNumber, $gid, $password ) = @_;
   $rid = 2 * $uidNumber + 1000;
-  $pgrid = 2 * $gid + 1001;
+  $pgrid = 513;
   ( $lmPassword, $ntPassword ) = ntlmgen $password;
   return ( $rid, $pgrid, $lmPassword, $ntPassword );
 
 }
 
 sub getFirstFreeUid {
-		my $FFuidNumber = 1000; # n° à partir duquel la recherche est lancée
+		my $FFuidNumber = 1001; # n° à partir duquel la recherche est lancée
 		my $increment = 1024; # doit etre une puissance de 2
 		if (defined(getpwuid($FFuidNumber))) {
 				do {

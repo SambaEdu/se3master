@@ -6,7 +6,7 @@
 LOG_DIR="/var/log/se3"
 HISTORIQUE_MAJ="$LOG_DIR/historique_maj"
 REPORT_FILE=$LOG_DIR/log_maj120
-
+mkdir -p /root/maj/1.50/
 #mode debug on si =1
 [ -e /root/debug ] && DEBUG="1"
 
@@ -20,7 +20,9 @@ mysql -u $dbuser -p$dbpass -f se3db < /var/cache/se3_install/se3db.sql 2>/dev/nu
 
 MAIL_REPORT()
 {
-[ -e /etc/ssmtp/ssmtp.conf ] && MAIL_ADMIN=$(cat /etc/ssmtp/ssmtp.conf | grep root | cut -d= -f2)
+if [ -e /etc/ssmtp/ssmtp.conf ]; then
+    MAIL_ADMIN=$(cat /etc/ssmtp/ssmtp.conf | grep root | cut -d= -f2)
+fi
 if [ ! -z "$MAIL_ADMIN" ]; then
 	REPORT=$(cat $REPORT_FILE)
 	#On envoie un mail à l'admin
@@ -42,7 +44,7 @@ RIGHTSR=`echo $RIGHTSRDN |cut -d = -f 2`
 GROUPSR=`echo $GROUPSRDN |cut -d = -f 2`
 
 # Correction nss pour ignorer root et openldap
-[ -z "$(grep "nss_initgroups_ignoreusers" /etc/libnss-ldap.conf)" ] && echo "nss_initgroups_ignoreusers root,openldap,plugdev,disk,kmem,tape,audio,daemon,lp,rdma,fuse,video,dialout,floppy,cdrom,tty" >> /etc/libnss-ldap.conf
+grep -q "nss_initgroups_ignoreusers" /etc/libnss-ldap.conf || echo "nss_initgroups_ignoreusers root,openldap,plugdev,disk,kmem,tape,audio,daemon,lp,rdma,fuse,video,dialout,floppy,cdrom,tty" >> /etc/libnss-ldap.conf
 
 # test id backuppc et modif si necessaire
 id_backuppc="$(id backuppc -u)"
@@ -60,25 +62,7 @@ sed -e "s/#BASEDN#/$BASEDN/g;s/#DOMAINSID#/$DOMAINSID/g;s/#GROUPS#/$GROUPSR/g;s/
 ldapadd -x -c -D "$ADMINRDN,$BASEDN" -w $ADMINPW -f /root/Samba_maj120.ldif
 echo ""
 
-#Change le SambaPrimaryGroupe
-echo "Modification du SambaPrimaryGroupe en arriere plan dans 5mn"
-AT_SCRIPT=/root/modif_SambaPrimaryGroupe.sh
-echo "#!/bin/bash
-ldapsearch -x -b $PEOPLERDN,$BASEDN '(objectclass=*)' uid | grep -v People | grep -v \# | grep uid: | cut -d\" \" -f2 | while read ID
-do
-ldapmodify -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
-dn: uid=\$ID,$PEOPLERDN,$BASEDN
-changetype: modify
-replace: sambaPrimaryGroupSID
-sambaPrimaryGroupSID: $DOMAINSID-513
-EOF
-done
-" >$AT_SCRIPT
-chmod 700 $AT_SCRIPT
-at now +5 minutes -f $AT_SCRIPT >/dev/null
-echo ""
-
-echo "maj supervision rouen" 
+# echo "maj supervision rouen" 
 ./depmaj/install_supervision_rouen.sh
 
 
@@ -86,17 +70,17 @@ echo "maj supervision rouen"
 echo "Mapping des groupes particuliers"
 echo ""
 # groupe lcs-users mappé vers "utilisateurs du domaine -513"
-net groupmap list | grep "lcs-users"  > /dev/null 2>&1 || net groupmap add ntgroup="Utilisateurs du domaine" rid="513" unixgroup="lcs-users" type="domain"
+net groupmap list | grep -q "lcs-users" || net groupmap add ntgroup="Utilisateurs du domaine" rid="513" unixgroup="lcs-users" type="domain"
 
 # groupe machines mappé vers -515
-net groupmap list | grep "machines"  > /dev/null 2>&1 || net groupmap add ntgroup="machines" rid="515" unixgroup="machines" type="domain"
+net groupmap list | grep -q "machines" || net groupmap add ntgroup="machines" rid="515" unixgroup="machines" type="domain"
 
 # groupe admins mappé vers -512
-net groupmap list | grep "admins"  > /dev/null 2>&1 || net groupmap  add ntgroup="Admins" rid="512" unixgroup="admins" type="domain"
+net groupmap list | grep -q "admins" || net groupmap  add ntgroup="Admins" rid="512" unixgroup="admins" type="domain"
 
 # groupe profs / eleves /root rid auto
-net groupmap list | grep "Profs"  > /dev/null 2>&1 || net groupmap add ntgroup="Profs" unixgroup="Profs" type="domain" comment="Profs du domaine"
-net groupmap list | grep "Eleves"  > /dev/null 2>&1 || net groupmap add ntgroup="Eleves" unixgroup="Eleves" type="domain" comment="Eleves du domaine"
+net groupmap list | grep -q "Profs" || net groupmap add ntgroup="Profs" unixgroup="Profs" type="domain" comment="Profs du domaine"
+net groupmap list | grep -q "Eleves" || net groupmap add ntgroup="Eleves" unixgroup="Eleves" type="domain" comment="Eleves du domaine"
 echo ""
 
 # mise a jour des parametres caches pour le domaine si besoin ( remplacement confse3.ini )
@@ -113,13 +97,13 @@ CHANGEMYSQL se3ip "$se3ip"
 
 CHANGEMYSQL bck_user "backuppc" 
 
+. /usr/share/se3/includes/config.inc.sh -clpbmsdf
 
 echo "mise en place des privileges samba"
 # 
-CONFSE3="/var/se3/Progs/install/installdll/confse3.ini"
-CONFSE3_SAV="/var/se3/Progs/install/installdll/confse3.ini-root"
+rm -rf /var/se3/Progs/install/installdll/
 
-ldapsearch -xLLL cn=root -b $BASEDN cn | grep "cn=root" > /dev/null 2>&1 || \
+ldapsearch -xLLL cn=root -b $BASEDN cn | grep -q "cn=root" || \
 echo "dn: cn=root,$BASEDN
 cn: root
 description: compte root samba 
@@ -147,6 +131,13 @@ gidNumber: 0
 sambaPrimaryGroupSID: $DOMAINSID-0
 sambaSID: $DOMAINSID-1" | ldapadd -x -h $LDAPIP -D $ADMINRDN,$BASEDN -w $ADMINPW 
 
+# mappage des groupes pour samba
+
+ldapsearch -xLLL -h $LDAPIP -b $GROUPSRDN,$BASEDN "(&(objectClass=posixGroup)(!(objectClass=sambaGroupMapping)))" cn | grep "^cn:"  | cut -c 5- | while read cn; do
+	echo "mappage de $cn" 
+    /usr/share/se3/scripts/group_mapping.sh $cn
+done
+
 # Creation compte adminse3 dans annuaire si besoin et application provileges smbpour admin et adminse3 
 /usr/share/se3/sbin/create_adminse3.sh
 
@@ -159,8 +150,50 @@ c est qu il faut les uploader a nouveau sur le serveur (voir la procedure de la 
 
 # bye bye se3printers
 rm -f /var/se3/Progs/ro/printers/se3printers.bat
-sed -i "/se3printers.bat/d" /home/templates/base/logon.bat
+# sed -i "/se3printers.bat/d" /home/templates/base/logon.bat
+for logon in /home/templates/*/logon*.bat
+do
+	sed -i "/se3printers.bat/d" $logon
+done
 
+
+. /usr/share/se3/includes/config.inc.sh -clpbmsdf
+
+# deplacement corbeille reseau si besoin ?
+for user in /home/*
+do	
+	if [ -d "$user"/profil/Bureau/Corbeille_Reseau ]; then 
+	    mv  "$user"/profil/Bureau/Corbeille_Reseau "$user"/Corbeille_Reseau
+	    
+	fi
+	
+	if  [ -e "$user"/Bureau ]; then 
+	find "$user"/Bureau/ -user root -iname "*.lnk" -exec rm {} \;
+	fi
+done
+#/usr/share/se3/sbin/update-smbconf.sh fait par instance_se3.sh
+
+#Change le SambaPrimaryGroupe
+echo "#!/bin/bash
+echo \"listage des utilisateurs\"
+ldapsearch -x -b $PEOPLERDN,$BASEDN '(objectclass=*)' uid | grep -v People | grep -v \# | grep uid: | cut -d\" \" -f2 | grep -v webmaster.etab | while read ID
+do
+echo \"dn: uid=\$ID,$PEOPLERDN,$BASEDN
+changetype: modify
+replace: sambaPrimaryGroupSID
+sambaPrimaryGroupSID: $DOMAINSID-513
+\" >> /root/maj/1.50/modif_SambaPrimaryGroupe.ldif
+done
+echo \"modification des entrees\" 
+ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" -f /root/maj/1.50/modif_SambaPrimaryGroupe.ldif >/root/maj/1.50/rapport_modif_annuaire.txt
+" >/root/maj/1.50/modif_SambaPrimaryGroupe.sh
+chmod 700 /root/maj/1.50/modif_SambaPrimaryGroupe.sh
+echo "Modification du SambaPrimaryGroupe en cours....Ce peut être long......."
+cd /root/maj/1.50/
+./modif_SambaPrimaryGroupe.sh && echo "Termine avec succes"
+cd - >/dev/null
+
+mv  /root/Samba_maj120.ldif /root/maj/1.50/
 
 echo "Mise a jour 120:
 - Ajout nouvelle architecture de connexion
@@ -176,5 +209,5 @@ MAIL_REPORT
 echo "
 Un mail recapitulatif de la mise a jour sera envoye
 "
-
+/etc/init.d/slapd restart
 exit 0
