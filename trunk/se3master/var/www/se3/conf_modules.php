@@ -173,7 +173,7 @@ if ($_GET[action] == "change") {
 			$valeur_internet=($_GET['valeur']==1) ? 1 : 0;
 			$resultat=mysql_query("SELECT * FROM params WHERE name='internet'");
 			if(mysql_num_rows($resultat)==0){
-				$sql = "INSERT INTO params VALUES('','internet','1','','Activation ou désactivation module se3-internet','6')";
+				$sql = "INSERT INTO params VALUES('','internet','1','','Activation ou dï¿½sactivation module se3-internet','6')";
 			} else {
 				$sql = "UPDATE params SET value='$valeur_internet' where name='internet'";
 			}
@@ -273,21 +273,23 @@ echo "</TD><TD align=\"center\" class=\"menuheader\" height=\"30\">".gettext("In
 // Module sauvegarde
 echo "<TR><TD>".gettext("Syst&#232;me de sauvegarde (sur disque)")."</TD>";
   
-$backuppc_version_install = exec("apt-cache policy se3 | grep \"Install\" | cut -d\":\" -f2");
-//$ocs_version_dispo = exec("apt-cache policy se3-ocs | grep \"Candidat\" | cut -d\":\" -f2");
-// Cas pour le moment particulier backuppc n'est pas un paquet debian
+$backuppc_version_install = exec("apt-cache policy se3-backup | grep \"Install\" | cut -d\":\" -f2");
+$backuppc_version_dispo = exec("apt-cache policy se3-backup | grep \"Candidat\" | cut -d\":\" -f2");
+
+
 echo "<TD align=\"center\">$backuppc_version_install</TD>";
 // On teste si on a bien la derniere version
 
-$backuppc_version_install="1";
-$backuppc_version_dispo="1";
+// $backuppc_version_install="1";
+// $backuppc_version_dispo="1";
+
 if ("$backuppc_version_install" == "$backuppc_version_dispo") {
 	echo "<TD align=\"center\">";
 	echo "<u onmouseover=\"return escape".gettext("('Pas de nouvelle version de ce module')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\"></u>";
 	echo "</TD>";
 } else {
 	echo "<TD align=\"center\">";
-	// echo "<u onmouseover=\"return escape".gettext("('Mise &#224; jour version $backuppc_version_dispo disponible.<br>Cliquer ici pour lancer la mise &#224; jour de ce module.')")."\"><a href=\"../test.php?action=settime\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/warning.png\"></a></u>"; 
+        echo "<u onmouseover=\"return escape".gettext("('Mise &#224; jour version $backuppc_version_dispo disponible.<br>Cliquer ici pour lancer la mise &#224; jour de ce module.')")."\"><a href=\"../test.php?action=settime\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/warning.png\"></a></u>";
 	echo "</TD>";
 }
 
@@ -426,7 +428,7 @@ if (($dhcp!="1") || ($dhcp_actif!="1")) {
 	echo "</u>";
 } else {
 	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer sue l\'icone verte pour d&#233;sactiver le module serveur dhcp')")."\">";
-	if($clonage=="1") { $dhcp_alert="onClick=\"alert('Le clonage des stations est actif, en désactivant le dhcp celui-ci ne pourra plus fonctionner')\""; }
+	if($clonage=="1") { $dhcp_alert="onClick=\"alert('Le clonage des stations est actif, en dï¿½sactivant le dhcp celui-ci ne pourra plus fonctionner')\""; }
 	echo "<a href=conf_modules.php?action=change&varb=dhcp&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" \"$dhcp_alert\"></a>";
 	echo "</u>";
 }
