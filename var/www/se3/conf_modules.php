@@ -47,9 +47,27 @@ if ($_GET[action] == "change") {
 	$resultat=mysql_query("UPDATE params set value='$_GET[valeur]' where name='$_GET[varb]'");
 	switch ($_GET[varb]) {
 		case "backuppc":
-			include ("fonction_backup.inc.php");
-			stopBackupPc();
-			break;
+                 if($_GET[valeur]=="1") { //si on veut l'activer
+				$backuppc_actif = exec("dpkg -s se3-backup | grep \"Status: install ok\" > /dev/null && echo 1");
+				if($backuppc_actif!="1") { //paquet pas installe on l'installe
+					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh se3-backup");
+				} else { //sinon on l'active
+					$update_query = "UPDATE params SET value='$_GET[valeur]' where name='backuppc'";
+					mysql_query($update_query);
+					echo "Module $module activ&#233;.<br>\n";
+				}
+			}
+                 if($_GET[valeur]=="0") {
+				$update_query = "UPDATE params SET value='$_GET[valeur]' where name='backuppc'";
+				mysql_query($update_query);
+				echo "Module $module d&#233;sactiv&#233;.<br>\n";
+                                include ("fonction_backup.inc.php");
+                                stopBackupPc();
+                        }
+	       
+                break;
+
+
 		case "savbandactiv":
 			if ($_GET[valeur] == "1") {
 				echo "Module $module activ&#233;.<br>\n";
