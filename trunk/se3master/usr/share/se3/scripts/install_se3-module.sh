@@ -8,6 +8,8 @@ SE3MODULE="$1"
 M2="$2"
 M3="$3"
 
+. /etc/se3/config_m.cache.sh
+
 if [ "$1" = "--help" -o "$1" = "" -o "$1" = "-h" ]
 then
 	echo "Script permettant l'installion ou l'activation de $SE3MODULE"
@@ -34,10 +36,10 @@ MAIL_REPORT()
 {
 [ -e /etc/ssmtp/ssmtp.conf ] && MAIL_ADMIN=$(cat /etc/ssmtp/ssmtp.conf | grep root | cut -d= -f2)
 if [ ! -z "$MAIL_ADMIN" ]; then
-	REPORT=$(cat $REPORT_FILE)
+	REPORT=$(cat $REPORT_FILE | sed -e "s/$xppass/XXXXXX/g")
 #cat $REPORT_FILE
-	#On envoie un mail à l'admin
-	echo "$REPORT"  | mail -s "[SE3] Résultat de $0" $MAIL_ADMIN
+	#On envoie un mail a l'admin
+	echo "$REPORT"  | mail -s "[SE3] Resultat de $0" $MAIL_ADMIN
 fi
 }
 
@@ -61,7 +63,7 @@ fi
 [ -e /root/debug ] && debug="1"
 
 TEST_LOCK()
-# principe bien rempompé sur un script de stéphane ;)
+# principe bien rempompe sur un script de stephane ;)
 {
 # Chemin des fichiers de lock:
 chemin_lock="/var/lock"
@@ -73,11 +75,11 @@ if [ -e $fich_lock ]; then
 	t2=$(date +%s)
 	difference=$(($t2-$t1))
 	if [ $t2 -gt $t_expiration ]; then
-		echo "Tâche d'installation de $SE3MODULE initiée en $t1 et il est $t2" | tee -a $REPORT_FILE
-		echo "La tâche a dépassé le délai imparti." | tee -a $REPORT_FILE
-		echo "Le fichier va être réinitialisé..." | tee -a $REPORT_FILE
+		echo "Tache d'installation de $SE3MODULE initiee en $t1 et il est $t2" | tee -a $REPORT_FILE
+		echo "La tache a depasse le delai imparti." | tee -a $REPORT_FILE
+		echo "Le fichier va etre reinitialise..." | tee -a $REPORT_FILE
 	else
-		echo "Une installation semble déjà en cours, veuillez patienter qu'elle se termine, celle-ci dispose de 20mn pour le faire" | tee -a $REPORT_FILE
+		echo "Une installation semble deja en cours, veuillez patienter qu'elle se termine, celle-ci dispose de 20mn pour le faire" | tee -a $REPORT_FILE
 		echo "</pre>"
 		exit 1
 	fi
@@ -99,21 +101,21 @@ fi
 install_module()
 {
 echo "Installation ou MAJ de $SE3MODULE" | tee -a $REPORT_FILE
-echo "Mise à jour de la liste des paquets disponibles ....." | tee -a $REPORT_FILE
+echo "Mise a jour de la liste des paquets disponibles ....." | tee -a $REPORT_FILE
 LINE_TEST
 TEST_LOCK
-apt-get update -qq && (echo "Liste mise à jour avec succès" | tee -a $REPORT_FILE)
+apt-get update -qq && (echo "Liste mise a jour avec succes" | tee -a $REPORT_FILE)
 echo "" | tee -a $REPORT_FILE
 
-echo "Installation du paquet $SE3MODULE et de ses dépendances" | tee -a $REPORT_FILE
+echo "Installation du paquet $SE3MODULE et de ses dependances" | tee -a $REPORT_FILE
 apt-get install $SE3MODULE -y --force-yes $opt | tee -a $REPORT_FILE
 if [ ! -z "$M2" ]; then
-echo "Installation du paquet complémentaire $M2" | tee -a $REPORT_FILE
+echo "Installation du paquet complementaire $M2" | tee -a $REPORT_FILE
 apt-get install $M2 -y --force-yes $opt | tee -a $REPORT_FILE
 fi
 
 if [ ! -z "$M3" ]; then
-echo "Installation du paquet complémentaire $M3" | tee -a $REPORT_FILE
+echo "Installation du paquet complementaire $M3" | tee -a $REPORT_FILE
 apt-get install $M3 -y --force-yes $opt | tee -a $REPORT_FILE
 fi
 
@@ -193,7 +195,7 @@ LINE_TEST
 
 if [ -d /tftpboot ]; then
 	if [ -z "$(dpkg -s se3-dhcp | grep "Status: install ok")" ]; then
-		echo -e "Présence de /tftpboot détectée, se3-clonage a renommé le répertoire en /tftpboot_${SE3MODULE}.sav" | tee -a $REPORT_FILE
+		echo -e "Presence de /tftpboot detectee, se3-clonage a renomme le repertoire en /tftpboot_${SE3MODULE}.sav" | tee -a $REPORT_FILE
 		mv /tftpboot /tftpboot_${SE3MODULE}.sav
 	fi
 
@@ -210,7 +212,7 @@ mysql -h $dbhost -u $dbuser -p$dbpass -D $dbname -e "UPDATE params SET value='1'
 se3-clamav)
 install_module
 
-	echo "Récupération du paquet se3-clamav si necessaire (activation possible via l'interface)"
+	echo "Recuperation du paquet se3-clamav si necessaire (activation possible via l'interface)"
 	mv /etc/clamav/freshclam.conf /etc/clamav/freshclam.conf_se3sauv_$LADATE
 echo "DatabaseOwner clamav
 UpdateLogFile /var/log/clamav/freshclam.log
@@ -228,7 +230,7 @@ DNSDatabaseInfo current.cvd.clamav.net" > /etc/clamav/freshclam.conf
 
 
 
-# Activation dans l'interfesse
+# Activation dans l'interface
 # mysql -h $dbhost -u $dbuser -p$dbpass -D $dbname -e "UPDATE params SET value='1' WHERE name='clamav';"
 ;;
 
@@ -256,14 +258,14 @@ se3-fondecran)
 SE3MODULE="gsfonts"
 M2="imagemagick"
 
-# Paramètres:
+# Parametres:
 chemin_param_fond="/etc/se3/fonds_ecran"
 
-# Création du dossier de paramètres:
+# Creation du dossier de parametres:
 mkdir -p $chemin_param_fond
 chown www-se3:root $chemin_param_fond
 
-# Dossier de log en cas de mode debug activé:
+# Dossier de log en cas de mode debug active:
 dossier_log="/var/log/se3/fonds_ecran"
 mkdir -p "$dossier_log"
 
@@ -271,7 +273,7 @@ mkdir -p "$dossier_log"
 install_module && touch $chemin_param_fond/imagemagick_present.txt && touch $chemin_param_fond/gsfonts_present.txt
 if [ -e $chemin_param_fond/gsfonts_present.txt ]; then
 #paramétrage
-echo "Installation ok !, paramétrage...."
+echo "Installation ok !, parametrage...."
 echo "3" > $chemin_param_fond/version_samba.txt
 touch $chemin_param_fond/actif.txt
 chown www-se3 $chemin_param_fond/actif.txt
@@ -289,7 +291,7 @@ MAIL_REPORT
 ;;
 esac
 echo "</pre>"
-echo "Installation terminée, suppression du fichier verrou" | tee -a $REPORT_FILE
+echo "Installation terminee, suppression du fichier verrou" | tee -a $REPORT_FILE
 rm -f $fich_lock
 /usr/share/se3/scripts/refresh_cache_params.sh
 exit 0
