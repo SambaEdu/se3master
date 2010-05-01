@@ -1,0 +1,9 @@
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main]
+"IE8RunOnceLastShown"=dword:00000001
+"IE8RunOncePerInstallCompleted"=dword:00000001
+"IE8RunOnceCompletionTime"=hex:
+"IE8TourShown"=dword:00000001
+"IE8TourShownTime"=hex:
+"IE8RunOnceLastShown_TIMESTAMP"=hex:
