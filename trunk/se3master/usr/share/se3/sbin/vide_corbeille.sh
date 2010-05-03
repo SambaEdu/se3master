@@ -20,19 +20,21 @@ if [ "$corbeille" == "1" ]; then
     overfill=$(getent group | grep "overfill")
     for homedir in $(ls /home); do
         if ldapsearch -xLLL -b ${peopleRdn},${ldap_base_dn} "uid=$homedir" uid | grep -q $homedir ; then
-            if [ -d /home/$homedir/Corbeille_Reseau ]; then
-                if    echo "$overfill" | grep -q $homedir
-                then
-                    # utilisateur en overfill, on efface tout    
-                    rm -fr /home/$homedir/Corbeille_Reseau/*
-                else 
-                    # effacement des fichiers de + de 3 jours (à cause de l'arrondi : voir le man find)
-                    find /home/$homedir/Corbeille_Reseau -mtime +2 -delete
+            if [ -d /home/$homedir ]; then
+                if [ -d /home/$homedir/Corbeille_Reseau ]; then
+                    if    echo "$overfill" | grep -q $homedir
+                    then
+                        # utilisateur en overfill, on efface tout    
+                        rm -fr /home/$homedir/Corbeille_Reseau/*
+                    else 
+                        # effacement des fichiers de + de 3 jours (à cause de l'arrondi : voir le man find)
+                        find /home/$homedir/Corbeille_Reseau -mtime +2 -delete
+                    fi
+                else
+                    mkdir -p /home/$homedir/Corbeille_Reseau
+                    chown $homedir /home/$homedir/Corbeille_Reseau
                 fi
-            else
-                mkdir -p /home/$homedir/Corbeille_Reseau
-                chown $homedir /home/$homedir/Corbeille_Reseau
-            fi    
+            fi
         fi
     done 
 elif [ "$1" == "clean" ]; then
