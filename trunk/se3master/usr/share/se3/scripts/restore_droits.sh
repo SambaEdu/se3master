@@ -116,8 +116,10 @@ do
 				# seront aussi supprimés lors du prochain login.
 
 				# Tous les raccourcis sur le Bureau seront supprimés au prochain login:
-				chown root:admins /home/$A/profil/Bureau
-				chmod 777 /home/$A/profil/Bureau
+				#chown root:admins /home/$A/profil/Bureau
+				#chmod 777 /home/$A/profil/Bureau
+				chown $A:admins /home/$A/profil/Bureau
+				chmod 700 /home/$A/profil/Bureau
 				find /home/$A/profil/Bureau/ -iname "*.lnk" | while read B
 				do
 					chown root:admins "$B" -R
