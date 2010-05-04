@@ -1,7 +1,7 @@
 #!/bin/bash
 # Auteurs: denis bonnenfant
 #
-## $Id: vide_corbeille.sh 5421 2010-04-19 09:31:05Z dbo $ ##
+## $Id: vide_corbeille.sh 5482 2010-05-04 05:46:38Z crob $ ##
 #
 ##### script permettant de vider les corbeilles si + de 3 jours ou dépassement quota #####
 # usage : clean  pour effacer les  corbeilles si non configurees
@@ -40,7 +40,9 @@ if [ "$corbeille" == "1" ]; then
 elif [ "$1" == "clean" ]; then
     echo "on fait le menage"
     for homedir in $(ls /home); do
-        rm -fr "/home/$homedir/Corbeille_Reseau"
+        if [ -d /home/$homedir ]; then
+            rm -fr "/home/$homedir/Corbeille_Reseau"
+        fi
     done
 fi
 # on actualise overfill si besoin
