@@ -960,7 +960,7 @@ PRIMARY KEY ( `identifiant` )
 							else{
 								$checked="";
 							}
-							echo "<option value=\"$tabcouleur[$i]\"$checked>$tabcouleur[$i]</option>\n";
+							echo "<option style=\"background-color: $tabcouleur[$i]\" value=\"$tabcouleur[$i]\"$checked>$tabcouleur[$i]</option>\n";
 						}
 						echo "</select>\n";
 						echo "</td></tr>\n";
@@ -976,7 +976,7 @@ PRIMARY KEY ( `identifiant` )
 							else{
 								$checked="";
 							}
-							echo "<option value=\"$tabcouleur[$i]\"$checked>$tabcouleur[$i]</option>\n";
+							echo "<option style=\"background-color: $tabcouleur[$i]\" value=\"$tabcouleur[$i]\"$checked>$tabcouleur[$i]</option>\n";
 						}
 						echo "</select>\n";
 						echo "</td></tr>\n";
@@ -1315,7 +1315,7 @@ couleur2="'.$couleur2.'"
 								else{
 									$checked="";
 								}
-								echo "<option value=\"$tabcouleur[$i]\"$checked>$tabcouleur[$i]</option>\n";
+								echo "<option style=\"background-color: $tabcouleur[$i]\" value=\"$tabcouleur[$i]\"$checked>$tabcouleur[$i]</option>\n";
 							}
 							echo "</select>\n";
 							echo "</td></tr>\n";
