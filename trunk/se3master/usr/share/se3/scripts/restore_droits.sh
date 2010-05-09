@@ -109,8 +109,12 @@ do
 				# Droits sur le menu Démarrer.
 				# Pour un bon fonctionnement du nettoyage avant application des templates:
 				#chown root /home/$A/profil/Demarrer/Programmes/* -R
-				chown root /home/$A/profil/Demarrer -R
-				chmod 755 /home/$A/profil/Demarrer -R
+				#chown root /home/$A/profil/Demarrer -R
+				#chmod 755 /home/$A/profil/Demarrer -R
+				chown $A /home/$A/profil/Demarrer
+				chmod 555 /home/$A/profil/Demarrer
+				chown root /home/$A/profil/Demarrer/* -R
+				chmod 755 /home/$A/profil/Demarrer/* -R
 				# Inconvénient:
 				# En l'état, les raccourcis provenant de skeluser
 				# seront aussi supprimés lors du prochain login.
