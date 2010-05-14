@@ -1415,11 +1415,14 @@ function add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber){
 	// Faut-il interdire les espaces dans le password? les apostrophes?
 	// Comment le script ntlmpass.pl prend-il le parametre sans les apostrophes?
 
-	$ntlmpass=explode(" ",exec("$pathscripts/ntlmpass.pl '$password'"));
+	//$ntlmpass=explode(" ",exec("$pathscripts/ntlmpass.pl '$password'"));
+    echo "Preparation du mot de passe pour $nom $prenom\n";
+    $ntlmpass=explode(" ",exec("export LC_ALL=\"fr_FR.UTF-8\";$pathscripts/ntlmpass.pl '$password'"));
 
 	$sambaLMPassword=$ntlmpass[0];
 	$sambaNTPassword=$ntlmpass[1];
-	$userPassword=exec("$pathscripts/unixPassword.pl '$password'");
+    //$userPassword=exec("$pathscripts/unixPassword.pl '$password'");
+    $userPassword=exec("export LC_ALL=\"fr_FR.UTF-8\";$pathscripts/unixPassword.pl '$password'");
 
 	$attribut=array();
 	$attribut["uid"]="$uid";
