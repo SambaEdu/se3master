@@ -733,6 +733,12 @@ function creer_uid($nom,$prenom){
 		// Ou renseigner un uid_initial ou uid_souche
 		$uid_souche=$uid;
 
+		$tab_logins_non_permis=array('prof', 'progs', 'docs', 'classes', 'homes', 'admhomes', 'admse3');
+		if(in_array($uid_souche,$tab_logins_non_permis)) {
+			$cpt=1;
+			$uid_souche=substr($uid,0,strlen($uid)-strlen($cpt)).$cpt;
+		}
+
 		$ok_uid="non";
 
 		$attr=array("uid");
