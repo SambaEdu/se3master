@@ -277,7 +277,15 @@ sub processGepUser {
     return ("<tr><td>Entrée <strong>$cn :</strong></td><td>compte $uniqueNumber déjà présent dans l'annuaire : <tt><strong>$uid</strong></tt>.</td></tr>\n");
   } else {
     $id = 1;
+    if(($uid=='prof')||($uid=='docs')||($uid=='progs')||($uid=='netlogon')||($uid=='classes')||($uid=='homes')||($uid=='admhomes')) {
+        #$uid=substr($uid, 0, length($uid)-1)."1";
+        $uid=substr($uid, 0, length($uid)-1).++$id;
+    }
   DOUBLONS: while (1) {
+      if($uid=='admse3') {
+          if($id<=3) {$id=4;}
+          $uid=substr($uid, 0, length($uid)-1).++$id;
+      }
       # Recherche d'un uid correspondant dans l'annuaire
       $res = $lcs_ldap->search(base     => "$peopleDn",
 															 scope    => 'one',
