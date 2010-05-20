@@ -6,18 +6,18 @@
 #
 ## $Id$ ##
 #
-# Dernière modif: 12/09/2006
+# Derniere modif: 12/09/2006
 
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
 	echo "Script permettant de remettre des droits corrects sur /home et /var/se3"
 	echo ""
 	echo "Usage : Pas d'option pour un usage classique."
         echo "        --home Pour juste remettre les droits sur les home"
-	echo "        Si vous souhaitez remettre en place les ACL et proprios par défaut de"
-	echo "        /var/se3, passez 'acl_default' en paramètre."
-	echo "        Pour en plus répondre par Oui à toutes les demandes de confirmation"
-	echo "        lors de la restauration des acl par défaut, passer 'auto' en deuxième"
-	echo "        paramètre."
+	echo "        Si vous souhaitez remettre en place les ACL et proprios par defaut de"
+	echo "        /var/se3, passez 'acl_default' en parametre."
+	echo "        Pour en plus repondre par Oui a toutes les demandes de confirmation"
+	echo "        lors de la restauration des acl par defaut, passer 'auto' en deuxieme"
+	echo "        parametre."
 	exit
 fi
 
@@ -66,12 +66,12 @@ fi
 [ "$HTML" == "0" ] && (
 echo -e "$COLTITRE"
 echo "#####################################################"
-echo "# Rétablissement des droits et proprios sur /home/* #"
+echo "# Retablissement des droits et proprios sur /home/* #"
 echo "#             sur /var/se3/Classes,...              #"
 echo "#####################################################"
 )
 
-# Ajout pour rétablir les droits
+# Ajout pour retablir les droits
 # sur les raccourcis provenant de skeluser:
 echo -e "$COLCMD\c "
 if [ -e "/tmp/raccourcis_skel_user" ]; then
@@ -103,10 +103,10 @@ do
 				chown $A:admins /home/$A -R
 				chmod 700 /home/$A -R
 
-				# Ajout pour permettre à l'admin de déposer des documents dans le Mes documents des utilisateurs et aux utilisateurs de voir ces documents.
+				# Ajout pour permettre a l'admin de deposer des documents dans le Mes documents des utilisateurs et aux utilisateurs de voir ces documents.
 				setfacl -R -m u:$A:rwx /home/$A/Docs
 
-				# Droits sur le menu Démarrer.
+				# Droits sur le menu Demarrer.
 				# Pour un bon fonctionnement du nettoyage avant application des templates:
 				#chown root /home/$A/profil/Demarrer/Programmes/* -R
 				#chown root /home/$A/profil/Demarrer -R
@@ -115,11 +115,11 @@ do
 				chmod 555 /home/$A/profil/Demarrer
 				chown root /home/$A/profil/Demarrer/* -R
 				chmod 755 /home/$A/profil/Demarrer/* -R
-				# Inconvénient:
-				# En l'état, les raccourcis provenant de skeluser
-				# seront aussi supprimés lors du prochain login.
+				# Inconvenient:
+				# En l'etat, les raccourcis provenant de skeluser
+				# seront aussi supprimes lors du prochain login.
 
-				# Tous les raccourcis sur le Bureau seront supprimés au prochain login:
+				# Tous les raccourcis sur le Bureau seront supprimes au prochain login:
 				#chown root:admins /home/$A/profil/Bureau
 				#chmod 777 /home/$A/profil/Bureau
 				chown $A:admins /home/$A/profil/Bureau
@@ -131,11 +131,11 @@ do
 				done
 
 				# Dans profile, c'est lcs-users,... le groupe principal
-				# de l'utilisateur qui est propriétaire.
-				# Avec des droits à 700
-				# Idem pour les fichiers créés par l'utilisateur dans son Home.
+				# de l'utilisateur qui est proprietaire.
+				# Avec des droits a 700
+				# Idem pour les fichiers crees par l'utilisateur dans son Home.
 
-				# Rétablissement des raccourcis provenant
+				# Retablissement des raccourcis provenant
 				# de /etc/skel/user/ soit X:\templates\skeluser\
 				chown $A:admins /tmp/raccourcis_skel_user -R
 				cp -fa /tmp/raccourcis_skel_user/Bureau/* /home/$A/profil/Bureau/ 2> /dev/null
@@ -146,12 +146,12 @@ do
 
 		if [ "$A" = "admin" ]; then
 			echo -e "$COLTXT\c "
-			echo "Traitement 'allégé' de /home/$A"
+			echo "Traitement 'allege' de /home/$A"
 			echo -e "$COLCMD\c "
 			chown $A:admins /home/$A -R
 			chmod 700 /home/$A -R
-			# Pour admin, les raccourcis actuellement présents dans le home ne seront pas supprimés (c'est embêtant).
-			# Je préfère tout de même qu'il fasse le ménage lui-même.
+			# Pour admin, les raccourcis actuellement presents dans le home ne seront pas supprimes (c'est embêtant).
+			# Je prefere tout de même qu'il fasse le menage lui-même.
 		fi
 	fi
 done
@@ -173,26 +173,15 @@ echo "Traitements divers dans /home"
 echo "============================="
 
 # Remarque:
-# Les droits indiqués ci-dessous ont été relevés sur un SE3 Sarge fraichement installé.
+# Les droits indiques ci-dessous ont ete releves sur un SE3 Sarge fraichement installe.
 # Certains droits semblent curieux, comme les 674 sur les registre.zrn
-
 echo -e "$COLTXT"
-echo "Rétablissement des droits sur /home/netlogon"
+echo "Retablissement des droits sur /home/netlogon"
 echo -e "$COLCMD\c "
-chown admin:admins /home/netlogon
-# chmod g+s /home/netlogon -------------------------> A VOIR
-chmod 755 /home/netlogon
-chown root:admins /home/netlogon/*
-chmod 660 /home/netlogon/*
-chown -R admin:admins "/home/netlogon/Default User"
-chmod -R 755 "/home/netlogon/Default User"
-chown admin:admins /home/netlogon/registre.vbs
-chmod 644 /home/netlogon/registre.vbs
-chmod 644 /home/netlogon/killexplorer.exe
-chmod 644 /home/netlogon/majdll.exe
+/usr/share/se3/scripts/permse3 netlogon
 
 echo -e "$COLTXT"
-echo "Rétablissement des droits sur /home/templates"
+echo "Retablissement des droits sur /home/templates"
 echo -e "$COLCMD\c "
 chown admin:admins /home/templates
 setfacl -m u:www-se3:rwx /home/templates
@@ -206,10 +195,7 @@ do
 		# Pour les dossiers 775 et pour les fichiers 674???
 		chmod 775 /home/templates/$A/*
 
-		if [ -e "/home/templates/$A/registre.zrn" ]; then
-			chown www-se3:www-data /home/templates/$A/registre.zrn
-			chmod 674 /home/templates/$A/registre.zrn
-		fi
+		
 	fi
 
 	# Il ne faut pas appliquer les modifs suivantes sur skeluser
@@ -226,7 +212,7 @@ chmod -R 755 /etc/skel/user
 
 
 
-# Droits sur /home/templates/... en cas de délégation de parc.
+# Droits sur /home/templates/... en cas de delegation de parc.
 echo -e "$COLCMD\c "
 ladate=$(date +"%Y.%m.%d-%H.%M.%S")
 tmp=/root/tmp/retablissement_delagation_parc.${ladate}
@@ -238,7 +224,7 @@ liste=($(mysql -uroot se3db < $tmp/requete.sql))
 # 0  1     2    3      4 5     6  7    8 9      10  11
 if [ ${#liste[*]} -gt 4 ]; then
 	echo -e "$COLTXT"
-	echo "Rétablissement des délégations de parcs..."
+	echo "Retablissement des delegations de parcs..."
 	nb_delegations=$((${#liste[*]}/4-1))
 	cpt=1
 	while [ $cpt -le $nb_delegations ]
@@ -247,7 +233,7 @@ if [ ${#liste[*]} -gt 4 ]; then
 		parc=${liste[$((4*$cpt+2))]}
 		niveau=${liste[$((4*$cpt+3))]}
 		echo -e "$COLTXT"
-		echo "Rétablissement de la délégation $niveau à $user sur $parc"
+		echo "Retablissement de la delegation $niveau a $user sur $parc"
 		echo -e "$COLCMD\c "
 		#/usr/share/se3/scripts/delegate_parc.sh $parc $user $niveau
 		/usr/share/se3/scripts/delegate_parc.sh "$parc" "$user" "delegate"
@@ -255,9 +241,9 @@ if [ ${#liste[*]} -gt 4 ]; then
 	done
 
 	echo -e "$COLINFO"
-	echo "Pour les délégations de parcs, les droits sur les dossiers de templates sont"
-	echo "rétablis."
-	echo "Aucune modification n'a été effectuée sur l'annuaire LDAP en ce qui concerne les"
+	echo "Pour les delegations de parcs, les droits sur les dossiers de templates sont"
+	echo "retablis."
+	echo "Aucune modification n'a ete effectuee sur l'annuaire LDAP en ce qui concerne les"
 	echo "droits 'parc_can_manage', 'parc_can_view'."
 fi
 
@@ -280,8 +266,8 @@ if [ -e "$dossier_svg/acl/varse3_acl.bz2" -a -z "$acl_default" ]; then
 	echo -e "$COLTXT"
 	echo "Restauration du fichier de sauvegarde des ACL:"
 	echo "   $dossier_svg/acl/varse3_acl.bz2"
-	echo "(si vous préférez restaurer les ACL par défaut, relancez le script avec le"
-	echo "paramètre 'acl_default')"
+	echo "(si vous preferez restaurer les ACL par defaut, relancez le script avec le"
+	echo "parametre 'acl_default')"
 	cd $dossier_svg
 	ladate=$(date +"%Y%m%d-%H%M%S")
 	mkdir -p $dossier_svg/tmp_${ladate}
@@ -300,13 +286,13 @@ else
     [ "$HTML" == "0" ] && (
 	echo -e "$COLTXT"
 	echo "Dans un premier temps, les dossiers de Classes proprement dites vont être"
-	echo "traitées."
-	echo "Ensuite, il vous sera proposé de rétablir aussi les droits et ACL pour les"
+	echo "traitees."
+	echo "Ensuite, il vous sera propose de retablir aussi les droits et ACL pour les"
 	echo "dossiers de Classe_grp."
 	echo -e "$COLCMD"
     )
 	#ls /var/se3/Classes | grep "Classe_" | while read A
-	# J'exclus maintenant les Classe_grp traitées plus loin avec le script de Franck.
+	# J'exclus maintenant les Classe_grp traitees plus loin avec le script de Franck.
 	ls /var/se3/Classes | grep "Classe_" | grep -v "Classe_grp_" | while read A
 	do
 		echo -e "$COLTXT\c "
@@ -329,7 +315,7 @@ else
 		# Nettoyage des ACL existantes:
 		setfacl -R -b /var/se3/Classes/$A
 
-		# Décommenter pour supprimer les ACL existantes sur le dossier:
+		# Decommenter pour supprimer les ACL existantes sur le dossier:
 		# setfacl -R -k -b /var/se3/Classes/$A
 
 		# ACL pour le groupe Classe:
@@ -346,14 +332,14 @@ else
 		setfacl -m g:admins:rwx  /var/se3/Classes/$A
 		setfacl -m d:g:admins:rwx  /var/se3/Classes/$A
 
-		# ACL pour les élèves:
+		# ACL pour les eleves:
 		if ! echo "$A" | grep "Classe_grp_" > /dev/null; then
 			ls /var/se3/Classes/$A | while read B
 			do
-				# Si des dossiers autres que les dossiers élèves
+				# Si des dossiers autres que les dossiers eleves
 				# (en dehors de _travail et _profs)
 				# existent dans /var/se3/Classes/$A/
-				# il va s'afficher des erreurs (sans conséquences):
+				# il va s'afficher des erreurs (sans consequences):
 				if [ "$B" != "_travail" -a "$B" != "_profs" ]; then
 					setfacl -R -m u:$B:rwx  /var/se3/Classes/$A/$B
 					setfacl -R -m d:u:$B:rwx  /var/se3/Classes/$A/$B
@@ -361,12 +347,12 @@ else
 				setfacl -m m::rwx /var/se3/Classes/$A/$B
 			done
 			# Pour les /var/se3/Classes/Classe_grp_XXX/YYYYY_1ES1
-			# où YYYYY est le login de l'élève, les ACL n'ont pas à être rétablies
+			# où YYYYY est le login de l'eleve, les ACL n'ont pas a être retablies
 			# puisque /var/se3/Classes/Classe_grp_XXX/YYYYY_1ES1
 			# n'est qu'un lien vers /var/se3/Classes/Classe_1ES1/YYYYY
 		fi
 
-		# Rétablissement des ACL pour l'équipe des profs:
+		# Retablissement des ACL pour l'equipe des profs:
 		Equipe=$(echo "$A" | sed -e "s/^Classe_/Equipe_/")
 		ldapsearch -xLLL cn=$Equipe member | grep "^member: uid=" | sed -e "s/^member: uid=//" | cut -d"," -f1 | while read B
 		do
@@ -377,7 +363,8 @@ else
 		done
 	done
 
-
+	# Les droits fixes ci-dessus sont incomplets : on utilise le script standard
+	/usr/share/se3/scripts/updateClasses.pl -c ALL
 
 
 	if ls /var/se3/Classes | grep Classe_grp > /dev/null; then
@@ -388,7 +375,7 @@ else
 		while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 		do
 			echo -e "$COLTXT"
-			echo -e "Voulez-vous rétablir les ACL sur les dossiers Classe_grp_*? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c "
+			echo -e "Voulez-vous retablir les ACL sur les dossiers Classe_grp_*? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c "
 			read REPONSE
 		done
 
@@ -396,7 +383,7 @@ else
 			ls /var/se3/Classes/ | grep Classe_grp_ | sed -e "s/^Classe_grp_//" | while read A
 			do
 				echo -e "$COLTXT"
-				echo "Rétablissement des droits sur Classe_grp_${A}..."
+				echo "Retablissement des droits sur Classe_grp_${A}..."
 				echo -e "$COLCMD\c "
 				/usr/share/se3/scripts/creer_grpclass.sh $A
 			done
@@ -411,15 +398,15 @@ else
     [ "$HTML" == "1" ] && echo "<br/>"
 	echo "============================"
 
-	# Voulez-vous rétablir les ACL par défaut sur tout /var/se3/Progs
-	# Voulez-vous rétablir les ACL par défaut sur tout /var/se3/Docs
+	# Voulez-vous retablir les ACL par defaut sur tout /var/se3/Progs
+	# Voulez-vous retablir les ACL par defaut sur tout /var/se3/Docs
 	# /var/se3/Docs/public
 	# /var/se3/Docs/deploy
 	# /var/se3/Docs/trombine
     [ "$HTML" == "0" ] && (
 	echo -e "$COLTXT"
-	echo "Il se peut que vous ayez adapté à vos besoins les ACL dans /var/se3/Progs"
-	echo "Si c'est le cas, répondez non à la question suivante."
+	echo "Il se peut que vous ayez adapte a vos besoins les ACL dans /var/se3/Progs"
+	echo "Si c'est le cas, repondez non a la question suivante."
 	echo "Sinon, des proprios, droits et ACL standards seront remis en place."
     )
 	REPONSE=""
@@ -429,20 +416,20 @@ else
 	while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 	do
 		echo -e "$COLTXT"
-		echo -e "Voulez-vous rétablir les proprios/droits/ACL par défaut"
+		echo -e "Voulez-vous retablir les proprios/droits/ACL par defaut"
 		echo -e "sur tout /var/se3/Progs? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c "
 		read REPONSE
 	done
 
 	if [ "$REPONSE" = "o" ]; then
 		echo -e "$COLTXT"
-		echo "Rétablissement des proprios/droits/ACL par défaut sur tout /var/se3/Progs"
+		echo "Retablissement des proprios/droits/ACL par defaut sur tout /var/se3/Progs"
 		echo -e "$COLCMD\c "
 		chown admin:admins /var/se3/Progs
 		chmod 775 /var/se3/Progs
 		# Nettoyage des ACL:
 		setfacl -b /var/se3/Progs
-		# Définition des ACL:
+		# Definition des ACL:
 		setfacl -R -m m:rwx /var/se3/Progs
 		setfacl -R -m d:m:rwx /var/se3/Progs
 		setfacl -m g::rx /var/se3/Progs
@@ -459,14 +446,14 @@ else
 		setfacl -R -m d:u::rwx /var/se3/Progs/rw
 		setfacl -R -m d:g::rwx /var/se3/Progs/rw
 		setfacl -R -m d:o::rwx /var/se3/Progs/rw
-		# OK 'admins' et mask sont traités récursivement plus haut.
+		# OK 'admins' et mask sont traites recursivement plus haut.
 
 		chown admin:admins /var/se3/Progs/ro
 		chmod 775 /var/se3/Progs/ro
 		setfacl -R -m d:u::rwx /var/se3/Progs/ro
 		setfacl -R -m d:g::rx /var/se3/Progs/ro
 		setfacl -R -m d:o::rx /var/se3/Progs/ro
-		# OK 'admins' et mask sont traités récursivement plus haut.
+		# OK 'admins' et mask sont traites recursivement plus haut.
 
 
 
@@ -481,7 +468,7 @@ else
 			fi
 
 
-			# Demander à l'auteur de l'inventaire si cela convient:
+			# Demander a l'auteur de l'inventaire si cela convient:
 			chmod -R 777 /var/se3/Progs/rw/inventaire
 			setfacl -R -m u::rwx /var/se3/Progs/rw/inventaire
 			setfacl -R -m d:u::rwx /var/se3/Progs/rw/inventaire
@@ -506,9 +493,9 @@ else
 
 
 		if [ -e "/var/se3/Progs/ro/inventory/deploy" ]; then
-			# Il semble que le dossier ne soit pas là sur ma version de test...
-			# Quelles sont les ACL appropriées pour ce dossier?
-			# Sont-elles héritées de /var/se3/Progs/ro ?
+			# Il semble que le dossier ne soit pas la sur ma version de test...
+			# Quelles sont les ACL appropriees pour ce dossier?
+			# Sont-elles heritees de /var/se3/Progs/ro ?
 			#bidon="oui"
 			chown -R admin:admins /var/se3/Progs/ro/inventory
 			setfacl -R -m m:rwx /var/se3/Progs/ro/inventory
@@ -591,7 +578,7 @@ else
 			chmod 660 /var/se3/Progs/install/installdll/todo.cmd
 		fi
 
-		# Déjà fait plus haut:
+		# Deja fait plus haut:
 		#setfacl -R -m m:rwx /var/se3/Progs
 		#setfacl -R -m d:m:rwx /var/se3/Progs
 		#setfacl -R -m u:www-se3:rx /var/se3/Progs/install
@@ -611,8 +598,8 @@ else
 	echo "==========================="
     [ "$HTML" == "0" ] && (
 	echo -e "$COLTXT"
-	echo "Il se peut que vous ayez adapté à vos besoins les ACL dans /var/se3/Docs"
-	echo "Si c'est le cas, répondez non à la question suivante."
+	echo "Il se peut que vous ayez adapte a vos besoins les ACL dans /var/se3/Docs"
+	echo "Si c'est le cas, repondez non a la question suivante."
 	echo "Sinon, des proprios, droits et ACL standards seront remis en place."
     )
 	REPONSE=""
@@ -622,14 +609,14 @@ else
 	while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 	do
 		echo -e "$COLTXT"
-		echo -e "Voulez-vous rétablir les proprios/droits/ACL par défaut"
+		echo -e "Voulez-vous retablir les proprios/droits/ACL par defaut"
 		echo -e "sur tout /var/se3/Docs? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c "
 		read REPONSE
 	done
 
 	if [ "$REPONSE" = "o" ]; then
 		echo -e "$COLTXT"
-		echo "Rétablissement des proprios/droits/ACL par défaut sur tout /var/se3/Docs"
+		echo "Retablissement des proprios/droits/ACL par defaut sur tout /var/se3/Docs"
 		echo -e "$COLCMD\c "
 
 		#chown admin:root /var/se3/Docs -R
@@ -653,7 +640,7 @@ else
 		while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 		do
 			echo -e "$COLTXT"
-			echo -e "Voulez-vous mettre à 777 les droits récursivement"
+			echo -e "Voulez-vous mettre a 777 les droits recursivement"
 			echo -e "sur tout le contenu de /var/se3/Docs/public? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c "
 			read REPONSE
 		done
@@ -664,7 +651,7 @@ else
 		fi
 		echo -e "$COLCMD\c "
 
-		# A l'intérieur de Docs/public (sauf modif des ACL), tout le monde peut tout faire...
+		# A l'interieur de Docs/public (sauf modif des ACL), tout le monde peut tout faire...
 		chown $OPT admin:root /var/se3/Docs/public
 		# ==================
 		# Faut-il mettre -R?
@@ -744,14 +731,14 @@ else
 	while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 	do
 		echo -e "$COLTXT"
-		echo -e "Voulez-vous rétablir les proprios/droits/ACL par défaut"
+		echo -e "Voulez-vous retablir les proprios/droits/ACL par defaut"
 		echo -e "sur tout /var/se3/prof? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c "
 		read REPONSE
 	done
 
 	if [ "$REPONSE" = "o" ]; then
 		echo -e "$COLTXT"
-		echo "Rétablissement des proprios/droits/ACL par défaut sur tout /var/se3/prof"
+		echo "Retablissement des proprios/droits/ACL par defaut sur tout /var/se3/prof"
 		echo -e "$COLCMD\c "
 		mkdir -p /var/se3/prof
 		chown admin:Profs /var/se3/prof
@@ -784,14 +771,14 @@ else
 	while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 	do
 		echo -e "$COLTXT"
-		echo -e "Voulez-vous rétablir les proprios/droits/ACL par défaut"
+		echo -e "Voulez-vous retablir les proprios/droits/ACL par defaut"
 		echo -e "sur tout /var/se3/unattended? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c "
 		read REPONSE
 	done
 
 	if [ "$REPONSE" = "o" ]; then
 		echo -e "$COLTXT"
-		echo "Rétablissement des proprios/droits/ACL par défaut sur tout /var/se3/unattended"
+		echo "Retablissement des proprios/droits/ACL par defaut sur tout /var/se3/unattended"
 		echo -e "$COLCMD\c "
 		chown -R admin:admins /var/se3/unattended
 		chmod -R 755 /var/se3/unattended
@@ -834,7 +821,7 @@ else
 
 	# Il y a /var/se3/drivers aussi drwxr-xr-x  2 admin   root     6 2006-04-13 19:40 drivers
 	echo -e "$COLTXT"
-	echo "Rétablissement des proprios/droits/ACL par défaut sur /var/se3/drivers"
+	echo "Retablissement des proprios/droits/ACL par defaut sur /var/se3/drivers"
 	echo -e "$COLCMD\c "
 	chown admin:root /var/se3/drivers
 	chmod 755 /var/se3/drivers
@@ -843,14 +830,14 @@ fi
 
 
 
-# Scories de la version précédente du script:
+# Scories de la version precedente du script:
 #echo -e "$COLINFO"
-#echo "Pour rétablir les ACL sur le partage Classes pour les profs,"
+#echo "Pour retablir les ACL sur le partage Classes pour les profs,"
 #echo "lancez un 'Ressources et partages/Rafraichissement des classes'"
-#echo "(en niveau Confirmé)."
+#echo "(en niveau Confirme)."
 #echo ""
-#echo "Pour rétablir les ACL sur des templates en cas de délégation de parcs,"
-#echo "consultez l'interface Web... et re-déléguez le Parc???"
+#echo "Pour retablir les ACL sur des templates en cas de delegation de parcs,"
+#echo "consultez l'interface Web... et re-deleguez le Parc???"
 
 
 echo -e "$COLPARTIE"
@@ -863,11 +850,11 @@ echo "===================="
 echo -e "$COLTXT"
 echo "Lancement de /usr/share/se3/scripts/permse3"
 echo -e "$COLCMD\c "
-/usr/share/se3/scripts/permse3
+/usr/share/se3/scripts/permse3 --full
 
 echo -e "$COLTITRE"
 echo "***********"
-echo "* Terminé *"
+echo "* Termine *"
 echo "***********"
 echo -e "$COLTXT"
 
