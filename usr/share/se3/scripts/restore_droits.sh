@@ -291,79 +291,8 @@ else
 	echo "dossiers de Classe_grp."
 	echo -e "$COLCMD"
     )
-	#ls /var/se3/Classes | grep "Classe_" | while read A
-	# J'exclus maintenant les Classe_grp traitees plus loin avec le script de Franck.
-	ls /var/se3/Classes | grep "Classe_" | grep -v "Classe_grp_" | while read A
-	do
-		echo -e "$COLTXT\c "
-		echo "Traitement de /var/se3/Classes/$A"
-		echo -e "$COLCMD\c "
-		# Le premier cas ne doit plus se produire maintenant:
-		if echo "$A" | grep "Classe_grp_" > /dev/null; then
-			GROUPE=$(echo "$A" | sed -e "s/Classe_grp_//")
-		else
-			GROUPE="$A"
-		fi
-		chown admin:nogroup /var/se3/Classes/$A
-		#chmod 770 /var/se3/Classes/$A
-		chmod 700 /var/se3/Classes/$A
-
-		chown admin:nogroup /var/se3/Classes/$A/*
-		#chmod 770 /var/se3/Classes/$A/*
-		chmod 700 /var/se3/Classes/$A/*
-
-		# Nettoyage des ACL existantes:
-		setfacl -R -b /var/se3/Classes/$A
-
-		# Decommenter pour supprimer les ACL existantes sur le dossier:
-		# setfacl -R -k -b /var/se3/Classes/$A
-
-		# ACL pour le groupe Classe:
-		#setfacl -m g:$GROUPE:rx  /var/se3/Classes/$A
-		#setfacl -m g:$GROUPE:rx  /var/se3/Classes/$A/_travail
-		#setfacl -m d:g:$GROUPE:rx  /var/se3/Classes/$A/_travail
-		setfacl -m d:m::rwx /var/se3/Classes/$A
-		setfacl -m m::rwx /var/se3/Classes/$A
-		setfacl -m g:$GROUPE:rx  /var/se3/Classes/$A
-		setfacl -m g:$GROUPE:rx  /var/se3/Classes/$A/_travail
-		setfacl -m d:g:$GROUPE:rx  /var/se3/Classes/$A/_travail
-
-		# ACL pour admins
-		setfacl -m g:admins:rwx  /var/se3/Classes/$A
-		setfacl -m d:g:admins:rwx  /var/se3/Classes/$A
-
-		# ACL pour les eleves:
-		if ! echo "$A" | grep "Classe_grp_" > /dev/null; then
-			ls /var/se3/Classes/$A | while read B
-			do
-				# Si des dossiers autres que les dossiers eleves
-				# (en dehors de _travail et _profs)
-				# existent dans /var/se3/Classes/$A/
-				# il va s'afficher des erreurs (sans consequences):
-				if [ "$B" != "_travail" -a "$B" != "_profs" ]; then
-					setfacl -R -m u:$B:rwx  /var/se3/Classes/$A/$B
-					setfacl -R -m d:u:$B:rwx  /var/se3/Classes/$A/$B
-				fi
-				setfacl -m m::rwx /var/se3/Classes/$A/$B
-			done
-			# Pour les /var/se3/Classes/Classe_grp_XXX/YYYYY_1ES1
-			# où YYYYY est le login de l'eleve, les ACL n'ont pas a être retablies
-			# puisque /var/se3/Classes/Classe_grp_XXX/YYYYY_1ES1
-			# n'est qu'un lien vers /var/se3/Classes/Classe_1ES1/YYYYY
-		fi
-
-		# Retablissement des ACL pour l'equipe des profs:
-		Equipe=$(echo "$A" | sed -e "s/^Classe_/Equipe_/")
-		ldapsearch -xLLL cn=$Equipe member | grep "^member: uid=" | sed -e "s/^member: uid=//" | cut -d"," -f1 | while read B
-		do
-			setfacl -m u:$B:rx  /var/se3/Classes/$A
-			setfacl -m d:u:$B:rwx  /var/se3/Classes/$A
-			setfacl -R -m u:$B:rwx  /var/se3/Classes/$A/*
-			setfacl -R -m d:u:$B:rwx  /var/se3/Classes/$A/*
-		done
-	done
-
-	# Les droits fixes ci-dessus sont incomplets : on utilise le script standard
+	#droits Classes : on utilise le script standard
+	echo -e "$COLCMD"
 	/usr/share/se3/scripts/updateClasses.pl -c ALL
 
 
@@ -457,41 +386,6 @@ else
 
 
 
-
-		if [ -e "/var/se3/Progs/rw/inventaire" ]; then
-			if [ -e "/var/se3/Progs/ro/startocs.vbs" ]; then
-				chmod 755 /var/se3/Progs/ro/startocs.vbs
-				setfacl -m g:admins:rwx /var/se3/Progs/ro/startocs.vbs
-				# Mais ce droit n'est pas effectif:
-				#group:admins:rwx                #effective:r-x
-				setfacl -m m:rx /var/se3/Progs/ro/startocs.vbs
-			fi
-
-
-			# Demander a l'auteur de l'inventaire si cela convient:
-			chmod -R 777 /var/se3/Progs/rw/inventaire
-			setfacl -R -m u::rwx /var/se3/Progs/rw/inventaire
-			setfacl -R -m d:u::rwx /var/se3/Progs/rw/inventaire
-			setfacl -R -m g::rwx /var/se3/Progs/rw/inventaire
-			setfacl -R -m d:g::rwx /var/se3/Progs/rw/inventaire
-			setfacl -R -m g:admins:rwx /var/se3/Progs/rw/inventaire
-			setfacl -R -m d:g:admins:rwx /var/se3/Progs/rw/inventaire
-
-			if [ -e "/var/se3/Progs/rw/inventaire/Application/Config.csv" ]; then
-				chmod 666 /var/se3/Progs/rw/inventaire/Application/Config.csv
-			fi
-
-			if [ -e "/var/se3/Progs/rw/inventaire/Application/OCSInventory.bmp" ]; then
-				chmod 644 /var/se3/Progs/rw/inventaire/Application/OCSInventory.bmp
-			fi
-
-			for EXTENSION in exe dll bmp
-			do
-				setfacl -m m::rx /var/se3/Progs/rw/inventaire/Application/*.$EXTENSION
-			done
-		fi
-
-
 		if [ -e "/var/se3/Progs/ro/inventory/deploy" ]; then
 			# Il semble que le dossier ne soit pas la sur ma version de test...
 			# Quelles sont les ACL appropriees pour ce dossier?
@@ -540,54 +434,7 @@ else
 
 		chown -R admin:admins /var/se3/Progs/install/xp/Registry
 
-
-
-		# Dans /var/se3/Progs/install/installdll, c'est un peu le bazar les droits...
-		# Voir avec zorn...
-		mkdir -p /var/se3/Progs/install/installdll
-		#chown root:root /var/se3/Progs/install/installdll
-		chown -R root:admins /var/se3/Progs/install/installdll
-		setfacl -m o::rx /var/se3/Progs/install/installdll
-		setfacl -m d:o::--- /var/se3/Progs/install/installdll
-		chmod 640 /var/se3/Progs/install/installdll/*
-		# activate-adminse3.sh confse3.in installcop.ba majzinbr mountappliz.exe netdom.exe registre.vbs.in setacl.exe todo.cm VB6FR.DLL
-		for fich in ActivePerl-5.8.7.813-MSWin32-x86-148120.msi confse3.ini Copssh_1.3.6_Installer.exe id_rsa.pub
-		do
-			chown root:admins /var/se3/Progs/install/installdll/$fich
-			chmod 670 /var/se3/Progs/install/installdll/$fich
-		done
-
-		for fich in CPAU.exe msi.vbs prerenewdll.vbs registre2K.MSI registre2K.MSI.cab registre.MSI registre.MSI.cab rejoinsambaedu3.vbs rejoin_se3_XP.vbs remote_adminse3_dontexpire.vbs renewdll.vbs
-		do
-			chown root:admins /var/se3/Progs/install/installdll/$fich
-			chmod 674 /var/se3/Progs/install/installdll/$fich
-		done
-
-		if [ -e "/var/se3/Progs/install/installdll/clients.ini" ]; then
-			chown admin:lcs-users /var/se3/Progs/install/installdll/clients.ini
-			chmod 770 /var/se3/Progs/install/installdll/clients.ini
-		fi
-
-		if [ -e "/var/se3/Progs/install/installdll/installcop.bat" ]; then
-			chown root:admins /var/se3/Progs/install/installdll/installcop.bat
-			chmod 660 /var/se3/Progs/install/installdll/installcop.bat
-		fi
-
-		if [ -e "/var/se3/Progs/install/installdll/todo.cmd" ]; then
-			chown root:admins /var/se3/Progs/install/installdll/todo.cmd
-			chmod 660 /var/se3/Progs/install/installdll/todo.cmd
-		fi
-
-		# Deja fait plus haut:
-		#setfacl -R -m m:rwx /var/se3/Progs
-		#setfacl -R -m d:m:rwx /var/se3/Progs
-		#setfacl -R -m u:www-se3:rx /var/se3/Progs/install
-		#setfacl -R -m d:u:www-se3:rx /var/se3/Progs/install
-		#setfacl -R -m g:admins:rwx /var/se3/Progs
-		#setfacl -R -m d:g:admins:rwx /var/se3/Progs
 	fi
-
-
 
 
 	echo -e "$COLPARTIE"
