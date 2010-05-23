@@ -12,13 +12,42 @@ then
     echo "Sans argument afin de remettre les droits sur les dossiers les plus importants uniquement."
     exit 0
 fi
-OPTION=
-[ "$1" == "--full"  ] && OPTION="-R"
+
+if [ "$1" == "--full"  ]; then
+OPTION="-R"
+else 
+OPTION=""
+fi
 
 dbhost=$(expr "$(grep mysqlServerIp /etc/SeConfig.ph)" : ".*'\(.*\)'.*")
 dbuser=$(expr "$(grep mysqlServerUsername /etc/SeConfig.ph)" : ".*'\(.*\)'.*")
 dbpass=$(expr "$(grep mysqlServerPw /etc/SeConfig.ph)" : ".*'\(.*\)'.*")
 dbname=$(expr "$(grep connexionDb /etc/SeConfig.ph)" : ".*'\(.*\)'.*")
+
+function SETNETLOGON
+{
+#droits sur /home/netlogon
+if [ -e /home/netlogon ]; then
+  find /home/netlogon/machine/ -name gpoPASSWD -delete
+  chmod -R 755 /home/netlogon
+  chown -R admin:admins /home/netlogon/
+  chmod g+s /home/netlogon
+  setfacl -b /home/netlogon/
+  chmod 664 /home/netlogon/domscripts/*
+
+  setfacl -R -m  u:adminse3:rx /var/se3/Progs/install
+  setfacl -R -m  d:u:adminse3:rx /var/se3/Progs/install 
+
+  # Droits sur CPAU
+  chown root:admins /home/netlogon/CPAU.exe
+  chmod 775 /home/netlogon/CPAU.exe
+fi
+}
+
+if [ "$1" == "netlogon"  ]; then
+SETNETLOGON
+exit 0
+fi
 
 chmod 400 /root/.my.cnf
 
@@ -130,19 +159,10 @@ fi
 if [ -e ${LOGS_DIR}/ocsinventory-NG ]; then
 chown -R www-se3 ${LOGS_DIR}/ocsinventory-NG
 fi
-#droits sur /home/netlogon
-if [ -e /home/netlogon ]; then
-chmod -R 755 /home/netlogon
-chown -R admin:admins /home/netlogon/
-chmod g+s /home/netlogon
-[ ! -f /usr/share/se3/logonpy/logon.py ] && (
-rm -f /home/netlogon/*.bat 
-rm -f /home/netlogon/*.txt 
-)
-# chmod -R 666 /home/netlogon/*.bat 2>/dev/null
-# chmod -R 666 /home/netlogon/*.txt 2>/dev/null
-setfacl -b /home/netlogon/
-fi
+
+# mise en place droits sur /home/netlogon
+SETNETLOGON
+
 
 if [ -e /home/templates ]; then
 # droits sur les templates
@@ -160,67 +180,49 @@ chgrp nut /var/run/nut
 chgrp nut /var/lib/nut
 
 
-# droit sur /var/se3/install
+#droits de base sur var/se3 (sauf public enlevé volontairement)
+# setfacl -m d:g::rwx /var/se3/Docs/public
+chgrp admins /var/se3
+chmod 755 /var/se3
+
+#partage Progs
+mkdir -p /var/se3/Progs
+chown $OPTION admin:admins /var/se3/Progs
+chown admin:admins /var/se3/Progs/ro
+chown admin:admins /var/se3/Progs/rw
+chown admin:admins /var/se3/Progs/install
+chmod 775 /var/se3/Progs/rw /var/se3/Progs/ro
+setfacl -m d:u::rwx /var/se3/Progs/rw
+setfacl -m d:g::rwx /var/se3/Progs/rw
+#setfacl -m d:o::rwx /var/se3/Progs/rw
+setfacl -m d:u::rwx /var/se3/Progs/ro
+setfacl -m d:g::rx /var/se3/Progs/ro
+setfacl -m d:o::rx /var/se3/Progs/ro
+setfacl $OPTION -m g:admins:rwx /var/se3/Progs
+setfacl $OPTION -m d:g:admins:rwx /var/se3/Progs
+
+
+# droit sur /var/se3/Progs/install 
 if [ -e /var/se3/Progs/install ]; then
-setfacl -R -m  u:www-se3:rx /var/se3/Progs/install
-setfacl -R -m  d:u:www-se3:rx /var/se3/Progs/install
-setfacl -R -m  g:admins:rwx /var/se3/Progs/install
-setfacl -R -m  d:g:admins:rwx /var/se3/Progs/install
+	setfacl $OPTION -m  u:www-se3:rx /var/se3/Progs/install
+	setfacl $OPTION -m  d:u:www-se3:rx /var/se3/Progs/install
+	setfacl -R -m  u:adminse3:rx /var/se3/Progs/install
+	setfacl -R -m  d:u:adminse3:rx /var/se3/Progs/install
+	setfacl -R -m  g:admins:rwx /var/se3/Progs/install
+	setfacl -R -m  d:g:admins:rwx /var/se3/Progs/install
 # accès à CPAU pour installation initiale de : inventaire, wpkg...
-setfacl -m other:x /var/se3/Progs/install
+	setfacl -m other:x /var/se3/Progs/install
 fi
 
 installdll="/var/se3/Progs/install/installdll"
 if [ -e "$installdll" ]; then 
-setfacl -m other:x $installdll
-if [ -e "$installdll/CPAU.exe" ]; then 
-setfacl -m other:r $installdll/CPAU.exe
+	chmod 755 $installdll
+	chown -R admin:admins $installdll
+	if [ -e "$installdll/confse3.ini" ]; then 
+		chown root $installdll/confse3.ini
+		chmod 770 $installdll/confse3.ini
+	fi
 fi
-chgrp -R admins $installdll
-if [ -e "$installdll/confse3.ini" ]; then 
-chown root $installdll/confse3.ini
-chmod 770 $installdll/confse3.ini
-fi
-fi
-
-
-#droits de base sur var/se3 (sauf public enlevé volontairement)
-# setfacl -m d:g::rwx /var/se3/Docs/public
-chgrp admins /var/se3
-
-
-chown admin:admins /var/se3/Progs
-chown admin:admins /var/se3/Progs/ro
-chown admin:admins /var/se3/Progs/rw
-chown admin:admins /var/se3/Progs/install
-
-chmod 775 /var/se3/Progs/rw /var/se3/Progs/ro
-
-chgrp admins /var/se3/Classes >/dev/null
-
-chown admin:admins /var/se3/Docs
-
-
-chmod 700 /var/se3/Docs/trombine
-chown admin.admins /var/se3/Docs/trombine
-setfacl -m g:admins:rwx /var/se3/Docs/trombine
-setfacl -m g:profs:rx /var/se3/Docs/trombine
-setfacl -m d:g:admins:rwx /var/se3/Docs/trombine
-setfacl -m d:g:profs:rx /var/se3/Docs/trombine
-setfacl -m u:www-se3:rx /var/se3/Docs/trombine
-setfacl -m d:u:www-se3:rx /var/se3/Docs/trombine
-
-setfacl $OPTION -m g:admins:rwx /var/se3/Progs
-setfacl $OPTION -m d:g:admins:rwx /var/se3/Progs
-setfacl $OPTION -m g:admins:rwx /var/se3/Docs
-setfacl $OPTION -m d:g:admins:rwx /var/se3/Docs
-
-setfacl -m d:u::rwx /var/se3/Progs/rw
-setfacl -m d:g::rwx /var/se3/Progs/rw
-setfacl -m d:o::rwx /var/se3/Progs/rw
-setfacl -m d:u::rwx /var/se3/Progs/ro
-setfacl -m d:g::rx /var/se3/Progs/ro
-setfacl -m d:o::rx /var/se3/Progs/ro
 
 # inventaire
 if [ -e /var/se3/Progs/ro/inventory ]; then
@@ -228,12 +230,39 @@ chown -R admin:admins /var/se3/Progs/ro/inventory
 setfacl -R -m m:rwx /var/se3/Progs/ro/inventory
 fi
 
-if [ -e /var/se3/prof ]; then
-  chown admin.Profs /var/se3/prof
-  chmod 770 /var/se3/prof
-  setfacl -m g:Profs:rwx /var/se3/prof
-  setfacl -m d:g:Profs:rwx /var/se3/prof
-fi
+#partage Classes
+mkdir -p /var/se3/Classes
+chown  www-se3:admins /var/se3/Classes
+chgrp $OPTION admins /var/se3/Classes
+chmod 755 /var/se3/Classes
+
+#partage Docs
+mkdir -p /var/se3/Docs
+chown $OPTION admin:admins /var/se3/Docs
+chmod 775 /var/se3/Docs
+chmod 700 /var/se3/Docs/trombine
+chown admin.admins /var/se3/Docs/trombine
+# Droits fond ecran, on empeche les petits camarades de voir les fonds des autres (trombi)
+chmod o=x /var/se3/Docs/media/fonds_ecran
+setfacl $OPTION -m g:admins:rwx /var/se3/Docs
+setfacl $OPTION -m d:g:admins:rwx /var/se3/Docs
+setfacl -m g:admins:rwx /var/se3/Docs/trombine
+setfacl -m g:profs:rx /var/se3/Docs/trombine
+setfacl -m d:g:admins:rwx /var/se3/Docs/trombine
+setfacl -m d:g:profs:rx /var/se3/Docs/trombine
+setfacl -m u:www-se3:rx /var/se3/Docs/trombine
+setfacl -m d:u:www-se3:rx /var/se3/Docs/trombine
+setfacl -m d:g::rwx /var/se3/Docs/public
+
+
+
+
+#partage Prof
+mkdir -p /var/se3/prof 
+chown admin.Profs /var/se3/prof
+chmod 770 /var/se3/prof
+setfacl -m g:Profs:rwx /var/se3/prof
+setfacl -m d:g:Profs:rwx /var/se3/prof
 
 #unnatended - wpkg
 chmod 755 /var/se3/unattended
@@ -267,9 +296,6 @@ if [ -e "/tftpboot/pxelinux.cfg" ]; then
   chown www-se3:root /tftpboot/pxelinux.cfg
 fi
 
-# Droits sur CPAU
-chown root:admins /home/netlogon/CPAU.exe
-chmod 775 /home/netlogon/CPAU.exe
 
 # Droits conf ldap
 chmod 644 /etc/pam_ldap.conf
@@ -291,30 +317,3 @@ chown www-se3:root /etc/se3/www-tools
 # Droits si nécessaire du dossier tmp necessaires aux scripts profils FF / TB
 chmod 770 /var/www/se3/tmp
 chown www-se3:root /var/www/se3/tmp
-
-chown $OPTION admin /home/templates
-chown $OPTION admin /var/se3/Progs
-chown $OPTION admin /var/se3/Docs
-chown $OPTION www-se3 /var/se3/Classes
-setfacl $OPTION -m  u:www-se3:rwx /home/templates/ 2>/dev/null
-setfacl $OPTION -m  d:u:www-se3:rwx /home/templates/ 2>/dev/null
-setfacl -m d:g::rwx /var/se3/Docs/public
-setfacl $OPTION -m g:admins:rwx /var/se3/Progs
-setfacl $OPTION -m d:g:admins:rwx /var/se3/Progs
-setfacl $OPTION -m g:admins:rwx /var/se3/Docs
-setfacl $OPTION -m d:g:admins:rwx /var/se3/Docs
-setfacl -m d:u::rwx /var/se3/Progs/rw
-setfacl -m d:g::rwx /var/se3/Progs/rw
-setfacl -m d:o::rwx /var/se3/Progs/rw
-setfacl -m d:u::rwx /var/se3/Progs/ro
-setfacl -m d:g::rx /var/se3/Progs/ro
-setfacl -m d:o::rx /var/se3/Progs/ro
-chown admin.Profs /var/se3/prof
-chmod 770 /var/se3/prof
-setfacl -m g:Profs:rwx /var/se3/prof
-setfacl -m d:g:Profs:rwx /var/se3/prof
-setfacl $OPTION -m  u:www-se3:rx /var/se3/Progs/install
-setfacl $OPTION -m  d:u:www-se3:rx /var/se3/Progs/install
-
-# Droits fond ecran, on empeche les petits camarades de voir les fonds des autres (trombi)
-chmod o=x /var/se3/Docs/media/fonds_ecran
