@@ -312,21 +312,21 @@ chmod 644 /etc/hosts
 
 
 #
-# Mise à jour de /var/se3/Progs/install/installdll/confse3.ini
+# Mise à jour de /var/se3/Progs/install/ocs-config.bat
 #
-if [ -e "/var/se3/Progs/install/installdll/confse3.ini" ]; then
+if [ -e "/var/se3/Progs/install/ocs-config.bat" ]; then
 	echo -e "$COLTXT"
-	echo "Mise à jour de /var/se3/Progs/install/installdll/confse3.ini"
+	echo "Mise à jour de /var/se3/Progs/install/ocs-config.bat"
 	echo -e "$COLCMD\c"
-	cp -f /var/se3/Progs/install/installdll/confse3.ini /var/se3/Progs/install/installdll/confse3.ini.ori
-	echo "sed -e \"s/ip_se3=$OLD_IP/ip_se3=$NEW_IP/g\" -i /var/se3/Progs/install/installdll/confse3.ini"
-	sed -e "s/ip_se3=$OLD_IP/ip_se3=$NEW_IP/g" -i /var/se3/Progs/install/installdll/confse3.ini
-	chmod 770 /var/se3/Progs/install/installdll/confse3.ini
+	cp -f /var/se3/Progs/install/ocs-config.bat /var/se3/Progs/install/ocs-config.bat.ori
+	echo "sed -e \"s/ip_se3=$OLD_IP/ip_se3=$NEW_IP/g\" -i /var/se3/Progs/install/ocs-config.bat"
+	sed -e "s/ip_se3=$OLD_IP/ip_se3=$NEW_IP/g" -i /var/se3/Progs/install/ocs-config.bat
+	
 fi
 
 
 #
-# Mise à jour des variables 'urlse3' et 'ldap_server' dans MySQL
+# Mise à jour des variables 'urlse3', 'ldap_server' et 'se3ip'dans MySQL
 # Ou faut-il le faire dans l'interface web parce que d'autres actions sont effectuées que la màj MySQL?
 #
 echo -e "$COLTXT"
@@ -335,6 +335,7 @@ echo -e "$COLCMD\c"
 echo "UPDATE params SET value='http://"$NEW_IP":909' WHERE name='urlse3';" > /tmp/maj_chgt_ip_se3.sql
 # Et dans le cas de M.Curie Bernay, cela risque même d'être l'IP du SLIS...
 echo "UPDATE params SET value='$NEW_IP' WHERE name='ldap_server';" >> /tmp/maj_chgt_ip_se3.sql
+echo "UPDATE params SET value='$NEW_IP' WHERE name='se3ip';" >> /tmp/maj_chgt_ip_se3.sql
 # Sauf que... est-ce que le LDAP n'est pas déporté?
 mysql -u$dbuser -p$dbpass $dbname < /tmp/maj_chgt_ip_se3.sql
 
@@ -386,6 +387,10 @@ ldapmodify -x -D "$ADMIN_DN" -w $(cat /etc/ldap.secret) -f /tmp/maj_chgt_ip_se3.
 # maj params pour wpkg
 [ -e /usr/share/se3/scripts/wpkg_initvars.sh ] &&  /usr/share/se3/scripts/wpkg_initvars.sh
 
+# domscripts
+/usr/share/se3/sbin/update-domscripts.sh 
+
+. /usr/share/se3/includes/config.inc.sh -clpbmsdf
 
 echo -e "$COLINFO"
 echo "Par sécurité:"
@@ -404,12 +409,13 @@ cp -f /etc/pam_ldap.conf.ori /etc/pam_ldap.conf
 cp -f /etc/libnss-ldap.conf.ori /etc/libnss-ldap.conf
 cp -f /etc/samba/smb.conf.ori /etc/samba/smb.conf
 cp -f /etc/hosts.ori /etc/hosts
-cp -f /var/se3/Progs/install/installdll/confse3.ini.ori /var/se3/Progs/install/installdll/confse3.ini
+cp -f /var/se3/Progs/install/ocs-config.bat.ori /var/se3/Progs/install/ocs-config.bat
 cp -f $HOTPERM_FICH.ori $HOTPERM_FICH
 cp -f /etc/ldap/config.se3.ori /etc/ldap/config.se3
 
 echo \"UPDATE params SET value='http://$OLD_IP:909' WHERE name='urlse3';\" > /tmp/retablissement_ip_se3.sql
 echo \"UPDATE params SET value='$OLD_IP' WHERE name='ldap_server';\" >> /tmp/retablissement_ip_se3.sql
+echo \"UPDATE params SET value='$OLD_IP' WHERE name='se3ip';\" >> /tmp/retablissement_ip_se3.sql
 mysql -u$dbuser -p$dbpass $dbname < /tmp/retablissement_ip_se3.sql
 
 echo \"dn: cn=$NOM_NETBIOS_SE3,ou=Computers,$BASE_DN\" > /tmp/retablissement_chgt_ip_se3.ldif
@@ -427,7 +433,9 @@ echo \"\" >> /tmp/retablissement_chgt_ip_se3.ldif
 /etc/init.d/apache2se start
 
 ldapmodify -x -D \"$ADMIN_DN\" -w $(cat /etc/ldap.secret) -f /tmp/retablissement_chgt_ip_se3.ldif
-[ -e /usr/share/se3/scripts/wpkg_initvars.sh ] &&  /usr/share/se3/scripts/wpkg_initvars.sh" > retablissement_config_initiale.sh
+/usr/share/se3/sbin/update-domscripts.sh 
+[ -e /usr/share/se3/scripts/wpkg_initvars.sh ] &&  /usr/share/se3/scripts/wpkg_initvars.sh
+. /usr/share/se3/includes/config.inc.sh -clpbmsdf" > retablissement_config_initiale.sh
 chmod +x retablissement_config_initiale.sh
 
 echo -e "$COLTXT"
