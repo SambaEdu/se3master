@@ -1115,6 +1115,10 @@ setfacl -m o::rwx /var/se3/Docs/public
 setfacl -m d:u::rwx /var/se3/Docs/public
 setfacl -m d:g::rwx /var/se3/Docs/public
 setfacl -m d:o::rwx /var/se3/Docs/public
+setfacl -m d:o::rwx /var/se3/Progs/rw
+
+# au cas ou il existerait un ancien fichier pref.js, on le vire....
+rm  -f /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 
 # Instanciation
 echo "Instanciation en cours..."
