@@ -409,6 +409,7 @@ cp -f /etc/pam_ldap.conf.ori /etc/pam_ldap.conf
 cp -f /etc/libnss-ldap.conf.ori /etc/libnss-ldap.conf
 cp -f /etc/samba/smb.conf.ori /etc/samba/smb.conf
 cp -f /etc/hosts.ori /etc/hosts
+cp -f /etc/resolv.conf.ori /etc/resolv.conf
 cp -f /var/se3/Progs/install/ocs-config.bat.ori /var/se3/Progs/install/ocs-config.bat
 cp -f $HOTPERM_FICH.ori $HOTPERM_FICH
 cp -f /etc/ldap/config.se3.ori /etc/ldap/config.se3
