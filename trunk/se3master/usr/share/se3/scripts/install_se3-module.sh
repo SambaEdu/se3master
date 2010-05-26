@@ -250,6 +250,11 @@ se3-domain)
 install_module
 ;;
 
+
+se3-logonpy)
+install_module
+;;
+
 se3-internet)
 install_module
 ;;
