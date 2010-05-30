@@ -129,13 +129,13 @@ case "$1" in
 se3)
 install_module
 #echo "<br/>"
-se3domain_ok=$(dpkg -s se3-domain | grep "Status: install ok")
-if [ -z "$se3domain_ok" ]; then
-  echo ""
-  echo "Installation de se3-domain" | tee -a $REPORT_FILE
+#se3domain_ok=$(dpkg -s se3-domain | grep "Status: install ok")
+#if [ -z "$se3domain_ok" ]; then
+#  echo ""
+  echo "Maj si besoin se3-domain" | tee -a $REPORT_FILE
   apt-get install se3-domain -y --force-yes $opt | tee -a $REPORT_FILE 
   
-fi
+#fi
 
 # UPDATE PARTIE MODULES 
 (
@@ -149,7 +149,7 @@ list_module=$(cat /root/se3_update_list)
 if [ -n "$list_module" ]; then
   echo ""
   echo "Mise a jour des modules" | tee -a $REPORT_FILE
-  apt-get install $list_module $debug -y --force-yes $opt | tee -a $REPORT_FILE 
+  apt-get install $list_module -y --force-yes $opt 2>&1 | tee -a $REPORT_FILE 
 ##
 ##apt-get install $(cat /tmp/se3_update_list) --allow-unauthenticated -y -o Dpkg::Options::=--force-confold 2>&1 | tee -a $REPORT_FILE 
 #  rm -f /root/se3_update_list
@@ -249,7 +249,6 @@ install_module
 se3-domain)
 install_module
 ;;
-
 
 se3-logonpy)
 install_module
