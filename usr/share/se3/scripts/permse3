@@ -166,7 +166,8 @@ SETNETLOGON
 
 if [ -e /home/templates ]; then
 # droits sur les templates
-chown admin /home/templates -R
+chmod 775 /home/templates
+chown admin:admins /home/templates -R
 [ ! -e /home/templates/skeluser ] && ln -s /etc/skel/user /home/templates/skeluser
 chown -R www-se3 /etc/skel/user
 setfacl -R -m  u:www-se3:rwx /home/templates/ 2> /dev/null
