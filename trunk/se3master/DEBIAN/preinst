@@ -116,10 +116,17 @@ if [ -e /usr/share/se3/sbin/gon2posix.sh ]; then
 rm -f /usr/share/se3/sbin/gon2posix.sh
 fi
 
+if [ -e /usr/share/se3/sbin/se3_update_system.sh ]; then
+rm -f /usr/share/se3/sbin/se3_update_system.sh
+fi
 
 if [ -e /usr/share/se3/sbin/permse3 ]; then
 rm -f /usr/share/se3/sbin/permse3
 ln -s /usr/share/se3/scripts/permse3 /usr/share/se3/sbin/permse3 
+fi
+
+if [ -e /usr/share/se3/sbin/restore_droits.sh ]; then
+rm -f /usr/share/se3/sbin/restore_droits.sh 
 fi
 
 #if [ -e  ]; then
