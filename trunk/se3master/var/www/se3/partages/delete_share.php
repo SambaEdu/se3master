@@ -92,7 +92,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
                 // Recherche de la liste des partages supprimables
                 if ( $stat_srv == "maitre" ) {
                         // Cas d'un serveur maitre
-                        exec ("/bin/grep \"#</\" /etc/samba/smb.conf", $AllOutPut, $ReturnValueShareName);
+                        exec ("/bin/grep \"#</\" /etc/samba/smb_etab.conf", $AllOutPut, $ReturnValueShareName);
                 } else {
                 // Cas d'un serveur esclave
                         exec ("ssh -l remote_adm $ipHostNumber '/bin/grep \"#</\" /etc/samba/smb.conf'", $AllOutPut, $ReturnValueShareName);
@@ -132,18 +132,18 @@ if (is_admin("se3_is_admin",$login)=="Y") {
                 echo "<H6>".gettext("[Phase 2] :")."</h6>\n";
                 // Creation du script bash pour admind
                 $commandes = "#!/bin/bash\n";
-                $commandes .= "SMBCONF=/etc/samba/smb.conf\n";
+                $commandes .= "SMBCONF=/etc/samba/smb_etab.conf\n";
                 $commandes .= "SHARENAME=$del_sharename\n";
                 $commandes .= "mv \$SMBCONF \$SMBCONF.share_orig\n";
                 $commandes .= "test=true\n";
                 $commandes .= "share=false\n";
 		#===========================================================
 		# AJOUT: 19/02/2006
-                $commandes .= "cat \$SMBCONF.share_orig | grep -B1000 \"include = /etc/samba/printers_se3/%m.inc\" > /etc/samba/smb.conf\n";
-                $commandes .= "cat \$SMBCONF.share_orig | grep -A1000 \"include = /etc/samba/printers_se3/%m.inc\" | grep -v \"include = /etc/samba/printers_se3/%m.inc\" > /etc/samba/fin_du_smb.conf\n";
+                #$commandes .= "cat \$SMBCONF.share_orig | grep -B1000 \"include = /etc/samba/printers_se3/%m.inc\" > /etc/samba/smb.conf\n";
+                #$commandes .= "cat \$SMBCONF.share_orig | grep -A1000 \"include = /etc/samba/printers_se3/%m.inc\" | grep -v \"include = /etc/samba/printers_se3/%m.inc\" > /etc/samba/fin_du_smb.conf\n";
 		#===========================================================
                 #$commandes .= "cat \$SMBCONF.share_orig | while (\$test)\n";
-                $commandes .= "cat /etc/samba/fin_du_smb.conf | while (\$test)\n";
+                $commandes .= "cat \$SMBCONF.share_orig | while (\$test)\n";
                 $commandes .= "do\n";
                 $commandes .= "       read ligne || test=false\n";
                 $commandes .= " if [ \$test = false ]; then\n";
