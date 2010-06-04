@@ -7,7 +7,7 @@
 	workgroup = #DOMAIN#
 	netbios name = #NETBIOSNAME#
 	server string = Serveur SambaEdu 3
-	interfaces = #IPSERVEUR#/#MASK#
+	interfaces = #IPSERVEUR#/#MASK#, 127.0.0.1
 	passdb backend = ldapsam:ldap://#SLAPDIP#
 	log file = /var/log/samba/%m.log
 	socket options = TCP_NODELAY SO_KEEPALIVE SO_SNDBUF=8192 SO_RCVBUF=8192
@@ -22,14 +22,13 @@
 	ldap group suffix = #GROUPS#
 	ldap admin dn = #ADMINRDN#,#BASEDN#
 	ldap ssl = start_tls
+	ldapsam:trusted = No
 	create mask = 0700
 	directory mask = 0700
 	inherit acls = Yes
 	printing = cups
     	printcap = cups
-    	##printer admin = @admins
     	load printers = yes
-	##print command = lpr -s -r -P %p %s
 	hide unreadable = Yes
 	hide files = /inventaire/desktop.ini/profil/profile/profile.V2/$RECYCLE.BIN/gpoPASSWD/
 	hide dot files = yes
@@ -37,8 +36,9 @@
 	unix charset = #CHARSET#
 	lanman auth = yes
 	notify:inotify = false
+	bind interfaces only = Yes
 	include = /etc/samba/smb_%a.conf
-
+	
 [drivers]
 	root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
 	root preexec close = Yes
@@ -78,7 +78,7 @@
 	path = /var/se3/Classes
 	read only = No
 	vfs object = recycle:repository recycle:keeptree recycle:versions recycle:touch recycle:exclude recycle:exclude_dir recycle:noversions
-	recycle:repository=/home/%u/profil/Bureau/Corbeille_Reseau
+	recycle:repository=/home/%u/Corbeille_Reseau
 	recycle:keeptree=no
 	recycle:versions=no
 	recycle:touch=no
@@ -118,3 +118,4 @@
 
 include = /etc/samba/printers_se3/%m.inc
 include = /etc/samba/smb_Printers.conf
+include = /etc/samba/smb_etab.conf
