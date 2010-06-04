@@ -2,7 +2,7 @@
 ########################################
 ########################################
 
-SMB_CONF=/etc/samba/smb.conf
+SMB_CONF=/etc/samba/smb_etab.conf
 SE3_ROOT=/var/se3
 MAIL=$(ldapsearch -xLLL "uid=admin" | grep mail | cut -d " " -f2)
 
