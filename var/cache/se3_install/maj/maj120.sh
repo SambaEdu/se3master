@@ -6,7 +6,7 @@
 LOG_DIR="/var/log/se3"
 HISTORIQUE_MAJ="$LOG_DIR/historique_maj"
 REPORT_FILE=$LOG_DIR/log_maj120
-mkdir -p /root/maj/1.50/
+mkdir -p /root/maj/2.0/
 #mode debug on si =1
 [ -e /root/debug ] && DEBUG="1"
 
@@ -93,6 +93,14 @@ netbiosname=$(grep "netbios name =" /etc/samba/smb.conf |grep -v "^#" | cut -d"=
 CHANGEMYSQL netbios_name "$netbiosname" 
 
 se3ip=$(nmblookup $netbiosname | grep "$netbiosname<00>" | cut -d " " -f1)
+
+if [ $(nmblookup $netbiosname | grep "$netbiosname<00>" | wc -l) == "1" ]; then
+	se3ip=$(nmblookup $netbiosname | grep "$netbiosname<00>" | cut -d " " -f1)
+else
+	se3ip=$(grep interface /etc/samba/smb.conf | grep -v "#" | head -n1 | awk '{ print $3 }' | cut -d"/" -f1)
+fi
+
+
 CHANGEMYSQL se3ip "$se3ip" 
 
 CHANGEMYSQL bck_user "backuppc" 
@@ -131,12 +139,12 @@ gidNumber: 0
 sambaPrimaryGroupSID: $DOMAINSID-0
 sambaSID: $DOMAINSID-1" | ldapadd -x -h $LDAPIP -D $ADMINRDN,$BASEDN -w $ADMINPW 
 
-# mappage des groupes pour samba
-
-ldapsearch -xLLL -h $LDAPIP -b $GROUPSRDN,$BASEDN "(&(objectClass=posixGroup)(!(objectClass=sambaGroupMapping)))" cn | grep "^cn:"  | cut -c 5- | while read cn; do
-	echo "mappage de $cn" 
-    /usr/share/se3/scripts/group_mapping.sh $cn
-done
+# mappage des groupes pour samba --> maj121
+# 
+# ldapsearch -xLLL -h $LDAPIP -b $GROUPSRDN,$BASEDN "(&(objectClass=posixGroup)(!(objectClass=sambaGroupMapping)))" cn | grep "^cn:"  | cut -c 5- | while read cn; do
+# 	echo "mappage de $cn" 
+#     /usr/share/se3/scripts/group_mapping.sh $cn
+# done
 
 # Creation compte adminse3 dans annuaire si besoin et application provileges smbpour admin et adminse3 
 /usr/share/se3/sbin/create_adminse3.sh
@@ -182,18 +190,20 @@ echo \"dn: uid=\$ID,$PEOPLERDN,$BASEDN
 changetype: modify
 replace: sambaPrimaryGroupSID
 sambaPrimaryGroupSID: $DOMAINSID-513
-\" >> /root/maj/1.50/modif_SambaPrimaryGroupe.ldif
+\" >> /root/maj/2.0/modif_SambaPrimaryGroupe.ldif
 done
 echo \"modification des entrees\" 
-ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" -f /root/maj/1.50/modif_SambaPrimaryGroupe.ldif >/root/maj/1.50/rapport_modif_annuaire.txt
-" >/root/maj/1.50/modif_SambaPrimaryGroupe.sh
-chmod 700 /root/maj/1.50/modif_SambaPrimaryGroupe.sh
+ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" -f /root/maj/2.0/modif_SambaPrimaryGroupe.ldif >/root/maj/2.0/rapport_modif_annuaire.txt
+" >/root/maj/2.0/modif_SambaPrimaryGroupe.sh
+chmod 700 /root/maj/2.0/modif_SambaPrimaryGroupe.sh
 echo "Modification du SambaPrimaryGroupe en cours....Ce peut être long......."
-cd /root/maj/1.50/
+cd /root/maj/2.0/
 ./modif_SambaPrimaryGroupe.sh && echo "Termine avec succes"
 cd - >/dev/null
 
-mv  /root/Samba_maj120.ldif /root/maj/1.50/
+mv  /root/Samba_maj120.ldif /root/maj/2.0/
+
+cp /etc/samba/*.conf  /root/maj/2.0/
 
 echo "Mise a jour 120:
 - Ajout nouvelle architecture de connexion
@@ -209,5 +219,6 @@ MAIL_REPORT
 echo "
 Un mail recapitulatif de la mise a jour sera envoye
 "
-/etc/init.d/slapd restart
+#/etc/init.d/slapd restart
+sleep 1
 exit 0
