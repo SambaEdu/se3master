@@ -152,7 +152,8 @@ INSERT INTO `params` VALUES ('', 'netbios_name', '', 0, 'Nom netbios du serveur'
 INSERT INTO `params` VALUES ('', 'se3ip', '', 0, 'Adresse IP du serveur', 4);
 
 INSERT INTO `params` VALUES ('', 'corbeille', '0', 0, 'Etat activation de la corbeille', 4);
-
+INSERT INTO `params` VALUES ('', 'hide_logon', '1', 0, 'Visibilite script de login ou non', 4);
+INSERT INTO `params` VALUES ('', 'localmenu', '0', 0, 'menu demarrer en local ou distant', 4);
 # --------------------------------------------------------
 
 #
