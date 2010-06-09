@@ -27,11 +27,13 @@
 
 
 include "entete.inc.php";
-include "ldap.inc.php";
-include "ihm.inc.php";
-include "printers.inc.php";
+require_once ("ldap.inc.php");
+require_once ("ihm.inc.php");
+require_once ("printers.inc.php");
 
-include "fonc_outils.inc.php";
+require_once ("fonc_outils.inc.php");
+
+include("crob_ldap_functions.php"); // Pour les recherches de doublons
 
 // Traduction
 require_once ("lang.inc.php");
@@ -128,7 +130,22 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			echo "<input type=\"submit\" value=\"".gettext("Ajouter &#224; un parc")."\">\n";
 			echo "</form>\n";
 		} else { echo "Il n'y a aucune machine"; }	
-	} else {
+	}
+	else {
+
+		if(isset($_POST['suppr_doublons_ldap'])) {
+			$suppr=isset($_POST['suppr']) ? $_POST['suppr'] : NULL;
+		
+			$tab_attr_recherche=array('cn');
+			for($i=0;$i<count($suppr);$i++) {
+				if(get_tab_attribut("computers","cn=$suppr[$i]",$tab_attr_recherche)) {
+					if(!del_entry("cn=$suppr[$i]","computers")) {
+						echo "Erreur lors de la suppression de l'entr&#233;e $suppr[$i]<br />\n";
+					}
+				}
+			}
+			// Faut-il aussi supprimer les uid=$suppr[$i]$ ?
+		}
 
 		// On traite le nom de la machine
 		//Si ce nom est bon on affiche les parcs de cette machine
@@ -168,7 +185,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 
 				exit;
 			}
-		}	
+		}
 
 
 
@@ -220,7 +237,12 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		echo "<input type=\"hidden\" name=\"sansparc\" value=\"oui\">\n";
 	        echo "<input type=\"submit\" value=\"".gettext("Valider")."\">\n";
 		echo "</form>";
-						
+
+		echo "<br />\n";
+		echo "<h3>".gettext("Recherche des doublons")."</h3>\n";
+
+		search_doublons_mac();
+
 	}
 }
 
