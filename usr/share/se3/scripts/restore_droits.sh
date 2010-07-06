@@ -6,7 +6,7 @@
 #
 ## $Id$ ##
 #
-# Derniere modif: 12/09/2006
+# Derniere modif: 06/07/2010
 
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
 	echo "Script permettant de remettre des droits corrects sur /home et /var/se3"
@@ -141,6 +141,16 @@ do
 				cp -fa /tmp/raccourcis_skel_user/Bureau/* /home/$A/profil/Bureau/ 2> /dev/null
 				cp -fa /tmp/raccourcis_skel_user/Demarrer/* /home/$A/profil/Demarrer/ 2> /dev/null
 				chown root:admins /home/$A/profil/Demarrer/Programmes
+
+				if [ -e "/home/profiles/$A" ]; then
+					echo -e "$COLTXT\c "
+					echo "Traitement de /home/profiles/$A"
+					echo -e "$COLCMD\c "
+					chown $A:lcs-users /home/profiles/$A -R
+					chmod 700 /home/profiles/$A -R
+					find /home/profiles/$A -iname ntuser.ini | while read ntuser_ini;do chmod 600 ${ntuser_ini} ;done
+					find /home/profiles/$A -iname ntuser.pol | while read ntuser_pol;do chmod 400 ${ntuser_pol} ;done
+				fi
 			fi
 		fi
 
