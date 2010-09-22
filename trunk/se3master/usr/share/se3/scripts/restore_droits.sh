@@ -6,7 +6,7 @@
 #
 ## $Id$ ##
 #
-# Derniere modif: 06/07/2010
+# Derniere modif: 22/09/2010
 
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
 	echo "Script permettant de remettre des droits corrects sur /home et /var/se3"
@@ -163,6 +163,13 @@ do
 			# Pour admin, les raccourcis actuellement presents dans le home ne seront pas supprimes (c'est embêtant).
 			# Je prefere tout de même qu'il fasse le menage lui-même.
 		fi
+		
+		if [ ! -z "$(echo "$A" | grep -e "_Trash_[0-9_]*")" ]; then
+			# permet de corriger une erreur de quota en cas d'uid re-attribue
+			echo "Traitement du dossier Trash des anciens homes : $A"
+			chown -R admin:admins /home/$A
+		fi
+
 	fi
 done
 
