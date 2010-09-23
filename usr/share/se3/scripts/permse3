@@ -318,3 +318,8 @@ chown www-se3:root /etc/se3/www-tools
 # Droits si nécessaire du dossier tmp necessaires aux scripts profils FF / TB
 chmod 770 /var/www/se3/tmp
 chown www-se3:root /var/www/se3/tmp
+
+# Droits necessaires a l'interface fonds d'ecran
+chmod 755 /etc/se3/fonds_ecran
+chmod 644 /etc/se3/fonds_ecran/*
+chown -R www-se3:root /etc/se3/fonds_ecran
