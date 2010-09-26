@@ -156,23 +156,23 @@ quota_max="1"
 i=1 # à la place de 0 pour corriger bug d'apparition d'un espace au debut de $liste_appartenance
 for quota in $liste_quotas
 do
-i=$[$i+1]
-if [ $quota -eq 0 ]; then
-quota_max=0
-indice_grp=$i
-else
-if [ "$quota_max" -lt "$quota" -a $quota_max -ne 0 ]; then
-quota_max="$quota"
-indice_grp=$i
-fi
-fi
+	i=$[$i+1]
+	if [ $quota -eq 0 ]; then
+		quota_max=0
+		indice_grp=$i
+	else
+		if [ "$quota_max" -lt "$quota" -a $quota_max -ne 0 ]; then
+		quota_max="$quota"
+		indice_grp=$i
+		fi
+	fi
 done
 
 
 if [ $indice_grp -eq 0 ]; then
-#user n'appartient à aucun groupe dans la base mysql
-qsoft=0
-qhard=0
+	#user n'appartient à aucun groupe dans la base mysql
+	qsoft=0
+	qhard=0
 
 else #user appartient à un grp dans la base mysql
   #extraire les quotas soft et hard applicables
@@ -181,6 +181,14 @@ else #user appartient à un grp dans la base mysql
   qhard=`echo "SELECT quotahard FROM quotas WHERE nom=\"$groupe_preponderant\" AND type=\"g\" AND partition=\"$part\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 fi
 fi
+
+# securite et correctif pour eviter un quota sur les comptes importants :
+if [ "$user" == "admin" -o "$user" == "adminse3" -o "$user" == "root" -o "$user" == "www-se3" ]; then
+	#user est un compte systeme : on imposte un quota 0. CORRECTIF du 26/09/10 pour effet retroactif sur le compte adminse3 qui n'etait pas protege.
+	qsoft=0
+	qhard=0
+fi
+
 echo "je fixe le quota pour $user sur la partition $part :"
 echo "quota soft : $qsoft"
 echo "quota hard : $qhard"
@@ -300,7 +308,7 @@ else
 [ "$ERREURFLAG" == "1" ] && echo ERREUR "Sortie."  
 
   # on empeche les betises !
-  liste_users="$(echo "$liste_users" | grep -v "^admin$" | grep -v "^www-se3$" | grep -v "^root$" )"
+  liste_users="$(echo "$liste_users" | grep -v "^admin$" | grep -v "^adminse3$" | grep -v "^www-se3$" | grep -v "^root$" )"
   
   # complete mysql ou mise à jour suivant le cas.
   if [ "$3" != "suppr" -a "$3" != "actu" ]; then
