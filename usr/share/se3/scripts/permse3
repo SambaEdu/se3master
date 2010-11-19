@@ -28,12 +28,14 @@ function SETNETLOGON
 {
 #droits sur /home/netlogon
 if [ -e /home/netlogon ]; then
-  find /home/netlogon/machine/ -name gpoPASSWD -delete
-  chmod -R 755 /home/netlogon
-  chown -R admin:admins /home/netlogon/
-  chmod g+s /home/netlogon
-  setfacl -b /home/netlogon/
-  chmod 664 /home/netlogon/domscripts/*
+	find /home/netlogon/machine/ -name gpoPASSWD -delete
+  	chmod -R 755 /home/netlogon
+  	chown -R admin:admins /home/netlogon/
+ 	chmod g+s /home/netlogon
+  	setfacl -b /home/netlogon/
+	if [ -e /home/netlogon/domscripts/ ]; then
+		chmod 664 /home/netlogon/domscripts/*
+	fi
 
   setfacl -R -m  u:adminse3:rx /var/se3/Progs/install
   setfacl -R -m  d:u:adminse3:rx /var/se3/Progs/install 
@@ -92,8 +94,10 @@ chown www-se3.root /usr/lib/perl5/Se.pm
 # Droits sur la sauvegarde
 chmod -R 750 /etc/save
 chgrp -R admins /var/se3/save
-echo "Positionnement des droits backuppc en arrière plan"
-/usr/share/se3/sbin/droit_backuppc.sh &
+
+#echo "Positionnement des droits backuppc en arrière plan"
+#desormais gere par le paquet backuppc le script se nomme permbackuppc
+#/usr/share/se3/sbin/droit_backuppc.sh &
 
 # Droits sur ssmtp
 chown -R www-se3 /etc/ssmtp
@@ -101,7 +105,8 @@ chown -R www-se3 /etc/ssmtp
 # Droits sur cups
 chown -R www-se3.lpadmin /etc/samba/printers_se3
 chmod 770 /etc/samba/printers_se3
-chmod -R  755 /var/lib/samba/printers
+chmod -R  775 /var/lib/samba/printers
+chown -R admin:admins /var/lib/samba/printers
 chmod 777 /var/spool/samba
 
 # Droits sur drivers
@@ -152,8 +157,12 @@ if [ -e ${LOGS_DIR}/squid ]; then
 chown -R proxy ${LOGS_DIR}/squid
 fi
 
+if [ -e ${LOGS_DIR}/squid3 ]; then
+chown -R proxy ${LOGS_DIR}/squid3
+fi
+
 if [ -e ${LOGS_DIR}/dansguardian ]; then
-chown -R nobody /var/log/dansguardian
+chown -R dansguardian /var/log/dansguardian
 fi
 
 if [ -e ${LOGS_DIR}/ocsinventory-NG ]; then
@@ -188,6 +197,7 @@ chmod 755 /var/se3
 
 #partage Progs
 mkdir -p /var/se3/Progs
+chmod 775 /var/se3/Progs
 chown $OPTION admin:admins /var/se3/Progs
 chown admin:admins /var/se3/Progs/ro
 chown admin:admins /var/se3/Progs/rw
@@ -213,16 +223,6 @@ if [ -e /var/se3/Progs/install ]; then
 	setfacl -R -m  d:g:admins:rwx /var/se3/Progs/install
 # accès à CPAU pour installation initiale de : inventaire, wpkg...
 	setfacl -m other:x /var/se3/Progs/install
-fi
-
-installdll="/var/se3/Progs/install/installdll"
-if [ -e "$installdll" ]; then 
-	chmod 755 $installdll
-	chown -R admin:admins $installdll
-	if [ -e "$installdll/confse3.ini" ]; then 
-		chown root $installdll/confse3.ini
-		chmod 770 $installdll/confse3.ini
-	fi
 fi
 
 # inventaire
@@ -307,19 +307,26 @@ chmod 600 /etc/ldap.secret
 chown root:root /etc/ldap.secret
 
 # Droits du dossier de mise à disposition des CSV (optionnel) lors de la génération de comptes:
+mkdir -p /var/www/se3/setup/csv
 chmod 770 /var/www/se3/setup/csv
 chown www-se3:root /var/www/se3/setup/csv
 
 
 # Droits si nécessaire du dossier www-tools... utilisé à la place de /var/remote_adm dans plusieurs scripts:
+mkdir -p /etc/se3/www-tools
 chmod 770 /etc/se3/www-tools
 chown www-se3:root /etc/se3/www-tools
 
 # Droits si nécessaire du dossier tmp necessaires aux scripts profils FF / TB
+mkdir -p /var/www/se3/tmp
 chmod 770 /var/www/se3/tmp
 chown www-se3:root /var/www/se3/tmp
 
 # Droits necessaires a l'interface fonds d'ecran
+
+if [ -e /etc/se3/fonds_ecran ]; then
 chmod 755 /etc/se3/fonds_ecran
 chmod 644 /etc/se3/fonds_ecran/*
 chown -R www-se3:root /etc/se3/fonds_ecran
+fi
+exit 0
