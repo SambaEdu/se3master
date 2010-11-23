@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-## $Id: correctSID.sh 2956 2008-05-08 20:15:19Z olikin $ ##
+## $Id: correctSID.sh 5575 2010-05-30 13:47:42Z keyser $ ##
 #
 ##### Change dans l'annuaire LDAP le SID en fonction du SID existant dans la base MySQL #####
 #
@@ -20,7 +20,8 @@ function usage {
         echo "        -q mode silencieux (corrige les erreurs)"
         echo "        --noldapsave ne sauvegarde pas l'annuaire LDAP avant de le corriger (DANGEREUX)"
         echo "        -c corrige le mot de passe AdminPw LDAP dans le secrets.tdb (cas de probleme de connexion generalise des clients)"
-	echo "        --simulation genere le fichier de correction LDAP mais ne corrige pas"        
+		echo "        --videcache vide les fichiers cache tdb de samba : permet de resoudre des problemes generalises d'impression, d'integration..."
+		echo "        --simulation genere le fichier de correction LDAP mais ne corrige pas"
         echo ""
         echo "Remarques: -t l'emporte sur tout le reste : seul le testSID est effectue."
         echo "           -s , -l et -m sont incompatibles. -m l'emporte !"
@@ -32,7 +33,8 @@ do
 	if [ "$cmd" == "-" ] ; then
               case $OPTARG in
                         noldapsave ) NOLDAPSAVE=1 ;;
-			simulation ) SIMUL=1 ;;
+						videcache ) VIDECACHE=1;;
+						simulation ) SIMUL=1 ;;
                         * ) echo "option longue inconnue..."
                             usage 1 ;;
               esac
@@ -375,5 +377,22 @@ if [ "$CORRECTADMINPWSAMBA" == "1" ]; then
   echo "Effectue."
 fi
 
+################### partie vide les cache de samba en cas de problme d'impression gŽnŽralisŽ ou autre #####################
+if [ "$VIDECACHE" == "1" ]; then
+	echo "On vide les fichier tdb cache de samba"
+	if [ "1" != "$QUIET" ]; then
+		echo "ATTENTION : Un redemarrage de samba est necessaire !!!"
+		echo 
+		POURSUIVRE
+	fi
+	echo "Arret de samba"
+	/etc/init.d/samba stop > /dev/null
+	echo "On vide les tdb en cache."
+	rm -f /var/cache/samba/*.tdb	
+	rm -f /var/cache/samba/printing/*.tdb
+	echo "Demarrage de samba"
+	/etc/init.d/samba start > /dev/null
+	echo "Effectue."
+fi
 # faut il lancer une correction de mdp root dans samba ?
 #/usr/share/se3/scripts/change_root_smbpass.sh
