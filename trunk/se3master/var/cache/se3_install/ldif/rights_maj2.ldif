@@ -1,5 +1,0 @@
-dn: cn=printers_is_admin,ou=#RIGHTS#,#BASEDN#
-objectClass: groupOfNames
-cn: printers_is_admin
-member: uid=admin,ou=#PEOPLE#,#BASEDN#
-

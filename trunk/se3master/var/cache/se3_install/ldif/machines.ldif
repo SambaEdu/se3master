@@ -1,6 +1,0 @@
-dn: cn=machines,ou=#GROUPS#,#BASEDN#
-objectClass: posixGroup
-objectClass: top
-cn: machines
-userPassword: {crypt}x
-gidNumber: 998

@@ -1,8 +1,0 @@
-MaxCacheSize=100
-SendUserAgent=true
-UseCache=false
-UserAgentKeys=:ovp
-cache=Reload
-
-[$Version]
-update_info=kioslave.upd:kde2.2/r1,kioslave.upd:kde2.2/r2

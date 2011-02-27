@@ -1,4 +1,0 @@
-[ktalkannounce]
-Sound=true
-SoundFile=/usr/share/sounds/pop.wav
-talkprg= -e talk
