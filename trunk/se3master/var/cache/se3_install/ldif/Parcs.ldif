@@ -1,3 +1,0 @@
-dn: ou=#PARCS#,#BASEDN#
-objectClass: organizationalUnit
-ou: #PARCS#

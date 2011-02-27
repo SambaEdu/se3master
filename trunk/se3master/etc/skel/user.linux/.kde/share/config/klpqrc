@@ -1,4 +1,0 @@
-[klpq]
-Spooler=LPRNG
-[klpqLprng]
-lpcCommand=/usr/sbin/lpc

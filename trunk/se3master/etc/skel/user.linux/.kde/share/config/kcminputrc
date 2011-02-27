@@ -1,9 +1,0 @@
-[Keyboard]
-ClickVolume=0
-KeyboardRepeating=true
-NumLock=2
-
-[Mouse]
-Acceleration=2
-MouseButtonMapping=RightHanded
-Threshold=4

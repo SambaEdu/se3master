@@ -1,5 +1,0 @@
-[Misc]
-firstTime=false
-scanPaths=$HOME/.netscape/plugins,/usr/local/netscape/plugins,/opt/netscape/plugins,/opt/netscape/communicator/plugins,/usr/lib/netscape/plugins,/usr/lib/netscape/plugins-libc5,/usr/lib/netscape/plugins-libc6,$MOZILLA_HOME/plugins
-startkdeScan=false
-useArtsdsp=false
