@@ -1,0 +1,49 @@
+NameVirtualHost *
+<VirtualHost *>
+	ServerAdmin webmaster@localhost
+	
+	DocumentRoot /var/www/se3/
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /var/www/se3>
+		Options -Indexes FollowSymLinks MultiViews
+		AllowOverride None
+		Order allow,deny
+		allow from all
+		# This directive allows us to have apache2's default start page
+                # in /apache2-default/, but still have / go to the right place
+		# RedirectMatch ^/$ /se3/
+	</Directory>
+
+	<Directory /var/www/se3/setup>
+		AllowOverride All
+	</Directory>
+	ScriptAlias /cgi-bin/ /usr/lib/cgi-binse/
+	<Directory "/usr/lib/cgi-binse">
+		AllowOverride None
+		Options ExecCGI -MultiViews +SymLinksIfOwnerMatch
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	ErrorLog /var/log/apache2/errorse.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog /var/log/apache2se/accessse.log combined
+	ServerSignature On
+
+    Alias /doc/ "/usr/share/doc/"
+    <Directory "/usr/share/doc/">
+        Options Indexes MultiViews FollowSymLinks
+        AllowOverride None
+        Order deny,allow
+        Deny from all
+        Allow from 127.0.0.0/255.0.0.0 ::1/128
+    </Directory>
+
+</VirtualHost>

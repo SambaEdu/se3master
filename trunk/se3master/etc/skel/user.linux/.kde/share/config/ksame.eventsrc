@@ -1,0 +1,14 @@
+[game over]
+logfile=
+presentation=0
+soundfile=
+
+[game won]
+logfile=
+presentation=0
+soundfile=
+
+[stones removed]
+logfile=
+presentation=0
+soundfile=

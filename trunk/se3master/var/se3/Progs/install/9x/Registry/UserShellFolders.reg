@@ -1,0 +1,9 @@
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders]
+"Desktop"="K:\\profil\\Bureau"
+"Programs"="K:\\profil\\Demarrer\\Programmes"
+"Startup"="K:\\profil\\Demarrer\\Programmes\\Demarrage"
+"Start Menu"="K:\\profil\\Demarrer"
+"personal"="K:\\Docs"
+"appdata"="K:\\profil\\appdata"

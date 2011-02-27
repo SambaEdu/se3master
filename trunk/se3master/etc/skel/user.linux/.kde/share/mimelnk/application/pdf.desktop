@@ -1,0 +1,8 @@
+[Desktop Entry]
+Comment=PDF-Dokument
+Hidden=false
+Icon=pdf
+MimeType=application/pdf
+Patterns=*.pdf;*.PDF
+Type=MimeType
+X-KDE-AutoEmbed=false

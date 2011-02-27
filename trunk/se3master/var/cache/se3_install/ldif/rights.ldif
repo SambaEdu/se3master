@@ -1,0 +1,70 @@
+dn: cn=se3_is_admin,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: se3_is_admin
+member: uid=admin,ou=#PEOPLE#,#BASEDN#
+
+dn: cn=Annu_is_admin,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: Annu_is_admin
+member: uid=admin,ou=#PEOPLE#,#BASEDN#
+
+dn: cn=sovajon_is_admin,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: sovajon_is_admin
+member: uid=admin,ou=#PEOPLE#,#BASEDN#
+
+dn: cn=system_is_admin,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: system_is_admin
+member: uid=admin,ou=#PEOPLE#,#BASEDN#
+
+dn: cn=computers_is_admin,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: computers_is_admin
+member: uid=admin,ou=#PEOPLE#,#BASEDN#
+
+dn: cn=printers_is_admin,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: printers_is_admin
+member: uid=admin,ou=#PEOPLE#,#BASEDN#
+
+dn: cn=echange_can_administrate,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: echange_can_administrate
+member: uid=admin,ou=#PEOPLE#,#BASEDN#
+
+dn: cn=inventaire_can_read,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: inventaire_can_read
+member: uid=admin,ou=#PEOPLE#,#BASEDN#
+
+dn: cn=annu_can_read,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: annu_can_read
+member: uid=admin,ou=#PEOPLE#,#BASEDN#
+member: cn=profs,ou=#GROUPS#,#BASEDN#
+
+dn: cn=maintenance_can_write,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: maintenance_can_write
+member: uid=admin,ou=#PEOPLE#,#BASEDN#
+
+dn: cn=parc_can_view,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: parc_can_view
+member: uid=admin,ou=#PEOPLE#,#BASEDN#
+
+dn: cn=parc_can_manage,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: parc_can_manage
+member: uid=admin,ou=#PEOPLE#,#BASEDN#
+
+dn: cn=firefox_is_admin,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: firefox_is_admin
+member: uid=admin,ou=#PEOPLE#,#BASEDN#
+
+dn: cn=no_Trash_user,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: no_Trash_user
+member: uid=admin,ou=#PEOPLE#,#BASEDN#

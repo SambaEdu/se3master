@@ -1,0 +1,4 @@
+dn: cn=no_Trash_user,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: no_Trash_user
+member: uid=admin,ou=#PEOPLE#,#BASEDN#

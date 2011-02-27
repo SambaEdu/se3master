@@ -1,0 +1,124 @@
+// <!-- <mdb:mork:z v="1.4"/> -->
+< <(a=c)> // (f=iso-8859-1)
+  (8A=charset)(8B=folderName)(80=ns:msg:db:row:scope:folders:all)
+  (81=ns:msg:db:table:kind:folders)(82=key)(83=flags)(84=totalMsgs)
+  (85=totalUnreadMsgs)(86=pendingUnreadMsgs)(87=pendingMsgs)
+  (88=expungedBytes)(89=folderSize)>
+
+<(80
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\qlsjpha5.default\\Mail\\Local\
+ Folders\\Trash.msf)(81=104)(82=0)(83=)(84=Corbeille)(85
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\qlsjpha5.default\\Mail\\Local\
+ Folders\\Sent.msf)(9D=4)(87=Envoy$C3$A9s)(88
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\qlsjpha5.default\\Mail\\Local\
+ Folders\\Drafts.msf)(8A=Brouillons)(8B
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\qlsjpha5.default\\Mail\\Local\
+ Folders\\Unsent Messages.msf)(8C=804)(8D=Messages en attente)(8E
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\qlsjpha5.default\\Mail\\Local\
+ Folders\\)(8F=1c)(90=ffffffff)(91=Dossiers locaux)(92
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\qlsjpha5.default\\Mail\\pop.r\
+eplace.fr\\Inbox.msf)(93=1004)(94=Courrier entrant)(95
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\qlsjpha5.default\\Mail\\pop.r\
+eplace.fr\\Trash.msf)(96
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\qlsjpha5.default\\Mail\\pop.r\
+eplace.fr\\Sent.msf)(86=204)(97
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\qlsjpha5.default\\Mail\\pop.r\
+eplace.fr\\Drafts.msf)(89=404)(98
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\qlsjpha5.default\\Mail\\pop.r\
+eplace.fr\\Templates.msf)(99=400004)(9A=Mod$C3$A8les)(9B
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\qlsjpha5.default\\Mail\\pop.r\
+eplace.fr\\)(9C=nom_compte_replace)(9E
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\Local Folders\\\
+Trash.msf)(9F
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\Local Folders\\\
+Sent.msf)(A0
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\Local Folders\\\
+Drafts.msf)(A1
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\Local Folders\\\
+Unsent Messages.msf)(A2
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\Local Folders\\)
+  (A3
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\pop.replace.fr\
+\\Inbox.msf)(A4
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\pop.replace.fr\
+\\Trash.msf)(A5
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\pop.replace.fr\
+\\Sent.msf)(A6
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\pop.replace.fr\
+\\Drafts.msf)(A7
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\pop.replace.fr\
+\\Templates.msf)(A8
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\pop.replace.fr\
+\\)(A9=c)(AA
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\defaultbal\\In\
+box.msf)(AB
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\defaultbal\\Tr\
+ash.msf)(AC
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\defaultbal\\Se\
+nt.msf)(AD
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\defaultbal\\Dr\
+afts.msf)(AE
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\defaultbal\\Te\
+mplates.msf)(AF
+    =K:\\profil\\appdata\\Thunderbird\\Profiles\\default\\Mail\\defaultbal\\)
+  (B0=nom_compte_replace@domaine)>
+{1:^80 {(k^81:c)(s=9)} 
+  [1(^82^80)(^83^81)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^84)]
+  [2(^82^85)(^83=4)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^87)]
+  [3(^82^88)(^83=4)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^8A)]
+  [4(^82^8B)(^83^8C)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^8D)]
+  [5(^82^8E)(^83=1c)(^84^90)(^85^90)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^91)]
+  [6(^82^92)(^83^93)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^94)]
+  [7(^82^95)(^83^81)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^84)]
+  [8(^82^96)(^83^86)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^87)]
+  [9(^82^97)(^83^89)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^8A)]
+  [A(^82^98)(^83^99)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^9A)]
+  [B(^82^9B)(^83=1c)(^84^90)(^85^90)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^9C)]
+  [C(^82^9E)(^83^81)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^84)]
+  [D(^82^9F)(^83^86)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^87)]
+  [E(^82^A0)(^83^89)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^8A)]
+  [F(^82^A1)(^83^8C)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^8D)]
+  [10(^82^A2)(^83=1c)(^84^90)(^85^90)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B=)]
+  [11(^82^A3)(^83^93)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^94)]
+  [12(^82^A4)(^83^81)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^84)]
+  [13(^82^A5)(^83^86)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^87)]
+  [14(^82^A6)(^83^89)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^8A)]
+  [15(^82^A7)(^83^99)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^9A)]
+  [16(^82^A8)(^83=c)(^84^90)(^85^90)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B=)]
+  [17(^82^AA)(^83^93)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^94)]
+  [18(^82^AB)(^83^81)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^84)]
+  [19(^82^AC)(^83^86)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^87)]
+  [1A(^82^AD)(^83^89)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^8A)]
+  [1B(^82^AE)(^83^99)(^84=0)(^85=0)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^9A)]
+  [1C(^82^AF)(^83=1c)(^84^90)(^85^90)(^86=0)(^87=0)(^88=0)(^89=0)(^8A=)
+    (^8B^B0)]}
+
+@$${1C{@
+@$$}1C}@

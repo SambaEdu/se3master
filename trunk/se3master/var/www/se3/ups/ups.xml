@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ups>
+ <marque nom="APC">
+
+    <version ver="BackUPS">
+	<driver>genericups</driver>
+   	<type>1</type>
+    </version>
+    <version ver="BackUPS (Cable  940-0095A)">
+	<driver>genericups</driver>
+   	<type>1</type>
+	<cable>940-0095A</cable>
+    </version>
+ 
+   <version ver="BackUPS (Cable 940-0095C)">
+	<driver>genericups</driver>
+   	<type>1</type>
+	<cable>940-0095C</cable>
+    </version>
+   <version ver="BackUPS (Cable 940-0013A)">
+	<driver>genericups</driver>
+	<type>2</type>
+    </version>
+    <version ver="BackUPS (Cable 940-0023A)">
+	<driver>genericups</driver>
+	<cable>940-0023A</cable>
+	<type>9</type>
+    </version>
+    
+  <version ver="BackUPS Pro">
+	<driver>apcsmart</driver>
+  </version>	
+  <version ver="BackUPS Pro (Cable 940-0023A)">
+	<driver>apcsmart</driver>
+	<cable>940-0023A</cable>
+  </version>	
+  <version ver="BackUPS Pro (Cable 940-0024C)">
+	<driver>apcsmart</driver>
+	<cable>940-0024C</cable>
+  </version>	
+  <version ver="BackUPS Pro (Cable 940-0095A)">
+	<driver>apcsmart</driver>
+	<cable>940-0095A</cable>
+  </version>	
+  <version ver="BackUPS Pro (Cable 940-0095B)">
+	<driver>apcsmart</driver>
+	<cable>940-0095B</cable>
+  </version>	
+  <version ver="Matrix-UPS">
+  	<driver>apcsmart</driver>
+  </version>	
+  <version ver="SmartUPS">
+	<driver>apcsmart</driver>
+    </version>
+  <version ver="BackUPS Office">
+  	<driver>genericups</driver>
+	<type>12</type>
+  </version>
+ </marque>
+  
+ <marque nom="Belkin">
+  <version ver="Regulator Pro serial">
+  	<driver>belkin</driver>
+  </version>	
+  <version ver="Ressource">
+  	<driver>genericups</driver>
+	<type>4</type>
+  </version>	
+  <version ver="Home Office F6H350-SER">
+  	<driver>genericups</driver>
+	<type>7</type>
+  </version>	
+  <version ver="Home Office F6H500-SER">
+  	<driver>genericups</driver>
+	<type>7</type>
+  </version>
+  <version ver="Home Office F6H650-SER">
+  	<driver>genericups</driver>
+	<type>7</type>
+  </version>
+  <version ver="Universal UPS F6C800-UNV">
+  	<driver>belkinunv</driver>
+  </version>
+  <version ver="Universal UPS F6C120-UNV">
+  	<driver>belkinunv</driver>
+  </version>
+ </marque>
+  
+ <marque nom="Best Power">
+  <version ver="Fortress (newer)">
+  	<driver>bestups</driver>
+  </version>	
+  <version ver="Fortress Telecom">
+  	<driver>bestups</driver>
+  </version>	
+  <version ver="Axxium Rackmount">
+  	<driver>bestups</driver>
+  </version>	
+  <version ver="Patriot Pro">
+  	<driver>bestups</driver>
+  </version>	
+  <version ver="Patriot Pro II">
+  	<driver>bestups</driver>
+  </version>	
+  <version ver="Patriot">
+  	<driver>genericups</driver>
+	<type>6</type>
+  </version>	
+  <version ver="Micro-Ferrups">
+  	<driver>bestuferrups</driver>
+  </version>	
+ </marque>
+
+ <marque nom="Centralion">
+  <version ver="Blazer">
+  	<driver>blazer</driver>
+  </version>	
+ </marque>
+
+ <marque nom="Cyber Power Systems">
+  <version ver="700AVR">
+  	<driver>cyberpower</driver>
+  </version>	
+  <version ver="900AVR">
+  	<driver>cyberpower</driver>
+  </version>	
+  <version ver="1250AVR">
+  	<driver>cyberpower</driver>
+  </version>	
+  <version ver="1500AVR">
+  	<driver>cyberpower</driver>
+  </version>	
+  <version ver="Power99">
+  	<driver>genericups</driver>
+	<type>7</type>
+  </version>	
+ </marque>
+
+ <marque nom="Effekta">
+	 <version ver="MI/MT/MH">
+	 <cable>2502</cable>	 
+	 <driver>fentonups</driver>
+  </version>	
+ </marque>
+
+ <marque nom="Energy Sistem">
+	 <version ver="Tous">
+	 <cable>2502</cable>	 
+	 <driver>esupssmart</driver>
+  </version>	
+ </marque>
+
+ <marque nom="ETA">
+   <version ver="mini+UPS">
+		 <driver>genericups</driver>
+		 <type>7</type>
+  </version>	
+  <version ver="mini+UPS PRO">
+	  <driver>etapro</driver>
+	  <type>7</type>
+  </version>
+  </marque>
+
+  <marque nom="EverUPS">
+	<version ver="NET DPC">
+		<driver>everups</driver>
+  	</version>	
+	<version ver="AP PRO">
+		<driver>everups</driver>
+  </version>
+  </marque>
+  
+  <marque nom="Ever-Power">
+	  <version ver="625">
+		  <driver>safenet</driver>
+  	</version>	
+	<version ver="1000">
+		<driver>safenet</driver>
+  </version>
+  </marque>
+  
+  <marque nom="Fenton Technologies">
+	  <version ver="PowerPal P-series">
+		  <driver>safenet</driver>
+  	</version>	
+	<version ver="PowerPal L-series">
+		<driver>fentonups</driver>
+  	</version>
+
+  	<version ver="PowerOn">
+		<driver>fentonups</driver>
+  	</version>
+	<version ver="PowerPure">
+		<driver>fentonups</driver>
+  	</version>
+  </marque>
+  
+  <marque nom="Fairstone">
+	  <version ver="L525">
+		  <driver>safenet</driver>
+  	</version>	
+	<version ver="L625">
+		<driver>safenet</driver>
+  	</version>
+  	<version ver="L750">
+	  <driver>safenet</driver>
+  	</version>
+  </marque>
+
+  <marque nom="Fideltronik">
+	  <version ver="Ares 700 et plus">
+		  <driver>genericups</driver>
+		  <type>6</type>
+  	</version>	
+	<version ver="Autres modeles">
+		<driver>genericups</driver>
+		<type>19</type>
+  	</version>
+  </marque>
+
+  <marque nom="Gemini">
+	  <version ver="UPS625">
+		  <driver>safenet</driver>
+  	</version>	
+	<version ver="UPS1000">
+		<driver>safenet</driver>
+  	</version>
+  </marque>
+
+  <marque nom="Infosec">
+	  <version ver="UPS System">
+		  <driver>esupssmart</driver>
+  	</version>	
+  </marque>
+
+  <marque nom="Ippon">
+	  <version ver="Tous">
+		  <driver>ippon</driver>
+  	</version>	
+  </marque>
+  
+  <marque nom="Liebert">
+	  <version ver="UPStation GXT2">
+		  <cable>contact-closure</cable>
+		  <driver>liebert</driver>
+  	</version>	
+  </marque>
+
+  <marque nom="Masterguard">
+	  <version ver="Tous">
+		  <driver>masterguard</driver>
+  	</version>	
+  </marque>
+
+  <marque nom="MGE">
+    <version ver="Ellipse">
+	<driver>mge-shut</driver>
+    </version>
+    <version ver="Pulsar Ellipse S">
+	<driver>mge-shut</driver>
+    </version>
+    <version ver="Pulsar Ellipse Premium S">
+	<driver>mge-shut</driver>
+    </version>
+    <version ver="Pulsar Esprit">
+    	<driver>mge-shut</driver>
+    </version>
+    <version ver="Comet / Galaxy(Serial) HID COM Serial Card (ref 66066)">
+    	<driver>mge-shut</driver>
+    </version>
+    <version ver="Pulsar Evolution">
+    	<driver>mge-shut</driver>
+    </version>
+    <version ver="Pulsar EXtreme C">
+    	<driver>mge-shut</driver>
+    </version>
+    <version ver="Pulsar / Comet EXtreme">
+    	<driver>mge-shut</driver>
+    </version>
+    <version ver="Pulsar ESV+">
+    	<driver>mge-utalk</driver>
+    </version>
+    <version ver="Pulsar ESV">
+    	<driver>mge-utalk</driver>
+    </version>
+    <version ver="Pulsar EX">
+    	<driver>mge-utalk</driver>
+    </version>
+    <version ver="Pulsar EXL">
+    	<driver>mge-utalk</driver>
+    </version>
+    <version ver="Pulsar SX">
+    	<driver>mge-utalk</driver>
+    </version>
+    <version ver="Pulsar ES+">
+    	<driver>mge-utalk</driver>
+    </version>
+    <version ver="Comet / Galaxy (Serial) Utalk Serial Card (ref 66060)">
+    	<driver>mge-utalk</driver>
+    </version>
+ </marque>
+
+ <marque nom="Nitram">
+    <version ver="Elite 500">
+	<driver>genericups</driver>
+	<type>8</type>
+    </version>
+    <version ver="Elite 2002">
+	<driver>genericups</driver>
+	<type>16</type>
+    </version>
+ </marque>
+    
+ <marque nom="Oneac">
+    <version ver="EG/ON Series">
+    	<driver>oneac</driver>
+    </version>
+ </marque>
+
+ <marque nom="Online">
+   <version ver="P-Series">
+   	<driver>genericups</driver>
+	<type>14</type>
+   </version>
+ </marque>  
+
+ <marque nom="Orvaldi Power Protection">
+	 <version ver="Tous (sauf les 400 et 600)">
+		 <driver>fentonups</driver>
+   </version>
+ </marque>  
+
+ <marque nom="Powercom">
+	 <version ver="SMK-800A">
+		 <driver>fentonups</driver>
+   </version>
+   <version ver="ULT-1000">
+		 <driver>fentonups</driver>
+   </version>
+   <version ver="Trust 425/625">
+	   <driver>powercom</driver>
+   </version>
+   <version ver="Advice Partner/King Pr750">
+	   <driver>powercom</driver>
+   </version>
+   <version ver="Autres">
+	   <driver>powercom</driver>
+   </version>
+</marque>  
+
+ <marque nom="PowerGuard">
+	 <version ver="PG-600">
+		 <driver>fentonups</driver>
+   </version>
+ </marque>  
+
+ <marque nom="PowerKinetics">
+	 <version ver="9001">
+		 <driver>genericups</driver>
+		 <type>17</type>
+   </version>
+ </marque>  
+
+ <marque nom="PowerTech">
+   <version ver="Comp1000">
+		 <driver>genericups</driver>
+		 <type>3</type>
+   </version>
+ </marque>  
+
+<marque nom="Powerware">
+   <version ver="3115">
+		 <driver>genericups</driver>
+		 <type>11</type>
+   </version>
+   <version ver="5119">
+		 <driver>genericups</driver>
+		 <type>15</type>
+   </version>
+</marque>  
+
+
+<marque nom="Powerwell">
+   <version ver="PM525A">
+		<driver>safenet</driver>
+   </version>
+   <version ver="PM625A">
+		<driver>safenet</driver>
+   </version>
+   <version ver="PM800A">
+		<driver>safenet</driver>
+   </version>
+   <version ver="PM1000A">
+		<driver>safenet</driver>
+   </version>
+   <version ver="PM1250A">
+		<driver>safenet</driver>
+   </version>
+</marque>  
+
+<marque nom="Repotec">
+   <version ver="RPF525">
+		<driver>safenet</driver>
+   </version>
+   <version ver="RPF625">
+		<driver>safenet</driver>
+   </version>
+   <version ver="RPF800">
+		<driver>safenet</driver>
+   </version>
+   <version ver="RPF1000">
+		<driver>safenet</driver>
+   </version>
+   <version ver="RPT-800A">
+	   <driver>genericups</driver>
+	   <type>13</type>
+   </version>
+   <version ver="RPT-162A">
+	   <driver>genericups</driver>
+	   <type>13</type>
+   </version>
+</marque>  
+
+<marque nom="SMS">
+   <version ver="Manager III">
+		<driver>sms</driver>
+   </version>
+</marque>  
+
+<marque nom="SOLA">
+   <version ver="325">
+		<driver>bestups</driver>
+   </version>
+   <version ver="520">
+		<driver>bestups</driver>
+   </version>
+   <version ver="620">
+		<driver>bestups</driver>
+   </version>
+   <version ver="330">
+	   <driver>blazer</driver>
+   </version>
+</marque>  
+
+<marque nom="Socomec Sicon">
+   <version ver="Egys 420 VA">
+		<driver>powercom</driver>
+   </version>
+</marque>  
+
+<marque nom="Soltec">
+   <version ver="Winmate 525">
+		<driver>safenet</driver>
+   </version>
+   <version ver="Winmate 625">
+		<driver>safenet</driver>
+   </version>
+   <version ver="Winmate 800">
+		<driver>safenet</driver>
+   </version>
+   <version ver="Winmate 800">
+		<driver>safenet</driver>
+   </version>
+   <version ver="Winmate 1000">
+		<driver>safenet</driver>
+   </version>
+</marque>  
+
+<marque nom="Sweex">
+   <version ver="500 smart">
+		<driver>safenet</driver>
+   </version>
+   <version ver="1000 smart">
+		<driver>safenet</driver>
+   </version>
+</marque>  
+
+<marque nom="Tripp-Lite">
+	<version ver="SmartUPS">
+		<driver>tripplite</driver>
+   </version>
+   <version ver="SmartOnline">
+	   <driver>tripplitesu</driver>
+   </version>
+   <version ver="Autres">
+	   <driver>genericups</driver>
+	   <type>5</type>
+   </version>
+</marque>  
+
+<marque nom="UNITEK">
+	<version ver="ALPHA 500 IC">
+		<driver>fentonups</driver>
+   </version>
+</marque>  
+
+<marque nom="UPSonic">
+   <version ver="LAN Saver 600">
+		<driver>genericups</driver>
+		<type>0</type>
+   </version>
+   <version ver="Power Guardian">
+		<driver>genericups</driver>
+		<type>7</type>
+   </version>
+</marque>  
+
+<marque nom="Victron/IMV">
+   <version ver="Lite">
+		<driver>genericups</driver>
+		<type>10</type>
+   </version>
+   <version ver="Autres">
+		<driver>victronups</driver>
+   </version>
+</marque>
+</ups>
