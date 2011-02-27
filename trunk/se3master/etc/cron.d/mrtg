@@ -1,0 +1,1 @@
+0-55/5 *        * * *   root    if [ -x /usr/share/se3/sbin/mrtg-se3 ] && [ -r /etc/mrtg.cfg ]; then env LANG=C /usr/share/se3/sbin/mrtg-se3 /etc/mrtg.cfg >> /var/log/mrtg/mrtg.log 2>&1; fi

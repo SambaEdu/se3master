@@ -1,0 +1,120 @@
+# SambaEdu 3
+# Olivier LECLUSE
+# 01 Septembre 2002 
+
+# Global parameters
+[global]
+	workgroup = #DOMAIN#
+	netbios name = #NETBIOSNAME#
+	server string = Serveur SambaEdu 3
+	interfaces = #IPSERVEUR#/#MASK#
+	encrypt passwords = Yes
+	log file = /var/log/samba/log.%m
+	read size = 8192
+	socket options = TCP_NODELAY SO_KEEPALIVE SO_SNDBUF=8192 SO_RCVBUF=8192
+	character set = ISO8859-1
+	add user script = /usr/share/se3/sbin/machineAdd.pl %m
+	logon script = %u.bat
+	logon drive = K:
+	domain logons = Yes
+	os level = 66
+	domain master = True
+	dns proxy = No
+	wins support = Yes
+	ldap server = #SLAPDIP#
+	ldap port = 389
+	ldap suffix = "#BASEDN#"
+	ldap admin dn = "#ADMINRDN#,#BASEDN#"
+	ldap filter = "(uid=%u)"
+	ldap ssl = no
+	create mask = 0700
+	directory mask = 0700
+	printing = cups
+	printcap = cups
+	printer admin = @admins
+	load printers = yes
+	print command = lpr -s -r -P %p %s
+	hide unreadable = yes
+	hide files = /inventaire/desktop.ini/profil/profile/
+	inherit acls = Yes
+	deadtime = 1
+  keepalive = 30
+
+
+[netlogon]
+	comment = NetLogon
+	path = /home/netlogon
+	browseable = No
+	locking = No
+	root preexec = /usr/share/se3/sbin/mkhome.pl %u %m; /usr/share/se3/sbin/logonpl %u %m %a
+
+[drivers]
+  root preexec = /usr/share/se3/sbin/LcsCanSee.pl %m lcs
+  root preexec close = Yes
+	comment = Pilotes d'imprimante
+	path= /var/se3/drivers
+	read only = no
+	browseable = yes
+	valid users = @admins
+	admin users = @admins
+
+[Docs]
+	comment = Partage Documents
+	path = /var/se3/Docs
+	read only = No
+
+[prof]
+	comment = Partage prof
+	path = /var/se3/prof
+	read only = No
+	valid users = @Profs
+	root preexec close = yes
+	root preexec = /usr/share/se3/sbin/machineInParc.pl %m prof
+
+[Progs]
+  root preexec = /usr/share/se3/sbin/LcsCanSee.pl %m lcs
+  root preexec close = Yes
+	comment = Partage programmes
+	path = /var/se3/Progs
+	read only = No
+	
+[Classes]
+	comment = Partage classes
+	path = /var/se3/Classes
+	read only = No
+
+[admse3]
+	comment = Administration des partages
+	path = /var/se3
+	valid users = @admins
+	admin users = @admins
+	read only = No
+	browseable = No
+
+[admhomes]
+	comment = Administration des homes
+	path = /home
+	valid users = @admins
+	admin users = @admins
+	read only = No
+	browseable = No
+
+[homes]
+	comment = Home de %u
+	path = /home/%u
+	read only = No
+	browseable = No
+	root preexec = /usr/share/se3/sbin/connexion.pl %u %m %I
+	root postexec = /usr/share/se3/sbin/deconnexion.pl %u %m %I
+	hide files = /profile/profil/
+
+[profile]
+  root preexec = /usr/share/se3/sbin/LcsCanSee.pl %m lcs
+  root preexec close = Yes
+	path = /home/%u/profile
+	read only = No
+	create mask = 0600
+	directory mask = 0700
+	nt acl support = No
+
+include = /etc/samba/printers_se3/%m.inc

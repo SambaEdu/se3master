@@ -1,0 +1,6 @@
+dn: cn=Profs,ou=#GROUPS#,#BASEDN#
+objectClass: posixGroup
+objectClass: top
+cn: Profs
+userPassword: {crypt}x
+gidNumber: 5002

@@ -1,0 +1,5 @@
+AuthType Basic
+AuthName "YALA: Authorised Users only"
+AuthUserFile "/var/www/htdocs/yala/.htpasswd"
+AuthGroupFile /dev/null
+Require valid-user

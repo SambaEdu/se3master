@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<Xfce>
+  <Panel orientation="0" layer="0" size="1" popupposition="2" style="0" icontheme="Crystal" groups="6">
+    <Position x="372" y="714"/>
+  </Panel>
+  <Groups>
+    <Group>
+      <Popup>
+        <Item>
+          <Caption/>
+          <Command term="0"/>
+          <Icon id="0"/>
+        </Item>
+      </Popup>
+      <Control id="-2">
+        <Command term="0">xftree</Command>
+        <Tooltip>File manager</Tooltip>
+        <Icon id="2"/>
+      </Control>
+    </Group>
+    <Group>
+      <Popup/>
+      <Control id="-2">
+        <Command term="0">xterm -bg black -fg green -fn 10x20 -cr red</Command>
+        <Tooltip>Terminal</Tooltip>
+        <Icon id="12"/>
+      </Control>
+    </Group>
+    <Group>
+      <Popup>
+        <Item>
+          <Caption>OpenOffice</Caption>
+          <Command term="0">soffice</Command>
+          <Tooltip>OpenOffice</Tooltip>
+          <Icon id="1"/>
+        </Item>
+        <Item>
+          <Caption>Emacs</Caption>
+          <Command term="0">emacs</Command>
+          <Tooltip>Including the kitchen sink</Tooltip>
+          <Icon id="1"/>
+        </Item>
+      </Popup>
+      <Control id="-2">
+        <Command term="0">gvim</Command>
+        <Tooltip>Gvim Editor</Tooltip>
+        <Icon id="1"/>
+      </Control>
+    </Group>
+    <Group>
+      <Popup/>
+      <Control id="-2">
+        <Command term="0">mozilla</Command>
+        <Tooltip>Web browser</Tooltip>
+        <Icon id="7"/>
+      </Control>
+    </Group>
+    <Group>
+      <Popup/>
+      <Control id="-2">
+        <Command term="0">gimp</Command>
+        <Tooltip>The Gimp</Tooltip>
+        <Icon id="8"/>
+      </Control>
+    </Group>
+    <Group>
+      <Popup/>
+      <Control id="-2">
+        <Command term="0">xfprint</Command>
+        <Tooltip>Drag file to print</Tooltip>
+        <Icon id="9"/>
+      </Control>
+    </Group>
+  </Groups>
+</Xfce>

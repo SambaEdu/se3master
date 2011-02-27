@@ -1,0 +1,31 @@
+[Desktop Entry]
+# Icon=3floppy_mount
+# UnmountIcon=3floppy_unmount
+# Dev=/dev/fd0
+# MountPoint=/mnt/floppy
+# ReadOnly=0
+# FSType=Default
+# Type=FSDevice
+Name=Floppy disk
+Name[de]=Diskette
+Name[nl]=Diskettestation
+Actions=Format
+Icon=3floppy_unmount
+Type=Link
+URL=/mnt/floppy
+Comment=File System Device
+Comment[fi]=Tiedostosysteemi
+Comment[pt]=Dispositivo com Sistema de Ficheiros
+Comment[fr]=Périphérique avec système de fichiers
+Comment[pl]=Urz±dzenie
+Comment[it]=Dispositivo con Sistema File
+Comment[de]=Dateisystem
+Comment[nl]=Apparaat
+
+[Desktop Action Format]
+Icon=kfloppy
+Exec=kfloppy;
+Name=Format Floppy disk
+Name[de]=Diskette formatieren
+Name[nl]=Diskette formatteren
+Terminal=1

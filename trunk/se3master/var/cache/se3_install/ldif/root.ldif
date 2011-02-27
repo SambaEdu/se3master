@@ -1,0 +1,22 @@
+dn: cn=root,#BASEDN#
+objectClass: posixAccount
+objectClass: posixGroup
+objectClass: sambaAccount
+gidNumber: 0
+homeDirectory: /root
+uidNumber: 0
+uid: root
+pwdLastSet: 2147483647
+logonTime: 0
+logoffTime: 0
+kickoffTime: 0
+pwdCanChange: 2147483647
+pwdMustChange: 2147483647
+displayName: root
+cn: root
+rid: 0
+primaryGroupID: 0
+lmPassword: 5C8CFE88DAAC33C9AAD3B435B51404EE
+ntPassword: 6CEEFA84BE115E51BEF3007E39FFBA37
+acctFlags: [U          ]
+

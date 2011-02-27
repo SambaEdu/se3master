@@ -1,0 +1,30 @@
+[Colors]
+CurrentPalette=40 Colors
+
+[General]
+InitialHeight=528
+InitialHeight 600=527
+InitialHeight 768=576
+InitialWidth=811
+InitialWidth 1024=974
+InitialWidth 800=792
+UseSystemBell=false
+
+[Index]
+IconSize=Medium
+ViewMode=Tree
+
+[KFileDialog Settings]
+Recent Files=/usr/local/lib/knoppix.gif
+
+[KFileDialog Speedbar]
+Speedbar IconSize=32
+
+[Options]
+colors=true
+icons=true
+overwrite=false
+panel=true
+sounds=true
+wallpapers=true
+wm=true

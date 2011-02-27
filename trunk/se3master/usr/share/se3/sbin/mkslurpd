@@ -1,0 +1,333 @@
+#!/bin/bash
+
+#
+## $Id$ ##
+#
+##### Permet de mettre en place la réplication de l'annuaire LDAP #####
+#
+# Philippe.chadefaux 
+
+############################################################
+# Variables
+############################################################
+
+LDAPGRP="root"
+SLAPDIR="ldap"
+SLAPDCONF="/etc/$SLAPDIR/slapd.conf"
+INITDSLAPD="/etc/init.d/slapd"
+PWDH=`pwd`
+MYSQLIP="localhost"
+SE3DB_ADMIN="se3db_admin"
+SE3PW=`cat /var/www/se3/includes/config.inc.php | grep dbpass= | cut -d\" -f2`	# Peut être passé en ligne de commande avec -p
+BASEDN=""  # Si vide se connecte a la base SQL pour l'obtenir
+ADMINRDN="" 	# Peut être passé en ligne de commande -n (si vide se connecte à MySQL pour l'obtenir)
+ADMINPW=""	# Peut être passé en ligne de commande avec l'option -q (si vide se connecte à MySQL)
+DIR_REPLICA="/var/spool/slurpd/replica"
+LOG_TAG="Replica LDAP"
+DIR_MKSLURPD="/usr/share/se3/sbin"
+
+#############################################################
+# SLURP CONFIGURATION
+#############################################################
+
+# Read the command line parameters
+HELP=1
+while getopts :echl:smp:q:d:n: VAR
+do
+	case $VAR in
+	s ) STATUS=s;	 HELP=0 ;;
+	e ) STATUS=e;	HELP=0 ;;
+	c ) ADDLDAP=c;	HELP=0 ;;
+	p ) PASSMYSQL=p;	SE3PW=$OPTARG;	HELP=0 ;;
+	n ) NAME=n;	ADMINRDN=$OPTARG;	HELP=0 ;;
+	m ) STATUS=m;	HELP=0 ;;
+	q ) ADMINPW=q;	ADMINPW=$OPTARG;	HELP=0 ;;
+	d ) BASEDN=d;	BASEDN=$OPTARG;	HELP=0 ;;
+	l ) LOG=1;	OPTION=$OPTARG;  HELP=0 ;;
+	h ) HELP=1 ;;
+	? ) echo "Option incorrect $OPTARG"
+		HELP=h ;;
+	esac
+done
+shift $((OPTIND-1))
+
+	###############################################################
+	# Partie Aide
+	##############################################################
+
+if [ "$HELP" = "1" ]
+then
+	echo
+	echo "Usage : mkslurpd -esmdcpqnh [ option ]"
+	echo
+	echo " -d : Indique la base Dn de votre annuaire. Si pas indiqué, la recherche dans la base SQL" 
+	echo "  -e : Le serveur LDAP est un unique sur SE3, on détruit les réplicas"
+	echo "  -s [ ip_address ] : Le serveur LDAP est esclave d'un autre serveur"
+	echo "  -m [ ip_address ] : Le serveur LDAP est maitre. Les comptes sont créés sur SE3 et répliqués sur l'esclave"
+	echo "  -c : Compléte les entrées SE3 dans l'annuaire distant. Il est nécessaire d'utiliser l'option -p mot de passe MySQL"
+	echo "  -p [ password ] : Mot de passe de connexion à la base Mysql. A donner afin de trouver les données manquantes"
+	echo "  -n [ Nom ] : Compte de réplication. Defaut ldapadm. Si ce compte n'est pas donné, il est cherché dans la base MySQL"
+	echo "  -q [ password ] : Mot de passe du compte de réplication. Si ce mot de passe n'est pas donné il est cherché dans la base MySQL"
+	echo "  -l [ option ] [ -s | -m ] [ adresse_ip ] Compare les deux annuaires et affiche le résultat -s si SE3 est esclave et l'adresse ip du Maitre ou -m si SE3 est maitre et l'adresse ip du maitre"
+	echo "  -h : Cette aide"
+	echo
+	exit 0
+fi	
+
+	#####################################################
+	# Partie log et synchro manuelle
+	#####################################################
+
+# Affiche la différence entre les deux annuaires
+if [ "$LOG" = "1" ]
+	then
+	cd $DIR_MKSLURPD
+	echo "Affiche les logs, Veuillez patienter...."
+	# Recherche la BASEDN dans la base MySQL
+        if [ "$BASEDN" = "" ]
+	then
+	   BASEDN=`echo "SELECT value FROM params WHERE name='ldap_base_dn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+	fi
+
+
+	# recherche l'annuaire par défaut
+	REPLICA_MASTER=`echo "SELECT value FROM params WHERE name='ldap_server'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+        REPLICA_SLAVE=`echo "SELECT value FROM params WHERE name='replica_ip'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+	
+	# si manque une variable
+	if [ "$BASEDN" = "" -o "$REPLICA_MASTER" = "" ]
+ 	then
+	   logger -t "$REPLICA_LDAP" "Echec du test de l'état de la synchro"
+	   echo "Echec du test de l'état de la synchro"
+	   exit
+	fi
+	
+   	# Verifie si le compte admin a été donné en ligne de commande sinon le cherche dans la base SQL
+	if [ "$ADMINRDN" = "" ]
+	then
+	   ADMINRDN=`echo "SELECT value FROM params WHERE name='adminRdn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+	   # ADMINR=`echo $ADMINRDN |cut -d , -f 1 |cut -d = -f 2`
+	fi
+	if [ "$ADMINPW" = "" ]
+	then
+	   ADMINPW=`echo "SELECT value FROM params WHERE name='adminPw'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+	fi
+
+	# si manque une variable
+	if [ "$ADMINRDN" = "" -o "$BASEDN" = "" -o "$REPLICA_MASTER" = "" -o "$ADMINPW" = "" ]
+	then
+		logger -t "$REPLICA_LDAP" "Echec de la réplication manuelle"
+		"Echec de la réplication manuelle, manque une variable"
+		# Restart LDAP
+		$INITDSLAPD start
+		exit
+	fi
+		
+	echo "$ADMINRDN,$BASEDN;$ADMINPW" > $DIR_MKSLURPD/passM
+	echo "$ADMINRDN,$BASEDN;$ADMINPW" > $DIR_MKSLURPD/passS
+	FORCE_SYNCHRO="-bindmaster ./passM -bindslave ./passS -option $OPTION"
+	
+	echo "$BASEDN"
+	$DIR_MKSLURPD/SyncReplica.pl -master $REPLICA_MASTER -slave $REPLICA_SLAVE -basedn "$BASEDN" $FORCE_SYNCHRO
+
+
+echo "$DIR_MKSLURPD/SyncReplica.pl -master $REPLICA_MASTER -slave $REPLICA_SLAVE -basedn "$BASEDN" $FORCE_SYNCHRO"
+
+	sleep 5
+	rm -f $DIR_MKSLURPD/passM 2>/dev/null
+	rm -f $DIR_MKSLURPD/passS 2>/dev/null
+#	more $DIR_MKSLURPD/ErrReplica.txt
+	exit
+fi
+
+
+  	##############################################################
+	# Début de la partie mise en place du réplica
+	##############################################################
+	
+	echo "  Local LDAP server configuration (even if not used)..."
+	logger -t "$REPLICA_LDAP" "Modification du replica de LDAP"
+  	# Stop ldap
+	killall -9 slurpd
+	$INITDSLAPD stop
+
+	# On vide l'existant quoiqu'il arrive
+	# verifie la presence du répertoire de replica
+	if [ \( -d $DIR_REPLICA \) ]
+	then
+	  rm -Rf $DIR_REPLICA
+	fi
+	
+	  perl -pi -e 's,.*replica.*\n,,' $SLAPDCONF
+	  perl -pi -e 's,.*binddn.*\n,,' $SLAPDCONF 
+	  perl -pi -e 's,.*bindmethod.*\n,,' $SLAPDCONF 
+	  perl -pi -e 's,.*replogfile.*\n,,' $SLAPDCONF 
+	  perl -pi -e 's,.*updatedn.*\n,,' $SLAPDCONF 
+	  perl -pi -e 's,.*updateref.*\n,,' $SLAPDCONF 
+
+
+	# Ajout pour Syncrepl
+	perl -pi -e "s/.*syncrepl.conf//" /etc/ldap/slapd.conf
+	if [ -e "/etc/ldap/syncrepl.conf" ]
+	then
+		rm -f /etc/ldap/syncrepl.conf
+	fi
+
+
+	
+	# recherche l'annuaire par défaut
+	REPLICA_MASTER=`echo "SELECT value FROM params WHERE name='ldap_server'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+        REPLICA_SLAVE=`echo "SELECT value FROM params WHERE name='replica_ip'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+	
+	# Modiifie les fichiers de conf
+        perl -pi -e "s/host .*/host $REPLICA_MASTER/" /etc/libnss-ldap.conf
+	perl -pi -e "s/host .*/host $REPLICA_MASTER/" /etc/pam_ldap.conf
+	perl -pi -e "s§ldapsam:.*§ldapsam:ldap://$REPLICA_MASTER§" /etc/samba/smb.conf
+	perl -pi -e "s/HOST .*/HOST $REPLICA_MASTER/" /etc/ldap/ldap.conf
+								 
+	
+	# CAs ou SE3 est serveur Maitre
+	if [ "$STATUS" = "m" ]
+	  then	
+		# Recherche la BASEDN dans la base MySQL
+		if [ "$BASEDN" = "" ]
+		then
+		   BASEDN=`echo "SELECT value FROM params WHERE name='ldap_base_dn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+		fi
+		# Verifie si le compte admin a été donné en ligne de commande sinon le cherche dans la base SQL
+		if [ "$ADMINRDN" = "" ]
+		then
+		   ADMINRDN=`echo "SELECT value FROM params WHERE name='adminRdn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+		   # ADMINR=`echo $ADMINRDN |cut -d , -f 1 |cut -d = -f 2`
+		fi
+		if [ "$ADMINPW" = "" ]
+		then
+		   ADMINPW=`echo "SELECT value FROM params WHERE name='adminPw'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+		fi
+
+		# si manque une variable
+		if [ "$ADMINRDN" = "" -o "$BASEDN" = "" -o "$REPLICA_MASTER" = "" -o "$ADMINPW" = "" ]
+		then
+			logger -t "$REPLICA_LDAP" "Echec de la mise en place de la réplication Maitre"
+			echo "Echec de la mise en place de la réplication Maitre, manque une variable"
+			# Restart LDAP
+			$INITDSLAPD start
+			exit
+		fi
+		
+		# Enfin modifie le fichier slapd.conf
+#		mkdir /var/lib/ldap/replica
+#	  	chown -R root.$LDAPGRP /var/spool/slurpd/replica
+		echo "replica host=$REPLICA_SLAVE:389" >> $SLAPDCONF
+		echo "	binddn=\"$ADMINRDN,$BASEDN\"" >> $SLAPDCONF
+		echo "	bindmethod=simple	credentials=$ADMINPW" >> $SLAPDCONF
+		echo "replogfile $DIR_REPLICA/replogfile" >> $SLAPDCONF
+
+
+		# Modiifie les fichiers de conf
+		perl -pi -e "s/host .*/host $REPLICA_MASTER/" /etc/libnss-ldap.conf
+		perl -pi -e "s/host .*/host $REPLICA_MASTER/" /etc/pam_ldap.conf
+		perl -pi -e "s§ldapsam:.*§ldapsam:ldap://$REPLICA_MASTER§" /etc/samba/smb.conf
+		perl -pi -e "s/HOST .*/HOST $REPLICA_MASTER/" /etc/ldap/ldap.conf
+					
+	  fi
+
+	# Le serveur SE3 est esclave
+	if [ "$STATUS" = "s" ]
+	  then	
+		# cas serveur esclave
+		echo "Config Slave ..."		
+		if [ "$BASEDN" = "" ]
+		then
+			BASEDN=`echo "SELECT value FROM params WHERE name='ldap_base_dn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+		fi
+
+		# Verifie si le compte admin a été donné en ligne de commande sinon le cherche dans la base SQL
+		if [ "$ADMINRDN" = "" ]
+		then
+		   ADMINRDN=`echo "SELECT value FROM params WHERE name='adminRdn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+		   #ADMINR=`echo $ADMINRDN |cut -d , -f 1 |cut -d = -f 2`
+		fi
+		
+		# si manque une variable
+		if [ "$ADMINRDN" = "" -o "$BASEDN" = "" -o "$REPLICA_MASTER" = "" ]
+		then
+			logger -t "$REPLICA_LDAP" "Echec de la mise en place de la réplication esclave"
+			echo "Echec de la mise en place de la réplication esclave, manque une variable"
+			# Restart LDAP
+			$INITDSLAPD start
+			exit
+		fi
+
+		# recherche l'annuaire par défaut
+		REPLICA_MASTER=`echo "SELECT value FROM params WHERE name='ldap_server'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+        	REPLICA_SLAVE=`echo "SELECT value FROM params WHERE name='replica_ip'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+
+		# Enfin modifie le fichier slapd.conf
+		echo "updatedn \"$ADMINRDN,$BASEDN\" " >> $SLAPDCONF
+		echo "updateref \"ldap://$REPLICA_MASTER:389\"" >> $SLAPDCONF 		
+
+
+		# Modiifie les fichiers de conf
+		perl -pi -e "s/host .*/host $REPLICA_MASTER $REPLICA_SLAVE/" /etc/libnss-ldap.conf
+		perl -pi -e "s/host .*/host $REPLICA_MASTER $REPLICA_SLAVE/" /etc/pam_ldap.conf
+		perl -pi -e "s§ldapsam:.*§ldapsam:ldap://$REPLICA_MASTER§" /etc/samba/smb.conf
+		perl -pi -e "s/HOST .*/HOST $REPLICA_MASTER $REPLICA_SLAVE/" /etc/ldap/ldap.conf
+										
+	fi
+
+	# Restart LDAP
+	$INITDSLAPD start
+	/etc/init.d/samba restart
+	
+	#####################################################################
+	# On ajoute les entrées SE3 dans l'autre annuaire
+	#####################################################################
+	if [ "$ADDLDAP" = "c" -a "$SE3PW" != "" ]
+	then
+		cd /var/cache/se3_install/
+		# Recherche des données dans la base MySQL de SE3
+		BASEDN=`echo "SELECT value FROM params WHERE name='ldap_base_dn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+		ADMINRDN=`echo "SELECT value FROM params WHERE name='adminRdn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+		ADMINPW=`echo "SELECT value FROM params WHERE name='adminPw'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+		PEOPLERDN=`echo "SELECT value FROM params WHERE name='peopleRdn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+		GROUPSRDN=`echo "SELECT value FROM params WHERE name='groupsRdn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+		RIGHTSRDN=`echo "SELECT value FROM params WHERE name='rightsRdn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+		COMPUTERSRDN=`echo "SELECT value FROM params WHERE name='computersRdn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+		PARCSRDN=`echo "SELECT value FROM params WHERE name='parcsRdn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+		PRINTERSRDN=`echo "SELECT value FROM params WHERE name='printersRdn'" | mysql -h $MYSQLIP se3db -u $SE3DB_ADMIN -p$SE3PW -N`
+
+		# Suppression des ou= dans les noms des branches
+		#ADMINR=`echo $ADMINRDN |cut -d , -f 1 |cut -d = -f 2`
+		PEOPLER=`echo $PEOPLERDN |cut -d = -f 2`
+		GROUPSR=`echo $GROUPSRDN |cut -d = -f 2`
+		COMPUTERSR=`echo $COMPUTERSRDN |cut -d = -f 2`
+		PARCSR=`echo $PARCSRDN |cut -d = -f 2`
+		RIGHTSR=`echo $RIGHTSRDN |cut -d = -f 2`
+		PRINTERSR=`echo $PRINTERSRDN |cut -d = -f 2`
+
+		# Ecriture dans l'annuaire des branches et entrÃ©es nÃ©cessaires Ã  SambaEdu3
+		cat ldif/top.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		#cat ldif/cnadmin.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#ADMINRDN#/$ADMINRDN/g" | sed -e "s/#ADMINR#/$ADMINR/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/root.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/People.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#PEOPLE#/$PEOPLER/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/admin.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#PEOPLE#/$PEOPLER/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/Groups.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#GROUPS#/$GROUPSR/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/admins.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#GROUPS#/$GROUPSR/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/lcs-users.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#GROUPS#/$GROUPSR/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/Eleves.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#GROUPS#/$GROUPSR/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/Profs.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#GROUPS#/$GROUPSR/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/Administration.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#GROUPS#/$GROUPSR/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/machines.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#GROUPS#/$GROUPSR/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/Computers.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#COMPUTERS#/$COMPUTERSR/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/Parcs.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#PARCS#/$PARCSR/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/printers.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#PRINTERS#/$PRINTERSR/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/RightsRoot.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#RIGHTS#/$RIGHTSR/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+		cat ldif/rights.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#RIGHTS#/$RIGHTSR/g" | sed -e "s/#PEOPLE#/$PEOPLER/g" | ldapadd -h $REPLICA_MASTER -x -D "$ADMINRDN,$BASEDN" -w $ADMINPW
+  	fi
+
+
+
+
+
+

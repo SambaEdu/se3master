@@ -1,0 +1,3 @@
+dn: ou=#COMPUTERS#,#BASEDN#
+objectClass: organizationalUnit
+ou: #COMPUTERS#
