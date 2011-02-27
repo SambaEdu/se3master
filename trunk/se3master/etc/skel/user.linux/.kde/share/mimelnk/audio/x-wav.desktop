@@ -1,7 +1,0 @@
-[Desktop Entry]
-Comment=WAV-Audio
-Hidden=false
-Icon=sound
-MimeType=audio/x-wav
-Patterns=*.wav;*.WAV
-Type=MimeType

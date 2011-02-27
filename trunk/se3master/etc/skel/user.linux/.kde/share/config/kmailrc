@@ -1,9 +1,0 @@
-[General]
-transports=1
-
-[Transport 1]
-host=
-name=Sendmail
-port=
-precommand=
-type=sendmail

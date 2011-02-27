@@ -1,3 +1,0 @@
-dn: ou=#PEOPLE#,#BASEDN#
-objectClass: organizationalUnit
-ou: #PEOPLE#

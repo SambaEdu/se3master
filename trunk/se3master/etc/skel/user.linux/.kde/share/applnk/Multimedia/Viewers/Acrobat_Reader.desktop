@@ -1,8 +1,0 @@
-[Desktop Entry]
-Comment=Acrobat Reader
-Exec=/usr/bin/acroread
-Icon=mime_empty
-MimeType=application/pdf;Application
-Name=Acrobat Reader
-ServiceTypes=
-Type=Application

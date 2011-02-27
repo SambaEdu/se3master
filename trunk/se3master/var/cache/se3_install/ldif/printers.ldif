@@ -1,3 +1,0 @@
-dn: ou=#PRINTERS#,#BASEDN#
-objectClass: organizationalUnit
-ou: #PRINTERS#

@@ -1,5 +1,0 @@
-AuthGroupFile /dev/null
-AuthName EnterPassword
-AuthType Basic
-require valid-user
-AuthUserFile /var/www/se3/setup/.htpasswd

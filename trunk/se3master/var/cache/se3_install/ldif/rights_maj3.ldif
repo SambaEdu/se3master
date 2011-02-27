@@ -1,5 +1,0 @@
-dn: cn=echange_can_administrate,ou=#RIGHTS#,#BASEDN#
-objectClass: groupOfNames
-cn: echange_can_administrate
-member: uid=admin,ou=#PEOPLE#,#BASEDN#
-

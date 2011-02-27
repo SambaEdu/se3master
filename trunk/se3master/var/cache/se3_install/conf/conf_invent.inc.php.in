@@ -1,8 +1,0 @@
-<?
-//parametre d'acces à la base d'inventaire
-$dbhostinvent="localhost";
-$dbuserinvent="ocsadmin";
-$dbpassinvent="#OCSADMPASS#";
-$dbnameinvent="Inventory";
-
-?>
