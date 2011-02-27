@@ -109,7 +109,7 @@
 					echo "<li>Nom</li>\n";
 					echo "<li>Pr&#233;nom 1</li>\n";
 					echo "<li>Date de naissance</li>\n";
-					echo "<li>Nï¿½ Interne</li>\n";
+					echo "<li>N° Interne</li>\n";
 					echo "<li>Sexe</li>\n";
 					echo "<li>Division</li>\n";
 					echo "</ul>\n";
@@ -151,7 +151,7 @@
 
 					
 					function remplace_accents($chaine){
-						$retour=strtr(preg_replace("/ï¿½/","OE",preg_replace("/ï¿½/","oe",$chaine)),"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½","AAAEEEEIIOOUUUCcaaaeeeeiioouuu");
+						$retour=strtr(preg_replace("/¼/","OE",preg_replace("/½/","oe",$chaine)),"ÀÄÂÉÈÊËÎÏÔÖÙÛÜÇçàäâéèêëîïôöùûü","AAAEEEEIIOOUUUCcaaaeeeeiioouuu");
 						return $retour;
 					}
 
@@ -167,7 +167,7 @@
 						//if(!mkdir("$dossiercsv","0770")){
 						if(!mkdir("csv")){
 /*
-							echo "<p style='color:red;'>Erreur! Le dossier csv n'a pas pu ï¿½tre cr&#233;&#233;.</p>\n";
+							echo "<p style='color:red;'>Erreur! Le dossier csv n'a pas pu être cr&#233;&#233;.</p>\n";
 							echo "<p>Retour &#224; l'<a href='".$_SERVER['PHP_SELF']."'>index</a></p>\n";
 							echo "</div></body></html>\n";
 							die();
@@ -238,9 +238,9 @@
 						// Il faudrait reperer les champs et s'assurer que les champs utiles sont bien presents.
 						/*
 						// Voici la liste des champs de l'export que j'ai fait:
-						Nom;Prenom 1;Date de naissance;Nï¿½ Interne;INE;Sexe;MEF;Statut;Division;Groupe;Option 1;Option 2;Option 3;Option 4;Option 5;Option 6;Option 7;Option 8;Option 9;Option 10;Option 11;Option 12;Regime;Doublement;Legal;Financier;Correspondant;Civilite resp.;Nom resp.;Prenom resp.;Ligne 1 Adresse;Ligne 2 Adresse;Commune resp.;Code postal resp.
+						Nom;Prenom 1;Date de naissance;N° Interne;INE;Sexe;MEF;Statut;Division;Groupe;Option 1;Option 2;Option 3;Option 4;Option 5;Option 6;Option 7;Option 8;Option 9;Option 10;Option 11;Option 12;Regime;Doublement;Legal;Financier;Correspondant;Civilite resp.;Nom resp.;Prenom resp.;Ligne 1 Adresse;Ligne 2 Adresse;Commune resp.;Code postal resp.
 						// A recuperer:
-						Nom;Prenom 1;Date de naissance;Nï¿½ Interne;INE;Sexe;Division;Option 1;...;Option 12;Regime;Doublement;
+						Nom;Prenom 1;Date de naissance;N° Interne;INE;Sexe;Division;Option 1;...;Option 12;Regime;Doublement;
 						MEF: 3EME
 						Legal: 0, 1 ou 2
 						Financier: VRAI ou FAUX
@@ -287,7 +287,7 @@
 						$champ=array("Nom",
 						"Pr&#233;nom 1",
 						"Date de naissance",
-						"Nï¿½ Interne",
+						"N° Interne",
 						"Sexe",
 						"Division");
 						// Analyse:
@@ -352,19 +352,14 @@
 
 
 										//$eleve[$numero]["nom"]=preg_replace("/[^[:space:][:alpha:]]/", "", $tabtmp[$index[0]]);
-										$eleve[$numero]["nom"]=preg_replace("/[^a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ -]/", "", $tabtmp[$index[0]]);
+										$eleve[$numero]["nom"]=preg_replace("/[^a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ -]/", "", $tabtmp[$index[0]]);
 
-										//$eleve[$numero]["prenom"]=preg_replace("/[^[:space:][:alpha:]]/", "", $tabtmp[$index[1]]);
-										//$eleve[$numero]["prenom"]=preg_replace("/[^[:space:][:alpha:][ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]]/", "", $tabtmp[$index[1]]);
-										//$eleve[$numero]["prenom"]=strtr(preg_replace("/[^a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_\s]/", "", strtr($tabtmp[$index[1]],"-","_")),"_","-");
-										//$eleve[$numero]["prenom"]=strtr(preg_replace("/[^a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_\s]/", "", strtr($tabtmp[$index[1]],"-","_")),"_","-");
-										$eleve[$numero]["prenom"]=preg_replace("/[^a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ -]/", "", $tabtmp[$index[1]]);
+										$eleve[$numero]["prenom"]=preg_replace("/[^a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ -]/", "", $tabtmp[$index[1]]);
 
 										unset($tmpdate);
 										$tmpdate=explode("/",$tabtmp[$index[2]]);
 										$eleve[$numero]["date"]=$tmpdate[2].$tmpdate[1].$tmpdate[0];
 										$eleve[$numero]["sexe"]=$tabtmp[$index[4]];
-										//$eleve[$numero]["division"]=preg_replace("/[^[:space:][A-Z][a-z][0-9]]/", "",$tabtmp[$index[5]]);
 										$eleve[$numero]["division"]=preg_replace("/[^a-zA-Z0-9_ -]/", "",remplace_accents($tabtmp[$index[5]]));
 									}
 								}
@@ -511,11 +506,11 @@
 										$eleve[$numero]=array();
 
 										$eleve[$numero]["numero"]=$numero;
-										//$eleve[$numero]["nom"]=preg_replace("/[^[:space:][A-Z][a-z]]/", "", $tabtmp[$index[0]]);;
-										//$eleve[$numero]["nom"]=preg_replace("/[^[:space:][:alnum:]]/", "", $tabtmp[$index[0]]);;
-										$eleve[$numero]["nom"]=preg_replace("/[^a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ -]/", "", $tabtmp[$index[0]]);
-										//$eleve[$numero]["prenom"]=strtr(preg_replace("/[^a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_\s]/", "", strtr($tabtmp[$index[1]],"-","_")),"_","-");
-										$eleve[$numero]["prenom"]=preg_replace("/[^a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ -]/", "", $tabtmp[$index[1]]);
+										//$eleve[$numero]["nom"]=ereg_replace("[^[:space:][A-Z][a-z]]", "", $tabtmp[$index[0]]);;
+										//$eleve[$numero]["nom"]=ereg_replace("[^[:space:][:alnum:]]", "", $tabtmp[$index[0]]);;
+										$eleve[$numero]["nom"]=preg_replace("/[^a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ -]/", "", $tabtmp[$index[0]]);
+										//$eleve[$numero]["prenom"]=strtr(ereg_replace("[^a-zA-Zàäâéèêëîïôöùûü_\s]", "", strtr($tabtmp[$index[1]],"-","_")),"_","-");
+										$eleve[$numero]["prenom"]=preg_replace("/[^a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ -]/", "", $tabtmp[$index[1]]);
 
 										unset($tmpdate);
 										$tmpdate=explode("/",$tabtmp[$index[2]]);
@@ -525,7 +520,7 @@
 										}
 										$eleve[$numero]["date"]=$tmpdate[0]."/".$tmpdate[1]."/".$tmpdate[2];
 										$eleve[$numero]["sexe"]=$tabtmp[$index[4]];
-										//$eleve[$numero]["division"]=preg_replace("/[^[:space:][A-Z][a-z][0-9]]/", "",$tabtmp[$index[5]]);
+										//$eleve[$numero]["division"]=ereg_replace("[^[:space:][A-Z][a-z][0-9]]", "",$tabtmp[$index[5]]);
 										$eleve[$numero]["division"]=preg_replace("/[^a-zA-Z0-9_ -]/", "",remplace_accents($tabtmp[$index[5]]));
 									}
 								}
@@ -583,12 +578,12 @@
 						// ERENO          numero des sresponsables (en liaison avec F_ELE.DBF)
 						// ERENOM         nom  du premier responsable
 						// EREPRE         prenom(s)  du premier responsable
-						// EREADR         nï¿½ + rue   du premier responsable
+						// EREADR         n° + rue   du premier responsable
 						// ERECLD         code postal   du premier responsable
 						// ERELCOM        nom de la commune  du premier responsable
 						// EREANOM        nom du deuxieme responsable
 						// EREAPRE        prenom(s) du deuxieme responsable
-						// EREAADR        nï¿½ + rue  du deuxieme responsable
+						// EREAADR        n° + rue  du deuxieme responsable
 						// EREADRS        complement adresse
 						// EREACLD        code postal  du deuxieme responsable
 						// EREALCOM       nom de la commune  du deuxieme responsable
@@ -615,13 +610,13 @@
 
 
 						// Le CSV de Sconet:
-						//Nom;Prenom 1;Date de naissance;Nï¿½ Interne;INE;Sexe;Division;Option 1;Option 2;Option 3;Option 4;Option 5;Option 6;Option 7;Option 8;Option 9;Option 10;Option 11;Option 12;Regime;Doublement;Legal;Financier;Correspondant;Civilite resp.;Nom resp.;Prenom resp.;Ligne 1 Adresse;Ligne 2 Adresse;Ligne 3 Adresse;Ligne 4 Adresse;Commune resp.;Code postal resp.;Lien de parente;Profession resp.;Situation emploi;Tel maison resp.;Tel travail resp.;Tel mobile resp.;Courriel resp.
+						//Nom;Prenom 1;Date de naissance;N° Interne;INE;Sexe;Division;Option 1;Option 2;Option 3;Option 4;Option 5;Option 6;Option 7;Option 8;Option 9;Option 10;Option 11;Option 12;Regime;Doublement;Legal;Financier;Correspondant;Civilite resp.;Nom resp.;Prenom resp.;Ligne 1 Adresse;Ligne 2 Adresse;Ligne 3 Adresse;Ligne 4 Adresse;Commune resp.;Code postal resp.;Lien de parente;Profession resp.;Situation emploi;Tel maison resp.;Tel travail resp.;Tel mobile resp.;Courriel resp.
 
 	/*
 						$champ=array("Nom",
 						"Pr&#233;nom 1",
 						"Date de naissance",
-						"Nï¿½ Interne",
+						"N° Interne",
 						"Sexe",
 						"Division",
 						"L&#233;gal",
@@ -647,7 +642,7 @@
 						$champ=array("Nom",
 						"Pr&#233;nom 1",
 						"Date de naissance",
-						"Nï¿½ Interne",
+						"N° Interne",
 						"Sexe",
 						"Division",
 						"L&#233;gal",
@@ -728,22 +723,22 @@
 											$eleve[$numero]=array();
 
 											$eleve[$numero]["numero"]=$numero;
-											$eleve[$numero]["nom"]=preg_replace("/[^a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ -]/", "", $tabtmp[$index[0]]);
-											$eleve[$numero]["prenom"]=preg_replace("/[^a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ -]/", "", $tabtmp[$index[1]]);
+											$eleve[$numero]["nom"]=preg_replace("/[^a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ -]/", "", $tabtmp[$index[0]]);
+											$eleve[$numero]["prenom"]=preg_replace("/[^a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ -]/", "", $tabtmp[$index[1]]);
 
 											unset($tmpdate);
 											$tmpdate=explode("/",$tabtmp[$index[2]]);
 											$eleve[$numero]["date"]=$tmpdate[2]."-".$tmpdate[1]."-".$tmpdate[0];
 											$eleve[$numero]["sexe"]=$tabtmp[$index[4]];
-											//$eleve[$numero]["division"]=preg_replace("/[^[:space:][A-Z][a-z][0-9]]/", "",$tabtmp[$index[5]]);
+											//$eleve[$numero]["division"]=ereg_replace("[^[:space:][A-Z][a-z][0-9]]", "",$tabtmp[$index[5]]);
 											$eleve[$numero]["division"]=preg_replace("/[^a-zA-Z0-9_ -]/", "",remplace_accents($tabtmp[$index[5]]));
 
-											//$eleve[$numero]["INE"]=preg_replace("/[^a-zA-Z0-9_ -]/", "",$tabtmp[$index[17]]);
-											//$eleve[$numero]["INE"]=preg_replace("/[^a-zA-Z0-9_ -]/", "",$tabtmp[$index[24]]);
+											//$eleve[$numero]["INE"]=ereg_replace("[^a-zA-Z0-9_ -]", "",$tabtmp[$index[17]]);
+											//$eleve[$numero]["INE"]=ereg_replace("[^a-zA-Z0-9_ -]", "",$tabtmp[$index[24]]);
 											$eleve[$numero]["INE"]=preg_replace("/[^a-zA-Z0-9_ -]/", "",$tabtmp[$index[16]]);
 		/*
 											for($i=6;$i<count($champ);$i++){
-												$eleve[$numero][$champ[$i]][]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[$i]]);
+												$eleve[$numero][$champ[$i]][]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[$i]]);
 											}
 		*/
 											/*
@@ -769,15 +764,15 @@
 										}
 
 
-										// On contrï¿½le que c'est un representant legal (!=0) et en meme temps Correspondant (VRAI).
+										// On contrôle que c'est un representant legal (!=0) et en meme temps Correspondant (VRAI).
 										if(($tabtmp[$index[6]]!="0")&&($tabtmp[$index[7]]=="VRAI")){
 		/*
 											for($i=6;$i<count($champ);$i++){
-												//echo "\$eleve[$numero][$champ[$i]][]=preg_replace("/\"[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]\"/", \"\", \$tabtmp[$index[$i]])<br />";
+												//echo "\$eleve[$numero][$champ[$i]][]=ereg_replace(\"[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]\", \"\", \$tabtmp[$index[$i]])<br />";
 												//if($index[$i]){
 												//echo "\$tabtmp[$index[$i]]=".$tabtmp[$index[$i]]."<br />";
-												$eleve[$numero][$champ[$i]][]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[$i]]);
-												//$eleve[$numero][$champ[$i]][]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[$i]]);
+												$eleve[$numero][$champ[$i]][]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[$i]]);
+												//$eleve[$numero][$champ[$i]][]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜÇçàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[$i]]);
 												//echo "\$index[$i]=|".$index[$i]."|<br />";
 												//$eleve[$numero][$champ[$i]][]=$tabtmp[$index[$i]];
 												//}
@@ -786,9 +781,9 @@
 
 											if($tabtmp[$index[6]]==1){
 		/*
-												$eleve[$numero]["erenom1"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[9]]);
-												$eleve[$numero]["ereprenom1"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[10]]);
-												$eleve[$numero]["ereadr1"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[11]]);
+												$eleve[$numero]["erenom1"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[9]]);
+												$eleve[$numero]["ereprenom1"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[10]]);
+												$eleve[$numero]["ereadr1"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[11]]);
 												$chaine_compl_addr=$tabtmp[$index[12]];
 												if($tabtmp[$index[13]]!=""){
 													$chaine_compl_addr.=",".$tabtmp[$index[13]];
@@ -797,9 +792,9 @@
 													$chaine_compl_addr.=",".$tabtmp[$index[14]];
 												}
 		*/
-												$eleve[$numero]["erenom1"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[8]]);
-												$eleve[$numero]["ereprenom1"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[9]]);
-												$eleve[$numero]["ereadr1"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[10]]);
+												$eleve[$numero]["erenom1"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[8]]);
+												$eleve[$numero]["ereprenom1"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[9]]);
+												$eleve[$numero]["ereadr1"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[10]]);
 												$chaine_compl_addr=$tabtmp[$index[11]];
 												if($tabtmp[$index[12]]!=""){
 													$chaine_compl_addr.=",".$tabtmp[$index[12]];
@@ -809,20 +804,20 @@
 												}
 
 
-												//$eleve[$numero]["ereadrcomplement1"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ ,.-]/", "", $tabtmp[$index[12]].",".$tabtmp[$index[13]].",".$tabtmp[$index[14]]);
-												$eleve[$numero]["ereadrcomplement1"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ ,.-]/", "",$chaine_compl_addr);
+												//$eleve[$numero]["ereadrcomplement1"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ ,.-]/", "", $tabtmp[$index[12]].",".$tabtmp[$index[13]].",".$tabtmp[$index[14]]);
+												$eleve[$numero]["ereadrcomplement1"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ ,.-]/", "",$chaine_compl_addr);
 												/*
-												$eleve[$numero]["erecommune1"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[15]]);
+												$eleve[$numero]["erecommune1"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[15]]);
 												$eleve[$numero]["erecodepost1"]=preg_replace("/[^0-9]/", "", $tabtmp[$index[16]]);
 												*/
-												$eleve[$numero]["erecommune1"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[14]]);
+												$eleve[$numero]["erecommune1"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[14]]);
 												$eleve[$numero]["erecodepost1"]=preg_replace("/[^0-9]/", "", $tabtmp[$index[15]]);
 											}
 											elseif($tabtmp[$index[6]]==2){
 												/*
-												$eleve[$numero]["erenom2"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[9]]);
-												$eleve[$numero]["ereprenom2"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[10]]);
-												$eleve[$numero]["ereadr2"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[11]]);
+												$eleve[$numero]["erenom2"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[9]]);
+												$eleve[$numero]["ereprenom2"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[10]]);
+												$eleve[$numero]["ereadr2"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[11]]);
 												$chaine_compl_addr=$tabtmp[$index[12]];
 												if($tabtmp[$index[13]]!=""){
 													$chaine_compl_addr.=",".$tabtmp[$index[13]];
@@ -830,15 +825,15 @@
 												if($tabtmp[$index[14]]!=""){
 													$chaine_compl_addr.=",".$tabtmp[$index[14]];
 												}
-												//$eleve[$numero]["ereadrcomplement2"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ ,.-]/", "", $tabtmp[$index[12]].",".$tabtmp[$index[13]].",".$tabtmp[$index[14]]);
-												$eleve[$numero]["ereadrcomplement2"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ ,.-]/", "",$chaine_compl_addr);
-												$eleve[$numero]["erecommune2"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[15]]);
+												//$eleve[$numero]["ereadrcomplement2"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ ,.-]/", "", $tabtmp[$index[12]].",".$tabtmp[$index[13]].",".$tabtmp[$index[14]]);
+												$eleve[$numero]["ereadrcomplement2"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ ,.-]/", "",$chaine_compl_addr);
+												$eleve[$numero]["erecommune2"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[15]]);
 												$eleve[$numero]["erecodepost2"]=preg_replace("/[^0-9]/", "", $tabtmp[$index[16]]);
 												*/
 
-												$eleve[$numero]["erenom2"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[8]]);
-												$eleve[$numero]["ereprenom2"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[9]]);
-												$eleve[$numero]["ereadr2"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[10]]);
+												$eleve[$numero]["erenom2"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[8]]);
+												$eleve[$numero]["ereprenom2"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[9]]);
+												$eleve[$numero]["ereadr2"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[10]]);
 												$chaine_compl_addr=$tabtmp[$index[11]];
 												if($tabtmp[$index[12]]!=""){
 													$chaine_compl_addr.=",".$tabtmp[$index[12]];
@@ -846,9 +841,9 @@
 												if($tabtmp[$index[13]]!=""){
 													$chaine_compl_addr.=",".$tabtmp[$index[13]];
 												}
-												//$eleve[$numero]["ereadrcomplement2"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ ,.-]/", "", $tabtmp[$index[12]].",".$tabtmp[$index[13]].",".$tabtmp[$index[14]]);
-												$eleve[$numero]["ereadrcomplement2"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ ,.-]/", "",$chaine_compl_addr);
-												$eleve[$numero]["erecommune2"]=preg_replace("/[^0-9a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ .-]/", "", $tabtmp[$index[14]]);
+												//$eleve[$numero]["ereadrcomplement2"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ ,.-]/", "", $tabtmp[$index[12]].",".$tabtmp[$index[13]].",".$tabtmp[$index[14]]);
+												$eleve[$numero]["ereadrcomplement2"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ ,.-]/", "",$chaine_compl_addr);
+												$eleve[$numero]["erecommune2"]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[14]]);
 												$eleve[$numero]["erecodepost2"]=preg_replace("/[^0-9]/", "", $tabtmp[$index[15]]);
 
 											}
@@ -895,14 +890,14 @@
 								for($j=0;$j<$k;$j++){
 		/*
 									if(($eleve[$numero]["Nom resp."]==$eleve[$tabnumero[$j]]["Nom resp."])&&
-									($eleve[$numero]["Prï¿½nom resp."]==$eleve[$tabnumero[$j]]["Prï¿½nom resp."])&&
+									($eleve[$numero]["Prénom resp."]==$eleve[$tabnumero[$j]]["Prénom resp."])&&
 									($eleve[$numero]["Ligne 1 Adresse"]==$eleve[$tabnumero[$j]]["Ligne 1 Adresse"])&&
 									($eleve[$numero]["Ligne 2 Adresse"]==$eleve[$tabnumero[$j]]["Ligne 2 Adresse"])&&
 									($eleve[$numero]["Ligne 3 Adresse"]==$eleve[$tabnumero[$j]]["Ligne 3 Adresse"])&&
 									($eleve[$numero]["Ligne 4 Adresse"]==$eleve[$tabnumero[$j]]["Ligne 4 Adresse"])&&
 									($eleve[$numero]["Commune resp."]==$eleve[$tabnumero[$j]]["Commune resp."])&&
 									($eleve[$numero]["Code postal resp."]==$eleve[$tabnumero[$j]]["Code postal resp."])&&
-									($eleve[$numero]["Lien de parentï¿½"]==$eleve[$tabnumero[$j]]["Lien de parentï¿½"])&&
+									($eleve[$numero]["Lien de parenté"]==$eleve[$tabnumero[$j]]["Lien de parenté"])&&
 									($eleve[$numero]["Profession resp."]==$eleve[$tabnumero[$j]]["Profession resp."])&&
 									($eleve[$numero]["Situation emploi"]==$eleve[$tabnumero[$j]]["Situation emploi"])&&
 									($eleve[$numero]["Tel maison resp."]==$eleve[$tabnumero[$j]]["Tel maison resp."])&&
@@ -1111,14 +1106,14 @@
 								for($j=0;$j<$k;$j++){
 		/*
 									if(($eleve[$numero]["Nom resp."]==$eleve[$tabnumero[$j]]["Nom resp."])&&
-									($eleve[$numero]["Prï¿½nom resp."]==$eleve[$tabnumero[$j]]["Prï¿½nom resp."])&&
+									($eleve[$numero]["Prénom resp."]==$eleve[$tabnumero[$j]]["Prénom resp."])&&
 									($eleve[$numero]["Ligne 1 Adresse"]==$eleve[$tabnumero[$j]]["Ligne 1 Adresse"])&&
 									($eleve[$numero]["Ligne 2 Adresse"]==$eleve[$tabnumero[$j]]["Ligne 2 Adresse"])&&
 									($eleve[$numero]["Ligne 3 Adresse"]==$eleve[$tabnumero[$j]]["Ligne 3 Adresse"])&&
 									($eleve[$numero]["Ligne 4 Adresse"]==$eleve[$tabnumero[$j]]["Ligne 4 Adresse"])&&
 									($eleve[$numero]["Commune resp."]==$eleve[$tabnumero[$j]]["Commune resp."])&&
 									($eleve[$numero]["Code postal resp."]==$eleve[$tabnumero[$j]]["Code postal resp."])&&
-									($eleve[$numero]["Lien de parentï¿½"]==$eleve[$tabnumero[$j]]["Lien de parentï¿½"])&&
+									($eleve[$numero]["Lien de parenté"]==$eleve[$tabnumero[$j]]["Lien de parenté"])&&
 									($eleve[$numero]["Profession resp."]==$eleve[$tabnumero[$j]]["Profession resp."])&&
 									($eleve[$numero]["Situation emploi"]==$eleve[$tabnumero[$j]]["Situation emploi"])&&
 									($eleve[$numero]["Tel maison resp."]==$eleve[$tabnumero[$j]]["Tel maison resp."])&&

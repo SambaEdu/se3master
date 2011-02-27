@@ -337,7 +337,7 @@ switch ($ajout) {
     	//echo "Detection de l'OS";
     	$brut=$brutout;
    	 
-	$list= preg_split ("/\r\n/", $brutout, 15);
+	$list= split ("\r\n", $brutout, 15);
     	//echo $list[0];
     	$OS="";
       	if ($list[0] == "Windows Registry Editor Version 5.00")  {  $OS="XP";}
@@ -348,7 +348,7 @@ switch ($ajout) {
     	for ($i=1;$i<15;$i++) { if (Ord($list[$i]) == 91) { $branche = $list[$i]; $j=$i+1; next;}}
 
     	$branche = enlevedoublebarre($branche);
-    	list($cle,$valeur)=preg_split("/=/", $list[$j], 2);
+    	list($cle,$valeur)=split("=", $list[$j], 2);
     	$cle = enleveantislash($cle);
     	$cle = enlevequotes($cle);
     	$branche= enlevecrochets($branche);

@@ -154,7 +154,7 @@ PRIMARY KEY ( `identifiant` )
 
 					echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_consulter\" value=\"consulter\" checked=\"true\" /><label for='choix1_consulter' style='cursor:pointer;'> ".gettext("Consulter les param&#233;trages actuels").".</label></p></li>\n";
 					echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_parametrer\" value=\"parametrer\" /><label for='choix1_parametrer' style='cursor:pointer;'> ".gettext("Effectuer des param&#233;trages").".</label></p></li>\n";
-					echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_supprimer\" value=\"supprimer\" /><label for='choix1_supprimer' style='cursor:pointer;'> ".gettext("Supprimer le cache").".</label></p></li>\n";
+					echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_supprimer\" value=\"supprimer\" /><label for='choix1_supprimer' style='cursor:pointer;'> ".gettext("Supprimer le cache").".</label></p></li>\n";  	 
 			                echo "</ul>\n";
 					echo "<input type=\"submit\" name=\"bouton_choix\" value=\"".gettext("Valider")."\"></p>\n";
 					echo "</form>\n";
@@ -818,7 +818,7 @@ PRIMARY KEY ( `identifiant` )
 							$list_groups=search_groups("(&(cn=*) $filter )");
 							$j=0;
 							for ($loop=0; $loop < count ($list_groups) ; $loop++) {
-								if ( preg_match ("/Classe_/", $list_groups[$loop]["cn"]) ) {
+								if ( ereg ("Classe_", $list_groups[$loop]["cn"]) ) {
 									$classe[$j]["cn"] = $list_groups[$loop]["cn"];
 									//$classe[$j]["description"] = $list_groups[$loop]["description"];
 									echo "<option value=\"".$classe[$j]["cn"]."\">".$classe[$j]["cn"]."</option>\n";

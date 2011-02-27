@@ -57,7 +57,7 @@ echo "<title>".gettext("Edition d'une restriction")."</title>";
 if ($choix != "") {
 	$deleteSQL = "delete from restrictions where cleID='$cle' and groupe='$template'";
 	if ($choix == "Active") {
-		$addSQL = "Insert into restrictions values ('', '$cle', '$template', '$value')";
+		$addSQL = "Insert into restrictions values ('', '$cle', '$template', '$value', '0')";
 		mysql_query($deleteSQL);
 		mysql_query($addSQL);
 	}
@@ -79,7 +79,7 @@ if ($choix != "") {
 else {
 	if ($state == "1") $checkedA="checked";
 	if ($state == "0") $checkedI="checked";
-	if ($state == "-1") $checkedD="checked";
+//	if ($state == "-1") $checkedD="checked";
 
 	$query="Select valeur, type, Intitule, antidote from corresp where cleID='$cle'";
 	$result = mysql_query($query);
@@ -91,9 +91,9 @@ else {
 	echo "<input type=\"radio\" name=\"choix\" id='choix_active' value=\"Active\" $checkedA><label for='choix_active'>Active</label><br/>\n";
 	if ($row[1] != "config")
 		echo "<input type=\"radio\" name=\"choix\" id='choix_inactive' value=\"Inactive\" $checkedI><label for='choix_inactive'>Inactive</label><br/>\n";
-	echo "<input type=\"radio\" name=\"choix\" id='choix_nc' value=\"Non configur&eacute;e\" $checkedD><label for='choix_nc'>Non configur&eacute;e</label><br/>";
+//	echo "<input type=\"radio\" name=\"choix\" id='choix_nc' value=\"Non configur&eacute;e\" $checkedD><label for='choix_nc'>Non configur&eacute;e</label><br/>";
 	if ($row[1] == "config")
-		echo "<br/>Valeur: <input type=\"text\" value=\"$value\" name=\"value\" size=\"20\"><br/>";
+		echo "<br/>Valeur: <input type=\"text\" value=\"$value\" name=\"value\" size=\"40\"><br/>";
 	else
 		echo "<input type=\"hidden\" name=\"value\" value=\"$row[0]\">";
 
@@ -101,8 +101,6 @@ else {
 	echo "<input type=\"hidden\" name=\"template\" value=\"$template\">";
 	echo "<input type=\"hidden\" name=\"antidote\" value=\"$row[3]\">";
 
-	echo "<br/><input type=\"submit\" value=\"Valider\">";
-	echo "</form>\n";
 }
 mysql_close();
 

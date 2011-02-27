@@ -44,12 +44,11 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-parcs',"/var/www/se3/locale");
 textdomain ('se3-parcs');
 
-$parc=$_POST['parc'];
-if ($parc=="") { $parc=$_GET['parc']; }
-$parcs=$_POST['parcs'];
-$mpenc=$_POST['mpenc'];
-$description=$_GET['description'];
-$entree=$_GET['entree'];
+$parc=isset($_POST['parc']) ? $_POST['parc'] : (isset($_GET['parc']) ? $_GET['parc'] : "");
+$parcs=isset($_POST['parcs']) ? $_POST['parcs'] : "";
+$mpenc=isset($_POST['mpenc']) ? $_POST['mpenc'] : "";
+$description=isset($_GET['description']) ? $_GET['description'] : "";
+$entree=isset($_GET['entree']) ? $_GET['entree'] : "";
 
 //aide
 $_SESSION["pageaide"]="Gestion_des_parcs";
@@ -92,10 +91,17 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 
 	// Test si le parc possede un template
 	
+	
+	
+	
+	
+	
+	
+	
 
 	// Lecture des membres du parc
 	 $mp_all=gof_members($parc,"parcs",1);
-	if ("$filtrecomp"=="") $mp=$mp_all;
+	if ((!isset($filtrecomp))||("$filtrecomp"=="")) {$mp=$mp_all;}
 			
 	$nombre_machine=count($mp);
 
@@ -166,6 +172,9 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 
 </script>
 <?php
+
+	
+	
 		echo "<div class=\"dock\" id=\"dock\">";
 		echo "<div class=\"dock-container\">";
 		echo "<a class=\"dock-item\" href=\"create_parc.php?parc=$parc\"><span>Ajouter une machine</span><img src=\"../elements/images/computer_large.png\" alt=\"Machine\" /></a>";
@@ -203,7 +212,8 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			
 		echo "<input type=\"hidden\" name=\"delete_parc\" value=\"true\">\n";
 			
-		echo "<TABLE>";
+		//echo "<TABLE border=1>";
+                echo "<TABLE border=1 width=\"60%\">\n<tr class=menuheader style=\"height: 30\">\n";
 		
 		if ($description=="1") {
 			echo "Cliquer sur <img style=\"border: 0px solid ;\" width=\"20\" height=\"20\" src=\"../elements/images/notify.gif\" title=\"Choisir la machine professeur\"> pour choisir une  machine comme machine professeur";
@@ -211,39 +221,64 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			echo "<br><br>";
 		}
 
-		echo "<TR><TD class='menuheader' align=\"center\"></TD>";
-		echo "<TD class='menuheader' align=\"center\">".gettext("Nom")."</TD><TD class='menuheader'>".gettext("Supprimer du parc")."</TD><TD class='menuheader'>".gettext("Supprimer compl&#233;tement")."</TD></TR>\n";
-		echo "<TR><TD class='menuheader' align=\"center\"></TD>";
-		echo "<TD class='menuheader' align=\"center\">".count($mp)."</TD>";
-		echo "<TD class='menuheader' align=\"center\">";
-		echo "<a href=\"javascript:coche_delete('del',true)\">";
+		echo "<tr><td class='menuheader' align=\"center\"><img src='../elements/images/computer_ocs.png'></td>";
+		echo "<td class='menuheader' align=\"center\">".gettext("Stations")."</td>";
+                echo "<td class='menuheader' align=\"center\">".gettext("Adresse IP")."</td>";
+                echo "<td class='menuheader' align=\"center\">".gettext("Derni&#232;re connexion")."</td>";
+                echo "<td class='menuheader' align=\"center\">".gettext("Supprimer du parc")."<br><a href=\"javascript:coche_delete('del',true)\">";
 	        echo "<img src='../elements/images/enabled.png' alt='Cocher tout' title='Cocher tout' border='0' /></a>";
 	        echo " / \n";
 	        echo "<a href=\"javascript:coche_delete('del',false)\">";
-	        echo "<img src='../elements/images/disabled.png' alt='D&#233;cocher tout' title='D&#233;cocher tout' border='0' /></a>\n";
-		echo "</TD>";
-				
-		echo "<TD class='menuheader' align=\"center\">";
-		echo "<a href=\"javascript:coche_delete('sup',true)\">";
+	        echo "<img src='../elements/images/disabled.gif' alt='D&#233;cocher tout' title='D&#233;cocher tout' border='0' /></a>\n";
+		echo "</td>";
+                echo "<td class='menuheader' align=\"center\">".gettext("Supprimer compl&#232;tement")."<br>";
+                echo "<a href=\"javascript:coche_delete('sup',true)\">";
 	        echo "<img src='../elements/images/enabled.png' alt='Cocher tout' title='Cocher tout' border='0' /></a>";
 	        echo " / \n";
 	        echo "<a href=\"javascript:coche_delete('sup',false)\">";
-	        echo "<img src='../elements/images/disabled.png' alt='D&#233;cocher tout' title='D&#233;cocher tout' border='0' /></a>\n";
-		echo "</TD></TR>\n";
+	        echo "<img src='../elements/images/disabled.gif' alt='D&#233;cocher tout' title='D&#233;cocher tout' border='0' /></a>\n";
+                echo "</td></tr>\n";
+
+//                echo "<tr><td class='menuheader' align=\"center\"></td>";
+//		echo "<td class='menuheader' align=\"center\"></td>";
+//		echo "<td class='menuheader' align=\"center\"></td>";
+//		echo "<td class='menuheader' align=\"center\"></td>";
+//		echo "<td class='menuheader' align=\"center\">";
+//
+//
+//		echo "<td class='menuheader' align=\"center\">";
+//
+//		echo "</td></tr>\n";
 
 		// Test la machine prof pour italc
 		$machine_prof=search_description_parc("$parc");
+                $tableau_printer = "<br>";
+                $tableau_printer .= "\n<br>\n<CENTER>\n";
+
+                $tableau_printer .=  "<TABLE border=1 width=\"60%\">\n<tr class=menuheader style=\"height: 30\">\n";
+		$tableau_printer .=  "<tr class='menuheader'>\n";
+		$tableau_printer .=  "<td class='menuheader'></td>\n";
+		$tableau_printer .=  "<td class='menuheader' align=\"center\">Imprimantes</td>\n";
+		$tableau_printer .=  "<td class='menuheader' align=\"center\">Adresse IP</td>\n";
+                $tableau_printer .=  "<td class='menuheader' align=\"center\">".gettext("Supprimer du parc")."</td>";
+                $tableau_printer .=  "<td class='menuheader' align=\"center\">".gettext("Supprimer compl&#232;tement")."</td></tr>\n";
+		$tableau_printer .=  "</tr>\n";
+
+		$suisje_printer="0";
 
 		for ($loop=0; $loop < count($mp); $loop++) {
+		
 			$mpenc=urlencode($mp[$loop]);
 
-			echo "<TR>";
+			
 			// Test si on a une imprimante ou une machine
 			$resultat=search_imprimantes("printer-name=$mpenc","printers");
 			$suisje_printer="non";
 			for ($loopp=0; $loopp < count($resultat); $loopp++) {
 				if ($mpenc==$resultat[$loopp]['printer-name']) {
-					$suisje_printer="yes";	
+					$suisje_printer="yes";
+                                        $printer_in_parc++;
+                                        $uri_printer = $resultat[$loopp]['printer-uri'];
 					continue;
 				}	
 			}
@@ -256,49 +291,118 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 				$inventaire=0;
 			}
 			if ($suisje_printer=="yes") {
-				echo "<TD><img style=\"border: 0px solid ;\" src=\"../elements/images/printer.png\" title=\"Imprimante\" alt=\"Imprimante\" WIDTH=20 HEIGHT=20 ></TD>";
-
-				echo "<TD align=\"center\"><A href='../printers/view_printers.php?one_printer=$mpenc'>$mp[$loop]</A></TD>\n";
+				//$uri_printer = $resultat[$loopp]['printer-uri'];
+                                
+                                if (preg_match("/socket:\/\//", $uri_printer)) {
+                                    $uri_printer_modif = preg_replace("/socket:\/\//", "", $uri_printer);
+                                    $printer_ip = explode(":", $uri_printer_modif);
+                                   // echo $uri_printer;
+                                   $printer_ip = $printer_ip[0];
+                                }
+                                else {
+                                $printer_ip="none";
+                                }
+                                // completion tableau par les donnees recuperees
+                                $tableau_printer .= "<tr>";
+				$tableau_printer .= "<td><img style=\"border: 0px solid ;\" src=\"../elements/images/printer.png\" title=\"Imprimante\" alt=\"Imprimante\" WIDTH=20 HEIGHT=20 ></td>";
+                                $tableau_printer .= "<td align=\"center\"><A href='../printers/view_printers.php?one_printer=$mpenc'>$mp[$loop]</A></td>\n";
+				$tableau_printer .= "<td align=\"center\">$printer_ip</td>";
+                                $tableau_printer .= "<td align=\"center\"><INPUT type=\"checkbox\" name=\"old_computers[]\" id=\"del_$loop\"  value=\"$mpenc\"></td>";
+                                $tableau_printer .= "<td align=\"center\"><INPUT type=\"checkbox\" name=\"supprime_all[]\" id=\"sup_$loop\"  value=\"$mpenc\" onClick=\"coche_machine('del_$loop',true)\"></td>\n";
+                                $tableau_printer .= "</tr>";
 			} else {
+                                echo "<tr>";
 				if($inventaire=="1") {
 		                        // Type d'icone en fonction de l'OS
 		                        $retourOs = type_os($mpenc);
-		                        if($retourOs == "0") { $icone="computer.png"; }
+		                        if($retourOs == "0") { $icone="computer_disable.png"; }
 		                        elseif($retourOs == "Linux") { $icone="linux.png"; }
 		                        elseif($retourOs == "XP") { $icone="winxp.png"; }
 		                        elseif($retourOs == "98") { $icone="win.png"; }
-		                        else { $icone="computer.png"; }
+		                        else { $icone="computer_disable.png"; }
 					$ip=avoir_ip($mpenc);
-					echo "<TD><img style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"".$retourOs." - ".$ip."\" alt=\"$retourOs\" WIDTH=20 HEIGHT=20 onclick=\"popuprecherche('../ocsreports/machine.php?sessid=$sessid&systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=500');\">";
+					echo "<td><img style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"".$retourOs." - ".$ip."\" alt=\"$retourOs\" WIDTH=20 HEIGHT=20 onclick=\"popuprecherche('../ocsreports/machine.php?sessid=$sessid&systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=500');\">";
 				}
 				else
-					echo "<TD><img style=\"border: 0px solid ;\" src=\"../elements/images/computer.png\" alt=\"Ordinateur\" WIDTH=20 HEIGHT=20 >";
+					echo "<td><img style=\"border: 0px solid ;\" src=\"../elements/images/computer.png\" alt=\"Ordinateur\" WIDTH=20 HEIGHT=20 >";
 				
 				
 				// On selectionne la machine prof
 				if ($description=="1") {
 					echo "&nbsp;";
-					echo "<A HREF=../parcs/show_parc.php?description=0&parc=$parc&entree=$mpenc><img style=\"border: 0px solid ;\" src=\"../elements/images/notify.gif\" title=\"Machine professeur\" alt=\"Cliquer pour choisir cette machine\" ></A></TD>";
+					echo "<A HREF=../parcs/show_parc.php?description=0&parc=$parc&entree=$mpenc><img style=\"border: 0px solid ;\" src=\"../elements/images/notify.gif\" title=\"Machine professeur\" alt=\"Cliquer pour choisir cette machine\" ></A></td>";
 
 				} else {
 					// la machine prof est connue	
 					if ($machine_prof==$mpenc) {
 						echo "&nbsp;";
 
-						echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/notify.gif\" title=\"Machine professeur\" alt=\"Machine professeur\" ></TD>";
+						echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/notify.gif\" title=\"Machine professeur\" alt=\"Machine professeur\" ></td>";
 					}
 				}	
 				
-				echo "<TD align=\"center\"><A href='show_histo.php?selectionne=2&amp;mpenc=$mpenc'>$mp[$loop]</A></TD>\n";
-			}
-			echo "<TD align=\"center\"><INPUT type=\"checkbox\" name=\"old_computers[]\" id=\"del_$loop\"  value=\"$mpenc\">";
-			echo "</TD>\n";
+				echo "<td align=\"center\"><A href='show_histo.php?selectionne=2&amp;mpenc=$mpenc'>$mp[$loop]</A></td>\n";
+				$ip = avoir_ip($mpenc);
+				//mysql_close();
+				$authlink = mysql_connect($dbhost,$dbuser,$dbpass);
+				mysql_select_db($dbname,$authlink) or die("Impossible de se connecter &#224; la base $dbname.");
+				$query=" select logintime from connexions where netbios_name='$mpenc' order by id desc limit 1";
+				//$query .= $cnx_start;
+				//$query .= ",10";
+                                $last_cnx[0]="none";
+				$result = mysql_query($query) or die ('ERREUR '.$requete.' '.mysql_error());
+				if (($result)) {
+				  while ($r=mysql_fetch_array($result)) {
+				    $last_cnx_long=$r["logintime"];
+				    $last_cnx = explode(" ", $last_cnx_long);
+				    $time_old = mktime(0,0,0,date("m")-1,date("d"),date("Y"));
+				    
+				    $time_today= time();
+				    //$date_today= date("Ymd",mktime(0,0,0,date("m")-1,date("d"),date("Y")));
+				    $time_last_cnx_array = explode("-", $last_cnx_long);
+				    $time_last_cnx_array2 = explode(" ", $last_cnx_long[2]);
+					//echo "\$time_last_cnx_array[1]=$time_last_cnx_array[1]<br />";
+					//echo "\$time_last_cnx_array[2]=$time_last_cnx_array[2]<br />";
+					//echo "\$time_last_cnx_array[0]=$time_last_cnx_array[0]<br />";
+				    //$time_last_cnx = mktime(0,0,0,$time_last_cnx_array[1],$time_last_cnx_array[2],$time_last_cnx_array[0]);
+				    $time_last_cnx = mktime(0,0,0,$time_last_cnx_array[1],$time_last_cnx_array2[0],$time_last_cnx_array[0]);
+				    
+				  }
+				} else echo gettext("erreur lors de la lecture de la base se3");
+				
+			echo "<td align=\"center\">$ip</td>\n";
+			if  ($time_last_cnx<$time_old) {
+			    echo "<td align=\"center\"><STRONG><FONT color='red'>$last_cnx[0]</FONT></STRONG></td>\n";
+			    }
+			else	{
+			    echo "<td align=\"center\">$last_cnx[0]</td>\n";
+			    }
+				    
+			echo "<td align=\"center\"><INPUT type=\"checkbox\" name=\"old_computers[]\" id=\"del_$loop\"  value=\"$mpenc\">";
+			echo "</td>\n";
 
-			echo "<TD align=\"center\"><INPUT type=\"checkbox\" name=\"supprime_all[]\" id=\"sup_$loop\"  value=\"$mpenc\" onClick=\"coche_machine('del_$loop',true)\"></TD>\n";
-			echo "</TR>";
+			echo "<td align=\"center\"><INPUT type=\"checkbox\" name=\"supprime_all[]\" id=\"sup_$loop\"  value=\"$mpenc\" onClick=\"coche_machine('del_$loop',true)\"></td>\n";
+			echo "</tr>";
+			}
+			
+			//	echo " $ip";
+			
+			
+			
 		}
 		echo "</TABLE>\n";
 
+                $tableau_printer .=  "</table></center>";
+		if (isset($printer_in_parc)) {
+                    echo $tableau_printer;
+                    echo "<br>";
+                    $nb_machines = count($mp)-$printer_in_parc;
+                    echo "<h3>".$nb_machines." station(s) et "."$printer_in_parc"." imprimante(s) ".gettext("dans le parc ")."$parc</h3>";
+                }
+                else {
+
+                    echo "<h3>".count($mp)." station(s) dans le parc "."$parc</h3>";
+                }
 		echo "<input type=\"submit\" value=\"".gettext("Valider")."\">\n";
 		echo "</FORM>\n";
 		echo "</center>";

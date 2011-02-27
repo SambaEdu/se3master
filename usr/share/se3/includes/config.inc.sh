@@ -105,6 +105,16 @@ elif [ "$VERSBOSE" == "2" ]; then
     chmod 700 $fichier
 fi
 
+
+proxy=$(grep "http_proxy=" /etc/profile | head -n 1 | sed -e "s#.*//##;s/\"//")
+
+if [ ! -z "$proxy" ]; then
+export http_proxy="http://$proxy"
+export https_proxy="http://$proxy"
+export ftp_proxy="http://$proxy"
+fi
+
+
 if [ "$CONFIG" == "1" ]; then
     getmysql "1" $VERSBOSE /etc/se3/config_c.cache.sh
     

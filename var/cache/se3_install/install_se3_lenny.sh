@@ -6,7 +6,7 @@
 # Ce script est diftribué selon les termes de la licence GPL
 # **********************************************************
 
-# Adaptation pour etch keyser - Mars 2008
+# Adaptation pour lenny keyser - Mars 2010
 # Activation mode debug
 # Ajout test carte rezo != eth0
 # modif PHPINI="/etc/php5/apache2/php.ini"
@@ -15,7 +15,7 @@
 # modif mrtg
 # modif $INITDAPACHE
 
-#$Id: install_se3_etch.sh 3911 2009-05-15 07:28:41Z gnumdk $
+#$Id: install_se3_.sh 3911 2009-05-15 07:28:41Z gnumdk $
 
 # todo
 # déplacer la section clamav dans le postinst se3-clamav
@@ -27,7 +27,7 @@ set -x
 fi
 #Init annuaire et mise en place DB_CONFIG de se3
 /etc/init.d/slapd stop
-cp -a /var/lib/ldap/DB_CONFIG /root/DB_CONFIG_Etch.ori
+cp -a /var/lib/ldap/DB_CONFIG /root/DB_CONFIG_lenny.ori
 rm -rf /var/lib/ldap/*
 cp /var/cache/se3_install/conf/DB_CONFIG /var/lib/ldap/ 
 chown openldap:openldap /var/lib/ldap/*
@@ -144,8 +144,8 @@ fi
 
 DEBVER=`cat /etc/debian_version`
 echo -e "$COLINFO\c "
-if [ "$DEBVER" = "4.0" ]; then
-	echo "Debian Etch détectée."
+if [ "$DEBVER" = "5.0.4" ]; then
+	echo "Debian lenny détectée."
 fi
 
 
@@ -415,9 +415,9 @@ if [ ! "$rep" = "n" ]; then
 					do
 						echo -e "$COLINFO\c "
 						echo -e "Vous avez demandé à installer le serveur ldap sur une machine distante."
-						echo -e "IL EST INDISPENSABLE QUE LA MACHINE DISTANTE SOIT SOUS DEBIAN ETCH OU QUE L'ANNUAIRE" 
+						echo -e "IL EST INDISPENSABLE QUE LA MACHINE DISTANTE SOIT SOUS DEBIAN LENNY OU QUE L'ANNUAIRE" 
 						echo -e "DISTANT SOIT AU FORMAT SCHEMA CHECK ON POUR QUE L'INSTALLATION ABOUTISSE !"
-						echo -e "par exemple LCS Etch 2.0 répond à ce prérequis" 
+						echo -e "par exemple LCS LENNY répond à ce prérequis" 
 						echo -e "Dans le doute, il est vivement recommandé de laisser l'annuaire en local"
 						echo -e "Etes vous certain de vouloir conserver  votre choix ? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c "
 						read REP_CONFIRM 
@@ -572,49 +572,6 @@ if [ ! "$rep" = "n" ]; then
 			PRINTERSRDN="Printers"
 			TRASHRDN="Trash"
 
-# 			echo -e "$COLTXT"
-# 			echo -e "Entrez le nom de la branche Utilisateurs [${COLDEFAUT}People${COLTXT}] $COLSAISIE\c "
-# 			read PEOPLERDN
-# 			if [ "$PEOPLERDN" = "" ]; then
-# 				PEOPLERDN="People"
-# 			fi
-# 			echo -e "$COLTXT"
-# 			echo -e "Entrez le nom de la branche Groupes [${COLDEFAUT}Groups${COLTXT}] $COLSAISIE\c "
-# 			read GROUPSRDN
-# 			if [ "$GROUPSRDN" = "" ]; then
-# 				GROUPSRDN="Groups"
-# 			fi
-# 			echo -e "$COLTXT"
-# 			echo -e "Entrez le nom de la branche Machines [${COLDEFAUT}Computers${COLTXT}] $COLSAISIE\c "
-# 			read COMPUTERSRDN
-# 			if [ "$COMPUTERSRDN" = "" ]; then
-# 				COMPUTERSRDN="Computers"
-# 			fi
-# 			echo -e "$COLTXT"
-# 			echo -e "Entrez le nom de la branche Parcs [${COLDEFAUT}Parcs${COLTXT}] $COLSAISIE\c "
-# 			read PARCSRDN
-# 			if [ "$PARCSRDN" = "" ]; then
-# 				PARCSRDN="Parcs"
-# 			fi
-# 			echo -e "$COLTXT"
-# 			echo -e "Entrez le nom de la branche Droits [${COLDEFAUT}Rights${COLTXT}] $COLSAISIE\c "
-# 			read RIGHTSRDN
-# 			if [ "$RIGHTSRDN" = "" ]; then
-# 				RIGHTSRDN="Rights"
-# 			fi
-# 			echo -e "$COLTXT"
-# 			echo -e "Entrez le nom de la branche Imprimantes [${COLDEFAUT}Printers${COLTXT}] $COLSAISIE\c "
-# 			read PRINTERSRDN
-# 			if [ "$PRINTERSRDN" = "" ]; then
-# 				PRINTERSRDN="Printers"
-# 			fi
-#
-# 			echo -e "$COLTXT"
-# 			echo -e "Entrez le nom de la branche Corbeille [${COLDEFAUT}Trash${COLTXT}] $COLSAISIE\c "
-# 			read TRASHRDN
-# 			if [ "$TRASHRDN" = "" ]; then
-# 				TRASHRDN="Trash"
-# 			fi
  		fi
 
 
@@ -873,6 +830,11 @@ if [ ! "$rep" = "n" ]; then
 			fi
 		fi
 
+
+		echo -e "$COLTXT"
+		echo -e "Entrez le nom de votre interface reseau [${COLDEFAUT}${ECARD}${COLTXT}] $COLSAISIE\c "
+		read SE3ECARD
+		
 		NETMASK=`/sbin/ifconfig $ECARD |grep inet |cut -d \  -f 16 | cut -d : -f 2`
 		echo -e "$COLTXT"
 		echo -e "Entrez le masque de sous-réseau [${COLDEFAUT}$NETMASK${COLTXT}] $COLSAISIE\c "
@@ -880,6 +842,10 @@ if [ ! "$rep" = "n" ]; then
 		if [ "$SE3MASK" = "" ]; then
 			SE3MASK=$NETMASK
 		fi
+	fi
+	
+	if [ "$SE3ECARD" = "" ]; then
+		SE3ECARD="$ECARD"
 	fi
 
 if [ "$NTDOM" != "$DEFAULT_DOMAIN" -a "$DEFAULT_DOMAIN" != "SAMBAEDU3" ]; then
@@ -920,15 +886,14 @@ fi
 		net groupmap add sid=$DOMAINSID-512 ntgroup=Admins unixgroup=admins type=domain comment="Administrateurs du domaine"
 		net groupmap add ntgroup=Eleves unixgroup=Eleves type=domain comment="Eleves du domaine"
 		net groupmap add ntgroup=Profs unixgroup=Profs type=domain comment="Profs du domaine"
-# 		net groupmap add ntgroup="root" unixgroup="root" type="domain" comment="membres groupe root du domaine"
-# 		net groupmap add sid=$DOMAINSID-515 ntgroup="Domain Computers" unixgroup=machines type=domain comment="MAchines du domaine"
-
+		net groupmap add ntgroup="Utilisateurs du domaine" rid="513" unixgroup="lcs-users" type="domain"
+		net groupmap add ntgroup="machines" rid="515" unixgroup="machines" type="domain"
 
 		echo "UPDATE params SET value=\"$NTDOM\" WHERE name=\"se3_domain\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 		echo "UPDATE params SET value=\"$NETBIOS\" WHERE name=\"netbios_name\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 		echo "UPDATE params SET value=\"$SE3IP\" WHERE name=\"se3ip\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
-
-
+		echo "UPDATE params SET value=\"$SE3MASK\" WHERE name=\"se3mask\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
+		echo "UPDATE params SET value=\"$SE3ECARD\" WHERE name=\"ecard\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 
 	fi
 	/usr/share/se3/sbin/userChangePwd.pl admin $SE3PW
@@ -1100,14 +1065,6 @@ touch /etc/nologin
 #Passage aux mots de pass cryptés
 /usr/sbin/pwconv
 
-# degage conf paquet backuppc
-rm -f /etc/backuppc/localhost.pl
-rm -f /etc/backuppc/config.pl
-
-# Correction de droits
-echo "Remise en place des droits - exécution de permse3"
-/usr/share/se3/scripts/permse3
-
 # Droit sur public, certains etab desactivent public, donc on le fait la et pas dans permse3
 setfacl -m u::rwx /var/se3/Docs/public
 setfacl -m g::rwx /var/se3/Docs/public
@@ -1150,11 +1107,12 @@ if [  -z "$XPPASS" ]; then
 	echo "UPDATE params SET value=\"$XPPASS\" WHERE name=\"xppass\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 fi
 
+### Creation adminse3 dans annuaire et mise en place privileges admin-adminse3 pour mise au domaine
+/usr/share/se3/sbin/create_adminse3.sh
+
 ### remise en place des droits par défaut
 /usr/share/se3/scripts/permse3
 
-### Creation adminse3 dans annuaire et mise en place privileges admin-adminse3 pour mise au domaine
-/usr/share/se3/sbin/create_adminse3.sh
 
 # actualisation du cache des parametres : 
 /usr/share/se3/includes/config.inc.sh -clpbmsdf 
@@ -1162,6 +1120,11 @@ fi
 # Lance postinst de nos dependances, ces dernieres ayant besoin de l'execution du script d'install
 [ -f /var/lib/dpkg/info/se3-logonpy.postinst ] && /var/lib/dpkg/info/se3-logonpy.postinst configure
 [ -f /var/lib/dpkg/info/se3-domain.postinst ] && /var/lib/dpkg/info/se3-domain.postinst configure
+
+#Lancement maj intermediaires si necessaire
+cd /var/cache/se3_install/
+./maj_se.sh
+
 
 echo -e "$COLTITRE"
 echo "Terminé!"

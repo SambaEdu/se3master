@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# $Id: machineDel.pl 5218 2010-02-11 20:53:21Z keyser $ #
+# $Id$ #
 
 ##### Script utilisé pour virer les machines des l'annuaire
 

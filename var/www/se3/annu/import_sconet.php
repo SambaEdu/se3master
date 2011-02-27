@@ -324,6 +324,14 @@
 				echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('Il peut arriver que les comptes existants comportent des informations erron&#233;es<br />(<i>Sconet mal rempli, changement de nom d\'un professeur qui se marie,...</i>)<br />En cochant la case, vous autorisez les corrections des attributs cn, sn, givenName et gecos si des changements sont rep&#233;r&#233;s.<br />Le login/uid n\'est en revanche pas modifi&#233;.')")."\"><img name=\"action_image5\"  src=\"$helpinfo\"></u>\n";
 				echo "</li>\n";
 
+				// ===========================================================
+
+				echo "<li>\n";
+				echo "<label for='alimenter_groupe_pp' style='cursor: pointer;'>Cr&#233;er et alimenter le groupe Professeurs Principaux ? </label><input name='alimenter_groupe_pp' id='alimenter_groupe_pp' type='checkbox' value='y' />\n";
+				echo "&nbsp;&nbsp;";
+				echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('Le groupe des Professeurs Principaux...')")."\"><img name=\"action_image5\"  src=\"$helpinfo\"></u>\n";
+				echo "</li>\n";
+
 				echo "</ul>\n";
 				// ===========================================================
 
@@ -639,7 +647,7 @@
 			}
 
 
-			//$timestamp=preg_replace("/ /","_",microtime());
+			//$timestamp=ereg_replace(" ","_",microtime());
 			$echo_file="$racine_www/Admin/result.$timestamp.html";
 			$dest_mode="file";
 			$fich=fopen("$echo_file","w+");
@@ -710,6 +718,7 @@ decompte(cpt);
 			$creer_matieres=isset($_POST['creer_matieres']) ? $_POST['creer_matieres'] : 'y';
 			// ===========================================================
 			$corriger_gecos_si_diff=isset($_POST['corriger_gecos_si_diff']) ? $_POST['corriger_gecos_si_diff'] : 'n';
+			$alimenter_groupe_pp=isset($_POST['alimenter_groupe_pp']) ? $_POST['alimenter_groupe_pp'] : 'n';
 
 
 			// Dossier pour les CSV
@@ -780,7 +789,7 @@ decompte(cpt);
 
 			//fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff'\n");
 
-			fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff' '$temoin_f_uid'\n");
+			fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff' '$temoin_f_uid' '$alimenter_groupe_pp'\n");
 
 			//echo "<p>#!/bin/bash<br />\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff'</p>\n";
 			// ===========================================================

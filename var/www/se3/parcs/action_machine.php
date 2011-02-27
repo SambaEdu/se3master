@@ -27,8 +27,9 @@
 
 
 include "entete.inc.php";
-include "ldap.inc.php";
-include "ihm.inc.php";
+require_once "ldap.inc.php";
+require_once "ihm.inc.php";
+require_once "fonc_outils.inc.php";
 
 // Internationnalisation
 require_once ("lang.inc.php");
@@ -85,7 +86,7 @@ switch ($action) {
 		
 		echo "<h1>Arr&#234;t de(s) machine(s)</h1>";
 		echo gettext("Commandes prises en compte !")."<br>";
-		$commandes=system("sudo /usr/share/se3/scripts/start_poste.sh $machine shutdown");
+		$commandes=start_poste("shutdown", $machine);
 		echo "<h3>".gettext("Arret lanc&#233 pour le poste")." $machine. ".gettext("(Ne concerne que les machines XP/2000)")."</h3>";
 		echo "<font color=#FF0000>".gettext("Un temps d'attente de plus une minute est n&#233c&#233ssaire pour voir le r&#233sultat dans l'interface")."</font><br>";
 		echo "<br><center>";
@@ -106,8 +107,8 @@ switch ($action) {
 
 		echo gettext("Commandes prises en compte !")."<br>";
 
-		echo "<h3>".gettext("D&#233;marrage effectu&#233 pour le poste")." $parc. ".gettext("(Ne concerne que les machines equip&#233es du syst&#232me 'wake on lan')")."</h3>";
-		$commandes=system("sudo /usr/share/se3/scripts/start_poste.sh $machine wol");
+		echo "<h3>".gettext("D&#233;marrage effectu&#233 pour le poste")." $machine. ".gettext("(Ne concerne que les machines equip&#233es du syst&#232me 'wake on lan')")."</h3>";
+		$commandes=start_poste("wol", $machine);
 		echo "<font color=#FF0000>".gettext("Un temps d'attente de plus une minute est n&#233c&#233ssaire pour voir le r&#233sultat dans l'interface")."</font><br>";
 		
 		echo "<br><center>";

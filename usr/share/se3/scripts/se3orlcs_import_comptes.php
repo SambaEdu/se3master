@@ -1,13 +1,17 @@
 <?php
-        // Detection LCS ou SE3
-        if ( file_exists("/var/www/se3") ) $servertype="SE3";
-        else $servertype="LCS";
+	/*
+		$Id$
+	*/
+
+	// Detection LCS ou SE3
+	if ( file_exists("/var/www/se3") ) {$servertype="SE3";}
+	else {$servertype="LCS";}
 
 	// ===========================================================
 	// AJOUTS: 20070914 boireaus
 	//if($argc < 11 || in_array($argv[1], array('--help', '-help', '-h', '-?'))){
 	//if($argc < 15 || in_array($argv[1], array('--help', '-help', '-h', '-?'))){
-	if($argc < 16 || in_array($argv[1], array('--help', '-help', '-h', '-?'))){
+	if($argc < 17 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
 	// ===========================================================
 		$chaine="USAGE: Vous devez passer en paramètres (dans l'ordre):\n";
 		$chaine.="       . Le type du fichier 'csv' ou 'xml';\n";
@@ -31,13 +35,14 @@
 		$chaine.="       . 'y' ou 'n' selon que vous souhaitez corriger ou non les attributs\n";
 		$chaine.="                    gecos, cn, sn et givenName si des différences sont trouvées.\n";
 		$chaine.="       . 'y' ou 'n' selon qu'il faut utiliser ou non un fichier F_UID.txt\n";
+		$chaine.="       . 'y' ou 'n' selon qu'il faut alimenter un groupe Professeurs Principaux\n";
 		// ===========================================================
 
 
 
 		echo $chaine;
 
-		if($servertype=="LCS"){
+		if($servertype=="LCS") {
 			require ("/var/www/lcs/includes/config.inc.php");
 			$adressedestination="admin@$domain";
 			$sujet="ERREUR: import_comptes.php ";
@@ -45,14 +50,14 @@
 			$entete="From: root@$domain";
 			mail("$adressedestination", "$sujet", "$message", "$entete");
 		}
-		else{
+		else {
 			// Récupérer les adresses,... dans le /etc/ssmtp/ssmtp.conf
 			unset($tabssmtp);
 			#require ("/var/www/se3/import_sconet/crob_ldap_functions.php");
 			require ("/var/www/se3/includes/crob_ldap_functions.php");
 			$tabssmtp=lireSSMTP();
 			// Contrôler les champs affectés...
-			if(isset($tabssmtp["root"])){
+			if(isset($tabssmtp["root"])) {
 				$adressedestination=$tabssmtp["root"];
 				$sujet="ERREUR: import_comptes.php ";
 				$message=$chaine;
@@ -63,13 +68,13 @@
 		exit();
 	}
 
-	if($servertype=="LCS"){
+	if($servertype=="LCS") {
 		require ("/var/www/lcs/includes/config.inc.php");
 		include "/var/www/Annu/includes/ldap.inc.php";
 		include "/var/www/Annu/includes/ihm.inc.php";
 		require ("/var/www/Annu/includes/crob_ldap_functions.php");
 	}
-	else{
+	else {
 		include "/var/www/se3/includes/ldap.inc.php";
 		include "/var/www/se3/includes/ihm.inc.php";
 		require ("/var/www/se3/includes/config.inc.php");
@@ -102,9 +107,14 @@
 	// ===========================================================
 	$temoin_f_uid=$argv[15];
 	// ===========================================================
+	$alimenter_groupe_pp=$argv[16];
+	// ===========================================================
+
+	// Pour effectuer des affichages de debug:
+	$debug_import_comptes="n";
 
 	// Chemins:
-	if($servertype=="LCS"){
+	if($servertype=="LCS") {
 		$racine_www="/var/www";
 		$www_import="/Annu/import_sconet.php";
 		$chemin_http_csv="setup/csv/".$timestamp."_".$randval;
@@ -115,12 +125,21 @@
 		$pathscripts="/usr/share/lcs/scripts";
 		$user_web = "www-data";
 	}
-	else{
+	else {
 		$racine_www="/var/www/se3";
 		$www_import="/annu/import_sconet.php";
 		$chemin_http_csv="setup/csv/".$timestamp."_".$randval;
 		$dossiercsv=$racine_www."/".$chemin_http_csv;
 		$echo_file="$racine_www/Admin/result.$timestamp.html";
+		$sql="SELECT value FROM params WHERE name='se3ip';";
+		$res_ip=mysql_query($sql);
+		if(mysql_num_rows($res_ip)>0) {
+			$lig_ip=mysql_fetch_object($res_ip);
+			$baseurl="http://".$lig_ip->value.":909";
+		}
+		else {
+			$baseurl="http://IP_SE3:909";
+		}
 		$echo_http_file="$baseurl/Admin/result.$timestamp.html";
 		$dossier_tmp_import_comptes="/var/lib/se3/import_comptes";
 		$pathscripts="/usr/share/se3/scripts";
@@ -135,7 +154,7 @@
 		$domainsid = $retvalsid[0];
 		// Si il n'y a pas de sambaSID dans l'annuaire, on fixe une valeur factice
 		// Il faudra appliquer un correct SID lors de l'installation d'un se3
-		if (!isset($domainsid)) $domainsid ="S-0-0-00-0000000000-000000000-0000000000";
+		if (!isset($domainsid)) {$domainsid ="S-0-0-00-0000000000-000000000-0000000000";}
 	}
 
 	// AJOUT: 20080610

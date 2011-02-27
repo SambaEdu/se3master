@@ -40,7 +40,7 @@ echo "<h1>".gettext("Annuaire")."</h1>\n";
 
 
 if (is_admin("Annu_is_admin",$login)=="Y") {
-	$filter=profs;
+	$filter="profs";
 
 	aff_trailer ("1");
 	#$TimeStamp_0=microtime();
@@ -63,14 +63,14 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 
 		// Professeur abs
 		echo "<TABLE BORDER=0><TR><TD><BR>".gettext("Professeur absent ")." </TD><TD><BR>";
-		echo"<SELECT name='uid'>";
+		echo "<SELECT name='uid'>";
 		  echo $liste;					
-		echo"</SELECT>	</TD>\n";
-		echo"</TR></TABLE><BR><HR>\n";
+		echo "</SELECT>	</TD>\n";
+		echo "</TR></TABLE><BR><HR>\n";
 
 		// Professeur remplacant
 		echo "<TABLE BORDER=0><TR><TD><BR>".gettext("Professeur rempla&#231;ant ")."</TD><TD><BR>";
-		echo"<SELECT name='remplacant'>";
+		echo "<SELECT name='remplacant'>";
 		echo $liste;
 		echo "</SELECT>	</TD>\n";
 		echo "</TR>\n";

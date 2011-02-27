@@ -94,18 +94,131 @@ function avoir_nom($ipHost) { // Retourne le nom d'une machine a partir de l'adr
                  
 	$mp_curr=search_machines("(&(ipHostNumber=$ipHost)(objectClass=ipHost))","computers");
         if ($mp_curr[0]["cn"]) {
-                $mpenc=$mp_curr[0]["cn"];
+                $mpenc=$mp_curr[0]['cn'];
 		return $mpenc;
 	} else {
 		return 0;
 	}	
 }	
 
-
-
    /**
 
-   * Fonctions qui retourne si une machine a une demande de maintenance et le type 
+   * Fonctions qui retourne l'adresse mac d'une machine en fonction de son nom
+	
+   * @Parametres nom de la machnie
+
+   * @Return adresse mac
+	
+  */
+  
+function avoir_mac($mpenc) { 
+    
+    require_once("ldap.inc.php");
+                 
+    $mp_curr=search_machines("(&(cn=$mpenc)(objectClass=ipHost))","computers");
+//    echo "mac:".$mp_curr[0]['macAddress']."<br>";
+    if ($mp_curr[0]['macAddress']) {
+	        $ret=$mp_curr[0]['macAddress'];
+	        return $ret;
+	} else {
+		return 0;
+	}	
+}	
+
+
+/**
+* Retourne la config de l'interface serveur
+
+* @Parametres
+
+* @Return tableau des caractéristiques reseau
+
+*/
+
+function ifconfig()
+{
+    include ("config.inc.php");
+    require_once ("ihm.inc.php");
+    $reseau['mask']=exec("/sbin/ifconfig | grep ".$se3ip." | awk '{print $4}' | sed 's/Masque://;s/Mask://'");
+    $reseau['broadcast']=exec("/sbin/ifconfig | grep ".$se3ip." | awk '{print $3}' | sed 's/Bcast://'");
+    $reseau['network']=long2ip( ip2long($reseau['broadcast']) & ip2long($reseau['mask']));
+    $reseau['interface']=exec("route -n | grep ".$reseau['network']." | awk '{print $8}'" );
+    $reseau['gateway']=exec("route -n | grep UG | awk '{print $2}'" );
+    return $reseau;
+}
+
+/**
+* Demarre, eteint ou reboote un poste
+
+* @Parametres action: wol, reboot, shutdown
+*             nom : nom du poste
+
+* @Return 
+
+*/
+
+function start_poste($action, $name)
+{
+    include ("config.inc.php");
+    require_once ("ihm.inc.php");
+    require_once ("ldap.inc.php");
+    $ip=avoir_ip($name);
+    $mac=avoir_mac($name);
+
+    if ("$action" == "wol") {
+        if ($dhcp == 1 ) {
+            require_once ("dhcp/dhcpd.inc.php");
+            $reseau=get_vlan($ip);
+            system ( "/usr/bin/wakeonlan -i ".long2ip($reseau['broadcast'])." ".$mac );
+        }
+        else {
+            $reseau=ifconfig();
+            system ( "/usr/bin/wakeonlan -i ".$reseau['broadcast']." ".$mac );
+        }
+
+//        echo "/usr/bin/wakeonlan -i ".long2ip($reseau['broadcast'])." ".$mac."<br>";
+//	system ( "/usr/bin/wakeonlan -i ".long2ip($reseau['broadcast'])." ".$mac );
+    }
+    else {
+		// J ai SVN qui veut pas envoyer ma modification cosmetique...
+        echo "On eteint avec l action <b>".$action."</b> le poste <b>".$name."</b>.<br>\n";
+        if (search_samba($name)) {
+            // machine windows
+            if ("$action" == "shutdown") {$switch="";} else {$switch="-r";}        
+//            $ret.="/usr/bin/net rpc shutdown -t 2 -f ".$switch." -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"<br>";
+	    $ret.=system ("/usr/bin/net rpc shutdown -t 2 -f ".$switch." -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\""); 
+        }
+        else {
+            // poste linux : ne marchera pas, mais on verra plus tard...
+            system ( "/usr/bin/ssh -o StrictHostKeyChecking=no ".$name." halt");
+        }
+    }
+    return $ret;
+}
+
+/**
+* Demarre, eteint ou reboote un parc
+
+* @Parametres action: wol, reboot, shutdown
+*             parc : nom du parc
+
+* @Return 
+
+*/
+
+function start_parc($action, $parc)
+{
+    include ("config.inc.php");
+    require_once ("ldap.inc.php");
+    require_once ("ihm.inc.php");
+    $liste=liste_parc($parc);
+    foreach( $liste['computers'] as $key=>$value ) {
+        start_poste($action, $value);
+    }
+}
+   /**
+
+   * Fonction qui retourne si une machine a une demande de maintenance et le type 
 	
    * @Parametres  Nom de la machine 
 
@@ -240,7 +353,7 @@ function avoir_systemid($nom_machine) { // retourne l'ID de $nom_machine ou 0 a 
   */
   
 function type_os($nom_machine) { // retourne l'os de la machine
-        include "dbconfig.inc.php";
+    include "dbconfig.inc.php";
 	$dbnameinvent="ocsweb";
 
 	$authlink_invent=@mysql_connect($_SESSION["SERVEUR_SQL"],$_SESSION["COMPTE_BASE"],$_SESSION["PSWD_BASE"]);

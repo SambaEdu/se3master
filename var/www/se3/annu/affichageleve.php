@@ -98,37 +98,37 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 echo "&nbsp;".gettext("Veuillez contacter</div> <A HREF='mailto:$MelAdminLCS?subject=PB creation groupe'>l'administrateur du syst&#232;me</A>")."<BR>\n";
 				exit();
 			}
-    		}
+		}
 	}
-	echo "<B>".gettext("S&#233;lectionner les personnes &#224; mettre dans le groupe ci-dessus :")."</B><BR>";
-	echo "<form action=\"constitutiongroupe.php\" method=\"post\">";
-	echo "<table border=\"0\" cellspacing=\"10\">";    
-	echo "<TR>";
+	echo "<B>".gettext("S&#233;lectionner les personnes &#224; mettre dans le groupe ci-dessus :")."</B><BR>\n";
+	echo "<form action=\"constitutiongroupe.php\" method=\"post\">\n";
+	echo "<table border=\"0\" cellspacing=\"10\">\n";    
+	echo "<TR>\n";
 	for ($loop=0; $loop < count($filter); $loop++) {
-    		echo "<TD>$filter[$loop]</TD>";
+    		echo "<TD>$filter[$loop]</TD>\n";
 	}
-	echo "</TR>";    
-	echo "<TR>";
+	echo "</TR>\n";    
+	echo "<TR>\n";
 	for ($filt=0; $filt < count($filter); $filt++) {
       		$uids=search_uids("(cn=".$filter[$filt].")");
       		$people=search_people_groups($uids,"(sn=*)","cat");
       		echo "<td valign=\"top\">";
       		//echo "<B>$filter[$filt]</B>";
-      		echo "<select name=\"eleves[]\" size=\"10\"  multiple=multiple>";
+      		echo "<select name=\"eleves[]\" size=\"10\"  multiple=multiple>\n";
       		for ($loop=0; $loop < count($people); $loop++) {
-      			echo "<option value=".$people[$loop]["uid"].">".$people[$loop]["fullname"];
+      			echo "<option value=".$people[$loop]["uid"].">".$people[$loop]["fullname"]."</option>\n";
        		}
-		echo"</select><td>";
+		echo "</select>\n</td>\n";
 	}
-	echo "</TR>";    
-	echo "</table>";    
-	echo "<BR><BR>";    
+	echo "</TR>\n";    
+	echo "</table>\n";    
+	echo "<BR><BR>\n";    
 	$CREER_REP=$_POST['CREER_REP'];
 	echo "<input type=\"hidden\" name=\"cn\" value=\"$cn\">
       	      <input type=\"hidden\" name=CREER_REP value=\"$CREER_REP\">
       	      <input type=\"submit\" value=\"".gettext("valider")."\">
-      	      <input type=\"reset\" value=\"".gettext("R&#233;initialiser la s&#233;lection")."\">";
-	echo"</form>";
+      	      <input type=\"reset\" value=\"".gettext("R&#233;initialiser la s&#233;lection")."\">\n";
+	echo "</form>\n";
 
 }//fin is_admin
 	

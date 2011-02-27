@@ -61,10 +61,28 @@ if (d) {d.style.display='block';}
 
 function okshutdown()
 {
-	resultat=confirm('Confirmez l'arret des postes');
+	//resultat=confirm('Confirmez l'arret des postes');
+	resultat=confirm('Confirmez l\'arret des postes');
 	if(resultat !="1")
 	window.history.back()
 }
+
+//==================================
+/**
+
+* Valide le reboot
+* @language Javascript
+* @Parametres  
+* @Return
+*/
+
+function okreboot()
+{
+	resultat=confirm('Confirmez le reboot des postes');
+	if(resultat !="1")
+	window.history.back()
+}
+//==================================
 
 /**
 
@@ -76,7 +94,8 @@ function okshutdown()
 
 function okwol()
 {
-	resultat=confirm('Confirmez l'allumage des postes');
+	//resultat=confirm('Confirmez l'allumage des postes');
+	resultat=confirm('Confirmez l\'allumage des postes');
 	if(resultat !="1")
 	window.history.back()
 }
@@ -85,9 +104,10 @@ function okwol()
 
 <?php
 include "entete.inc.php";
-include "ldap.inc.php";
-include "ihm.inc.php";
-include "fonc_parc.inc.php";
+require_once "ihm.inc.php";
+require_once "ldap.inc.php";
+require_once "fonc_parc.inc.php";
+require_once "fonc_outils.inc.php";
 
 //aide
 $_SESSION["pageaide"]="Gestion_des_parcs#Action_sur_parcs";
@@ -135,10 +155,28 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
         		echo "<h3>".gettext("Arr&#234;t lanc&#233; pour le parc")." $parc</h3>\n";
 			echo"<br>";
 			echo gettext("(Ne concerne que les machines XP/2000)");
-			$commandes=system("sudo /usr/share/se3/scripts/start_client.sh $parc shutdown");
+			$commandes=start_parc("shutdown", $parc);
 
  		} else { echo gettext("Vous devez choisir un parc"); }
 	break;
+
+
+	//==============================
+	// Reboot de toutes les machines
+	case "stop":
+		if (($parc)  and ($parc<>"SELECTIONNER")) {
+			if ($acces_restreint)  {  if ((!this_parc_delegate($login,$parc,"manage")) and (!this_parc_delegate($login,$parc,"view"))) { continue; } }
+			echo "<HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"15; URL=action_parc.php?parc=$parc&action=detail\">";
+			echo "</HEAD>".gettext("Modification effectu&#233;e pour le groupe")." : $parc<br>";
+        		echo gettext(" Commandes prises en compte ! ");
+        		echo "<h3>".gettext("Reboot lanc&#233; pour le parc")." $parc</h3>\n";
+			echo "<br>";
+			echo gettext("(Ne concerne que les machines XP/2000)");
+			$commandes=start_parc("reboot", $parc);
+
+ 		} else { echo gettext("Vous devez choisir un parc"); }
+	break;
+	//==============================
 
 
 	// Essaye de demarrer les machines
@@ -151,7 +189,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 			echo "<br>";
 			echo gettext("Demarrage effectu&#233; pour le parc")." $parc. ".gettext("(Ne concerne que les machines equip&#233;es du syst&#232;me 'wake on lan')");
 
-	 		$commandes=system("sudo /usr/share/se3/scripts/start_client.sh $parc wol");
+	 		$commandes=start_parc("wol", $parc);
 		} else { echo gettext("Vous devez choisir un parc"); }
 	break;
 

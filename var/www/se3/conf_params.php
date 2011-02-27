@@ -289,6 +289,19 @@ if ($action == "modif_gid") {
 }
 echo "</td></tr>\n";
 
+// Affichage ou non script de login
+
+echo "<TR><TD>".gettext("Masquage du script &#224; l'ouverture de session windows")."</TD><TD align=\"center\">";
+if ($hide_logon=="0") {
+	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Le script de connexion de windows est actuellement visible des utilisateurs.<br><br> Cliquez sur le bouton si vous voulez le masquer.')")."\">";
+	echo "<a href=conf_params.php?action=change&amp;varb=hide_logon&amp;valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
+	echo "</u>";
+} else {
+	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Le script de connexion de windows est actuellement masqu&#233;.<br><br>Cliquez sur le bouton si vous voulez le rendre visible des utilisateurs. ')")."\">";
+	echo "<a href=conf_params.php?action=change&amp;varb=hide_logon&amp;valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
+	echo "</u>";
+}
+echo "</td></tr>\n";
 
 // Configuration du serveur smtp 
 echo "<TR><TD colspan=\"2\" align=\"center\" class=\"menuheader\">\n";

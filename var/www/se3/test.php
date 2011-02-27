@@ -45,33 +45,33 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 //	if (ldap_get_right("se3_is_admin",$login)=="Y")  {
 
-	if ($_GET[action] == "setadminse3smbpass") {
+	if ((isset($_GET['action']))&&($_GET['action'] == "setadminse3smbpass")) {
 			exec('/usr/bin/sudo /usr/share/se3/scripts/change_adminse3_smbpass.sh');
 	}
 
-		//if ($_GET[action] == "updatesystem") {
+		//if ($_GET['action'] == "updatesystem") {
 		//	exec('/usr/bin/sudo /usr/share/se3/scripts/se3_update_system.sh --auto');
 		//    unset($action);
 		// }
-	if ($_GET[action] == "updatesystem") {
+	if ((isset($_GET['action']))&&($_GET['action'] == "updatesystem")) {
 		$info_1 = gettext("Mise &#224; jour syst&#232;me lanc&#233;e, ne fermez pas cette fen&#234;tre avant que le script ne soit termin&#233;. vous recevrez un mail r&#233;capitulatif de tout ce qui sera effectu&#233;...");
 		echo $info_1;
 		system('sleep 1; /usr/bin/sudo /usr/share/se3/scripts/se3_update_system.sh --auto &');
 		unset($action);
 	}
-	if ($_GET[action] == "settime") {
+	if ((isset($_GET['action']))&&($_GET['action'] == "settime")) {
 		exec('/usr/bin/sudo /usr/share/se3/sbin/settime.sh');
 	}
-	if ($_GET[action] == "startsamba") {
+	if ((isset($_GET['action']))&&($_GET['action'] == "startsamba")) {
 		exec('/usr/bin/sudo /usr/share/se3/scripts/services.sh samba restart');
 	}
-	if ($_GET[action] == "installse3-domain") {
+	if ((isset($_GET['action']))&&($_GET['action'] == "installse3-domain")) {
 		$info_1 = gettext("Mise &#224; jour lanc&#233;e, ne fermez pas cette fen&#234;tre avant que le script ne soit termin&#233;. vous recevrez un mail r&#233;capitulatif de tout ce qui sera effectu&#233;...");
 	echo $info_1;
 	system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh se3-domain");
 	}
 	
-	if ($action == "exim_mod") {
+	if ((isset($_GET['action']))&&($_GET['action'] == "exim_mod")) {
 		$fichier = "/etc/ssmtp/ssmtp.conf";
 		$fp=fopen("$fichier","w+");
 		$DEFAUT = "
@@ -85,7 +85,7 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 	}
 
 
-	if ($_GET[action] == "mail_test") {
+	if ((isset($_GET['action']))&&($_GET['action'] == "mail_test")) {
        	$dc_root=exec('cat /etc/ssmtp/ssmtp.conf | grep root= | cut -d= -f2');
 	       $subject = gettext("Test de la configuration de votre serveur Se3");
         	$message = gettext("Message envoy&#233; par le serveur Se3");
@@ -156,7 +156,7 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 	// leb 30sept2007
 	if ($ligne_internet != "0%") { // test acces http
 	   //$http=exec("cd /tmp; wget -q ---tries=1 --connect-timeout=1 http://wawadeb.crdp.ac-caen.fr && echo \$? | rm -f /tmp/index.html.1*",$out,$retour);
-	   $http=exec("cd /tmp; wget -q --tries=1 --connect-timeout=1 http://wawadeb.crdp.ac-caen.fr && echo \$? | rm -f /tmp/index.html.1*",$out,$retour);
+	   $http=exec("cd /tmp; wget -q --tries=1 --timeout=2 http://wawadeb.crdp.ac-caen.fr && echo \$? | rm -f /tmp/index.html.1*",$out,$retour);
 	   if ($retour=="0") {
 	       $ligne_internet = "0%";
 	   }

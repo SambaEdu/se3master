@@ -47,7 +47,7 @@ function variable ($Name) { // retourne la valeur de Name
 	if (file_exists("/etc/rsyncd.conf")) {
 		$lignes = file("/etc/rsyncd.conf");
 		foreach ($lignes as $num => $ligne) {
-			if (preg_match ("/$Name=(.*)/",$ligne,$reg)) {
+			if (ereg ("$Name=(.*)",$ligne,$reg)) {
 				$var = trim($reg[1]);
 				return $var;
 			}
@@ -190,9 +190,9 @@ read only=".$_GET['dc_read']."";
 			$lignes = file("/etc/rsyncd.conf");
 			$dc_modules="";
 			foreach ($lignes as $num => $ligne) {
-				if (preg_match ("/##(.*)/",$ligne,$reg)) {
+				if (ereg ("##(.*)",$ligne,$reg)) {
 					$var = trim($reg[1]);
-					list($nom_module,$rep_module)=preg_split("/;/",$var);
+					list($nom_module,$rep_module)=split(';',$var);
 					if ($nom_module != "") {	
 						echo "<tr>\n";
         					echo "<td> $nom_module</td>";

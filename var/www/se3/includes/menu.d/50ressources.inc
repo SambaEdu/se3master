@@ -31,7 +31,7 @@ textdomain ('se3-core');
 
     $liens1=array(array(
         gettext("Gestion des partages"),"profs",1,
-        gettext("R&#233;pertoires Classes"),"partages/rep_classes.php","se3_is_admin",1,
+        gettext("R&#233;pertoires Classes"),"partages/rep_classes.php","se3_is_admin|annu_is_admin",1,
         gettext("Cr&#233;ation de partages"),"partages/create_share.php","se3_is_admin",2,
         gettext("Suppression de partages"),"partages/delete_share.php","se3_is_admin",2,
 	gettext("Droits sur fichiers"),"acls/acls.php","se3_is_admin",3,

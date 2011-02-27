@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-## $Id: change_adminse3_smbpass.sh 4757 2009-11-07 17:11:50Z keyser $ ##
+## $Id$ ##
 #
 ##### script permettant de changer le pass adminse3 smb afin qu'il concorde avec celui de la bdd #####
 # Auteur : franck molle 

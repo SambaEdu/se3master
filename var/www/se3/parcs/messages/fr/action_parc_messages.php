@@ -38,6 +38,12 @@
 	$action_parc['btnProgrammerTitre'] = "Programmer";
 	$action_parc['btnRafraichirTitre'] = "Rafraichir la page";
 
+	//==============================
+	$action_parc['btnRebooterTitre'] = "Rebooter tous les postes";
+	$action_parc['msgConfirmRebooter'] = "Etes-vous sur de vouloir rebooter le parc $parc ?";
+	$action_parc['msgConfirmRebooterMachine'] = "Etes-vous sur de vouloir rebooter la machine ";
+	//==============================
+
 	$action_parc['arrayStationTitre'] = "STATIONS CONCERNEES";
 	$action_parc['arrayEtatTitre'] = "ETAT";
 	$action_parc['arrayConnexionTitre'] = "CONNEXION";

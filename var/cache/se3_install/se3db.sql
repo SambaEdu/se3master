@@ -134,23 +134,17 @@ INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ("trashRdn", "ou=Tras
 INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ('slisip', '', 'Adresse du serveur Slis (optionnel)', '1');
 INSERT INTO `params` VALUES ('', 'slis_url', '', 0, 'Url du Slis (par defaut celle du webmail)', 1);
 INSERT INTO `params` VALUES ('', 'infobul_activ', '1', 0, 'Activation des info-bulles', 1);
-INSERT INTO `params` VALUES ('', 'bpcmedia', '0', 0, 'Media de sauvegarde pour backuppc', 5);
-INSERT INTO `params` VALUES ('', 'backuppc', '1', 0, 'Active backuppc de l''interface', 5);
-INSERT INTO `params` VALUES ('', 'inventaire', '1', 0, 'Désactive l''inventaire', 6);
+INSERT INTO `params` VALUES ('', 'inventaire', '0', 0, 'Désactive l''inventaire', 6);
 INSERT INTO `params` VALUES ('', 'antivirus', '0', 0, 'Désactive l''anti-virus', 6);
 INSERT INTO `params` VALUES ('', 'affiche_etat', '1', 0, 'Affiche la page d''état au lancement de l''interface', 6);
 INSERT INTO `params` VALUES  ('', 'type_Equipe_Matiere', 'posixGroup', 0, 'posixGroup ou groupOfNames', 4);
-
 INSERT INTO params VALUES ('', 'quota_warn_home', '0', '0', 'Avertissement pour dépassement de quota sur /home', '6');
 INSERT INTO params VALUES ('', 'quota_warn_varse3', '0', '0', 'Avertissement pour dépassement de quota sur /var/se3', '6');
-
-INSERT INTO params VALUES ('', 'bck_user', '', '0', 'utilisateur proprietaire backuppc', '5');
-INSERT INTO params VALUES ('', 'bck_uidnumber', '', '0', 'uidnumber proprietaire backuppc', '5');
-
 INSERT INTO `params` VALUES ('', 'se3_domain', '', 0, 'Nom du domaine samba', 4);
 INSERT INTO `params` VALUES ('', 'netbios_name', '', 0, 'Nom netbios du serveur', 4);
 INSERT INTO `params` VALUES ('', 'se3ip', '', 0, 'Adresse IP du serveur', 4);
-
+INSERT INTO `params` VALUES ('', 'se3mask', '', 0, 'masque sous reseau du serveur', 4);
+INSERT INTO `params` VALUES ('', 'ecard', '', 0, 'nom de la carte ethernet du serveur', 4);
 INSERT INTO `params` VALUES ('', 'corbeille', '0', 0, 'Etat activation de la corbeille', 4);
 INSERT INTO `params` VALUES ('', 'hide_logon', '1', 0, 'Visibilite script de login ou non', 4);
 INSERT INTO `params` VALUES ('', 'localmenu', '0', 0, 'menu demarrer en local ou distant', 4);

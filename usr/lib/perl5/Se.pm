@@ -277,12 +277,12 @@ sub processGepUser {
     return ("<tr><td>Entrée <strong>$cn :</strong></td><td>compte $uniqueNumber déjà présent dans l'annuaire : <tt><strong>$uid</strong></tt>.</td></tr>\n");
   } else {
     $id = 1;
-    if(($uid=='prof')||($uid=='docs')||($uid=='progs')||($uid=='netlogon')||($uid=='classes')||($uid=='homes')||($uid=='admhomes')) {
+    if(($uid eq 'prof')||($uid eq 'docs')||($uid eq 'progs')||($uid eq 'netlogon')||($uid eq 'classes')||($uid eq 'homes')||($uid eq 'admhomes')||($uid eq 'profiles')) {
         #$uid=substr($uid, 0, length($uid)-1)."1";
         $uid=substr($uid, 0, length($uid)-1).++$id;
     }
   DOUBLONS: while (1) {
-      if($uid=='admse3') {
+      if($uid eq 'admse3') {
           if($id<=3) {$id=4;}
           $uid=substr($uid, 0, length($uid)-1).++$id;
       }

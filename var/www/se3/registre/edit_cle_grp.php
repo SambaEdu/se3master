@@ -80,14 +80,14 @@ else {
 	if ($state == "0") $checkedI="checked";
 	if ($state == "-1") $checkedD="checked";
 
-	$query="Select valeur, type, Intitule, antidote from corresp where cleID='$cle'";
+	$query="Select valeur, type, Intitule, antidote from corresp where CleID='$cle'";
 	$result = mysql_query($query);
 	$row = mysql_fetch_row($result);
-	echo "$row[2]:\n";
+	echo "$row[2] :\n";
 	echo "<form method=get action=\"edit_cle_grp.php\">\n";
 	echo "<br/>\n";
 	echo "<input type=\"radio\" name=\"choix\" value=\"Active\" $checkedA>Active<br/>\n";
-	echo "<input type=\"radio\" name=\"choix\" value=\"Inactive\" $checkedI>Inactive<br/>\n";
+	if ( "$row[1]" == "config" ) { echo "<input type=\"radio\" name=\"choix\" value=\"Inactive\" $checkedI>Inactive<br/>\n"; }
 	echo "<input type=\"radio\" name=\"choix\" value=\"Non configur&eacute;e\" $checkedD>Non configur&eacute;e<br/>";
 	echo "<input type=\"hidden\" name=\"cle\" value=\"$cle\">";
 	echo "<input type=\"hidden\" name=\"modele\" value=\"$modele\">";

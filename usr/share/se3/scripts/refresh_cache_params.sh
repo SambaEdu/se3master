@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## $Id: refresh_cache_params.sh 5300 2010-02-25 00:09:51Z keyser $ ##
+## $Id$ ##
 #
 ##### actualisation du cache des parametres #####
 

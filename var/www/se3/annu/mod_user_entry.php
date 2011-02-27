@@ -133,7 +133,7 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
 	    <tr>
 	      <td><?php echo gettext("Mot de passe"); ?>:&nbsp;</td>
 	      <td>
-                    <input type= "password" value="" name="dummy" size='8'  maxlength='10'>
+                    <input type= "password" value="" name="dummy" size='20'  maxlength='20'>
                     <input type="hidden" name="string_auth" value="">
 		  </td>
 		  <td>
@@ -182,39 +182,39 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
       // Positionnement des entrees a modifier
       //$entry["sn"] =  stripslashes ( utf8_encode($nom) );
       //$entry["cn"] = stripslashes ( utf8_encode($prenom)." ".utf8_encode($nom) );
-      $entry["sn"] =  stripslashes ( ucfirst(strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$nom")))),"'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz"))) );
-      $entry["cn"] = stripslashes ( ucfirst(strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$prenom")))),"'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")))." ".ucfirst(strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$nom")))),"'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz"))) );
+      $entry["sn"] =  stripslashes ( ucfirst(strtolower(strtr(preg_replace("/Ã†/","AE",preg_replace("/Ã¦/","ae",preg_replace("/Â¼/","OE",preg_replace("/Â½/","oe","$nom")))),"'Ã‚Ã„Ã€ÃÃƒÃ„Ã…Ã‡ÃŠÃ‹ÃˆÃ‰ÃÃÃŒÃÃ‘Ã”Ã–Ã’Ã“Ã•Â¦Ã›ÃœÃ™ÃšÃÂ¾Â´Ã¡Ã Ã¢Ã¤Ã£Ã¥Ã§Ã©Ã¨ÃªÃ«Ã®Ã¯Ã¬Ã­Ã±Ã´Ã¶Ã°Ã²Ã³ÃµÂ¨Ã»Ã¼Ã¹ÃºÃ½Ã¿Â¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz"))) );
+      $entry["cn"] = stripslashes ( ucfirst(strtolower(strtr(preg_replace("/Ã†/","AE",preg_replace("/Ã¦/","ae",preg_replace("/Â¼/","OE",preg_replace("/Â½/","oe","$prenom")))),"'Ã‚Ã„Ã€ÃÃƒÃ„Ã…Ã‡ÃŠÃ‹ÃˆÃ‰ÃÃÃŒÃÃ‘Ã”Ã–Ã’Ã“Ã•Â¦Ã›ÃœÃ™ÃšÃÂ¾Â´Ã¡Ã Ã¢Ã¤Ã£Ã¥Ã§Ã©Ã¨ÃªÃ«Ã®Ã¯Ã¬Ã­Ã±Ã´Ã¶Ã°Ã²Ã³ÃµÂ¨Ã»Ã¼Ã¹ÃºÃ½Ã¿Â¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")))." ".ucfirst(strtolower(strtr(preg_replace("/Ã†/","AE",preg_replace("/Ã¦/","ae",preg_replace("/Â¼/","OE",preg_replace("/Â½/","oe","$nom")))),"'Ã‚Ã„Ã€ÃÃƒÃ„Ã…Ã‡ÃŠÃ‹ÃˆÃ‰ÃÃÃŒÃÃ‘Ã”Ã–Ã’Ã“Ã•Â¦Ã›ÃœÃ™ÃšÃÂ¾Â´Ã¡Ã Ã¢Ã¤Ã£Ã¥Ã§Ã©Ã¨ÃªÃ«Ã®Ã¯Ã¬Ã­Ã±Ã´Ã¶Ã°Ã²Ã³ÃµÂ¨Ã»Ã¼Ã¹ÃºÃ½Ã¿Â¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz"))) );
 
       //======================================
       // Correction du gecos:
       //echo "\$user[0][\"gecos\"]=".$user[0]["gecos"]."<br />";
       if($user[0]["gecos"]!="") {
          $tab_gecos=explode(",",$user[0]["gecos"]);
-         //$entry["gecos"]=ucfirst(strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$prenom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")))." ".ucfirst(strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$nom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz"))).",".$tab_gecos[1].",".$tab_gecos[2].",".$tab_gecos[3];
-         $entry["gecos"]=ucfirst(strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$prenom")))),"'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")))." ".ucfirst(strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$nom")))),"'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz"))).",".$tab_gecos[1].",".$tab_gecos[2].",".$tab_gecos[3];
+         //$entry["gecos"]=ucfirst(strtolower(strtr(preg_replace("/Ã†/","AE",preg_replace("/Ã¦/","ae",preg_replace("/Â¼/","OE",preg_replace("/Â½/","oe","$prenom"))))," 'Ã‚Ã„Ã€ÃÃƒÃ„Ã…Ã‡ÃŠÃ‹ÃˆÃ‰ÃÃÃŒÃÃ‘Ã”Ã–Ã’Ã“Ã•Â¦Ã›ÃœÃ™ÃšÃÂ¾Â´Ã¡Ã Ã¢Ã¤Ã£Ã¥Ã§Ã©Ã¨ÃªÃ«Ã®Ã¯Ã¬Ã­Ã±Ã´Ã¶Ã°Ã²Ã³ÃµÂ¨Ã»Ã¼Ã¹ÃºÃ½Ã¿Â¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")))." ".ucfirst(strtolower(strtr(preg_replace("/Ã†/","AE",preg_replace("/Ã¦/","ae",preg_replace("/Â¼/","OE",preg_replace("/Â½/","oe","$nom"))))," 'Ã‚Ã„Ã€ÃÃƒÃ„Ã…Ã‡ÃŠÃ‹ÃˆÃ‰ÃÃÃŒÃÃ‘Ã”Ã–Ã’Ã“Ã•Â¦Ã›ÃœÃ™ÃšÃÂ¾Â´Ã¡Ã Ã¢Ã¤Ã£Ã¥Ã§Ã©Ã¨ÃªÃ«Ã®Ã¯Ã¬Ã­Ã±Ã´Ã¶Ã°Ã²Ã³ÃµÂ¨Ã»Ã¼Ã¹ÃºÃ½Ã¿Â¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz"))).",".$tab_gecos[1].",".$tab_gecos[2].",".$tab_gecos[3];
+         $entry["gecos"]=ucfirst(strtolower(strtr(preg_replace("/Ã†/","AE",preg_replace("/Ã¦/","ae",preg_replace("/Â¼/","OE",preg_replace("/Â½/","oe","$prenom")))),"'Ã‚Ã„Ã€ÃÃƒÃ„Ã…Ã‡ÃŠÃ‹ÃˆÃ‰ÃÃÃŒÃÃ‘Ã”Ã–Ã’Ã“Ã•Â¦Ã›ÃœÃ™ÃšÃÂ¾Â´Ã¡Ã Ã¢Ã¤Ã£Ã¥Ã§Ã©Ã¨ÃªÃ«Ã®Ã¯Ã¬Ã­Ã±Ã´Ã¶Ã°Ã²Ã³ÃµÂ¨Ã»Ã¼Ã¹ÃºÃ½Ã¿Â¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")))." ".ucfirst(strtolower(strtr(preg_replace("/Ã†/","AE",preg_replace("/Ã¦/","ae",preg_replace("/Â¼/","OE",preg_replace("/Â½/","oe","$nom")))),"'Ã‚Ã„Ã€ÃÃƒÃ„Ã…Ã‡ÃŠÃ‹ÃˆÃ‰ÃÃÃŒÃÃ‘Ã”Ã–Ã’Ã“Ã•Â¦Ã›ÃœÃ™ÃšÃÂ¾Â´Ã¡Ã Ã¢Ã¤Ã£Ã¥Ã§Ã©Ã¨ÃªÃ«Ã®Ã¯Ã¬Ã­Ã±Ã´Ã¶Ã°Ã²Ã³ÃµÂ¨Ã»Ã¼Ã¹ÃºÃ½Ã¿Â¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz"))).",".$tab_gecos[1].",".$tab_gecos[2].",".$tab_gecos[3];
       }
 
       if($corriger_givenname_si_diff=="y") {
         // Ajout: crob 20080611
-        // Variable initialisée dans includes/ldap.inc.php: $corriger_givenname_si_diff
-        // placée pour permettre de désactiver temporairement cette partie
+        // Variable initialisÃ©e dans includes/ldap.inc.php: $corriger_givenname_si_diff
+        // placÃ©e pour permettre de dÃ©sactiver temporairement cette partie
 
-        // Le givenName est destiné à prendre pour valeur le Prenom de l'utilisateur
-        //$entry["givenName"] = ucfirst(strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$prenom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
-        $entry["givenName"] = ucfirst(strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$prenom")))),"'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
+        // Le givenName est destinÃ© Ã  prendre pour valeur le Prenom de l'utilisateur
+        //$entry["givenName"] = ucfirst(strtolower(strtr(preg_replace("/Ã†/","AE",preg_replace("/Ã¦/","ae",preg_replace("/Â¼/","OE",preg_replace("/Â½/","oe","$prenom"))))," 'Ã‚Ã„Ã€ÃÃƒÃ„Ã…Ã‡ÃŠÃ‹ÃˆÃ‰ÃÃÃŒÃÃ‘Ã”Ã–Ã’Ã“Ã•Â¦Ã›ÃœÃ™ÃšÃÂ¾Â´Ã¡Ã Ã¢Ã¤Ã£Ã¥Ã§Ã©Ã¨ÃªÃ«Ã®Ã¯Ã¬Ã­Ã±Ã´Ã¶Ã°Ã²Ã³ÃµÂ¨Ã»Ã¼Ã¹ÃºÃ½Ã¿Â¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
+        $entry["givenName"] = ucfirst(strtolower(strtr(preg_replace("/Ã†/","AE",preg_replace("/Ã¦/","ae",preg_replace("/Â¼/","OE",preg_replace("/Â½/","oe","$prenom")))),"'Ã‚Ã„Ã€ÃÃƒÃ„Ã…Ã‡ÃŠÃ‹ÃˆÃ‰ÃÃÃŒÃÃ‘Ã”Ã–Ã’Ã“Ã•Â¦Ã›ÃœÃ™ÃšÃÂ¾Â´Ã¡Ã Ã¢Ã¤Ã£Ã¥Ã§Ã©Ã¨ÃªÃ«Ã®Ã¯Ã¬Ã­Ã±Ã´Ã¶Ã°Ã²Ã³ÃµÂ¨Ã»Ã¼Ã¹ÃºÃ½Ã¿Â¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
       }
 
-      // Il faudrait aussi corriger le gecos et pour cela récupérer le sexe et la date de naissance
+      // Il faudrait aussi corriger le gecos et pour cela rÃ©cupÃ©rer le sexe et la date de naissance
       // On ne les trouve que dans le gecos ici.
-      // Et le gecos n'est pas récupéré avec $user=people_get_variables ($uid, false);
-      // Et on récupère un $user[0][pseudo] <- givenName
+      // Et le gecos n'est pas rÃ©cupÃ©rÃ© avec $user=people_get_variables ($uid, false);
+      // Et on rÃ©cupÃ¨re un $user[0][pseudo] <- givenName
       /*
       echo "<p>Valeur des attributs avant modification: <br />";
       foreach($user[0] as $key => $value) {
          echo "\$user[0][$key]=$value<br />";
       }
       */
-      // La fonction people_get_variables() est utilisée dans pas mal de pages modifier le retour si givenName prend pour valeur Prenom va être lourd.
+      // La fonction people_get_variables() est utilisÃ©e dans pas mal de pages modifier le retour si givenName prend pour valeur Prenom va Ãªtre lourd.
       //======================================
 
       if ( $isadmin=="Y" ) {

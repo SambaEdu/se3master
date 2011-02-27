@@ -29,9 +29,9 @@
 
 
 include "entete.inc.php";
-include "ldap.inc.php"; 
-include "ihm.inc.php";
-include "fonc_parc.inc.php";
+require_once ("ldap.inc.php"); 
+require_once ("ihm.inc.php");
+require_once ("fonc_parc.inc.php");
 
 ###########
 // Internationnalisation
@@ -130,7 +130,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
    			echo "<input type=\"hidden\" name=\"wolstop_station.php\" value=\"shutdown\" />";
   			echo "<input type=\"hidden\" name=\"parc\" value=\"$parc\" />";
   			echo "<input type=\"hidden\" name=\"action\" value=\"stop\" />";
-  			echo "<input  type=\"submit\" value=\"".gettext($action_parc['btnEteindreTitre'])."\" onclick=\"if (window.confirm('".$action_parc['msgConfirmEteindre']."')) {return true;} else {return false;}\"/>";
+  			echo "<input  type=\"submit\" value=\"".gettext($action_parc['btnEteindreTitre'])."\" onclick=\"if (window.confirm('".$action_parc['msgConfirmEteindre']."')) {return true;} else {return false;}\" />";
    			echo "</form></td>";
 
 			echo "<td><form action=\"wolstop_station.php\" method=\"post\">\n";
@@ -139,6 +139,15 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
    			echo "<input type=\"hidden\" name=\"action\" value=\"start\" />";
 			echo "<input  type=\"submit\" value=\"".gettext($action_parc['btnAllumerTitre'])."\" />";
    			echo "</form></td>";
+
+			//===================================
+			echo "<td><form action=\"wolstop_station.php\" method=\"post\">\n";
+   			echo "<input type=\"hidden\" name=\"action_poste\" value=\"reboot\" />";
+   			echo "<input type=\"hidden\" name=\"parc\" value=\"$parc\" />";
+   			echo "<input type=\"hidden\" name=\"action\" value=\"start\" />";
+			echo "<input  type=\"submit\" value=\"".gettext($action_parc['btnRebooterTitre'])."\"  onclick=\"if (window.confirm('".$action_parc['msgConfirmRebooter']."')) {return true;} else {return false;}\" />";
+   			echo "</form></td>";
+			//===================================
 
 			// Test le niveau de delegation
 			// manage ou view
@@ -157,7 +166,8 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 			echo "</tr>\n";
 
 			echo "<tr>\n";
-       			echo "<td colspan=\"3\" align=\"center\"><form action=\"action_parc.php\" method=\"post\">\n";
+       		//	echo "<td colspan=\"3\" align=\"center\"><form action=\"action_parc.php\" method=\"post\">\n";
+       			echo "<td colspan=\"4\" align=\"center\"><form action=\"action_parc.php\" method=\"post\">\n";
    			echo "<input type=\"hidden\" name=\"action_poste\" value=\"check\" />";
    			echo "<input type=\"hidden\" name=\"parc\" value=\"$parc\" />";
    			echo "<input type=\"hidden\" name=\"action\" value=\"detail\" />";
@@ -169,7 +179,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 			echo "</center>\n";
 
 
-	include "printers.inc.php";
+	require_once ("printers.inc.php");
 
 
 	global $smbversion;
@@ -179,7 +189,8 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 	echo "<td align=\"center\">".$action_parc['arrayStationTitre']."</td>\n";
 	echo "<td align=\"center\">".$action_parc['arrayEtatTitre']."</td>\n";
 	echo "<td align=\"center\">".$action_parc['arrayConnexionTitre']."</td>\n";
-	echo "<td align=\"center\">".$action_parc['arrayControleTitre']."</td></tr>\n";
+	echo "<td align=\"center\">".$action_parc['arrayControleTitre']."</td>\n";
+	echo "<td align=\"center\">".$action_parc['arrayLogonTitre']."</td></tr>\n";
 
 	$mp_all=gof_members($parc,"parcs",1);
 
@@ -192,7 +203,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 		$mpcount=count($mp_all);
 		for ($loop=0; $loop < count($mp_all); $loop++) {
 			$mach=$mp_all[$loop];
-			if (preg_match(/$filtrecomp/,$mach)) {$mp[$lmloop++]=$mach;}
+			if (preg_match("/$filtrecomp/",$mach)) {$mp[$lmloop++]=$mach;}
 		}
 	}
 
@@ -267,6 +278,18 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 				echo "<script type='text/javascript'>
 					// <![CDATA[
 					new Ajax.Updater($('divtsvnc$loop'),'parcs_ajax_lib.php',{method: 'post', parameters: '?ip=$iphost&mode=ts_vnc'});
+					//]]>
+				</script>\n";
+				
+				echo "</td>";
+				echo "</td>\n";
+				echo "<td align=\"center\">";
+
+				echo "<div id='divlogon$loop'><img src=\"../elements/images/spinner.gif\"></img></div>\n";
+				
+				echo "<script type='text/javascript'>
+					// <![CDATA[
+					new Ajax.Updater($('divlogon$loop'),'parcs_ajax_lib.php',{method: 'post', parameters: '?nom_machine=".$mp[$loop]."&ip=".$iphost."&mode=test_logon'});
 					//]]>
 				</script>\n";
 				

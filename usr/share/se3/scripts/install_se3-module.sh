@@ -4,6 +4,36 @@
 #
 ##### Permet d'installer un paquet module se3#####
 ### franck.molle@ac-rouen.fr
+
+
+function usage {
+	echo "usage: $0 -a -d -h -i -r module"
+	echo "       -a :  activation module"
+	echo "       -d :  desactivation module"
+	echo "       -i :  install module"
+	echo "       -h :  show this help"
+	echo "       -r : remove module"
+	echo "       ex.:  $0 -i se3-dhcp"
+	exit $1;
+}
+
+while getopts ":adihr" cmd
+do
+	case $cmd in	
+	  a) activate=1 ;;
+	  d) desactivate=1;;
+	  i) install=1 ;;
+	  r) remove=1 ;;
+	  h) usage 0 ;;
+	  ?) echo "bad option!"
+	      usage 1 ;;
+	esac
+done
+
+# remise a zero compteur pour avoir le module en $1
+shift $(($OPTIND-1))
+
+
 SE3MODULE="$1"
 M2="$2"
 M3="$3"
@@ -28,6 +58,10 @@ export  DEBIAN_FRONTEND
 export  DEBIAN_PRIORITY
 
 opt="--allow-unauthenticated"
+
+
+[ -z "$LC_ALL" ] && LC_ALL=C && export LC_ALL=C 
+
 
 #debug="-s"
   echo "<pre>"
@@ -108,20 +142,31 @@ apt-get update -qq && (echo "Liste mise a jour avec succes" | tee -a $REPORT_FIL
 echo "" | tee -a $REPORT_FILE
 
 echo "Installation du paquet $SE3MODULE et de ses dependances" | tee -a $REPORT_FILE
-apt-get install $SE3MODULE -y --force-yes $opt | tee -a $REPORT_FILE
+LC_ALL=C apt-get install $SE3MODULE -y --force-yes $opt | tee -a $REPORT_FILE
 if [ ! -z "$M2" ]; then
 echo "Installation du paquet complementaire $M2" | tee -a $REPORT_FILE
-apt-get install $M2 -y --force-yes $opt | tee -a $REPORT_FILE
+LC_ALL=C apt-get install $M2 -y --force-yes $opt | tee -a $REPORT_FILE
 fi
 
 if [ ! -z "$M3" ]; then
 echo "Installation du paquet complementaire $M3" | tee -a $REPORT_FILE
-apt-get install $M3 -y --force-yes $opt | tee -a $REPORT_FILE
+LC_ALL=C apt-get install $M3 -y --force-yes $opt | tee -a $REPORT_FILE
 fi
 
 # L'envoi d'un mail est superflu
 #MAIL_REPORT
 }
+
+remove_module()
+{
+echo "Supression de $SE3MODULE" | tee -a $REPORT_FILE
+apt-get remove $SE3MODULE -y | tee -a $REPORT_FILE
+}
+
+if [ "$nomaj" == "1" ]; then
+echo "systeme de maj non disponible pour le moment"
+exit 0
+fi
 
 
 ## on installe quoi comme module ?
@@ -235,7 +280,11 @@ DNSDatabaseInfo current.cvd.clamav.net" > /etc/clamav/freshclam.conf
 ;;
 
 se3-ocs)
+cp /root/.my.cnf  /var/remote_adm/
+chown www-se3 /var/remote_adm/.my.cnf
+chmod 400 /var/remote_adm/.my.cnf
 install_module
+rm -f /var/remote_adm/.my.cnf
 ;;
 
 se3-wpkg)
@@ -256,6 +305,38 @@ install_module
 
 se3-internet)
 install_module
+;;
+
+se3-backup)
+install_module
+;;
+
+se3-synchro)
+
+if [ "$install" ==  "1" ]; then
+  install_module
+fi
+
+if [ "$remove" ==  "1" ]; then
+  remove_module
+fi
+
+;;
+se3-seven)
+echo "Installation ou MAJ du support seven (samba backport)" | tee -a $REPORT_FILE
+LINE_TEST
+TEST_LOCK
+echo "deb http://backports.debian.org/debian-backports lenny-backports main" > /etc/apt/sources.list.d/smb_backport.list
+echo "Mise a jour de la liste des paquets disponibles ....." | tee -a $REPORT_FILE
+apt-get update -qq && (echo "Liste mise a jour avec succes" | tee -a $REPORT_FILE)
+echo "" | tee -a $REPORT_FILE
+
+echo "Installation du paquet Samba et de ses dependances" | tee -a $REPORT_FILE
+echo "Dpkg::Options {\"--force-confnew\";}" > /etc/apt/apt.conf
+apt-get -t lenny-backports install samba -y --force-yes $opt 2>&1 | tee -a $REPORT_FILE 
+apt-get -t lenny-backports install samba-common-bin -y --force-yes $opt 2>&1 | tee -a $REPORT_FILE 
+rm -f /etc/apt/apt.conf
+MAIL_REPORT
 ;;
 
 se3-fondecran)

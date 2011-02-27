@@ -213,11 +213,13 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 				// Affichage menu de s&#233;lection des machines &#224; ajouter au parc
 				if  ( count($list_new_machines)>15) $size=15; else $size=count($list_new_machines);
 				if ( count($list_new_machines)>0) {
+					sort($list_new_machines);
 					$form = "<form action=\"create_parc.php\" method=\"post\">\n";
 					$form.="<p>".gettext("S&#233;lectionnez les nouvelles machines &#224; int&#233;grer au parc:")."</p>\n";
 					$form.="<p><select size=\"".$size."\" name=\"new_computers[]\" multiple=\"multiple\">\n";
 					echo $form;
 					for ($loop=0; $loop < count($list_new_machines); $loop++) {
+						
 						echo "<option value=\"".$list_new_machines[$loop]."\">".$list_new_machines[$loop];
 					}
 					$form="</select></p>\n";

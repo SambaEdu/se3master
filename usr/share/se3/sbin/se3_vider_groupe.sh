@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# $Id: se3_vider_groupe.sh 5341 2010-03-17 16:48:16Z dbo $
+# $Id$
 # Script destiné à virer tous les membres d'un groupe
 # Auteur: Stéphane Boireau
 # Dernière modification: 26/02/2007

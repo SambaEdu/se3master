@@ -77,6 +77,6 @@ set_lk_max_locks        10000
 # Number of lockers
 set_lk_max_lockers      10000
 
-# Désactivation logs ldap
+# no logs ldap
 set_flags DB_LOG_AUTOREMOVE
 

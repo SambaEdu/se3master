@@ -25,7 +25,7 @@
 
 
 
-
+include "config.inc.php";
 include "entete.inc.php";
 include "ldap.inc.php";
 include "ihm.inc.php";
@@ -109,7 +109,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 							//$lmloop=0;
 							$mpcount=count($mpenc);
 							$mach=$mpenc;
-							if (preg_match(/$filtrecomp/,$mach)) {
+							if (preg_match("/$filtrecomp/",$mach)) {
 								$form .= "<option value=".$mpenc.">".$mpenc;
 							}
 						}
@@ -149,7 +149,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 				$mpcount=count($mp_all);
 				for ($loop=0; $loop < count($mp_all); $loop++) {
 					$mach=$mp_all[$loop];
-					if (preg_match(/$filtrecomp/,$mach)) $mp[$lmloop++]=$mach;
+					if (preg_match("/$filtrecomp/",$mach)) $mp[$lmloop++]=$mach;
 				}
 			}
 			if ( count($mp)>15) $size=15; else $size=count($mp);
@@ -323,9 +323,28 @@ if (is_admin("computers_is_admin",$login)=="Y") {
                                                         suppr_inventaire($computer);
 							// voir si on doit pas nettoyer les connexions
 							// Vire dans le dhcp
-							echo "Suppression du dhcp";
-							echo "<br>";
-							suppr_reservation($computer);
+                        	// On teste si la table existe
+/*                        	$exec = mysql_query("SHOW TABLES FROM `se3db` LIKE 'se3_dhcp'");
+                        	$tables =array();
+                        	while($row = mysql_fetch_row($exec)) {
+                        		$tables[] = $row[0];
+                        	}
+                        	if(in_array('se3_dhcp',$tables)){
+                    	        $dhcp_ok = 1;
+                        	}
+                        	if ($dhcp_ok==1) {
+*/
+                        	if ($dhcp=="1") {
+                        		echo "Suppression du dhcp";
+							    echo "<br>";
+							    $suppr_query = "DELETE FROM `se3_dhcp` where `ip` = '$ip' AND `mac` = '$mac' AND  `name` = '$name'";
+	                            mysql_query($suppr_query);
+	                            // On relance dhcp si celui-ci est active.
+                                if($dhcp=="1") {
+                                     exec("sudo /usr/share/se3/scripts/makedhcpdconf",$ret);
+                                }
+
+                            }
 						
 							// La virer de wpkg 
 						        echo "Suppression des rapports wpkg";
@@ -342,6 +361,9 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 							
 							exec ("/usr/share/se3/sbin/entryDel.pl cn=$computer,".$dn["computers"],$output,$returnval);
 							exec ("/usr/share/se3/sbin/entryDel.pl uid=$computer$,".$dn["computers"]);
+							exec("/usr/bin/touch /tmp/csvtodo",$ret);
+							exec("sudo /usr/share/se3/sbin/update-csv.sh",$ret);
+							
 							
 						}
 					}	

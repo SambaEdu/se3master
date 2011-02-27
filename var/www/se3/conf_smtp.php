@@ -46,7 +46,7 @@ function variable ($Name) { // retourne la valeur de Name
 	if (file_exists("/etc/ssmtp/ssmtp.conf")) {
 		$lignes = file("/etc/ssmtp/ssmtp.conf");
 		foreach ($lignes as $num => $ligne) {
-			if (preg_match ("/$Name=(.*)/",$ligne,$reg)) {
+			if (ereg ("$Name=(.*)",$ligne,$reg)) {
 				$var = trim($reg[1]);
 				return $var;
 			}
@@ -72,12 +72,13 @@ $DEFAUT = "
 root=$_GET[dc_root]
 mailhub=$_GET[dc_smarthost]
 rewriteDomain=$_GET[dc_readhost]
-";
+hostname=$_GET[dc_readhost]
+                ";
 		fwrite($fp,$DEFAUT);
 		fclose($fp);
 
 		$subject = gettext("Test de la configuration de votre serveur Se3");
-		$message = gettext("Message envoyé par le serveur Se3");
+		$message = gettext("Message envoyï¿½ par le serveur Se3");
 		mail ($_GET[dc_root], $subject, $message);
 
 		unset($action);

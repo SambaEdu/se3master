@@ -168,6 +168,10 @@ function remote_ip()
 
 function decode_pass($string_auth) {
         global  $MaxLifeTime,$path_to_wwwse3;
+
+        // Initialisation
+        $error=0;
+
         // Decodage de la chaine d'authentification cote serveur avec une cle privee
         exec ("/usr/bin/python ".$path_to_wwwse3."/includes/decode.py '$string_auth'",$AllOutPut,$ReturnValue);
         // Extraction des parametres

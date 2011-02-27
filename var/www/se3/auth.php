@@ -24,6 +24,8 @@
 
   */	
 
+  // Initialisation:
+  $error=0;
 
 
   require ("config.inc.php");
@@ -36,22 +38,22 @@
   bindtextdomain('se3-core',"/var/www/se3/locale");
   textdomain ('se3-core');
 
-if ((!isset($_GET[al])||($_GET[al]!=0)) && (($_POST[login] != "" && $_POST[dummy] != "") || ($autologon==1))) {
-	if ( open_session($_POST[login], $_POST[string_auth], $_GET[al]) == 1 ) {
-		if (isset($_GET[request]) && ($_GET[request] != '')) {
-			header("Location:".rawurldecode($_GET[request]));
+if ((!isset($_GET['al'])||($_GET['al']!=0)) && ((isset($_POST['login']) && $_POST['login'] != "" && isset($_POST['dummy']) && $_POST['dummy'] != "") || ($autologon==1))) {
+	if((isset($_POST['login']))&& open_session($_POST['login'], $_POST['string_auth'], $_GET['al']) == 1 ) {
+		if (isset($_GET['request']) && ($_GET['request'] != '')) {
+			header("Location:".rawurldecode($_GET['request']));
 		} else {
 			header("Location:index.php");
 		}
 	} else {
-		if (isset($_GET[request]) && ($_GET[request] != '')) {
-			if ($_POST[login]=="") {
-				header("Location:auth.php?al=0&error=2&request=".rawurlencode($_GET[request]));
+		if (isset($_GET['request']) && ($_GET['request'] != '')) {
+			if ($_POST['login']=="") {
+				header("Location:auth.php?al=0&error=2&request=".rawurlencode($_GET['request']));
 			} else {
-				header("Location:auth.php?al=0&error=1&request=".rawurlencode($_GET[request]));
+				header("Location:auth.php?al=0&error=1&request=".rawurlencode($_GET['request']));
 			}
 		} else {
-			if ($_POST[login]=="") {
+			if (isset($_POST['login'])&&($_POST['login']=="")) {
 				header("Location:auth.php?al=0&error=2");
 			} else {
 				header("Location:auth.php?al=0&error=1");
@@ -59,9 +61,11 @@ if ((!isset($_GET[al])||($_GET[al]!=0)) && (($_POST[login] != "" && $_POST[dummy
 		}
 	}
 } else {
+
+	$texte="";
 	header_crypto_html("Authentification SE3","");
 	$texte .= gettext("<P>Afin de pouvoir rentrer dans l'interface <EM>SambaEdu</EM>, vous devez indiquer votre identifiant et votre mot de passe sur le r&#233;seau.\n");
-	$texte .= "<form name = 'auth' action='auth.php?al=1&request=".rawurlencode($_GET[request])."' method='post' onSubmit = 'encrypt(document.auth)'>\n";
+	$texte .= "<form name = 'auth' action='auth.php?al=1&request=".(isset($_GET['request']) ? rawurlencode($_GET['request']) : "")."' method='post' onSubmit = 'encrypt(document.auth)'>\n";
 	$texte .= "<table><tr><td>\n";
 	$texte .= gettext("Identifiant")." :</td><td><INPUT TYPE='text' NAME='login' SIZE='20' MAXLENGTH='30'><BR>\n";
 	$texte .= "</td></tr><tr><td>\n";

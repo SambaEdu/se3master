@@ -49,7 +49,7 @@ include "ihm.inc.php";
 if (ldap_get_right("computers_is_admin",$login)!="Y")
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 $_SESSION["pageaide"]="Gestion_des_clients_windowsNG#Description_du_processus_de_configuration_du_registre_Windows";
-	
+
 //require ("functions.inc.php");
 $testniveau=getintlevel();
 $afficheniveau=afficheniveau($testniveau);
@@ -96,7 +96,7 @@ if ($testniveau) {
 
 	echo "<h3>".gettext("Gestion des groupes de cl&#233s :")." </h3>";
     echo "<a href=\"mod_maj.php?action=maj\">".gettext("Effectuer la mise &#224 jour des groupes de cl&#233s ?")."</a><br>";
-	echo "<a href=\"indexgrp.php\">".gettext("Editer les groupes de cl&#233s ?")."</a><br>";
+	echo "<a href=\"affiche_modele.php\">".gettext("Editer les groupes de cl&#233s ?")."</a><br>";
 	echo "<a href=\"gestion_interface.php?action=delallmod\" onclick=\"return getconfirm();\">".gettext("Supprimer tous les groupes de cl&#233s?")."</a><br>";
 	if ($testniveau>1) {
 

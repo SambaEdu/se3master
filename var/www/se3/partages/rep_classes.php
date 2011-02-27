@@ -61,7 +61,8 @@ function areyousure()
 </script>
 
 <?php
-if (is_admin("se3_is_admin",$login)=="Y") {
+if ((is_admin("se3_is_admin",$login)=="Y") or
+(is_admin("annu_is_admin",$login)=="Y")) {
 
 	echo "<h1>".gettext("Cr&#233;ation des r&#233;pertoires classes")."</h1>";
 	

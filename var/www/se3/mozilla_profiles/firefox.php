@@ -48,15 +48,20 @@ if (is_admin("computer_is_admin",$login)!="Y")
 //aide
 $_SESSION["pageaide"]="Gestion_Mozilla#Mozilla_Firefox";
 
+//debug_var();
 
-$choix=$_POST['choix'];
-$config=$_GET['config'];
-$autres_gr=$_POST['autres_gr'];
-$classe_gr=$_POST['classe_gr'];
-$equipe_gr=$_POST['equipe_gr'];
-$home=$_POST['home'];
-$page_dem=$_POST['page_dem'];
-$user=$_POST['user'];
+$choix=isset($_POST['choix']) ? $_POST['choix'] : "";
+$config=isset($_POST['config']) ? $_POST['config'] : (isset($_GET['config']) ? $_GET['config'] : "");
+
+$autres_gr=isset($_POST['autres_gr']) ? $_POST['autres_gr'] : array();
+$classe_gr=isset($_POST['classe_gr']) ? $_POST['classe_gr'] : array();
+$equipe_gr=isset($_POST['equipe_gr']) ? $_POST['equipe_gr'] : array();
+
+// Je n'ai pas vu a quoi sert $home
+$home=isset($_POST['home']) ? $_POST['home'] : "";
+
+$page_dem=isset($_POST['page_dem']) ? $_POST['page_dem'] : "";
+$user=isset($_POST['user']) ? $_POST['user'] : "";
 
 /*
 echo "valeur de choix : $choix";
@@ -72,10 +77,10 @@ if ($config==""||$config=="init") {
 	//echo "valleur de config : $config<br>";
 	
 	// echo "<body>";
-	
+	/*
 	if (file_exists("/var/se3/unattended/install/packages/firefox/firefox-config.bat") or file_exists("/usr/share/se3/logonpy/logon.py")) {
 		echo "<a href=\"/mozilla_profiles/firefox-se3-NG.php\">Configuration des profils firefox</a>";  
-	}
+	}*/
 	
 	$form = "<form action=\"firefox.php?config=init\" method=\"post\">\n";
 	// Form de selection d'actions

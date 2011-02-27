@@ -4,23 +4,22 @@
 debian_vers=$(cat /etc/debian_version)
 [ -z "$netbios_name" ] && netbios_name=$(grep "netbios name" /etc/samba/smb.conf|cut -d '=' -f2|sed -e 's/ //g')
 [ -z "$se3ip" ] && se3ip="$(LC_ALL=C grep address /etc/network/interfaces | sort | head -n1 | cut -d" " -f2)"
-MASK=$(grep netmask  /etc/network/interfaces | head -n1 | sed -e "s/netmask//g" | tr "\t" " " | sed -e "s/ //g")
-
+[ -z "$ecard" ] &&  ecard="$(grep iface /etc/network/interfaces | grep static | sort | head -n1 | awk '{print $2}')"
 if [ -z "$adminPw" ]; then
-	echo "impossible de lire la parametre adminPw"
+	echo "impossible de lire le parametre adminPw"
 	exit 1
 fi
 
 # Get network card
-ECARD="$(grep iface /etc/network/interfaces | grep static | sort | head -n1 | awk '{print $2}')"
-if [ -z "$ECARD" ]; then
-ECARD=$(/sbin/ifconfig -a | grep eth | sort | head -n 1 | cut -d " " -f 1)
-fi
+# 
+# if [ -z "$ECARD" ]; then
+# ECARD=$(/sbin/ifconfig -a | grep eth | sort | head -n 1 | cut -d " " -f 1)
+# fi
 
 #Mise a l'heure du serveur
-if [ ! -z "$slisIp" ]; then
+if [ ! -z "$slisip" ]; then
 echo "Mise a l'heure sur le slis via ntp"
-ntpdate $slisIp 
+ntpdate $slisip 
 else
 
 	if [ ! -z "$ntpserv" ]; then
@@ -42,7 +41,7 @@ if [ ! -f /var/se3/unattended/install/packages/firefox/firefox-profile.js ]; the
 fi
 
 # Mrtg
-sed -i "s/eth0/$ECARD/g" /etc/mrtg.cfg
+sed -i "s/eth0/$ecard/g" /etc/mrtg.cfg
 sed -i "s/growright//g" /etc/mrtg.cfg
 indexmaker --output=/var/www/se3/sysmon/index.html /etc/mrtg.cfg
 env LANG=C /usr/bin/mrtg /etc/mrtg.cfg 2>/dev/null
@@ -88,11 +87,11 @@ if [ ! -e /var/remote_adm/.ssh/id_rsa.pub ]; then
 	su www-se3 -c 'ssh-keygen -t rsa -f /var/remote_adm/.ssh/id_rsa -N ""'
 fi
 
-# Mkslurpd
-sed -i "s/#MYSQLIP#/$MYSQLIP/g;s/#SE3DBPASS#/$SE3PW/g" /usr/share/se3/sbin/mkslurpd
+# Mkslurpd ---> deprecated a vi
+#sed -i "s/#MYSQLIP#/$MYSQLIP/g;s/#SE3DBPASS#/$SE3PW/g" /usr/share/se3/sbin/mkslurpd
 
 # Syslog
-if [ "$debian_vers" == "4.0" ]; then
+if [ -e /etc/init.d/sysklogd ]; then
 	/etc/init.d/sysklogd restart 
 else
 	/etc/init.d/rsyslog restart
@@ -129,41 +128,28 @@ done
 
 # Backuppc
 
-cd /usr/share/backuppc/lib/BackupPC/CGI
-rm -f Lib.pm
-if [ "$debian_vers" == "4.0" ]; then
-	ln -s Lib.pm.etch Lib.pm
-else
-	ln -s Lib.pm.lenny Lib.pm
-fi
-cd - >/dev/null
+#cd /usr/share/backuppc/lib/BackupPC/CGI
+#rm -f Lib.pm
+#if [ "$debian_vers" == "4.0" ]; then
+#	ln -s Lib.pm.etch Lib.pm
+#else
+#	ln -s Lib.pm.lenny Lib.pm
+#fi
+#cd - >/dev/null
 
 
 # Firefox
-PREF_JS_FF="/etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js"
-sed -i "s/%ip%/$se3ip/g;s/%se3pdc%/$(hostname -f)/g" /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/hostperm.1
-if [ "$slisIp" == "" ]
-then
-	if [ -e /var/www/se3.pac ]; then
-		sed -i 's/%proxytype%/2/g' $PREF_JS_FF
-		sed -i "s/%proxyurl%/http:\/\/$se3ip\/se3.pac/g" $PREF_JS_FF
-	else
-		if [ -z $http_proxy ]
-		then
-			sed -i 's/%proxytype%/0/g' $PREF_JS_FF
-		else
-			sed -i 's/%proxytype%/1/g' $PREF_JS_FF
-		proxyurl=$(echo $http_proxy|sed -e 's/http:\/\///g')
-			sed -i "s/%proxyurl%/$proxyurl/g" $PREF_JS_FF
-		fi	
-	fi	
-	
-else
-		
-		sed -i 's/%proxytype%/2/g' $PREF_JS_FF
-		sed -i "s/%proxyurl%/http:\/\/$slisIp\/cgi-bin\/slis.pac/g" $PREF_JS_FF
+if [ ! -e /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js ]; then
+    proxyurl=$(grep http_proxy /etc/profile | grep -v export | cut -d= -f2 | sed -e "s/http:\/\///;s/\"//g")
+
+    sed -i "s/%ip%/$se3ip/g;s/%se3pdc%/$(hostname -f)/g" /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/hostperm.1
+    /usr/share/se3/scripts/modifProxy.sh $proxyurl
+
 fi
 /etc/init.d/cron reload
+
+#/etc/init.d/slapd restart
+/var/cache/se3_install/depmaj/install_supervision_rouen.sh 
 
 # Corrige icone reparer son compte si L: toujours utilise pour Progs
 grep W: /home/templates/base/logon.bat >/dev/null || cp -f /var/cache/se3_install/conf/Reparer\ son\ compte_legacy.lnk /home/templates/base/Bureau/Reparer\ son\ compte.lnk

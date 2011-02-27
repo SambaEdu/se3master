@@ -88,7 +88,7 @@ if (! isset($_POST['groups'])) {
 }
 else {
 	$nombre=$_POST['nombre'];
-
+        $priorite = priorite($salle);
 	for ($n=0;$n<$nombre;$n++) {
 		$mod=$_POST['modele'.$n];
 		$query="SELECT `cle`,`etat` FROM `modele` WHERE `mod`= '$mod' ;";
@@ -105,10 +105,10 @@ else {
 			if ($row[1] == "1") {
 				$row1[2]=ajoutedoublebarre($row1[2]);
 				if ($row2[0]) {
-					$query = "UPDATE `restrictions` SET `valeur` = '$row1[2]' WHERE `cleID` = '$cle' AND `groupe` = '$salle';";
+					$query = "UPDATE `restrictions` SET `valeur` = '$row1[2]',priorite='$priorite' WHERE `cleID` = '$cle' AND `groupe` = '$salle';";
 					$insert = mysql_query($query);
 				} else {
-					$query="INSERT INTO restrictions (resID,valeur,cleID,groupe) VALUES ('','$row1[2]','$row[0]','$salle');";
+					$query="INSERT INTO restrictions (resID,valeur,cleID,groupe,priorite) VALUES ('','$row1[2]','$row[0]','$salle','$priorite');";
 					$insert = mysql_query($query);
 				}
 			}
@@ -119,10 +119,10 @@ else {
 				}
 				else {
 					if ($row2[0]) {
-						$query = "UPDATE `restrictions` SET `valeur` = '$row1[3]' WHERE `cleID` = '$cle' AND `groupe` = '$salle';";
+						$query = "UPDATE `restrictions` SET `valeur` = '$row1[3]',priorite='$priorite' WHERE `cleID` = '$cle' AND `groupe` = '$salle';";
 						$insert = mysql_query($query);
 					} else {
-						$query="INSERT INTO restrictions (resID,valeur,cleID,groupe) VALUES ('','$row1[3]','$row[0]','$salle');";
+						$query="INSERT INTO restrictions (resID,valeur,cleID,groupe,priorite) VALUES ('','$row1[3]','$row[0]','$salle','$priorite');";
 						$insert = mysql_query($query);
 					}
 				}

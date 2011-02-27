@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-## $Id: correctSID.sh 5575 2010-05-30 13:47:42Z keyser $ ##
+## $Id$ ##
 #
 ##### Change dans l'annuaire LDAP le SID en fonction du SID existant dans la base MySQL #####
 #

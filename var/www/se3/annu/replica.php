@@ -285,11 +285,7 @@ if (($ip_se3 == $ldap_server) || ($ldap_server == "localhost") || ($ldap_server 
 		  if ($ldap_deport=="no") {
 		  ?>
 	          <option <?php if ($replica_status == "0") {echo "selected"; } ?> value="0"><?php echo gettext("Serveur non r&#233;pliqu&#233;"); ?></option>
-		  <option <?php if ($replica_status == "1") {echo "selected"; } ?> value="1"><?php echo gettext("Serveur LDAP principal"); ?></option>
-		  <?php } ?>
-		  <option <?php if ($replica_status == "2") {echo "selected"; } ?> value="2"><?php echo gettext("Serveur LDAP secondaire"); ?></option>
-		 <?php
-		// Cas ou l'annuaire est deporte
+		  // Cas ou l'annuaire est deporte
 		 if ($ldap_deport=="no") {
 		?>
 		  <option <?php if ($replica_status == "3") {echo "selected"; } ?> value="3"><?php echo gettext("Serveur LDAP principal (m&#233;thode syncrepl)"); ?></option>

@@ -45,7 +45,7 @@ if ($login == "") header("Location:$urlauth");
 if (is_admin("Annu_is_admin",$login)=="Y") {
 	// Decodage de la chaine d'authentification cote serveur avec une cle privee
 	exec ("/usr/bin/python ".$path_to_wwwse3."/includes/decode.py '$keys'",$AllOutPut,$ReturnValue);
-	$tmp = preg_split ("/[\|\]/",$AllOutPut[0],5);
+	$tmp = split ("[\|\]",$AllOutPut[0],5);
 	$p = $tmp[0];
 	$q = $tmp[1];
 	$pq = $tmp[2];

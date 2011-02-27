@@ -50,7 +50,7 @@ if ($ligne_internet != "0%") { // on teste sur un autre serveur
 }
 // leb 30sept2007
 if ($ligne_internet != "0%") { // test acces http
-   $http=exec("cd /tmp; wget -q ---tries=1 --connect-timeout=1 http://wawadeb.crdp.ac-caen.fr && echo \$? | rm -f /tmp/index.html.1*",$out,$retour);
+   $http=exec("cd /tmp; wget -q ---tries=1 --timeout=2 http://wawadeb.crdp.ac-caen.fr && echo \$? | rm -f /tmp/index.html.1*",$out,$retour);
    if ($retour=="0") {
        $ligne_internet = "0%";
    }

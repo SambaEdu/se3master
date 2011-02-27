@@ -156,7 +156,7 @@ DY></HTML>");
 	entree_table_param_exist(tag_popup_alert,0,4,"Tag du popup alerte");
 	// On relit la table
 	require ("config.inc.php");
-	system("cd /tmp; wget -q --tries=1 --connect-timeout=1 $url_popup_alert");
+	system("cd /tmp; wget -q --tries=1 --timeout=2 $url_popup_alert");
    	if (file_exists("/tmp/Alerte_popup.html")) {
         	$lines = file("/tmp/Alerte_popup.html");
 	        foreach ($lines as $line_num => $line) {

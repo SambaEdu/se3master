@@ -101,19 +101,19 @@ if ( (!$_POST['mod_pwd']) ||
         <table border="0">
           <tr>
             <td><?php echo gettext("Mot de passe actuel");?> : </td>
-            <td><input type="password" name="old_password" size="8"></td>
+            <td><input type="password" name="old_password" size="20"></td>
           </tr>
           <tr>
             <td><?php echo gettext("Nouveau mot de passe");?> : </td>
             <td>
-                    <input type= "password" value="" name="dummy" size='8'  maxlength='10'>
+                    <input type= "password" value="" name="dummy" size='20'  maxlength='20'>
                     <input type="hidden" name="string_auth" value="">
 			</td>
           </tr>
           <tr>
             <td><?php echo gettext("Ressaisir nouveau mot de passe");?> : </td>
             <td>
-                    <input type= "password" value="" name="dummy1" size='8'  maxlength='10'>
+                    <input type= "password" value="" name="dummy1" size='20'  maxlength='20'>
                     <input type="hidden" name="string_auth1" value="">
 			</td>
           <tr>

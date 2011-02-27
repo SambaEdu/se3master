@@ -60,11 +60,17 @@ foreach $entree_p ($recherche_p->all_entries()) {
                                          filter => "cn=$cn_computer[1]",
                                          attrs => "cn",
                                          );
-            foreach $entree_h ($recherche_h->all_entries()) {
-                $add_host=$entree_h->get_value('cn');
-                $tab_computers[$k][$h]=$add_host;           # Le nom netbios est rangé dans un tableau 
-                $h++;
-            }
+			if ($recherche_h->code()) {  # la machnine n'existe plus !
+			    $parc=$entree_p->get_value('dn',asref=>1);
+				print "cn=$cn_computer[1],$computersDn a supprimer de cn=$parc,$parcDn";
+#			    system("/usr/share/se3/sbin/groupDelEntry.pl \"cn=$cn_computer[1],$computersDn\",\"cn=$parc,$parcDn\"";
+            } else {
+				foreach $entree_h ($recherche_h->all_entries()) {
+					$add_host=$entree_h->get_value('cn');
+					$tab_computers[$k][$h]=$add_host;           # Le nom netbios est rangé dans un tableau 
+					$h++;
+				}
+			}
          }
         elsif ($a[1] eq $printersRdn) {                  # Si membre est une imprimante, on récupère son nom
             @printer_name = split (/=/,$a[0]);

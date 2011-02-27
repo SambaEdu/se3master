@@ -77,18 +77,18 @@ switch ($case) {
 
 	//par default affichage du commentaires sur la cle
 	default :
-    		$query="SELECT comment,Intitule,chemin,OS,categorie,sscat FROM corresp WHERE cleID='$num'";
+    		$query="SELECT comment,Intitule,chemin,OS,categorie,sscat,type FROM corresp WHERE CleID='$num'";
     		$resultat = mysql_query($query);
     		$row = mysql_fetch_array($resultat);
-    		echo "<br><H3>".gettext("Commentaires pour la cle :")." <br> $row[1] </H3>";
+    		echo "<br><H3>".gettext(" Cle :").$row[1]." </H3><br> Type : ".$row[6];
     		if ($row[4]) {
     			echo"<h2>".gettext("Cat&#233gorie :")." $row[4]</h2>"; 
 		}
      		if ($row[5]) {
     			echo"<h3>".gettext("Sous- Cat&#233gorie :")." $row[5]</h3>"; 
 		}
-    		echo"<br>$row[2]<br> $row[3]<br>";
-    		echo $row[0]."<br>";
+    		echo "<br>Chemin : $row[2]<br> Os : $row[3]<br>";
+    		echo "Commentaire : ".$row[0]."<br>";
     		echo "<br><a href=\"aide_cle.php?cle=$num&act=2\">".gettext("Modifier le commentaire")."</a><br>";
 		break;
 }

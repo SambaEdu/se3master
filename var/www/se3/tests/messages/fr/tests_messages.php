@@ -36,7 +36,7 @@
 
 // Controle l'installation des cles
 	$tests_msg['link_keys_ko'] = '../registre/gestion_interface.php';
-       $tests_msg['msg_keys_ok'] = 'Cliquer ici pour importer les cl&#233;s<br /><a href=\"'+link_keys_ko+'\"></a>';
+       $tests_msg['msg_keys_ok'] = 'Cliquer ici pour importer les cl&#233;s<br /><a href=\"'+$tests_msg['link_keys_ko']+'\"></a>';
 	$tests_msg['msg_keys_nocx'] = 'Impossible de mettre &#224; jour les cl&#233;s, sans connexion &#224; internet';
 	$tests_msg['msg_keys_info'] = 'Si vous n\'avez pas install&#233; les cl&#233;s des registres,<br>vous devez aller dans <a href=\"'.$tests_msg['link_keys_ko'].'\">Gestion des clients Windows</a> et cliquer sur effectuer la mise &#224; jour de la base des cl&#233;s';
 

@@ -264,7 +264,7 @@ if($reinit_mode=='csv') {
 		echo "<h4>".gettext("Modification des mots de passe d'apr&#232;s le fichier CSV fourni")."</h4>\n";
 
 		echo "<pre class='listing'>";
-		system ("/usr/bin/sudo /usr/share/se3/sbin/se3_reinit_mdp.sh 'csv=$dest_file' 'nettoyage'");
+		system ("/usr/bin/sudo /usr/share/se3/scripts/se3_reinit_mdp.sh 'csv=$dest_file' 'nettoyage'");
 		echo "</pre>\n";
 		echo "<hr />\n";
 
@@ -294,7 +294,7 @@ else {
 				echo "<h4>".gettext("R&#233;initialisation des mots de passe &#224; la date de naissance pour les membres du groupe ".$grp."&nbsp;:")."</h4>\n";
 			}
 			echo "<pre class='listing'>";
-			system ("/usr/bin/sudo /usr/share/se3/sbin/se3_reinit_mdp.sh $grp $option");
+			system ("/usr/bin/sudo /usr/share/se3/scripts/se3_reinit_mdp.sh $grp $option");
 			echo "</pre>\n";
 			echo "<hr />\n";
 		}
@@ -309,7 +309,7 @@ else {
 				echo "<h4>".gettext("R&#233;initialisation des mots de passe &#224; la date de naissance pour les membres du groupe ".$grp."&nbsp;:")."</h4>\n";
 			}
 			echo "<pre class='listing'>";
-			system ("/usr/bin/sudo /usr/share/se3/sbin/se3_reinit_mdp.sh $grp $option");
+			system ("/usr/bin/sudo /usr/share/se3/scripts/se3_reinit_mdp.sh $grp $option");
 			echo "</pre>\n";
 			echo "<hr />\n";
 		}
@@ -325,7 +325,7 @@ else {
 				echo "<h4>".gettext("R&#233;initialisation des mots de passe &#224; la date de naissance pour les membres du groupe ".$grp."&nbsp;:")."</h4>\n";
 			}
 			echo "<pre class='listing'>";
-			system ("/usr/bin/sudo /usr/share/se3/sbin/se3_reinit_mdp.sh $grp $option");
+			system ("/usr/bin/sudo /usr/share/se3/scripts/se3_reinit_mdp.sh $grp $option");
 			echo "</pre>\n";
 			echo "<hr />\n";
 		}
@@ -341,7 +341,7 @@ else {
 				echo "<h4>".gettext("R&#233;initialisation des mots de passe &#224; la date de naissance pour les membres du groupe ".$grp."&nbsp;:")."</h4>\n";
 			}
 			echo "<pre class='listing'>";
-			system ("/usr/bin/sudo /usr/share/se3/sbin/se3_reinit_mdp.sh $grp $option");
+			system ("/usr/bin/sudo /usr/share/se3/scripts/se3_reinit_mdp.sh $grp $option");
 			echo "</pre>\n";
 			echo "<hr />\n";
 		}

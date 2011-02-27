@@ -51,26 +51,35 @@ switch($act) {
 	break;
 
 	case "export":
-	$ligne="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><se3mod><nom>SE3</nom><version>V 0.1</version><categories>";
+	$content_dir = '/tmp/';
+	$fichier_mod_xml = $content_dir . "rules.xml";
+	if (file_exists($fichier_mod_xml)) unlink($fichier_mod_xml);
+
+	$get= fopen ($fichier_mod_xml, "w+");
+	
+	$ligne="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<se3mod>\n<nom>SE3</nom>\n<version>V 0.1</version>\n<categories>\n";
+	fputs($get,$ligne);
  	$query1="SELECT categorie from corresp group by categorie";
  	$resultat1 = mysql_query($query1);
  	
 	while ($row = mysql_fetch_array($resultat1)) {
-		$ligne=$ligne."<categorie nom=\"$row[0]\"><regles><Regle ClasseObjet=\"INFO\"><OS>252</OS><Chemin/><Intitule>g&#233;n&#233;ral</Intitule><Composant>LIGNE</Composant><Variable/><ValeurSiCoche/><ValeurSiDecoche/><Commentaire/></Regle>";
+		$ligne="<categorie nom=\"$row[0]\">\n<regles>\n<Regle ClasseObjet=\"INFO\">\n<OS>252</OS>\n<Intitule>g&#233;n&#233;ral</Intitule>\n<Composant>LIGNE</Composant>\n<ValeurSiCoche/>\n<ValeurSiDecoche/>\n<Commentaire/>\n </Regle>\n";
+    	fputs($get,$ligne);
 		$query2="SELECT sscat from corresp where categorie='$row[0]' group by sscat";
 		$resultat2 = mysql_query($query2);
 		
 		while ($row2 = mysql_fetch_array($resultat2)) {
  			if ($row2[0]) {
-				$ligne=$ligne."<Regle ClasseObjet=\"INFO\"><OS>252</OS><Chemin/><Intitule>$row2[0]</Intitule><Composant>LIGNE</Composant><Variable/><ValeurSiCoche/><ValeurSiDecoche/><Commentaire/></Regle>";
-				$ajoutquery=" and sscat=\"$row2[0]\" ";
+				$ligne="<Regle ClasseObjet=\"INFO\">\n<OS>252</OS>\n<Intitule>\"$row2[0]\"</Intitule>\n<Composant>LIGNE</Composant>\n <ValeurSiCoche/>\n <ValeurSiDecoche/>\n<Commentaire/>\n</Regle>\n";
+				fputs($get,$ligne);
+                $ajoutquery=" and sscat=\"$row2[0]\" ";
  			} else  { $ajoutquery= " and sscat=\"\" "; }
 		
-			$query3="SELECT Intitule,chemin,OS,type,genre,valeur,antidote,comment from corresp where categorie='$row[0]' ".$ajoutquery;
+			$query3="SELECT Intitule,chemin,OS,type,genre,valeur,antidote,comment from corresp where categorie='$row[0]' ".$ajoutquery." order by type,genre,OS,valeur";
 			$resultat3 = mysql_query($query3);
-			while ($row3=mysql_fetch_row($resultat3)) {
- 				$cheminpascomp=$row3[1];
- 				$chemin=explode("\\",$row3[1]);
+			while ($row3=mysql_fetch_array($resultat3)) {
+ 				$cheminpascomp=$row3['chemin'];
+ 				$chemin=explode("\\",$row3['chemin']);
  				$j=count($chemin)-1;
  				$cheminpascomp=$chemin[0];
  				for ($i=1;$i<$j;$i++) {
@@ -78,28 +87,29 @@ switch($act) {
  				}
  				$variable=$chemin[$j];
 
- 				$ligne=$ligne."<Regle ClasseObjet=\"REGISTRE\"><OS>$row3[2]</OS><Chemin>reg:///$cheminpascomp</Chemin><Intitule>$row3[0]</Intitule>";
-				if ($row3[3]=="restrict") { $type="CHECKBOX" ;} else {$type="SELECT"; }
-      				if (trim($row3[4])=="REG_SZ") {$genre="CHAINE" ;}
-    				if (trim($row3[4])=="REG_DWORD") { $genre="DWORD"; }
-
-    				$ligne=$ligne."<Composant>$type</Composant><Variable type=\"$genre\">$variable</Variable><ValeurSiCoche>$row3[5]</ValeurSiCoche><ValeurSiDecoche>$row3[6]</ValeurSiDecoche> ";
-    				if ($row3[7]) {$ligne=$ligne."<commentaire>$row3[7]</commentaire>";} else { $ligne=$ligne."<commentaire/>";}
-				$ligne=$ligne."</Regle>";
+ 				$ligne="<Regle ClasseObjet=\"REGISTRE\">\n<OS>".$row3['OS']."</OS>\n<Chemin>reg:///$cheminpascomp</Chemin>\n<Intitule>".$row3['Intitule']."</Intitule>\n";
+ 				fputs($get,$ligne);
+				if ($row3['type']=="restrict") { $type="restrict" ;} else {$type="config"; }
+    			$ligne="<Composant>$type</Composant>\n<Variable type=\"".$row3['genre']."\">$variable</Variable>\n";
+    			fputs($get,$ligne);
+    			if (isset($row3['valeur'])) {$ligne="<ValeurSiCoche>".$row3['valeur']."</ValeurSiCoche>\n"; } else {$ligne="<ValeurSiCoche/>\n";}
+    			fputs($get,$ligne);
+    			if (isset($row3['antidote'])) {$ligne="<ValeurSiDecoche>".$row3['antidote']."</ValeurSiDecoche>\n";} else {$ligne="<ValeurSiDeCoche/>\n";}
+    			fputs($get,$ligne);
+    			if (isset($row3['comment'])) {$ligne="<commentaire>".$row3['comment']."</commentaire>\n";} else {$ligne="<commentaire/>\n";}
+    			fputs($get,$ligne); 
+				$ligne="</Regle>\n";
+				fputs($get,$ligne); 
  			}
 		}
 
 
- 		$ligne=$ligne."</regles></categorie>";
+ 		$ligne="</regles>\n</categorie>\n";
+        fputs($get,$ligne); 
 	}
-	$ligne=$ligne."</categories></se3mod>";
-	$content_dir = '/tmp/';
-	$fichier_mod_xml = $content_dir . "rules.xml";
-	if (file_exists($fichier_mod_xml)) unlink($fichier_mod_xml);
-
-	$get= fopen ($fichier_mod_xml, "w+");
-	fputs($get,$ligne);
-	fclose($get);
+	$ligne="</categories>\n</se3mod>\n";
+    fputs($get,$ligne); 
+    fclose($get);
 	$get= fopen ($fichier_mod_xml, "r");
 	header("Content-type: application/force-download");
 	header("Content-Length: ".filesize($fichier_mod_xml));

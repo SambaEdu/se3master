@@ -1,4 +1,4 @@
-## $Id: se3 5395 2010-04-12 17:09:27Z dbo $ ##
+## $Id$ ##
 # Extinction programmée des postes xp tous les 1/4h
 59,14,29,44 * * * * root /usr/share/se3/sbin/cron_wolstop.pl &>/dev/null
 #

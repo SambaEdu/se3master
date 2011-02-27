@@ -1,7 +1,7 @@
 #!/bin/bash
 # Auteurs: denis bonnenfant
 #
-## $Id: vide_corbeille.sh 5482 2010-05-04 05:46:38Z crob $ ##
+## $Id$ ##
 #
 ##### script permettant de vider les corbeilles si + de 3 jours ou dépassement quota #####
 # usage : clean  pour effacer les  corbeilles si non configurees

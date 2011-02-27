@@ -12,6 +12,9 @@ then
 	echo "-h Cette aide"
 	exit
 fi	
+. /usr/share/se3/includes/config.inc.sh -lm
+. /usr/share/se3/includes/functions.inc.sh 
+
 
 mkdir -p /var/se3/save/ldap/
 	
@@ -21,49 +24,55 @@ then
 	logger -t "SLAPD" "Lock syncrepl.lock existant"
 	exit 1
 fi	
+# 
+# ## recuperation des variables necessaires pour interoger mysql ###
+# if [ -e /root/.my.cnf ]; then
+# 	. /root/.my.cnf 2>/dev/null
+# else
+#         echo "Fichier de conf inaccessible désolé !!"
+#         echo "le script ne peut se poursuivre"
+#         exit 1
+# fi
 
-## recuperation des variables necessaires pour interoger mysql ###
-if [ -e /root/.my.cnf ]; then
-	. /root/.my.cnf 2>/dev/null
-else
-        echo "Fichier de conf inaccessible désolé !!"
-        echo "le script ne peut se poursuivre"
-        exit 1
-fi
-
-se3_ip="$(expr "$(LC_ALL=C /sbin/ifconfig eth0 | grep 'inet addr')" : '.*inet addr:\([^ ]*\)')"
+# se3ip="$(expr "$(LC_ALL=C /sbin/ifconfig eth0 | grep 'inet addr')" : '.*inet addr:\([^ ]*\)')"
 
 
 # Permettre un retour sur l'annuaire local
 if [ "$1" = "-r" ]
 then
-        /usr/bin/mysql -u $user -p$password -D se3db -e "UPDATE params set value='' WHERE name='replica_ip'"
-        /usr/bin/mysql -u $user -p$password -D se3db -e "UPDATE params set value='0' WHERE name='replica_status'"
-        /usr/bin/mysql -u $user -p$password -D se3db -e "UPDATE params set value='127.0.0.1' WHERE name='ldap_server'"
+        CHANGEMYSQL replica_ip ""
+	CHANGEMYSQL replica_status "0"
+	CHANGEMYSQL ldap_server "127.0.0.1"
+# 
+# 
+#         /usr/bin/mysql -u $user -p$password -D se3db -e "UPDATE params set value='' WHERE name='replica_ip'"
+#         /usr/bin/mysql -u $user -p$password -D se3db -e "UPDATE params set value='0' WHERE name='replica_status'"
+#         /usr/bin/mysql -u $user -p$password -D se3db -e "UPDATE params set value='127.0.0.1' WHERE name='ldap_server'"
 	echo "Annuaire replacé en mode annuaire local"
 fi
 
 #
 ## Version Debian
-# if [ -e /etc/debian_version ]
-# then
-# 	DEBIAN_VERSION=`cat /etc/debian_version`
-# fi
+if [ -e /etc/debian_version ]
+then
+  DEBIAN_VERSION=`cat /etc/debian_version`
+fi
 
 #########################################################################################
 # 	Recup et vérif  des données dans la base SQL					#
 #########################################################################################
-replica_status=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='replica_status'" | grep -v value`
-replica_ip=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='replica_ip'" | grep -v value`
-ldap_ip=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='ldap_server'" | grep -v value`
-ldap_base_dn=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='ldap_base_dn'" | grep -v value`
-ldap_server=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='ldap_server'" | grep -v value`
-ldap_admin=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='adminRdn'" | grep -v value`
+# replica_status=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='replica_status'" | grep -v value`
+# replica_ip=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='replica_ip'" | grep -v value`
+# ldap_server=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='ldap_server'" | grep -v value`
+# ldap_base_dn=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='ldap_base_dn'" | grep -v value`
+# ldap_server=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='ldap_server'" | grep -v value`
+# ldap_server=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='ldap_server'" | grep -v value`
+# adminRdn=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='adminRdn'" | grep -v value`
+# adminPw=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='adminPw'" | grep -v value`
 
-ldap_adminPw=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='adminPw'" | grep -v value`
 
 # Vérification des variables
-if [ "$ldap_server" = "" -o "$ldap_admin" = "" ]
+if [ "$ldap_server" = "" -o "$adminRdn" = "" ]
 then
 	echo "Impossible de connaître la base dn et/ou l'admin"
 	echo "le script ne peut se poursuivre"
@@ -137,14 +146,14 @@ fi
 # On crypte le mot de passe
 ldap_passwd=`cat /etc/ldap.secret`
 # vérifie la concordence avcc la base SQL
-if [ "$ldap_passwd" != "$ldap_adminPw" ]
+if [ "$ldap_passwd" != "$adminPw" ]
 then
 	# Implique un changement de mot de passe, on change donc celui de ldap.secret
-	echo "$ldap_adminPw" > /etc/ldap.secret
+	echo "$adminPw" > /etc/ldap.secret
 	chmod 400 /etc/ldap.secret
-	smbpasswd -w $ldap_adminPw
+	smbpasswd -w $adminPw
 fi	
-crypted_ldap_passwd=`/usr/sbin/slappasswd -h {MD5} -s $ldap_adminPw`
+crypted_ldap_passwd=`/usr/sbin/slappasswd -h {MD5} -s $adminPw`
 
 # TLS
 echo "
@@ -230,7 +239,7 @@ database        bdb
 
 # The base of your directory
 suffix		\"$ldap_base_dn\"
-rootdn		\"$ldap_admin,$ldap_base_dn\"
+rootdn		\"$adminRdn,$ldap_base_dn\"
 rootpw		$crypted_ldap_passwd
 # Where the database file are physically stored
 directory	\"/var/lib/ldap\"
@@ -337,15 +346,15 @@ fi
 # Pas de ssl si le ldap est local
 if [ "$replica_status" == "" -o "$replica_status" = "0" ]
 then	
-	if [ "$ldap_ip" == "$se3_ip" ]
+	if [ "$ldap_server" == "$se3ip" ]
 	then
 		echo "Pas de replication, LDAP local, SSL off"
 		SSL="off"
 	fi
 fi
 # Modification conf samba
-sed -i "s!ldapsam:.*!ldapsam:ldap://$ldap_server!" /etc/samba/smb.conf 2>/dev/null
-sed -i "s!ldap ssl.*!ldap ssl = $SSL!" /etc/samba/smb.conf 2>/dev/null
+sed -i "s#ldapsam:ldap.*#ldapsam:ldap://$ldap_server#" /etc/samba/smb.conf 2>/dev/null
+sed -i "s#ldap ssl.*#ldap ssl = $SSL#" /etc/samba/smb.conf 2>/dev/null
 
 #################################################################################
 #	Slave Syncrepl						  		#
@@ -353,12 +362,17 @@ sed -i "s!ldap ssl.*!ldap ssl = $SSL!" /etc/samba/smb.conf 2>/dev/null
 if [ "$replica_status" = "4" ]
 then
 	# On supprime la base 
-	rm -f /var/lib/ldap/*
+	
 	if [ -e "/var/se3/save/ldap/DB_CONFIG" ]
         then
-	        cp /var/se3/save/ldap/DB_CONFIG /var/lib/ldap/
+	    
+	    cp /var/se3/save/ldap/DB_CONFIG /var/lib/ldap/
+	else
+	    mkdir -p /var/se3/save/ldap/
+	    cp /var/lib/ldap/DB_CONFIG /var/se3/save/ldap/
+	
 	fi
-
+  rm -f /var/lib/ldap/*
 
 echo "syncrepl rid=0
  provider=ldap://$ldap_server:389
@@ -368,7 +382,6 @@ echo "syncrepl rid=0
  scope=sub
  schemachecking=off
  bindmethod=simple
- updatedn=\"cn=admin,$ldap_base_dn\"
  binddn=\"cn=admin,$ldap_base_dn\"
  credentials=$ldap_passwd" > /etc/ldap/syncrepl.conf
 
@@ -390,10 +403,9 @@ then
 	# touch syncrepl vide pour indiquer la méthode
 	
 echo "moduleload syncprov
-sessionlog 123 500
 overlay syncprov
 syncprov-checkpoint 50 5
-syncprov-session 50" > /etc/ldap/syncrepl.conf
+syncprov-sessionlog 50" > /etc/ldap/syncrepl.conf
 	
 # Ajout de l'include dans slapd.conf
 echo "# Replication Slave Syncrepl
@@ -419,7 +431,7 @@ if [ "$replica_status" = "2" ]
 then
 	# Modiife les différents fichiers de conf
 	serveurs="$ldap_server $replica_ip"
-	echo "updatedn \"$ldap_admin,$ldap_base_dn\" " >> /etc/ldap/slapd.conf
+	echo "updatedn \"$adminRdn,$ldap_base_dn\" " >> /etc/ldap/slapd.conf
         echo "updateref \"ldap://$ldap_server:389\"" >> /etc/ldap/slapd.conf
 		
 fi
@@ -432,7 +444,7 @@ then
 	# Modiife les différents fichiers de conf
 	serveurs="$ldap_server $replica_ip"
 	echo "replica host=$replica_ip:389" >> /etc/ldap/slapd.conf
-        echo "  binddn=\"$ldap_admin,$ldap_base_dn\"" >> /etc/ldap/slapd.conf
+        echo "  binddn=\"$adminRdn,$ldap_base_dn\"" >> /etc/ldap/slapd.conf
 	echo "  bindmethod=simple       credentials=$ldap_passwd" >> /etc/ldap/slapd.conf
 	echo "replogfile /var/spool/slurpd/replica/replogfile" >> /etc/ldap/slapd.conf
 	
@@ -450,7 +462,7 @@ fi
 #################################################################################
 echo "ldap_version 3
 base $ldap_base_dn
-rootbinddn $ldap_admin,$ldap_base_dn
+rootbinddn $adminRdn,$ldap_base_dn
 #bindpw pasecure
 host $serveurs
 #scope sub
@@ -463,7 +475,7 @@ nss_initgroups_ignoreusers root,openldap,plugdev,disk,kmem,tape,audio,daemon,lp,
 # Création de pam_ldap.conf
 echo "ldap_version 3
 base $ldap_base_dn
-rootbinddn $ldap_admin,$ldap_base_dn
+rootbinddn $adminRdn,$ldap_base_dn
 #bindpw pasecure
 host $serveurs
 pam_crypt local

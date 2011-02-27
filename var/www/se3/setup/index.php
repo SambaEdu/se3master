@@ -127,7 +127,7 @@ if (isset($_POST['submit'])) {
 				// Correction du SID dans le secrets.tdb et l'annuaire en fonction du domainsid de mysql 
 				exec('/usr/bin/sudo /usr/share/se3/scripts/correctSID.sh -m -q');
 			}
-			exec('/usr/bin/sudo /usr/share/se3/scripts/refresh_cache_params.sh');
+			
 		} else {
 			if ($modif == "0") {
 				echo "<center>";
@@ -137,6 +137,9 @@ if (isset($_POST['submit'])) {
 		}
 		echo "<br /><br /><center><a href=\"./\">".gettext("Retour")."</a></center>";
 		mysql_free_result($result);
+		if ($modif == "1") {
+				exec('/usr/bin/sudo /usr/share/se3/scripts/refresh_cache_params.sh');
+		}
 	} else print gettext ("oops: Erreur inattendue de lecture des anciens param&#232;tres\n");
 
 

@@ -148,7 +148,7 @@ if (($fichier_xml)&&(!$retval_mod)) {
   	}
   	xml_parser_free($analyseur_xml);
      	connexion();
-    	$ligne=preg_replace("/(\r\n)|(\n)|(\r)/","",$ligne);
+    	$ligne=ereg_replace("(\r\n)|(\n)|(\r)","",$ligne);
 
 	if (mb_detect_encoding($ligne,"UTF-8")) {
                 $ligne=mb_convert_encoding($ligne,'ISO-8859-1','UTF-8');
@@ -164,11 +164,11 @@ if (($fichier_xml)&&(!$retval_mod)) {
     			$cree=0;
     			$modif=0;
     			$ignore=0;
-    			list($nom,$reste)=preg_split("/-:-/",$categorie[$j]);
-    			list($cle,$valeur)=preg_split("/--/",$reste);
+    			list($nom,$reste)=split("-:-",$categorie[$j]);
+    			list($cle,$valeur)=split("--",$reste);
     			echo "<h2>$nom</h2>";
     		} else {
-    			list($cle,$valeur)=preg_split("/--/",$categorie[$j]);
+    			list($cle,$valeur)=split("--",$categorie[$j]);
     		}
     		
 		if ($cle) {

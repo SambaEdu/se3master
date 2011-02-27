@@ -41,4 +41,13 @@ RSYNC_OPTS='' " > /etc/default/rsync
 /etc/init.d/rsync stop 2>/dev/null
 fi
 
+if [ "$1" = "restart" ]
+then
+echo "
+RSYNC_ENABLE=true
+RSYNC_CONFIG_FILE=/etc/rsyncd.conf
+RSYNC_OPTS='' " > /etc/default/rsync
+
+/etc/init.d/rsync restart 2>/dev/null
+fi
 

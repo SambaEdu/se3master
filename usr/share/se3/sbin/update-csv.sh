@@ -2,7 +2,7 @@
 # Auteur: Denis Bonnenfant
 #
 #
-## $Id: update-csv.sh 5416 2010-04-17 12:21:51Z dbo $ ##
+## $Id$ ##
 #
 ##### script generant le fichier unattend.csv à partir du ldap #####
 
@@ -25,12 +25,12 @@ rm -f /tmp/emailunattended_generate
 # initialisation de la config
 # recup parametres ldap
 . /etc/se3/config_l.cache.sh
+. /etc/se3/config_m.cache.sh
 
 REPSITE=/home/netlogon/domscripts
 UNATTENDEDSITE=/var/se3/unattended/install/site
 UNATTENDCSV=$REPSITE/unattend.csv
 UNATTENDTXT=unattend.txt
-
 
 
 ##### variables a stocker dans mysql ########
@@ -54,6 +54,7 @@ echo "\"Default\",\"ntp_servers\",\"ntp.ac-creteil.fr\"" >> $UNATTENDCSV
 echo "\"Default\",\"top_scripts\",\"basese3.bat\"" >> $UNATTENDCSV
 echo "\"Default\",\"AdminPassword\",\"wawa\"" >> $UNATTENDCSV
 echo "\"Default\",\"JoinWorkgroup\",\"workgroup\"" >> $UNATTENDCSV
+echo "\"Default\",\"FullName\",\"Unattended XP\"" >> $UNATTENDCSV
 echo "" >> $UNATTENDCSV
 
 export COMPUTER
@@ -77,7 +78,7 @@ do
                   if [ "$COMPUTER" != "clone" ]; then
                       echo "\"$MACADD\",\"ComputerName\",\"$COMPUTER\"" >> $UNATTENDCSV
                       echo "\"$COMPUTER\",\"FullName\",\"$COMPUTER\"" >> $UNATTENDCSV
-                      [ -e $UNATTENDEDSITE/$COMPUTER.txt ] && echo "\"$MACADD\",\"UnattendedFile\",\"$COMPUTER\"" >> $UNATTENDCSV
+                      [ -e $UNATTENDEDSITE/$COMPUTER.txt ] && echo "\"$MACADD\",\"UnattendedFile\",\"$COMPUTER.txt\"" >> $UNATTENDCSV
                   fi
               else
                   echo "L'adresse MAC : $MACADD correspond a deux ordinateurs de la branche Computers (il faut corriger en ne gardant qu'une des entrees suivantes)." >> /tmp/emailunattended_generate
@@ -91,11 +92,16 @@ do
 done
 # Envoi de l'e-mail rapport
 if [ -e /tmp/emailunattended_generate ] ; then
-  echo "Dans le cas ou vous ne corrigeriez pas, les reinstallations unattended risqueraient de se faire sous le mauvais nom." >> /tmp/emailunattended_generate
+  echo "Pour corriger : Sur l'interface web, Menu gestion des parcs, cliquer sur recherche puis supprimer les entrees obsoletes.
+
+Dans le cas ou vous ne corrigeriez pas, les reinstallations unattended risqueraient de se faire sous le mauvais nom." >> /tmp/emailunattended_generate
   cat  /tmp/emailunattended_generate
 fi
-
-
+if [ -e $UNATTENDCSV ]; then
+    unix2dos $UNATTENDCSV
+    mkdir -p $UNATTENDEDSITE
+    cp -f $UNATTENDCSV $UNATTENDEDSITE
+fi
 if [ -e $LOCKFILE ]; then
   rm $LOCKFILE
 fi

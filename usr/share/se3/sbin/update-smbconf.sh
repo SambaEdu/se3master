@@ -1,5 +1,5 @@
 #!/bin/bash
-## $Id: update-smbconf.sh 5510 2010-05-08 09:09:28Z keyser $ ##
+## $Id$ ##
 # Update smb.conf based on current template version and current logon script (pl, py)
 # Keep user defined shares
 . /usr/share/se3/includes/config.inc.sh -cml
@@ -12,12 +12,12 @@ chmod 777 /home/profiles
 [ -z "$netbios_name" ] && netbios_name=$(grep "netbios name" /etc/samba/smb.conf|cut -d '=' -f2|sed -e 's/ //g')
 [ -z "$se3ip" ] && se3ip="$(expr "$(LC_ALL=C /sbin/ifconfig eth0 | grep 'inet addr')" : '.*inet addr:\([^ ]*\)')"
 
-MASK=$(grep netmask  /etc/network/interfaces | head -n1 | sed -e "s/netmask//g" | tr "\t" " " | sed -e "s/ //g")
+[ -z "$se3mask" ] && se3mask=$(grep netmask  /etc/network/interfaces | head -n1 | sed -e "s/netmask//g" | tr "\t" " " | sed -e "s/ //g")
 CHARSET=$(grep "unix charset" /etc/samba/smb.conf |grep -v "#"| head -n1 | cut -d"=" -f2 | sed -e "s/ //")
 [ -z "$CHARSET" ] && CHARSET="UTF-8"
 
 cp -f /etc/samba/smb.conf /etc/samba/smb.conf.old
-sed -e "s/#DOMAIN#/$se3_domain/g;s/#NETBIOSNAME#/$netbios_name/g;s/#IPSERVEUR#/$se3ip/g;s/#MASK#/$MASK/g;s/#SLAPDIP#/$ldap_server/g;s/#BASEDN#/$ldap_base_dn/g;s/#ADMINRDN#/$adminRdn/g;s/#COMPUTERS#/$computersRdn/g;s/#PEOPLE#/$peopleRdn/g;s/#GROUPS#/$groupsRdn/g;s/#CHARSET#/$CHARSET/g" /var/cache/se3_install/conf/smb_3.conf.in >/etc/samba/smb.conf
+sed -e "s/#DOMAIN#/$se3_domain/g;s/#NETBIOSNAME#/$netbios_name/g;s/#IPSERVEUR#/$se3ip/g;s/#MASK#/$se3mask/g;s/#SLAPDIP#/$ldap_server/g;s/#BASEDN#/$ldap_base_dn/g;s/#ADMINRDN#/$adminRdn/g;s/#COMPUTERS#/$computersRdn/g;s/#PEOPLE#/$peopleRdn/g;s/#GROUPS#/$groupsRdn/g;s/#CHARSET#/$CHARSET/g" /var/cache/se3_install/conf/smb_3.conf.in >/etc/samba/smb.conf
 
 
 if [ ! -e /etc/samba/smb_etab.conf ]; then
@@ -26,9 +26,9 @@ if [ ! -e /etc/samba/smb_etab.conf ]; then
 	grep -A1000 "include = /etc/samba/printers_se3/%m.inc" /etc/samba/smb.conf.old | grep -v "include =" >/etc/samba/smb_etab.conf
 	SMB_ETAB=$(cat /etc/samba/smb_etab.conf)
 	if [ -z "$SMB_ETAB" ]; then
-		echo "Attention : AUCUN partage propre a l'etablissement trouvé dans le smb.conf d'origine. A noter que c'est normal si vous n'en avez jamais crees"
+		echo "Attention : AUCUN partage propre a l'etablissement trouve dans le smb.conf d'origine. A noter que c'est normal si vous n'en avez jamais crees"
 	else
-		echo "Les partages propres à l'établissement suivants on ete trouve et exportes dans /etc/samba/smb_etab.conf"  
+		echo "Les partages propres a l'etablissement suivants ont ete trouve et exportes dans /etc/samba/smb_etab.conf"  
 		echo "$SMB_ETAB" 
 	fi
 	
@@ -65,7 +65,7 @@ sed -i "s!recycle:repository=/home/%u/profil/Bureau/Corbeille_Reseau!recycle:rep
 sed -i "s!recycle:touch !recycle:touch_mtime !" /etc/samba/smb*.conf
 sed -i "s!recycle:touch=no!recycle:touch_mtime=yes!" /etc/samba/smb*.conf
 /usr/share/se3/sbin/vide_corbeille.sh clean
-if [ "$corbeille" -eq "0" ]
+if [ "$corbeille" == "0" ]
 then
 	sed -i "s/recycle:exclude=.*/recycle:exclude=\*\.\*/" /etc/samba/smb*.conf
 else

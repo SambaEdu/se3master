@@ -36,7 +36,8 @@
 	if ( isset($_GET['username']) ) {
 		$username = $_GET['username'];
 		echo "  username = '$username';\r\n";
-		$userGroups = search_groups ( "(|(memberUid=$username)(member=uid=$username,ou=People,dc=malherbe,dc=lyc14,dc=ac-caen,dc=fr))" );
+		$filtre = "(|(memberUid=".$username.")(member=uid=".$username.",".$dn['people']."))";
+		$userGroups = search_groups ( $filtre );
 		$nGroups = count( $userGroups);
 		echo "  userGroups = ',";
 		for ($i=0; $i<$nGroups; $i++) {

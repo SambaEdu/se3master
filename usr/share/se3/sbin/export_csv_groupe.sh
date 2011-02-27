@@ -4,7 +4,7 @@
 #
 # Auteur: Stéphane Boireau (A.S. - Relais de Bernay/Pont-Audemer (27))
 #
-## $Id: export_csv_groupe.sh 5341 2010-03-17 16:48:16Z dbo $ ##
+## $Id$ ##
 #
 # /usr/share/se3/sbin/export_csv_groupe.sh
 # Dernière modification: 23/06/2007

@@ -1,5 +1,5 @@
 #!/bin/bash
-## $Id: mkhome.sh 3544 2009-02-15 00:00:33Z keyser $ ##
+## $Id$ ##
 #shares_Win95: homes
 #shares_Win2K: homes
 #shares_WinXP: homes
@@ -20,18 +20,19 @@ then
 fi	
 	
 user=$1
+. /etc/se3/config_m.cache.sh
+
 # Creation du repertoire perso le cas echeant
 # -------------------------------------------
 if [ ! -d "/home/$user" -o ! -d "/home/$user/profil" ]; then
 
     . /etc/se3/config_c.cache.sh
-	. /etc/se3/config_m.cache.sh
  	. /etc/se3/config_o.cache.sh
 	. /etc/se3/config_p.cache.sh
 	
     [ -d "/home/$user" ] || mkdir /home/$user
     cp -a $path2UserSkel/* /home/$user > /dev/null # 2>&1
-
+	
 	# kz - Ajout pour la construction du fichier de pref de moz TB uniquement car FF géré lors des maj
 	# 
 	PREF_JS_TB="/home/$user/profil/appdata/Thunderbird/Profiles/default/prefs.js"
@@ -87,11 +88,24 @@ if [ ! -d "/home/$user" -o ! -d "/home/$user/profil" ]; then
 
 
 else
+	if [ "localmenu" == "1" ]; then
+		# il faut creer le menu dans profiles	
+		pathDemarrer="/home/profiles/$user/Demarrer"
+		if [ -d /home/profiles/$user ]; then 
+			find "$pathDemarrer" -group root # -delete
+		else
+			mkdir -p "$pathDemarrer" && chown -R  $user:admins /home/profiles/$user
+		fi
+		[ -d /home/$user/profil/Demarrer ] && mv /home/$user/profil/Demarrer /home/profiles/$user
+	fi
 	useruid=`getent passwd $user | gawk -F ':' '{print $3}'`
 	prop=`stat -c%u /home/$user`
-	if [ ! "$prop" = "$useruid" ]; then
-	chown -R $user:admins /home/$user > /dev/null 2>&1
-	chown -R root:admins /home/$user/profil/Bureau/* > /dev/null 2>&1
-	chown -R root:admins /home/$user/profil/Demarrer/* > /dev/null 2>&1
+	if [ "$prop" != "$useruid" ]; then
+		chown -R $user:admins /home/$user > /dev/null 2>&1
+		chown -R root:admins /home/$user/profil/Bureau/* > /dev/null 2>&1
+	fi
+	if [ "localmenu" != "1" ]; then
+		chown -R root:admins /home/$user/profil/Demarrer/* > /dev/null 2>&1
 	fi 
 fi
+

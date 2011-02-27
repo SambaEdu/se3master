@@ -1,8 +1,7 @@
 <?php
 
    /**
-
-    * Ancienne page a supprimer
+   
    * Page qui test les differents services
    * @Version $Id: test.php 3002 2008-05-30 12:58:43Z keyser $ 
    

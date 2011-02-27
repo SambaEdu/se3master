@@ -244,8 +244,7 @@ function dispstats($idpers)
 
     if ($idpers):
         /* Renvoie le nombre de connexions */
-	mysql_select_db('$DBAUTH',$authlink);
-        $result=mysql_query("SELECT stat FROM personne WHERE id=$idpers", $authlink);
+        $result=mysql_db_query("$DBAUTH","SELECT stat FROM personne WHERE id=$idpers", $authlink);
     if ($result && mysql_num_rows($result)):
         $stat=mysql_result($result,0,0);
     mysql_free_result($result);
@@ -272,8 +271,7 @@ function displogin ($idpers)
 
     if ($idpers):
         /* Renvoie le timestamp du dernier login */
-	mysql_select_db($DBAUTH , $authlink);
-        $result=mysql_query("SELECT date_format(last_log,'%e %m %Y à %T' ) FROM personne WHERE id=$idpers", $authlink);
+        $result=mysql_db_query("$DBAUTH","SELECT date_format(last_log,'%e %m %Y à %T' ) FROM personne WHERE id=$idpers", $authlink);
     if ($result && mysql_num_rows($result)):
         $der_log=mysql_result($result,0,0);
     mysql_free_result($result);
@@ -304,6 +302,10 @@ function isauth()
                 - Si non, renvoie ""
                 - Si oui, renvoie l'uid de la personne
     */
+
+    // Initialisation:
+    $login="";
+
     global $HTTP_COOKIE_VARS, $authlink;
     if ( ! empty($HTTP_COOKIE_VARS["SambaEdu3"])):
         $sess=$HTTP_COOKIE_VARS["SambaEdu3"];
@@ -362,8 +364,13 @@ function open_session($login, $passwd,$al)
     global $urlauth, $authlink, $secook;
     global  $dbhost, $dbuser, $dbpass, $autologon, $REMOTE_ADDR;
     global $MsgError,$logpath,$defaultintlevel,$smbversion;
+
     $res=0;
     $loginauto="";
+
+    // Initialisation
+    $auth_ldap=0;
+
     if (($al!=1)&&("$autologon"=="1")){
 
 		$logintstsecu=exec("smbstatus -p | grep \"(".$_SERVER['REMOTE_ADDR'].")\" | grep -v root | grep -v nobody | grep -v adminse3  | grep -v unattend | wc -l");
@@ -379,6 +386,7 @@ function open_session($login, $passwd,$al)
         }
         //echo "-->";
     }
+
     if ($auth_ldap!=1) {
                         // decryptage du mot de passe
                         list ($passwd, $error,$ip_src,$timetotal) = decode_pass($passwd);
@@ -850,7 +858,8 @@ function ldap_get_right($type,$login)
 
             // Recherche du nom exact
             $search_filter = "(member=$nom)";
-            $ret=ldap_get_right_search ($type,$search_filter,$ldap,$base_search);
+            //$ret=ldap_get_right_search ($type,$search_filter,$ldap,$base_search);
+            $ret=ldap_get_right_search ($type,$search_filter,$ldap);
             if ($ret=="N") {
             // Recherche sur les Posixgroups d'appartenance
                 $result1 = @ldap_list ( $ldap, $dn["groups"], "memberUid=$login", array ("cn") );
@@ -860,7 +869,8 @@ function ldap_get_right($type,$login)
                     $loop=0;
                     while (($loop < $info["count"]) && ($ret=="N")){
                         $search_filter = "(member=cn=".$info[$loop]["cn"][0].",".$dn["groups"].")";
-                        $ret=ldap_get_right_search ($type,$search_filter,$ldap,$base_search,$search_attributes);
+                        //$ret=ldap_get_right_search ($type,$search_filter,$ldap,$base_search,$search_attributes);
+                        $ret=ldap_get_right_search ($type,$search_filter,$ldap);
                         $loop++;
                     }
                 }
@@ -876,7 +886,8 @@ function ldap_get_right($type,$login)
                     $loop=0;
                     while (($loop < $info["count"]) && ($ret=="N")){
                         $search_filter = "(member=cn=".$info[$loop]["cn"][0].",".$dn["groups"].")";
-                        $ret=ldap_get_right_search ($type,$search_filter,$ldap,$base_search,$search_attributes);
+                        //$ret=ldap_get_right_search ($type,$search_filter,$ldap,$base_search,$search_attributes);
+                        $ret=ldap_get_right_search ($type,$search_filter,$ldap);
                         $loop++;
                     }
                 }
@@ -956,8 +967,7 @@ function this_parc_delegate($login,$parc,$niveau)
 	$authlink_delegate = @mysql_connect($dbhost,$dbuser,$dbpass);
 	@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
 	$query_delegate="SELECT `parc` FROM `delegation` WHERE `login`='$login' and `parc`='$parc' and `niveau`='$niveau';";
-	
-	$result_delegate=mysql_query($query_delegate,$authlink_delegate);
+	$result_delegate=mysql_db_query($dbname,$query_delegate);
 	if ($result_delegate) {
 		$ligne_delegate=mysql_num_rows($result_delegate);
 		if ($ligne_delegate>0) { return true; } else { return false;}

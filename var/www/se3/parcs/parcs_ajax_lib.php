@@ -28,12 +28,12 @@
 	require ("config.inc.php");
 	require_once ("functions.inc.php");
 	require_once ("lang.inc.php");
-
-	include "ldap.inc.php";
-	include "ihm.inc.php";
+    require_once ("fonc_outils.inc.php");
+	require_once ("ldap.inc.php");
+	require_once ("ihm.inc.php");
 
 	
-	include('fonc_parc.inc.php');
+	require_once ('fonc_parc.inc.php');
 	$prefix = "action_parc";
 	//$lang = "en";
 	require_once("messages/$lang/".$prefix."_messages.php");
@@ -68,8 +68,8 @@
 			$texte= $login.$action_parc['msgUserLogged'];
 			$etat_session.="<img onmouseout=\"UnTip();\" onmouseover=\"Tip('".$texte."',WIDTH,250,SHADOW,true,DURATION,5000);\" src=\"../elements/images/enabled.png\" border=\"0\" />";
 
-			}
-		echo $etat_session;
+		}
+		return array( login=>$login, html=>$etat_session);
 	}
 
 	//====================================================
@@ -99,7 +99,7 @@
 				}
 
 				if($smbsess=="") {
-					@exec("sudo /usr/share/se3/scripts/start_poste.sh $nom reboot");
+					@start_poste("shutdown", $nom);
 					echo $action_parc['cmdSendReboot'];
 				}
 				else {
@@ -113,13 +113,13 @@
 				}
 			}
 			elseif($shutdown_reboot=="reboot") {
-				@exec("sudo /usr/share/se3/scripts/start_poste.sh $nom reboot");
+				@start_poste("reboot", $nom);
 				echo $action_parc['msgSendReboot'];
 			}
 		}
 		else {
 			if("$wake"=="y") {
-				@exec("sudo /usr/share/se3/scripts/start_poste.sh $nom wol");
+				@start_poste("wol", $nom);
 				echo $action_parc['msgSendWakeup'];
 			}
 		}
@@ -166,13 +166,43 @@
 		}
 	}
 	elseif($_POST['mode']=='session') {
-		get_smbsess($_POST['nom_machine']);
+		$session = get_smbsess($_POST['nom_machine']);
+		echo $session['html'];
 	}
 	elseif($_POST['mode']=='wake_shutdown_or_reboot') {
 		wake_shutdown_or_reboot($_POST['ip'],$_POST['nom'],$_POST['wake'],$_POST['shutdown_reboot']);
 	}
+	elseif($_POST['mode']=='test_logon') {
+	    $machine = $_POST['nom_machine'];
+		if (is_dir('/home/netlogon/machine/'.$machine)) {
+			if (is_file('/home/netlogon/machine/'.$machine.'/gpt.ini')) {
+					echo "<img type=\"image\" src=\"../elements/images/enabled.png\" border=\"0\" title=\"".$machine." : intégration OK \"/>";
+			} else {
+					echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"".$machine." : problème avec les domscripts\"/>";
+			}
+		} else {
+			$session = get_smbsess($machine);
+			if ($session['login']) {
+				echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"".$machine." : problème avec les domscripts, le script de logon ne se lance pas \"/>";
+			} elseif (fping($_POST['ip'])) {
+				unset($texte);
+				exec( "sudo /usr/share/se3/scripts/force_gpo.sh ".$machine." ".$_POST['ip'], $texte, $ret ); 
+				if ($ret) {
+				// afficher les codes d'erreur en fonction des résultats du script
+					echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"".$machine." : problème avec les domscripts, le script de logon a renvoye une erreur ".$ret;
+					foreach ($texte as $ligne){
+						echo $ligne."<br>";
+					}
+					echo "\"/>";
+				} else {
+					echo "<img type=\"image\" src=\"../elements/images/enabled.png\" border=\"0\" title=\"".$machine." : intégration OK \"/>";
+				}
+			} else {
+					echo "<img type=\"image\" src=\"../elements/images/disabled.png\" border=\"0\" title=\"".$machine." : il faut allumer la machine \"/>";
+			}
+		}
+	}
 	elseif($_POST['mode']=='ts_vnc') {
-		//include "../parcs/fonc_parc.inc.php";
 
 		$resultat=fping($_POST['ip']);
 		if($resultat){

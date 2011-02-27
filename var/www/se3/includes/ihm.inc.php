@@ -10,8 +10,8 @@
    
    * @Auteurs Equipe Tice academie de Caen
    * @Auteurs oluve olivier.le_monnier@crdp.ac-caen.fr
-   * @Auteurs « jLCF >:> » jean-luc.chretien@tice.ac-caen.fr
-   * @Auteurs « wawa »  olivier.lecluse@crdp.ac-caen.fr
+   * @Auteurs ï¿½ jLCF >:> ï¿½ jean-luc.chretien@tice.ac-caen.fr
+   * @Auteurs ï¿½ wawa ï¿½  olivier.lecluse@crdp.ac-caen.fr
 
    * @Note: Ce fichier de fonction doit etre appele par un include
 
@@ -126,18 +126,18 @@ function enleveaccents($chaine){
 	$chaine=convertUTF8_to_8859($chaine);
 	$chaine = str_replace(
 		array(
-		'à', 'â', 'ä', 'á', 'ã', 'å',
-		'î', 'ï', 'ì', 'í',
-		'ô', 'ö', 'ò', 'ó', 'õ', 'ø',
-		'ù', 'û', 'ü', 'ú',
-		'é', 'è', 'ê', 'ë',
-		'ç', 'ÿ', 'ñ',
-		'À', 'Â', 'Ä', 'Á', 'Ã', 'Å',
-		'Î', 'Ï', 'Ì', 'Í',
-		'Ô', 'Ö', 'Ò', 'Ó', 'Õ', 'Ø',
-		'Ù', 'Û', 'Ü', 'Ú',
-		'É', 'È', 'Ê', 'Ë',
-		'Ç', '¾', 'Ñ',
+		'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½',
+		'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½',
+		'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½',
+		'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½',
+		'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½',
+		'ï¿½', 'ï¿½', 'ï¿½',
+		'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½',
+		'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½',
+		'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½',
+		'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½',
+		'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½',
+		'ï¿½', 'ï¿½', 'ï¿½',
 		' '
 		),
 		array(
@@ -177,7 +177,7 @@ function verifIntituleGrp ($intitule) {
   $motif2 = "^Cours$";
   $motif3 = "^Equipe$";
   $motif4 = "^Matiere$";
-  if ( preg_match("/$motif1/",$intitule)||preg_match("/$motif2/",$intitule)||preg_match("/$motif3/",$intitule)||preg_match("/$motif4/",$intitule) ) {
+  if ( ereg($motif1,$intitule)||ereg($motif2,$intitule)||ereg($motif3,$intitule)||ereg($motif4,$intitule) ) {
     $ret = false;
   } else $ret = true;
   return $ret;
@@ -188,8 +188,8 @@ function verifIntituleGrp ($intitule) {
 
 /**
 * Verification de la validite d'un mot de passe 
-* longueur de 4 a 8 caracteres
-* compose de lettre et d'au moins un chiffre ou des caracteres speciaux suivants : _#@£%§!?*$:
+* longueur de 4 a 20 caracteres
+* compose de lettre et d'au moins un chiffre ou des caracteres speciaux suivants : _#@ï¿½%ï¿½!?*$:
 
 * @Parametres password a tester
 * @Return true si Ok false sinon 
@@ -198,9 +198,9 @@ function verifIntituleGrp ($intitule) {
 function verifPwd ($password) {
   global $char_spec;
 
-  if ( preg_match("/(^[a-zA-Z]*$)|(^[0-9]*$)/", $password) )
+  if ( ereg("(^[a-zA-Z]*$)|(^[0-9]*$)", $password) )
   	return false;
-  elseif ( preg("/^[[:alnum:]$char_spec]{4,8}$/", $password) )
+  elseif ( ereg("^[[:alnum:]$char_spec]{4,20}$", $password) )
     	return true; else return false;
 }
 
@@ -217,9 +217,9 @@ function verifPwd ($password) {
 function verifDateNaissance ($date) {
 $motif = "^[0-9]{8}$";
 
- if ( preg_match("/$motif/", $date) ) {
+ if ( ereg($motif, $date) ) {
    // Verification de l'annee
-   if ( (date(Y) - substr ($date,0,4) < 75) && (date(Y) - substr ($date,0,4) > 4) ) {
+   if ( (date('Y') - substr ($date,0,4) < 75) && (date('Y') - substr ($date,0,4) > 4) ) {
      // Verification du mois
      if ( (substr ($date,4,2) > 0) && (substr ($date,4,2) <= 12 ) ) {
        if ( (substr ($date,6,2) > 0) && (substr ($date,6,2) <= 31) ) {
@@ -245,9 +245,9 @@ $motif = "^[0-9]{8}$";
 */
 
 function verifEntree($entree) {
-  $motif = "^[_0-9a-zA-Z \'ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ-]{2,20}$";
+  $motif = "^[_0-9a-zA-Z \'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-]{2,20}$";
 
-  if ( preg_match("/$motif/", $entree) ) {
+  if ( ereg($motif, $entree) ) {
      $ret= true;
   } else {
     $ret= false;
@@ -269,7 +269,7 @@ function verifEntree($entree) {
 function verifPseudo($pseudo) {
   $motif = "[\|,/ ]";
 
-  if ( preg_match("/$motif/", $pseudo) || strlen ($pseudo) > 20 || strlen ($pseudo) == 0 ) {
+  if ( ereg($motif, $pseudo) || strlen ($pseudo) > 20 || strlen ($pseudo) == 0 ) {
     $ret = false;
   } else {
     $ret = true;
@@ -289,7 +289,7 @@ function verifPseudo($pseudo) {
 */
 
 function verifDescription($entree) {
-  $motif = "/^[a-zA-Z0-9\s,.;\"\'\/:&ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ-]{0,80}$/";
+  $motif = "/^[a-zA-Z0-9\s,.;\"\'\/:&ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-]{0,80}$/";
   if ( preg_match($motif, stripslashes($entree)) ) {
      $ret= true;
   } else {
@@ -311,7 +311,7 @@ function verifDescription($entree) {
 function verifTel ($tel) {
   $motif ="^[0-9]{10}$";
 
-  if ( preg_match("/$motif"/, $tel) || strlen ($tel) == 0 ) {
+  if ( ereg($motif, $tel) || strlen ($tel) == 0 ) {
     $ret = true;
   } else {
     $ret = false;
@@ -463,13 +463,13 @@ function aff_trailer ($mode)
     } elseif ($mode == 7 ) {
       echo "-> <a href=\"add_user.php\">".gettext("Ajout d'un utilisateur")."</a></h2>";
     } elseif ($mode != "") {
-	list($valeur, $filtre) = preg_split ("/_/", $mode); 
+	list($valeur, $filtre) = split ("_", $mode); 
       	if ($valeur == 8 ) {
-    		$mode=preg_replace("/8_/","",$mode);
+    		$mode=ereg_replace("8_","",$mode);
 		echo "-> <a href=\"search.php\">".gettext("Recherche")."</a> -><a href=\"group.php?filter=$mode\">".gettext(" Modification")."</a> -> $mode</h2>";
     	}
       	if ($valeur == 9 ) {
-		$mode=preg_replace("/9_/","",$mode);
+		$mode=ereg_replace("9_","",$mode);
 		echo "-> <a href=\"search.php\">".gettext("Recherche")."</a> -><a href=\"people.php?uid=$mode\">".gettext(" Modification")."</a> -> $mode</h2>";
     	}
     } else {

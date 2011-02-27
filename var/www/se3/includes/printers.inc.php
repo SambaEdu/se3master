@@ -174,6 +174,9 @@ function search_imprimantes ($filter,$branch) {
     "printer-name"
     );
 
+  // Initialisation au cas ou il n'y aurait pas d'imprimante declaree:
+  $printers=array();
+
   $ds = @ldap_connect ( $ldap_server, $ldap_port );
   if ( $ds ) {
     $r = @ldap_bind ( $ds ); // Bind anonyme

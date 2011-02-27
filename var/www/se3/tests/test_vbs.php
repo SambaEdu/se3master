@@ -3,14 +3,14 @@
 
    /**
    
-   * Test la presence des vbs 
+   * Test la presence script integration 
    * @Version $Id$ 
    * @Projet LCS / SambaEdu 
    * @auteurs Philippe Chadefaux  MrT
    * @Licence Distribue selon les termes de la licence GPL
    * @note
    * Modifications proposées par Sébastien Tack (MrT)
-   * Optimisation du lancement des scripts bash par la technologie asynchrone Ajax.
+   * Optimisation du lancement des scripts bash par la technologie asynchrone Ajax - modif keyser passage a rejointSE3.bat.
  
    
    */
@@ -24,8 +24,9 @@
 
 require_once('entete_ajax.inc.php');
  // Controle l'installation des vbs
-$DIR_VBS="/var/se3/Progs/install/installdll/rejoin_se3_XP.vbs";
-if(@is_dir("/var/se3/Progs/install/installdll")) {
+$filename="/home/netlogon/domscripts/rejointSE3.cmd";
+
+if (file_exists($filename)) { 
 	$ok="1";
 } else {
 	$ok="0";

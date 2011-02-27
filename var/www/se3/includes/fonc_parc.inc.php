@@ -443,7 +443,7 @@ function detail_parc($parc)
                 $mpcount=count($mp_all);
                 for ($loop=0; $loop < count($mp_all); $loop++) {
                 	$mach=$mp_all[$loop];
-                   	if (ereg($filtrecomp,$mach)) $mp[$lmloop++]=$mach;
+                   	if (preg("/$filtrecomp/",$mach)) $mp[$lmloop++]=$mach;
                 }
         }
 
@@ -557,7 +557,7 @@ function detail_parc_printer($parc)
                 $mpcount=count($mp_all);
                 for ($loop=0; $loop < count($mp_all); $loop++) {
                 	$mach=$mp_all[$loop];
-                   	if (ereg($filtrecomp,$mach)) $mp[$lmloop++]=$mach;
+                   	if (preg_match("/$filtrecomp/",$mach)) $mp[$lmloop++]=$mach;
                 }
         }
 
@@ -658,8 +658,8 @@ function deja_valid($mpenc)
 function enleveantislash($string)
 {
             $temp=rawurlencode($string);
-            $temp1=ereg_replace("%5C%27","%27",$temp);
-            $temp2=ereg_replace("%5C%22","%22",$temp1);
+            $temp1=preg_replace("/%5C%27/","%27",$temp);
+            $temp2=preg_replace("/%5C%22/","%22",$temp1);
             $final=rawurldecode($temp2);
 return $final;
 }
@@ -676,7 +676,7 @@ return $final;
 function enlevedoublebarre($string)
 {
             $temp=rawurlencode($string);
-            $temp1=ereg_replace("%5C%5C","%5C",$temp);
+            $temp1=preg_replace("/%5C%5C/","%5C",$temp);
             $final=rawurldecode($temp1);
 return $final;
 }
@@ -789,7 +789,7 @@ function test_log($machine)
     		$tab = file($fichier_log);
     
     		$inverse_tab=array_reverse($tab);
-    		if (eregi('A)bort',$inverse_tab[0])) { 
+    		if (preg_match("/A)bort/i",$inverse_tab[0])) { 
     			return true;
 		} else {
     			return false;
@@ -877,13 +877,17 @@ function renomme_machine_parcs($oldname,$name)
 {
     require_once ("ihm.inc.php");
 	require_once ("ldap.inc.php");
-	$ret="renommage de $oldname en $name dans :<br>";
-	$parc=search_parcs($oldname);
-	if (isset($parc)) {
-		foreach($parc as $key=>$value) {
-		 	$ret .=	add_machine_parc($name,$parc[$key]['cn']);
-			supprime_machine_parc($oldname,$parc[$key]['cn']);
-		}
+	if ("$name"=="$oldname") { 
+	    $ret="rien a faire<br>";
+	} else {
+	    $ret="renommage de $oldname en $name dans :<br>";
+	    $parc=search_parcs($oldname);
+	    if (isset($parc)) {
+		    foreach($parc as $key=>$value) {
+		     	$ret .=	add_machine_parc($name,$parc[$key]['cn']);
+		    	supprime_machine_parc($oldname,$parc[$key]['cn']);
+		    }
+	    }
 	}
     return $ret;
 }

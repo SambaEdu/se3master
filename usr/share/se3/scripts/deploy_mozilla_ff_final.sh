@@ -21,64 +21,20 @@ then
 exit
 fi
 chemin_html="/var/www/se3/tmp"
-
-
-#Couleurs
-COLTITRE="\033[1;35m"	# Rose
-COLPARTIE="\033[1;34m"	# Bleu
-
-COLTXT="\033[0;37m"	# Gris
-COLCHOIX="\033[1;33m"	# Jaune
-COLDEFAUT="\033[0;33m"	# Brun-jaune
-COLSAISIE="\033[1;32m"	# Vert
-
-COLCMD="\033[1;37m"	# Blanc
-
-COLERREUR="\033[1;31m"	# Rouge
-COLINFO="\033[0;36m"	# Cyan
-
-ERREUR()
-{
-	echo -e "$COLERREUR"
-	echo "ERREUR!"
-	echo -e "$1"
-	echo -e "$COLTXT"
-	exit 1
-}
-echo -e "$COLTITRE"
-echo -e "Géneration des profils de Mozilla Firefox"
-echo -e "$COLINFO"
-echo -e "Les profils deja existants seront remplacés mais sauvegardés si ce sont des profils personnalisés (non installés par ce meme script ou par mkhome.pl)"
-echo -e "$COLTXT"
-
 LADATE=$(date +%D_%Hh%M | sed -e "s!/!_!g")
 WWWPATH="/var/www"
 
 mkdir -p /var/se3/save
 
-if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
-        dbhost=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbname=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbuser=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbpass=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 |cut -d \" -f 2`
+. /usr/share/se3/includes/config.inc.sh -cm
 
-else
-	ERREUR "imposible de trouver $WWWPATH/se3/includes/config.inc.php"
-fi
-
-path2UserSkel=`echo "SELECT value FROM params WHERE name='path2UserSkel'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-if [ -z "$path2UserSkel" ]; then
-	path2UserSkel="/etc/skel/user"
-fi
 
 #Seuls les homes deja existants seront complétés
-CHEMIN_FF_SOURCE="${path2UserSkel}/profil/appdata/Mozilla"
-SlisIp=`echo "SELECT value FROM params WHERE name='slisip'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-
+CHEMIN_FF_SOURCE="/etc/skel/user/profil/appdata/Mozilla"
 
 #======================================================
 # Nombre de dossiers à traiter:
-nbdossiers=$(ls /home | grep -v netlogon | grep -v templates | wc -l)
+nbdossiers=$(ls /home | grep -v netlogon | grep -v templates  | grep -v profiles | wc -l)
 nbdossiers=$(($nbdossiers-2))
 compteur=1
 
@@ -100,7 +56,57 @@ chmod 755 $chemin_html/recopie_profils_firefox.html
 chown www-se3 $chemin_html/recopie_profils_firefox.html
 #======================================================
 
-for user in `ls /home | grep -v netlogon | grep -v templates`
+PROXY=$(grep "http_proxy=" /etc/profile | cut -d"=" -f2 | sed -e "s#http://##g;s/\"//g" | cut -d: -f1)
+
+PORT=$(grep "http_proxy=" /etc/profile | cut -d"=" -f2 | sed -e "s#http://##g;s/\"//g" | cut -d: -f2)
+
+#modif proxy firefox
+rm -f /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js 
+cp /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js.in /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js 
+PREF_JS_FF="/etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js"
+  
+
+
+if [ -n "$PROXY" ]; then
+
+	if [ "$slisip" == "$PROXY"  ];	then
+		sed -i 's/%proxytype%/2/g' $PREF_JS_FF
+		sed -i "s/%proxyurl%/http:\/\/$slisip\/cgi-bin\/slis.pac/g" $PREF_JS_FF
+	else
+		if [ "$dhcp" == "1" ]; then 
+		  /usr/share/se3/scripts/makedhcpdconf 
+		  sed -i 's/%proxytype%/2/g' $PREF_JS_FF
+		  sed -i "s/%proxyurl%/http:\/\/$se3ip\/se3.pac/g" $PREF_JS_FF
+		else
+		  sed -i '/%proxyurl%/d' $PREF_JS_FF
+		  sed -i '/%proxytype%/d' $PREF_JS_FF
+		  echo "user_pref(\"network.proxy.http\", \"$PROXY\");" >> $PREF_JS_FF
+		  echo "user_pref(\"network.proxy.http_port\", $PORT);" >> $PREF_JS_FF
+		  echo "user_pref(\"network.proxy.type\", 1);"  >> $PREF_JS_FF
+		
+		fi	
+	fi
+
+
+	
+
+else
+	rm -f /var/www/se3.pac
+	rm -f /var/www/wpad.dat
+	
+	if [ "$slisip" != "" ];	then
+		sed -i 's/%proxytype%/2/g' $PREF_JS_FF
+		sed -i "s/%proxyurl%/http:\/\/$slisip\/cgi-bin\/slis.pac/g" $PREF_JS_FF
+	else
+		sed -i 's/%proxytype%/0/g' $PREF_JS_FF
+		sed -i '/%proxyurl%/d' $PREF_JS_FF
+	fi
+
+fi
+
+
+
+for user in $(ls /home | grep -v netlogon | grep -v templates | grep -v profiles | grep -v _netlogon | grep -v _templates)
 do
 
 
@@ -158,7 +164,7 @@ do
 						BOOK="pasglop"
 		fi
 	fi
-	rm -rf $CHEMIN_CIBLE
+	rm -rf /home/$user/profil/appdata/Mozilla/Firefox/Profiles/default
 	cp -a $CHEMIN_FF_SOURCE /home/$user/profil/appdata/
 
 
@@ -169,26 +175,26 @@ do
 	fi
 
 	# Personalisation du profil
-	if [ ! -z "$SlisIp" ]; then
-		sed -e "s/slisip/$SlisIp/" -i $PREF_JS
-	else
-		if [ -e /var/www/se3.pac ]; then
+	#if [ ! -z "$slisip" ]; then
+	#	sed -e "s/slisip/$slisip/" -i $PREF_JS
+	#else
+	#	if [ -e /var/www/se3.pac ]; then
 		# AJOUTER DETECTION IP LOCALE !!!!!!
 		# /!\ !!!
-		echo "ajout se3.pac dans la profil"
-		SE3IP=$(/sbin/ifconfig eth0 | grep inet |cut -d : -f 2 |cut -d \  -f 1| head -n 1)
-		sed -e "s§http://slisip/cgi-bin/slis.pac§http://$SE3IP/se3.pac§" -i $PREF_JS
-		else
-		sed -e "s§http://slisip/cgi-bin/slis.pac§§" -i $PREF_JS
-		sed -e "/network.proxy.type/d" -i $PREF_JS
-		fi
-	fi
+	#	echo "ajout se3.pac dans la profil"
+	#	SE3IP=$(/sbin/ifconfig eth0 | grep inet |cut -d : -f 2 |cut -d \  -f 1| head -n 1)
+	#	sed -e "s§http://slisip/cgi-bin/slis.pac§http://$SE3IP/se3.pac§" -i $PREF_JS
+	#	else
+	#	sed -e "s§http://slisip/cgi-bin/slis.pac§§" -i $PREF_JS
+	#	sed -e "/network.proxy.type/d" -i $PREF_JS
+	#	fi
+	#fi
 
 
 
 # 
-# 	if [ ! -z "$SlisIp" ]; then
-# 		sed -e "s/slisip/$SlisIp/" -i $PREF_JS
+# 	if [ ! -z "$slisip" ]; then
+# 		sed -e "s/slisip/$slisip/" -i $PREF_JS
 # 	else
 # 		sed -e "s!http://slisip/cgi-bin/slis.pac!!" -i $PREF_JS
 # 		sed -e "/network.proxy.type/d" -i $PREF_JS

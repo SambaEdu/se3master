@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-## $Id: convertsambaschema.sh 660 2005-10-27 15:51:18Z plouf $ ##
+## $Id$ ##
 #
 ##### Convertion de l'annuaire LDAP du format Samba 2 au format samba 3 #####
 #

@@ -4,7 +4,15 @@
 # Script de recherche des correspondances nom_machine=nom_parc
 # Auteur: Stephane Boireau
 
-. /usr/share/se3/sbin/variables_admin_ldap.sh lib > /dev/null
+#. /usr/share/se3/sbin/variables_admin_ldap.sh lib > /dev/null
+
+WWWPATH="/var/www"
+
+# recup parametres ldap
+. /etc/se3/config_l.cache.sh
+# recup parametres caches : 
+. /etc/se3/config_m.cache.sh
+. /etc/se3/config_d.cache.sh
 
 echo "**************************************************"
 echo "* Controle des noms de machines et noms de parcs *"
@@ -13,9 +21,9 @@ echo "**************************************************"
 tmp=/root/tmp/controle_noms_parcs_et_machines_pour_wpkg_$(date +%Y%m%d%H%M%S)
 mkdir -p $tmp
 
-ldapsearch -xLLL -b ou=Parcs,$BASEDN cn | grep "^cn: " | sed -e "s|^cn: ||" |while read parc
+ldapsearch -xLLL -b ${parcsRdn},${ldap_base_dn} cn | grep "^cn: " | sed -e "s|^cn: ||" |while read parc
 do
-	t=$(ldapsearch -xLLL -b ou=Computers,$BASEDN cn=$parc | grep "^cn: ")
+	t=$(ldapsearch -xLLL -b ${computersRdn},${ldap_base_dn} cn=$parc | grep "^cn: ")
 	if [ -n "$t" ]; then
 		echo "Anomalie: Une machine porte le meme nom qu'un parc: $parc"
 		echo "Cela peut perturber WPKG."

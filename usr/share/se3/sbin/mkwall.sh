@@ -146,13 +146,14 @@ else
 fi
 
 # Génération du fond commun s'il n'existe pas:
-if [ ! -e "${dossier_base_fond}/$orig.$ext" ]; then
-       /usr/bin/convert -size ${largeur}x${hauteur} gradient:${couleur1}-${couleur2} ${prefixe}${dossier_base_fond}/$orig.$ext
+# il est genere en jpeg par l'interface, mais xp veut du bmp, il sera converti si besoin
+if [ ! -e "${dossier_base_fond}/$orig.jpg" ]; then
+       /usr/bin/convert -size ${largeur}x${hauteur} gradient:${couleur1}-${couleur2} jpeg:${dossier_base_fond}/$orig.jpg
 fi
 
 # Si le fond existe deja on quitte
 
-if [ -f "${dossier_base_fond}/$1_$orig.$ext" ]; then
+if [ -f "${dossier_base_fond}/$1_$orig.$ext" -a -f "${dossier_base_fond}/$1.$ext" ]; then
     echo " fond deja cree pour $1"
     # Suppression du fichier de lock s'il existe:
     rm -f "/tmp/$1.fond.lck"
@@ -194,17 +195,23 @@ fi
 if [ "$(cat "$chemin_param_fond/annotations_${base}.txt" 2>/dev/null)" = "actif" ]; then
     /usr/bin/convert -fill ${couleur_txt} -pointsize $taille_police -draw "gravity North text 0,0 '$chaine'" ${dossier_base_fond}/$orig.jpg ${prefix}${dossier_base_fond}/$1_$orig.$ext
     if [ "$(cat "$chemin_param_fond/photos_${base}.txt" 2>/dev/null)" = "actif" ]; then
-        if [ ! -z "$photo" ]; then
+        photo=$dossier_trombines/$1.jpg
+	if [ -f "$photo" ]; then
             source $chemin_param_fond/dim_photo_$temoin.sh
             if [ "$dim_photo" -eq "0" ]; then
                 taille_photo="100%"
             else
                 taille_photo="${dim_photo}x${dim_photo}"
             fi
-            /usr/bin/convert -resize $taille_photo $photo /tmp/$1_tromb.jpg
-            /usr/bin/composite -gravity NorthEast -dissolve 80 /tmp/$1_tromb.jpg ${prefix}${dossier_base_fond}/$1_$orig.$ext ${prefix}${dossier_base_fond}/$1_$orig.$ext
-            rm -f /tmp/$1_tromb.jpg
+            /usr/bin/convert -resize $taille_photo $photo ${prefix}/tmp/$1_tromb.$ext
+            /usr/bin/composite -gravity NorthEast -dissolve 80 /tmp/$1_tromb.$ext ${dossier_base_fond}/$1_$orig.$ext ${dossier_base_fond}/$1_$orig.$ext
+            rm -f /tmp/$1_tromb.$ext
         fi
+    fi
+else
+    # on fait une copie en bmp si besoin
+    if [ ! -e "${dossier_base_fond}/$orig.$ext" ]; then
+       /usr/bin/convert jpeg:${dossier_base_fond}/$orig.jpg bmp3:${dossier_base_fond}/$orig.bmp
     fi
 fi
 [ ! -f ${dossier_base_fond}/$1_$orig.$ext ] && ln -s ${dossier_base_fond}/$orig.$ext ${dossier_base_fond}/$1_$orig.$ext

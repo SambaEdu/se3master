@@ -6,38 +6,22 @@
 
 WWWPATH="/var/www"
 
-if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
-	dbhost=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
-	dbname=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d \" -f 2`
-	dbuser=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 |cut -d \" -f 2`
-	dbpass=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 |cut -d \" -f 2`
-else
-	echo "Fichier de conf inaccessible"
-	exit 1
-fi
-BASEDN=`echo "SELECT value FROM params WHERE name='ldap_base_dn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-if [ -z "$BASEDN" ]; then
-	echo "Impossible d'accéder au paramètre BASEDN"
-	exit 1
-fi
+# recup parametres ldap
+. /etc/se3/config_l.cache.sh
+# recup parametres caches : 
+. /etc/se3/config_m.cache.sh
+. /etc/se3/config_d.cache.sh
 
-COMPUTERSRDN=`echo "SELECT value FROM params WHERE name='ComputersRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-if [ -z "$COMPUTERSRDN" ]; then
-	echo "Impossible d'accéder au paramètre COMPUTERSRDN"
-	exit 1
-fi
-
-PARCSRDN=`echo "SELECT value FROM params WHERE name='parcsRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-if [ -z "$PARCSRDN" ]; then
-	echo "Impossible d'accéder au paramètre PARCSDN"
-	exit 1
-fi
-PASSADM=`echo "SELECT value FROM params WHERE name='xppass'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-if [ -z "$PASSADM" ]; then
-	echo "Impossible d'accéder au paramètre PASSADM"
-	exit 1
-fi
-
+# calcule l'adresse de broadcast à partir de l'ip
+GETBROADCAST()
+{
+    if [ "$dhcp" == "1" ]; then
+        vlan=
+    else
+        broadcast=$(echo $1|"s/\.[0-9]*$/.255/")
+    fi
+    
+}
 if [ -z "$2" ]
 then
 	echo "Ce script est destine a provoquer l'allumage,"
@@ -48,7 +32,7 @@ then
 #	echo "Les parcs existants sont :"
 #	ldapsearch  -x -b $PARCSRDN,$BASEDN '(objectclass=*)'  | grep cn |  grep -v requesting | grep -i -v Rights | grep -i -v member
 else
-	ldapsearch  -xLLL -b cn=$1,$COMPUTERSRDN,$BASEDN '(objectclass=*)' macAddress | grep macAddress | while read C
+	ldapsearch  -xLLL -b ${computersRdn},${ldap_base_dn} cn=$1 '(objectclass=*)' macAddress | grep macAddress | while read C
 	do
 		echo "$C" | cut -d: -f 2-7  | while read D
 		do
@@ -65,7 +49,7 @@ else
 				fi
 				if [ "$2" = "wol" ]; then
 					echo "Tentative d'eveil pour la machine correspondant a l'adresse mac $D<br>"
-				        ldapsearch  -xLLL -b cn=$1,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I
+				        ldapsearch  -xLLL -b ${computersRdn},${ldap_base_dn} cn=$1 '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I
 	                                do
 					       echo "Broadcast: $I<br>"
 					       /usr/bin/wakeonlan  -i $I $D > /dev/null
@@ -74,14 +58,14 @@ else
 				fi
 			else
 				# On teste si on a un windows ou un linux
-				ldapsearch  -x -b uid=$B$,$COMPUTERSRDN,$BASEDN '(objectclass=*)' uidNumber | grep uid |grep -v requesting | grep -v base
+				ldapsearch  -x -b ${computersRdn},${ldap_base_dn} uid=$B$ '(objectclass=*)' uidNumber | grep uid |grep -v requesting | grep -v base
 				# On peut penser que l'on a un linux, mais cela peut aussi être un win 9X
 				# A affiner
 				if [ $? = "1" ]
 				then
 				if [ "$2" = "wol" ]; then
 					echo "Tentative d'eveil pour la machine correspondant a l'adresse mac $D<br>"
-				        ldapsearch  -xLLL -b cn=$1,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I
+				        ldapsearch  -xLLL -b ${computersRdn},${ldap_base_dn} cn=$1 '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I
 	                                do
 					       echo "broadcast: $I<br>"
 					       /usr/bin/wakeonlan  -i $I $D > /dev/null

@@ -23,6 +23,7 @@
 	ldap admin dn = #ADMINRDN#,#BASEDN#
 	ldap ssl = start_tls
 	ldapsam:trusted = No
+	ldap passwd sync = yes 
 	create mask = 0700
 	directory mask = 0700
 	inherit acls = Yes
@@ -37,6 +38,8 @@
 	lanman auth = yes
 	notify:inotify = false
 	bind interfaces only = Yes
+	wide links = yes
+	unix extensions = no
 	include = /etc/samba/smb_%a.conf
 	
 [drivers]

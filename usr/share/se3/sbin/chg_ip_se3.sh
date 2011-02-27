@@ -81,15 +81,8 @@ echo "Recherche des informations dans $WWWPATH/se3/includes/config.inc.php"
 echo -e "$COLCMD\c"
 
 ## recuperation des variables necessaires pour interoger mysql ###
-if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
-        dbhost=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbhost=" | cut -d"=" -f2 | cut -d \" -f2`
-        dbname=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbname=" | cut -d"=" -f2 |cut -d \" -f 2`
-        dbuser=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbuser=" | cut -d"=" -f2 | cut -d \" -f 2`
-        dbpass=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbpass=" | cut -d"=" -f2 | cut -d \" -f 2`
-else
-        ERREUR "Fichier de configuration inaccessible, le script ne peut se poursuivre."
-fi
 
+. /usr/share/se3/includes/config.inc.sh -dm
 
 
 #
@@ -337,10 +330,17 @@ echo "UPDATE params SET value='http://"$NEW_IP":909' WHERE name='urlse3';" > /tm
 echo "UPDATE params SET value='$NEW_IP' WHERE name='ldap_server';" >> /tmp/maj_chgt_ip_se3.sql
 echo "UPDATE params SET value='$NEW_IP' WHERE name='se3ip';" >> /tmp/maj_chgt_ip_se3.sql
 # Sauf que... est-ce que le LDAP n'est pas déporté?
-mysql -u$dbuser -p$dbpass $dbname < /tmp/maj_chgt_ip_se3.sql
 
 
-#
+
+if [ -n "$dhcp_wins" ]; then
+	echo "UPDATE params SET value='$NEW_IP' WHERE name='dhcp_wins';" >> /tmp/maj_chgt_ip_se3.sql
+	echo "UPDATE params SET value='$NEW_IP' WHERE name='dhcp_tftp_server';" >> /tmp/maj_chgt_ip_se3.sql
+	mysql -u$dbuser -p$dbpass $dbname < /tmp/maj_chgt_ip_se3.sql
+	
+else
+	mysql -u$dbuser -p$dbpass $dbname < /tmp/maj_chgt_ip_se3.sql
+fi
 
 
 #
@@ -390,6 +390,8 @@ ldapmodify -x -D "$ADMIN_DN" -w $(cat /etc/ldap.secret) -f /tmp/maj_chgt_ip_se3.
 # domscripts
 /usr/share/se3/sbin/update-domscripts.sh 
 
+[ -n "$dhcp_wins" ] && /usr/share/se3/scripts/makedhcpdconf 
+
 . /usr/share/se3/includes/config.inc.sh -clpbmsdf
 
 echo -e "$COLINFO"
@@ -417,6 +419,15 @@ cp -f /etc/ldap/config.se3.ori /etc/ldap/config.se3
 echo \"UPDATE params SET value='http://$OLD_IP:909' WHERE name='urlse3';\" > /tmp/retablissement_ip_se3.sql
 echo \"UPDATE params SET value='$OLD_IP' WHERE name='ldap_server';\" >> /tmp/retablissement_ip_se3.sql
 echo \"UPDATE params SET value='$OLD_IP' WHERE name='se3ip';\" >> /tmp/retablissement_ip_se3.sql
+"> retablissement_config_initiale.sh
+if [ -n "$dhcp_wins" ]; then
+echo "	
+echo \"UPDATE params SET value='$OLD_IP' WHERE name='dhcp_wins';\" >> /tmp/retablissement_ip_se3.sql
+echo \"UPDATE params SET value='$OLD_IP' WHERE name='dhcp_tftp_server';\" >> /tmp/retablissement_ip_se3.sql" >> retablissement_config_initiale.sh
+fi
+
+
+echo "
 mysql -u$dbuser -p$dbpass $dbname < /tmp/retablissement_ip_se3.sql
 
 echo \"dn: cn=$NOM_NETBIOS_SE3,ou=Computers,$BASE_DN\" > /tmp/retablissement_chgt_ip_se3.ldif
@@ -436,8 +447,18 @@ echo \"\" >> /tmp/retablissement_chgt_ip_se3.ldif
 ldapmodify -x -D \"$ADMIN_DN\" -w $(cat /etc/ldap.secret) -f /tmp/retablissement_chgt_ip_se3.ldif
 /usr/share/se3/sbin/update-domscripts.sh 
 [ -e /usr/share/se3/scripts/wpkg_initvars.sh ] &&  /usr/share/se3/scripts/wpkg_initvars.sh
-. /usr/share/se3/includes/config.inc.sh -clpbmsdf" > retablissement_config_initiale.sh
+. /usr/share/se3/includes/config.inc.sh -clpbmsdf" >> retablissement_config_initiale.sh
+
+
+if [ -n "$dhcp_wins" ]; then	
+echo "/usr/share/se3/scripts/makedhcpdconf" >> retablissement_config_initiale.sh
+
+fi
+
+
 chmod +x retablissement_config_initiale.sh
+
+
 
 echo -e "$COLTXT"
 echo "Fin des opérations."

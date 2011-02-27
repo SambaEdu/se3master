@@ -25,6 +25,10 @@
 
 
 //================================================
+// Correspondances de caractères accentués/désaccentués
+$liste_caracteres_accentues   ="ÂÄÀÁÃÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕØ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõø¨ûüùúıÿ¸";
+$liste_caracteres_desaccentues="AAAAAACEEEEIIIINOOOOOOSUUUUYYZaaaaaaceeeeiiiinooooooosuuuuyyz";
+//================================================
 
 /**
 
@@ -137,7 +141,7 @@ function lireSSMTP() {
 
 /**
 
-* Affiche le texte ou le contenu d'un fichier
+* Affiche le texte ou l ecrit dans un fichier
 * @Parametres texte
 * @Return
 
@@ -164,6 +168,34 @@ function my_echo($texte){
 	}
 }
 
+//================================================
+
+/**
+
+* Affiche le tableau à la façon de print_r ou l ecrit dans un fichier
+* @Parametres tableau
+* @Return
+
+*/
+
+function my_print_r($tab) {
+	global $echo_file, $dest_mode;
+
+	my_echo("Array<br />(<br />\n");
+	my_echo("<blockquote>\n");
+	foreach($tab as $key => $value) {
+		if(is_array($value)) {
+			my_echo("[$key] =&gt; ");
+			my_print_r($value);
+		}
+		else {
+			my_echo("[$key] =&gt; $value<br />\n");
+		}
+	}
+	my_echo("</blockquote>\n");
+	my_echo(")<br />\n");
+}
+
 
 //================================================
 
@@ -176,11 +208,80 @@ function my_echo($texte){
 */
 
 function remplace_accents($chaine){
-	//$retour=strtr(preg_replace("/¼/","OE",preg_replace("/½/","oe",$chaine)),"ÀÄÂÉÈÊËÎÏÔÖÙÛÜÇçàäâéèêëîïôöùûü","AAAEEEEIIOOUUUCcaaaeeeeiioouuu");
-	$retour=strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$chaine"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz");
+	global $liste_caracteres_accentues, $liste_caracteres_desaccentues;
+	//$retour=strtr(ereg_replace("¼","OE",ereg_replace("½","oe",$chaine)),"ÀÄÂÉÈÊËÎÏÔÖÙÛÜÇçàäâéèêëîïôöùûü","AAAEEEEIIOOUUUCcaaaeeeeiioouuu");
+	//$retour=strtr(ereg_replace("Æ","AE",ereg_replace("æ","ae",ereg_replace("¼","OE",ereg_replace("½","oe","$chaine"))))," 'ÂÄÀÁÃÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕØ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõø¨ûüùúıÿ¸","__AAAAAACEEEEIIIINOOOOOOSUUUUYYZaaaaaaceeeeiiiinooooooosuuuuyyz");
+	$retour=strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$chaine"))))," '$liste_caracteres_accentues","__$liste_caracteres_desaccentues");
 	return $retour;
 }
 
+//================================================
+
+/**
+
+* dédoublonnage des espaces dans une chaine
+* @Parametres chaine a traiter
+* @Return la chaine sans doublons d'espaces
+
+*/
+
+function traite_espaces($chaine) {
+	//$chaine="  Bla   ble bli  blo      blu  ";
+	/*
+	$tab=explode(" ",$chaine);
+
+	$retour=$tab[0];
+	for($i=1;$i<count($tab);$i++) {
+		if($tab[$i]!="") {
+			$retour.=" ".$tab[$i];
+		}
+	}
+	*/
+	$retour=preg_replace("/ {2,}/"," ",$chaine);
+	$retour=trim($retour);
+	return $retour;
+}
+
+//================================================
+
+/**
+
+* remplacement des apostrophes et espaces par des underscore
+* @Parametres chaine a traiter
+* @Return la chaine nettoyee
+
+*/
+
+function apostrophes_espaces_2_underscore($chaine) {
+	$retour=preg_replace("/'/","_",preg_replace("/ /","_",$chaine));
+	return $retour;
+}
+
+//================================================
+
+/**
+
+* traitement des chaines accentuees (simpleXML recupere des chaines UTF8, meme si l'entete du XML est ISO)
+* @Parametres chaine a traiter
+* @Return la chaine correctement encodee
+
+*/
+
+function traite_utf8($chaine) {
+	// On passe par cette fonction pour pouvoir desactiver rapidement ce traitement s'il ne se revele plus necessaire
+	//$retour=$chaine;
+
+	// mb_detect_encoding($chaine . 'a' , 'UTF-8, ISO-8859-1');
+
+	//$retour=utf8_decode($chaine);
+	// utf8_decode() va donner de l'iso-8859-1 d'ou probleme sur quelques caracteres
+
+	//$retour=recode_string("utf8..lat9", $chaine);
+	//Warning: recode_string(): Illegal recode request 'utf8..lat9' in /var/www/se3/includes/crob_ldap_functions.php on line 277
+
+	$retour=recode_string("utf8..iso-8859-15", $chaine);
+	return $retour;
+}
 
 //================================================
 
@@ -453,7 +554,7 @@ function modify_entry ($entree, $branche, $attributs){
 			@ldap_free_result($result);
 		}
 		else{
-			$error=gettext("Echec du bind anonyme");
+			$error=gettext("Echec du bind en admin");
 		}
 		@ldap_close($ds);
 	}
@@ -520,7 +621,7 @@ function modify_attribut ($entree, $branche, $attributs, $mode){
 			@ldap_free_result($result);
 		}
 		else{
-			$error=gettext("Echec du bind anonyme");
+			$error=gettext("Echec du bind en admin");
 		}
 		@ldap_close($ds);
 	}
@@ -633,6 +734,7 @@ function fich_debug($texte){
 function creer_uid($nom,$prenom){
 	global $uidPolicy;
 	global $ldap_server, $ldap_port, $dn;
+	global $liste_caracteres_accentues, $liste_caracteres_desaccentues;
 	global $error;
 	$error="";
 
@@ -660,8 +762,10 @@ function creer_uid($nom,$prenom){
 	//nom=$(echo "$nom" | tr " àâäéèêëîïôöùûü" "-aaaeeeeiioouuu" | sed -e "s/'//g")
 	//$nom=strtolower(strtr("$nom"," 'àâäéèêëîïôöùûüçÇÂÄÊËÎÏÔÖÙÛÜ","__aaaeeeeiioouuucCAAEEIIOOUUU"));
 	//$prenom=strtolower(strtr("$prenom"," 'àâäéèêëîïôöùûüçÇÂÄÊËÎÏÔÖÙÛÜ","__aaaeeeeiioouuucCAAEEIIOOUUU"));
-	$nom=strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$nom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz"));
-	$prenom=strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$prenom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz"));
+	//$nom=strtolower(strtr(ereg_replace("Æ","AE",ereg_replace("æ","ae",ereg_replace("¼","OE",ereg_replace("½","oe","$nom"))))," 'ÂÄÀÁÃÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕØ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõø¨ûüùúıÿ¸","__AAAAAACEEEEIIIINOOOOOOSUUUUYYZaaaaaaceeeeiiiinooooooosuuuuyyz"));
+	//$prenom=strtolower(strtr(ereg_replace("Æ","AE",ereg_replace("æ","ae",ereg_replace("¼","OE",ereg_replace("½","oe","$prenom"))))," 'ÂÄÀÁÃÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕØ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõø¨ûüùúıÿ¸","__AAAAAACEEEEIIIINOOOOOOSUUUUYYZaaaaaaceeeeiiiinooooooosuuuuyyz"));
+	$nom=strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$nom"))))," '$liste_caracteres_accentues","__$liste_caracteres_desaccentues"));
+	$prenom=strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$prenom"))))," '$liste_caracteres_accentues","__$liste_caracteres_desaccentues"));
 
 	fich_debug("Apr&#232;s filtrage...\n");
 	fich_debug("\$nom=$nom\n");
@@ -714,7 +818,7 @@ function creer_uid($nom,$prenom){
 	}
 
 	fich_debug("\$uid=$uid\n");
-	fich_debug("\$ERREUR=$ERREUR\n");
+	if(isset($ERREUR)) {fich_debug("\$ERREUR=$ERREUR\n");}
 
 	// Pour faire disparaitre les caracteres speciaux restants:
 	$uid=preg_replace("/[^a-z_.-]/","",$uid);
@@ -734,7 +838,7 @@ function creer_uid($nom,$prenom){
 		$uid_souche=$uid;
 
 		//$tab_logins_non_permis=array('prof', 'progs', 'docs', 'classes', 'homes', 'admhomes', 'admse3');
-		$tab_logins_non_permis=array('prof', 'progs', 'docs', 'classes', 'homes', 'admhomes', 'netlogon');
+		$tab_logins_non_permis=array('prof', 'progs', 'docs', 'classes', 'homes', 'admhomes', 'netlogon','profiles');
 		if(in_array($uid_souche,$tab_logins_non_permis)) {
 			$cpt=1;
 			$uid_souche=substr($uid,0,strlen($uid)-strlen($cpt)).$cpt;
@@ -771,7 +875,7 @@ function creer_uid($nom,$prenom){
 										//$uid=$prefuid.$cpt;
 										$uid=substr($uid_souche,0,strlen($uid_souche)-strlen($cpt)).$cpt;
 
-										if($uid=="admse3") {$uid="admse4";}
+										if($uid=="admse3") {$uid="admse4";$cpt++;}
 
 										fich_debug("Doublons... \$uid=$uid\n");
 										$cpt++;
@@ -921,14 +1025,23 @@ function verif_nom_prenom_sans_employeeNumber($nom,$prenom){
 	// Tester si un uid existe ou non dans l'annuaire pour $nom et $prenom sans employeeNumber...
 	// ... ce qui correspondrait a un compte cree a la main.
 
+	$trouve=0;
+
+	// On fait une recherche avec éventuellement les accents dans les nom/prénom... et on en fait si nécessaire une deuxième sans les accents
 	$attribut=array("uid");
 	$tab1=array();
 	//$tab1=get_tab_attribut("people","cn='$prenom $nom'",$attribut);
- 	$tab1=get_tab_attribut("people","cn=$prenom $nom",$attribut);
+	$tab1=get_tab_attribut("people","cn=$prenom $nom",$attribut);
+	/*
+	if(strtolower($nom)=='andro') {
+		$fich=fopen("/tmp/verif_nom_prenom_sans_employeeNumber_debug.txt","a+");
+		fwrite($fich,"Recherche cn=$prenom $nom on recupere count($tab1)=".count($tab1)."<br />\n");
+		fclose($fich);
+	}
+	*/
 
 	//echo "<p>error=$error</p>";
 
-	$trouve=0;
 	if(count($tab1)>0){
 		//echo "<p>count(\$tab1)>0</p>";
 		for($i=0;$i<count($tab1);$i++){
@@ -952,7 +1065,50 @@ function verif_nom_prenom_sans_employeeNumber($nom,$prenom){
 		}
 	}
 	else{
-		return false;
+		// On fait en sorte de ne pas avoir d'accents dans la branche People de l'annuaire
+		$nom=remplace_accents(traite_espaces($nom));
+		$prenom=remplace_accents(traite_espaces($prenom));
+	
+		$attribut=array("uid");
+		$tab1=array();
+		//$tab1=get_tab_attribut("people","cn='$prenom $nom'",$attribut);
+		$tab1=get_tab_attribut("people","cn=$prenom $nom",$attribut);
+
+		/*
+		if(strtolower($nom)=='andro') {
+			$fich=fopen("/tmp/verif_nom_prenom_sans_employeeNumber_debug.txt","a+");
+			fwrite($fich,"Recherche cn=$prenom $nom on recupere count($tab1)=".count($tab1)."<br />\n");
+			fclose($fich);
+		}
+		*/
+
+		//echo "<p>error=$error</p>";
+	
+		if(count($tab1)>0){
+			//echo "<p>count(\$tab1)>0</p>";
+			for($i=0;$i<count($tab1);$i++){
+				$attribut=array("employeenumber");
+				$tab2=get_tab_attribut("people","uid=$tab1[$i]",$attribut);
+				if(count($tab2)==0){
+					//echo "<p>count(\$tab2)==0</p>";
+					$trouve++;
+					$uid=$tab1[$i];
+					//echo "<p>uid=$uid</p>";
+				}
+			}
+	
+			// On ne cherche a traiter que le cas d'une seule correspondance.
+			// S'il y en a plus, on ne pourra pas identifier...
+			if($trouve==1){
+				return $uid;
+			}
+			else{
+				return false;
+			}
+		}
+		else{
+			return false;
+		}
 	}
 }
 
@@ -1261,8 +1417,8 @@ function add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber){
 
 
 	// crob_init(); Ne sert a rien !!!!
-	$nom=preg_replace("/[^a-z_-]/","",strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$nom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
-	$prenom=preg_replace("/[^a-z_-]/","",strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$prenom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
+	$nom=ereg_replace("[^a-z_-]","",strtolower(strtr(ereg_replace("Æ","AE",ereg_replace("æ","ae",ereg_replace("¼","OE",ereg_replace("½","oe","$nom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
+	$prenom=ereg_replace("[^a-z_-]","",strtolower(strtr(ereg_replace("Æ","AE",ereg_replace("æ","ae",ereg_replace("¼","OE",ereg_replace("½","oe","$prenom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
 
 	$nom=ucfirst(strtolower($nom));
 	$prenom=ucfirst(strtolower($prenom));
@@ -1379,6 +1535,7 @@ function add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber){
 	// Recuperer le gidNumber par defaut -> lcs-users (1000) ou slis (600)
 	global $defaultgid,$domain,$defaultshell,$domainsid,$uidPolicy;
 	global $attribut_pseudo;
+	global $liste_caracteres_accentues, $liste_caracteres_desaccentues;
 
 	fich_debug("================\n");
 	fich_debug("add_user:\n");
@@ -1393,10 +1550,12 @@ function add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber){
 
 
 	// crob_init(); Ne sert a rien !!!!
-	//$nom=preg_replace("/[^a-z_-]/","",strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$nom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
-	//$prenom=preg_replace("/[^a-z_-]/","",strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$prenom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
-	$nom=preg_replace("/[^a-z_ -]/","",strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$nom")))),"'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
-	$prenom=preg_replace("/[^a-z_ -]/","",strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$prenom")))),"'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
+	//$nom=ereg_replace("[^a-z_-]","",strtolower(strtr(ereg_replace("Æ","AE",ereg_replace("æ","ae",ereg_replace("¼","OE",ereg_replace("½","oe","$nom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
+	//$prenom=ereg_replace("[^a-z_-]","",strtolower(strtr(ereg_replace("Æ","AE",ereg_replace("æ","ae",ereg_replace("¼","OE",ereg_replace("½","oe","$prenom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
+	//$nom=ereg_replace("[^a-z_ -]","",strtolower(strtr(ereg_replace("Æ","AE",ereg_replace("æ","ae",ereg_replace("¼","OE",ereg_replace("½","oe","$nom")))),"'ÂÄÀÁÃÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕØ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõø¨ûüùúıÿ¸","_AAAAAACEEEEIIIINOOOOOOSUUUUYYZaaaaaaceeeeiiiinooooooosuuuuyyz")));
+	//$prenom=ereg_replace("[^a-z_ -]","",strtolower(strtr(ereg_replace("Æ","AE",ereg_replace("æ","ae",ereg_replace("¼","OE",ereg_replace("½","oe","$prenom")))),"'ÂÄÀÁÃÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕØ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõø¨ûüùúıÿ¸","_AAAAAACEEEEIIIINOOOOOOSUUUUYYZaaaaaaceeeeiiiinooooooosuuuuyyz")));
+	$nom=preg_replace("/[^a-z_ -]/","",strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$nom")))),"'$liste_caracteres_accentues","_$liste_caracteres_desaccentues")));
+	$prenom=preg_replace("/[^a-z_ -]/","",strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$prenom")))),"'$liste_caracteres_accentues","_$liste_caracteres_desaccentues")));
 
 	$nom=ucfirst(strtolower($nom));
 	$prenom=ucfirst(strtolower($prenom));

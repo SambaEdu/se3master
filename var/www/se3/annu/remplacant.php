@@ -47,7 +47,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
     $rpl=$_POST['remplacant'];
 
     if ($abs == $rpl ) {
-        echo "<BR>".gettext("Le professeur")." <B>$rpl</B>".gettext(" se remplace lui-m&#234;me; Vous appliquez les d&#233;cisions du ministre. C'est bien, poursuivez......")."<BR><BR><HR>";
+        echo "<BR>".gettext("Le professeur")." <B>$rpl</B>".gettext(" se remplace lui-m&#234;me; Vous appliquez les d&#233;cisions du ministre. C'est bien, poursuivez...")."<BR><BR><HR>";
     } else {
         echo gettext("Attribution des cours,classes, equipes et droits de gestion serveur de")." <B>$abs</B> ".gettext(" &#224;")." <B>$rpl</B>.<BR><BR>";
         echo "<B>$rpl </B>".gettext("sera ajout&#233; dans les groupes suivants :");

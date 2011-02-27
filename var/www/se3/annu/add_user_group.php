@@ -44,19 +44,25 @@
 
 if (is_admin("Annu_is_admin",$login)=="Y") {
 	
-	$uid = $_GET[uid]; 
-	if ($uid == "") {$uid = $_POST[uid];}
-	$add_user_group = $_POST[add_user_group];
-	$categorie = $_POST[categorie];
-	$filtre = $_GET[filtre];
-	if ($filtre == "") { $filtre = $_POST[filtre]; } 
-	$new_categorie = $_POST[new_categorie];
-	$classe_gr = $_POST[classe_gr];
-	$matiere_gr = $_POST[matiere_gr];
-	$cours_gr = $_POST[cours_gr];
-	$autres_gr = $_POST[autres_gr];
-	$equipe_gr = $_POST[equipe_gr];
-        $remplacant = $_POST[remplacant];
+	$uid=isset($_GET['uid']) ? $_GET['uid'] : (isset($_POST['uid']) ? $_POST['uid'] : "");
+	$filtre=isset($_GET['filtre']) ? $_GET['filtre'] : (isset($_POST['filtre']) ? $_POST['filtre'] : "");
+
+	$add_user_group=isset($_POST['add_user_group']) ? $_POST['add_user_group'] : "";
+	$categorie=isset($_POST['categorie']) ? $_POST['categorie'] : "";
+	$new_categorie=isset($_POST['new_categorie']) ? $_POST['new_categorie'] : "";
+	$classe_gr=isset($_POST['classe_gr']) ? $_POST['classe_gr'] : array();
+	$matiere_gr=isset($_POST['matiere_gr']) ? $_POST['matiere_gr'] : array();
+	$cours_gr=isset($_POST['cours_gr']) ? $_POST['cours_gr'] : array();
+	$autres_gr=isset($_POST['autres_gr']) ? $_POST['autres_gr'] : array();
+	$equipe_gr=isset($_POST['equipe_gr']) ? $_POST['equipe_gr'] : array();
+	$remplacant=isset($_POST['remplacant']) ? $_POST['remplacant'] : "";
+
+	//$filter=isset($_POST['filter']) ? $_POST['filter'] : "";
+
+	//debug_var();
+
+	//echo "\$filtre=$filtre<br />";
+
 	if ( !$add_user_group ) {
       		// Ajout de groupes
       		list($user, $groups)=people_get_variables($uid, true);
@@ -124,7 +130,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
         		for ($loop=0; $loop < count ($groups) ; $loop++) {
           		if ( ($groups[$loop]["cn"] != "Profs") && ($groups[$loop]["cn"] != "Eleves") && ($groups[$loop]["cn"] != "Administratifs") ) {
             			echo "<LI><A href=\"group.php?filter=".$groups[$loop]["cn"]."\">".$groups[$loop]["cn"]."</A>,<font size=\"-2\"> ".$groups[$loop]["description"];
-            			$login=preg_split ("/[\,\]/",ldap_dn2ufn($groups[$loop]["owner"]),2);
+            			$login=split ("[\,\]",ldap_dn2ufn($groups[$loop]["owner"]),2);
             			if ($login[0] == $uid) echo "<strong><font color=\"#ff8f00\">&nbsp;(".gettext("professeur principal").")</font></strong>";
             			echo "</font></LI>\n";
             			// constitution d'un filtre pour exclure les groupes d'appartenance
@@ -136,52 +142,56 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
       	}
 
 	if ( $categorie ) {
+			//echo "\$filtre=$filtre<br />";
+
       		// Etablissement des listes des groupes disponibles
+			if(!isset($filter)) {$filter="";}
       		$list_groups=search_groups("(&(cn=*) $filter )");
       		// Etablissement des sous listes de groupes :
       		$i = 0; $j =0; $k =0; $l = 0 ; $m = 0;
       		for ($loop=0; $loop < count ($list_groups) ; $loop++) {
                 //echo "\$list_groups[$loop][\"cn\"]=".$list_groups[$loop]["cn"]."<br />";
-                //echo "\$list_groups[$loop][\"cn\"]=".$list_groups[$loop]["cn"].": ($filtre) ";
-         		if ( $filtre=="") {
+                //echo "\$list_groups[$loop][\"cn\"]=".$list_groups[$loop]["cn"].": ($filtre) <br />";
+         		if ($filtre=="") {
         			// Cours
-        			if ( preg_match ("/Cours_/", $list_groups[$loop]["cn"]) ) {
+        			if ( preg_match("/Cours_/", $list_groups[$loop]["cn"]) ) {
           				$cours[$i]["cn"] = $list_groups[$loop]["cn"];
           				$cours[$i]["description"] = $list_groups[$loop]["description"];
                         //echo " Cours<br />";
           				$i++;
           			// Classe
-        			} elseif ( preg_match ("/Classe_/", $list_groups[$loop]["cn"])  ) {
+        			} elseif ( preg_match("/Classe_/", $list_groups[$loop]["cn"])  ) {
           				$classe[$j]["cn"] = $list_groups[$loop]["cn"];
           				$classe[$j]["description"] = $list_groups[$loop]["description"];
                         //echo " Classe<br />";
           				$j++;
           			// Equipe
-        			} elseif ( preg_match ("/Equipe_/", $list_groups[$loop]["cn"]) ) {
+        			} elseif ( preg_match("/Equipe_/", $list_groups[$loop]["cn"]) ) {
           				$equipe[$k]["cn"] = $list_groups[$loop]["cn"];
           				$equipe[$k]["description"] = $list_groups[$loop]["description"];
                         //echo " Equipe<br />";
           				$k++;
           			// Matiere
-        			} elseif ( preg_match ("/Matiere_/", $list_groups[$loop]["cn"]) ) {
+        			} elseif ( preg_match("/Matiere_/", $list_groups[$loop]["cn"]) ) {
           				$matiere[$l]["cn"] = $list_groups[$loop]["cn"];
           				$matiere[$l]["description"] = $list_groups[$loop]["description"];
                         //echo " Matiere<br />";
           				$l++;
-          			// Autres
-	  			//} elseif ( !preg_match( "/^(Administratifs)|(Eleves)|(lcs-users)|(machines)|(overfil)|(Profs)$/",$list_groups[$loop]["cn"] )  ) {
-	  			} elseif ( !preg_match( "/(^Administratifs$)|(^Eleves$)|(^lcs-users$)|(^machines$)|(^overfill$)|(^Profs$)/",$list_groups[$loop]["cn"] )  ) {
-          				$autres[$m]["cn"] = $list_groups[$loop]["cn"];
-          				$autres[$m]["description"] = $list_groups[$loop]["description"];
-                        //echo " Autres<br />";
-          				$m++;
+						// Autres
+					//} elseif ( !ereg( "^(Administratifs)|(Eleves)|(lcs-users)|(machines)|(overfil)|(Profs)$",$list_groups[$loop]["cn"] )  ) {
+					} elseif ( !preg_match( "/(^Administratifs$)|(^Eleves$)|(^lcs-users$)|(^machines$)|(^overfill$)|(^Profs$)/",$list_groups[$loop]["cn"] )  ) {
+						$autres[$m]["cn"] = $list_groups[$loop]["cn"];
+						$autres[$m]["description"] = $list_groups[$loop]["description"];
+						//echo " Autres<br />";
+						$m++;
         			}
                     /*
                     else {
                         echo " ???<br />";
                     }
                     */
-			} else {
+				} else {
+				//echo "PLOP";
 	  			// Cours
         			if ( preg_match ("/Cours_/", $list_groups[$loop]["cn"])  && preg_match("/$filtre/",$list_groups[$loop]["cn"])) {
           				$cours[$i]["cn"] = $list_groups[$loop]["cn"];
@@ -203,7 +213,10 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
           				$matiere[$l]["description"] = $list_groups[$loop]["description"];
           				$l++;
           			// Autres
-	  			} elseif ( !preg_match( "/^(Administratifs)|(Eleves)|(lcs-users)|(machines)|(overfil)|(Profs)$/",$list_groups[$loop]["cn"] )  ) {
+	  			} elseif((!preg_match( "/^(Administratifs)|(Eleves)|(lcs-users)|(machines)|(overfil)|(Profs)$/",$list_groups[$loop]["cn"]))&&
+					(!preg_match("/^(Cours_)|(Classe_)|(Equipe_)|(Matiere_)/",$list_groups[$loop]["cn"]))&&
+					(preg_match("/$filtre/",$list_groups[$loop]["cn"]))
+				) {
           				$autres[$m]["cn"] = $list_groups[$loop]["cn"];
           				$autres[$m]["description"] = $list_groups[$loop]["description"];
           				$m++;
@@ -298,7 +311,8 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
       			</form>
     
       			<?php
-    			echo "<FORM action=\"add_user_group.php?uid=$uid&filtre=$filtre\" method=\"post\">\n";
+    			//echo "<FORM action=\"add_user_group.php?uid=$uid&filtre=$filtre\" method=\"post\">\n";
+    			echo "<FORM action=\"add_user_group.php?uid=$uid\" method=\"post\">\n";
         	        echo "<P>".gettext("Filtrer les groupes secondaires contenant :");
         	        echo "<INPUT TYPE=\"text\" NAME=\"filtre\"\n VALUE=\"$filtre\" SIZE=\"16\">";
 			echo "    ";
@@ -393,7 +407,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
       			}
       			
 			// Compte rendu de la page remplacant.php (ajout aux groupes du prof remplac&#233;)
-      			if ($_POST['remplacant']=="true" ) {
+      			if ($remplacant=="true") {
                         
                           // Prepositionnement variables
                           $mono_srv = false;
@@ -416,7 +430,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
                             echo "<BR>".gettext(" N'oubliez pas de")." <A HREF=\"../partages/synchro_folders_classes.php\">".gettext("rafraichir les classes")." </A>".gettext("pour attribuer les ACLS")."<BR>.";
                           }
                         }
-      			if ($err ) {
+      			if ((isset($err))&&($err)) {
         			echo "<div class=error_msg>";
         			echo gettext("Veuillez contacter")."<A HREF='mailto:$MelAdminLCS?subject=PB".gettext("Affectation de")." $uid ".gettext(" a des groupes secondaires !")."'>".gettext("l'administrateur du syst&#232;me")."</A>
               			</div><BR>\n";

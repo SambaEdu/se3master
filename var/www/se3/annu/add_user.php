@@ -49,18 +49,17 @@ echo "<h1>".gettext("Annuaire")."</h1>\n";
 $_SESSION["pageaide"]="Annuaire";
 aff_trailer ("7");
 
-$nom=$_POST['nom'];
-$prenom=$_POST['prenom'];
-$naissance=$_POST['naissance'];
-$userpw=$_POST['userpwd'];
-$sexe=$_POST['sexe'];
-$categorie=$_POST['categorie'];
-$add_user=$_POST['add_user'];
-$string_auth=$_POST['string_auth'];
-$string_auth1=$_POST['string_auth1'];
-$dummy=$_POST['dummy'];
-$dummy1=$_POST['dummy1'];
-
+$nom=isset($_POST['nom']) ? $_POST['nom'] : "";
+$prenom=isset($_POST['prenom']) ? $_POST['prenom'] : "";
+$naissance=isset($_POST['naissance']) ? $_POST['naissance'] : "";
+$userpw=isset($_POST['userpw']) ? $_POST['userpw'] : "";
+$sexe=isset($_POST['sexe']) ? $_POST['sexe'] : "";
+$categorie=isset($_POST['categorie']) ? $_POST['categorie'] : "";
+$add_user=isset($_POST['add_user']) ? $_POST['add_user'] : "";
+$string_auth=isset($_POST['string_auth']) ? $_POST['string_auth'] : "";
+$string_auth1=isset($_POST['string_auth1']) ? $_POST['string_auth1'] : "";
+$dummy=isset($_POST['dummy']) ? $_POST['dummy'] : "";
+$dummy1=isset($_POST['dummy1']) ? $_POST['dummy1'] : "";
 
 
 if (is_admin("Annu_is_admin",$login)=="Y") {
@@ -68,7 +67,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 			exec ("/usr/bin/python ".$path_to_wwwse3."/includes/decode.py '$string_auth'",$Res);
         	$naissance = $Res[0];
 			exec ("/usr/bin/python ".$path_to_wwwse3."/includes/decode.py '$string_auth1'",$Res1);
-        	$userpwd = $Res1[0];
+        	if(isset($Res1[0])) {$userpwd = $Res1[0];} else {$userpwd=false;}
 		}
     // Ajout d'un utilisateur
     if (    ( !$nom || !$prenom )    // absence de nom ou de prenom
@@ -149,6 +148,14 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
                 </select>
               </td>
             </tr>
+
+            <tr>
+              <td><label for='checkbox_create_home'><?php echo gettext("Cr&#233;er le dossier personnel imm&#233;diatement"); ?></label></td>
+              <td colspan="2" valign="top">
+                <input type='checkbox' id='checkbox_create_home' name='create_home' value='y' />
+              </td>
+            </tr>
+
             <tr>
               <td></td>
               <td></td>
@@ -203,16 +210,27 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
         		exec ("/usr/share/se3/sbin/userAdd.pl \"$prenom\" \"$nom\" \"$userpwd\" \"$naissance\" \"$sexe\" \"$categorie\"",$AllOutPut,$ReturnValue);
         		// Compte rendu de creation
         		if ($ReturnValue == "0") {
-	  			if($sexe=="M"){
-            				echo gettext("L'utilisateur ")." $prenom $nom ".gettext(" a &#233;t&#233; cr&#233;&#233; avec succ&#232;s.")."<BR>";
-	  			} else {
-            				echo gettext("L'utilisateur ")." $prenom $nom ".gettext(" a &#233;t&#233; cr&#233;&#233;e avec succ&#232;s.")."<BR>";
-	  			}
-	  		$users = search_people ("(cn=$cn)");
-	  		if ( count ($users) ) {
-	  			echo gettext("Son identifiant est ")."<STRONG>".$users[0]["uid"]."</STRONG><BR>\n";
-				echo "<LI><A HREF=\"add_user_group.php?uid=".$users[0]["uid"]."\">".gettext("Ajouter &#224; des groupes...")."</A>\n";
-	  		}
+					if($sexe=="M"){
+						echo gettext("L'utilisateur ")." $prenom $nom ".gettext(" a &#233;t&#233; cr&#233;&#233; avec succ&#232;s.")."<BR>";
+					} else {
+						echo gettext("L'utilisateur ")." $prenom $nom ".gettext(" a &#233;t&#233; cr&#233;&#233;e avec succ&#232;s.")."<BR>";
+					}
+					$users = search_people ("(cn=$cn)");
+					if ( count ($users) ) {
+						echo gettext("Son identifiant est ")."<STRONG>".$users[0]["uid"]."</STRONG><BR>\n";
+						echo "<LI><A HREF=\"add_user_group.php?uid=".$users[0]["uid"]."\">".gettext("Ajouter &#224; des groupes...")."</A>\n";
+					}
+	
+					if((isset($_POST['create_home']))&&($_POST['create_home']=='y')) {
+						echo "<p><b>Création du dossier personnel de ".$users[0]["uid"]."</b><br />";
+						exec("sudo /usr/share/se3/scripts/modif_profil_mozilla_ff.sh ".$users[0]["uid"]." http://www.google.fr create_homes",$ReturnValue2);
+						echo "<pre style='color:red'>";
+						foreach($ReturnValue2 as $key => $value) {
+							echo "$value";
+						}
+						echo "</pre>\n";
+					}
+
         	} else {
          	 	echo "<div class='error_msg'>".gettext("Erreur lors de la cr&#233;ation du nouvel utilisateur")." $prenom $nom
                   	<font color='black'>(".gettext("type d'erreur :")." $ReturnValue)

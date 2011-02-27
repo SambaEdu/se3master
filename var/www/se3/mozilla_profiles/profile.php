@@ -52,7 +52,11 @@ echo "<h1>".gettext("D&#233;ploiement de Mozilla")."</h1>\n";
 
 
 	if (file_exists("/var/se3/unattended/install/packages/firefox/firefox-config.bat") or file_exists("/usr/share/se3/logonpy/logon.py")) {
-		echo "<a href=\"/mozilla_profiles/firefox-se3-NG.php\">Configuration des profils Firefox</a>";  
+		echo "<H3>".gettext("Configuration dynamique des profils Mozilla Firefox :")." </H3>\n";
+		echo "<a href=\"/mozilla_profiles/firefox-se3-NG.php\">Effectuer le param&#233;trage</a>";
+		echo " <u onmouseover=\"return escape".gettext("('Permet la configuration directe des clients firefox d&#233;ploy&#233;s avec wpkg. ATTENTION : ce param&#233;trage est prioritaire au contenu du fichier local pref.js. Il est donc obligatoire pour fixer un proxy !!.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u> ";
+		echo "<br><br><br>";
+
 	}
 	//EVALUE SI UNE SAISIE A ETE EFFECTUEE: AUTO-APPEL DE LA PAGE APRES FORMULAIRE REMPLI
 	
@@ -71,7 +75,7 @@ echo "<h1>".gettext("D&#233;ploiement de Mozilla")."</h1>\n";
 	$form.="</form>\n";
 	echo $form;
 
-	echo "<br><br><br>";
+	echo "<br><br>";
 
         $form = "<form action=\"thunderbird.php?config=init\" method=\"post\">\n";
         // Form de selection d'actions
