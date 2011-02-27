@@ -389,7 +389,7 @@ function search_uids($filter) {
     if ($ds) {
         $r = @ldap_bind($ds); // Bind anonyme
         if ($r) {
-            // if ((ereg("Matiere",$filter,$matche) && ereg("Equipe",$filter,$matche))||ereg("Classe",$filter,$matche)) {
+            // if ((preg_match("/Matiere/",$filter,$matche) && preg_match("/Equipe/",$filter,$matche))||preg_match("/Classe/",$filter,$matche)) {
             // Debug
             //echo "filtre 1 memberuid : $filter<BR>";
             // Recherche dans la branche Groups Classe_ et Cours_
@@ -943,8 +943,8 @@ function tstclass($prof, $eleve) {
     $filtre = "(&(memberUid=$eleve)(cn=Classe_*))";
     $classe = search_groups($filtre);
     if (count($classe) == 1) {
- 	   $equipe=preg_replace("/Classe_/","Equipe_",$classe[0]["cn"]);       
-       $filtre = "(&(memberUid=$prof)(cn=$equipe))";
+        $equipe=preg_replace("/Classe_/","Equipe_",$classe[0]["cn"]);
+        $filtre = "(&(memberUid=$prof)(cn=$equipe))";
         $res = search_groups($filtre);
         if (count($res) == 1) {
             $tstclass = 1;
@@ -956,8 +956,7 @@ function tstclass($prof, $eleve) {
         if (count($grcomm) > 0) {
             $i = 0;
             while (($i < count($grcomm)) and ($tstclass == 0)) {
-                if (preg_match("/Cours/",$grcomm[$i]["cn"],$matche))
-                    $tstclass = 1;
+                if (preg_match("/Cours/",$grcomm[$i]["cn"],$matche) { $tstclass = 1; }
                 $i++;
             }
         }

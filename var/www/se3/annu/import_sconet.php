@@ -647,7 +647,7 @@
 			}
 
 
-			//$timestamp=ereg_replace(" ","_",microtime());
+			//$timestamp=preg_replace("/ /","_",microtime());
 			$echo_file="$racine_www/Admin/result.$timestamp.html";
 			$dest_mode="file";
 			$fich=fopen("$echo_file","w+");

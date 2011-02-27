@@ -51,126 +51,138 @@ Function retour() {
 
 /**
 
- * Fonctions traitement des URL supprime les doubles barres
+* Fonctions traitement des URL supprime les doubles barres
+	
+* @Parametres $string url a traiter
+* @Return  $final l'url traite
+   
+*/
 
- * @Parametres $string url a traiter
- * @Return  $final l'url traite
+Function enlevedoublebarre($string)
+{
+        $temp=rawurlencode($string);
+        $temp1=preg_replace("/%5C%5C/","%5C",$temp);
+        $final=rawurldecode($temp1);
+	return $final;
+}
 
- */
-Function enlevedoublebarre($string) {
-    $temp = rawurlencode($string);
-    $temp1 = ereg_replace("%5C%5C", "%5C", $temp);
-    $final = rawurldecode($temp1);
-    return $final;
+
+/**
+
+* Fonctions Supprime le retour chariot
+	
+* @Parametres $string ce qu'il faut traiter
+* @Return  $final 
+   
+*/
+Function enleveretourchariot($string)
+{
+        $temp=rawurlencode($string);
+        $temp1=preg_replace("/[^ \n\r\t]/","",$temp);
+        $final=rawurldecode($temp1);
+	return $final;
+}	
+
+/**
+
+* Fonctions Ajout une double barre
+	
+* @Parametres $string ce qu'il faut traiter
+* @Return  $final 
+   
+*/
+Function ajoutedoublebarre($string)
+{
+        $temp=rawurlencode($string);
+        $temp1=preg_replace("/%5C/","%5C%5C",$temp);
+        $final=rawurldecode($temp1);
+	return $final;
 }
 
 /**
 
- * Fonctions Supprime le retour chariot
-
- * @Parametres $string ce qu'il faut traiter
- * @Return  $final
-
- */
-Function enleveretourchariot($string) {
-    $temp = rawurlencode($string);
-    $temp1 = ereg_replace("[^ \n\r\t]", "", $temp);
-    $final = rawurldecode($temp1);
-    return $final;
+* Fonctions supprime les antislash
+	
+* @Parametres $string
+* @Return 
+   
+*/
+Function enleveantislash($string)
+{
+	$temp=rawurlencode($string);
+        $temp1=preg_replace("/%5C%27/","%27",$temp);
+        $temp2=preg_replace("/%5C%22/","%22",$temp1);
+        $final=rawurldecode($temp2);
+	return $final;
 }
 
 /**
 
- * Fonctions Ajout une double barre
-
- * @Parametres $string ce qu'il faut traiter
- * @Return  $final
-
- */
-Function ajoutedoublebarre($string) {
-    $temp = rawurlencode($string);
-    $temp1 = ereg_replace("%5C", "%5C%5C", $temp);
-    $final = rawurldecode($temp1);
-    return $final;
+* Fonctions supprime les doubles slash
+	
+* @Parametres $string
+* @Return 
+   
+*/
+Function enlevedoubleslash($string)
+{
+	//$temp=rawurlencode($string);
+        $temp1=preg_replace("////","/",$temp);
+        //$temp2=preg_replace("/%5C%22/","%22",$temp1);
+        //$final=rawurldecode($temp1);
+        $final = $temp1;
+        return $final;
 }
 
 /**
 
- * Fonctions supprime les antislash
+* Fonctions supprime les crochets
+	
+* @Parametres $string
+* @Return 
+   
+*/
 
- * @Parametres $string
- * @Return
-
- */
-Function enleveantislash($string) {
-    $temp = rawurlencode($string);
-    $temp1 = ereg_replace("%5C%27", "%27", $temp);
-    $temp2 = ereg_replace("%5C%22", "%22", $temp1);
-    $final = rawurldecode($temp2);
-    return $final;
+Function enlevecrochets($string)
+{
+        $temp=rawurlencode($string);
+        $temp1=preg_replace("/%5B/","",$temp);
+        $temp2=preg_replace("/%5D/","",$temp1);
+        $final=rawurldecode($temp2);
+        return $final;
 }
 
 /**
 
- * Fonctions supprime les doubles slash
-
- * @Parametres $string
- * @Return
-
- */
-Function enlevedoubleslash($string) {
-    //$temp=rawurlencode($string);
-    $temp1 = ereg_replace("//", "/", $temp);
-    //$temp2=ereg_replace("%5C%22","%22",$temp1);
-    //$final=rawurldecode($temp1);
-    $final = $temp1;
-    return $final;
+* Fonctions supprime les quotes
+	
+* @Parametres $string
+* @Return 
+   
+*/
+Function enlevequotes($string)
+{
+        $temp=rawurlencode($string);
+        $temp1=preg_replace("/%22/","",$temp);
+        $final=rawurldecode($temp1);
+	return $final;
 }
+
 
 /**
 
- * Fonctions supprime les crochets
-
- * @Parametres $string
- * @Return
-
- */
-Function enlevecrochets($string) {
-    $temp = rawurlencode($string);
-    $temp1 = ereg_replace("%5B", "", $temp);
-    $temp2 = ereg_replace("%5D", "", $temp1);
-    $final = rawurldecode($temp2);
-    return $final;
-}
-
-/**
-
- * Fonctions supprime les quotes
-
- * @Parametres $string
- * @Return
-
- */
-Function enlevequotes($string) {
-    $temp = rawurlencode($string);
-    $temp1 = ereg_replace("%22", "", $temp);
-    $final = rawurldecode($temp1);
-    return $final;
-}
-
-/**
-
- * Fonctions supprime les #
-
- * @Parametres $string
- * @Return
-
- */
-Function enlevediese($string) {
-    $temp = rawurlencode($string);
-    $temp1 = ereg_replace("%23", "", $temp);
-    $final = rawurldecode($temp1);
-    return $final;
+* Fonctions supprime les #
+	
+* @Parametres $string
+* @Return 
+   
+*/
+Function enlevediese($string)
+{
+	$temp=rawurlencode($string);
+        $temp1 = preg_replace("/%23/","",$temp);
+        $final=rawurldecode($temp1);
+        return $final;
 }
 
 /**

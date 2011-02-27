@@ -11,7 +11,7 @@
    * @Licence Distribue selon les termes de la licence GPL
 
    * @note
-   * Ajaxification des pings - script parc_ajax_lib.php sur une proposition de Stéphane Boireau
+   * Ajaxification des pings - script parc_ajax_lib.php sur une proposition de Stï¿½phane Boireau
    * Gestion des infobulles nouvelle mouture Tip et UnTip
    * Modification des fonctions ts et vnc qui se trouvent desormais dans /var/www/se3/includes/fonc_parc.inc.php
    * Externalisation des messages dans messages/fr/action_parc_messages.php dans un hash global
@@ -41,30 +41,23 @@
 
 	//echo "<script type='text/javascript' src='position.js'></script>\n";
 
-	
+        function new_smbstatus() {
+            global $smb_login;
+            exec("smbstatus -b 2>/dev/null", $resultat);
+            foreach($resultat as $ligne) {
+                    $table=preg_split("/[\s]+/", $ligne);
+                    if (count($table)==4) {
+                        $smb_login[$table[3]]=$table[1];                                
+                    }
+                }
+        }
+
 	function get_smbsess($mp_en_cours) {
-		global $smbversion, $action_parc;
-		//echo "\$smbversion=$smbversion<br />";
-
-		if ("$smbversion"=="samba3") {
-			$smbsess=exec ("smbstatus -b 2>/dev/null |gawk -F' ' '{print \" \"$5\" \"$4\" \"}' |grep ' $mp_en_cours ' |cut -d' ' -f2 |head -n1");
-			//echo "smbstatus |gawk -F' ' '{print \" \"$5\" \"$4\" \"}' |grep ' $mp_en_cours ' |cut -d' ' -f2 |head -n1";
-		}
-		else {
-			$smbsess=exec ("smbstatus |gawk -F' ' '{print \" \"$5\" \"$4}' |grep ' $mp_en_cours ' |cut -d' ' -f3 |head -n1");
-		}
-
-		if ($smbsess=="") {
+		global $action_parc, $smb_login;
+                $login=$smb_login[$mp_en_cours];
+		if (!($login)) {
 			$etat_session="<img type=\"image\" src=\"../elements/images/disabled.png\">\n";
 		} else {
-			if ("$smbversion"=="samba3") {
-				$login = exec ("smbstatus -b 2>/dev/null | grep -v 'root' |gawk -F' ' '{print \" \"$5\" \"$2}' |grep ' $smbsess ' |cut -d' ' -f3 |head -n1");
-				//$login=exec ("smbstatus -b 2>/dev/null | grep -v 'root' | sed -e \"s/ \{2,\}/ /g\" | grep ' $smbsess ' | cut -d" " -f2 | head -n1");
-			}
-			else {
-				$login = exec ("smbstatus | grep -v 'root' |gawk -F' ' '{print \" \"$4\" \"$2}' |grep ' $smbsess ' |cut -d' ' -f3 |head -n1");
-			}
-
 			$texte= $login.$action_parc['msgUserLogged'];
 			$etat_session.="<img onmouseout=\"UnTip();\" onmouseover=\"Tip('".$texte."',WIDTH,250,SHADOW,true,DURATION,5000);\" src=\"../elements/images/enabled.png\" border=\"0\" />";
 
@@ -176,26 +169,26 @@
 	    $machine = $_POST['nom_machine'];
 		if (is_dir('/home/netlogon/machine/'.$machine)) {
 			if (is_file('/home/netlogon/machine/'.$machine.'/gpt.ini')) {
-					echo "<img type=\"image\" src=\"../elements/images/enabled.png\" border=\"0\" title=\"".$machine." : intégration OK \"/>";
+					echo "<img type=\"image\" src=\"../elements/images/enabled.png\" border=\"0\" title=\"".$machine." : intï¿½gration OK \"/>";
 			} else {
-					echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"".$machine." : problème avec les domscripts\"/>";
+					echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"".$machine." : problï¿½me avec les domscripts\"/>";
 			}
 		} else {
 			$session = get_smbsess($machine);
 			if ($session['login']) {
-				echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"".$machine." : problème avec les domscripts, le script de logon ne se lance pas \"/>";
+				echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"".$machine." : problï¿½me avec les domscripts, le script de logon ne se lance pas \"/>";
 			} elseif (fping($_POST['ip'])) {
 				unset($texte);
 				exec( "sudo /usr/share/se3/scripts/force_gpo.sh ".$machine." ".$_POST['ip'], $texte, $ret ); 
 				if ($ret) {
-				// afficher les codes d'erreur en fonction des résultats du script
-					echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"".$machine." : problème avec les domscripts, le script de logon a renvoye une erreur ".$ret;
+				// afficher les codes d'erreur en fonction des rï¿½sultats du script
+					echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"".$machine." : problï¿½me avec les domscripts, le script de logon a renvoye une erreur ".$ret;
 					foreach ($texte as $ligne){
 						echo $ligne."<br>";
 					}
 					echo "\"/>";
 				} else {
-					echo "<img type=\"image\" src=\"../elements/images/enabled.png\" border=\"0\" title=\"".$machine." : intégration OK \"/>";
+					echo "<img type=\"image\" src=\"../elements/images/enabled.png\" border=\"0\" title=\"".$machine." : intï¿½gration OK \"/>";
 				}
 			} else {
 					echo "<img type=\"image\" src=\"../elements/images/disabled.png\" border=\"0\" title=\"".$machine." : il faut allumer la machine \"/>";

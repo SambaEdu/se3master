@@ -76,7 +76,7 @@ if (! $login ) {
 		while (!feof($fp)) {
 			$ligne = fgets($fp, 1024);
 			$match=0;
-			if ( preg_macth("/\tpref\('browser.startup.homepage', '(.*)'\);/", $ligne, $val) ) {
+			if ( preg_match("/\tpref\('browser.startup.homepage', '(.*)'\);/", $ligne, $val) ) {
 				$defaultUrl = $val[1];
 			} else if ( preg_match("/\tpref\('network.proxy.type', (.*)\);/", $ligne, $val) ) {
 				$proxyType = $val[1];

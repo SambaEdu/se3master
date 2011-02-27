@@ -151,7 +151,7 @@
 
 					
 					function remplace_accents($chaine){
-						$retour=strtr(preg_replace("/¼/","OE",preg_replace("/½/","oe",$chaine)),"ÀÄÂÉÈÊËÎÏÔÖÙÛÜÇçàäâéèêëîïôöùûü","AAAEEEEIIOOUUUCcaaaeeeeiioouuu");
+						$retour=strtr(ereg_replace("¼","OE",ereg_replace("½","oe",$chaine)),"ÀÄÂÉÈÊËÎÏÔÖÙÛÜÇçàäâéèêëîïôöùûü","AAAEEEEIIOOUUUCcaaaeeeeiioouuu");
 						return $retour;
 					}
 
@@ -354,6 +354,10 @@
 										//$eleve[$numero]["nom"]=preg_replace("/[^[:space:][:alpha:]]/", "", $tabtmp[$index[0]]);
 										$eleve[$numero]["nom"]=preg_replace("/[^a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ -]/", "", $tabtmp[$index[0]]);
 
+										//$eleve[$numero]["prenom"]=preg_replace("/[^[:space:][:alpha:]]/", "", $tabtmp[$index[1]]);
+										//$eleve[$numero]["prenom"]=preg_replace("/[^[:space:][:alpha:][àäâéèêëîïôöùûü]]/", "", $tabtmp[$index[1]]);
+										//$eleve[$numero]["prenom"]=strtr(preg_replace("/[^a-zA-Zàäâéèêëîïôöùûü_\s]/", "", strtr($tabtmp[$index[1]],"-","_")),"_","-");
+										//$eleve[$numero]["prenom"]=strtr(preg_replace("/[^a-zA-Zàäâéèêëîïôöùûü_\s]/", "", strtr($tabtmp[$index[1]],"-","_")),"_","-");
 										$eleve[$numero]["prenom"]=preg_replace("/[^a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ -]/", "", $tabtmp[$index[1]]);
 
 										unset($tmpdate);
@@ -509,7 +513,7 @@
 										//$eleve[$numero]["nom"]=ereg_replace("[^[:space:][A-Z][a-z]]", "", $tabtmp[$index[0]]);;
 										//$eleve[$numero]["nom"]=ereg_replace("[^[:space:][:alnum:]]", "", $tabtmp[$index[0]]);;
 										$eleve[$numero]["nom"]=preg_replace("/[^a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ -]/", "", $tabtmp[$index[0]]);
-										//$eleve[$numero]["prenom"]=strtr(ereg_replace("[^a-zA-Zàäâéèêëîïôöùûü_\s]", "", strtr($tabtmp[$index[1]],"-","_")),"_","-");
+										//$eleve[$numero]["prenom"]=strtr(preg_replace("/[^a-zA-Zàäâéèêëîïôöùûü_\s]/", "", strtr($tabtmp[$index[1]],"-","_")),"_","-");
 										$eleve[$numero]["prenom"]=preg_replace("/[^a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ -]/", "", $tabtmp[$index[1]]);
 
 										unset($tmpdate);
@@ -733,8 +737,8 @@
 											//$eleve[$numero]["division"]=ereg_replace("[^[:space:][A-Z][a-z][0-9]]", "",$tabtmp[$index[5]]);
 											$eleve[$numero]["division"]=preg_replace("/[^a-zA-Z0-9_ -]/", "",remplace_accents($tabtmp[$index[5]]));
 
-											//$eleve[$numero]["INE"]=ereg_replace("[^a-zA-Z0-9_ -]", "",$tabtmp[$index[17]]);
-											//$eleve[$numero]["INE"]=ereg_replace("[^a-zA-Z0-9_ -]", "",$tabtmp[$index[24]]);
+											//$eleve[$numero]["INE"]=preg_replace("/[^a-zA-Z0-9_ -]/", "",$tabtmp[$index[17]]);
+											//$eleve[$numero]["INE"]=preg_replace("/[^a-zA-Z0-9_ -]/", "",$tabtmp[$index[24]]);
 											$eleve[$numero]["INE"]=preg_replace("/[^a-zA-Z0-9_ -]/", "",$tabtmp[$index[16]]);
 		/*
 											for($i=6;$i<count($champ);$i++){
@@ -772,7 +776,7 @@
 												//if($index[$i]){
 												//echo "\$tabtmp[$index[$i]]=".$tabtmp[$index[$i]]."<br />";
 												$eleve[$numero][$champ[$i]][]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[$i]]);
-												//$eleve[$numero][$champ[$i]][]=preg_replace("/[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜÇçàäâéèêëîïôöùûü_ .-]/", "", $tabtmp[$index[$i]]);
+												//$eleve[$numero][$champ[$i]][]=ereg_replace("[^0-9a-zA-ZÀÄÂÉÈÊËÎÏÔÖÙÛÜÇçàäâéèêëîïôöùûü_ .-]", "", $tabtmp[$index[$i]]);
 												//echo "\$index[$i]=|".$index[$i]."|<br />";
 												//$eleve[$numero][$champ[$i]][]=$tabtmp[$index[$i]];
 												//}

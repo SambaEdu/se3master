@@ -818,7 +818,7 @@ PRIMARY KEY ( `identifiant` )
 							$list_groups=search_groups("(&(cn=*) $filter )");
 							$j=0;
 							for ($loop=0; $loop < count ($list_groups) ; $loop++) {
-								if ( ereg ("Classe_", $list_groups[$loop]["cn"]) ) {
+								if ( preg_match ("/Classe_/", $list_groups[$loop]["cn"]) ) {
 									$classe[$j]["cn"] = $list_groups[$loop]["cn"];
 									//$classe[$j]["description"] = $list_groups[$loop]["description"];
 									echo "<option value=\"".$classe[$j]["cn"]."\">".$classe[$j]["cn"]."</option>\n";

@@ -443,7 +443,7 @@ function detail_parc($parc)
                 $mpcount=count($mp_all);
                 for ($loop=0; $loop < count($mp_all); $loop++) {
                 	$mach=$mp_all[$loop];
-                   	if (preg("/$filtrecomp/",$mach)) $mp[$lmloop++]=$mach;
+                   	if (preg_match("/$filtrecomp/",$mach)) $mp[$lmloop++]=$mach;
                 }
         }
 
