@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/evolution
+Icon=/usr/share/pixmaps/evolution.png
+SwallowExec=
+SwallowTitle=
+Terminal=false
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=

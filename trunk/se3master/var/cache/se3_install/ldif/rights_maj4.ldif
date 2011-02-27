@@ -1,0 +1,4 @@
+dn: cn=inventaire_can_read,ou=#RIGHTS#,#BASEDN#
+objectClass: groupOfNames
+cn: inventaire_can_read
+member: uid=admin,ou=#PEOPLE#,#BASEDN#

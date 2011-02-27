@@ -1,0 +1,74 @@
+REGEDIT4
+
+
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies]
+"NoFavoritesMenu"=dword:00000000
+"NoSetActiveDesktop"=dword:00000000
+"NoChangeStartMenu"=dword:00000000
+"NoFolderOptions"=dword:00000000
+"NoRecentDocsHistory"=dword:00000000
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoFavoritesMenu"=dword:00000000
+"NoSetActiveDesktop"=dword:00000000
+"NoChangeStartMenu"=dword:00000000
+"NoFolderOptions"=dword:00000000
+"NoRecentDocsHistory"=dword:00000000
+"NoRecentDocsMenu"=dword:00000000
+"NoDriveTypeAutoRun"=hex:95,00,00,00
+"EditLevel"=dword:00000000
+"NoNetHood"=dword:00000000
+"NoActiveDesktop"=dword:00000000
+"NoInternetIcon"=dword:00000000
+"ClassicShell"=dword:00000000
+"NoFileMenu"=dword:00000000
+"NoViewContextMenu"=dword:00000000
+"NoNetConnectDisconnect"=dword:00000000
+"NoRun"=dword:00000000
+"NoSetFolders"=dword:00000000
+"NoSetTaskbar"=dword:00000000
+"NoFind"=dword:00000000
+"NoDrives"=dword:00000000
+"NoSaveSettings"=dword:00000000
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\RestrictRun]
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System]
+"NoDispCPL"=dword:00000000
+"NoDispBackgroundPage"=dword:00000000
+"NoDispScrSavPage"=dword:00000000
+"NoDispAppearancePage"=dword:00000000
+"NoDispSettingsPage"=dword:00000000
+"NoDevMgrPage"=dword:00000000
+"NoConfigPage"=dword:00000000
+"NoFileSysPage"=dword:00000000
+"NoVirtMemPage"=dword:00000000
+"DisableRegistryTools"=dword:00000000
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\WinOldApp]
+"Disabled"=dword:00000000
+"NoRealMode"=dword:00000000
+
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer]
+
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel]
+"HomePage"=dword:00000000
+"Ratings"=dword:00000000
+"Connection Wizard"=dword:00000000
+"Connection Settings"=dword:00000000
+"Proxy"=dword:00000000
+"Autoconfig"=dword:00000000
+"Advanced"=dword:00000000
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\ActiveDesktop]
+"NoCloseDragDropBands"=dword:00000000
+"NoMovingBands"=dword:00000000
+
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Infodelivery]
+
+[HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Infodelivery\Restrictions]
+"NoChannelUI"=dword:00000000
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoWindowsUpdate"=dword:00000000

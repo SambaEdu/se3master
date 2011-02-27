@@ -1,0 +1,12 @@
+[Layout]
+Additional=us,fr
+AdditionalEncodings=ISO8859-1,ISO8859-1
+Encoding=ISO8859-1
+Layout=de
+Model=pc105
+Options=
+ResetOldOptions=false
+SwitchMode=Global
+Test=Test
+Use=true
+Variants=de(nodeadkeys),en_US(pc105_nodeadkeys)

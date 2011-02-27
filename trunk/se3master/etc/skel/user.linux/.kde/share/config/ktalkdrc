@@ -1,0 +1,11 @@
+[ktalkd]
+Answmach=false
+EmptyMail=true
+ExtPrg=
+ForwardMethod=FWA
+Head=Message left in the answering machine, by %s@%s
+Mail=
+Msg1=The person you're asking to talk with is not answering.
+Msg2=Please leave a message to be delivered via E-Mail.
+Msg3=Just start typing and when you're done, exit normally.
+Subj=Message from %s

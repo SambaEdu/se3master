@@ -1,0 +1,7 @@
+[Desktop Entry]
+Comment=MIDI-Audio
+Hidden=false
+Icon=midi
+MimeType=audio/x-midi
+Patterns=*.mid;*.MID
+Type=MimeType

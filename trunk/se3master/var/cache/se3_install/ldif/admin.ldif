@@ -1,0 +1,24 @@
+dn: uid=admin,ou=#PEOPLE#,#BASEDN#
+uid: admin
+cn: Administrateur SE3
+sn: SE3
+mail: admin@#DOMAIN#
+objectClass: top
+objectClass: posixAccount
+objectClass: shadowAccount
+objectClass: sambaAccount
+objectClass: person
+objectClass: inetOrgPerson
+loginShell: /bin/bash
+uidNumber: 5000
+gidNumber: #DEFAULTGID#
+homeDirectory: /home/admin
+userPassword: {crypt}g6QulIusKPB1s
+rid: 11000
+primaryGroupID: #GID1#
+lmPassword: 94F92844CDB823F709752A3293831D17
+ntPassword: 66FE68F5B1006745A5895E42A24B24AC
+pwdMustChange: 2147483647
+pwdLastSet: 1
+acctFlags: [U          ]
+

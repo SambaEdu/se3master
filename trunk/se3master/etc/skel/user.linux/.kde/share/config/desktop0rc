@@ -1,0 +1,12 @@
+[Common]
+Item=0
+RandomMode=false
+[Desktop0]
+WallpaperMode=Tiled
+UseWallpaper=false
+Pattern=255,255,255,255,255,255,255,255,
+Wallpaper=No wallpaper
+ColorMode=Flat
+Color1=#356390
+Color2=#356390
+OrientationMode=Portrait

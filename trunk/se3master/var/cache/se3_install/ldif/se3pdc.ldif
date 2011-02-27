@@ -1,0 +1,10 @@
+dn: cn=#NETBIOSNAME#,ou=#COMPUTERS#,#BASEDN#
+cn: #NETBIOSNAME#
+objectClass: top
+objectClass: ipHost
+objectClass: ieee802Device
+objectClass: organizationalRole
+ipHostNumber: #IPSERVEUR#
+l: maitre
+description: SE3 Maitre
+

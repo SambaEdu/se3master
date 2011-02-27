@@ -1,0 +1,23 @@
+[General]
+Antialiasing=true
+Backing=pixmap
+Messages=false
+Palette=color
+Platform fonts=false
+ShowStatusBar=true
+ShowToolBar=true
+WatchFile=false
+[KGVMiniWidget]
+Antialiasing=true
+Backing=pixmap
+FancyPageLabels=false
+Messages=false
+Palette=color
+Platform fonts=false
+ShowMarkList=true
+[Toolbar style]
+IconText=IconOnly
+Index=0
+NewLine=FALSE
+Offset=-1
+Position=Top
