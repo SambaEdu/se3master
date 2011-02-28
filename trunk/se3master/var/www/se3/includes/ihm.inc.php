@@ -311,7 +311,7 @@ function verifDescription($entree) {
 function verifTel ($tel) {
   $motif ="^[0-9]{10}$";
 
-  if ( preg_match("/$motif"/, $tel) || strlen ($tel) == 0 ) {
+  if ( preg_match("/$motif/", $tel) || strlen ($tel) == 0 ) {
     $ret = true;
   } else {
     $ret = false;

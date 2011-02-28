@@ -956,7 +956,7 @@ function tstclass($prof, $eleve) {
         if (count($grcomm) > 0) {
             $i = 0;
             while (($i < count($grcomm)) and ($tstclass == 0)) {
-                if (preg_match("/Cours/",$grcomm[$i]["cn"],$matche) { $tstclass = 1; }
+                if (preg_match("/Cours/",$grcomm[$i]["cn"],$matche)) { $tstclass = 1; }
                 $i++;
             }
         }

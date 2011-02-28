@@ -996,5 +996,26 @@ function suppr_inventaire($name)
         }
 }
 
+/*
+ * fonction generant un tableau global a partir de smbstatus
+ * @Parametres $name : Nom de la machine
+ * @ smb_status["machine"]["login"]
+ *                        ["ip"]
+ */
+
+function new_smbstatus() {
+    global $smb_login;
+    unset($smb_login);
+    exec("smbstatus -b 2>/dev/null", $resultat);
+    foreach ($resultat as $ligne) {
+        $table = preg_split("/[\s]+/", $ligne);
+        if ((count($table) == 5)&&($table[1]!=root)&&($table[1]!=nobody)) {
+            $smb_login[$table[3]]["login"] = $table[1];
+            $smb_login[$table[3]]["ip"] = preg_replace("/[\(\)]/", "", $table[4]);
+        }
+    }
+}
+
+
 
 ?>
