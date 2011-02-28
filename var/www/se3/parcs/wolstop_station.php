@@ -99,7 +99,7 @@ function okwol()
 	if(resultat !="1")
 	window.history.back()
 }
-</SCRIPT>
+</script>
 
 
 <?php
