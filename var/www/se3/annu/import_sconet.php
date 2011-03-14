@@ -725,13 +725,15 @@ decompte(cpt);
 
 			//$temoin_creation_fichiers="non";
 			//$temoin_creation_fichiers="oui";
+			mt_srand((float) microtime()*1000000);
+			$randval = mt_rand();
 			$temoin_creation_fichiers=isset($_POST['temoin_creation_fichiers']) ? $_POST['temoin_creation_fichiers'] : "non";
 			if($temoin_creation_fichiers!="non"){
 				if(!file_exists($racine_www.$chemin_csv)){
 					mkdir($racine_www.$chemin_csv);
 				}
-				mt_srand((float) microtime()*1000000);
-				$randval = mt_rand();
+				//mt_srand((float) microtime()*1000000);
+				//$randval = mt_rand();
 				$chemin_http_csv=$chemin_csv."/".$timestamp."_".$randval;
 				$dossiercsv=$racine_www."/".$chemin_http_csv;
 				if(!mkdir($dossiercsv)){$temoin_creation_fichiers="non";}
@@ -760,10 +762,10 @@ decompte(cpt);
 
 			// Prefixe LP/LEGT,...
 			$prefix=isset($_POST['prefix']) ? $_POST['prefix'] : "";
-			#$prefix=strtoupper(preg_replace("/[^A-Za-z0-9_]/", "", strtr(remplace_accents($prefix)," ","_")));
-                        $prefix=strtoupper(preg_replace("/[^A-Za-z0-9]/", "", remplace_accents($prefix)));
-			if(strlen(preg_replace("/_/","",$prefix))==0) $prefix="";
-			if (strlen($prefix)>0) $prefix=$prefix."_";
+			//$prefix=strtoupper(preg_replace("/[^A-Za-z0-9_]/", "", strtr(remplace_accents($prefix)," ","_")));
+			$prefix=strtoupper(preg_replace("/[^A-Za-z0-9]/", "", remplace_accents($prefix)));
+			if(strlen(preg_replace("/_/","",$prefix))==0) {$prefix="";}
+			if (strlen($prefix)>0) {$prefix=$prefix."_";}
 
 /*
 			echo "\$resultat=exec(\"/usr/bin/sudo $php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp'\",$retour);";
