@@ -725,7 +725,7 @@ PRIMARY KEY ( `identifiant` )
 						}
 						else{
 							// Récupération des variables:
-							$CleID=$_POST['CleID'];
+							$CleID=isset($_POST['CleID']) ? $_POST['CleID'] : "";
 
 							if(isset($_POST['regenerer_registre_zrn'])){
 								$regenerer_registre_zrn=$_POST['regenerer_registre_zrn'];
@@ -1224,7 +1224,7 @@ couleur2="'.$couleur2.'"
 										*/
 										//La 'variable_bidon' est là pour passer le test sur $1
 										//Il faut juste éviter de créer un dossier '/home/variable_bidon'
-										echo "<p>".gettext("Le nouveau fond a &#233;t&#233; g&#233;n&#233;r&#233; dans")." 'I:\media\fonds_ecran'.</p>\n";
+										echo "<p>".gettext("Le nouveau fond a &#233;t&#233; g&#233;n&#233;r&#233; dans")." 'I:\\media\\fonds_ecran'.</p>\n";
 
 										// Mise en place d'une copie au format PNG pour l'interface web:
 										exec("/usr/bin/sudo $chemin_scripts/fond_jpg2png.sh $groupe");
@@ -1234,7 +1234,7 @@ couleur2="'.$couleur2.'"
 
 								}
 								else{
-									echo "<p>".gettext("Le fond n'a pas &#233;t&#233; modifi&#233; dans")." 'I:\media\\fonds_ecran'.</p>\n";
+									echo "<p>".gettext("Le fond n'a pas &#233;t&#233; modifi&#233; dans")." 'I:\\media\\fonds_ecran'.</p>\n";
 									if(!file_exists("/var/se3/Docs/media/fonds_ecran/$wallgrp.jpg")){
 										echo "<p style=\"color:red;\">".gettext("ERREUR: Le fichier")." I:\\media\\fonds_ecran\\$groupe.jpg ".gettext("n'existe pas.<br>\nSi vous ne d&#233;finissez pas d'image, vous risquez de ne pas obtenir ce que vous souhaitez!")."</p>\n";
 									}
@@ -1407,7 +1407,7 @@ couleur2="'.$couleur2.'"
 							//  sans validation de formulaire lorsqu'on désactive
 							// l'utilisation d'image pour le groupe $groupe
 							if(!isset($suppr_annotations)){
-								$suppr_annotations=$_POST['suppr_annotations'];
+								$suppr_annotations=isset($_POST['suppr_annotations']) ? $_POST['suppr_annotations'] : "";
 							}
 
 							// Validation des choix d'annotation:
