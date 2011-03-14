@@ -1172,7 +1172,7 @@ Veillez à choisir des couleurs connues (<i>liste disponible à l'adresse <a href=
 											$dest_file="$dossier_upload_images/$groupe.jpg";
 											$source_file=stripslashes("$tmp_image");
 											$res_copy=copy("$source_file" , "$dest_file");
-											echo "".gettext("Le fond")." $image ".gettext("va &#234;tre mis en place sous le nom")." $groupe.jpg ".gettext("dans")." I:\media\fonds_ecran";
+											echo "".gettext("Le fond")." $image ".gettext("va &#234;tre mis en place sous le nom")." $groupe.jpg ".gettext("dans")." I:\\media\\fonds_ecran";
 										}
 										echo "</p>\n";
 										// Mise en place du fichier de $dossier_upload_images vers I:\media\fonds_ecran
