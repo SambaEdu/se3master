@@ -45,6 +45,27 @@ SETMYSQL distribution lenny "Version de la distribution debian" 5
 cp conf/DB_CONFIG /var/lib/ldap/ 
 /etc/init.d/slapd start
 
+#=======================================
+# Fond d ecran personnalise
+t=$(grep "^Cmnd_Alias FONDS_ECRAN" /etc/sudoers|grep "/usr/share/se3/sbin/mkwall.sh")
+if [ -z "$t" ]; then
+	sed -ri "s|^(Cmnd_Alias FONDS_ECRAN.*)|\1, /usr/share/se3/sbin/mkwall.sh|" /etc/sudoers
+	/etc/init.d/sudo restart
+fi
+
+. /usr/share/se3/includes/config.inc.sh -cl
+echo "dn: cn=fond_can_change,${rightsRdn},${ldap_base_dn}
+objectClass: groupOfNames
+cn: fond_can_change
+member: uid=admin,${peopleRdn},${ldap_base_dn}
+" | ldapadd -x -D ${adminRdn},${ldap_base_dn} -w ${adminPw}
+
+mkdir -p /var/www/se3/Admin/fonds_ecran/courant
+chown www-se3 /var/www/se3/Admin/fonds_ecran/courant
+
+mkdir -p /var/lib/se3/fonds_ecran
+chown www-se3 /var/lib/se3/fonds_ecran
+#=======================================
 
 
 echo "Mise a jour 133:

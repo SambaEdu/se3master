@@ -154,8 +154,10 @@ PRIMARY KEY ( `identifiant` )
 
 					echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_consulter\" value=\"consulter\" checked=\"true\" /><label for='choix1_consulter' style='cursor:pointer;'> ".gettext("Consulter les param&#233;trages actuels").".</label></p></li>\n";
 					echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_parametrer\" value=\"parametrer\" /><label for='choix1_parametrer' style='cursor:pointer;'> ".gettext("Effectuer des param&#233;trages").".</label></p></li>\n";
-					echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_supprimer\" value=\"supprimer\" /><label for='choix1_supprimer' style='cursor:pointer;'> ".gettext("Supprimer le cache").".</label></p></li>\n";  	 
-			                echo "</ul>\n";
+					echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_supprimer\" value=\"supprimer\" /><label for='choix1_supprimer' style='cursor:pointer;'> ".gettext("Supprimer le cache").".</label></p></li>\n";
+					//echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_inserer_image\" value=\"inserer_image\" /><label for='choix1_inserer_image' style='cursor:pointer;'> ".gettext("Ins&#233;rer une image personnalis&#233;e dans le fond d'un utilisateur").".</label></p></li>\n";  	 
+					echo "<li><p><a href='fond_perso.php'>".gettext("Ins&#233;rer une image personnalis&#233;e dans le fond d'un utilisateur").".</a></p></li>\n";  	 
+					echo "</ul>\n";
 					echo "<input type=\"submit\" name=\"bouton_choix\" value=\"".gettext("Valider")."\"></p>\n";
 					echo "</form>\n";
 					echo "</blockquote>\n";
