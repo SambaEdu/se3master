@@ -68,13 +68,15 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 			echo "<p>\n";
 			//echo "<input type='radio' id='type_utilisateur' name='type' value='utilisateur' /><label for='type_utilisateur'> Utilisateur</label><br />\n";
 			//echo "<input type='radio' id='type_groupe' name='type' value='groupe' /><label for='type_groupe'> Groupe</label><br />\n";
-			echo "Login de l'utilisateur&nbsp;: <input type='text' name='cible' value='$cible' /><br />\n";
+			echo "Login de l'utilisateur&nbsp;: <input type='text' id='cible' name='cible' value='$cible' onblur='actualise_fond_actuel()' />";
+			//echo " <a id='lien_fond_actuel' href='javascript:actualise_fond_actuel()'>Fond actuel</a>";
+			echo "<br />\n";
 			echo "</p>\n";
 		}
 		else {
 			echo "<p>Vous avez la possibilit&#233; de choisir une image &#224; ins&#233;rer au centre de votre fond d'&#233;cran.</p>\n";
 
-			if(file_exists($dossier_www_fonds_courants."/".$login)) {
+			if(file_exists($dossier_www_fonds_courants."/".$login.".jpg")) {
 				echo "<p><a href='$chemin_www_fonds_courants/$login.jpg' target='_blank'>Votre fond d'&#233;cran actuel</a></p>\n";
 			}
 		}
@@ -87,10 +89,42 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 
 		echo "</form>\n";
 
-		echo "<p><br /></p>\n";
-		echo "<p><i>NOTES&nbsp;</i>: ";
-		echo "<span style='color:red'>A FAIRE: Possibilit&#233; de param&#233;trer les dimensions de l'insertion d'image (<i>avec valeur max pour conserver le nom_pr&#233;nom,...</i>)</span></p>\n";
+		echo "<div id='fond_actuel'>";
+		if(is_admin("se3_is_admin",$login)!="Y") {
+			echo "<img src='../$chemin_www_fonds_courants/$login.jpg' />";
+		}
+		echo "</div>\n";
 
+		echo "<script type='text/javascript'>
+	function actualise_fond_actuel() {
+		if((document.getElementById('cible'))&&(document.getElementById('fond_actuel'))) {
+			cible=document.getElementById('cible').value;
+			//alert('cible='+cible);
+
+			//alert('<img src=\"../$chemin_www_fonds_courants/'+cible+'.jpg\" width=\"800\" height=\"600\" />')
+			//document.getElementById('fond_actuel').innerHTML='<img src=\"../$chemin_www_fonds_courants/'+cible+'.jpg\" width=\"800\" height=\"600\" />';
+			document.getElementById('fond_actuel').innerHTML='<img src=\"../$chemin_www_fonds_courants/'+cible+'.jpg\" />';
+
+			/*
+			if(document.getElementById('lien_fond_actuel')) {
+				if(cible=='') {
+					document.getElementById('lien_fond_actuel').style.display='none';
+				}
+				else {
+					document.getElementById('lien_fond_actuel').style.display='';
+				}
+			}
+			*/
+		}
+	}
+</script>\n";
+
+		echo "<p><br /></p>\n";
+		echo "<p><i>NOTES&nbsp;</i>: </p>";
+		echo "<ul>\n";
+		echo "<li><p>Si l'image &#224; ins&#233;rer comporte des transparences, veillez &#224; la redimensionner pour que la dimension maximale (<i>hauteur ou largeur</i>) soit de 500px pour conserver la transparence.</p></li>\n";
+		echo "<li><p><span style='color:red'>A FAIRE: Possibilit&#233; de param&#233;trer les dimensions de l'insertion d'image (<i>avec valeur max pour conserver le nom_pr&#233;nom,...</i>)</span></p></li>\n";
+		echo "</ul>\n";
 	}
 	else {
 		if($cible=='') {
