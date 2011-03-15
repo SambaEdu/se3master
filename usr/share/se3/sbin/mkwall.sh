@@ -259,7 +259,9 @@ if [ -n "$image_a_inserer" -a -e "$image_a_inserer" ]; then
 	#	taille_image_inseree="${larg_ins}x${haut_ins}"
 	#fi
 
+	redimensionnement="n"
 	if [ $larg_ins -ge $larg_max -o $haut_ins -ge $haut_max ]; then
+		redimensionnement="y"
 		echo "Redimensionnement requis:"
 
 		ratio_l=$(echo "$larg_ins/$larg_max"|bc -l)
@@ -290,9 +292,15 @@ if [ -n "$image_a_inserer" -a -e "$image_a_inserer" ]; then
 	# Opaque: 100, transparent:0
 	niveau_dissolve=100
 
-	echo "Redimensionnement si necessaire de l'image:"
-	echo "/usr/bin/convert -resize $taille_image_inseree $image_a_inserer ${prefix}/tmp/$1_inser.$ext"
-	/usr/bin/convert -resize $taille_image_inseree $image_a_inserer ${prefix}/tmp/$1_inser.$ext
+	if [ "$redimensionnement" = "y" ]; then
+		echo "Redimensionnement si necessaire de l'image:"
+		echo "/usr/bin/convert -resize $taille_image_inseree $image_a_inserer ${prefix}/tmp/$1_inser.$ext"
+		/usr/bin/convert -resize $taille_image_inseree $image_a_inserer ${prefix}/tmp/$1_inser.$ext
+	else
+		echo "Copie temporaire de l'image a inserer:"
+		echo "cp $image_a_inserer ${prefix}/tmp/$1_inser.$ext"
+		cp $image_a_inserer /tmp/$1_inser.$ext
+	fi
 
 	echo "Fusion avec le fond:"
 	echo "/usr/bin/composite -gravity center -dissolve $niveau_dissolve /tmp/$1_inser.$ext ${dossier_base_fond}/$1_$orig.$ext ${dossier_base_fond}/$1_$orig.$ext"
