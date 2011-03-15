@@ -126,8 +126,8 @@ function extract_login($dn) {
      * @Return 	Le login de l'utilisateur ($login)
 
      */
-    $login = split("[\,\]", $dn, 4);
-    $login = split("[\=\]", $login[0], 2);
+    $login = preg_split("/,/", $dn, 4);
+    $login = preg_split("/=/", $login[0], 2);
     return $login[1];
 }
 
@@ -170,10 +170,10 @@ function duree($t0, $t1) {
      * @Return 	La duree en seconde
 
      */
-    $result0 = split("[\ \!\?]", $t0, 2);
+    $result0 = preg_split("/[\ \!\?]/", $t0, 2);
     $t0ms = $result0[0];
     $t0s = $result0[1];
-    $result1 = split("[\ \!\?]", $t1, 2);
+    $result1 = preg_split("/[\ \!\?]/", $t1, 2);
     $t1ms = $result1[0];
     $t1s = $result1[1];
     $tini = ( $t0s + $t0ms );
@@ -198,6 +198,9 @@ function people_get_variables($uid, $mode) {
     global $ldap_server, $ldap_port, $dn;
     global $error;
     $error = "";
+
+	$ret_group=array();
+	$ret_people=array();
 
     // LDAP attribute
     $ldap_people_attr = array(
@@ -234,22 +237,24 @@ function people_get_variables($uid, $mode) {
                 if ($info["count"]) {
 
                     // Traitement du champ gecos pour extraction de date de naissance, sexe, isAdmin
-                    $gecos = $info[0]["gecos"][0];
-                    $tmp = split("[\,\]", $info[0]["gecos"][0], 4);
+                    if(isset($info[0]["gecos"][0])) {
+						$gecos = $info[0]["gecos"][0];
+						$tmp = preg_split("/,/", $info[0]["gecos"][0], 4);
+					}
                     $ret_people = array(
                         "uid" => $info[0]["uid"][0],
                         "nom" => stripslashes(utf8_decode($info[0]["sn"][0])),
                         "fullname" => stripslashes(utf8_decode($info[0]["cn"][0])),
-                        "prenom" => utf8_decode($info[0]["givenname"][0]),
+                        "prenom" => (isset($info[0]["givenname"][0])) ? utf8_decode($info[0]["givenname"][0]) : "",
                         "pseudo" => (isset($info[0]["initials"][0]) ? utf8_decode($info[0]["initials"][0]) : ""),
-                        "gecos" => utf8_decode($info[0]["gecos"][0]),
+                        "gecos" => (isset($info[0]["gecos"][0]) ? utf8_decode($info[0]["gecos"][0]) : ""),
                         "email" => $info[0]["mail"][0],
                         "tel" => (isset($info[0]["telephonenumber"][0]) ? $info[0]["telephonenumber"][0] : ""),
                         "homedirectory" => $info[0]["homedirectory"][0],
                         "description" => (isset($info[0]["description"][0]) ? utf8_decode($info[0]["description"][0]) : ""),
                         "shell" => $info[0]["loginshell"][0],
-                        "sexe" => $tmp[2],
-                        "admin" => $tmp[3],
+                        "sexe" => (isset($tmp[2]) ? $tmp[2] : ""),
+                        "admin" => (isset($tmp[3]) ? $tmp[3] : ""),
                         "employeeNumber" => (isset($info[0]["employeenumber"][0]) ? $info[0]["employeenumber"][0] : "")
                     );
                 }
@@ -401,7 +406,8 @@ function search_uids($filter) {
                     //  dans le tableau $ret
                     $init = 0;
                     for ($loop = 0; $loop < $info["count"]; $loop++) {
-                        $group = split("[\_\]", $info[$loop]["cn"][0], 2);
+                        //$group = preg_split("/[\_\]/", $info[$loop]["cn"][0], 2);
+                        $group = preg_split("/_/", $info[$loop]["cn"][0], 2);
                         for ($i = 0; $i < $info[$loop]["memberuid"]["count"]; $i++) {
                             // Ajout de wawa : test si le gus est prof
                             $filtre1 = "(memberUid=" . $info[$loop]["memberuid"][$i] . ")";
@@ -475,6 +481,9 @@ function search_groups($filter) {
      */
     global $ldap_server, $ldap_port, $dn;
     global $error;
+
+	$groups=array();
+
     // LDAP attributs
     $ldap_group_attr = array(
         "objectclass",
@@ -559,7 +568,8 @@ function search_people_groups($uids, $filter, $order) {
                     if ($info["count"]) {
                         // traitement du gecos pour identification du sexe
                         $gecos = $info[0]["gecos"][0];
-                        $tmp = split("[\,\]", $gecos, 4);
+                        //$tmp = preg_split("/[\,\]/", $gecos, 4);
+                        $tmp = preg_split("/,/", $gecos, 4);
                         #echo "debug ".$info["count"]." init ".$init." loop ".$loop."<BR>";
                         $ret[$loop1] = array(
                             "uid" => $uids[$loop]["uid"],
@@ -943,7 +953,7 @@ function tstclass($prof, $eleve) {
     $filtre = "(&(memberUid=$eleve)(cn=Classe_*))";
     $classe = search_groups($filtre);
     if (count($classe) == 1) {
-        $equipe=preg_replace("/Classe_/","Equipe_",$classe[0]["cn"]);
+        $equipe = preg_replace("/Classe_/", "Equipe_", $classe[0]["cn"]);
         $filtre = "(&(memberUid=$prof)(cn=$equipe))";
         $res = search_groups($filtre);
         if (count($res) == 1) {
@@ -956,7 +966,7 @@ function tstclass($prof, $eleve) {
         if (count($grcomm) > 0) {
             $i = 0;
             while (($i < count($grcomm)) and ($tstclass == 0)) {
-                if (preg_match("/Cours/",$grcomm[$i]["cn"],$matche)) { $tstclass = 1; }
+                if (preg_match("/Cours/", $grcomm[$i]["cn"], $matche)) {$tstclass = 1;}
                 $i++;
             }
         }
