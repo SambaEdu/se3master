@@ -33,7 +33,7 @@ bindtextdomain('se3-fond',"/var/www/se3/locale");
 textdomain ('se3-fonds');
 
 //aide
-$_SESSION["pageaide"]="Ressources_et_partages";
+$_SESSION["pageaide"]="Le_module_Syst%C3%A8me_fond_d\'%C3%A9cran";
 
 
 if ((is_admin("se3_is_admin",$login)=="Y") or
@@ -69,7 +69,10 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 			//echo "<input type='radio' id='type_utilisateur' name='type' value='utilisateur' /><label for='type_utilisateur'> Utilisateur</label><br />\n";
 			//echo "<input type='radio' id='type_groupe' name='type' value='groupe' /><label for='type_groupe'> Groupe</label><br />\n";
 			echo "Login de l'utilisateur&nbsp;: <input type='text' id='cible' name='cible' value='$cible' onblur='actualise_fond_actuel()' />";
+			echo " ";
+			echo "<a href=\"#\" onclick=\"popuprecherche('search_login.php','popuprecherche','width=500,height=500,scrollbars=1'); return false;\" /><img src='../elements/images/zoom.png' width='22' height='22' border='0' alt='Chercher un utilisateur' /></a>";
 			//echo " <a id='lien_fond_actuel' href='javascript:actualise_fond_actuel()'>Fond actuel</a>";
+			// setTimeout('if(popuprecherche) {popuprecherche.focus()}', 1000);
 			echo "<br />\n";
 			echo "</p>\n";
 		}
