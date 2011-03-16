@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Script de changement du shell des utilisateurs
 # Stephane Boireau (Animateur TICE sur le Secteur de Bernay/Pont-Audemer (27))

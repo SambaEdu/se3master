@@ -59,8 +59,8 @@ function menuprint($login) {
             $level=$liens[$menunbr][2];
             if (($rightname=="") or ($afftest)) $afftest=1==1;
             else {
-                if ((!isset($ldapright["$rightname"]))||($ldapright["$rightname"]=="") {$ldapright["$rightname"]=ldap_get_right($rightname,$login);}
-                $afftest=($ldapright["$rightname"]=="Y");
+                if ($ldapright[$rightname]=="") $ldapright[$rightname]=ldap_get_right($rightname,$login);
+                $afftest=($ldapright[$rightname]=="Y");
             }
             if ($level > $getintlevel) $afftest=0;
             if ($afftest)
@@ -81,14 +81,14 @@ function menuprint($login) {
                     $level=$liens[$menunbr][$i+3];
                     if (($rightname=="") or ($afftest)) $afftest=1==1;
                     else {
-                        if ((!isset($ldapright["$rightname"]))||($ldapright["$rightname"]=="")) {$ldapright["$rightname"]=ldap_get_right($rightname,$login);}
-                        $afftest=($ldapright["$rightname"]=="Y");
+                        if ($ldapright[$rightname]=="") $ldapright[$rightname]=ldap_get_right($rightname,$login);
+                        $afftest=($ldapright[$rightname]=="Y");
                     }
                     if ($level > $getintlevel ) $afftest=0;
                     if ($afftest) {
                     	echo "<img src=\"elements/images/typebullet.png\" width=\"30\" height=\"11\" alt=\"\">";
 		    	// Traite yala pour ne pas avoir deux target
-		    	if (preg_match("/yala/i",$liens[$menunbr][$i+1])) {
+		    	if (preg_match('#yala#',$liens[$menunbr][$i+1])) {
                         	echo "<a href=\"" . $liens[$menunbr][$i+1] . "\">" . $liens[$menunbr][$i]  . "</a><br>\n";
                    	} else {
                         	echo "<a href=\"" . $liens[$menunbr][$i+1] . "\" TARGET='$menutarget'>" . $liens[$menunbr][$i]  . "</a><br>\n";
@@ -271,7 +271,7 @@ function displogin ($idpers)
 
     if ($idpers):
         /* Renvoie le timestamp du dernier login */
-        $result=mysql_db_query("$DBAUTH","SELECT date_format(last_log,'%e %m %Y à %T' ) FROM personne WHERE id=$idpers", $authlink);
+        $result=mysql_db_query("$DBAUTH","SELECT date_format(last_log,'%e %m %Y ï¿½ %T' ) FROM personne WHERE id=$idpers", $authlink);
     if ($result && mysql_num_rows($result)):
         $der_log=mysql_result($result,0,0);
     mysql_free_result($result);
@@ -322,16 +322,16 @@ function isauth()
 //=================================================
 
 /**
-* Fabrique un N° de session aleatoire
+* Fabrique un Nï¿½ de session aleatoire
 
 * @Parametres
-* @Return N° de session
+* @Return Nï¿½ de session
 */
 
 
 function mksessid()
 {
-    /* Fabrique un N° de session aleatoire */
+    /* Fabrique un Nï¿½ de session aleatoire */
     global $Pool, $SessLen;
 
     $count=10;
@@ -967,7 +967,7 @@ function this_parc_delegate($login,$parc,$niveau)
 	$authlink_delegate = @mysql_connect($dbhost,$dbuser,$dbpass);
 	@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
 	$query_delegate="SELECT `parc` FROM `delegation` WHERE `login`='$login' and `parc`='$parc' and `niveau`='$niveau';";
-	$result_delegate=mysql_db_query($dbname,$query_delegate);
+	$result_delegate=mysql_query($query_delegate);
 	if ($result_delegate) {
 		$ligne_delegate=mysql_num_rows($result_delegate);
 		if ($ligne_delegate>0) { return true; } else { return false;}
@@ -1069,21 +1069,13 @@ function niveau_parc_delegate($login,$parc)
 
 
 /**
-* Fonction destinee a afficher les variables transmises d'une page à l'autre: GET, POST et SESSION
+* Fonction destinee a afficher les variables transmises d'une page ï¿½ l'autre: GET, POST et SESSION
 
 * @Parametres
 * @Return
 */
-$debug_var_count=array();
-function debug_var() {
-	global $debug_var_count;
-
-	$debug_var_count['POST']=0;
-	$debug_var_count['GET']=0;
-
-	$debug_var_count['COOKIE']=0;
-
-	// Fonction destinée à afficher les variables transmises d'une page à l'autre: GET, POST et SESSION
+function debug_var(){
+	// Fonction destinee a afficher les variables transmises d'une page ï¿½ l'autre: GET, POST et SESSION
 	echo "<div style='border: 1px solid black; background-color: white; color: black;'>\n";
 
 	$cpt_debug=0;
@@ -1093,7 +1085,7 @@ function debug_var() {
 	echo "<div id='container_debug_var_$cpt_debug'>\n";
 	$cpt_debug++;
 
-	echo "<p>Variables envoyées en POST: ";
+	echo "<p>Variables envoyees en POST: ";
 	if(count($_POST)==0) {
 		echo "aucune";
 	}
@@ -1119,7 +1111,7 @@ function debug_var() {
 		}
 	}
 </script>\n";
-	/*
+
 	echo "<table summary=\"Tableau de debug\">\n";
 	foreach($_POST as $post => $val){
 		//echo "\$_POST['".$post."']=".$val."<br />\n";
@@ -1140,57 +1132,11 @@ function debug_var() {
 		echo "</td></tr>\n";
 	}
 	echo "</table>\n";
-	*/
-
-	function tab_debug_var($chaine_tab_niv1,$tableau,$pref_chaine,$cpt_debug) {
-		//global $cpt_debug;
-		global $debug_var_count;
-
-		echo " (<a href='#' onclick=\"tab_etat_debug_var[$cpt_debug]=tab_etat_debug_var[$cpt_debug]*(-1);affiche_debug_var('container_debug_var_$cpt_debug',tab_etat_debug_var[$cpt_debug]);return false;\">*</a>)\n";
-
-		echo "<table id='container_debug_var_$cpt_debug' summary=\"Tableau de debug\">\n";
-		foreach($tableau as $post => $val) {
-			echo "<tr><td valign='top'>".$pref_chaine."['".$post."']=</td><td>".$val;
-
-			if(is_array($tableau[$post])) {
-
-				tab_debug_var($chaine_tab_niv1,$tableau[$post],$pref_chaine.'['.$post.']',$cpt_debug);
-
-				$cpt_debug++;
-			}
-			elseif(isset($debug_var_count[$chaine_tab_niv1])) {
-				$debug_var_count[$chaine_tab_niv1]++;
-			}
-
-			echo "</td></tr>\n";
-		}
-		echo "</table>\n";
-	}
-
-
-	echo "<table summary=\"Tableau de debug\">\n";
-	foreach($_POST as $post => $val) {
-		echo "<tr><td valign='top'>\$_POST['".$post."']=</td><td>".$val;
-
-		if(is_array($_POST[$post])) {
-			tab_debug_var('POST',$_POST[$post],'$_POST['.$post.']',$cpt_debug);
-
-			$cpt_debug++;
-		}
-		else {
-			$debug_var_count['POST']++;
-		}
-
-		echo "</td></tr>\n";
-	}
-	echo "</table>\n";
-
-	echo "<p>Nombre de valeurs en POST: <b>".$debug_var_count['POST']."</b></p>\n";
 	echo "</div>\n";
 	echo "</blockquote>\n";
 
 
-	echo "<p>Variables envoyées en GET: ";
+	echo "<p>Variables envoyees en GET: ";
 	if(count($_GET)==0) {
 		echo "aucune";
 	}
@@ -1204,27 +1150,14 @@ function debug_var() {
 	echo "<table summary=\"Tableau de debug sur GET\">";
 	foreach($_GET as $get => $val){
 		//echo "\$_GET['".$get."']=".$val."<br />\n";
-		//echo "<tr><td>\$_GET['".$get."']=</td><td>".$val."</td></tr>\n";
-
-		echo "<tr><td valign='top'>\$_GET['".$get."']=</td><td>".$val;
-
-		if(is_array($_GET[$get])) {
-			tab_debug_var('GET',$_GET[$get],'$_GET['.$get.']',$cpt_debug);
-
-			$cpt_debug++;
-		}
-		else {
-			$debug_var_count['GET']++;
-		}
-
-		echo "</td></tr>\n";
+		echo "<tr><td>\$_GET['".$get."']=</td><td>".$val."</td></tr>\n";
 	}
 	echo "</table>\n";
 	echo "</div>\n";
 	echo "</blockquote>\n";
 
 
-	echo "<p>Variables envoyées en SESSION: ";
+	echo "<p>Variables envoyees en SESSION: ";
 	if(count($_SESSION)==0) {
 		echo "aucune";
 	}
@@ -1245,7 +1178,7 @@ function debug_var() {
 	echo "</blockquote>\n";
 
 
-	echo "<p>Variables envoyées en SERVER: ";
+	echo "<p>Variables envoyees en SERVER: ";
 	if(count($_SERVER)==0) {
 		echo "aucune";
 	}
@@ -1266,67 +1199,6 @@ function debug_var() {
 	echo "</blockquote>\n";
 
 
-	echo "<p>Variables envoyées en FILES: ";
-	if(count($_FILES)==0) {
-		echo "aucune";
-	}
-	else {
-		echo "(<a href='#' onclick=\"tab_etat_debug_var[$cpt_debug]=tab_etat_debug_var[$cpt_debug]*(-1);affiche_debug_var('container_debug_var_$cpt_debug',tab_etat_debug_var[$cpt_debug]);return false;\">*</a>)";
-	}
-	echo "</p>\n";
-	echo "<blockquote>\n";
-	echo "<div id='container_debug_var_$cpt_debug'>\n";
-	$cpt_debug++;
-
-	echo "<table summary=\"Tableau de debug\">\n";
-	foreach($_FILES as $key => $val) {
-		echo "<tr><td valign='top'>\$_FILES['".$key."']=</td><td>".$val;
-
-		if(is_array($_FILES[$key])) {
-			tab_debug_var('FILES',$_FILES[$key],'$_FILES['.$key.']',$cpt_debug);
-
-			$cpt_debug++;
-		}
-
-		echo "</td></tr>\n";
-	}
-	echo "</table>\n";
-
-	echo "</div>\n";
-	echo "</blockquote>\n";
-
-	echo "<p>Variables COOKIES: ";
-	if(count($_COOKIE)==0) {
-		echo "aucune";
-	}
-	else {
-		echo "(<a href='#' onclick=\"tab_etat_debug_var[$cpt_debug]=tab_etat_debug_var[$cpt_debug]*(-1);affiche_debug_var('container_debug_var_$cpt_debug',tab_etat_debug_var[$cpt_debug]);return false;\">*</a>)";
-	}
-	echo "</p>\n";
-	echo "<blockquote>\n";
-	echo "<div id='container_debug_var_$cpt_debug'>\n";
-	$cpt_debug++;
-	echo "<table summary=\"Tableau de debug sur COOKIE\">";
-	foreach($_COOKIE as $get => $val){
-
-		echo "<tr><td valign='top'>\$_COOKIE['".$get."']=</td><td>".$val;
-
-		if(is_array($_COOKIE[$get])) {
-			tab_debug_var('COOKIE',$_COOKIE[$get],'$_COOKIE['.$get.']',$cpt_debug);
-
-			$cpt_debug++;
-		}
-		else {
-			$debug_var_count['COOKIE']++;
-		}
-
-		echo "</td></tr>\n";
-	}
-	echo "</table>\n";
-	echo "</div>\n";
-	echo "</blockquote>\n";
-
-
 	echo "<script type='text/javascript'>
 	// On masque le cadre de debug au chargement:
 	//affiche_debug_var('container_debug_var',var_debug_var_etat);
@@ -1336,7 +1208,7 @@ function debug_var() {
 		if(document.getElementById('container_debug_var_'+i)) {
 			affiche_debug_var('container_debug_var_'+i,-1);
 		}
-		// Variable destinée à alterner affichage/masquage
+		// Variable destinee ï¿½ alterner affichage/masquage
 		tab_etat_debug_var[i]=-1;
 	}
 </script>\n";

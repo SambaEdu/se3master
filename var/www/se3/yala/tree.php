@@ -77,7 +77,7 @@ function showContents($ldap_func, $base_dn) {
 		# Find out what the objectclass group is
 		$group = getEntryType($objectclasses[$dn]);
 
-		if (ereg("^([^\,]+)", $dn, $regs))
+		if (preg_match("#^([^\,]+)#", $dn, $regs))
 			$rdn = $regs[1];
 		else
 			die("Invalid dn $dn!");

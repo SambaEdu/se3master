@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Script largement ébauché par Franck Molle...
 # ... poursuivi par Stéphane Boireau (03/10/2005)
 ## $Id$ ##

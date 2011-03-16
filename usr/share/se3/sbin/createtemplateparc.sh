@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Script de création du dossier au nom du parc dans /home/template
 # Stéphane Boireau - 18/03/2005

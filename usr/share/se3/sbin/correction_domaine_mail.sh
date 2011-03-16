@@ -78,7 +78,7 @@ else
 	exit
 fi
 
-echo "#!/bin/sh" > $tmp/restaure_ldap.sh
+echo "#!/bin/bash" > $tmp/restaure_ldap.sh
 echo "/etc/init.d/slapd stop
 sleep 5
 if ps aux | grep slapd | grep -v grep > /dev/null ;then

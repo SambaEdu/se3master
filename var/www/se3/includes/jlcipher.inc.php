@@ -9,7 +9,7 @@
    * @Projet LCS / SambaEdu 
    
    * @Auteurs Equipe Tice academie de Caen
-   * @Auteurs « jLCF >:> » jean-luc.chretien@tice.ac-caen.fr
+   * @Auteurs ï¿½ jLCF >:> ï¿½ jean-luc.chretien@tice.ac-caen.fr
 
    * @Note: Ce fichier de fonction doit etre appele par un include
 
@@ -125,7 +125,7 @@ function crypto_nav($path)
 {
          global   $HTTP_USER_AGENT;
         // Affichage logo crypto
-        if (preg_match("/Mozilla/4.7/i", $HTTP_USER_AGENT)) {
+        if (preg_match("#Mozilla/4.7#", $HTTP_USER_AGENT)) {
                 echo " <a HREF='".$path."html' onClick='auth_popup(); return false' TARGET='_blank'><img src='".$path."elements/images/no_crypto.png' alt='".gettext("Attention, avec ce navigateur votre mot de passe va circuler en clair sur le r&#233;seau !")."' width=48 height=48 border=0></a>";
         } else {
                 echo " <a HREF='".$path."auth_se3.html' onClick='auth_popup(); return false' TARGET='_blank'><img src='".$path."elements/images/crypto.png' alt='".gettext("Cryptage du mot de passe actif !")."' width=48 height=48 border=0></a>";
@@ -168,28 +168,41 @@ function remote_ip()
 
 function decode_pass($string_auth) {
         global  $MaxLifeTime,$path_to_wwwse3;
-
-        // Initialisation
-        $error=0;
-
+        $fpdebug=fopen("/var/log/se3/debug.log","a");
+	fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$string_auth: ".$string_auth."\n");
+	//$argument=explode("\n", $string_auth);
+	//fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$argument: ".$argument[0]."\n");
+	//fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$argument: ".$argument[1]."\n");
+	$string_auth_clean=str_replace(CHR(13).CHR(10),"",$string_auth);
+	fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$string_auth_clean: ".$string_auth_clean."\n");
         // Decodage de la chaine d'authentification cote serveur avec une cle privee
-        exec ("/usr/bin/python ".$path_to_wwwse3."/includes/decode.py '$string_auth'",$AllOutPut,$ReturnValue);
+        //$commande="/usr/bin/python ".$path_to_wwwse3."/includes/decode.py $string_auth";
+        $commande="/usr/bin/python ".$path_to_wwwse3."/includes/decode.py $string_auth_clean";
+        fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$commande".$commande."\n");
+        exec ($commande,$AllOutPut,$ReturnValue);
         // Extraction des parametres
-        $tmp = preg_split ("/[\|\]/",$AllOutPut[0],4);
+        //print_r($AllOutPut);
+        $tmp = preg_split ("#\|#",$AllOutPut[0],4);
         $passwd = $tmp[0];
         $ip_src = $tmp[1];
         $timestamp = $tmp[2];
+        //$timestamp=time();
         $timewait = $tmp[3];
+        fputs($fpdebug,date("j/m/y:H:i").":function decode_pass(".$string_auth_clean."):\n\$passwd : ".$passwd." | \$ip_src : ".$ip_src." | \$timestamp : ".$timestamp." | \$timewait :  ".$timewait."\n");
         $timetotal= $timewait+$timestamp+$MaxLifeTime;
-        #echo  " MaxLifeTime: $MaxLifeTime ipsrc:$ip_src  timestamp:$timestamp time :".time()."timetotal:$timetotal pass:$passwd";
+        fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$timetotal : ".$timetotal."\n");
         // Interpretation des resultats
                 if ( $ip_src != remote_ip() && time() <  $timetotal ) {
+			fputs($fpdebug,date("j/m/y:H:i").":function decode_pass(): ips differentes | ".time()." < timetotal => error=1\n");
                         $error = 1;
                 } elseif   ( time() >  $timetotal && $ip_src == remote_ip() ) {
+			fputs($fpdebug,date("j/m/y:H:i").":function decode_pass(): ips identiques | ".time()." > timetotal => error=2\n");
                         $error = 2;
                 }  elseif ( $ip_src != remote_ip()   &&   time() >  $timetotal ) {
+			fputs($fpdebug,date("j/m/y:H:i").":function decode_pass(): ips differentes | ".time()." > timetotal => error=3\n");
                         $error = 3;
                 }
+        fclose($fpdebug);
         return array ($passwd, $error,$ip_src,$timetotal);
 }
 
@@ -207,7 +220,7 @@ function decode_pass($string_auth) {
 function detect_key_orig()
 {
         $myFile = file( "public_key.js");
-        if ( preg_match("/19281203,140977887,4051811,156855586,32904/i",$myFile[1])) return true;  else return false;
+        if ( preg_match("19281203,140977887,4051811,156855586,32904",$myFile[1])) return true;  else return false;
 }
 
 ?>

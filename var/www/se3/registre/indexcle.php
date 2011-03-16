@@ -45,7 +45,7 @@ if (test_bdd_registre() == false) {
 }
 
 echo "<h1>" . gettext("Gestion des templates") . "</h1>";
-echo gettext("Chosir un template ");
+echo gettext("Choisir un template ");
 echo "<u onmouseover=\"return escape" . gettext("('Choisir un template correspond &#224; un groupe de machine, un groupe de personnes. Dans ce menu, vous pouvez visualiser les protections des clients windows de votre parc en leur attribuant des groupes de cl&#233;s. Selon le niveau de s&#233;curit&#233; que vous souhaitez, choisissez un des groupes des cl&#233;s qui va vous &#234;tre propos&#233;. Attention, vous pouvez<font color=#FF0000> uniquement enlever des restrictions </font> ou faire des r&#233;glages sur les cl&#233;s de configuration ( changer votre page de d&#233;marrage pour Internet Explorer, par exemple), seuls les administrateurs r&#233;seau peuvent ajouter des restrictions. <font color=#FF0000>Soyez tr&#232;s prudent avec ce menu !!</font>. Faites-vous aidez par votre administrateur r&#233;seau au d&#233;but.')") . "\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/system-help.png\"></u>";
 
 echo "<br><br>";

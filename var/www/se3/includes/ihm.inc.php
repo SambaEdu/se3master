@@ -173,11 +173,11 @@ function enleveaccents($chaine){
 
 
 function verifIntituleGrp ($intitule) {
-  $motif1 = "^Classe$";
-  $motif2 = "^Cours$";
-  $motif3 = "^Equipe$";
-  $motif4 = "^Matiere$";
-  if ( preg_match("/$motif1/",$intitule)||preg_match("/$motif2/",$intitule)||preg_match("/$motif3/",$intitule)||preg_match("/$motif4/",$intitule) ) {
+  $motif1 = "#^Classe$#";
+  $motif2 = "#^Cours$#";
+  $motif3 = "#^Equipe$#";
+  $motif4 = "#^Matiere$#";
+  if ( preg_match($motif1,$intitule)||preg_match($motif2,$intitule)||preg_match($motif3,$intitule)||preg_match($motif4,$intitule) ) {
     $ret = false;
   } else $ret = true;
   return $ret;
@@ -200,7 +200,7 @@ function verifPwd ($password) {
 
   if ( preg_match("/(^[a-zA-Z]*$)|(^[0-9]*$)/", $password) )
   	return false;
-  elseif ( preg("/^[[:alnum:]$char_spec]{4,20}$/", $password) )
+  elseif ( preg_match("/^[[:alnum:]$char_spec]{4,20}$/", $password) )
     	return true; else return false;
 }
 
@@ -245,9 +245,9 @@ $motif = "^[0-9]{8}$";
 */
 
 function verifEntree($entree) {
-  $motif = "^[_0-9a-zA-Z \'ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ-]{2,20}$";
+  $motif = "#^[_0-9a-zA-Z \'ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ-]{2,20}$#";
 
-  if ( preg_match("/$motif/", $entree) ) {
+  if ( preg_match($motif, $entree) ) {
      $ret= true;
   } else {
     $ret= false;
@@ -267,9 +267,9 @@ function verifEntree($entree) {
 */
 
 function verifPseudo($pseudo) {
-  $motif = "[\|,/ ]";
+  $motif = "#\|,/ #";
 
-  if ( preg_match("/$motif/", $pseudo) || strlen ($pseudo) > 20 || strlen ($pseudo) == 0 ) {
+  if ( preg_match($motif, $pseudo) || strlen ($pseudo) > 20 || strlen ($pseudo) == 0 ) {
     $ret = false;
   } else {
     $ret = true;
@@ -309,9 +309,9 @@ function verifDescription($entree) {
 */
 
 function verifTel ($tel) {
-  $motif ="^[0-9]{10}$";
+  $motif ="#^[0-9]{10}$#";
 
-  if ( preg_match("/$motif/", $tel) || strlen ($tel) == 0 ) {
+  if ( preg_match($motif, $tel) || strlen ($tel) == 0 ) {
     $ret = true;
   } else {
     $ret = false;
@@ -463,13 +463,13 @@ function aff_trailer ($mode)
     } elseif ($mode == 7 ) {
       echo "-> <a href=\"add_user.php\">".gettext("Ajout d'un utilisateur")."</a></h2>";
     } elseif ($mode != "") {
-	list($valeur, $filtre) = split ("_", $mode); 
+	list($valeur, $filtre) = preg_split ("#_#", $mode); 
       	if ($valeur == 8 ) {
-    		$mode=preg_replace("/8_/","",$mode);
+    		$mode=preg_replace("#8_#","",$mode);
 		echo "-> <a href=\"search.php\">".gettext("Recherche")."</a> -><a href=\"group.php?filter=$mode\">".gettext(" Modification")."</a> -> $mode</h2>";
     	}
       	if ($valeur == 9 ) {
-		$mode=preg_replace("/9_/","",$mode);
+		$mode=preg_replace("#9_#","",$mode);
 		echo "-> <a href=\"search.php\">".gettext("Recherche")."</a> -><a href=\"people.php?uid=$mode\">".gettext(" Modification")."</a> -> $mode</h2>";
     	}
     } else {
