@@ -154,8 +154,10 @@ PRIMARY KEY ( `identifiant` )
 
 					echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_consulter\" value=\"consulter\" checked=\"true\" /><label for='choix1_consulter' style='cursor:pointer;'> ".gettext("Consulter les param&#233;trages actuels").".</label></p></li>\n";
 					echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_parametrer\" value=\"parametrer\" /><label for='choix1_parametrer' style='cursor:pointer;'> ".gettext("Effectuer des param&#233;trages").".</label></p></li>\n";
-					echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_supprimer\" value=\"supprimer\" /><label for='choix1_supprimer' style='cursor:pointer;'> ".gettext("Supprimer le cache").".</label></p></li>\n";  	 
-			                echo "</ul>\n";
+					echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_supprimer\" value=\"supprimer\" /><label for='choix1_supprimer' style='cursor:pointer;'> ".gettext("Supprimer le cache").".</label></p></li>\n";
+					//echo "<li><p><input type=\"radio\" name=\"choix1\" id=\"choix1_inserer_image\" value=\"inserer_image\" /><label for='choix1_inserer_image' style='cursor:pointer;'> ".gettext("Ins&#233;rer une image personnalis&#233;e dans le fond d'un utilisateur").".</label></p></li>\n";  	 
+					echo "<li><p><a href='fond_perso.php'>".gettext("Ins&#233;rer une image personnalis&#233;e dans le fond d'un utilisateur").".</a></p></li>\n";  	 
+					echo "</ul>\n";
 					echo "<input type=\"submit\" name=\"bouton_choix\" value=\"".gettext("Valider")."\"></p>\n";
 					echo "</form>\n";
 					echo "</blockquote>\n";
@@ -725,7 +727,7 @@ PRIMARY KEY ( `identifiant` )
 						}
 						else{
 							// Récupération des variables:
-							$CleID=$_POST['CleID'];
+							$CleID=isset($_POST['CleID']) ? $_POST['CleID'] : "";
 
 							if(isset($_POST['regenerer_registre_zrn'])){
 								$regenerer_registre_zrn=$_POST['regenerer_registre_zrn'];
@@ -1172,7 +1174,7 @@ Veillez à choisir des couleurs connues (<i>liste disponible à l'adresse <a href=
 											$dest_file="$dossier_upload_images/$groupe.jpg";
 											$source_file=stripslashes("$tmp_image");
 											$res_copy=copy("$source_file" , "$dest_file");
-											echo "".gettext("Le fond")." $image ".gettext("va &#234;tre mis en place sous le nom")." $groupe.jpg ".gettext("dans")." I:\media\fonds_ecran";
+											echo "".gettext("Le fond")." $image ".gettext("va &#234;tre mis en place sous le nom")." $groupe.jpg ".gettext("dans")." I:\\media\\fonds_ecran";
 										}
 										echo "</p>\n";
 										// Mise en place du fichier de $dossier_upload_images vers I:\media\fonds_ecran
@@ -1224,7 +1226,7 @@ couleur2="'.$couleur2.'"
 										*/
 										//La 'variable_bidon' est là pour passer le test sur $1
 										//Il faut juste éviter de créer un dossier '/home/variable_bidon'
-										echo "<p>".gettext("Le nouveau fond a &#233;t&#233; g&#233;n&#233;r&#233; dans")." 'I:\media\fonds_ecran'.</p>\n";
+										echo "<p>".gettext("Le nouveau fond a &#233;t&#233; g&#233;n&#233;r&#233; dans")." 'I:\\media\\fonds_ecran'.</p>\n";
 
 										// Mise en place d'une copie au format PNG pour l'interface web:
 										exec("/usr/bin/sudo $chemin_scripts/fond_jpg2png.sh $groupe");
@@ -1234,7 +1236,7 @@ couleur2="'.$couleur2.'"
 
 								}
 								else{
-									echo "<p>".gettext("Le fond n'a pas &#233;t&#233; modifi&#233; dans")." 'I:\media\\fonds_ecran'.</p>\n";
+									echo "<p>".gettext("Le fond n'a pas &#233;t&#233; modifi&#233; dans")." 'I:\\media\\fonds_ecran'.</p>\n";
 									if(!file_exists("/var/se3/Docs/media/fonds_ecran/$wallgrp.jpg")){
 										echo "<p style=\"color:red;\">".gettext("ERREUR: Le fichier")." I:\\media\\fonds_ecran\\$groupe.jpg ".gettext("n'existe pas.<br>\nSi vous ne d&#233;finissez pas d'image, vous risquez de ne pas obtenir ce que vous souhaitez!")."</p>\n";
 									}
@@ -1407,7 +1409,7 @@ couleur2="'.$couleur2.'"
 							//  sans validation de formulaire lorsqu'on désactive
 							// l'utilisation d'image pour le groupe $groupe
 							if(!isset($suppr_annotations)){
-								$suppr_annotations=$_POST['suppr_annotations'];
+								$suppr_annotations=isset($_POST['suppr_annotations']) ? $_POST['suppr_annotations'] : "";
 							}
 
 							// Validation des choix d'annotation:
