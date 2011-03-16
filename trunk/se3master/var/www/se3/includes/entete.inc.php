@@ -45,10 +45,15 @@ $login=isauth();
 if ($login == "") {
 	//	header("Location:$urlauth");
 	$request = $PHP_SELF;
-	if ( $_SERVER['QUERY_STRING'] != "") $request .= "?".$_SERVER['QUERY_STRING'];
+	if ( $_SERVER['QUERY_STRING'] != "") {$request .= "?".$_SERVER['QUERY_STRING'];}
+
 	echo "<script language=\"JavaScript\" type=\"text/javascript\">\n<!--\n";
 	echo "top.location.href = '$urlauth?request=" . rawurlencode($request) . "';\n";
 	echo "//-->\n</script>\n";
+
+	// Pour prevenir une poursuite dans le cas ou javascript serait desactive sur le client
+	die();
+
 } else {
 	// Fin Prise en compte de la page demandee initialement - leb 25/6/2005
 ?>
