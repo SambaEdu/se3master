@@ -36,10 +36,10 @@
   // Aide
   $_SESSION["pageaide"]="ACL#En_utilisant_l.27interface_SambaEdu";
 
-  $group = $_POST['group'];
-  $priority_group = $_POST['priority_group'];
+	$group=isset($_POST['group']) ? $_POST['group'] : "";
+	$priority_group=isset($_POST['priority_group']) ? $_POST['priority_group'] : "contient";
   
-if (!$group) {
+if ($group=='') {
 	$filter = "(cn=*)";
 } else {
 	if ($priority_group == "contient") {
@@ -61,13 +61,14 @@ if (count($groups)) {
     	} else {
       		echo "<p><STRONG>".count($groups)."</STRONG>".gettext(" groupes r&#233;pondent &#224; ces crit&#232;res de recherche")."</p>\n";
     	}
-      	echo "<UL>\n";
-        echo"<form><select name=\"liste\" onChange=\"Reporter(this)\">";
+      	echo "<blockquote>\n";
+        echo "<form><select name=\"liste\" onChange=\"Reporter(this)\">";
         echo "<option value=\"\">".gettext("Votre choix ...")."</option>";
         for ($loop=0; $loop<count($groups);$loop++) {
 		echo "<option value=\"".$groups[$loop]["cn"]."\">".$groups[$loop]["cn"]."</option>";
 	}
-        echo "</form></UL>\n";
+        echo "</form>\n";
+		echo "</blockquote>\n";
      
 } else {
 	echo "<STRONG>".gettext("Pas de r&#233;sultats")."</STRONG>".gettext(" correspondant aux crit&#232;res s&#233;lectionn&#233;s.")."<BR>";
