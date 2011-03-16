@@ -40,14 +40,24 @@ $_SESSION["pageaide"]="Annuaire#Voir_ma_fiche";
 
 echo "<h1>".gettext("Annuaire")."</h1>\n";
 
-$uid = $_GET[uid];
+$uid = isset($_GET['uid']) ? $_GET['uid'] : "";
+
+if($uid=='') {
+	echo "<p style='color:red;'>ERREUR: uid non choisi.</p>";
+	include ("pdp.inc.php");
+	die();
+}
 
 aff_trailer ("3");
 #$TimeStamp_0=microtime();
 // correctif provisoire
-$user_tmp = $user;
-// fin correctif
+if(isset($user)) {
+	$user_tmp = $user;
+	// fin correctif
+}
+
 list($user, $groups)=people_get_variables($uid, true);
+
 #$TimeStamp_1=microtime();
 #############
 # DEBUG     #
@@ -75,7 +85,8 @@ echo "<table width=\"80%\"><tr><td>";
       				echo "</A>";
 			}	
 			echo "<font size=\"-2\"> ".$groups[$loop]["description"];
-      			$login1=preg_split ("#\,#",ldap_dn2ufn($groups[$loop]["owner"]),2);
+      			//$login1=split ("[\,\]",ldap_dn2ufn($groups[$loop]["owner"]),2);
+      			$login1=preg_split ("/,/",ldap_dn2ufn($groups[$loop]["owner"]),2);
       			if ( $uid == $login1[0] ) echo "<strong><font color=\"#ff8f00\">&nbsp;(".gettext("professeur principal").")</font></strong>";
       			echo "</font></LI>\n";
        			echo "</font></li>";
@@ -86,7 +97,11 @@ echo "<table width=\"80%\"><tr><td>";
         			&nbsp;&nbsp;&nbsp;&nbsp;<a href="del_user_group_direct.php?uid=<?php echo $user["uid"]?>&cn=<?php echo $groups[$loop]["cn"] ?>" onclick= "return getconfirm();"><font size="2"><?php echo gettext("retirer du groupe"); ?></a></font><br>
         			<?php
         			//R&#233;cup&#233;ration de tous les groupes de l'utilisateur
-         			$cn=$cn."&cn".$loop."=".$groups[$loop]["cn"];
+         			if(isset($groups[$loop]["cn"])) {
+						// A quoi sert ce $cn ???
+						if(!isset($cn)) {$cn="";}
+						$cn=$cn."&cn".$loop."=".$groups[$loop]["cn"];
+					}
       			}
       			
 			//fin modif 
@@ -203,11 +218,16 @@ echo "<table width=\"80%\"><tr><td>";
   		echo "<li><A HREF=\"../infos/du.php?wrep=/home/$login&uid=$login\">".gettext("Espace occup&#233; par mon Home")."</A>";  
   		echo "<li><a href=\"del_nt_profile.php?uid=".$user["uid"]."&action=del\">".gettext("Regenerer mon profil Windows...")."</a><br>\n";
   		exec ("/usr/share/se3/sbin/getUserProfileInfo.pl $user[uid]",$AllOutPut,$ReturnValue);
-     		if ($AllOutPut[0]=="lock") {
+		if ($AllOutPut[0]=="lock") {
      			echo "<li><a href=\"del_nt_profile.php?uid=".$user["uid"]."&action=unlock\">".gettext("D&#233;verrouiller mon profil Windows...")."</a><br>\n"; 
   		} else {
          		echo "<li><a href=\"del_nt_profile.php?uid=".$user["uid"]."&action=lock\">".gettext("Verrouiller mon profil Windows...")."</a><br>\n";
-  		}  
+  		}
+
+		if(ldap_get_right("fond_can_change",$login)) {
+			echo "<li><a href=\"../fond_ecran/fond_perso.php\">".gettext("Personnaliser mon fond d'&#233;cran")."</a><br>\n";
+		}
+
   		echo "</ul>\n";
   	}
 
@@ -218,6 +238,7 @@ echo "<table width=\"80%\"><tr><td>";
                 $photo="/var/se3/Docs/trombine/".$user["uid"].".".$tab_type[$j];
                 // Supprime le 0 devant s'il existe
                 $employeeNumber_gepi = preg_replace('/^[0]/','',$user["employeeNumber"]);
+				if(!isset($rep_trombine)) {$rep_trombine="";} // A quoi sert le $rep_trombine ; Il a l'air de n'etre jamais initialise
                 $photo_employeeNumber="$rep_trombine"."$employeeNumber_gepi".".".$tab_type[$j];
 
                 if (file_exists("$photo")) {
