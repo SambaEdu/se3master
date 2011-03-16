@@ -6,10 +6,13 @@
 		Page d'import des comptes depuis les fichiers CSV/XML de Sconet
 		Auteur: Stéphane Boireau (ex-Animateur de Secteur pour les TICE sur Bernay/Pont-Audemer (27))
 		Portage LCS : jean-Luc Chrétien jean-luc.chretien@tice;accaen.fr
-		Dernière modification: 10/09/2010
+		Dernière modification: 13/03/2011
 	*/
 
 	include "se3orlcs_import_comptes.php";
+
+	// $debug_import_comptes peut être initialisée dans se3orlcs_import_comptes.php
+	//$debug_import_comptes="y";
 
 	//my_echo("<p style='background-color:red;'>\$servertype=$servertype</p>");
 
@@ -60,6 +63,17 @@
 		}
 	}
 
+	// Pour ne pas faire de betises en cours d'annee scolaire et se retrouver avec un nom de classe qui change en cours d'annee parce qu'on se serait mis a virer les accents dans les noms de classes:
+	$sql="SELECT value FROM params WHERE name='clean_caract_classe';";
+	$res_clean=mysql_query($sql);
+	if(mysql_num_rows($res_clean)==0) {
+		// On ne passera a 'y' que lors d'un import annuel.
+		$clean_caract_classe="n";
+	}
+	else {
+		$lig_clean=mysql_fetch_object($res_clean);
+		$clean_caract_classe=$lig_clean->value;
+	}
 
 	$nouveaux_comptes=0;
 	$comptes_avec_employeeNumber_mis_a_jour=0;
@@ -219,6 +233,16 @@
 			if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 			my_echo("</h3>\n");
 			my_echo("<blockquote>\n");
+
+
+			// ==========================================================
+			// On profite d'une mise a jour annuelle pour passer en mode sans accents sur les caractères dans les noms de classes (pour eviter des blagues dans la creation de dossiers de classes,...)
+			$sql="DELETE FROM params WHERE name='clean_caract_classe';";
+			$res_clean=mysql_query($sql);
+			$sql="INSERT INTO params SET name='clean_caract_classe', value='y';";
+			$res_clean=mysql_query($sql);
+			$clean_caract_classe="y";
+			// ==========================================================
 
 			if(file_exists($sts_xml_file)) {
 				unset($attribut);
@@ -583,16 +607,15 @@
 								$eleve[$numero]["prenom"]=$tab_tmp_prenom[0];
 								// =============================================
 
-								//$nom=strtolower(strtr(ereg_replace("Æ","AE",ereg_replace("æ","ae",ereg_replace("¼","OE",ereg_replace("½","oe","$nom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚÝ¾´áàâäãåçéèêëîïìíñôöðòóõ¨ûüùúýÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz"));
-								//$prenom=strtolower(strtr(ereg_replace("Æ","AE",ereg_replace("æ","ae",ereg_replace("¼","OE",ereg_replace("½","oe","$prenom"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚÝ¾´áàâäãåçéèêëîïìíñôöðòóõ¨ûüùúýÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz"));
-
 								unset($tmpdate);
 								$tmpdate=explode("/",$tabtmp[$index[2]]);
 								$eleve[$numero]["date"]=$tmpdate[2].$tmpdate[1].$tmpdate[0];
 								$eleve[$numero]["sexe"]=$tabtmp[$index[4]];
-								//$eleve[$numero]["division"]=ereg_replace("[^[:space:][A-Z][a-z][0-9]]", "",$tabtmp[$index[5]]);
-								//$eleve[$numero]["division"]=ereg_replace("[^a-zA-Z0-9_ -]", "",remplace_accents($tabtmp[$index[5]]));
-								$eleve[$numero]["division"]=preg_replace("/[^a-zA-Z0-9_ -]/", "",remplace_accents($tabtmp[$index[5]]));
+
+                                $eleve[$numero]["division"]=strtr(trim($tabtmp[$index[5]]),"/","_");
+								if($clean_caract_classe=="y") {
+	                                $eleve[$numero]["division"]=preg_replace("/[^a-zA-Z0-9_ -]/", "",remplace_accents($eleve[$numero]["division"]));
+								}
 							}
 						}
 					}
@@ -972,8 +995,17 @@
 							$eleves[$i]["structures"][$j]=array();
 							foreach($structure->children() as $key => $value) {
 								if(in_array(strtoupper($key),$tab_champs_struct)) {
-									$eleves[$i]["structures"][$j][strtolower($key)]=trim(traite_utf8($value));
+									//my_echo("\$structure->$key=".$value."<br />");
+									// Traitement des accents et slashes dans les noms de divisions
+									//$eleves[$i]["structures"][$j][strtolower($key)]=preg_replace("/[^a-zA-Z0-9_ -]/", "",strtr(remplace_accents(trim(traite_utf8($value))),"/","_"));
+									//my_echo("\$eleves[$i][\"structures\"][$j][strtolower($key)]=".$eleves[$i]["structures"][$j][strtolower($key)]."<br />");
 									//my_echo("\$structure->$key=".$value."<br />)";
+
+									$eleves[$i]["structures"][$j][strtolower($key)]=strtr(trim(traite_utf8($value)),"/","_");
+									if($clean_caract_classe=="y") {
+										$eleves[$i]["structures"][$j][strtolower($key)]=preg_replace("/[^a-zA-Z0-9_ -]/", "",remplace_accents($eleves[$i]["structures"][$j][strtolower($key)]));
+									}
+
 								}
 							}
 							$j++;
@@ -1325,8 +1357,9 @@
 	
 			// PARTIE <PARAMETRES>
 			my_echo("<p>Parcours de la section PARAMETRES<br />\n");
-	
+
 			// RNE
+			$etablissement=array();
 			foreach($sts_xml->PARAMETRES->UAJ->attributes() as $key => $value) {
 				if(strtoupper($key)=='CODE') {
 					$etablissement["code"]=trim(traite_utf8($value));
@@ -1430,9 +1463,9 @@
 			my_echo("</blockquote>\n");
 
 			if($debug_import_comptes=='y') {
-				echo "DEBUG_ETAB_1<br /><pre style='color:green'><b>etablissement</b><br />\n";
+				my_echo("DEBUG_ETAB_1<br /><pre style='color:green'><b>etablissement</b><br />\n");
 				my_print_r($etablissement);
-				echo "</pre><br />\nDEBUG_ETAB_2<br />\n";
+				my_echo("</pre><br />\nDEBUG_ETAB_2<br />\n");
 			}
 	
 			//==============================================================================	
@@ -1523,9 +1556,9 @@
 			my_echo("</blockquote>\n");
 
 			if($debug_import_comptes=='y') {
-				echo "DEBUG_MATIERE_1<br /><pre style='color:green'><b>matiere</b><br />\n";
+				my_echo("DEBUG_MATIERE_1<br /><pre style='color:green'><b>matiere</b><br />\n");
 				my_print_r($matiere);
-				echo "</pre><br />\nDEBUG_MATIERE_2<br />\n";
+				my_echo("</pre><br />\nDEBUG_MATIERE_2<br />\n");
 			}
 	
 
@@ -1633,7 +1666,15 @@
 					foreach($individu->PROFS_PRINC->children() as $prof_princ) {
 						//$prof[$i]["prof_princ"]=array();
 						foreach($prof_princ->children() as $key => $value) {
-							$prof[$i]["prof_princ"][$j][strtolower($key)]=trim(traite_utf8($value));
+							//$prof[$i]["prof_princ"][$j][strtolower($key)]=trim(traite_utf8($value));
+							// Traitement des accents et slashes dans les noms de divisions
+							//$prof[$i]["prof_princ"][$j][strtolower($key)]=preg_replace("/[^a-zA-Z0-9_ -]/", "",strtr(remplace_accents(trim(traite_utf8($value))),"/","_"));
+
+							$prof[$i]["prof_princ"][$j][strtolower($key)]=strtr(trim(traite_utf8($value)),"/","_");
+							if($clean_caract_classe=="y") {
+								$prof[$i]["prof_princ"][$j][strtolower($key)]=preg_replace("/[^a-zA-Z0-9_ -]/", "",remplace_accents($prof[$i]["prof_princ"][$j][strtolower($key)]));
+							}
+
 							$temoin_au_moins_un_prof_princ="oui";
 						}
 						$j++;
@@ -1688,7 +1729,16 @@
 	
 				foreach($objet_division->attributes() as $key => $value) {
 					if(strtoupper($key)=='CODE') {
-						$divisions[$i]['code']=trim(traite_utf8($value));
+						//$divisions[$i]['code']=trim(traite_utf8($value));
+						//$divisions[$i]['code']=trim(remplace_accents(traite_utf8($value)));
+						// Traitement des accents et slashes dans les noms de divisions
+						//$divisions[$i]['code']=preg_replace("/[^a-zA-Z0-9_ -]/", "",strtr(remplace_accents(trim(traite_utf8($value))),"/","_"));
+
+						$divisions[$i]['code']=strtr(trim(traite_utf8($value)),"/","_");
+						if($clean_caract_classe=="y") {
+							$divisions[$i]['code']=preg_replace("/[^a-zA-Z0-9_ -]/", "",remplace_accents($divisions[$i]['code']));
+						}
+
 						//my_echo("<p>\$divisions[$i]['code']=".$divisions[$i]['code']."<br />");
 						break;
 					}
@@ -1770,7 +1820,14 @@
 				$j=0;
 				foreach($objet_groupe->DIVISIONS_APPARTENANCE->children() as $objet_division_apartenance) {
 					foreach($objet_division_apartenance->attributes() as $key => $value) {
-						$groupes[$i]["divisions"][$j][strtolower($key)]=trim(traite_utf8($value));
+						//$groupes[$i]["divisions"][$j][strtolower($key)]=trim(traite_utf8($value));
+						// Traitement des accents et slashes dans les noms de divisions
+						//$groupes[$i]["divisions"][$j][strtolower($key)]=preg_replace("/[^a-zA-Z0-9_ -]/", "",strtr(remplace_accents(trim(traite_utf8($value))),"/","_"));
+
+						$groupes[$i]["divisions"][$j][strtolower($key)]=strtr(trim(traite_utf8($value)),"/","_");
+						if($clean_caract_classe=="y") {
+							$groupes[$i]["divisions"][$j][strtolower($key)]=preg_replace("/[^a-zA-Z0-9_ -]/", "",remplace_accents($groupes[$i]["divisions"][$j][strtolower($key)]));
+						}
 					}
 					$j++;
 				}
