@@ -8,9 +8,9 @@
    * @auteurs Philippe Chadefaux  MrT
    * @Licence Distribue selon les termes de la licence GPL
    * @note
-   * Modifications proposées par Sébastien Tack (MrT)
+   * Modifications proposï¿½es par Sï¿½bastien Tack (MrT)
    * Optimisation du lancement des scripts bash par la technologie asynchrone Ajax.
-   * Modification du système d'infos bulles.(Nouvelle version de wz-tooltip) Ancienne version incompatible avec ajax
+   * Modification du systï¿½me d'infos bulles.(Nouvelle version de wz-tooltip) Ancienne version incompatible avec ajax
    * Externalisation des messages contenus dans les infos-bulles
    * Fonctions Tip('msg') et UnTip();
    * Nouvelle organisation de l'arborescence.
@@ -178,7 +178,7 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 	<center><TABLE border="1" width="80%"><TR><TD colspan="3" align="center" class="menuheader">
 	Version SambaEdu</TD></TR><TR><TD>Version OS</TD><TD align="center" colspan="2">
 <?php
-	if ($os=="3.1") { echo "Sarge"; } elseif ($os=="4.0") { echo "Etch"; } else { echo "Lenny"; } echo "<I> <img src=\"../elements/images/debian.png\">($os)</I></TD></TR>\n";
+	if ($os=="3.1") { echo "Sarge"; } elseif ($os=="4.0") { echo "Etch"; } elseif ($os=="5.0") { echo "Lenny"; } else { echo "Squeeze"; } echo "<I> <img src=\"../elements/images/debian.png\">($os)</I></TD></TR>\n";
 ?>
 	</TD>
 	</TR>

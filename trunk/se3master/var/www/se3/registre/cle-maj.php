@@ -185,13 +185,13 @@ if (($fichier_xml) && (!$retval_rules)) {
 //    	print "$categorie[$j]<br>\n";
         if ((preg_match("/INFO/", $categorie[$j]))) {
             $oldnom = $nom;
-            $tab = split("-:-", $categorie[$j]);
+            $tab = preg_split("#-:-#", $categorie[$j]);
             if (count($tab) == 3) {
                 list($nom, $rest) = $tab;
                 $sscat = "";
             } elseif (count($tab) == 2) {
                 $reste = $tab[1];
-                $tab2 = split("--", $reste);
+                $tab2 = preg_split("#--#", $reste);
                 if ("$tab2[1]" == "") {
                     $sscat = $tab2[2];
                 } else {
@@ -200,11 +200,11 @@ if (($fichier_xml) && (!$retval_rules)) {
             }
         } else {
             if (preg_match("/REGISTRE/", $categorie[$j])) {
-                list($partcomp1, $partcomp2, $partcomp3) = split("-:-", $categorie[$j]);
-                list($OS, $reg, $Intitule, $type, $genre) = split("--", $partcomp2);
-                list($finreg, $valeur, $antidote, $comment) = split("--", $partcomp3);
+                list($partcomp1, $partcomp2, $partcomp3) = preg_split("#-:-#", $categorie[$j]);
+                list($OS, $reg, $Intitule, $type, $genre) = preg_split("#--#", $partcomp2);
+                list($finreg, $valeur, $antidote, $comment) = preg_split("#--#", $partcomp3);
                 if ($reg) {
-                    list($poub, $reg) = split("reg:///", $reg);
+                    list($poub, $reg) = preg_split("#reg:///#", $reg);
                 }
                 if ("$genre" == "") {
                     $genre = "EXPAND_SZ";
@@ -219,7 +219,7 @@ if (($fichier_xml) && (!$retval_rules)) {
 }
 
 if ($envoi) {
-    $envoi = ereg_replace("(\r\n)|(\n)|(\r)", "", $envoi);
+    $envoi = preg_replace("#(\r\n)|(\n)|(\r)#", "", $envoi);
     echo "<br>" . gettext("Premi&#232;re analyse des cl&#233;s &#224; importer  en cours :") . " <br>";
     if (mb_detect_encoding($envoi, "UTF-8")) {
         $envoi = mb_convert_encoding($envoi, 'ISO-8859-1', 'UTF-8');

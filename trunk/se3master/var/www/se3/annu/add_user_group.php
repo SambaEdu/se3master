@@ -130,7 +130,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
         		for ($loop=0; $loop < count ($groups) ; $loop++) {
           		if ( ($groups[$loop]["cn"] != "Profs") && ($groups[$loop]["cn"] != "Eleves") && ($groups[$loop]["cn"] != "Administratifs") ) {
             			echo "<LI><A href=\"group.php?filter=".$groups[$loop]["cn"]."\">".$groups[$loop]["cn"]."</A>,<font size=\"-2\"> ".$groups[$loop]["description"];
-            			$login=split ("[\,\]",ldap_dn2ufn($groups[$loop]["owner"]),2);
+            			$login=preg_split ("#\,#",ldap_dn2ufn($groups[$loop]["owner"]),2);
             			if ($login[0] == $uid) echo "<strong><font color=\"#ff8f00\">&nbsp;(".gettext("professeur principal").")</font></strong>";
             			echo "</font></LI>\n";
             			// constitution d'un filtre pour exclure les groupes d'appartenance
@@ -154,32 +154,32 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
                 //echo "\$list_groups[$loop][\"cn\"]=".$list_groups[$loop]["cn"].": ($filtre) <br />";
          		if ($filtre=="") {
         			// Cours
-        			if ( preg_match("/Cours_/", $list_groups[$loop]["cn"]) ) {
+        			if ( preg_match ("#Cours_#", $list_groups[$loop]["cn"]) ) {
           				$cours[$i]["cn"] = $list_groups[$loop]["cn"];
           				$cours[$i]["description"] = $list_groups[$loop]["description"];
                         //echo " Cours<br />";
           				$i++;
           			// Classe
-        			} elseif ( preg_match("/Classe_/", $list_groups[$loop]["cn"])  ) {
+        			} elseif ( preg_match ("#Classe_#", $list_groups[$loop]["cn"])  ) {
           				$classe[$j]["cn"] = $list_groups[$loop]["cn"];
           				$classe[$j]["description"] = $list_groups[$loop]["description"];
                         //echo " Classe<br />";
           				$j++;
           			// Equipe
-        			} elseif ( preg_match("/Equipe_/", $list_groups[$loop]["cn"]) ) {
+        			} elseif ( preg_match ("#Equipe_#", $list_groups[$loop]["cn"]) ) {
           				$equipe[$k]["cn"] = $list_groups[$loop]["cn"];
           				$equipe[$k]["description"] = $list_groups[$loop]["description"];
                         //echo " Equipe<br />";
           				$k++;
           			// Matiere
-        			} elseif ( preg_match("/Matiere_/", $list_groups[$loop]["cn"]) ) {
+        			} elseif ( preg_match ("#Matiere_#", $list_groups[$loop]["cn"]) ) {
           				$matiere[$l]["cn"] = $list_groups[$loop]["cn"];
           				$matiere[$l]["description"] = $list_groups[$loop]["description"];
                         //echo " Matiere<br />";
           				$l++;
-						// Autres
-					//} elseif ( !ereg( "^(Administratifs)|(Eleves)|(lcs-users)|(machines)|(overfil)|(Profs)$",$list_groups[$loop]["cn"] )  ) {
-					} elseif ( !preg_match( "/(^Administratifs$)|(^Eleves$)|(^lcs-users$)|(^machines$)|(^overfill$)|(^Profs$)/",$list_groups[$loop]["cn"] )  ) {
+          			// Autres
+	  			//} elseif ( !ereg( "^(Administratifs)|(Eleves)|(lcs-users)|(machines)|(overfil)|(Profs)$",$list_groups[$loop]["cn"] )  ) {
+	  			} elseif ( !preg_match( "#(^Administratifs$)|(^Eleves$)|(^lcs-users$)|(^machines$)|(^overfill$)|(^Profs$)#",$list_groups[$loop]["cn"] )  ) {
 						$autres[$m]["cn"] = $list_groups[$loop]["cn"];
 						$autres[$m]["description"] = $list_groups[$loop]["description"];
 						//echo " Autres<br />";
@@ -190,25 +190,25 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
                         echo " ???<br />";
                     }
                     */
-				} else {
+			} else {
 				//echo "PLOP";
 	  			// Cours
-        			if ( preg_match ("/Cours_/", $list_groups[$loop]["cn"])  && preg_match("/$filtre/",$list_groups[$loop]["cn"])) {
+        			if ( preg_match ("#Cours_#", $list_groups[$loop]["cn"])  && preg_match($filtre,$list_groups[$loop]["cn"])) {
           				$cours[$i]["cn"] = $list_groups[$loop]["cn"];
           				$cours[$i]["description"] = $list_groups[$loop]["description"];
           				$i++;
           			// Classe
-        			} elseif ( preg_match ("/Classe_/", $list_groups[$loop]["cn"]) && preg_match("/$filtre/",$list_groups[$loop]["cn"]) ) {
+        			} elseif ( preg_match ("#Classe_#", $list_groups[$loop]["cn"]) && preg_match($filtre,$list_groups[$loop]["cn"]) ) {
           				$classe[$j]["cn"] = $list_groups[$loop]["cn"];
           				$classe[$j]["description"] = $list_groups[$loop]["description"];
           				$j++;
           			// Equipe
-        			} elseif ( preg_match ("/Equipe_/", $list_groups[$loop]["cn"])&& preg_match("/$filtre/",$list_groups[$loop]["cn"]) ) {
+        			} elseif ( preg_match ("#Equipe_#", $list_groups[$loop]["cn"])&& preg_match($filtre,$list_groups[$loop]["cn"]) ) {
           				$equipe[$k]["cn"] = $list_groups[$loop]["cn"];
           				$equipe[$k]["description"] = $list_groups[$loop]["description"];
           				$k++;
           			// Matiere
-        			} elseif ( preg_match ("/Matiere_/", $list_groups[$loop]["cn"])&& preg_match("/$filtre/",$list_groups[$loop]["cn"]) ) {
+        			} elseif ( preg_match ("#Matiere_#", $list_groups[$loop]["cn"])&& preg_match($filtre,$list_groups[$loop]["cn"]) ) {
           				$matiere[$l]["cn"] = $list_groups[$loop]["cn"];
           				$matiere[$l]["description"] = $list_groups[$loop]["description"];
           				$l++;

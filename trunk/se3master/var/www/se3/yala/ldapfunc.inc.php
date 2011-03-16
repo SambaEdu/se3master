@@ -169,13 +169,13 @@ class LDAPFunc {
 				for ($j = 0; $j < $info[$i]["objectclasses"]["count"]; $j++) {
 					$line = $info[$i]["objectclasses"][$j];
 					
-					if (ereg('^$', $line)) continue;
+					if (preg_match('#^$#', $line)) continue;
 	
 					# alright.. Now we begin parsing the weird objectclass line:
 
 					# FIRST, OID!
 					# We allow strings here as well, due to some schemas + ldap servers which support this kludge (or is it legal?)
-					if (ereg("^[\([:space:]]*([\.-_[:alnum:]]+)[\)[:space:]]+", $line, $matches)) {
+					if (preg_match("#^[\([:space:]]*([\.-_[:alnum:]]+)[\)[:space:]]+#", $line, $matches)) {
 						$oid = $matches[1];
 #						print "OID: ".$matches[1]."<BR>";
 					}
@@ -184,11 +184,11 @@ class LDAPFunc {
 					}
 
 					# NAME
-					if (ereg("NAME[[:space:]]+\(([^\)]+)", $line, $matches)) {
-						$objectclasses[$oid]["names"] = split("[[:space:]]+", str_replace("'", "", trim($matches[1])));
+					if (preg_match("#NAME[[:space:]]+\(([^\)]+)#", $line, $matches)) {
+						$objectclasses[$oid]["names"] = preg_split("#[[:space:]]+#", str_replace("'", "", trim($matches[1])));
 #						print "NAME: ".str_replace("'","",$matches[1])."<BR>";
 					} else { 
-						if (ereg("NAME[[:space:]]+\'([^\']+)", $line, $matches)) {
+						if (preg_match("#NAME[[:space:]]+\'([^\']+)#", $line, $matches)) {
 							$objectclasses[$oid]["names"] = array($matches[1]);
 #							print "NAME: ".$matches[1]."<BR>";
 						} else {
@@ -197,34 +197,34 @@ class LDAPFunc {
 					}
 
 					# SUP
-					if (ereg("SUP[[:space:]]+([[:alpha:]]+)", $line, $matches)) {
+					if (preg_match("#SUP[[:space:]]+([[:alpha:]]+)#", $line, $matches)) {
 						$objectclasses[$oid]["sup"] = $matches[1];
 #						print "SUP: ".$matches[1]."<BR>";
 					}
 
 					# DESC
-					if (ereg("DESC[[:space:]]+\'([^\']+)", $line, $matches)) {
+					if (preg_match("#DESC[[:space:]]+\'([^\']+)#", $line, $matches)) {
 						$objectclasses[$oid]["desc"] = $matches[1];
 #						print "DESC: ".$matches[1]."<BR>";
 					}
 
 					# MAY
-					if (ereg("MAY[[:space:]]+\(([^\)]+)", $line, $matches)) {
-						$objectclasses[$oid]["may"] = split('[[:space:]]*\$[[:space:]]*', trim($matches[1]));
+					if (preg_match("#MAY[[:space:]]+\(([^\)]+)#", $line, $matches)) {
+						$objectclasses[$oid]["may"] = preg_split('#[[:space:]]*\$[[:space:]]*#', trim($matches[1]));
 #						print "MAY: ".$matches[1]."<BR>";
 					} else {
-						if (ereg("MAY[[:space:]]+([[:alpha:]]+)", $line, $matches)) {
+						if (preg_match("#MAY[[:space:]]+([[:alpha:]]+)#", $line, $matches)) {
 							$objectclasses[$oid]["may"] = array($matches[1]);
 #							print "MAY: ".$matches[1]."<BR>";
 						}
 					}
 
 					# MUST
-					if (ereg("MUST[[:space:]]+\(([^\)]+)", $line, $matches)) {
-						$objectclasses[$oid]["must"] = split('[[:space:]]*\$[[:space:]]*', trim($matches[1]));
+					if (preg_match("#MUST[[:space:]]+\(([^\)]+)#", $line, $matches)) {
+						$objectclasses[$oid]["must"] = preg_split('#[[:space:]]*\$[[:space:]]*#', trim($matches[1]));
 #						print "MUST: ".$matches[1]."<BR>";
 					} else {
-						if (ereg("MUST[[:space:]]+([[:alpha:]]+)", $line, $matches)) {
+						if (preg_match("#MUST[[:space:]]+([[:alpha:]]+)#", $line, $matches)) {
 							$objectclasses[$oid]["must"] = array($matches[1]);
 #							print "MUST: ".$matches[1]."<BR>";
 						}

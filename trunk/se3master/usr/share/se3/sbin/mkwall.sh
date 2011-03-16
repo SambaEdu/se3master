@@ -12,19 +12,6 @@
 chemin_param_fond="/etc/se3/fonds_ecran"
 dossier_trombines="/var/se3/Docs/trombine"
 dossier_base_fond="/var/se3/Docs/media/fonds_ecran"
-
-#=============================================
-# Chemin pour les images a inserer uploadees
-dossier_tmp_fond="/var/lib/se3/fonds_ecran"
-mkdir -p ${dossier_tmp_fond}
-chown www-se3 ${dossier_tmp_fond}
-# Comme ca, apres le premier essai, les droits sont ok pour l'upload
-
-chemin_www_fonds_courants="Admin/fonds_ecran/courant"
-dossier_www_fonds_courants="/var/www/se3/$chemin_www_fonds_courants"
-mkdir -p ${dossier_www_fonds_courants}
-#=============================================
-
 case $2 in 
 jpg)
     prefix="jpeg:"
@@ -50,15 +37,7 @@ fi
 [ -f "/tmp/$1.fond.lck" ] && exit 0
 >"/tmp/$1.fond.lck"
 
-#=============================================
-image_a_inserer=""
-if [ -e "$dossier_tmp_fond/tmp_$1.jpg" ]; then
-	#echo "Le fichier image a inserer $dossier_tmp_fond/tmp_$1.jpg existe."
-	image_a_inserer="$dossier_tmp_fond/tmp_$1.jpg"
-fi
-#=============================================
-
-temoin=""
+temoin=
 
 # Param√®tres propres √† un utilisateur/groupe:
 if [ "$1" = "admin" ]; then
@@ -172,18 +151,16 @@ if [ ! -e "${dossier_base_fond}/$orig.jpg" ]; then
        /usr/bin/convert -size ${largeur}x${hauteur} gradient:${couleur1}-${couleur2} jpeg:${dossier_base_fond}/$orig.jpg
 fi
 
-# S'il y a une image a inserer, on ne se preoccupe pas de ce que le fond existe deja
-if [ -z "$image_a_inserer" ]; then
-	# Si le fond existe deja on quitte
-	
-	if [ -f "${dossier_base_fond}/$1_$orig.$ext" -a -f "${dossier_base_fond}/$1.$ext" ]; then
-		echo " fond deja cree pour $1"
-		# Suppression du fichier de lock s'il existe:
-		rm -f "/tmp/$1.fond.lck"
-	
-		exit 0
-	fi
+# Si le fond existe deja on quitte
+
+if [ -f "${dossier_base_fond}/$1_$orig.$ext" -a -f "${dossier_base_fond}/$1.$ext" ]; then
+    echo " fond deja cree pour $1"
+    # Suppression du fichier de lock s'il existe:
+    rm -f "/tmp/$1.fond.lck"
+
+    exit 0
 fi
+
 
 # on efface les anciens
 rm -f ${dossier_base_fond}/$1_*.$ext
@@ -193,8 +170,7 @@ rm -f ${dossier_base_fond}/$1_*.$ext
 chaine=""
 if [ "$annotation_nom" = "1" ]; then
     nom_prenom=$(ldapsearch -xLLL uid=$1 cn | grep "^cn: " | sed -e "s/^cn: //")
-    #chaine="$nom_prenom"
-    chaine=$(echo "$nom_prenom" | tr "'¬ƒ¿¡√ƒ≈« À»…ŒœÃÕ—‘÷“”’¶€‹Ÿ⁄›æ¥·‡‚‰„ÂÁÈËÍÎÓÔÏÌÒÙˆÚÛı®˚¸˘˙˝ˇ∏" "_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz" | sed -e "s|[^A-Za-z_ -]||g" | sed -e "s|∆|AE|g" | sed -e "s|º|OE|g" | sed -e "s|Ê|ae|g" | sed -e "s|Ω|oe|g")
+    chaine="$nom_prenom"
 fi
 
 if [ "$annotation_classe" = "1" ]; then
@@ -238,96 +214,8 @@ else
        /usr/bin/convert jpeg:${dossier_base_fond}/$orig.jpg bmp3:${dossier_base_fond}/$orig.bmp
     fi
 fi
-
-if [ -n "$image_a_inserer" -a -e "$image_a_inserer" ]; then
-	# Insertion de l'image $image_a_inserer
-
-	# Si il n'y a pas d'image propre a l'utilisateur on fait une copie du modËle du groupe de l'utilisateur
-	# Et on va modifier la copie
-	[ ! -f ${dossier_base_fond}/$1_$orig.$ext ] && cp ${dossier_base_fond}/$orig.$ext ${dossier_base_fond}/$1_$orig.$ext
-
-	# Calculer la taille et redimensionner si c'est trop grand
-	larg_max=500
-	haut_max=500
-
-	taille_image_inseree=$(identify $image_a_inserer | cut -d" " -f3)
-	larg_ins=$(echo "$taille_image_inseree" | cut -d"x" -f1)
-	haut_ins=$(echo "$taille_image_inseree" | cut -d"x" -f2)
-	echo "Largeur de l'image proposee: larg_ins=$larg_ins"
-	echo "Hauteur de l'image proposee: haut_ins=$haut_ins"
-	#if [ $larg_ins -ge $larg_max -o $haut_ins -ge $haut_max ]; then
-	#	taille_image_inseree="${larg_ins}x${haut_ins}"
-	#fi
-
-	redimensionnement="n"
-	if [ $larg_ins -ge $larg_max -o $haut_ins -ge $haut_max ]; then
-		redimensionnement="y"
-		echo "Redimensionnement requis:"
-
-		ratio_l=$(echo "$larg_ins/$larg_max"|bc -l)
-		ratio_h=$(echo "$haut_ins/$haut_max"|bc -l)
-		echo "Ratio horizontal: ratio_l=$ratio_l"
-		echo "Ratio vertical: ratio_h=$ratio_h"
-
-		ratio_l_test=$(echo "$ratio_l*1000000"|bc|cut -d"." -f1)
-		ratio_h_test=$(echo "$ratio_h*1000000"|bc|cut -d"." -f1)
-		#echo "ratio_l_test=$ratio_l_test"
-		#echo "ratio_h_test=$ratio_h_test"
-
-		#if [ $ratio_h -gt $ratio_l ]; then
-		if [ $ratio_h_test -gt $ratio_l_test ]; then
-			larg_ins=$(echo "$larg_ins/$ratio_h"|bc)
-			haut_ins=$(echo "$haut_ins/$ratio_h"|bc)
-		else
-			larg_ins=$(echo "$larg_ins/$ratio_l"|bc)
-			haut_ins=$(echo "$haut_ins/$ratio_l"|bc)
-		fi
-
-		taille_image_inseree="${larg_ins}x${haut_ins}"
-
-	fi
-
-	echo "Dimensions de l'image inseree: taille_image_inseree=$taille_image_inseree"
-
-	# Opaque: 100, transparent:0
-	niveau_dissolve=100
-
-	if [ "$redimensionnement" = "y" ]; then
-		echo "Redimensionnement si necessaire de l'image:"
-		echo "/usr/bin/convert -resize $taille_image_inseree $image_a_inserer ${prefix}/tmp/$1_inser.$ext"
-		/usr/bin/convert -resize $taille_image_inseree $image_a_inserer ${prefix}/tmp/$1_inser.$ext
-	else
-		echo "Copie temporaire de l'image a inserer:"
-		echo "cp $image_a_inserer ${prefix}/tmp/$1_inser.$ext"
-		cp $image_a_inserer /tmp/$1_inser.$ext
-	fi
-
-	echo "Fusion avec le fond:"
-	echo "/usr/bin/composite -gravity center -dissolve $niveau_dissolve /tmp/$1_inser.$ext ${dossier_base_fond}/$1_$orig.$ext ${dossier_base_fond}/$1_$orig.$ext"
-	/usr/bin/composite -gravity center -dissolve $niveau_dissolve /tmp/$1_inser.$ext ${dossier_base_fond}/$1_$orig.$ext ${dossier_base_fond}/$1_$orig.$ext
-
-	rm -f /tmp/$1_inser.$ext
-else
-	# Si il n'y a pas d'image propre a l'utilisateur on cree un lien vers le modele du groupe de l'utilisateur
-	[ ! -f ${dossier_base_fond}/$1_$orig.$ext ] && ln -s ${dossier_base_fond}/$orig.$ext ${dossier_base_fond}/$1_$orig.$ext
-fi
-
-# On supprime l'ancien lien symbolique login.jpg pour le recreer
-rm -f  ${dossier_base_fond}/$1.$ext
+[ ! -f ${dossier_base_fond}/$1_$orig.$ext ] && ln -s ${dossier_base_fond}/$orig.$ext ${dossier_base_fond}/$1_$orig.$ext
+rm -f  ${dossier_base_fond}/$1.$ext 
 ln -s ${dossier_base_fond}/$1_$orig.$ext ${dossier_base_fond}/$1.$ext
-
-# Pour pouvoir consulter le fond courant depuis l'interface web
-# Probleme: Si ce n'est pas un jpeg, l'affichage merdoie...
-if [ -n "$image_a_inserer" -a -e "$image_a_inserer" ]; then
-	echo "Creation du lien..."
-	if [ "$ext" = "jpg" ]; then
-		ln -s ${dossier_base_fond}/$1.$ext $dossier_www_fonds_courants/$1.jpg
-	else
-		convert ${dossier_base_fond}/$1.$ext ${dossier_base_fond}/$1.jpg
-		ln -s ${dossier_base_fond}/$1.jpg $dossier_www_fonds_courants/$1.jpg
-	fi
-	rm -f $image_a_inserer
-fi
-
 chown admin ${dossier_base_fond}/$1_$orig.$ext
 rm -f "/tmp/$1.fond.lck"

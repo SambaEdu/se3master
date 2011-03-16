@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #Nom du dossier d'échange:
 echange="_echange"

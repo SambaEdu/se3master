@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # $Id$
 # Bibliothèque de fonctions de calculs IP/MASQUE/...

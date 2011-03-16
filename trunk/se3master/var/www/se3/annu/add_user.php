@@ -174,7 +174,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
             echo "<div class=error_msg>".gettext("Vous devez obligatoirement renseigner les champs : nom, pr&#233;nom !")."</div><br>\n";
           } elseif ( !$naissance && !$userpwd ) {
             	echo "<div class='error_msg'>";
-             	echo gettext("Vous devez obligatoirement renseigner un des deux champs «mot de passe» ou «date de naissance».");
+             	echo gettext("Vous devez obligatoirement renseigner un des deux champs ï¿½mot de passeï¿½ ou ï¿½date de naissanceï¿½.");
              	echo "</div><BR>\n";
           } else {
             	if ( ($userpwd) && !verifPwd($userpwd) ){
@@ -222,7 +222,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 					}
 	
 					if((isset($_POST['create_home']))&&($_POST['create_home']=='y')) {
-						echo "<p><b>Création du dossier personnel de ".$users[0]["uid"]."</b><br />";
+						echo "<p><b>Crï¿½ation du dossier personnel de ".$users[0]["uid"]."</b><br />";
 						exec("sudo /usr/share/se3/scripts/modif_profil_mozilla_ff.sh ".$users[0]["uid"]." http://www.google.fr create_homes",$ReturnValue2);
 						echo "<pre style='color:red'>";
 						foreach($ReturnValue2 as $key => $value) {

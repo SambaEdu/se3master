@@ -50,7 +50,7 @@
     	if ( !$add_list_users_group ) {
       		echo "<H4>".gettext("Ajouter des membres au groupe :")." $cn</H4>\n";
       		// cas d'un groupe de type Equipe
-      		if ( preg_match ("/Equipe_/", $cn) ) {
+      		if ( preg_match ("#Equipe_#", $cn) ) {
         		// Recherche de la liste des uid  des membres de ce groupe
         		$uids_act = search_uids ("(cn=$cn)");
         		// Reherche de la liste des professeurs
@@ -70,7 +70,7 @@
             			}
         		}
          		$people_new_members=search_people_groups ($uids_new_members,"(sn=*)","cat");
-      		} elseif   ( preg_match ("/Classe_/", $cn) ) {
+      		} elseif   ( preg_match ("#Classe_#", $cn) ) {
         		// Recherche de la liste des Eleves appartenant a une classe
         		$uids_eleves_classes =   search_uids ("(cn=Classe_*)");
         		##DEBUG

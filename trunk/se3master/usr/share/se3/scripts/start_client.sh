@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # SambaEdu
 #
 # $Id: mail-ldap.sh 341 2005-07-13 15:06:30Z plouf $
