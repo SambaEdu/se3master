@@ -127,6 +127,12 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 		echo "<ul>\n";
 		echo "<li><p>Si l'image &#224; ins&#233;rer comporte des transparences, veillez &#224; la redimensionner pour que la dimension maximale (<i>hauteur ou largeur</i>) soit de 500px pour conserver la transparence.</p></li>\n";
 		echo "<li><p><span style='color:red'>A FAIRE: Possibilit&#233; de param&#233;trer les dimensions de l'insertion d'image (<i>avec valeur max pour conserver le nom_pr&#233;nom,...</i>)</span></p></li>\n";
+		if(is_admin("se3_is_admin",$login)=="Y") {
+			echo "<li><p>Vous pouvez autoriser des utilisateurs &#224; modifier eux-m&#234;mes leur fond d'&#233;cran.<br />Pour cela, il suffit de leur d&#233;l&#233;guer le droit '<b>fond_can_change</b>'.<br />L'acc&#232;s leur est alors donn&#233; dans <b>Annuaire/Voir ma fiche/Personnaliser mon fond d'&#233;cran</b><br />Pensez cependant que certains utilisateurs pourraient mettre en place des fonds non politiquement corrects.<br />Le fait d'avoir autoris&#233; la modification du fond pourrait vous &#234;tre reproch&#233;e.<br />Choisissez donc soigneusement les utilisateurs auxquels vous d&#233;l&#233;guerez ce droit.</p></li>\n";
+		}
+		else {
+			echo "<li><p>Vous pouvez ins&#233;rer une image de votre choix au centre du fond d'&#233;cran.<br />L'image ins&#233;r&#233;e sera r&#233;duite &#224; un maximum de 500px de côt&#233;.<br />&nbsp;<br />Pensez que l'image que vous ins&#233;rez doit &#234;tre politiquement correcte.<br />Elle ne doit pas choquer des &#233;lèves, des professeurs, votre principal ou proviseur.<br />De plus, le droit qui vous a &#233;t&#233; donn&#233; peut vous &#234;tre retir&#233;.</p></li>\n";
+		}
 		echo "</ul>\n";
 	}
 	else {
