@@ -1227,14 +1227,14 @@ function search_doublons_mac($generer_csv='n') {
                 $tab_machine[$cpt] = array();
                 $tab_machine[$cpt]['ip'] = $info[$i]["iphostnumber"][0];
                 $tab_machine[$cpt]['cn'] = $info[$i]["cn"][0];
-                $tab_machine[$cpt]['mac'] = $info[$i]["macaddress"][0];
+                $tab_machine[$cpt]['mac'] = strtolower($info[$i]["macaddress"][0]);
 
-                if (in_array($info[$i]["macaddress"][0], $tab_mac)) {
-                    if (!in_array($info[$i]["macaddress"][0], $tab_doublons_mac)) {
-                        $tab_doublons_mac[] = $info[$i]["macaddress"][0];
+                if (in_array(strtolower($info[$i]["macaddress"][0]), $tab_mac)) {
+                    if (!in_array(strtolower($info[$i]["macaddress"][0]), $tab_doublons_mac)) {
+                        $tab_doublons_mac[] = strtolower($info[$i]["macaddress"][0]);
                     }
                 } else {
-                    $tab_mac[] = $info[$i]["macaddress"][0];
+                    $tab_mac[] = strtolower($info[$i]["macaddress"][0]);
                 }
                 $cpt++;
             }
@@ -1318,7 +1318,7 @@ function search_doublons_mac($generer_csv='n') {
                 for ($j = 0; $j < count($tab_machine); $j++) {
                     echo "<input type='hidden' name='cn[$j]' value='" . $tab_machine[$j]['cn'] . "' />\n";
                     echo "<input type='hidden' name='ip[$j]' value='" . $tab_machine[$j]['ip'] . "' />\n";
-                    echo "<input type='hidden' name='mac[$j]' value='" . $tab_machine[$j]['mac'] . "' />\n";
+                    echo "<input type='hidden' name='mac[$j]' value='" . strtolower($tab_machine[$j]['mac']) . "' />\n";
                 }
                 echo "<input type='submit' name='genere_csv' value=\"G&#233;n&#233;rer le CSV\" />\n";
                 echo "</p>\n";
