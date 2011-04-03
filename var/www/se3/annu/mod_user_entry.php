@@ -37,6 +37,8 @@ require "ldap.inc.php";
 require "ihm.inc.php";
 require "jlcipher.inc.php";
 
+require "crob_ldap_functions.php";
+
 $login=isauth();
 // if ($login != "") {
 
@@ -60,7 +62,7 @@ $isadmin=is_admin("Annu_is_admin",$login);
 $uid=isset($_GET['uid']) ? $_GET['uid'] : (isset($_POST['uid']) ? $_POST['uid'] : NULL);
 
 if(!isset($uid)) {
-	echo "<p style='color:red'>Erreur&nbsp;: Aucun utilisateur n'a été choisi.</p>\n",
+	echo "<p style='color:red'>Erreur&nbsp;: Aucun utilisateur n'a &#233;t&#233; choisi.</p>\n",
 	include ("pdp.inc.php");
 	die();
 }
@@ -79,6 +81,7 @@ $password=isset($_POST['password']) ? $_POST['password'] : '';
 $string_auth=isset($_POST['string_auth']) ? $_POST['string_auth'] : '';
 
 $naissance=isset($_POST['naissance']) ? $_POST['naissance'] : '';
+$employeeNumber=isset($_POST['employeeNumber']) ? $_POST['employeeNumber'] : '';
 
 if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_is_admin",$login)=="Y"))) {
 	// Recuperation des entrees de l'utilisateur a modifier
@@ -112,7 +115,24 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
 		echo "ERREUR pwd<br />";
 	}
 	*/
-	if (!isset($user_entry) || !verifTel($telephone) || !verifEntree($nom) || !verifEntree($prenom) || !verifDescription($description) || ($userpwd && !verifPwd($userpwd)) || (($naissance!='')&&(!verifDateNaissance($naissance)))) {
+
+	$info_employeeNumber="";
+	if($employeeNumber!='') {
+		$tmp_tab=verif_employeeNumber($employeeNumber);
+		if(($tmp_tab)&&(count($tmp_tab)>0)) {
+			if($tmp_tab[0]!=$uid) {
+				$info_employeeNumber="Le num&#233;ro <b>$employeeNumber</b> est d&#233;j&#225; attribu&#233; &#225; <a href='".$_SERVER['PHP_SELF']."?uid=".$tmp_tab[0]."'>".$tmp_tab[0]."</a> dans la branche <b>".$tmp_tab[-1]."</b><br />";
+			}
+		}
+	}
+
+	$employeeNumber0=$employeeNumber;
+	$employeeNumber=preg_replace("/[0-9A-Za-z]/","",$employeeNumber);
+	if($employeeNumber!=$employeeNumber0) {
+		$info_employeeNumber.="Un ou des caract&#232;res non valides ont &#233;t&#233; saisis dans le num&#233;ro '<b>$employeeNumber0</b>'";
+	}
+
+	if (!isset($user_entry) || !verifTel($telephone) || !verifEntree($nom) || !verifEntree($prenom) || !verifDescription($description) || ($userpwd && !verifPwd($userpwd)) || (($naissance!='')&&(!verifDateNaissance($naissance))) || ($info_employeeNumber!="")) {
 		// Quand la migration givenName<-Prenom et seeAlso<-pseudo sera effectuee, on pourra modifier ci-dessous:
 		$user[0]["prenom"]=getprenom($user[0]["fullname"],$user[0]["nom"]);
 		?>
@@ -137,11 +157,23 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
 
 					$tmp_tab=explode(",", $user[0]["gecos"]);
 					if(isset($tmp_tab[1])) {$naissance=$tmp_tab[1];} else {$naissance="";}
+
+					if(isset($user[0]["employeeNumber"])) {$employeeNumber=$user[0]["employeeNumber"];}
 			?>
 
 			<tr>
 			<td><?php echo gettext("Date de naissance"); ?>&nbsp;:&nbsp;</td>
 			<td colspan="2"><input type="text" name="naissance" value="<?php echo $naissance?>" size="20"></td>
+			</tr>
+
+			<tr>
+				<td valign='top'><?php echo gettext("Numero"); ?>&nbsp;:&nbsp;</td>
+				<td valign='top'><input type="text" name="employeeNumber" value="<?php echo $employeeNumber?>" size="20"></td>
+				<td>
+					<font color="orange">
+					<u><?php echo gettext("Attention"); ?></u> :<?php echo gettext(" Le num&#233;ro correspond &#225; l'attribut 'employeeNumber' dans l'annuaire LDAP.<br />C'est ce num&#233;ro qui est utilis&#233; lors d'un import des comptes pour d&#233;terminer si le compte existe d&#233;j&#225; ou non.<br />Ne le changez pas sans bonne raison."); ?>
+					</font>
+				</td>
 			</tr>
 
 			<tr>
@@ -225,6 +257,11 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
 					alphanum&#233;riques avec obligatoirement un des caract&#232;res sp&#233;ciaux suivants");
 				echo " ($char_spec) </div><br />\n";
 			}
+
+			if($info_employeeNumber!="") {
+				echo "<div class=\"error_msg\">".gettext("$info_employeeNumber.")."</div><br />\n";
+			}
+
 			// fin verification des saisies
 		}
 	} else {
@@ -287,6 +324,8 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
 					}
 				}
 			}
+
+			$entry["employeeNumber"] = $employeeNumber;
 		}
 		// Modification des entrees
 		$ds = @ldap_connect ( $ldap_server, $ldap_port );
