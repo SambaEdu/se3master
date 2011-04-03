@@ -103,10 +103,10 @@ else
 	prop=`stat -c%u /home/$user`
 	if [ "$prop" != "$useruid" ]; then
 		chown -R $user:admins /home/$user > /dev/null 2>&1
-		chown -R root:admins /home/$user/profil/Bureau/* > /dev/null 2>&1
+		chown -R $user:admins /home/$user/profil/Bureau/* > /dev/null 2>&1
 	fi
 	if [ "localmenu" != "1" ]; then
-		chown -R root:admins /home/$user/profil/Demarrer/* > /dev/null 2>&1
+		chown -R $user:admins /home/$user/profil/Demarrer/* > /dev/null 2>&1
 	fi 
 fi
 
