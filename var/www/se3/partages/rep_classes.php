@@ -63,14 +63,20 @@ function areyousure()
 <?php
 if ((is_admin("se3_is_admin",$login)=="Y") or
 (is_admin("annu_is_admin",$login)=="Y")) {
+	// Initialisation
+	$RessourcesClasses=array();
+	$new_folders_classes=0;
+
+	//debug_var();
 
 	echo "<h1>".gettext("Cr&#233;ation des r&#233;pertoires classes")."</h1>";
 	
 	// On ajoute les classes
-	if($_POST[create_folders_classes]) {
-		$new_folders_classes=$_POST[new_folders_classes];	
+	if((isset($_POST['create_folders_classes']))&&($_POST['create_folders_classes']==true)) {
+		$new_folders_classes=$_POST['new_folders_classes'];	
         	for ($loop=0; $loop < count($new_folders_classes); $loop++) {
 			list($Classe,$Niveau)=preg_split("/Classe_/",$new_folders_classes[$loop]);
+			//echo "<p style='color:red'>/usr/bin/sudo /usr/share/se3/scripts/updateClasses.pl -c $Niveau</p>";
 			system("/usr/bin/sudo /usr/share/se3/scripts/updateClasses.pl -c $Niveau");
 			$rep_niveau = "/var/se3/Classes/Classe_".$Niveau;
 			
@@ -89,8 +95,8 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 	}
 
 	// On supprime les classes
-	if($_POST[delete_folders_classes]) {
-		$old_RessourcesClasses=$_POST[old_RessourcesClasses];	
+	if((isset($_POST['delete_folders_classes']))&&($_POST['delete_folders_classes']==true)) {
+		$old_RessourcesClasses=$_POST['old_RessourcesClasses'];	
         	for ($loop=0; $loop < count($old_RessourcesClasses); $loop++) {
 			list($Classe,$Niveau)=preg_split("/Classe_/",$old_RessourcesClasses[$loop]);
 			system ("/usr/bin/sudo /usr/share/se3/scripts/deleteClasses.sh $Niveau");
@@ -105,22 +111,21 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 	}
 
 	// On rafaichit on sait jamais, cela replace les acl
-	if($_POST[refresh_folders_classes]) {
+	if((isset($_POST['refresh_folders_classes']))&&($_POST['refresh_folders_classes']==true)) {
        		$dirClasses = dir ("/var/se3/Classes");
         	$indice=0;
         	while ( $Entry = $dirClasses ->read() ) {
+				if ( preg_match("/^Classe_/", $Entry) ) {
 
-        		if ( preg_match("/^Classe_/", $Entry) ) {
-
-        			$RessourcesClasses[$indice] = $Entry;
-				list($Classe,$Niveau)=preg_split("/Classe_/",$RessourcesClasses[$indice]);
-				//echo "Rafraichissement du r&#233;pertoire classe ".$Niveau."<br>\n";
-				system ("/usr/bin/sudo /usr/share/se3/scripts/updateClasses.pl -c $Niveau");
-        			$indice++;
-        		}
-        	}
+					$RessourcesClasses[$indice] = $Entry;
+					list($Classe,$Niveau)=preg_split("/Classe_/",$RessourcesClasses[$indice]);
+					//echo "Rafraichissement du r&#233;pertoire classe ".$Niveau."<br>\n";
+					system ("/usr/bin/sudo /usr/share/se3/scripts/updateClasses.pl -c $Niveau");
+					$indice++;
+				}
+			}
 		// Dans le cas ou on donne le droit a tous les profs sur les repertoires classes
-		if ($_POST[acl_group_profs]) {
+		if((isset($_POST['acl_group_profs']))&&($_POST['acl_group_profs']==true)) {
 			system ("/usr/bin/sudo /usr/share/se3/scripts/acls.sh -m g Profs r w x \"/var/se3/Classes\" non -R");
 			system ("/usr/bin/sudo /usr/share/se3/scripts/acls.sh -m g Profs r w x \"/var/se3/Classes\" oui -R");
 		} else {
@@ -132,18 +137,20 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 		echo "</center>";
 		exit;
 	}
+
 	// On rafaichit les classes selectionnees
-	if($_POST[refresh_classes]||$_POST[clean_classes]) {
-		$refresh_RessourcesClasses=$_POST[old_RessourcesClasses];	
+	if(((isset($_POST['refresh_classes']))&&($_POST['refresh_classes']==true))||
+		((isset($_POST['clean_classes']))&&($_POST['clean_classes']==true))) {
+		$refresh_RessourcesClasses=$_POST['old_RessourcesClasses'];	
             if ( count($refresh_RessourcesClasses) > 0 ) {
 	        for ($loop=0; $loop < count($refresh_RessourcesClasses); $loop++) {
        		    list($Classe,$Niveau)=preg_split("/Classe_/",$refresh_RessourcesClasses[$loop]);
-		    if($_POST[refresh_classes]) {
+		    if($_POST['refresh_classes']) {
 			//echo "<b>rafraichissement de la classe : $Niveau</b><br>";
 			system ("/usr/bin/sudo /usr/share/se3/scripts/updateClasses.pl -c $Niveau ");
 		
 		        // Dans le cas ou on donne le droit a tous les profs sur les repertoires classes
-		        if ($_POST[acl_group_profs]) {
+		        if ($_POST['acl_group_profs']) {
 			    system ("/usr/bin/sudo /usr/share/se3/scripts/acls.sh -m g Profs r w x \"/var/se3/Classes/$refresh_RessourcesClasses[$loop]\" non -R");
 			    system ("/usr/bin/sudo /usr/share/se3/scripts/acls.sh -m g Profs r w x \"/var/se3/Classes/$refresh_RessourcesClasses[$loop]\" oui -R");
 	        	} else {
@@ -154,7 +161,7 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 			    system ("/usr/bin/sudo /usr/share/se3/scripts/acls.sh effd g Profs r w x \"/var/se3/Classes/$refresh_RessourcesClasses[$loop]\" oui -R");
 		            }
 		        }
-		    } elseif($_POST[clean_classes]) {
+		    } elseif($_POST['clean_classes']) {
 			echo "<b>nettoyage de la classe : $Niveau</b><br>";
 			system ("/usr/bin/sudo /usr/share/se3/scripts/cleanClasses.pl $Niveau ");
 		    }
@@ -190,19 +197,22 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
       	// Creation d'un tableau des nouvelles ressources a cr&#233;er  par
       	// elimination des ressources deja existantes
       	$k=0;
-      	for ($i=0; $i < count($list_classes); $i++ ) {
-        	for ($j=0; $j < count($RessourcesClasses); $j++ ) {
-          		if (  $list_classes[$i]["cn"] ==  $RessourcesClasses[$j])  {
-            			$exist = true;
-            			break;
-          		} else { $exist = false; }
-        	}
-        	
-		if (!$exist) {
-          		$list_new_classes[$k]["cn"]= $list_classes[$i]["cn"];
-          		$k++;
-        	}
-      	}
+		for ($i=0; $i < count($list_classes); $i++ ) {
+			// Initialisation dans le cas où $RessourcesClasses est vide
+			$exist=false;
+
+			for ($j=0; $j < count($RessourcesClasses); $j++ ) {
+				if (  $list_classes[$i]["cn"] == $RessourcesClasses[$j])  {
+					$exist = true;
+					break;
+				} else { $exist = false; }
+			}
+			
+			if (!$exist) {
+				$list_new_classes[$k]["cn"]= $list_classes[$i]["cn"];
+				$k++;
+			}
+		}
      	
 	// Affichage de la table
 	echo "<H3>Gestion des ressources classes</H3>\n";
@@ -231,7 +241,7 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
         	echo "</form>\n";
         
 		// V&#233;rification selection d'au moins une classe
-        	if ( $create_folders_classes && count($new_folders_classes)==0 ) {
+        	if ((isset($_POST['create_folders_classes']))&&($_POST['create_folders_classes']==true)&&(count($new_folders_classes)==0)) {
           		echo "<div class='error_msg'>".gettext("Vous devez s&#233lectionner au moins une classe !")."</div>\n";
         	}
       	} else {
@@ -282,6 +292,7 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 	echo "<H3>Rafraichir les r&#233;pertoires classes existants</H3>\n";
 	echo "<form action=\"rep_classes.php\" method=\"post\">\n";
 	$acl_group_profs_classes = exec("cd /var/se3/Classes; /usr/bin/getfacl . | grep default:group:Profs >/dev/null && echo 1");
+	$CHECKED="";
 	if ($acl_group_profs_classes=="1") {
 		$CHECKED="checked";
 	}	
