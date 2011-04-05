@@ -935,6 +935,52 @@ function liste_parc($parc) {
     }
     return $ret;
 }
+function filter_parcs($filter) {
+
+    /**
+     * Liste les membres des parcs répondant aux filtre
+     * @Parametres $filter filtre ldap
+
+     * @Return  Retourne un tableau avec les membres  repondant a la recherche
+     */
+    global $ldap_server, $ldap_port, $dn;
+    global $error;
+    $error = "";
+
+    // Initialisation:
+    $ret=array();
+
+    // LDAP attributs
+    $members_attr = array(
+        "member"
+    );
+    $ds = @ldap_connect($ldap_server, $ldap_port);
+    if ($ds) {
+        $r = @ldap_bind($ds); // Bind anonyme
+        if ($r) {
+            $result = @ldap_read($ds, $dn["parcs"], $filter, $members_attr);
+            if ($result) {
+                $info = @ldap_get_entries($ds, $result);
+                if ($info["count"] == 1) {
+                    foreach($info[0]["member"] as $value) {
+                        if ((preg_match( "/cn=/", $value))) {
+                            $ret[] = extract_login($value);
+                        }
+                    }
+                }
+                @ldap_free_result($result);
+            }
+        } else {
+            $error = gettext("Echec du bind anonyme");
+        }
+
+        @ldap_close($ds);
+    } else {
+        $error = gettext("Erreur de connection au serveur LDAP");
+    }
+    return $ret;
+}
+
 
 function tstclass($prof, $eleve) {
 
