@@ -823,11 +823,18 @@ function creer_uid($nom,$prenom){
 	// Pour faire disparaitre les caracteres speciaux restants:
 	$uid=preg_replace("/[^a-z_.-]/","",$uid);
 
+	// Pour eviter les _ en fin d'UID... pb avec des connexions machine de M$7
+	$uid=preg_replace("/_*$/","",$uid);
+
 	fich_debug("Apr&#232;s filtrage...\n");
 	fich_debug("\$uid=$uid\n");
 
 	$test_caract1=substr($uid,0,1);
-	if(strlen(preg_replace("/[a-z]/","",$test_caract1))!=0){
+	//if(strlen(preg_replace("/[a-z]/","",$test_caract1))!=0){
+	if($uid=='') {
+		$error="L'uid obtenu avec le nom '$nom' et le prenom '$prenom' en uidPolicy '$uidPolicy' est vide.";
+	}
+	elseif(strlen(preg_replace("/[a-z]/","",$test_caract1))!=0) {
 		$error="Le premier caract&#232;re de l'uid n'est pas une lettre.";
 	}
 	else{
