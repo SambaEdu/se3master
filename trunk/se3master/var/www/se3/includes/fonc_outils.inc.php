@@ -70,7 +70,7 @@ function fping($ip) { // Ping une machine Return 1 si Ok 0 pas de ping
 function avoir_ip($mpenc) { // Retourne l'adresse IP d'une machine en fonction de son nom ou 0 si pas d'IP
                  
 	$mp_curr=search_machines("(&(cn=$mpenc)(objectClass=ipHost))","computers");
-        if ($mp_curr[0]["ipHostNumber"]) {
+        if (isset($mp_curr[0]["ipHostNumber"])) {
                 $iphost=$mp_curr[0]["ipHostNumber"];
 		return $iphost;
 	} else {
@@ -93,7 +93,7 @@ function avoir_ip($mpenc) { // Retourne l'adresse IP d'une machine en fonction d
 function avoir_nom($ipHost) { // Retourne le nom d'une machine a partir de l'adresse IP ou 0 si pas
                  
 	$mp_curr=search_machines("(&(ipHostNumber=$ipHost)(objectClass=ipHost))","computers");
-        if ($mp_curr[0]["cn"]) {
+        if (isset($mp_curr[0]["cn"])) {
                 $mpenc=$mp_curr[0]['cn'];
 		return $mpenc;
 	} else {
@@ -117,7 +117,7 @@ function avoir_mac($mpenc) {
                  
     $mp_curr=search_machines("(&(cn=$mpenc)(objectClass=ipHost))","computers");
 //    echo "mac:".$mp_curr[0]['macAddress']."<br>";
-    if ($mp_curr[0]['macAddress']) {
+    if (isset($mp_curr[0]['macAddress'])) {
 	        $ret=$mp_curr[0]['macAddress'];
 	        return $ret;
 	} else {
