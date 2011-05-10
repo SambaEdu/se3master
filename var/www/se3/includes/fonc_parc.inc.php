@@ -59,11 +59,11 @@ if (d) {d.style.display='block';}
 }
 //--></script><div id=\"menu\">
   "; if ($parc) {
-echo"<dl><dt onmouseover=\"javascript:montre('smenu0');\" onmouseout=\"javascript:montre('');\"><a href=\"action_parc.php\" title=\"Parc choisi\">$parc&nbsp;&nbsp;<img src=\"../elements/images/command.png\" alt=\"".gettext("Changer de parc")."\" title=\"".gettext("Changer de parc")."\" width=\"20\" height=\"20\" border=\"0\" /></a></dt></dl>\n";
+echo "<dl><dt onmouseover=\"javascript:montre('smenu0');\" onmouseout=\"javascript:montre('');\"><a href=\"action_parc.php\" title=\"Parc choisi\">$parc&nbsp;&nbsp;<img src=\"../elements/images/command.png\" alt=\"".gettext("Changer de parc")."\" title=\"".gettext("Changer de parc")."\" width=\"20\" height=\"20\" border=\"0\" /></a></dt></dl>\n";
     }
  else{
 
-echo"  <dl><dt onmouseover=\"javascript:montre('smenu0');\" onmouseout=\"javascript:montre('');\"><a href=\"action_parc.php\" title=\"".gettext("Choisir un parc")."\">".gettext("Choisir un parc")."</a></dt>\n";
+echo "  <dl><dt onmouseover=\"javascript:montre('smenu0');\" onmouseout=\"javascript:montre('');\"><a href=\"action_parc.php\" title=\"".gettext("Choisir un parc")."\">".gettext("Choisir un parc")."</a></dt>\n";
 echo "<dd id=\"smenu0\" onmouseover=\"javascript:montre('smenu0');\" onmouseout=\"javascript:montre('');\">
       <ul class=ssmenu onmouseout=\"javascript:montre('');\">\n";
           $list_parcs=search_machines("objectclass=groupOfNames","parcs");
@@ -72,7 +72,7 @@ echo "<dd id=\"smenu0\" onmouseover=\"javascript:montre('smenu0');\" onmouseout=
            if ($acces_restreint)  {  if ((!this_parc_delegate($login,$list_parcs[$loop]["cn"],"manage")) and (!this_parc_delegate($login,$list_parcs[$loop]["cn"],"view"))) { continue; } }
  if ($list_parcs[$loop]["cn"]<>$parc) { echo"<li class=ssmenu onmouseout=\"javascript:montre('');\"><a href=\"action_parc.php?parc=".$list_parcs[$loop]["cn"]."\"><img src=\"../elements/images/typebullet.png\" width=\"30\" height=\"11\" border=\"0\">".$list_parcs[$loop]["cn"]."</a></li>\n";}
         }   }
-echo"</ul>
+echo "</ul>
     </dd>
   </dl>\n";
 
@@ -82,7 +82,7 @@ echo"</ul>
 
 $testniveau=getintlevel();
 if (($parc) and ($testniveau>3)) {
-echo" <dl>
+echo " <dl>
     <dt onmouseover=\"javascript:montre('smenu1');\">".gettext("Installations clientes")."</dt>
 
     <dd id=\"smenu1\" onmouseover=\"javascript:montre('smenu1');\" onmouseout=\"javascript:montre('');\">
@@ -111,7 +111,7 @@ echo "  <dl>
       </dd>
   </dl>\n"; }
 //  else  { echo "<dl><dt onmouseover=\"javascript:montre('smenu3');\">Etat du parc</dt></dl>";}
-echo"  </div>
+echo "  </div>
 ";
 }
 
@@ -479,7 +479,7 @@ function detail_parc($parc)
         				$etat_session="<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape('$login est actuellement connect&#233; sur ce poste')\"><img type=\"image\" src=\"../elements/images/enabled.png\"></u>\n";
         			}
        	
-				if ($mp_curr[0]["ipHostNumber"]) {
+				if (isset($mp_curr[0]["ipHostNumber"])) {
                   			$iphost=$mp_curr[0]["ipHostNumber"];
                   			$ping=fping($iphost);
 
