@@ -195,6 +195,8 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 				}
 				echo "<input type=\"submit\" value=\"".gettext("Valider")."\">\n";
 				echo "</FORM>\n";
+				// Initialisation:
+				$list_new_machines=array();
 				// Lecture des membres du parc
 				$mp=gof_members($parc,"parcs",1);
 				// Creation d'un tableau des nouvelles machines &#224; int&#233;grer
