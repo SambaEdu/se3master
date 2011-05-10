@@ -79,7 +79,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			$color="#B4CDCD";
 	        	for ($loopa=0; $loopa < count($list_computer); $loopa++) {
 				$exist_parc = search_parcs($list_computer[$loopa]["cn"]);
-				if ($exist_parc[0]["cn"] == "") {
+				if ((isset($exist_parc[0]["cn"]))&&($exist_parc[0]["cn"] == "")) {
 					$computer_parc="no";
 				} else {
 				        $computer_parc="yes";
