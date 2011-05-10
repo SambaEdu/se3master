@@ -29,7 +29,7 @@ function fping($ip) { // Ping une machine Return 1 si Ok 0 pas de ping
 function avoir_ip($mpenc) { // Retourne l'adresse IP d'une machine en fonction de son nom ou 0 si pas d'IP
                  
 	$mp_curr=search_machines("(&(cn=$mpenc)(objectClass=ipHost))","computers");
-        if ($mp_curr[0]["ipHostNumber"]) {
+        if (isset($mp_curr[0]["ipHostNumber"])) {
                 $iphost=$mp_curr[0]["ipHostNumber"];
 		return $iphost;
 	} else {
