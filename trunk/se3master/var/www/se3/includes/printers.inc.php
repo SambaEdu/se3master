@@ -58,7 +58,8 @@ function search_parc($ip){
 
   $machine=search_computers("ipHostNumber=".$ip);
 
-  if ($machine != "") {
+  //if ($machine != "") {
+  if (count($machine)>0) {
    $ds = @ldap_connect ( $ldap_server, $ldap_port );
    if ( $ds ) {
     $r = @ldap_bind ( $ds ); // Bind anonyme
@@ -80,7 +81,8 @@ function search_parc($ip){
 //		 echo "<br>";
 //		 echo $info[$i]["cn"][$loop];
 //		 echo "<br>";
-		if (preg_match ('/$machine[0]["cn"]/',$info[$i]["member"][$loop])) {
+		//if (preg_match ('/$machine[0]["cn"]/',$info[$i]["member"][$loop])) {
+		if (preg_match ('/'.$machine[0]["cn"].'/',$info[$i]["member"][$loop])) {
 //fwrite($fich,$info[$i]["member"][$loop]."\n");
 			$parc = explode(",",$info[$i]["dn"]);
 			$parc = explode("=",$parc[0]);
