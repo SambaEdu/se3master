@@ -39,13 +39,13 @@ bindtextdomain('se3-parcs',"/var/www/se3/locale");
 textdomain ('se3-parcs');
 
 
-$selectionne=$_GET['selectionne'];
-$ipaddr=$_GET['ipaddr'];
-$cnx_start2=$_GET['cnx_start2'];
-$cnx_start1=$_GET['cnx_start1'];
-$cnx_start=$_GET['cnx_start'];
-$user=$_GET['user'];
-$mpenc=$_GET['mpenc'];
+$selectionne=isset($_GET['selectionne']) ? $_GET['selectionne'] : NULL;
+$ipaddr=isset($_GET['ipaddr']) ? $_GET['ipaddr'] : NULL;
+$cnx_start2=isset($_GET['cnx_start2']) ? $_GET['cnx_start2'] : NULL;
+$cnx_start1=isset($_GET['cnx_start1']) ? $_GET['cnx_start1'] : NULL;
+$cnx_start=isset($_GET['cnx_start']) ? $_GET['cnx_start'] : NULL;
+$user=isset($_GET['user']) ? $_GET['user'] : NULL;
+$mpenc=isset($_GET['mpenc']) ? $_GET['mpenc'] : NULL;
 
 //aide
 $_SESSION["pageaide"]="Informations_syst%C3%A8me#Historique";
