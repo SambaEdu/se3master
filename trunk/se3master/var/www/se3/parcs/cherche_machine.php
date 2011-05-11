@@ -40,16 +40,18 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-parcs',"/var/www/se3/locale");
 textdomain ('se3-parcs');
 
-$parc=$_POST['parc'];
-if ($parc=="") { $parc=$_GET['parc']; }
-$parcs=$_POST['parcs'];
-$creationdossiertemplate=$_POST['creationdossiertemplate'];
-$mpenc=$_POST['mpenc'];
+$parc=isset($_POST['parc']) ? $_POST['parc'] : (isset($_GET['parc']) ? $_GET['parc'] : NULL);
+//if ($parc=="") { $parc=$_GET['parc']; }
+//$parcs=$_POST['parcs'];
+$parcs=isset($_POST['parcs']) ? $_POST['parcs'] : NULL;
+
+$creationdossiertemplate=isset($_POST['creationdossiertemplate']) ? $_POST['creationdossiertemplate'] : NULL;
+$mpenc=isset($_POST['mpenc']) ? $_POST['mpenc'] : NULL;
 
 //aide
 $_SESSION["pageaide"]="Gestion_des_parcs";
 
-
+//debug_var();
 
 if (is_admin("computers_is_admin",$login)=="Y") {
 
@@ -63,7 +65,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 
 		echo "<FORM method=\"post\" action=\"cherche_machine.php\">\n";
 		echo "<input type=\"hidden\" name=\"sansparc\" value=\"oui\">\n";
-		if ($_POST['affiche_all']=="yes") {
+		if ((isset($_POST['affiche_all']))&&($_POST['affiche_all']=="yes")) {
 			echo "<input type=\"submit\" value=\"".gettext("Voir uniquement les machines sans parc")."\">\n";
 		} else {
 			echo "<input type=\"hidden\" name=\"affiche_all\" value=\"yes\">\n";
@@ -88,6 +90,8 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 				$mpenc=$list_computer[$loopa]['cn'];
                     		$icone="computer.png";
 		                // $inventaire_act=inventaire_actif();
+				// Initialisation
+				$retourOs="";
 				if($inventaire=="1") {
 		                        // Type d'icone en fonction de l'OS
 		                        $retourOs = type_os($mpenc);
@@ -100,7 +104,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			
 
 				$ip=avoir_ip($mpenc);
-				if($_POST['affiche_all'] == "yes") {
+				if ((isset($_POST['affiche_all']))&&($_POST['affiche_all']=="yes")) {
 					if ($color=="#E0EEEE") { $color="#B4CDCD"; } else {$color="#E0EEEE"; }
 			   		$affiche_result_prov = "<tr bgcolor=$color><td>&nbsp;&nbsp;";
 					$affiche_result_prov .= "<img width=\"15\" height=\"15\" style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"$retourOs\">\n";
@@ -143,8 +147,14 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 						echo "Erreur lors de la suppression de l'entr&#233;e $suppr[$i]<br />\n";
 					}
 				}
+
+				// Faut-il aussi supprimer les uid=$suppr[$i]$ ? OUI
+				if(get_tab_attribut("computers","uid=$suppr[$i]$",$tab_attr_recherche)) {
+					if(!del_entry("uid=$suppr[$i]$","computers")) {
+						echo "Erreur lors de la suppression de l'entr&#233;e uid=$suppr[$i]$<br />\n";
+					}
+				}
 			}
-			// Faut-il aussi supprimer les uid=$suppr[$i]$ ?
 		}
 
 		// On traite le nom de la machine
