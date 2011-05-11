@@ -36,14 +36,19 @@ textdomain ('se3-annu');
 
 $_SESSION["pageaide"]="Annuaire";
 
-$uid=$_GET['uid'];
-if ($uid=="") { $uid=$_POST['uid']; }
-$action = $_POST[action];
-$delrights = $_POST['delrights'];
-$newrights = $_POST['newrights'];
+$uid=isset($_GET['uid']) ? $_GET['uid'] : (isset($_POST['uid']) ? $_POST['uid'] : "");
+$action = isset($_POST['action']) ? $_POST['action'] : "";
+$delrights = isset($_POST['delrights']) ? $_POST['delrights'] : "";
+$newrights = isset($_POST['newrights']) ? $_POST['newrights'] : "";
 
 
 echo "<h1>".gettext("Annuaire")."</h1>\n";
+
+if($uid=="") {
+	echo "<p>ERREUR : Il faut choisir un 'uid'</p>\n";
+	include ("pdp.inc.php");
+	die();
+}
 
 $filtre = "9_".$uid;
 aff_trailer ("$filtre");
@@ -144,7 +149,7 @@ if (ldap_get_right("se3_is_admin",$login)=="Y") {
   </SELECT><BR><BR>
   <?php
   	// On desactive la possibilite de virer des droits pour admin
-	if ($uid!=admin) {
+	if ($uid!='admin') {
   ?>
 		<input type="submit" value="Retirer ces droits" onClick="this.form.action.value ='DelRights';return true;">
 	<?php
