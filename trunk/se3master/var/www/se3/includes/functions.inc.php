@@ -59,7 +59,8 @@ function menuprint($login) {
             $level=$liens[$menunbr][2];
             if (($rightname=="") or ($afftest)) $afftest=1==1;
             else {
-                if ($ldapright["$rightname"]=="") $ldapright["$rightname"]=ldap_get_right($rightname,$login);
+                //if ($ldapright["$rightname"]=="") $ldapright["$rightname"]=ldap_get_right($rightname,$login);
+                if ((!isset($ldapright["$rightname"]))||($ldapright["$rightname"]=="")) { $ldapright["$rightname"]=ldap_get_right($rightname,$login);}
                 $afftest=($ldapright["$rightname"]=="Y");
             }
             if ($level > $getintlevel) $afftest=0;
