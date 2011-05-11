@@ -55,10 +55,10 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 
 
 	// Variables
-	$nom = $_POST['nom'];
-	$prenom = $_POST['prenom'];
-	$telephone = $_POST['telephone'];
-	$mod_entry = $_POST['mod_entry'];
+	$nom = isset($_POST['nom']) ? $_POST['nom'] : "";
+	$prenom = isset($_POST['prenom']) ? $_POST['prenom'] : "";
+	$telephone = isset($_POST['telephone']) ? $_POST['telephone'] : "";
+	$mod_entry = isset($_POST['mod_entry']) ? $_POST['mod_entry'] : "";
 
 	echo "<h1>".gettext("Annuaire")."</h1>\n";
 
