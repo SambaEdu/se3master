@@ -171,14 +171,14 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 
 
 
-	$os=exec("cat /etc/debian_version");
+	$os=exec("cat /etc/debian_version | cut -d. -f1-2");
 	$vers=exec("dpkg -s se3|grep Version|cut -d ' ' -f2");
 ?>
 
 	<center><TABLE border="1" width="80%"><TR><TD colspan="3" align="center" class="menuheader">
 	Version SambaEdu</TD></TR><TR><TD>Version OS</TD><TD align="center" colspan="2">
 <?php
-	if ($os=="3.1") { echo "Sarge"; } elseif ($os=="4.0") { echo "Etch"; } elseif ($os=="5.0") { echo "Lenny"; } else { echo "Squeeze"; } echo "<I> <img src=\"../elements/images/debian.png\">($os)</I></TD></TR>\n";
+	if ($os=="3.1") { echo "Sarge"; } elseif ($os=="4.0") { echo "Etch"; } elseif ($os=="5.0") { echo "Lenny"; } elseif ($os=="6.0") { echo "Squeeze"; } else { echo "Wheezy"; } echo "<I> <img src=\"../elements/images/debian.png\">($os)</I></TD></TR>\n";
 ?>
 	</TD>
 	</TR>
