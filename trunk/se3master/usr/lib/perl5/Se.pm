@@ -367,6 +367,7 @@ sub addUserEntry {
 	    'cn',             $cn,
 	    'givenname',      $givenName,
 	    'sn',             $sn,
+            'initials',       $initials,
 	    'mail',           "$uid\@$domain",
 	    'objectClass',    'top',
 	    'objectClass',    'posixAccount',
@@ -393,6 +394,7 @@ sub addUserEntry {
 	    'uid',            $uid,
 	    'cn',             $cn,
 	    'givenname',      $givenName,
+            'initials,        $initials,
 	    'sn',             $sn,
 	    'mail',           "$uid\@$domain",
 	    'objectClass',    'top',
@@ -648,7 +650,8 @@ sub gep2posixAccount {
   # Génération de cn, givenName et sn
   $cn = ucfirst($prenom1);
   $cn = "$cn $sn";  
-  $givenName = $prenom1 . $firstletter_nom;
+  $givenName = $prenom1;
+  $initials = $prenom1 . $firstletter_nom;
 
   # Génération du gecos
   if ($sexe eq '1') { $sexe = 'M' }
@@ -657,6 +660,6 @@ sub gep2posixAccount {
   $unacn = unac_string('utf8', ($cn));
   $gecos = "$unacn,$date,$sexe,N";
 
-  @data = ( $uid, $cn, $givenName, $sn, $crypt, $gecos );
+  @data = ( $uid, $cn, $givenName, $initials, $sn, $crypt, $gecos );
   return @data;
 }
