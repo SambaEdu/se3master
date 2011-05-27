@@ -59,15 +59,11 @@ chmod 544 /etc/default/apache2
 # Droits sur la conf de LDAP
 chmod 600 /etc/ldap.secret
 chmod 640 /etc/ldap/slapd.conf
+chmod 644 /etc/ldap/slapd.pem
 
 # Droits sur /var/lib/ldap
-if [ -z $(grep "3.1" /etc/debian_version) ]; then
-# /etc/init.d/slapd stop
-# sleep 1
 chown openldap.openldap /var/lib/ldap
 # chown openldap.openldap /var/lib/ldap/*
-# /etc/init.d/slapd start
-fi
 
 # Droits sur admind
 chown root.root /usr/sbin/admind
