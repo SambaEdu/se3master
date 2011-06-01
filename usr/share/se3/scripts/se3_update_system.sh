@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 ## $Id$ ##
 #
@@ -97,10 +97,6 @@ if [ "$USE_SPACE" -le 90 ]; then
         echo "Correction de droits si besoin...." | tee -a $REPORT_FILE
         /usr/share/se3/sbin/permse3 $PERMSE3_OPTION | tee -a $REPORT_FILE
         
-        echo "Correction de backuppc si besoin...." | tee -a $REPORT_FILE
-        [ -e /var/cache/se3_install/maj/wawabpcfix.tgz ] && tar -zxf /var/cache/se3_install/maj/wawabpcfix.tgz -C / | tee -a $REPORT_FILE
-        echo "" | tee -a $REPORT_FILE
-
         # teste si apache a besoin d'etre relancé
 	if [ -z "$(ps aux | grep "apache2se" | grep -v grep)" ]; then
                 echo "Redémarrage d'Apachese" | tee -a $REPORT_FILE
