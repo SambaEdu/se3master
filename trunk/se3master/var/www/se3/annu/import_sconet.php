@@ -529,7 +529,7 @@
 					//if(!file_exists($racine_www."/includes/pclzip.lib.php")) {
 					if(!file_exists($chemin_www_includes."/pclzip.lib.php")) {
 						echo "<p style='color:red;'>Erreur : Un fichier ZIP a été fourni, mais la bibliothèque de dézippage est absente.</p>\n";
-						require("../includes/pdp.inc.php");
+						require($pathlcsorse3."pdp.inc.php");
 						die();
 					}
 					else {
@@ -547,13 +547,13 @@
 
 							if (($list_file_zip = $archive->listContent()) == 0) {
 								echo "<p style='color:red;'>Erreur : ".$archive->errorInfo(true)."</p>\n";
-								require("../includes/pdp.inc.php");
+								require($pathlcsorse3."pdp.inc.php");
 								die();
 							}
 
 							if(sizeof($list_file_zip)!=1) {
 								echo "<p style='color:red;'>Erreur : L'archive contient plus d'un fichier.</p>\n";
-								require("../includes/pdp.inc.php");
+								require($pathlcsorse3."pdp.inc.php");
 								die();
 							}
 
@@ -566,7 +566,7 @@
 
 							if(($list_file_zip[0]['size']>$unzipped_max_filesize)&&($unzipped_max_filesize>0)) {
 								echo "<p style='color:red;'>Erreur : La taille du fichier extrait (<i>".$list_file_zip[0]['size']." octets</i>) dépasse la limite paramétrée (<i>$unzipped_max_filesize octets</i>).</p>\n";
-								require("../includes/pdp.inc.php");
+								require($pathlcsorse3."pdp.inc.php");
 								die();
 							}
 
@@ -578,7 +578,7 @@
 							}
 							else {
 								echo "<p style='color:red'>Echec de l'extraction de l'archive ZIP.</p>\n";
-								require("../includes/pdp.inc.php");
+								require($pathlcsorse3."pdp.inc.php");
 								die();
 							}
 						}
