@@ -41,6 +41,10 @@
 #
 01 21 * * * root /usr/share/se3/scripts/quota_fixer_mysql.sh Toutlemonde Toutespartitions actu >/dev/null
 
+# restart clamav freshclam 1 fois par jour pour éviter blocage potentiel sur logs
+03 21 * * * root [ -e /etc/init.d/clamav-freshclam ] && /etc/init.d/clamav-freshclam restart >/dev/null
+
+
 # purge des elements de la corbeille de + de 2 jours ou overfill
 0 1  * * *   root  /usr/share/se3/sbin/vide_corbeille.sh >/dev/null 2>&1
 
