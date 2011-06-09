@@ -394,7 +394,7 @@ sub addUserEntry {
 	    'uid',            $uid,
 	    'cn',             $cn,
 	    'givenname',      $givenName,
-            'initials,        $initials,
+            'initials',        $initials,
 	    'sn',             $sn,
 	    'mail',           "$uid\@$domain",
 	    'objectClass',    'top',
@@ -660,6 +660,6 @@ sub gep2posixAccount {
   $unacn = unac_string('utf8', ($cn));
   $gecos = "$unacn,$date,$sexe,N";
 
-  @data = ( $uid, $cn, $givenName, $initials, $sn, $crypt, $gecos );
+  @data = ( $uid, $cn, $givenName, $sn, $crypt, $gecos );
   return @data;
 }
