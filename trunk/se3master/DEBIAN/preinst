@@ -37,10 +37,24 @@ if [ -d /var/cache/se3_install/unattended ]; then
 rm -rf /var/cache/se3_install/unattended
 fi
 
+if [ -e /var/cache/se3_install/maj/wawabpcfix.tgz ]; then
+rm -f /var/cache/se3_install/maj/wawabpcfix.tgz
+fi
+
 # Nettoyage etc
 
 if [ -e /etc/logrotate.d/se3-logrotate ]; then
 rm -f /etc/logrotate.d/se3-logrotate
+fi
+
+
+if [ -e /etc/apache2se/sites-available/backuppc.conf ]; then
+rm -f /etc/apache2se/sites-available/backuppc.conf
+fi
+
+
+if [ -e /etc/apache2se/sites-enabled/backuppc ]; then
+rm -f /etc/apache2se/sites-enabled/backuppc
 fi
 
 # Nettoyage sbin
