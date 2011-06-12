@@ -10,7 +10,7 @@ nb_max=100
 # Possibilite de passer en parametre la taille en Mo a tester
 if [ -n "$1" ]; then
 	t=$(echo "$1"|sed -e "s|[0-9]||g")
-	if [ -n "$t" ]; then
+	if [ -z "$t" ]; then
 		nb_max=$1
 	fi
 fi
@@ -18,7 +18,7 @@ fi
 # Taille max d'un fichier de log en ko:
 taille_max=$((${nb_max}*1024))
 
-tmp=/tmp/root_check_size_log_$(date +%Y%m%d)
+tmp=/tmp/root_check_size_log_$(date +%Y%m%d%H%M%S)
 mkdir -p -m 700 "$tmp"
 
 MAIL_REPORT()
