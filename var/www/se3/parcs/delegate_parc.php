@@ -105,12 +105,10 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 	}
 
 	//************************Definition des variables*******************
-	$user=$_GET['nouveau'];
-	$salles=$_POST['salles'];
-	if ($salles=="") { $salles=$_GET['salles'];}
-	$action=$_POST['action'];
-	if ($action=="") { $action=$_GET['action']; }
-	$nouveau=$_GET['nouveau'];
+	$user=isset($_GET['nouveau']) ? $_GET['nouveau'] : NULL;
+	$salles=isset($_POST['salles']) ? $_POST['salles'] : (isset($_GET['salles']) ? $_GET['salles'] : NULL);
+	$action=isset($_POST['action']) ? $_POST['action'] : (isset($_GET['action']) ? $_GET['action'] : "");
+	$nouveau=isset($_GET['nouveau']) ? $_GET['nouveau'] : NULL;
 
 	$template=is_template($salles);
 
@@ -159,7 +157,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 
 			//$last_user="";
 			while ($row=mysql_fetch_row($result)) {
-				if (($last_user) and ($last_user<>$row[1])) { echo "<tr><td class=menuheader colspan=\"6\"></td></tr>\n";}
+				if ((isset($last_user)) and ($last_user) and ($last_user<>$row[1])) { echo "<tr><td class=menuheader colspan=\"6\"></td></tr>\n";}
 				array_push($liste_delegate,$row[1]);
 				echo "<tr><td align=center>".$row[1]."</td>\n";
 				echo "<td align=center>".$row[2]."</td>\n";
@@ -219,7 +217,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 					if ((is_admin("computers_is_admin",$login)=="Y") or (this_parc_delegate($login,$list_parcs[$loop]["cn"],"manage"))) {
 						array_push($parcs,$list_parcs[$loop]["cn"]); 
 						echo "<option value=\"".$list_parcs[$loop]["cn"]."\"";
-						if ($parc==$list_parcs[$loop]["cn"]) { echo " selected"; }
+						if ((isset($parc))&&($parc==$list_parcs[$loop]["cn"])) { echo " selected"; }
 						echo ">".$list_parcs[$loop]["cn"]."\n";
 						echo "</option>";
 					}
@@ -271,8 +269,8 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			echo "<br><br>  ";
 			
 			if (is_admin("computers_is_admin",$login)=="Y") {
-				echo"<input type=\"radio\" name=\"action\" value=\"manage\"  >\n";
-				echo gettext("D&#233;l&#233;guer totalement la gestion de")." <b> $salles </b><br>\n";
+				echo "<input type=\"radio\" name=\"action\" id=\"action_manage\" value=\"manage\"  >\n";
+				echo "<label for='action_manage'>".gettext("D&#233;l&#233;guer totalement la gestion de")." <b> $salles </b></label><br>\n";
 			}
 
 			if ((is_admin("computers_is_admin",$login)=="Y") or (this_parc_delegate($login,$salles,"manage")))  {
@@ -280,11 +278,11 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 				//en effet, la delegation sur les templates donne acces a logon.bat et a clients windows
 				//des qu'un parc a un template associe il est considere comme un template
 				//if (is_parc($salles)) {
-				echo"<input type=\"radio\" name=\"action\" value=\"view\" CHECKED />\n";
-				echo gettext("Permettre &#224; l'utilisateur de suivre le parc ( pas d'action possible)");
+				echo "<input type=\"radio\" name=\"action\" id=\"action_view\" value=\"view\" CHECKED />\n";
+				echo "<label for='action_view'>".gettext("Permettre &#224; l'utilisateur de suivre le parc ( pas d'action possible)")."</label>";
 				//}
-				echo "<br><input type=\"radio\" name=\"action\" value=\"nodelegate\">\n";
-				echo gettext("Retirer la d&#233;l&#233;gation de")." <b> $salles </b> ".gettext("pour cet utilisateur");
+				echo "<br><input type=\"radio\" name=\"action\" id=\"action_nodelegate\" value=\"nodelegate\">\n";
+				echo "<label for='action_nodelegate'>".gettext("Retirer la d&#233;l&#233;gation de")." <b> $salles </b> ".gettext("pour cet utilisateur")."</label>";
 			}
 
 			echo"<br><br><input type=\"submit\" name=\"submit\" value=\"".gettext("Envoyer")."\" />\n";
@@ -433,7 +431,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		}
 	
 		//retirer le droit (potentiellement les deux droits) si ce user n'a plus aucun parc delegue !!
-		if ((!$fort) and (is_admin("parc_can_manage",$user)=="Y")) {
+		if (((!isset($fort))||(!$fort)) and (is_admin("parc_can_manage",$user)=="Y")) {
 			echo "<h3>".gettext("Suppression du droit `D&#233;l&#233;gation forte(parc_can_manage)`")." </h3>\n";
 			$right="parc_can_manage";
 			$cDn = "uid=$user,$peopleRdn,$ldap_base_dn";
@@ -441,7 +439,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			exec ("/usr/share/se3/sbin/groupDelEntry.pl \"$cDn\" \"$pDn\"");
 		}
 
-		if ((!$faible) and (is_admin("parc_can_view",$user)=="Y")) {
+		if (((!isset($faible))||(!$faible)) and (is_admin("parc_can_view",$user)=="Y")) {
 			echo "<h3>".gettext("Suppression du droit `D&#233;l&#233;gation faible (parc_can_view)`")." </h3>";
 
 			$right="parc_can_view";
