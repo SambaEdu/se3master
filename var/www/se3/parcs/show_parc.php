@@ -211,7 +211,14 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		echo "<input type=\"hidden\" name=\"delparc\" value=\"0\">\n";
 			
 		echo "<input type=\"hidden\" name=\"delete_parc\" value=\"true\">\n";
-			
+
+		$module_clonage_actif="n";
+		$sql="select 1=1 from params where name='clonage' AND value='1';";
+		$test_clonage=mysql_query($sql);
+		if(mysql_num_rows($test_clonage)>0) {
+			$module_clonage_actif="y";
+		}
+
 		//echo "<TABLE border=1>";
                 echo "<TABLE border=1 width=\"60%\">\n<tr class=menuheader style=\"height: 30\">\n";
 		
@@ -225,6 +232,11 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		echo "<td class='menuheader' align=\"center\">".gettext("Stations")."</td>";
                 echo "<td class='menuheader' align=\"center\">".gettext("Adresse IP")."</td>";
                 echo "<td class='menuheader' align=\"center\">".gettext("Derni&#232;re connexion")."</td>";
+
+				if($module_clonage_actif=='y') {
+					echo "<td class='menuheader' align=\"center\">".gettext("Dernier rapport TFTP")."</td>";
+				}
+
                 echo "<td class='menuheader' align=\"center\">".gettext("Supprimer du parc")."<br><a href=\"javascript:coche_delete('del',true)\">";
 	        echo "<img src='../elements/images/enabled.png' alt='Cocher tout' title='Cocher tout' border='0' /></a>";
 	        echo " / \n";
@@ -377,7 +389,21 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			else	{
 			    echo "<td align=\"center\">$last_cnx[0]</td>\n";
 			    }
-				    
+
+				if($module_clonage_actif=='y') {
+					$sql="SELECT * FROM se3_tftp_rapports WHERE name='".$mp[$loop]."' ORDER BY date DESC LIMIT 1;";
+					$res_rapport_tftp=mysql_query($sql);
+					if(mysql_num_rows($res_rapport_tftp)>0) {
+						$lig=mysql_fetch_object($res_rapport_tftp);
+						echo "<td align=\"center\">";
+						echo "<span style='font-size: x-small;' title='Dernier rapport: $lig->tache ($lig->statut)'><a href=\"../tftp/visu_rapport.php?id_machine=$lig->id\" target='_blank'>".$lig->date."</a></span>\n";
+						echo "</td>\n";
+					}
+					else {
+						echo "<td align=\"center\" style='color:red'>".gettext("Aucun rapport")."</td>\n";
+					}
+				}
+
 			echo "<td align=\"center\"><INPUT type=\"checkbox\" name=\"old_computers[]\" id=\"del_$loop\"  value=\"$mpenc\">";
 			echo "</td>\n";
 
