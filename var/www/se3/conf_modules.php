@@ -30,9 +30,9 @@ $_SESSION["pageaide"]="Les modules";
 if (ldap_get_right("se3_is_admin",$login)!="Y")
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 
-$module = "se3-".$_GET[varb];
+$module = "se3-".$_GET['varb'];
 // Mise a jour
-if ($_GET[action] == "update") {
+if ($_GET['action'] == "update") {
 	echo "<h1>Gestion des modules SE3</h1>";
         if ($module == "se3-ocs") {
         system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i $module se3-ocs-clientwin");
@@ -45,21 +45,21 @@ if ($_GET[action] == "update") {
 }
 
 // Change dans la base
-if ($_GET[action] == "change") {
+if ($_GET['action'] == "change") {
 
 	echo "<H1>Gestion des modules SE3</H1>";
 	// Change dnas la table params
-	$resultat=mysql_query("UPDATE params set value='$_GET[valeur]' where name='$_GET[varb]'");
-	switch ($_GET[varb]) {
+	$resultat=mysql_query("UPDATE params set value='".$_GET['valeur']."' where name='$_GET[varb]'");
+	switch ($_GET['varb']) {
 		case "savbandactiv":
-			if ($_GET[valeur] == "1") {
+			if ($_GET['valeur'] == "1") {
 				echo "Module $module activ&#233;.<br>\n";
 			} else{
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
 		case "inventaire":
-			if($_GET[valeur]=="1") {
+			if($_GET['valeur']=="1") {
 				$ocs_actif = exec("dpkg -s se3-ocs | grep \"Status: install ok\" > /dev/null && echo 1");
 				// Si paquet pas installe
 				if($ocs_actif!="1") {
@@ -75,7 +75,7 @@ if ($_GET[action] == "change") {
 		// Conf antivirus
 		case "antivirus":
 			$clamav_actif = exec("dpkg -s se3-clamav | grep \"Status: install ok\" > /dev/null && echo 1");
-			if(($_GET[valeur]=="1") && ($clamav_actif!="1")) { //paquet pas installe on l'installe
+			if(($_GET['valeur']=="1") && ($clamav_actif!="1")) { //paquet pas installe on l'installe
 					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-clamav");
 					echo "Module $module activ&#233;.<br>\n";
 			} else {
@@ -86,21 +86,21 @@ if ($_GET[action] == "change") {
 			break;
 		// Conf du dhcp
 		case "dhcp":
-			if($_GET[valeur]=="1") { //si on veut l'activer
+			if($_GET['valeur']=="1") { //si on veut l'activer
 				$STOP_START="start";
 				$dhcp_actif = exec("dpkg -s se3-dhcp | grep \"Status: install ok\" > /dev/null && echo 1");
 				if($dhcp_actif!="1") { //paquet pas installe on l'installe
 					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-dhcp");
 				} else { //sinon on l'active
-					$update_query = "UPDATE params SET value='$_GET[valeur]' where name='dhcp_on_boot'";
+					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='dhcp_on_boot'";
 					mysql_query($update_query);
 					echo "Module $module activ&#233;.<br>\n";
 				}
 			}
 			//	exec("/usr/bin/sudo /usr/share/se3/scripts/makedhcpdconf");
-			if($_GET[valeur]=="0") {
+			if($_GET['valeur']=="0") {
 				$STOP_START="stop";
-				$update_query = "UPDATE params SET value='$_GET[valeur]' where name='dhcp_on_boot'";
+				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='dhcp_on_boot'";
 				mysql_query($update_query);
 				exec("/usr/bin/sudo /usr/share/se3/scripts/makedhcpdconf");
 				exec("/usr/bin/sudo /usr/share/se3/scripts/makedhcpdconf $STOP_START");
@@ -109,44 +109,44 @@ if ($_GET[action] == "change") {
 			break;
 		// Conf du clonage
 		case "clonage":
-			if($_GET[valeur]=="1") {
+			if($_GET['valeur']=="1") {
 				$clonage_actif = exec("dpkg -s se3-clonage | grep \"Status: install ok\" > /dev/null && echo 1");
 				// Si paquet pas installe
 				if($clonage_actif!="1") {
 					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-clonage");
 				} else {
-					$update_query = "UPDATE params SET value='$_GET[valeur]' where name='clonage'";
+					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='clonage'";
 					mysql_query($update_query);
 					exec("/usr/bin/sudo /usr/share/se3/scripts/se3_tftp_boot_pxe.sh start");
 					echo "Module $module activ&#233;.<br>\n";
 				}
 			}
-			if($_GET[valeur]=="0") {
+			if($_GET['valeur']=="0") {
 				exec("/usr/bin/sudo /usr/share/se3/scripts/se3_tftp_boot_pxe.sh stop");
-				$update_query = "UPDATE params SET value='$_GET[valeur]' where name='clonage'";
+				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='clonage'";
 				mysql_query($update_query);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
 		// Conf d'unattended
 		case "unattended":
-			if($_GET[valeur]=="1") {
+			if($_GET['valeur']=="1") {
 				$unattended_actif = exec("dpkg -s se3-unattended | grep \"Status: install ok\" > /dev/null && echo 1");
 				// Si paquet pas installe
 				if($unattended_actif!="1") {
 					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-unattended");
 				} else {
-					$update_query = "UPDATE params SET value='$_GET[valeur]' where name='unattended'";
+					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='unattended'";
 					mysql_query($update_query);
                                         // activer unattended, c'est activer le clonage
-					$update_query = "UPDATE params SET value='$_GET[valeur]' where name='clonage'";
+					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='clonage'";
 					mysql_query($update_query);
 					exec("/usr/bin/sudo /usr/share/se3/scripts/se3_tftp_boot_pxe.sh start");
 					echo "Module $module et clonage activ&#233;s.<br>\n";
 				}
 			}
-			if($_GET[valeur]=="0") {
-				$update_query = "UPDATE params SET value='$_GET[valeur]' where name='unattended'";
+			if($_GET['valeur']=="0") {
+				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='unattended'";
 				mysql_query($update_query);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
@@ -203,19 +203,19 @@ if ($_GET[action] == "change") {
 			break;
 		// Conf de se3-domain
 		case "backup":
-			if($_GET[valeur]=="1") {
+			if($_GET['valeur']=="1") {
 				$backup_actif = exec("dpkg -s se3-backup | grep \"Status: install ok\" > /dev/null && echo 1");
 				// Si paquet pas installe
 				if($backup_actif!="1") {
 					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-backup");
 				} else {
-					$update_query = "UPDATE params SET value='$_GET[valeur]' where name='backuppc'";
+					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='backuppc'";
 					mysql_query($update_query);
                                         echo "Module $module activ&#233;.<br>\n";
 				}
 			}
-			if($_GET[valeur]=="0") {
-				$update_query = "UPDATE params SET value='$_GET[valeur]' where name='backuppc'";
+			if($_GET['valeur']=="0") {
+				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='backuppc'";
 				mysql_query($update_query);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 				include ("fonction_backup.inc.php");
@@ -284,18 +284,18 @@ if ($_GET[action] == "change") {
 			break;
 		// Conf de WPKG
 		case "wpkg":
-			if($_GET[valeur]=="1") { //si on veut l'activer
+			if($_GET['valeur']=="1") { //si on veut l'activer
 				$wpkg_actif = exec("dpkg -s se3-wpkg | grep \"Status: install ok\" > /dev/null && echo 1");
 				if($wpkg_actif!="1") { //paquet pas installe on l'installe
 					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-wpkg");
 				} else { //sinon on l'active
-					$update_query = "UPDATE params SET value='$_GET[valeur]' where name='wpkg'";
+					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='wpkg'";
 					mysql_query($update_query);
 					echo "Module $module activ&#233;.<br>\n";
 				}
 			}
-			if($_GET[valeur]=="0") {
-				$update_query = "UPDATE params SET value='$_GET[valeur]' where name='wpkg'";
+			if($_GET['valeur']=="0") {
+				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='wpkg'";
 				mysql_query($update_query);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
