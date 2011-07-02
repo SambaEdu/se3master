@@ -335,15 +335,13 @@ if (is_admin("computers_is_admin",$login)=="Y") {
                         	if ($dhcp_ok==1) {
 */
                         	if ($dhcp=="1") {
-                        		echo "Suppression du dhcp";
-							    echo "<br>";
-							    $suppr_query = "DELETE FROM `se3_dhcp` where `ip` = '$ip' AND `mac` = '$mac' AND  `name` = '$name'";
+                                    echo "Suppression du dhcp";
+				    echo "<br>";
+				    $suppr_query = "DELETE FROM `se3_dhcp` where `name` = '$computer'";
 	                            mysql_query($suppr_query);
 	                            // On relance dhcp si celui-ci est active.
-                                if($dhcp=="1") {
-                                     exec("sudo /usr/share/se3/scripts/makedhcpdconf",$ret);
-                                }
-
+                                    exec("sudo /usr/share/se3/scripts/makedhcpdconf",$ret);
+                                
                             }
 						
 							// La virer de wpkg 
