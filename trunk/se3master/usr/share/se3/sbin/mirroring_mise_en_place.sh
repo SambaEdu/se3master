@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #/usr/share/se3/sbin/mirroring_mise_en_place.sh
 #
@@ -48,19 +48,20 @@ BLANC="\033[00m"
 
 
 clear
-echo -e "${COLTITRE}"
-echo "***************************************************************"
-echo "* Ce script va mettre en place un mirroring a l'aide de rsync *"
-echo "* entre HDA / SDA / etc ... et un 2eme disque de votre choix  *"
-echo "*                                                             *"
-echo "*                                                             *"
-echo -e "*${COLIMPORTANT}          /!\ ATTENTION /!\   A CE QUE VOUS FAITES     ${COLTITRE}      *"
-echo -e "*  ${COLIMPORTANT}    SI LE DEUXIEME DISQUE CONTIENT DEJA DES DONNEES   ${COLTITRE}     *"
-echo -e "*${COLTITRE}                                                             *"
-echo "*   suggestions, corrections ... : franck.molle@ac-rouen.fr   *"
-echo "*                                                             *"
-echo "*          appuyez sur une touche pour continuer              *"
-echo "***************************************************************"
+echo -e "${COLTITRE}
+***************************************************************
+* Ce script va mettre en place un mirroring a l'aide de rsync *
+* entre votre disque principale (/dev/XXX ou /dev/ciss/XXX,   *
+* et un 2eme disque de votre choix                            *
+*                                                             *
+*                                                             *
+*${COLIMPORTANT}          /!\ ATTENTION /!\   A CE QUE VOUS FAITES     ${COLTITRE}      *
+*  ${COLIMPORTANT}    SI LE DEUXIEME DISQUE CONTIENT DEJA DES DONNEES   ${COLTITRE}     *
+*${COLTITRE}                                                             *
+*   suggestions, corrections ... : franck.molle@ac-rouen.fr   *
+*                                                             *
+*          appuyez sur une touche pour continuer              *
+***************************************************************"
 read OK
 echo -e "${COLTXT}"
 
@@ -102,13 +103,14 @@ else
 	fi
 fi
 
+
 while [ "$DISK1OK" != "o" ]
 do
 
-	DD1DEFAULT=$(cat /etc/fstab | grep -v "^#" | grep /home | tr "\t" " " | cut -d" " -f1 | sed -e "s|/dev/||" | sed -e "s|[0-9]||g")
+	DD1DEFAULT=$(cat /etc/fstab | grep -v "^#" | grep /home | tr "\t" " " | cut -d" " -f1 | sed -e "s|[0-9]||g")
 
 	if [ "$(echo $DD1DEFAULT | wc -m)" != "4" ]; then
-		DD1DEFAULT="hda"
+		DD1DEFAULT="/dev/sda"
 	fi
 
 	echo -e "$COLTXT"
@@ -136,18 +138,17 @@ done
 
 #Sauvegarde de la table des partitions du premier disque
 echo -e "$COLCMD"
-sfdisk -d /dev/$DISK1 > /tmp/part
+sfdisk -d $DISK1 > /tmp/part
 
 #Detection des partitions disque source
-PARTSWAP=`fdisk -l /dev/$DISK1 | grep swap | sed -e "s/ .*//" | sed -e "s/\/dev\///" `
-PARTROOT=`df | grep "/\$" | sed -e "s/ .*//" | sed -e "s/\/dev\///" `
+PARTSWAP=`fdisk -l $DISK1 | grep swap | sed -e "s/ .*//"`
+PARTROOT=`df | grep "/\$" | sed -e "s/ .*//"`
 #PARTHOME=`df | grep "/home" | sed -e "s/ .*//" | sed -e "s/\/dev\///"`
 #PARTVARSE3=`df | grep "/var/se3" | sed -e "s/ .*//" | sed -e "s/\/dev\///"`
 #TSTVAR=`df | grep "/var"| grep -v /var/se3`
 
-PARTHOME=`df | tr "\t" " " | sed -e "s/ \{2,\}/ /g" | grep " /home$" | sed -e "s/ .*//" | sed -e "s/\/dev\///"`
-PARTVARSE3=`df | tr "\t" " " | sed -e "s/ \{2,\}/ /g" | grep " /var/se3$" | sed -e "s/ .*//" | sed -e "s/\/dev\///"`
-
+PARTHOME=`df | tr "\t" " " | sed -e "s/ \{2,\}/ /g" | grep " /home$" | sed -e "s/ .*//"`
+PARTVARSE3=`df | tr "\t" " " | sed -e "s/ \{2,\}/ /g" | grep " /var/se3$" | sed -e "s/ .*//"`
 TSTVAR=`df | tr "\t" " " | sed -e "s/ \{2,\}/ /g" | grep "/var$"| grep -v /var/se3`
 
 echo -e "$COLTXT"
@@ -158,7 +159,7 @@ echo -e "${COLTXT}Partition Racine :\t${COLINFO} $PARTROOT"
 if [ ! -z "$TSTVAR" ]; then
 	echo -e "$COLCMD\c"
 	#PARTVAR=`df | grep "/var"| grep -v /var/se3 | sed -e "s/ .*//" | sed -e "s/\/dev\///"`
-	PARTVAR=`df | tr "\t" " " | sed -e "s/ \{2,\}/ /g" | grep "/var$"| grep -v /var/se3 | sed -e "s/ .*//" | sed -e "s/\/dev\///"`
+	PARTVAR=`df | tr "\t" " " | sed -e "s/ \{2,\}/ /g" | grep "/var$"| grep -v /var/se3 | sed -e "s/ .*//"`
 	echo -e "${COLTXT}Partition /VAR :\t${COLINFO} $PARTVAR"
 else
 	# echo -e "Pas de Partition /var de detectee "
@@ -184,33 +185,33 @@ done
 if [ "$DETECTOK" = "n" ]; then
 	while [ "$PARTOK" != "o" ]
 	do
-		echo -e "${COLTXT}Quelle est votre partition SWAP ? [${COLDEFAUT}hda1${COLTXT}] ${COLSAISIE}\c"
+		echo -e "${COLTXT}Quelle est votre partition SWAP ? [${COLDEFAUT}/dev/sda1${COLTXT}] ${COLSAISIE}\c"
 		read  PARTSWAP
 		if [ -z "$PARTSWAP" ]; then
-			PARTSWAP=hda1
+			PARTSWAP="/dev/sda1"
 		fi
-		echo -e "${COLTXT}Quelle est votre partition RACINE ? [${COLDEFAUT}hda2${COLTXT}] ${COLSAISIE}\c"
+		echo -e "${COLTXT}Quelle est votre partition RACINE ? [${COLDEFAUT}/dev/sda2${COLTXT}] ${COLSAISIE}\c"
 		read  PARTROOT
 		if [ -z "$PARTROOT" ]; then
-			PARTROOT=hda2
+			PARTROOT="/dev/sda2"
 		fi
 
 		echo -e "${COLTXT}Quelle est votre partition /VAR ? [${COLDEFAUT}aucune${COLTXT}] ${COLSAISIE}\c"
 		read  PARTVAR
 		if [ -z "$PARTVAR" ]; then
-			PARTVAR=aucune
+			PARTVAR="/dev/sda3"
 		fi
 
-		echo -e "${COLTXT}Quelle est votre partition HOME ? [${COLDEFAUT}hda3${COLTXT}] ${COLSAISIE}\c"
+		echo -e "${COLTXT}Quelle est votre partition HOME ? [${COLDEFAUT}/dev/sda6${COLTXT}] ${COLSAISIE}\c"
 		read  PARTHOME
 		if [ -z "$PARTHOME" ]; then
-			PARTHOME=hda3
+			PARTHOME="/dev/sda6"
 		fi
 
-		echo -e "${COLTXT}Quelle est votre partition VAR/SE3 ? [${COLDEFAUT}hda${COLTXT}] ${COLSAISIE}\c"
+		echo -e "${COLTXT}Quelle est votre partition VAR/SE3 ? [${COLDEFAUT}/dev/sda5${COLTXT}] ${COLSAISIE}\c"
 		read  PARTVARSE3
 		if [ -z "$PARTVARSE3" ]; then
-			PARTVARSE3=hda4
+			PARTVARSE3="/dev/sda5"
 		fi
 
 		echo -e "$COLTXT"
@@ -246,14 +247,14 @@ DISK2OK="n"
 while [ "$DISK2OK" != "o" ]
 do
 
-	DEFAULT_DISK2="hdb"
+	DEFAULT_DISK2="sdb"
 
-	liste_dd=($(sfdisk -g | grep -v "^/dev/$DISK1:" | cut -d"/" -f3 | cut -d":" -f1))
+	liste_dd=($(sfdisk -g | grep -v "$DISK1:" | cut -d":" -f1))
 	if [ ${#liste_dd[*]} -ge 1 ]; then
 		cpt=0
 		while [ $cpt -le ${#liste_dd[*]} ]
 		do
-			if sfdisk -s /dev/${liste_dd[$cpt]} >/dev/null 2>&1; then
+			if sfdisk -s ${liste_dd[$cpt]} >/dev/null 2>&1; then
 				DEFAULT_DISK2="${liste_dd[$cpt]}"
 				break
 			fi
@@ -294,7 +295,7 @@ if [ "$DISK2" == "$DISK1"  ]; then
 fi
 
 echo -e "$COLCMD"
-DISK2PARTS=`sfdisk -l /dev/$DISK2 2>/dev/null`
+DISK2PARTS=`sfdisk -l $DISK2 2>/dev/null`
 if [ -z "$DISK2PARTS" ]; then
 	echo -e "${COLERREUR}Erreur !! Aucun disque $DISK2 detecte."
 	echo -e "${COLERREUR}Vous avez saisi une valeur erronee pour le 2eme disque."
@@ -303,17 +304,17 @@ if [ -z "$DISK2PARTS" ]; then
 fi
 
 #recuperation des noms de partitions du disque 2
-PARTSWAP_CIBLE=`echo $PARTSWAP | sed -e "s/$DISK1/$DISK2/"`
-PARTROOT_CIBLE=`echo $PARTROOT | sed -e "s/$DISK1/$DISK2/"`
-PARTHOME_CIBLE=`echo $PARTHOME | sed -e "s/$DISK1/$DISK2/"`
-PARTVARSE3_CIBLE=`echo $PARTVARSE3 | sed -e "s/$DISK1/$DISK2/"`
+PARTSWAP_CIBLE=`echo $PARTSWAP | sed -e "s#$DISK1#$DISK2#"`
+PARTROOT_CIBLE=`echo $PARTROOT | sed -e "s#$DISK1#$DISK2#"`
+PARTHOME_CIBLE=`echo $PARTHOME | sed -e "s#$DISK1#$DISK2#"`
+PARTVARSE3_CIBLE=`echo $PARTVARSE3 | sed -e "s#$DISK1#$DISK2#"`
 
 echo -e "$COLTXT"
 echo -e "Voici la liste des (futures) partitions de${COLINFO} $DISK2"
 echo -e "${COLTXT}Partition SWAP :\t${COLINFO} $PARTSWAP_CIBLE"
 echo -e "${COLTXT}Partition Racine :\t${COLINFO} $PARTROOT_CIBLE"
 if [ "$PARTVAR" != "aucune" ]; then
-	PARTVAR_CIBLE=`echo $PARTVAR | sed -e "s/$DISK1/$DISK2/"`
+	PARTVAR_CIBLE=`echo $PARTVAR | sed -e "s#$DISK1#$DISK2#"`
 	echo -e "${COLTXT}Partition /VAR :\t${COLINFO} $PARTVAR_CIBLE"
 fi
 echo -e "${COLTXT}Partition /HOME :\t${COLINFO} $PARTHOME_CIBLE"
@@ -408,7 +409,7 @@ if [ "$REPONSE" == "o" ]; then
 		echo -e "$COLTXT"
 		echo -e "Creation des partitions et des systemes de fichiers..."
 		echo -e "$COLCMD"
-		sfdisk /dev/$DISK2 < /tmp/part
+		sfdisk $DISK2 < /tmp/part
 		if [ $? != 0 ]; then
 			echo -e "${COLIMPORTANT}Erreur lors de la creation des partitions de $DISK2 "
 			echo -e "Le script ne peut se poursuivre normalement."
@@ -440,7 +441,7 @@ if [ "$REPONSE" == "o" ]; then
 			fi
 
 			echo -e "$COLCMD"
-			/sbin/cfdisk /dev/$DISK2
+			/sbin/cfdisk $DISK2
 		fi
 	else
 		echo -e "$COLTXT"
@@ -470,17 +471,17 @@ if [ "$REPONSE" == "o" ]; then
 		fi
 
 		echo -e "$COLCMD"
-		/sbin/cfdisk /dev/$DISK2
+		/sbin/cfdisk $DISK2
 	fi
 
 	if [ "$PARTVAR" != "aucune" ]; then
 		echo -e "$COLTXT"
 		echo -e "Partition /VAR :\t${COLTXT} $PARTVAR"
 		echo -e "$COLCMD"
-		/sbin/mkswap /dev/$PARTSWAP_CIBLE  && /sbin/mke2fs -j /dev/$PARTROOT_CIBLE && /sbin/mke2fs -j /dev/$PARTVAR_CIBLE && /sbin/mkfs.xfs -f /dev/$PARTHOME_CIBLE && /sbin/mkfs.xfs -f /dev/$PARTVARSE3_CIBLE
+		/sbin/mkswap $PARTSWAP_CIBLE  && /sbin/mke2fs -j $PARTROOT_CIBLE && /sbin/mke2fs -j $PARTVAR_CIBLE && /sbin/mkfs.xfs -f $PARTHOME_CIBLE && /sbin/mkfs.xfs -f $PARTVARSE3_CIBLE
 	else
 		echo -e "$COLCMD"
-		/sbin/mkswap /dev/$PARTSWAP_CIBLE  && /sbin/mke2fs -j /dev/$PARTROOT_CIBLE && /sbin/mkfs.xfs -f /dev/$PARTHOME_CIBLE && /sbin/mkfs.xfs -f /dev/$PARTVARSE3_CIBLE
+		/sbin/mkswap $PARTSWAP_CIBLE  && /sbin/mke2fs -j $PARTROOT_CIBLE && /sbin/mkfs.xfs -f $PARTHOME_CIBLE && /sbin/mkfs.xfs -f /$PARTVARSE3_CIBLE
 	fi
 
 
@@ -617,6 +618,10 @@ done
 
 ################# creation des scripts ########################
 
+PARTROOTUUID=$(vol_id -u $PARTROOT)
+PARTROOTUUID_CIBLE=$(vol_id -u $PARTROOT_CIBLE)
+
+
 # creation du script rsync
 echo -e "$COLCMD"
 
@@ -637,15 +642,20 @@ DISK2=$DISK2
 # Adresse mail d'alerte
 MAIL_ADMIN=$MAIL_ADMIN
 
-# Temoin d'existence ou non d'une partition /var
+# Liste des partitions sources
+PARTROOT=$PARTROOT
+PARTROOTUUID=$PARTROOTUUID
 PARTVAR=$PARTVAR
+PARTHOME=$PARTHOME
+PARTVARSE3=$PARTVARSE3
 
-# Liste des partitions
+# Liste des partitions cibles
 PARTROOT_CIBLE=$PARTROOT_CIBLE
+PARTROOTUUID_CIBLE=$PARTROOTUUID_CIBLE
 PARTVAR_CIBLE=$PARTVAR_CIBLE
 PARTHOME_CIBLE=$PARTHOME_CIBLE
 PARTVARSE3_CIBLE=$PARTVARSE3_CIBLE
-PARTROOT_CIBLE=$PARTROOT_CIBLE
+
 
 # Attention: En cas de modification manuelle, relancer le script
 #            /usr/share/se3/sbin/genere_mirror_rsync_sh.sh
@@ -671,20 +681,24 @@ echo "Un script /mirror/umount_$DISK2.sh vous permettant de demonter vos partiti
 echo "de $DISK2 dans les sous repertoires de /mirror"
 
 echo -e "$COLTXT"
-echo "Voulez vous lancer le script rsync de suite "
-echo -e "afin d'effectuer une premiere synchronisation des disques ? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
+echo "Il faut maintenant lancer le script rsync de suite "
+echo -e "afin d'effectuer une premiere synchronisation (${COLCHOIX}Ok${COLTXT}) $COLSAISIE\c"
 read REPONSE
-while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
-do
-	echo -e "$COLTXT"
-	echo -e "Voulez-vous lancer le script rsync de suite ? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
-	read REPONSE
-done
-if [ "$REPONSE" == "o" ]; then
-	echo -e "$COLTXT"
-	echo "Script lance !"
-	cd /mirror/
-	./mirror_rsync.sh
-fi
+
+mount -t ext3 $PARTROOT_CIBLE  /mirror/part_root
+/usr/bin/rsync -av --delete --exclude=/home/* --exclude=/mirror/ --exclude=/tmp/* --exclude=/var/lock/* --exclude=/proc/* --exclude=/sys/* --exclude=/cdrom/* --exclude=/var/*  / /mirror/part_root | tee -a \$FICHIERLOG
+
+echo -e "$COLTITRE"
+echo "Installation de grub"
+echo -e "$COLCMD"
+grub-install --root-directory=/mirror/part_root --no-floppy --recheck hd1 
+echo -e "$COLINFO Grub installé !!"
+
+chroot /mirror/part_root updategrub 
+sed "s/hd1/hd0/" -i /mirror/part_root/boot/grub/menu.lst  
+sed "s#$PARTROOT_CIBLE#$PARTROOT#" -i /mirror/part_root/boot/grub/menu.lst  
+umount /mirror/part_root/
+cd /mirror/
+./mirror_rsync.sh
 echo -e "$COLTXT"
 exit 0
