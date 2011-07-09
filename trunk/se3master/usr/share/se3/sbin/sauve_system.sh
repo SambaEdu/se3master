@@ -6,7 +6,7 @@
 #
 ## $Id$ ##
 #
-# Dernière modif: 05/03/2008
+# Dernière modif: 09/07/2011
 
 # Chemin des sauvegardes:
 #dossier_svg="/home/sauvegardes/fichiers_se3"
@@ -245,7 +245,7 @@ if [ $svg_hebdo = "oui" ]; then
 		mkdir -p $dossier_svg/svg_hebdo/semaine_${semaine}/mysql
 		for base in se3db mysql
 		do
-			liste=($(ls $dossier_svg/mysql/$base.*.sql))
+			liste=($(ls -t $dossier_svg/mysql/$base.*.sql))
 			if [ ${#liste[*]} -gt 0 ]; then
 				# On récupère la première sauvegarde de la semaine
 				cp -a ${liste[0]} $dossier_svg/svg_hebdo/semaine_${semaine}/mysql/
@@ -254,14 +254,14 @@ if [ $svg_hebdo = "oui" ]; then
 
 
 		mkdir -p $dossier_svg/svg_hebdo/semaine_${semaine}/ldap
-		liste=($(ls $dossier_svg/ldap/DB_CONFIG.*))
+		liste=($(ls -t $dossier_svg/ldap/DB_CONFIG.*))
 		if [ ${#liste[*]} -gt 0 ]; then
-			# On récupère la première sauvegarde de la semaine
+			# On récupère la sauvegarde la plus récente de la semaine
 			cp -a ${liste[0]} $dossier_svg/svg_hebdo/semaine_${semaine}/ldap/
 		fi
-		liste=($(ls $dossier_svg/ldap/ldap.*.ldif))
+		liste=($(ls -t $dossier_svg/ldap/ldap.*.ldif))
 		if [ ${#liste[*]} -gt 0 ]; then
-			# On récupère la première sauvegarde de la semaine
+			# On récupère la sauvegarde la plus récente de la semaine
 			cp -a ${liste[0]} $dossier_svg/svg_hebdo/semaine_${semaine}/ldap/
 		fi
 		if [ -e $dossier_svg/ldap/ldap.se3sav.tar.gz ]; then
@@ -273,30 +273,32 @@ if [ $svg_hebdo = "oui" ]; then
 		#if ls $dossier_svg/samba/ | grep "var_lib_samba." > /dev/null; then
 		test=$(ls $dossier_svg/samba/ | grep 'var_lib_samba\.')
 		if [ ! -z "$test" ]; then
-			liste=($(ls $dossier_svg/samba/var_lib_samba.*.tar.gz))
+			liste=($(ls -t $dossier_svg/samba/var_lib_samba.*.tar.gz))
 			if [ ${#liste[*]} -gt 0 ]; then
-				# On récupère la première sauvegarde de la semaine
+				# On récupère la sauvegarde la plus récente de la semaine
 				cp -a ${liste[0]} $dossier_svg/svg_hebdo/semaine_${semaine}/samba/
 			fi
 		fi
 		#if ls $dossier_svg/samba/ | grep "var_lib_samba_secrets_tdb." > /dev/null; then
 		test=$(ls $dossier_svg/samba/ | grep 'var_lib_samba_secrets_tdb.')
 		if [ ! -z "$test" ]; then
-			liste=($(ls $dossier_svg/samba/var_lib_samba_secrets_tdb.*))
+			liste=($(ls -t $dossier_svg/samba/var_lib_samba_secrets_tdb.*))
 			if [ ${#liste[*]} -gt 0 ]; then
-				# On récupère la première sauvegarde de la semaine
+				# On récupère la sauvegarde la plus récente de la semaine
 				cp -a ${liste[0]} $dossier_svg/svg_hebdo/semaine_${semaine}/samba/
 			fi
 		fi
 
 		mkdir -p $dossier_svg/svg_hebdo/semaine_${semaine}/etc
-		liste=($(ls $dossier_svg/etc/etc.*.tar.gz))
+		liste=($(ls -t $dossier_svg/etc/etc.*.tar.gz))
 		if [ ${#liste[*]} -gt 0 ]; then
-			# On récupère la première sauvegarde de la semaine
+			# On récupère la sauvegarde la plus récente de la semaine
 			cp -a ${liste[0]} $dossier_svg/svg_hebdo/semaine_${semaine}/etc/
 		fi
 
 		# On ne conserve pas dans le roulement les ACL... trop gros
+
+		echo $semaine > "$dossier_svg/svg_hebdo/num_semaine.txt"
 	fi
 fi
 
