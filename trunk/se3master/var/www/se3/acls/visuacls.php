@@ -126,7 +126,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
 		}
 	}
 	echo "<H1>".gettext("Attribution d'acls")."</H1><P>\n";
-	echo gettext(" Les acls sont maintenant :")." <p>";
+	echo 'Sur <b>'.$repertoire.'</b> '.gettext("les acls sont maintenant :")." <p>";
 	
 	}
 	
