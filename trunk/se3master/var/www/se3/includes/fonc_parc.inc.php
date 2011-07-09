@@ -862,6 +862,9 @@ function supprime_machine_parc($mpenc,$parc) {
 		exec ("/usr/share/se3/sbin/groupDelEntry.pl \"$cDn\" \"$pDn\"");
 	}
 	update_wpkg();
+
+	// Modif pour italc
+	exec ("/usr/bin/sudo /usr/share/se3/scripts/italc_generate.sh");
 }
 
 /**
@@ -1017,5 +1020,74 @@ function new_smbstatus() {
 }
 
 
+/*
+ * fonction destinee a suppreimer completement une machine
+ * @Parametres $computer : Nom de la machine
+ */
+//function suppression_computer($computer, $tab_options=array('all')) {
+function suppression_computer($computer) {
+	global $computersRdn, $parcsRdn, $printersRdn, $ldap_base_dn;
+
+	$retour="";
+
+	$resultat=search_imprimantes("printer-name=$computer","printers");
+	$suisje_printer="non";
+	for ($loopp=0; $loopp < count($resultat); $loopp++) {
+		if ($computer==$resultat[$loopp]['printer-name']) {
+			$suisje_printer="yes";
+			$retour="$computer est une imprimante. Suppression non effectuee.<br />\n";
+			break;
+		}
+	}
+
+	if($suisje_printer=="non") {
+		$tab_parcs=search_machines("(&(member=cn=$computer,$computersRdn,$ldap_base_dn)(objectClass=groupOfNames))","parcs");
+
+		for ($loop=0;$loop<count($tab_parcs);$loop++) {
+			$parc=$tab_parcs[$loop]['cn'];
+
+			supprime_machine_parc($computer,$parc);
+			// Si le parc est vide la fonction supprime_machine_parc() se charge de supprimer le parc
+			$retour.="Suppression de $computer du parc $parc<br />\n";
+
+			// Test la machine prof pour italc
+			$machine_prof=search_description_parc("$parc");
+			if($computer==$machine_prof) {
+				$retour.="<b>Attention :</b> vous ne disposez plus de machine professeur pour le parc $parc<br />\n";
+				modif_description_parc ($parc,"0");
+			}
+
+		}
+
+		$retour.="Suppression de $computer de la branche Computers.";
+		$retour.="<br />\n";
+		$cDn = "cn=".$computer.",".$computersRdn.",".$ldap_base_dn;
+		exec ("/usr/share/se3/sbin/entryDel.pl \"$cDn\"");
+		$cDn = "uid=".$computer."$,".$computersRdn.",".$ldap_base_dn;
+		exec ("/usr/share/se3/sbin/entryDel.pl \"$cDn\"");
+
+		$retour.="Suppression des rapports wpkg de $computer";
+		$retour.="<br />\n";
+		$rapport_computer="/var/se3/unattended/install/wpkg/rapports/".$computer.".txt";
+		$log_computer="/var/se3/unattended/install/wpkg/rapports/".$computer.".log";
+		if(file_exists($rapport_computer)) { @unlink($rapport_computer); }
+		if(file_exists($log_computer)) { @unlink($log_computer);}
+
+		// Entree DHCP:
+		$suppr_query = "DELETE FROM se3_dhcp where name='$computer';";
+		if(mysql_query($suppr_query)) {$retour.="Suppression de la reservation DHCP.<br />";} else {$retour.="<span style='color:red'>ERREUR</span> lors de la suppression de la reservation DHCP.<br />";}
+		// On relance dhcp si celui-ci est active... A TESTER QUELQUE PART
+		exec("sudo /usr/share/se3/scripts/makedhcpdconf",$ret);
+
+		// Nettoyage de l'inventaire
+		$retour.="Suppression de $computer de l'inventaire.";
+		$retour.="<br />\n";
+		suppr_inventaire($computer);
+		exec("/usr/bin/touch /tmp/csvtodo",$ret);
+		exec("sudo /usr/share/se3/sbin/update-csv.sh",$ret);
+	}
+
+	return $retour;
+}
 
 ?>
