@@ -7,7 +7,13 @@
 if [ -z "$2" -o "$1" = "-h" -o "$1" = "--help" ]; then
 	echo "USAGE: Script de changement d'uid."
 	echo "       Passer en parametres l'ancien uid et le nouveau."
-	echo "       Exemple: $0 ancien_uid nouvel_uid"
+	echo "       Exemple:"
+	echo "                $0 ancien_uid nouvel_uid"
+	echo ""
+	echo "       Pour modifier aussi l'uid dans le profil Thunderbird:"
+	echo "                $0 ancien_uid nouvel_uid y"
+	echo "       Attention: Si Thunderbird contient des comptes autres que celui du SE3,"
+	echo "                  il se peut qu'il ne faille pas modifier le profil Thunderbird."
 	exit
 fi
 
@@ -20,6 +26,7 @@ mkdir -p $tmp
 
 ancien_uid=$1
 nouvel_uid=$2
+modif_thund_prefjs=$3
 
 WWWPATH="/var/www"
 
@@ -103,6 +110,13 @@ fi
 # /home/$ancien_uid/Docs/desktop.ini
 # ?
 
+
+if [ "$modif_thund_prefjs" = "y" -a -e /home/$nouvel_uid/profil/appdata/Thunderbird/Profiles/default/prefs.js ]; then
+	cp /home/$nouvel_uid/profil/appdata/Thunderbird/Profiles/default/prefs.js /home/$nouvel_uid/profil/appdata/Thunderbird/Profiles/default/prefs.js.$ladate
+	echo "Correction du /home/$nouvel_uid/profil/appdata/Thunderbird/Profiles/default/prefs.js"
+	sed -i "s|/$ancien_uid@|/$nouvel_uid@|;s|\"$ancien_uid@|\"$nouvel_uid@|;s|\"$ancien_uid\");|\"$nouvel_uid\");|" /home/$nouvel_uid/profil/appdata/Thunderbird/Profiles/default/prefs.js
+fi
+
 # Modification des member
 echo "Correction des appartenances member"
 cpt=0
@@ -153,6 +167,8 @@ done
 
 echo "Termine."
 
-echo "Il se peut qu'il faille corriger les fichiers: /home/$nouvel_uid/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
+if [ "$modif_thund_prefjs" != "y" ]; then
+	echo "Il se peut qu'il faille corriger le fichier:
 /home/$nouvel_uid/profil/appdata/Thunderbird/Profiles/default/prefs.js
-s'ils existent."
+s'il existe."
+fi
