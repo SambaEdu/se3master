@@ -42,7 +42,7 @@ de wpkg
 
 cause : profiles.xml fait 240 Mo
 
-diagnostique : une station porte le même nom qu'un parc ! ( quel ... à 
+diagnostique : une station porte le même nom qu'un parc ! ( quel ... a 
 fait ça ? ;-)  )
 ( Bien vu Jean Le Bail et merci )
 
