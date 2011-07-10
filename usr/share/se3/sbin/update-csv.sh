@@ -95,7 +95,7 @@ if [ -e /tmp/emailunattended_generate ] ; then
   echo "Pour corriger : Sur l'interface web, Menu gestion des parcs, cliquer sur recherche puis supprimer les entrees obsoletes.
 
 Dans le cas ou vous ne corrigeriez pas, les reinstallations unattended risqueraient de se faire sous le mauvais nom." >> /tmp/emailunattended_generate
-  cat  /tmp/emailunattended_generate
+#  cat  /tmp/emailunattended_generate
 fi
 if [ -e $UNATTENDCSV ]; then
     unix2dos $UNATTENDCSV
