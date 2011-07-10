@@ -142,6 +142,11 @@ if [ -e /usr/share/se3/sbin/restore_droits.sh ]; then
 rm -f /usr/share/se3/sbin/restore_droits.sh 
 fi
 
+if [ -e /usr/share/se3/sbin/droit_backuppc.sh ]; then
+rm -f /usr/share/se3/sbin/droit_backuppc.sh
+fi
+
+
 #if [ -e  ]; then
 #rm -f 
 #fi
