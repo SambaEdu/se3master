@@ -1021,7 +1021,7 @@ function new_smbstatus() {
 
 
 /*
- * fonction destinee a suppreimer completement une machine
+ * fonction destinee a supprimer completement une machine
  * @Parametres $computer : Nom de la machine
  */
 //function suppression_computer($computer, $tab_options=array('all')) {
