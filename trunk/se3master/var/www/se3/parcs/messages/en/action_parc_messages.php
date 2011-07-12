@@ -41,6 +41,13 @@
 	$action_parc['arrayConnexionTitre'] = "CONNECTIONS";
 	$action_parc['arrayControleTitre'] = "CONTROL";
 
+        
+	//==============================
+	$action_parc['btnRebooterTitre'] = "Reboot all computers";
+	$action_parc['msgConfirmRebooter'] = "Are yous sure to reboot all computers of the parc $parc ?";
+	$action_parc['msgConfirmRebooterMachine'] = "Are yous sure to reboot this computer ?";
+	//==============================
+        
 	
 	$action_parc['msgAttendre'] = "Wait please";
 
