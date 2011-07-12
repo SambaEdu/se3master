@@ -163,7 +163,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 
 	//==============================
 	// Reboot de toutes les machines
-	case "stop":
+	case "reboot":
 		if (($parc)  and ($parc<>"SELECTIONNER")) {
 			if ($acces_restreint)  {  if ((!this_parc_delegate($login,$parc,"manage")) and (!this_parc_delegate($login,$parc,"view"))) { continue; } }
 			echo "<HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"15; URL=action_parc.php?parc=$parc&action=detail\">";
