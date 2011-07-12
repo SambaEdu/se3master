@@ -12,7 +12,7 @@
    * @Licence Distribue selon les termes de la licence GPL
 
    * @note
-   * Ajaxification des pings - script parc_ajax_lib.php sur une proposition de Stéphane Boireau
+   * Ajaxification des pings - script parc_ajax_lib.php sur une proposition de Stephane Boireau
    * Gestion des infobulles nouvelle mouture Tip et UnTip
    * Modification des fonctions ts et vnc qui se trouvent desormais dans /var/www/se3/includes/fonc_parc.inc.php
    * Externalisation des messages dans messages/fr/action_parc_messages.php dans un hash global
@@ -38,14 +38,13 @@
 	$action_parc['btnProgrammerTitre'] = "Programmer";
 	$action_parc['btnRafraichirTitre'] = "Rafraichir la page";
         $action_parc['btnListerTitre'] = "Lister le parc";
-
-
+        
 	//==============================
 	$action_parc['btnRebooterTitre'] = "Rebooter tous les postes";
 	$action_parc['msgConfirmRebooter'] = "Etes-vous sur de vouloir rebooter le parc $parc ?";
 	$action_parc['msgConfirmRebooterMachine'] = "Etes-vous sur de vouloir rebooter la machine ";
 	//==============================
-
+        
 	$action_parc['arrayStationTitre'] = "STATIONS CONCERNEES";
 	$action_parc['arrayEtatTitre'] = "ETAT";
 	$action_parc['arrayConnexionTitre'] = "CONNEXION";
