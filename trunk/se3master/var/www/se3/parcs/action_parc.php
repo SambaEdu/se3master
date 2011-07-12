@@ -148,7 +148,7 @@ if ((is_admin("computers_is_admin", $login) == "Y") or (is_admin("parc_can_view"
                 echo "<td><form action=\"wolstop_station.php\" method=\"post\">\n";
                 echo "<input type=\"hidden\" name=\"action_poste\" value=\"reboot\" />";
                 echo "<input type=\"hidden\" name=\"parc\" value=\"$parc\" />";
-                echo "<input type=\"hidden\" name=\"action\" value=\"start\" />";
+                echo "<input type=\"hidden\" name=\"action\" value=\"reboot\" />";
                 echo "<input  type=\"submit\" value=\"" . gettext($action_parc['btnRebooterTitre']) . "\"  onclick=\"if (window.confirm('" . $action_parc['msgConfirmRebooter'] . "')) {return true;} else {return false;}\" />";
                 echo "</form></td>";
                 //===================================
