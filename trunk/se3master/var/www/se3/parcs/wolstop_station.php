@@ -61,12 +61,10 @@ if (d) {d.style.display='block';}
 
 function okshutdown()
 {
-	//resultat=confirm('Confirmez l'arret des postes');
 	resultat=confirm('Confirmez l\'arret des postes');
 	if(resultat !="1")
 	window.history.back()
 }
-
 //==================================
 /**
 
@@ -94,11 +92,11 @@ function okreboot()
 
 function okwol()
 {
-	//resultat=confirm('Confirmez l'allumage des postes');
 	resultat=confirm('Confirmez l\'allumage des postes');
 	if(resultat !="1")
 	window.history.back()
 }
+
 </script>
 
 
@@ -142,7 +140,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 
 	//$force=$_POST['force'];
 
-	//echo $action;
+	//echo "action : $action";
 	switch ($action) {
 	
 	// Arret de toutes les machines
@@ -150,44 +148,42 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 		if (($parc)  and ($parc<>"SELECTIONNER")) {
 			if ($acces_restreint)  {  if ((!this_parc_delegate($login,$parc,"manage")) and (!this_parc_delegate($login,$parc,"view"))) { continue; } }
 			echo "<HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"15; URL=action_parc.php?parc=$parc&action=detail\">";
-			echo "</HEAD>".gettext("Modification effectu&#233;e pour le groupe")." : $parc<br>";
-        		echo gettext(" Commandes prises en compte ! ");
-        		echo "<h3>".gettext("Arr&#234;t lanc&#233; pour le parc")." $parc</h3>\n";
+			echo "</HEAD>".gettext("Commandes prises en compte pour le parc")." <b>$parc</b><br>";
+//        		echo gettext("! <br>");
+        		//echo gettext(" Commandes prises en compte ! ");
+        		echo "<h3>".gettext("Arr&#234;t lanc&#233; pour le parc")." <b>$parc</b></h3>\n";
 			echo"<br>";
-			echo gettext("(Ne concerne que les machines XP/2000)");
+//			echo gettext("(Ne concerne que les machines XP/2000)");
 			$commandes=start_parc("shutdown", $parc);
 
  		} else { echo gettext("Vous devez choisir un parc"); }
 	break;
-
-
-	//==============================
+        //==============================
 	// Reboot de toutes les machines
 	case "reboot":
 		if (($parc)  and ($parc<>"SELECTIONNER")) {
 			if ($acces_restreint)  {  if ((!this_parc_delegate($login,$parc,"manage")) and (!this_parc_delegate($login,$parc,"view"))) { continue; } }
 			echo "<HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"15; URL=action_parc.php?parc=$parc&action=detail\">";
-			echo "</HEAD>".gettext("Modification effectu&#233;e pour le groupe")." : $parc<br>";
-        		echo gettext(" Commandes prises en compte ! ");
-        		echo "<h3>".gettext("Reboot lanc&#233; pour le parc")." $parc</h3>\n";
+			echo "</HEAD>".gettext("Commandes prises en compte pour le parc")." <b>$parc</b><br>";
+//        		echo gettext(" Commandes prises en compte ! <br>");
+        		echo "<h3>".gettext("Reboot lanc&#233; pour le parc")." <b>$parc</b></h3>\n";
 			echo "<br>";
-			echo gettext("(Ne concerne que les machines XP/2000)");
+//			echo gettext("(Ne concerne que les machines XP/2000)");
 			$commandes=start_parc("reboot", $parc);
 
  		} else { echo gettext("Vous devez choisir un parc"); }
 	break;
 	//==============================
 
-
 	// Essaye de demarrer les machines
 	case "start":
 		if (($parc)  and ($parc<>"SELECTIONNER")) {
 			if ($acces_restreint)  {  if ((!this_parc_delegate($login,$parc,"manage")) and (!this_parc_delegate($login,$parc,"view"))) { continue; } }
   			echo "<HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"15; URL=action_parc.php?parc=$parc&action=detail\">";
-			echo "</HEAD>".gettext("Modification effectu&#233;e pour le groupe")." : $parc<br>";
-			echo "Commandes prises en compte ! ";
+			echo "</HEAD>".gettext("Commandes prises en compte pour le parc")." <b>$parc</b><br>";
+//			echo "Commandes prises en compte ! ";
 			echo "<br>";
-			echo gettext("Demarrage effectu&#233; pour le parc")." $parc. ".gettext("(Ne concerne que les machines equip&#233;es du syst&#232;me 'wake on lan')");
+			echo "<h3>".gettext("Demarrage effectu&#233; pour le parc")." <b>$parc</b>. ".gettext("(Ne concerne que les machines equip&#233;es du syst&#232;me 'wake on lan')</h3>\n<br>");
 
 	 		$commandes=start_parc("wol", $parc);
 		} else { echo gettext("Vous devez choisir un parc"); }
