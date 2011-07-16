@@ -1090,4 +1090,29 @@ function suppression_computer($computer) {
 	return $retour;
 }
 
+
+/*
+ * fonction destinee a determiner si on a une machine ou une imprimante 
+ * @Parametres $device : Nom de l'unite a verifier
+ */
+//function is_printer($device) {
+function is_printer($device) {
+//    require_once "config.inc.php";
+//    require_once ("ihm.inc.php");
+//	require_once("ldap.inc.php");
+	require_once("printers.inc.php");
+	$resultat=search_imprimantes("printer-name=$device", "printers");
+        $suisje_printer = "0";
+        for ($loopp = 0; $loopp < count($resultat); $loopp++) {
+            if ($device == $resultat[$loopp]['printer-name']) {
+                $suisje_printer = "1";
+                return true;
+                break;
+            }
+        }
+
+
+        
+}
+
 ?>
