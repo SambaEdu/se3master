@@ -1110,9 +1110,6 @@ function is_printer($device) {
                 break;
             }
         }
-
-
-        
 }
 
 ?>
