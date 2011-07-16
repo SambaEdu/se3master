@@ -164,37 +164,100 @@ function start_poste($action, $name)
     require_once ("ldap.inc.php");
     $ip=avoir_ip($name);
     $mac=avoir_mac($name);
+    if (! is_printer($name)) {
+        switch ($action) {
+        case "wol":
+             if(fping($ip)) { 
+                 echo "Mise en marche de la machine  <b>$name</b> : ";
+                 echo "$name est d&#233;j&#224; en fonctionnement <br>";
+                 //echo "<br>";
+             }
+            elseif ($dhcp == 1 ) {
+                require_once ("dhcp/dhcpd.inc.php");
+                $reseau=get_vlan($ip);
+                echo "Mise en marche de la machine  <b>$name</b> : ";
+                system ( "/usr/bin/wakeonlan -i ".long2ip($reseau['broadcast'])." ".$mac );
+                echo "<br>";
+            }
+            else {
+                $reseau=ifconfig();
+                echo "Mise en marche de la machine <b>$name</b> : ";
+                system ( "/usr/bin/wakeonlan -i ".$reseau['broadcast']." ".$mac );
+                echo "<br>";
+            }
+            break;
 
-    if ("$action" == "wol") {
-        if ($dhcp == 1 ) {
-            require_once ("dhcp/dhcpd.inc.php");
-            $reseau=get_vlan($ip);
-            system ( "/usr/bin/wakeonlan -i ".long2ip($reseau['broadcast'])." ".$mac );
-        }
-        else {
-            $reseau=ifconfig();
-            system ( "/usr/bin/wakeonlan -i ".$reseau['broadcast']." ".$mac );
-        }
+        case "reboot":
+            if(fping($ip)) { 
+                // J ai SVN qui veut pas envoyer ma modification cosmetique...
+                echo "On reboote avec l'action <b>".$action."</b> le poste <b>".$name."</b> :<br>\n";
+                if (search_samba($name)) {
+                    // machine windows
+                    $ret.=system ("/usr/bin/net rpc shutdown -t 2 -f -r -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"");
+                    echo "<br><br>";
+                }
+                else {
+                    // poste linux : ne marchera pas, mais on verra plus tard...
+                    $ret.=system ( "/usr/bin/ssh -o StrictHostKeyChecking=no ".$name." reboot");
+                    echo "<br><br>";
+                }
+            }
+            else
+            {
+                echo "On reboote avec l'action <b>".$action."</b> le poste <b>".$name."</b> :<br>\n";
+                echo "<b>Attention, reboot impossible</b>, la machine est injoignable ! <br><br>";
+            }
+        return $ret;
+        break;
 
-//        echo "/usr/bin/wakeonlan -i ".long2ip($reseau['broadcast'])." ".$mac."<br>";
-//	system ( "/usr/bin/wakeonlan -i ".long2ip($reseau['broadcast'])." ".$mac );
-    }
-    else {
-		// J ai SVN qui veut pas envoyer ma modification cosmetique...
-        echo "On eteint avec l action <b>".$action."</b> le poste <b>".$name."</b>.<br>\n";
-        if (search_samba($name)) {
-            // machine windows
-            if ("$action" == "shutdown") {$switch="";} else {$switch="-r";}        
-//            $ret.="/usr/bin/net rpc shutdown -t 2 -f ".$switch." -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"<br>";
-	    $ret.=system ("/usr/bin/net rpc shutdown -t 2 -f ".$switch." -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\""); 
+        case "shutdown":
+        if(fping($ip)) {     
+            echo "On &#233;teint avec l'action <b>".$action."</b> le poste <b>".$name."</b> : <br>\n";
+            if (search_samba($name)) {
+                // machine windows
+                 $ret.=system ("/usr/bin/net rpc shutdown -t 2 -f -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"");
+                 echo "<br><br>";
+                //$ret.="/usr/bin/net rpc shutdown -t 2 -f -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"<br>";
+                  }
+                else {
+                    // poste linux : ne marchera pas, mais on verra plus tard...
+                    system ( "/usr/bin/ssh -o StrictHostKeyChecking=no ".$name." halt");
+                    echo "<br><br>";
+                }
         }
-        else {
-            // poste linux : ne marchera pas, mais on verra plus tard...
-            system ( "/usr/bin/ssh -o StrictHostKeyChecking=no ".$name." halt");
+        else
+        {
+           echo "On &#233;teint avec l'action <b>".$action."</b> le poste <b>".$name."</b> : <br>\n";
+           echo "<b>Attention, arr&#234;t impossible</b>, la machine est injoignable ! <br><br>"; 
+        }
+        return $ret;
+        break;
         }
     }
-    return $ret;
+  
+//    if ("$action" == "wol") {
+//        
+//
+////        echo "/usr/bin/wakeonlan -i ".long2ip($reseau['broadcast'])." ".$mac."<br>";
+////	system ( "/usr/bin/wakeonlan -i ".long2ip($reseau['broadcast'])." ".$mac );
+//    }
+//    else {
+//	// J ai SVN qui veut pas envoyer ma modification cosmetique...
+//        echo "On eteint avec l action <b>".$action."</b> le poste <b>".$name."</b>.<br>\n";
+//        if (search_samba($name)) {
+//            // machine windows
+//            if ("$action" == "shutdown") {$switch="";} else {$switch="-r";}        
+////            $ret.="/usr/bin/net rpc shutdown -t 2 -f ".$switch." -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"<br>";
+//	    $ret.=system ("/usr/bin/net rpc shutdown -t 2 -f ".$switch." -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\""); 
+//        }
+//        else {
+//            // poste linux : ne marchera pas, mais on verra plus tard...
+//            system ( "/usr/bin/ssh -o StrictHostKeyChecking=no ".$name." halt");
+//        }
+//    }
+//    return $ret;
 }
+
 
 /**
 * Demarre, eteint ou reboote un parc
