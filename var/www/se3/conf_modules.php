@@ -727,7 +727,7 @@ echo "</td></tr>\n";
 
 // Module clonage
 $clonage_actif = exec("dpkg -s se3-clonage | grep \"Status: install ok\"> /dev/null && echo 1");
-echo "<TR><TD>".gettext("Clonage de stations (se3-clonage)")."</TD>";
+echo "<TR><TD>".gettext("Clonage / sauvegarde - restauration de stations (se3-clonage)")."</TD>";
 
 // On teste si on a bien la derniere version
 $clonage_version_install = exec("apt-cache policy se3-clonage | grep \"Install\" | cut -d\":\" -f2");
