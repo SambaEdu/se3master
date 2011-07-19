@@ -466,13 +466,13 @@ echo "</TD></TR>";
 // test si rsync est actif
 $rsync_actif = exec("netstat -na | grep 0.0.0.0:873  > /dev/null && echo ok");
 			
-echo "<TR><TD>".gettext("Sauvegarde depuis un autre serveur")."</TD><TD align=\"center\">";
+echo "<TR><TD>".gettext("Sauvegarde rsyncd locale ou distante")."</TD><TD align=\"center\">";
 if ($rsync_actif!="ok") {
-	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Cliquer ici afin de pouvoir activer la possibilit&#233; de sauvegarder depuis un autre serveur (Se3 ou Lcs) disposant de backuppc.')")."\">";
+	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Cliquer ici afin de pouvoir activer la possibilit&#233; de sauvegarder en mode rsyncd, soit en local sur le se3 ou depuis un autre serveur (Se3 ou Lcs) disposant de backuppc.')")."\">";
 	echo "<a href=conf_rsync.php><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
 	echo "</u>";
 } else {
-	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer ici afin de pouvoir d&#233;sactiver la possibilt&#233; de sauvegarder ce serveur depuis un autre serveur disposant de backuppc, un se3 ou bien un serveur LCS.<br> Si vous n\'utiliser pas cette fonctionnalit&#233;, il est souhaitable de ne pas l\'activer.')")."\">";
+	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer ici afin de pouvoir d&#233;sactiver la possibilt&#233; de sauvegarder ce serveur soit en local sur le se3 ou depuis un autre serveur disposant de backuppc, un se3 ou bien un serveur LCS.<br> Si vous n\'utiliser pas cette fonctionnalit&#233;, il est souhaitable de ne pas l\'activer.')")."\">";
 	echo "<a href=conf_rsync.php><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
 	echo "</u>";
 }
