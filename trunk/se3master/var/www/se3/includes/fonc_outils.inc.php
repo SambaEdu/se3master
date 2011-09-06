@@ -162,6 +162,7 @@ function start_poste($action, $name)
     include ("config.inc.php");
     require_once ("ihm.inc.php");
     require_once ("ldap.inc.php");
+    require_once ("fonc_parc.inc.php");
     $ip=avoir_ip($name);
     $mac=avoir_mac($name);
     if (! is_printer($name)) {
@@ -257,7 +258,6 @@ function start_poste($action, $name)
 //    }
 //    return $ret;
 }
-
 
 /**
 * Demarre, eteint ou reboote un parc
