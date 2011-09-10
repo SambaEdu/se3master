@@ -24,7 +24,7 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-core', "/var/www/se3/locale");
 textdomain('se3-core');
 
-// Pour activer/d�sactiver la modification du givenName (Prenom) lors de la modification dans annu/mod_user_entry.php
+// Pour activer/desactiver la modification du givenName (Prenom) lors de la modification dans annu/mod_user_entry.php
 $corriger_givenname_si_diff = "n";
 
 function cmp_fullname($a, $b) {

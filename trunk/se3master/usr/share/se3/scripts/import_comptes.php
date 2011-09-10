@@ -2292,6 +2292,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 	my_echo("<p>Retour au <a href='#menu'>menu</a>.</p>\n");
 
 
+	$infos_corrections_gecos="";
 
 	my_echo("<a name='profs_se3'></a>\n");
 	my_echo("<a name='creer_profs'></a>\n");
@@ -5130,6 +5131,8 @@ fclose($f_tmp);
 		for($i=1;$i<count($tab_comptes_avec_employeeNumber_mis_a_jour);$i++) {$chaine.=", $tab_comptes_avec_employeeNumber_mis_a_jour[$i]";}
 		$chaine.="</p>\n";
 	}
+
+	my_echo($infos_corrections_gecos);
 
 	if($nb_echecs==0) {
 		//my_echo("<p>Aucune opération tentée n'a échoué.</p>\n");

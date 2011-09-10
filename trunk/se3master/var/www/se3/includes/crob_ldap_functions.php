@@ -1697,6 +1697,7 @@ function verif_et_corrige_gecos($uid,$nom,$prenom,$naissance,$sexe){
 	// Verification/correction du GECOS
 
     global $simulation;
+    global $infos_corrections_gecos;
 
 	// Correction du nom/prenom fournis
 	$nom=remplace_accents(traite_espaces($nom));
@@ -1720,6 +1721,10 @@ function verif_et_corrige_gecos($uid,$nom,$prenom,$naissance,$sexe){
 			$attributs["givenName"]=strtolower($prenom).strtoupper(substr($nom,0,1));
 			$attributs["sn"]="$nom";
 			my_echo("Correction de l'attribut 'gecos': ");
+
+			//if($infos_corrections_gecos!="") {$infos_corrections_gecos.="<br />";}
+			$infos_corrections_gecos.="Correction du nom, prénom, date de naissance ou sexe de <b>$uid</b><br />\n";
+
 			if($simulation!='y') {
                 if(modify_attribut ("uid=$uid", "people", $attributs, "replace")){
 				    my_echo("<font color='green'>SUCCES</font>");
