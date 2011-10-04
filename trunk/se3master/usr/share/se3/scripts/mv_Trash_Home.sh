@@ -36,6 +36,7 @@ do
         fi
         echo "$uid"|tee -a $fich
         mv /home/$uid ${dest}/
+	chown -R admin:admins ${dest}/$uid
         cpt=$(($cpt+1))
     else
         echo "/home/$uid n'existe pas"| tee -a $fich
