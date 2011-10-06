@@ -329,6 +329,7 @@ echo "UPDATE params SET value='http://"$NEW_IP":909' WHERE name='urlse3';" > /tm
 # Et dans le cas de M.Curie Bernay, cela risque même d'être l'IP du SLIS...
 echo "UPDATE params SET value='$NEW_IP' WHERE name='ldap_server';" >> /tmp/maj_chgt_ip_se3.sql
 echo "UPDATE params SET value='$NEW_IP' WHERE name='se3ip';" >> /tmp/maj_chgt_ip_se3.sql
+
 # Sauf que... est-ce que le LDAP n'est pas déporté?
 
 
@@ -336,12 +337,11 @@ echo "UPDATE params SET value='$NEW_IP' WHERE name='se3ip';" >> /tmp/maj_chgt_ip
 if [ -n "$dhcp_wins" ]; then
 	echo "UPDATE params SET value='$NEW_IP' WHERE name='dhcp_wins';" >> /tmp/maj_chgt_ip_se3.sql
 	echo "UPDATE params SET value='$NEW_IP' WHERE name='dhcp_tftp_server';" >> /tmp/maj_chgt_ip_se3.sql
-	mysql -u$dbuser -p$dbpass $dbname < /tmp/maj_chgt_ip_se3.sql
 	
-else
-	mysql -u$dbuser -p$dbpass $dbname < /tmp/maj_chgt_ip_se3.sql
 fi
 
+echo "UPDATE params SET value='$NEW_IP' WHERE name='semask';" >> /tmp/maj_chgt_ip_se3.sql
+mysql -u$dbuser -p$dbpass $dbname < /tmp/maj_chgt_ip_se3.sql
 
 #
 # Redémarrage de l'interface réseau
