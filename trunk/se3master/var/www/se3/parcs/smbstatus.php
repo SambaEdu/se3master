@@ -31,7 +31,7 @@ require ("ihm.inc.php");
 
 // Internationnalisation
 require_once ("lang.inc.php");
-require_once ("fonc_parc.php");
+require_once ("fonc_parc.inc.php");
 bindtextdomain('se3-parcs',"/var/www/se3/locale");
 textdomain ('se3-parcs');
 
@@ -42,7 +42,7 @@ $_SESSION["pageaide"]="Informations_syst%C3%A8me#Connexions_actives";
 if (is_admin("system_is_admin",$login)!="Y")
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 
-new_smbstatus();
+$smb_login = smbstatus();
 	
 echo "<H1>".gettext("Connexions aux ressources samba")."</H1>\n";
 echo "<H3>".gettext("Il y a "). count($out). gettext(" connexions en cours")."</H3>";

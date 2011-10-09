@@ -1001,24 +1001,29 @@ function suppr_inventaire($name)
 
 /*
  * fonction generant un tableau global a partir de smbstatus
- * @Parametres $name : Nom de la machine
+ * on cache le resultat 2 minutes afin de reduire la charge
+ * @Parametres : aucun
  * @ smb_status["machine"]["login"]
  *                        ["ip"]
  */
 
-function new_smbstatus() {
-    global $smb_login;
-    unset($smb_login);
-    exec("smbstatus -b 2>/dev/null", $resultat);
-    foreach ($resultat as $ligne) {
-        $table = preg_split("/[\s]+/", $ligne);
-        if ((count($table) == 5)&&($table[1]!=root)&&($table[1]!=nobody)) {
-            $smb_login[$table[3]]["login"] = $table[1];
-            $smb_login[$table[3]]["ip"] = preg_replace("/[\(\)]/", "", $table[4]);
-        }
-    }
+function smbstatus() {
+	static $smb_login;
+	static $timestamp = 0;
+	if ((time() > ($timestamp + 120)) || !(isset($smb_login))) {
+		$timestamp = time();
+		unset($smb_login);
+		exec("smbstatus -b 2>/dev/null", $resultat);
+		foreach ($resultat as $ligne) {
+			$table = preg_split("/[\s]+/", $ligne);
+			if ((count($table) == 5) && ($table[1] != root) && ($table[1] != nobody)) {
+				$smb_login[$table[3]]["login"] = $table[1];
+				$smb_login[$table[3]]["ip"] = preg_replace("/[\(\)]/", "", $table[4]);
+			}
+		}
+	}
+	return($smb_login);
 }
-
 
 /*
  * fonction destinee a supprimer completement une machine
@@ -1111,5 +1116,74 @@ function is_printer($device) {
             }
         }
 }
+
+/*
+ * fonction destinee a connaitre l'etat de la session samba d'une machine
+ * @Parametres $device : Nom de la machine
+ */
+
+function get_smbsess($mp_en_cours) {
+    global $action_parc;
+    $smb_login = smbstatus();
+    $login = $smb_login[$mp_en_cours]['login'];
+    if (!($login)) {
+        $etat_session = "<img type=\"image\" src=\"../elements/images/disabled.png\">\n";
+    } else {
+        $texte = $login . $action_parc['msgUserLogged'];
+        $etat_session.="<img onmouseout=\"UnTip();\" onmouseover=\"Tip('" . $texte . "',WIDTH,250,SHADOW,true,DURATION,5000);\" src=\"../elements/images/enabled.png\" border=\"0\" />";
+    }
+    return array(login => $login, html => $etat_session);
+}
+
+/*
+ * fonction destinee rebooter une machine
+ * @Parametres $ip : adresse ip
+ *	       $nom : nom machnie
+ *             $wake : action
+ *             $shutdownreboot
+ */
+
+function wake_shutdown_or_reboot($ip, $nom, $wake, $shutdown_reboot) {
+
+	global $restriction_parcs, $tab_delegated_parcs;
+	if($restriction_parcs=='y') {
+		$temoin_erreur="y";
+		for($loop=0;$loop<count($tab_delegated_parcs);$loop++) {
+			// La machine est-elle dans un des parcs d�l�gu�s?
+			if(is_machine_in_parc($nom,$tab_delegated_parcs[$loop])) {
+				$temoin_erreur='n';
+				break;
+			}
+		}
+		if($temoin_erreur=="y") {
+			echo "<p style='color:red'>La machine $nom n'est pas dans un de vos parcs delegues.</p>\n";
+			die();
+		}
+	}
+
+    if (fping($ip)) {
+	$smb_login = smbstatus();
+        if ($shutdown_reboot == "wait1") {
+            echo $action_parc['msgNoSignal'];
+        } elseif ($shutdown_reboot == "wait2") {
+            $login = $smb_login[$nom]['login'];
+            if (!($login)) {
+                @start_poste("shutdown", $nom);
+                echo $action_parc['cmdSendReboot'];
+            } else {
+                echo $login . $action_parc['msgUserIsLogged'];
+            }
+        } elseif ($shutdown_reboot == "reboot") {
+            @start_poste("reboot", $nom);
+            echo $action_parc['msgSendReboot'];
+        }
+    } else {
+        if ("$wake" == "y") {
+            @start_poste("wol", $nom);
+            echo $action_parc['msgSendWakeup'];
+        }
+    }
+}
+
 
 ?>
