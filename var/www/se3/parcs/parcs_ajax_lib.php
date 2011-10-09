@@ -38,47 +38,6 @@ require_once("messages/$lang/" . $prefix . "_messages.php");
 //echo "<script type='text/javascript' src='position.js'></script>\n";
 
 
-function get_smbsess($mp_en_cours) {
-    global $action_parc, $smb_login;
-    $login = $smb_login[$mp_en_cours]['login'];
-    if (!($login)) {
-        $etat_session = "<img type=\"image\" src=\"../elements/images/disabled.png\">\n";
-    } else {
-        $texte = $login . $action_parc['msgUserLogged'];
-        $etat_session.="<img onmouseout=\"UnTip();\" onmouseover=\"Tip('" . $texte . "',WIDTH,250,SHADOW,true,DURATION,5000);\" src=\"../elements/images/enabled.png\" border=\"0\" />";
-    }
-    return array(login => $login, html => $etat_session);
-}
-
-//====================================================
-//ip=$ip_machine&nom=$nom_machine&mode=wake_shutdown_or_reboot&wake=$wake&shutdown_reboot=$shutdown_reboot
-function wake_shutdown_or_reboot($ip, $nom, $wake, $shutdown_reboot) {
-    global $smb_login;
-
-    if (fping($ip)) {
-        if ($shutdown_reboot == "wait1") {
-            echo $action_parc['msgNoSignal'];
-        } elseif ($shutdown_reboot == "wait2") {
-            $login = $smb_login[$nom]['login'];
-            if (!($login)) {
-                @start_poste("shutdown", $nom);
-                echo $action_parc['cmdSendReboot'];
-            } else {
-                echo $login . $action_parc['msgUserIsLogged'];
-            }
-        } elseif ($shutdown_reboot == "reboot") {
-            @start_poste("reboot", $nom);
-            echo $action_parc['msgSendReboot'];
-        }
-    } else {
-        if ("$wake" == "y") {
-            @start_poste("wol", $nom);
-            echo $action_parc['msgSendWakeup'];
-        }
-    }
-}
-
-//====================================================
 
 if ($_POST['mode'] == 'ping_ip') {
     $resultat = fping($_POST['ip']);

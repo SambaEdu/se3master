@@ -128,7 +128,7 @@ if ((is_admin("computers_is_admin", $login) == "Y") or (is_admin("parc_can_view"
 
 
             if (($parc != "") && ($parc != "SELECTIONNER")) {
-                new_smbstatus();
+//                smbstatus();
                 echo "<CENTER><table align=center><tr>\n";
                 echo "<td><form action=\"wolstop_station.php\" method=\"post\">\n";
                 echo "<input type=\"hidden\" name=\"wolstop_station.php\" value=\"shutdown\" />";
