@@ -104,8 +104,8 @@ function cleanPath ( $path ) {
 	// Enleve les espaces
 	$path = str_replace(" ", "", $path);
 	// Enleve / en debut et en fin du chemin
-	while (preg_match("/^//",$path) ) $path = preg_replace ("/^//", "", $path);
-        while (preg("//$/",$path) ) $path = preg_replace ("//$/", "", $path);
+	while (preg_match("/^\//",$path) ) $path = preg_replace ("/^\//", "", $path);
+        while (preg_match("/\/$/",$path) ) $path = preg_replace ("/\/$/", "", $path);
 	return $path;
 }
 
