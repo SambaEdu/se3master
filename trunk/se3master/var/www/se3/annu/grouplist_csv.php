@@ -137,7 +137,7 @@ if ($login == "") {
 
 							// traitement du gecos pour identification du sexe
 							$gecos = $info[0]["gecos"][0];
-							$tmp = preg_split ("/[\,\]/",$gecos,4);
+							$tmp = preg_split ("/[\,]/",$gecos,4);
 							#echo "debug ".$info["count"]." init ".$init." loop ".$loop."<BR>";
 							$ret[$loop1] = array (
 								"uid"           => $uids[$loop]["uid"],
