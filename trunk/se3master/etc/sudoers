@@ -28,7 +28,7 @@ Cmnd_Alias QUOTAS =/usr/share/se3/scripts/quota.sh, /usr/share/se3/scripts/quota
 Cmnd_Alias BACKUP = /usr/share/se3/scripts/startbackup, /usr/share/se3/scripts/move_rep_backuppc.sh, /usr/share/se3/scripts/permbackuppc.sh, /usr/share/se3/sbin/testbackup.sh, /usr/share/se3/sbin/diskdetect.sh, /usr/share/se3/sbin/restorebackup.sh, /usr/share/se3/sbin/umountusbdisk.sh, /usr/share/se3/scripts/mk_rsyncconf.sh, /usr/share/se3/scripts/dfbck.sh, /usr/share/se3/sbin/chgbpcuser.sh,/usr/share/se3/scripts/udev_disk_rule.sh,/usr/share/se3/scripts/format_disk.sh
 Cmnd_Alias BACKUP1 = /usr/share/se3/scripts/tarCreate, /usr/share/se3/scripts/tarRestore
 Cmnd_Alias SE3APPLI = /usr/share/se3/scripts/unattended_generate.sh, /usr/share/se3/scripts/italc_generate.sh
-Cmnd_Alias FONDS_ECRAN =/usr/share/se3/scripts/install_imagemagick_et_gsfonts.sh, /usr/share/se3/scripts/genere_fond.sh, /usr/share/se3/scripts/fond_bmp2png.sh, /usr/share/se3/scripts/fonds_modif_smb.sh
+Cmnd_Alias FONDS_ECRAN =/usr/share/se3/scripts/install_imagemagick_et_gsfonts.sh, /usr/share/se3/scripts/genere_fond.sh, /usr/share/se3/scripts/fond_bmp2png.sh, /usr/share/se3/scripts/fonds_modif_smb.sh, /usr/share/se3/sbin/mkwall.sh
 Cmnd_Alias IMPORT_COMPTES = /usr/share/se3/scripts/sauvegarde_ldap_avant_import.sh, /usr/share/se3/scripts/run_import_comptes.sh, /usr/share/se3/scripts/deleteClasses.sh
 Cmnd_Alias UNISON=/usr/share/se3/scripts/unison_links.sh, /usr/share/se3/scripts/unison_keys.sh
 
