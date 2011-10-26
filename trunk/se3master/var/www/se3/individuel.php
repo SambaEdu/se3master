@@ -97,7 +97,7 @@ if ($login == "admin") {
       		if ( $softquota != 0 ) {
         		if ($utilise > $softquota) {
           			echo gettext("au lieu des")." $softquota ".gettext("Mo disponibles");
-          			if ($partit == "/home" ) {$lettre="K:";} else {$lettre="H: et I:";}
+          			if ($partit == "/home" ) {$lettre="K: (Mes documents, Bureau, etc....)";} else {$lettre="H: (Classes), I: (Docs) et L: (Progs)";}
           			echo ".</h2>";
           			if ($partit == "/home" ) {
             				echo "<h3>";
@@ -110,7 +110,7 @@ if ($login == "admin") {
             			//sauvegarde de la ligne precedente
             			//echo "<a href=infos/stats_user.php?partition=$partit&user=\"$login\"> <img src=\"elements/images/notes.png\" title=\"Cela correspond &#224; votre Mes Documents et au lecteur $lettre visible dans le poste de travail\" align=\"middle\" border=\"0\">&nbsp; D&#233;tail... </a></h3>";}
             
-          			echo "<h2>".gettext("Votre quota d'espace disque sur")." $partit ".gettext("est plein.");
+          			echo "<h2><font color=red>".gettext("Votre quota d'espace disque sur")." $partit ".gettext("est plein.");
           			if ($grace == 0) {
             				echo "<img src=\"elements/images/critical.png\" title=\"".gettext("P&#233riode de grace &#233coul&#233e. Supprimez d'urgence les fichiers inutiles.")."\" align=\"middle\" border=\"0\">&nbsp;</h2>";
             				echo "<h2>".gettext("Dor&#233;navant, vous ne pouvez plus rien &#233;crire sur ce disque.")." </h2> <h2>".gettext("ATTENTION : Tant que vous ne lib&#232;rerez pas d'espace sur")." $lettre, ".gettext("AUCUN logiciel ne fonctionnera plus correctement");
@@ -118,6 +118,7 @@ if ($login == "admin") {
             				echo "<img src=\"elements/images/warning.png\" title=\"".gettext("P&#233;riode de grace en cours. Supprimez rapidement les fichiers inutiles.")."\" align=\"middle\" border=\"0\">&nbsp;</h2>";
             				echo "<h2>".gettext("Dans")." $grace ".gettext("jour(s), vous ne pourrez plus rien &#233;crire sur ce disque.")."</h2> <h2>".gettext("ATTENTION : Si vous ne lib&#233;rez pas d'espace sur")." $lettre, ".gettext("pass&#233; ce d&#233;lai AUCUN logiciel ne fonctionnera plus correctement");
             			}
+				echo "</font>";
           		} else {
           			echo gettext("sur les")." $softquota ".gettext("Mo disponibles");
 			        echo ".&nbsp;<img src=\"elements/images/recovery.png\" title=\"".gettext("Vous ne d&#233passez pas l'espace disponible.")."\" align=\"middle\" border=\"0\">";
