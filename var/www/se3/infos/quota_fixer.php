@@ -71,6 +71,8 @@ if (isset($browser)) {
 	//rajoute indirectement l'avertissement sur /home mais supprime dans la suite de la page si non choisi
         $browser = preg_replace('/\\\++/','/', $browser); //gestion de \ qui passe mal (suppression des \\ en les rempla&#231;ant par un /)
         exec("sudo /usr/share/se3/scripts/warn_quota.sh $browser");
+        $query="UPDATE params SET value=\"$browser\" WHERE name=\"quota_browser\";";
+	mysql_query($query);
 }
 
 if (isset($quota) or isset($suppr)) {
@@ -298,15 +300,55 @@ foreach ($arr as $partit) {
 
 	foreach ($line as $col_value) {
 		if ( "$col_value" == "1" ) { 
-			echo gettext(" avec message d'avertissement.");
-   			//echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape('En cas de d&#233;passement, un message d\'avertissement apparaitra &#224; chaque ouverture de session des utilisateurs concern&#233;s.')\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>";
-   		} else {
+			echo gettext(" avec message d'avertissement.<br>");
+                        $warn="yes";
+                } else {
 			echo " <font color=\"#FF0000\">sans  message d'avertissement.</font>\n";
     			echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('PARAMETRAGE FORTEMENT DECONSEILLE: en cas de d&#233;passement autoris&#233, l\'utilisateur ne sera pas pr&#233;venu qu\'il se situe au del&#224; de son quota. Il se trouvera bloqu&#233;, sans pr&#233;avis, &#224; la fin de la p&#233;riode de gr&#226;ce... Ce r&#233;glage revient plus ou moins &#224; ne pas autoriser de d&#233;passement temporaire de quota puisque l\'utilisateur n\'est pas averti...')")."\"><img name=\"action_image3\"  src=\"../elements/images/system-help.png\"></u>\n";
     		}
 	}
-	
-	echo "</h3>\n";
+	// Insert ou update pour avertissement IE
+        if ($warn=="yes") {  
+            if (isset($browser)) {
+               $browser = preg_replace('/\\\++/','/', $browser); //gestion de \ qui passe mal (suppression des \\ en les rempla&#231;ant par un /)
+
+            } else $browser="$quota_browser";
+        // 
+            $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule='warnquotas'");
+            if(mysql_num_rows($result)==0){
+                    $query = "INSERT INTO corresp VALUES('','warnquotas','$browser $urlse3','','REG_SZ','systeme','','2000,XP,Vista,Seven','HKEY_CURRENT_USER\\\Software\\\Microsoft\\\Windows\\\CurrentVersion\\\Run\\\WarnQuota','Avertissement quota','config')";
+                    mysql_query($query);
+                    $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule='warnquotas'");
+            } 
+    //			
+            $row = mysql_fetch_row($result);
+            $result=mysql_query("SELECT CleID FROM restrictions WHERE CleID='$row[0]'");
+            //echo $row[0];
+            if(mysql_num_rows($result)==0){
+                    $query = "INSERT INTO restrictions VALUES('','$row[0]','overfill','$browser $urlse3')";
+
+            } 
+            else {
+                    $query = "UPDATE restrictions SET valeur='$browser $urlse3' where CleID='$row[0]'";
+            }
+            $result=mysql_query($query);
+            //echo $result;
+        } 
+        else  {
+                $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule='warnquotas'");
+                if(mysql_num_rows($result)!=0){
+                    $row = mysql_fetch_row($result);
+                    $result=mysql_query("SELECT CleID FROM restrictions WHERE CleID='$row[0]'");
+                    if(mysql_num_rows($result)!=0){
+                        $query="DELETE FROM restrictions WHERE cleID='$row[0]'";
+                        $result=mysql_query($query);
+                    }
+                }
+            
+            }
+             
+        
+        echo "</h3>\n";
 
 //	echo "</center>\n";
 
@@ -358,7 +400,7 @@ if (!isset($partition)) {$partition ="/home";}
 
 	$parametre[5] = gettext("Avertir les utilisateurs en cas de d&#233;passement :");
 
- 	$objet_var = "<input type=\"checkbox\" ";
+ 	$objet_var = "<input type=\"checkbox\" checked";
  
  	//$test_exist=exec("cat /etc/cron.d/se3 | grep \"$(echo \"warn_quota.sh $partition\")\"");
 	// PERMET L'AFFICHAGE DE CE QU'IL Y A DEJA DE REGLE DANS MYSQL POUR LA PARTITION CONSIDEREE
@@ -367,9 +409,9 @@ if (!isset($partition)) {$partition ="/home";}
   	{$resultat=mysql_query("select value from params where name='quota_warn_varse3'");}
 	
 	$line = mysql_fetch_assoc($resultat);
-	foreach ($line as $col_value) {
-		if ( "$col_value" == "1" ) {$objet_var="$objet_var checked ";}
-	}
+//	foreach ($line as $col_value) {
+//		if ( "$col_value" == "1" ) {$objet_var="$objet_var checked ";}
+//	}
  
  	//if ( $test_exist != "" ) {$objet_var="$objet_var checked ";}
  
@@ -384,8 +426,8 @@ if (!isset($partition)) {$partition ="/home";}
 	$help[5] = gettext("VALABLE POUR TOUTE LA PARTITION: Cr&#233;ation d\'un message d\'avertissement &#224; chaque ouverture de session pour tout utilisateur en d&#233;passement de quota.");
 
 	$parametre[6] = gettext("Chemin du navigateur affichant les messages d'avertissement en cas de d&#233;passement :");
-	$value=exec("cat /home/templates/overfill/registre.zrn | grep \"WarnQuota @@@\" | cut -d \"@\" -f10 |cut -d \" \" -f2");
-	$objet[6] = "<INPUT TYPE=\"TEXT\" NAME=\"browser\" value=\"$value\" size=20>\n";
+	//$value=exec("cat /home/templates/overfill/registre.zrn | grep \"WarnQuota @@@\" | cut -d \"@\" -f10 |cut -d \" \" -f2");
+	$objet[6] = "<INPUT TYPE=\"TEXT\" NAME=\"browser\" value=\"$browser\" size=20>\n";
 	$help[6] = gettext("Par d&#233;faut: la chaine de caractere \'iexplore\' fonctionne si internet explorer n\'est pas bloqu&#233; par une clef de registre. Sinon, le navigateur lynx convient en indiquant un chemin correct (par exemple, L:...lynx.exe). ATTENTION: firefox ne fonctionne pas si le quota est d&#233;pass&#233; sur /home car son profil y est stock&#233;. Utiliser firefoxportable sur L: par exemple.");
 
 	// creation du tableau proprement dite
