@@ -87,6 +87,19 @@ if [ ! -d "/home/$user" -o ! -d "/home/$user/profil" ]; then
 	chmod -R 700 /home/$user > /dev/null 2>&1
 	setfacl -R -m d:u:$user:rwx /home/$user
 
+	# fixe homepage selon categorie adm / profs / eleves
+	if [ -n "$(ldapsearch -xLLL cn=administratifs memberuid | grep "$user")" ]; then
+		[ -n "$administratifs_hp" ] && /usr/share/se3/scripts/modif_profil_mozilla_ff.sh $user "$administratifs_hp"
+	
+	elif [ -n "$(ldapsearch -xLLL cn=profs memberuid | grep "$user")" ]; then
+		[ -n "$profs_hp" ] && /usr/share/se3/scripts/modif_profil_mozilla_ff.sh $user "$profs_hp"
+	
+	elif [ -n "$(ldapsearch -xLLL cn=eleves memberuid | grep "$user")" ]; then
+		[ -n "$eleves_hp" ] && /usr/share/se3/scripts/modif_profil_mozilla_ff.sh $user "$eleves_hp"
+	fi
+	
+
+
 
 else
 	if [ "localmenu" == "1" ]; then
