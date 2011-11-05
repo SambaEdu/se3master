@@ -465,89 +465,9 @@ if (!isset($partition)) {$partition ="/home";}
 	echo "<h4>".gettext("Fixer ce quota pour tous les membres des groupes suivants&nbsp;:");
 	echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('Le quota fix&#233; d&#233;pendra des groupes d\'appartenance des utilisateurs: le quota effectif sera le plus grand des quotas applicables aux divers groupes. Par contre, si un quota est appliqu&#233; &#224; un utilisateur sp&#233;cifique, celui-ci est pr&#233;pond&#233;rant quelques soient ses groupes d\'appartenance.')")."\"><img name=\"action_image5\"  src=\"../elements/images/system-help.png\"></u>";
 	echo "</h4></div>\n";
-	//echo "</h4>";
-
-	// Etablissement des listes des groupes disponibles
-	$list_groups=search_groups("(&(cn=*) $filter )");
-	// Etablissement des sous listes de groupes :
-	$j =0; $k =0;
-	$m = 0; $n=0;
-	for ($loop=0; $loop < count ($list_groups) ; $loop++) {
-		// Classe
-		if ( preg_match ("/Classe_/", $list_groups[$loop]["cn"]) ) {
-			$classe[$j]["cn"] = $list_groups[$loop]["cn"];
-			$classe[$j]["description"] = $list_groups[$loop]["description"];
-			$j++;
-		}
-		// Equipe
-		elseif ( preg_match ("/Equipe_/", $list_groups[$loop]["cn"]) ) {
-			$equipe[$k]["cn"] = $list_groups[$loop]["cn"];
-			$equipe[$k]["description"] = $list_groups[$loop]["description"];
-			$k++;
-		}
-		// Matiere
-		elseif ( preg_match ("/Matiere_/", $list_groups[$loop]["cn"]) ) {
-			$matiere[$n]["cn"] = $list_groups[$loop]["cn"];
-			$matiere[$n]["description"] = $list_groups[$loop]["description"];
-			$n++;
-		}
-		// Autres
-		elseif (!preg_match ("/^overfill/", $list_groups[$loop]["cn"]) && !preg_match ("/^lcs-users/", $list_groups[$loop]["cn"]) &&
-		//!preg_match ("/^admins/", $list_groups[$loop]["cn"]) &&
-		!preg_match ("/Cours_/", $list_groups[$loop]["cn"]) &&
-		!preg_match ("/^system/", $list_groups[$loop]["cn"]) &&
-		!preg_match ("/^slis/", $list_groups[$loop]["cn"]) &&
-		!preg_match ("/^machines/", $list_groups[$loop]["cn"])) {
-			$autres[$m]["cn"] = $list_groups[$loop]["cn"];
-			$autres[$m]["description"] = $list_groups[$loop]["description"];
-			$m++;
-		}
-	}
-
-	// Affichage des boites de selection des groupes sur lesquels fixer les quotas + choix d'un user specifique
-?>
-<table align='center' border="0" cellspacing="10">
-<thead>
-<tr>
-<td><?php echo gettext("Classes"); ?></td>
-<td><?php echo gettext("Equipes"); ?></td>
-<td><?php echo gettext("Mati&#232;res"); ?></td>
-<td><?php echo gettext("Autres"); ?></td>
-<td><?php echo gettext("Utilisateur sp&#233;cifique"); ?></td>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td valign="top">
-<?php
-echo "<select name= \"classe_gr[]\" size=\"8\" multiple=\"multiple\">\n";
-for ($loop=0; $loop < count ($classe) ; $loop++) {
-echo "<option value=".$classe[$loop]["cn"].">".$classe[$loop]["cn"];
-}
-echo "</select>";
-echo "</td>";
-echo "<td valign=\"top\">\n";
-echo "<select name= \"equipe_gr[]\" size=\"8\" multiple=\"multiple\">\n";
-for ($loop=0; $loop < count ($equipe) ; $loop++) {
-echo "<option value=".$equipe[$loop]["cn"].">".$equipe[$loop]["cn"];
-}
-echo "</select></td>\n";
-
-echo "<td valign=\"top\">\n";
-echo "<select name= \"matiere_gr[]\"  size=\"8\" multiple=\"multiple\">\n";
-for ($loop=0; $loop < count ($matiere) ; $loop++) {
-echo "<option value=".$matiere[$loop]["cn"].">".$matiere[$loop]["cn"];
-}
-echo "</select></td>\n";
-
-echo "<td valign=\"top\">";
-echo "<select name=\"autres_gr[]\" size=\"8\" multiple=\"multiple\">";
-for ($loop=0; $loop < count ($autres) ; $loop++) {
-echo "<option value=".$autres[$loop]["cn"].">".$autres[$loop]["cn"];
-}
-echo "</select></td>\n";
-echo "<td valign=\"top\"><INPUT TYPE=\"TEXT\" NAME=\"user\" size=20></td></tr></table>";
-
+        // Etablissement des listes des groupes disponibles
+        affiche_all_groups(center,user);
+	
 echo "<div id=\"attribution\" align='center'><input type=\"submit\" value=\"".gettext("Valider")."\">
 <input type=\"reset\" value=\"".gettext("R&#233;initialiser")."\"></div>";
 echo "</form>";
