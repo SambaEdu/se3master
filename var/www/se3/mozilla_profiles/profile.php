@@ -48,13 +48,13 @@ if (is_admin("computer_is_admin",$login)!="Y")
 
 
 // Titre
-echo "<h1>".gettext("D&#233;ploiement de Mozilla")."</h1>\n";
+echo "<h1>".gettext("Configuration des navigateurs et de Thunderbird")."</h1>\n";
 
 
 	if (file_exists("/var/se3/unattended/install/packages/firefox/firefox-config.bat") or file_exists("/usr/share/se3/logonpy/logon.py")) {
-		echo "<H3>".gettext("Configuration dynamique des profils Mozilla Firefox :")." </H3>\n";
+		echo "<H3>".gettext("Configuration dynamique des profils Mozilla Firefox 3.x")." </H3>\n";
 		echo "<a href=\"/mozilla_profiles/firefox-se3-NG.php\">Effectuer le param&#233;trage</a>";
-		echo " <u onmouseover=\"return escape".gettext("('Permet la configuration directe des clients firefox d&#233;ploy&#233;s avec wpkg. ATTENTION : ce param&#233;trage est prioritaire au contenu du fichier local pref.js. Il est donc obligatoire pour fixer un proxy !!.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u> ";
+		echo " <u onmouseover=\"return escape".gettext("('Permet la configuration directe des clients firefox 3 (non pris en compte par firefox 7).  ATTENTION : ce param&#233;trage est prioritaire au contenu du fichier local pref.js. Il est donc obligatoire pour fixer un proxy !!.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u> ";
 		echo "<br><br><br>";
 
 	}
@@ -62,14 +62,14 @@ echo "<h1>".gettext("D&#233;ploiement de Mozilla")."</h1>\n";
 	
 	$form = "<form action=\"firefox.php\" method=\"post\">\n";
 	// Form de selection d'actions
-	$form .="<H3>".gettext("Deploiement ou  modification  des profils Mozilla Firefox :")." </H3>\n";
+	$form .="<H3>".gettext("Modification des param&#232;tres Firefox 7 et Internet Explorer")." </H3>\n";
 	$form .= "<SELECT name=\"choix\" onchange=submit()>\n";
-	$form .= "<OPTION VALUE='choix'>-------------------------------".gettext(" Choisir ")."-------------------------------</OPTION>\n";
+	$form .= "<OPTION VALUE='choix'>--------------------------------------".gettext(" Choisir ")."--------------------------------------</OPTION>\n";
 
-	$form .= "<OPTION VALUE='deploy_nosave'>".gettext("D&#233;ployer et remplacer les profils existants")."</OPTION>\n";
-	$form .= "<OPTION VALUE='deploy_save'>".gettext("D&#233;ployer et remplacer les profils mais conserver les bookmarks")."</OPTION>\n";
-	$form .= "<OPTION VALUE='modif'>".gettext("Modifier la page de d&#233;marrage pour un groupe ou un utilisateur")."</OPTION>\n";
-	$form .= "<OPTION VALUE='modif_skel'>".gettext("Modifier la page de d&#233;marrage de l'utilisateur mod&#232;le")." \"skeluser\"</OPTION>\n";
+	//$form .= "<OPTION VALUE='deploy_nosave'>".gettext("D&#233;ployer et remplacer les profils existants")."</OPTION>\n";
+	$form .= "<OPTION VALUE='deploy_nosave'>".gettext("D&#233;ployer et / ou remplacer des profils firefox")."</OPTION>\n";
+	$form .= "<OPTION VALUE='modif'>".gettext("Modifier la page de d&#233;marrage")."</OPTION>\n";
+	$form .= "<OPTION VALUE='modif_proxy'>".gettext("Param&#233;trer le proxy")."</OPTION>\n";
 
 	$form .= "</SELECT>\n";
 	$form.="</form>\n";
@@ -81,8 +81,8 @@ echo "<h1>".gettext("D&#233;ploiement de Mozilla")."</h1>\n";
         // Form de selection d'actions
         $form .="<H3>".gettext("Deploiement des profils Mozilla Thunderbird :")." </H3>\n";
         $form .= "<SELECT name=\"choix\" onchange=submit()>\n";
-        $form .= "<OPTION VALUE='choix'>-----------------------------".gettext(" Choisir ")."---------------------------------</OPTION>\n";
-        $form .= "<OPTION VALUE='deploy_all'>".gettext("D&#233;ployer les profils dans tous les espaces personnels existants")."</OPTION>\n";
+        $form .= "<OPTION VALUE='choix'>-----------------------------------------".gettext(" Choisir ")."---------------------------------------------</OPTION>\n";
+        $form .= "<OPTION VALUE='deploy_all'>".gettext("D&#233;ployer les profils dans tous les espaces personnels")."</OPTION>\n";
         $form .= "<OPTION VALUE='deploy_grp'>".gettext("D&#233;ployer les profils dans certains espaces personnels")." </OPTION>\n";
         $form .= "</SELECT>\n";
         $form.="</form>\n";
