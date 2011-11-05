@@ -241,6 +241,8 @@ if ($config==""||$config=="init") {
                         $val_cleid[] = $row[0];
                         mysql_query("DELETE FROM restrictions WHERE cleID='$row[0]'");
                     }
+                    
+                    
 
                     switch ($proxy_type) {
                                               
@@ -270,6 +272,7 @@ if ($config==""||$config=="init") {
                             break;
                         
                         case 2:
+                            mysql_query("UPDATE corresp set value='' WHERE cleID='$row[3]'");
                             $query = "INSERT INTO restrictions VALUES('','$val_cleid[3]','base','$new_proxy_url')";
                             $resultat=mysql_query($query);
                             if ($resultat == FALSE) { 
@@ -312,7 +315,7 @@ if ($config==""||$config=="init") {
                 
                 $array_proxy_type = array(
                   //  'none'  => 'Utiliser les param&#232;tres syst&#232;mes (IE)',
-                    '0'     => 'Aucun Proxy : connexion directe',
+                    '0'     => 'Aucun proxy : connexion directe',
                     '1'     => 'Proxy manuel --> ip:port',
                     '2'     => 'Utilisation d\'un fichier .pac'
                     ); 
@@ -321,7 +324,7 @@ if ($config==""||$config=="init") {
                 
                 $form .= "<tr class=\"menuheader\"><td align='center'> Type de proxy </td>\n";
                 $form .= "<td align='center'> Valeur actuelle</td></tr>\n";
-                if ($proxy_type == "") $proxy_url = "Aucun proxy utlis&#233; pour le moment";
+                //if ($proxy_type == "") $proxy_url = "Aucun proxy utlis&#233; pour le moment";
                 $form .= "<tr><td align='left'> $array_proxy_type[$proxy_type] </td>\n";
                 $form .= "<td align='left'> $proxy_url </td></tr>\n";
                 $form .= "</table><br>\n";
@@ -343,11 +346,14 @@ if ($config==""||$config=="init") {
                     } else {
                         $no_ie = "checked";
                         $form .= "<li>Firefox utilise actuellement son propre fichier de configuration pour d&#233;finir son proxy</li>\n";
- 
-                    }
+                     }
+                if ($firefox_use_ie == "default") $form .= "<li>La configuration actuelle a Firefox utilise actuellement son propre fichier de configuration pour d&#233;finir son proxy</li>\n";  
                 //<br><br>
                 $form .= "</ul>\n";
-                
+                if ($firefox_use_ie == "default") { 
+                    $form .= "<font color=red>La configuration actuelle a &#233;t&#233; g&#233;n&#233;r&#233;e automatiquement lors de l'installation et ne prend pas en compte les configuration d'internet explorer.<BR>\n";
+                    $form .= "Vous devriez la modifier ou la revalider pour que cela soit le cas.</font>";
+                }
                 $form .= "<h3>".gettext("D&#233finir un nouveau proxy et / ou un nouveau type")." </h3>";
 		$form .= "<INPUT TYPE=\"TEXT\" NAME=\"new_proxy_url\" size=30>";
 		
