@@ -5,36 +5,41 @@
 
 ## $Id$ ##
 
-#Couleurs
-COLTITRE="\033[1;35m"	# Rose
-COLPARTIE="\033[1;34m"	# Bleu
-COLTXT="\033[0;37m"	# Gris
-COLCHOIX="\033[1;33m"	# Jaune
-COLDEFAUT="\033[0;33m"	# Brun-jaune
-COLSAISIE="\033[1;32m"	# Vert
-COLCMD="\033[1;37m"	# Blanc
-COLERREUR="\033[1;31m"	# Rouge
-COLINFO="\033[0;36m"	# Cyan
 
 ERREUR()
 {
-	echo -e "$COLERREUR"
+	echo ""
 	echo "ERREUR!"
 	echo -e "$1"
-	echo -e "$COLTXT"
+	echo ""
 	exit 1
 }
-WWWPATH="/var/www"
 
-if [ $# -ne 3 -a $# -ne 2 ]; then
-	echo -e "$COLERREUR\c"
-	echo -e "$0 a besoin d'arguments pour fonctionner."
-	echo -e "$COLINFO\c"
+
+WWWPATH="/var/www"
+chemin_html="/var/www/se3/tmp"
+
+function RAPPORTHTML() {
+echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
+<html>
+<head>
+<title>Traitement des profils</title>
+</head>
+<body>
+<h1 align=\"center\">Traitement des profils</h1>
+<p align=\"center\">Traitement $1</p>
+</body>
+</html>" > $chemin_html/recopie_profils_firefox.html
+
+}
+
+if [ ! $# -ge 1 ]; then
+	echo ""
+	echo  "$0 a besoin d'arguments pour fonctionner."
 	echo "Passer en arguments dans l'ordre :"
-	echo "- le nom du groupe ou de l'utilisateur dont vous voulez modifier la page de démarrage de FireFox,"
+	echo "- le nom du groupe ou de l'utilisateur dont vous voulez modifier la page de démarrage de Firefox,"
 	echo "- l'url de la nouvelle page de démarrage,"
 	echo "- eventuellement ajouter create_homes en argument si vous voulez créer les homes non encore existants avant de modifier la page de démarrage."
-	echo -e "$COLTXT"
 	echo "ex1 : ./modif_profil_mozilla profs http://www.google.fr create_homes"
 	echo "fixera la page de démarrage de mozilla firefox à google.fr pour tous les profs et créera les homes si besoin avant de le faire."
 	echo ""
@@ -65,7 +70,7 @@ CHEMIN_FF_SOURCE="${path2UserSkel}/profil/appdata/Mozilla"
 
 
 if [ "$1" == "skeluser" ]; then
-	echo "Je change la page de démarrage pour le squelette en lui fixant $2"
+	echo "Je change la page de demarrage pour le squelette en lui fixant $2"
 	sed -e "/(\"browser.startup.homepage\",/d" -i ${CHEMIN_FF_SOURCE}/Firefox/Profiles/default/prefs.js
 	echo "user_pref(\"browser.startup.homepage\", \"$2\");'" >> ${CHEMIN_FF_SOURCE}/Firefox/Profiles/default/prefs.js
 	exit 0
@@ -78,19 +83,31 @@ fi
 	TST_GRP=$(ldapsearch -xLLL cn=$1 -b $BASEDN | grep member)
 	
 	if [ -z "$TST_GRP" ]; then
-	TST_UID=$(ldapsearch -xLLL uid="$1")
+	TST_UID=$(ldapsearch -xLLL uid="$1" uid)
 		if [ -z "$TST_UID" ]; then
 			ERREUR "Impossible de trouver le groupe ou l'utilisateur passé en paramètre dans l'annuaire Ldap."
 		else
+			if [ -z "$NEW_PAGE_DEM" ]; then
+				if [ -e /home/$1 ]; then
+					rm -rf /home/$1/profil/appdata/Mozilla/Firefox
+					cp -r $CHEMIN_FF_SOURCE/Firefox /home/$1/profil/appdata/Mozilla/
+					chown -R $1:lcs-users /home/$1/profil/appdata/Mozilla/Firefox
+				else
+					/usr/share/se3/shares/shares.avail/mkhome.sh "$1"
+				fi
+				
+				exit 0
+			fi
+			
 			if [ "$OPTION" == "create_homes" ]; then
 				/usr/share/se3/shares/shares.avail/mkhome.sh "$1"
 			fi
 			echo "Je change la page de démarrage pour $1 en lui fixant $2"
 			if [ -e /home/$1 ]; then
-			sed -e "/(\"browser.startup.homepage\",/d" -i /home/$1/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
-			echo "user_pref(\"browser.startup.homepage\", \"$2\");'" >> /home/$1/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
+			    sed -e "/(\"browser.startup.homepage\",/d" -i /home/$1/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
+			    echo "user_pref(\"browser.startup.homepage\", \"$2\");'" >> /home/$1/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 			else
-			echo "Le home de l'utilisateur $1 n'existe pas et a été ignoré, relancer la script avec l'option create_homes en 3eme argument si vous voulez le créer."
+			    echo "Le home de l'utilisateur $1 n'existe pas et a été ignoré, relancer la script avec l'option create_homes en 3eme argument si vous voulez le créer."
 			fi
 			exit 0	
 		fi
@@ -113,22 +130,40 @@ fi
 		done
 	
 	else
-		
+		RAPPORTHTML "du groupe $1 en cours"
 		ldapsearch -x -LLL "cn=$1" | grep memberUid | cut -d " " -f2 | while read A
 		do 
-			if [ "$OPTION" == "create_homes" ]; then
-			/usr/share/se3/shares/shares.avail/mkhome.sh "$A"
+			if [ -z "$NEW_PAGE_DEM" ]; then
+				if [ -e /home/$A ]; then
+					echo "Remplacement profil Firefox pour $A"
+					rm -rf /home/$A/profil/appdata/Mozilla/Firefox
+					cp -r $CHEMIN_FF_SOURCE/Firefox /home/$A/profil/appdata/Mozilla/
+					chown -R $A:lcs-users /home/$A/profil/appdata/Mozilla/Firefox
+				else
+					echo "Creation espace perso de $A"
+					/usr/share/se3/shares/shares.avail/mkhome.sh "$A"
+				fi
+				
+			else
+				if [ -e /home/$A ]; then
+					echo "Je change la page pour $A en lui fixant $2"
+					sed -e "/(\"browser.startup.homepage\",/d" -i /home/$A/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
+					echo "user_pref(\"browser.startup.homepage\", \"$2\");'" >> /home/$A/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
+				else
+					if [ "$OPTION" == "create_homes" ]; then
+						/usr/share/se3/shares/shares.avail/mkhome.sh "$A"
+					else
+						echo "Le home de l'utilisateur $A n'existe pas et a été ignoré, relancer la script avec l'option create_homes en 3eme argument si vous voulez le créer."
+					fi
+				
+				fi
+
+				
 			fi
 			
-			if [ -e /home/$A ]; then
-			echo "Je change la page de démarrage pour $A en lui fixant $2"
-			sed -e "/(\"browser.startup.homepage\",/d" -i /home/$A/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
-			echo "user_pref(\"browser.startup.homepage\", \"$2\");'" >> /home/$A/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
-			else
-			echo "Le home de l'utilisateur $A n'existe pas et a été ignoré, relancer la script avec l'option create_homes en 3eme argument si vous voulez le créer."
-			fi
 			
 		done
+		RAPPORTHTML "du groupe $1 Ok"
 	fi
 
 exit 0
