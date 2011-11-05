@@ -1253,14 +1253,15 @@ function affiche_all_groups($align,$afftype) {
 
 		// Affichage des boites de s&#233;lection des groupes sur lesquels fixer les quotas + choix d'un user sp&#233;cifique
 		echo "
-		<table align=\"$align\" border=\"0\" cellspacing=\"10\">
+		<table align=\"$align\" border=\"0\" cellspacing=\"10\" style='float: none' >
 		<tr>
-		<td>".gettext("Classes")."</td>
-                <td>".gettext("Mati&#232res")."</td>
-                <td>".gettext("Equipes")."</td>
-		<td>".gettext("Autres")."</td>
-		<td>".gettext("Utilisateur sp&#233;cifique")."</td>
-		</tr>
+		<td>".gettext("Classes")."</td>";
+                echo "<td>".gettext("Mati&#232res")."</td>";
+                if ($afftype == "cours")  echo "<td>".gettext("Cours")."</td>";
+                echo "<td>".gettext("Equipes")."</td>
+		<td>".gettext("Autres")."</td>";
+		if ($afftype == "user") echo "<td>".gettext("Utilisateur sp&#233;cifique")."</td>";
+		echo "</tr>
 		<tr>
 		<td valign=\"top\">
 
@@ -1303,7 +1304,7 @@ function affiche_all_groups($align,$afftype) {
 		}
 		echo "</select></td>\n";
                 if ($afftype == "user") 	echo "<td valign=\"top\"><INPUT TYPE=\"TEXT\" NAME=\"user\" size=15></td>\n";
-		echo "</tr></table>\n\n";
+		echo "</tr><tr></tr></table>\n\n";
 }
 
 
