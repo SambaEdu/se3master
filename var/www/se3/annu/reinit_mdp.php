@@ -69,89 +69,91 @@ if(!isset($_POST['is_posted'])) {
 
 
 	// Etablissement des listes des groupes disponibles
-	$list_groups=search_groups("(&(cn=*) $filter )");
-	// Etablissement des sous listes de groupes :
-	$j =0; $k =0;
-	$m = 0; $n=0;
-	for ($loop=0; $loop < count ($list_groups) ; $loop++) {
-		// Classe
-		if ( ereg ("Classe_", $list_groups[$loop]["cn"]) ) {
-			$classe[$j]["cn"] = $list_groups[$loop]["cn"];
-			$classe[$j]["description"] = $list_groups[$loop]["description"];
-			$j++;
-		}
-		// Equipe
-		elseif ( ereg ("Equipe_", $list_groups[$loop]["cn"]) ) {
-			$equipe[$k]["cn"] = $list_groups[$loop]["cn"];
-			$equipe[$k]["description"] = $list_groups[$loop]["description"];
-			$k++;
-		}
-		// Matiere
-		elseif ( ereg ("Matiere_", $list_groups[$loop]["cn"]) ) {
-			$matiere[$n]["cn"] = $list_groups[$loop]["cn"];
-			$matiere[$n]["description"] = $list_groups[$loop]["description"];
-			$n++;
-		}
-		// Autres
-		elseif (!ereg ("^overfill", $list_groups[$loop]["cn"]) && !ereg ("^lcs-users", $list_groups[$loop]["cn"]) &&
-		//!ereg ("^admins", $list_groups[$loop]["cn"]) &&
-		!ereg ("Cours_", $list_groups[$loop]["cn"]) &&
-		!ereg ("^system", $list_groups[$loop]["cn"]) &&
-		!ereg ("^slis", $list_groups[$loop]["cn"]) &&
-		!ereg ("^machines", $list_groups[$loop]["cn"])) {
-			$autres[$m]["cn"] = $list_groups[$loop]["cn"];
-			$autres[$m]["description"] = $list_groups[$loop]["description"];
-			$m++;
-		}
-	}
+//        affiche_all_groups(left, user);
+//	$list_groups=search_groups("(&(cn=*) $filter )");
+//	// Etablissement des sous listes de groupes :
+//	$j =0; $k =0;
+//	$m = 0; $n=0;
+//	for ($loop=0; $loop < count ($list_groups) ; $loop++) {
+//		// Classe
+//		if ( ereg ("Classe_", $list_groups[$loop]["cn"]) ) {
+//			$classe[$j]["cn"] = $list_groups[$loop]["cn"];
+//			$classe[$j]["description"] = $list_groups[$loop]["description"];
+//			$j++;
+//		}
+//		// Equipe
+//		elseif ( ereg ("Equipe_", $list_groups[$loop]["cn"]) ) {
+//			$equipe[$k]["cn"] = $list_groups[$loop]["cn"];
+//			$equipe[$k]["description"] = $list_groups[$loop]["description"];
+//			$k++;
+//		}
+//		// Matiere
+//		elseif ( ereg ("Matiere_", $list_groups[$loop]["cn"]) ) {
+//			$matiere[$n]["cn"] = $list_groups[$loop]["cn"];
+//			$matiere[$n]["description"] = $list_groups[$loop]["description"];
+//			$n++;
+//		}
+//		// Autres
+//		elseif (!ereg ("^overfill", $list_groups[$loop]["cn"]) && !ereg ("^lcs-users", $list_groups[$loop]["cn"]) &&
+//		//!ereg ("^admins", $list_groups[$loop]["cn"]) &&
+//		!ereg ("Cours_", $list_groups[$loop]["cn"]) &&
+//		!ereg ("^system", $list_groups[$loop]["cn"]) &&
+//		!ereg ("^slis", $list_groups[$loop]["cn"]) &&
+//		!ereg ("^machines", $list_groups[$loop]["cn"])) {
+//			$autres[$m]["cn"] = $list_groups[$loop]["cn"];
+//			$autres[$m]["description"] = $list_groups[$loop]["description"];
+//			$m++;
+//		}
+//	}
 
 	echo "<div id='div_choix_groupes'>\n";
-	echo "<p>Choisissez les groupes auxquels appliquer le traitement&nbsp;:</p>\n";
-	echo "<table border='0' cellspacing='10' summary='Choix des groupes'>\n";
-	echo "<thead>\n";
-	echo "<tr>\n";
-	echo "<td>".gettext("Classes")."</td>\n";
-	echo "<td>".gettext("Equipes")."</td>\n";
-	echo "<td>".gettext("Mati&#232;res")."</td>\n";
-	echo "<td>".gettext("Autres")."</td>\n";
-	echo "</tr>\n";
-	echo "</thead>\n";
-
-	echo "<tbody>\n";
-	echo "<tr>\n";
-	echo "<td valign='top'>\n";
-	echo "<select name= \"classe_gr[]\" size=\"8\" multiple=\"multiple\">\n";
-	for ($loop=0; $loop < count ($classe) ; $loop++) {
-		echo "<option value=".$classe[$loop]["cn"].">".$classe[$loop]["cn"]."</option>\n";
-	}
-	echo "</select>\n";
-	echo "</td>\n";
-
-	echo "<td valign=\"top\">\n";
-	echo "<select name= \"equipe_gr[]\" size=\"8\" multiple=\"multiple\">\n";
-	for ($loop=0; $loop < count ($equipe) ; $loop++) {
-		echo "<option value=".$equipe[$loop]["cn"].">".$equipe[$loop]["cn"]."</option>\n";
-	}
-	echo "</select>\n";
-	echo "</td>\n";
-	
-	echo "<td valign=\"top\">\n";
-	echo "<select name= \"matiere_gr[]\"  size=\"8\" multiple=\"multiple\">\n";
-	for ($loop=0; $loop < count ($matiere) ; $loop++) {
-		echo "<option value=".$matiere[$loop]["cn"].">".$matiere[$loop]["cn"]."</option>\n";
-	}
-	echo "</select>\n";
-	echo "</td>\n";
-	
-	echo "<td valign=\"top\">";
-	echo "<select name=\"autres_gr[]\" size=\"8\" multiple=\"multiple\">";
-	for ($loop=0; $loop < count ($autres) ; $loop++) {
-		echo "<option value=".$autres[$loop]["cn"].">".$autres[$loop]["cn"]."</option>\n";
-	}
-	echo "</select>\n";
-	echo "</td>\n";
-	echo "</tr>\n";
-	echo "</table>\n";
+        affiche_all_groups(left, user);
+//	echo "<p>Choisissez les groupes auxquels appliquer le traitement&nbsp;:</p>\n";
+//	echo "<table border='0' cellspacing='10' summary='Choix des groupes'>\n";
+//	echo "<thead>\n";
+//	echo "<tr>\n";
+//	echo "<td>".gettext("Classes")."</td>\n";
+//	echo "<td>".gettext("Equipes")."</td>\n";
+//	echo "<td>".gettext("Mati&#232;res")."</td>\n";
+//	echo "<td>".gettext("Autres")."</td>\n";
+//	echo "</tr>\n";
+//	echo "</thead>\n";
+//
+//	echo "<tbody>\n";
+//	echo "<tr>\n";
+//	echo "<td valign='top'>\n";
+//	echo "<select name= \"classe_gr[]\" size=\"8\" multiple=\"multiple\">\n";
+//	for ($loop=0; $loop < count ($classe) ; $loop++) {
+//		echo "<option value=".$classe[$loop]["cn"].">".$classe[$loop]["cn"]."</option>\n";
+//	}
+//	echo "</select>\n";
+//	echo "</td>\n";
+//
+//	echo "<td valign=\"top\">\n";
+//	echo "<select name= \"equipe_gr[]\" size=\"8\" multiple=\"multiple\">\n";
+//	for ($loop=0; $loop < count ($equipe) ; $loop++) {
+//		echo "<option value=".$equipe[$loop]["cn"].">".$equipe[$loop]["cn"]."</option>\n";
+//	}
+//	echo "</select>\n";
+//	echo "</td>\n";
+//	
+//	echo "<td valign=\"top\">\n";
+//	echo "<select name= \"matiere_gr[]\"  size=\"8\" multiple=\"multiple\">\n";
+//	for ($loop=0; $loop < count ($matiere) ; $loop++) {
+//		echo "<option value=".$matiere[$loop]["cn"].">".$matiere[$loop]["cn"]."</option>\n";
+//	}
+//	echo "</select>\n";
+//	echo "</td>\n";
+//	
+//	echo "<td valign=\"top\">";
+//	echo "<select name=\"autres_gr[]\" size=\"8\" multiple=\"multiple\">";
+//	for ($loop=0; $loop < count ($autres) ; $loop++) {
+//		echo "<option value=".$autres[$loop]["cn"].">".$autres[$loop]["cn"]."</option>\n";
+//	}
+//	echo "</select>\n";
+//	echo "</td>\n";
+//	echo "</tr>\n";
+//	echo "</table>\n";
 
 	echo "<div id=\"attribution\" align='center'>\n";
 	echo "<input type=\"hidden\" name=\"is_posted\" value=\"1\">\n";
