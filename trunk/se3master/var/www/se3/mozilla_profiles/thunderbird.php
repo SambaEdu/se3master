@@ -89,69 +89,11 @@ if ($config==""||$config=="init") {
 		echo "<input type=\"hidden\" name=\"choix\" value=\"deploy_grp\">";
 
 		// Etablissement des listes des groupes disponibles
-		$list_groups=search_groups("(&(cn=*) $filter )");
-		// Etablissement des sous listes de groupes :
-		$j =0; $k =0;
-		$m = 0;
-		for ($loop=0; $loop < count ($list_groups) ; $loop++) {
-			// Classe
-			if ( preg_match ("/Classe_/", $list_groups[$loop]["cn"]) ) {
-				$classe[$j]["cn"] = $list_groups[$loop]["cn"];
-				$classe[$j]["description"] = $list_groups[$loop]["description"];
-				$j++;}
-			// Equipe
-			elseif ( preg_match ("/Equipe_/", $list_groups[$loop]["cn"]) ) {
-				$equipe[$k]["cn"] = $list_groups[$loop]["cn"];
-				$equipe[$k]["description"] = $list_groups[$loop]["description"];
-				$k++;}
-			// Autres
-			elseif (!preg_match ("/^overfill/", $list_groups[$loop]["cn"]) &&
-				!preg_match ("/^lcs-users/", $list_groups[$loop]["cn"]) &&
-				!preg_match ("/^admins/", $list_groups[$loop]["cn"]) &&
-				!preg_match ("/Cours_/", $list_groups[$loop]["cn"]) &&
-				!preg_match ("/Matiere_/", $list_groups[$loop]["cn"]) &&
-				!preg_match ("/^machines/", $list_groups[$loop]["cn"])) {
-				$autres[$m]["cn"] = $list_groups[$loop]["cn"];
-				$autres[$m]["description"] = $list_groups[$loop]["description"];
-				$m++;
-			}
-		}
-
-		// Affichage des groupes + choix d'un user specifique
-		echo "
-		<table align=\"left\" border=\"0\" cellspacing=\"10\">
-		<tr>
-		<td>".gettext("Classes")."</td>
-		<td>".gettext("Equipes")."</td>
-		<td>".gettext("Autres")."</td>
-		<td>".gettext("Utilisateur sp&#233;cifique")."</td>
-		</tr>
-		<tr>
-		<td valign=\"top\">
-
-		<select name= \"classe_gr[]\" size=\"8\" multiple=\"multiple\">\n";
-		for ($loop=0; $loop < count ($classe) ; $loop++) {
-			echo "<option value=".$classe[$loop]["cn"].">".$classe[$loop]["cn"];
-		}
-		echo "</select>";
-		echo "</td>";
-		echo "<td valign=\"top\">\n";
-		echo "<select name= \"equipe_gr[]\" size=\"8\" multiple=\"multiple\">\n";
-		for ($loop=0; $loop < count ($equipe) ; $loop++) {
-			echo "<option value=".$equipe[$loop]["cn"].">".$equipe[$loop]["cn"];
-		}
-		echo "</select></td>\n";
-		echo "<td valign=\"top\">";
-		echo "<select name=\"autres_gr[]\"  size=\"8\" multiple=\"multiple\">";
-		for ($loop=0; $loop < count ($autres) ; $loop++) {
-			echo "<option value=".$autres[$loop]["cn"].">".$autres[$loop]["cn"];
-		}
-		echo "</select></td>\n";
-		echo "<td valign=\"top\"><INPUT TYPE=\"TEXT\" NAME=\"user\" size=20></td></tr></table>\n";
+		affiche_all_groups(left, user);
 
 // 		echo "<h3>Nouvelle page de d&#233;marrage pour Mozilla thunderbird : </h3><INPUT TYPE=\"TEXT\" NAME=\"page_dem\" size=50><br><br>";
 //
-		echo "<br><br><br><br><br><br><br><br><br><br>";
+		
 		echo "
 		<h3>".gettext("Ecraser les profils Thunderbird m&#234;me s'ils contiennent des donn&#233;es ?")." </h3>
 		<INPUT TYPE=\"RADIO\" NAME=\"option\" value=\"force_move\" >".gettext(" Oui ")."<br>
