@@ -1,20 +1,24 @@
-#!/bin/bash
+#!/bin/sh
 
 #
 ## $Id$ ##
 #
 ##### script de modif de /etc/profile afin que la machine passe par un proxy #####
-# modestement ecrit par franck molle 07/2004
+##### positionne egalement le proxy des clients FF 
 
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
 	echo "Modifie /etc/profile pour ajouter la conf d'un proxy"
+	echo "Relance la conf dhcp pour creation wpad et se3.pac si besoin"
+	echo "Modifie les valeurs msql proxy_url et proxy_type"
+	echo "Modifie les fichiers prefs.js Firefox"
 	echo "Sans option le proxy est supprimé"
 	echo "Usage : modifProxy.sh [adresse_ip:port]"
 	exit
 fi	
 
 . /usr/share/se3/includes/config.inc.sh -cms
+. /usr/share/se3/includes/functions.inc.sh
 
 # Si on a deja un proxy
 proxy=`cat /etc/profile | grep http_proxy=` 
@@ -51,47 +55,37 @@ PREF_JS_FF="/etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs
 if [ -n "$PROXY" ]; then
 
 	if [ "$slisip" == "$PROXY"  ];	then
-		sed -i 's/%proxytype%/2/g' $PREF_JS_FF
-		sed -i "s/%proxyurl%/http:\/\/$slisip\/cgi-bin\/slis.pac/g" $PREF_JS_FF
+		SETMYSQL proxy_url "http://$slisip/cgi-bin/slis.pac" "url du proxy pour le navigateur" 1
+		SETMYSQL proxy_type "2" "type du proxy (param IE / aucun / manuel / url auto" 1
 	else
 		if [ "$dhcp" == "1" ]; then 
-		  /usr/share/se3/scripts/makedhcpdconf 
-		  sed -i 's/%proxytype%/2/g' $PREF_JS_FF
-		  sed -i "s/%proxyurl%/http:\/\/$se3ip\/se3.pac/g" $PREF_JS_FF
+			/usr/share/se3/scripts/makedhcpdconf 
+			SETMYSQL proxy_url "http://$se3ip/se3.pac" "url du proxy pour le navigateur" 1
+			SETMYSQL proxy_type "2" "type du proxy (param IE / aucun / manuel / url auto" 1
 		else
-		  sed -i '/%proxyurl%/d' $PREF_JS_FF
-		  sed -i '/%proxytype%/d' $PREF_JS_FF
-		  echo "user_pref(\"network.proxy.http\", \"$PROXY\");" >> $PREF_JS_FF
-		  echo "user_pref(\"network.proxy.http_port\", $PORT);" >> $PREF_JS_FF
-		  echo "user_pref(\"network.proxy.type\", 1);"  >> $PREF_JS_FF
-		
+			SETMYSQL proxy_url "$PROXY:$PORT" "url du proxy pour le navigateur" 1
+			SETMYSQL proxy_type "1" "type du proxy (param IE / aucun / manuel / url auto" 1
 		fi	
 	fi
 
-
-	
-
 else
+
 	rm -f /var/www/se3.pac
 	rm -f /var/www/wpad.dat
 	
 	if [ "$slisip" != "" ];	then
-		sed -i 's/%proxytype%/2/g' $PREF_JS_FF
-		sed -i "s/%proxyurl%/http:\/\/$slisip\/cgi-bin\/slis.pac/g" $PREF_JS_FF
+		SETMYSQL proxy_url "http://$slisip/cgi-bin/slis.pac" "url du proxy pour le navigateur" 1
+		SETMYSQL proxy_type "2" "type du proxy (param IE / aucun / manuel / url auto" 1
 	else
-		sed -i 's/%proxytype%/0/g' $PREF_JS_FF
-		sed -i '/%proxyurl%/d' $PREF_JS_FF
+		SETMYSQL proxy_url "" "url du proxy pour le navigateur" 1
+		SETMYSQL proxy_type "0" "type du proxy (param IE / aucun / manuel / url auto" 1
 	fi
 
 fi
 
-for user in /home/*
-do	
-	if [ -e "$user"/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js ]; then 
-	    rm -f "$user"/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
-	    cp /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js "$user"/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
-	    
-	fi
-	
+### Ajouter lancement profil FF
+/usr/share/se3/scripts/deploy_mozilla_ff_final.sh shedule
 
-done
+SETMYSQL firefox_use_ie "default" "Firefox utilise ou non les param proxy de IE" 1
+exit 0
+
