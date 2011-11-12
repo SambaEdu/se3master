@@ -26,11 +26,23 @@ function usage {
 
 
 
+
+
 if [ $# -eq "0" ]  # Script appele sans argument?
 then
   echo "option incorrecte"
   usage 1 
 fi
+
+
+if [ ! -e /var/run/slapd.pid ];then
+	echo "ERREUR: Le serveur ldap ne semble pas fonctionner"
+	echo "Interuption du script"
+	exit 1
+fi
+
+
+
 
 unset CLEAN DELETE ONLY SHEDUL MOVE TRASH VARSE3
 
