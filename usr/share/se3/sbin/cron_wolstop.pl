@@ -31,5 +31,5 @@ die "Unable to execute query: $se3_db->errstr\n";
 while (my $ref = $sth->fetchrow_hashref())
 {
        print $ref->{'heure'},"\n";
-       exec "/usr/share/se3/scripts/start_client.sh $ref->{'parc'} $ref->{'action'} ";
+       system "/usr/share/se3/scripts/start_client.sh $ref->{'parc'} $ref->{'action'} ";
 }
