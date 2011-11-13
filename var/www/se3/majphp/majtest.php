@@ -76,7 +76,7 @@ else {
     if ("$domain_version_install" != "$domain_version_dispo") {
             echo "<TR><TD>".gettext("Scripts de jonction au domaine (se3-domain)")."</TD>";
             echo "<TD align=\"center\">$domain_version_install</TD>";
-            echo "<TD align=\"center\">$domain_version_dispo</TD>";
+            echo "<TD align=\"center\"><b>$domain_version_dispo</b></TD>";
             echo "</TR>";
     }
 
