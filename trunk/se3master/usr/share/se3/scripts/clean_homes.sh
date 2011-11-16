@@ -54,12 +54,13 @@ do
 	opt="c" ;;
 	d) DELETE=1 ;;
 	o) ONLY=1 
-	 opt="o" ;;
+	opt="o" ;;
 	s) SHEDUL=1 ;;
 	t) TRASH=1 ;;
 	v) VARSE3=1
-	  opt="v";;
-	m) MOVE=1 ;;
+	opt="v";;
+	m) MOVE=1 
+	opt="m" ;;
 	h) usage 0 ;;
 	\?) echo "bad option!"
 	usage 1 ;;
@@ -73,7 +74,7 @@ done
 
 
 if [ "$TRASH" == "1" ]; then 
-  echo "rm -rf /home/admin/Trash_users/"
+  rm -rf /home/admin/Trash_users
 fi
 
 
@@ -86,7 +87,7 @@ $0 -$opt
 END
 
   chmod 700 $at_script
-  if [ "$CLEAN" == "1" ]; then 
+  if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then 
       at 20:00 -f $at_script
   else
       at now -f $at_script  
