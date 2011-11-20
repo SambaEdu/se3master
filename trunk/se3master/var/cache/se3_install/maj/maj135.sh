@@ -17,7 +17,7 @@ echo "Mise a jour 135:
 
 echo "Programmation du nettoyage des homes ce soir a 20h00"
 echo "les fichiers obsoletes seront deplaces dans /home/admin/Trash_users"
-/usr/share/se3/scripts/clean_homes.sh -sm 2>&1
+/usr/share/se3/scripts/clean_homes.sh -so 2>&1
 
 config_ff="/var/se3/unattended/install/packages/firefox/firefox-profile.js"
 if [ -e "$config_ff" ]; then
