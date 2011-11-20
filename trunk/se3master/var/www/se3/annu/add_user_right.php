@@ -64,6 +64,11 @@ if (ldap_get_right("se3_is_admin",$login)=="Y") {
         	$cDn = "uid=$uid,$peopleRdn,$ldap_base_dn";
         	$pDn = "cn=$right,$rightsRdn,$ldap_base_dn";
         	exec ("/usr/share/se3/sbin/groupAddEntry.pl \"$cDn\" \"$pDn\"");
+                if ($right == "computers_is_admin") {
+                    //echo "MAj interface wpkg";
+                    $wpkgDroitSh="/usr/share/se3/scripts/update_droits_xml.sh";
+                    if (file_exists($wpkgDroitSh)) exec ("$wpkgDroitSh");
+                }
         	echo "<BR>";
       	}
     }
