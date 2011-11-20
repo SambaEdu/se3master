@@ -177,6 +177,7 @@ echo "	<body>\n";
 
 
 	$html = "<div style=\"margin-bottom: 15%\"><H1>Gestion des comptes orphelins</H1>\n";
+        $html .= "<H3>Op&#233;rations courantes</H3>\n";
 
 	if ($do !="1") 	$html .= "<li><a href=\"ldap_cleaner.php?do=1\" target=\"main\">Transfert des comptes orphelins dans la corbeille</a>".msgaide($msg1)."</li>\n";
 	if ($do !="2") 	$html .= "<li><a href=\"ldap_cleaner.php?do=2\" target=\"main\">Examiner le contenu de la corbeille</a>".msgaide($msg2)."</li>\n";
@@ -187,8 +188,9 @@ echo "	<body>\n";
         $html .= "<li><a href=\"ldap_cleaner.php?do=6\" target=\"main\">Supprimer le dossier temporaire _Trash_users</a>".msgaide($msg8)."</li>\n";
         
     }
-	if ($do !="4") 	$html .= "<li><a href=\"ldap_cleaner.php?do=4\" target=\"main\">Vider la corbeille et purger les fichiers inutiles sur /var/se3</a>".msgaide($msg5)."</li>\n";
-	$html .= "<li><a href=\"ldap_cleaner.php?do=5\" target=\"main\">Programmer la recherche et la suppression des fichiers utilisateurs obsol&#232;tes sur les partitions de stockage</a>".msgaide($msg7)."</li>\n";
+	if ($do !="4") 	$html .= "<li><a href=\"ldap_cleaner.php?do=4\" target=\"main\">Vider la corbeille et purger les fichiers inutiles sur /var/se3</a>".msgaide($msg5)."</li><br>\n";
+	$html .= "<H3>R&#233;solution de probl&#233;me</H3>\n";
+        $html .= "<li><a href=\"ldap_cleaner.php?do=5\" target=\"main\">Programmer la recherche et la suppression des fichiers utilisateurs obsol&#232;tes sur les partitions de stockage</a>".msgaide($msg7)."</li>\n";
 	
         $html .="<p></p>";
         
@@ -381,7 +383,7 @@ echo "	<body>\n";
                     //echo "\$ReturnValue=$ReturnValue<br />";
                     if($ReturnValue!="0") {echo "<div class='error_msg'>Une erreur s'est produite???</div>";}
                     else {
-                            echo "<div class='text'>Programmation pour 20h00 effectu&#233;e, un mail r&#233;capitulatif vous sera envoy&#233./div>"; 
+                            echo "<div class='text'>Programmation pour 20h00 effectu&#233;e, un mail r&#233;capitulatif vous sera envoy&#233.</div>"; 
                         }
                     break;        
               echo "Un mail r&#233;capitulatif vous sera envoy&#233;";
