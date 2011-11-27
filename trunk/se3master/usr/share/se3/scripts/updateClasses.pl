@@ -236,7 +236,9 @@ if ($option eq '-c') {
                 $login = Invert_Login($oldeleve); 
                 Update_Eleve($login) == 0 or warn " Erreur : impossible de mettre a jour pour $login<br\n>";
 		# Modifie le groupe par defaut
-		system("chgrp admins $PathClasses/$cnClasse/$login");
+	        if ( -d "$PathClasses/$cnClasse/$login") { 
+		  system("chgrp admins $PathClasses/$cnClasse/$login"); 
+      	        }
 	      }
             }
         
@@ -248,7 +250,9 @@ if ($option eq '-c') {
             if ( ! -d "$PathClasses/$cnClasse/$eleve") {
               Update_Eleve($member) == 0 or warn " Erreur : impossible de mettre a jour pour $member<br>\n>";
 	      # Modifie le groupe par defaut
-	      system("chgrp admins $PathClasses/$cnClasse/$eleve");
+	      if ( -d "$PathClasses/$cnClasse/$eleve") { 
+		system("chgrp admins $PathClasses/$cnClasse/$eleve"); 
+	      }
 	    }
 	  }
           #Retrait du droit w &#224; Equipe_$CLASSE et ajout de rx au groupe $cnClasse (Classe_ ) sur le dossier /var/se3/Classes/$cnClasse

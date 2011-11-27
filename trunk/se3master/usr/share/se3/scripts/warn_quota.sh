@@ -226,6 +226,7 @@ if [ "$PASDEHOME" != "" ]; then
     #~ CLEEXIST="$(grep "WarnQuota @@@" /home/templates/overfill/registre.zrn)"
     #~ if [ -z "$CLEEXIST" ] ; then
     echo -e "TOUS @@@ ADD @@@  HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\WarnQuota @@@ $BROWSERWIN $URLINTERFACE @@@ REG_SZ \r" >> /home/templates/overfill/registre.zrn
+    echo "INSERT INTO params VALUES ('','quota_browser','$BROWSER', '0','Navigateur affichant depassements de quotas','6')" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
         #~ chown "www-se3" /home/templates/overfill/registre.zrn
     #~ fi
     
