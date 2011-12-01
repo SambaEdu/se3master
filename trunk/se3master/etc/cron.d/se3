@@ -12,6 +12,9 @@
 30 22 * * 7 root /usr/share/se3/sbin/clean_log_ldap.sh > /dev/null
 #
 
+# Controle des pb de nom_parc=nom_machine
+00 22 * * * root /usr/share/se3/sbin/se3_controle_noms_parcs_et_machines_pour_wpkg.sh > /dev/null 2>&1
+
 ### Sauvegarde ldap, mysql et acls de /var/se3 tous les jours à 23h15###
 45 18 * * * root /usr/share/se3/sbin/lance_sauve_system.sh > /dev/null 2>&1
 #
