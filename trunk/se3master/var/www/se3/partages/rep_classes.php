@@ -52,7 +52,7 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 (is_admin("annu_is_admin",$login)=="Y")) {
 
 	function my_echo_debug($chaine) {
-		$debug=1;
+		$debug=0;
 		if($debug==1) {
 			echo "<span style='color:red'>".$chaine."</span><br />\n";
 		}
