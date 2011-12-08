@@ -61,7 +61,7 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
         			if ( $info["count"]) {
           				for ($loop=0; $loop<$info["count"];$loop++) {
          					$gecos = $info[0]["gecos"][0];
-         					$tmp = preg_split ("/[\,\]/",$info[0]["gecos"][0],4);
+         					$tmp = preg_split ("/,/",$info[0]["gecos"][0],4);
          					$date_naiss=$tmp[1];
          					echo gettext("Vous avez choisi de r&#233;initiliser le mot de passe &#224; la date de naissance")."<br><br>";
         					// echo $date_naiss;
