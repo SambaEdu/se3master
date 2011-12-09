@@ -578,6 +578,26 @@ if ($action=="add_com") {
 	echo "</u>";
 }
 echo "</td></tr>\n";
+
+// Partages
+echo "<TR><TD colspan=\"2\" align=\"center\" class=\"menuheader\">\n";
+echo gettext("Partages");
+echo "</TD></TR>";
+
+
+echo "<tr><td>".gettext("Purge journali&#232;re de la partition public ")."</td><td align=\"center\">";
+
+if ($purge_public=="1") {
+        echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer ici afin de d&#233;sactiver la purge automatique du partage public. <br>Cela permet de supprimer automatiquement toutes les nuits les fichiers dans la partition public.')")."\">";
+        echo "<a href=conf_params.php?action=change&amp;varb=purge_public&amp;valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
+} else {
+        echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Cliquer ici afin d\'activer une purge automatique de la partition public.')")."\">";
+        echo "<a href=conf_params.php?action=change&amp;varb=purge_public&amp;valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
+}
+
+echo "</td></tr>";
+
+
 echo "</table></center>";
 
 echo "</table></center>";
