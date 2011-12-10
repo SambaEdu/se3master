@@ -6,7 +6,7 @@
 		Page d'import des comptes depuis les fichiers CSV/XML de Sconet
 		Auteur: Stéphane Boireau (ex-Animateur de Secteur pour les TICE sur Bernay/Pont-Audemer (27))
 		Portage LCS : jean-Luc Chrétien jean-luc.chretien@tice;accaen.fr
-		Dernière modification: 13/03/2011
+		Dernière modification: 03/12/2011
 	*/
 
 	include "se3orlcs_import_comptes.php";
@@ -592,12 +592,6 @@
 								$eleve[$numero]=array();
 								$eleve[$numero]["numero"]=$numero;
 
-
-								//$eleve[$numero]["nom"]=ereg_replace("[^[:space:][:alpha:]]", "", $tabtmp[$index[0]]);
-								//$eleve[$numero]["nom"]=ereg_replace("[^A-Za-zÆæ¼½ÂÄÀÁÃÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕØ¦ÛÜÙÚÝ¾´áàâäãåçéèêëîïìíñôöðòóõø¨ûüùúýÿ¸_ -]", "", $tabtmp[$index[0]]);
-								//$eleve[$numero]["prenom"]=ereg_replace("[^A-Za-zÆæ¼½ÂÄÀÁÃÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕØ¦ÛÜÙÚÝ¾´áàâäãåçéèêëîïìíñôöðòóõø¨ûüùúýÿ¸_ -]", "", $tabtmp[$index[1]]);
-								//$eleve[$numero]["nom"]=ereg_replace("[^A-Za-zÆæ¼½".$liste_caracteres_accentues."_ -]", "", $tabtmp[$index[0]]);
-								//$eleve[$numero]["prenom"]=ereg_replace("[^A-Za-zÆæ¼½".$liste_caracteres_accentues."_ -]", "", $tabtmp[$index[1]]);
 								$eleve[$numero]["nom"]=preg_replace("/[^A-Za-zÆæ¼½".$liste_caracteres_accentues."_ -]/", "", $tabtmp[$index[0]]);
 								$eleve[$numero]["prenom"]=preg_replace("/[^A-Za-zÆæ¼½".$liste_caracteres_accentues."_ -]/", "", $tabtmp[$index[1]]);
 
@@ -629,8 +623,6 @@
 
 
 			my_echo("<a name='csv_eleves'></a>\n");
-			//my_echo("<h3>Affichage d'un CSV des élèves pour SambaEdu3</h3>\n");
-			//my_echo("<h4>Affichage d'un CSV des élèves pour SambaEdu3</h4>\n");
 			my_echo("<h4>Affichage d'un CSV des élèves");
 			if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 			my_echo("</h4>\n");
@@ -690,17 +682,6 @@
 		// C'est un fichier Eleves...XML
 		// *****************************
 
-		//$eleves_xml_file = isset($_FILES["eleves_file"]) ? $_FILES["eleves_file"] : NULL;
-		//$fp=fopen($eleves_xml_file['tmp_name'],"r");
-
-		/*
-		function extr_valeur($lig) {
-			unset($tabtmp);
-			$tabtmp=explode(">",ereg_replace("<",">",$lig));
-			return trim($tabtmp[2]);
-		}
-		*/
-
 		$ele_xml=simplexml_load_file($eleves_file);
 		if($ele_xml) {
 			$nom_racine=$ele_xml->getName();
@@ -732,69 +713,7 @@
 				if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 				my_echo("</h3>\n");
 				my_echo("<blockquote>\n");
-				/*
-				my_echo("<h4>Lecture du fichier Elèves...");
-				if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
-				my_echo("</h4>\n");
-				my_echo("<blockquote>\n");
-				while(!feof($fp)) {
-					$ligne[]=fgets($fp,4096);
-				}
-				fclose($fp);
-				my_echo("<p>Terminé.</p>\n");
-				if($chrono=='y') {my_echo("<p>Fin de l'opération: ".date_et_heure()."</p>\n");}
-				my_echo("</blockquote>\n");
-	
-	
-				// Contrôle du contenu du fichier:
-				if(!stristr($ligne[0],"<?xml ")) {
-					my_echo("<p style='color:red;'>ERREUR: Le fichier élèves fourni n'a pas l'air d'être de type XML.<br />La première ligne devrait débuter par '&lt;?xml '.</p>\n");
-					my_echo("<script type='text/javascript'>
-		compte_a_rebours='n';
-	</script>\n");
-					my_echo("</body>\n</html>\n");
-					my_echo("<div style='position:absolute; top: 50px; left: 300px; width: 400px; border: 1px solid black; background-color: red;'><div align='center'>ERREUR: Le fichier élèves fourni n'a pas l'air d'être de type XML.<br />La première ligne devrait débuter par '&lt;?xml '.</div></div>");
-	
-					// Renseignement du témoin de mise à jour terminée.
-					$sql="SELECT value FROM params WHERE name='imprt_cmpts_en_cours'";
-					$res1=mysql_query($sql);
-					if(mysql_num_rows($res1)==0) {
-						$sql="INSERT INTO params SET name='imprt_cmpts_en_cours',value='n'";
-						$res0=mysql_query($sql);
-					}
-					else{
-						$sql="UPDATE params SET value='n' WHERE name='imprt_cmpts_en_cours'";
-						$res0=mysql_query($sql);
-					}
-	
-					exit();
-				}
-	
-	
-				if(!stristr($ligne[1],"<BEE_ELEVES ")) {
-					my_echo("<p style='color:red;'>ERREUR: Le fichier XML fourni n'a pas l'air d'être un fichier XML Elèves.<br />La deuxième ligne devrait contenir '&lt;BEE_ELEVES '.</p>\n");
-					my_echo("<script type='text/javascript'>
-		compte_a_rebours='n';
-	</script>\n");
-					my_echo("</body>\n</html>\n");
-					my_echo("<div style='position:absolute; top: 50px; left: 300px; width: 400px; border: 1px solid black; background-color: red;'><div align='center'>ERREUR: Le fichier XML fourni n'a pas l'air d'être un fichier XML Elèves.<br />La deuxième ligne devrait contenir '&lt;BEE_ELEVES '.</div></div>");
-	
-					// Renseignement du témoin de mise à jour terminée.
-					$sql="SELECT value FROM params WHERE name='imprt_cmpts_en_cours'";
-					$res1=mysql_query($sql);
-					if(mysql_num_rows($res1)==0) {
-						$sql="INSERT INTO params SET name='imprt_cmpts_en_cours',value='n'";
-						$res0=mysql_query($sql);
-					}
-					else{
-						$sql="UPDATE params SET value='n' WHERE name='imprt_cmpts_en_cours'";
-						$res0=mysql_query($sql);
-					}
-	
-					exit();
-				}
-				*/
-	
+
 				my_echo("<h4>Analyse du fichier pour extraire les informations élèves...");
 				if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 				my_echo("</h4>\n");
@@ -996,10 +915,6 @@
 							foreach($structure->children() as $key => $value) {
 								if(in_array(strtoupper($key),$tab_champs_struct)) {
 									//my_echo("\$structure->$key=".$value."<br />");
-									// Traitement des accents et slashes dans les noms de divisions
-									//$eleves[$i]["structures"][$j][strtolower($key)]=preg_replace("/[^a-zA-Z0-9_ -]/", "",strtr(remplace_accents(trim(traite_utf8($value))),"/","_"));
-									//my_echo("\$eleves[$i][\"structures\"][$j][strtolower($key)]=".$eleves[$i]["structures"][$j][strtolower($key)]."<br />");
-									//my_echo("\$structure->$key=".$value."<br />)";
 
 									$eleves[$i]["structures"][$j][strtolower($key)]=strtr(trim(traite_utf8($value)),"/","_");
 									if($clean_caract_classe=="y") {
@@ -1034,7 +949,10 @@
 				my_echo("</blockquote>\n");
 	
 				//===================================================================
-	
+
+				$tab_groups=array();
+				$tab_groups_member=array();
+
 				my_echo("<h4>Affichage (d'une partie) des données ELEVES extraites:");
 				if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 				my_echo("</h4>\n");
@@ -1082,10 +1000,30 @@
 						if(count($eleves[$i]["structures"])>0) {
 							for($j=0;$j<count($eleves[$i]["structures"]);$j++) {
 								if($eleves[$i]["structures"][$j]["type_structure"]=="D") {
+
+									// Normalement, un élève n'est que dans une classe, mais au cas où:
+									if($temoin_div_trouvee!="oui") {
+										my_echo("<td>".$eleves[$i]["structures"][$j]["code_structure"]."</td>");
+										$eleves[$i]["classe"]=$eleves[$i]["structures"][$j]["code_structure"];
+									}
+
 									$temoin_div_trouvee="oui";
-									break;
+									//break;
+								}
+								elseif($eleves[$i]["structures"][$j]["type_structure"]=="G") {
+									if(!in_array($eleves[$i]["structures"][$j]["code_structure"], $tab_groups)) {
+										$tab_groups[]=$eleves[$i]["structures"][$j]["code_structure"];
+										$tab_groups_member[$eleves[$i]["structures"][$j]["code_structure"]]=array();
+									}
+	
+									if(!in_array($eleves[$i]['eleve_id'], $tab_groups_member[$eleves[$i]["structures"][$j]["code_structure"]])) {
+										//$tab_groups_member[$eleves[$i]["structures"][$j]["code_structure"]][]=$eleves[$i]['eleve_id'];
+										$tab_groups_member[$eleves[$i]["structures"][$j]["code_structure"]][]=$eleves[$i]['elenoet'];
+									}
 								}
 							}
+
+							/*
 							if($temoin_div_trouvee=="") {
 								echo "&nbsp;";
 							}
@@ -1093,6 +1031,7 @@
 								my_echo("<td>".$eleves[$i]["structures"][$j]["code_structure"]."</td>");
 								$eleves[$i]["classe"]=$eleves[$i]["structures"][$j]["code_structure"];
 							}
+							*/
 						}
 						else{
 							my_echo("<td>&nbsp;</td>\n");
@@ -1108,11 +1047,17 @@
 					$i++;
 				}
 	
-				/*
 				my_echo("DEBUG_ELEVES_1<br /><pre style='color:green'><b>eleves</b><br />\n");
 				my_print_r($eleves);
 				my_echo("</pre><br />DEBUG_ELEVES_2<br />\n");
-				*/
+	
+				my_echo("DEBUG_TAB_GROUPS_1<br /><pre style='color:green'><b>tab_groups</b><br />\n");
+				my_print_r($tab_groups);
+				my_echo("</pre><br />DEBUG_TAB_GROUPS_2<br />\n");
+	
+				my_echo("DEBUG_TAB_GROUPS_MEMBER_1<br /><pre style='color:green'><b>tab_groups_member</b><br />\n");
+				my_print_r($tab_groups_member);
+				my_echo("</pre><br />DEBUG_TAB_GROUPS_MEMBER_2<br />\n");
 	
 				my_echo("</table>\n");
 				//my_echo("___ ... ___");
@@ -1820,10 +1765,6 @@
 				$j=0;
 				foreach($objet_groupe->DIVISIONS_APPARTENANCE->children() as $objet_division_apartenance) {
 					foreach($objet_division_apartenance->attributes() as $key => $value) {
-						//$groupes[$i]["divisions"][$j][strtolower($key)]=trim(traite_utf8($value));
-						// Traitement des accents et slashes dans les noms de divisions
-						//$groupes[$i]["divisions"][$j][strtolower($key)]=preg_replace("/[^a-zA-Z0-9_ -]/", "",strtr(remplace_accents(trim(traite_utf8($value))),"/","_"));
-
 						$groupes[$i]["divisions"][$j][strtolower($key)]=strtr(trim(traite_utf8($value)),"/","_");
 						if($clean_caract_classe=="y") {
 							$groupes[$i]["divisions"][$j][strtolower($key)]=preg_replace("/[^a-zA-Z0-9_ -]/", "",remplace_accents($groupes[$i]["divisions"][$j][strtolower($key)]));
@@ -4202,7 +4143,9 @@ fclose($f_tmp);
 					for($k=0;$k<count($tab_division[$ind_div]["option"][$ind_mat]["eleve"]);$k++) {
 						$attribut=array("uid");
 						//my_echo("Recherche: get_tab_attribut(\"groups\", \"cn=Classe_".$prefix."$div\", $attribut)<br />");
-						$tabtmp=get_tab_attribut("people", "employeenumber=".$tab_division[$ind_div]["option"][$ind_mat]["eleve"][$k], $attribut);
+						//$tabtmp=get_tab_attribut("people", "employeenumber=".$tab_division[$ind_div]["option"][$ind_mat]["eleve"][$k], $attribut);
+						$tabtmp=get_tab_attribut("people", "(|(employeenumber=".$tab_division[$ind_div]["option"][$ind_mat]["eleve"][$k].")(employeenumber=".sprintf("%05d",$tab_division[$ind_div]["option"][$ind_mat]["eleve"][$k])."))", $attribut);
+
 						if(count($tabtmp)!=0) {
 							if(!in_array($tabtmp[0],$tab_eleve_uid)) {
 								//my_echo("Ajout à \$tab_eleve_uid<br />");
@@ -4348,21 +4291,22 @@ fclose($f_tmp);
 		//$groupes[$i]["divisions"][$j]["code"]	-> 3 A1
 		//$groupes[$i]["code_matiere"]			-> 070800
 		//$groupes[$i]["enseignant"][$m]["id"]	-> 38101
+
+		$nom_groupe_a_debugger="3 ALL2";
+		function my_echo_double_sortie($chaine, $balise="p") {
+			$debug="n";
+			if($debug=="y") {
+				$retour="<$balise style='color:red'>".$chaine."</$balise>\n";
+				echo $retour;
+				my_echo($retour);
+			}
+		}
+
+		my_echo_double_sortie("count(\$groupes)=".count($groupes));
+
 		for($i=0;$i<count($groupes);$i++) {
 			if(isset($groupes[$i]["service"])) {
 				for($p=0;$p<count($groupes[$i]["service"]);$p++) {
-					/*
-					$grp=$groupes[$i]["code"];
-					if(count($groupes[$i]["service"])>1) {
-						if(isset($groupes[$i]["service"][$p]["code_matiere"])) {
-							$grp=$grp."_".$groupes[$i]["service"][$p]["code_matiere"];
-						}
-						else{
-							$grp=$grp."_".$p;
-						}
-					}
-					$grp=ereg_replace("'","_",ereg_replace(" ","_",remplace_accents($grp)));
-					*/
 					$temoin_grp="";
 					$grp_mat="";
 
@@ -4410,6 +4354,11 @@ fclose($f_tmp);
 						}
 					}
 
+
+					if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+						my_echo_double_sortie("\$groupes[$i][\"code\"]=".$groupes[$i]["code"]);
+					}
+
 					// Récupération des élèves associés aux classes de ce groupe
 					unset($tab_eleve_uid);
 					$tab_eleve_uid=array();
@@ -4418,6 +4367,11 @@ fclose($f_tmp);
 						$div=$groupes[$i]["divisions"][$j]["code"];
 						//$div=ereg_replace("'","_",ereg_replace(" ","_",remplace_accents($div)));
 						$div=apostrophes_espaces_2_underscore(remplace_accents($div));
+
+
+							if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+								my_echo_double_sortie("Classe associee ".$div);
+							}
 
 						//my_echo("\$div=".$div."<br />");
 
@@ -4432,6 +4386,11 @@ fclose($f_tmp);
 								//if(ereg_replace("'","_",ereg_replace(" ","_",remplace_accents($tab_division[$k]["nom"])))==$div) {
 								if(apostrophes_espaces_2_underscore(remplace_accents($tab_division[$k]["nom"]))==$div) {
 									$ind_div=$k;
+
+									if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+										my_echo_double_sortie("\$ind_div=".$ind_div);
+									}
+
 									break;
 								}
 							}
@@ -4441,18 +4400,40 @@ fclose($f_tmp);
 
 
 						// La matière est-elle optionnelle dans la classe?
+						$temoin_groupe_apparaissant_dans_Eleves_xml="non";
 						$temoin_matiere_optionnelle="non";
 						$ind_mat="";
 						if(($type_fichier_eleves=="xml")&&($ind_div!="")) {
 							for($k=0;$k<count($tab_division[$ind_div]["option"]);$k++) {
-							//for($k=0;$k<=count($tab_division[$ind_div]["option"]);$k++) {
-								//my_echo("\$tab_division[$ind_div][\"option\"][$k][\"code_matiere\"]=".$tab_division[$ind_div]["option"][$k]["code_matiere"]."<br />");
-								// $tab_division[$k]["option"][$n]["code_matiere"]
-								if($tab_division[$ind_div]["option"][$k]["code_matiere"]==$grp_id_mat) {
+
+								if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+									my_echo_double_sortie("\$tab_division[$ind_div][\"option\"][$k][\"code_matiere\"]=".$tab_division[$ind_div]["option"][$k]["code_matiere"]." et \$grp_id_mat=$grp_id_mat");
+								}
+
+								//if(in_array($groupes[$i]["code"], $tab_groups)) {
+								if((in_array($groupes[$i]["code"], $tab_groups))||(in_array(apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"])), $tab_groups))) {
+									// Les inscriptions des eleves ont ete inscrites dans le ElevesSansAdresses.xml
+									$temoin_groupe_apparaissant_dans_Eleves_xml="oui";
 									$temoin_matiere_optionnelle="oui";
 									$ind_mat=$k;
+
+									if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+										my_echo_double_sortie("Matiere optionnelle apparaissant dans ElevesSansAdresses avec \$ind_mat=$ind_mat");
+									}
+
 									break;
 								}
+								elseif($tab_division[$ind_div]["option"][$k]["code_matiere"]==$grp_id_mat) {
+									$temoin_matiere_optionnelle="oui";
+									$ind_mat=$k;
+
+									if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+										my_echo_double_sortie("Matiere optionnelle avec \$ind_mat=$ind_mat");
+									}
+
+									break;
+								}
+
 							}
 						}
 						//my_echo("\$ind_mat=".$ind_mat."<br />");
@@ -4466,7 +4447,9 @@ fclose($f_tmp);
 							$chaine_div.=" / ".$div;
 						}
 
-
+							if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+								my_echo_double_sortie("\$temoin_matiere_optionnelle=".$temoin_matiere_optionnelle);
+							}
 
 						if($temoin_matiere_optionnelle!="oui") {
 							//$attribut=array("memberUid");
@@ -4482,18 +4465,45 @@ fclose($f_tmp);
 							}
 						}
 						else{
+
+							if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+								my_echo_double_sortie("\$temoin_groupe_apparaissant_dans_Eleves_xml=".$temoin_groupe_apparaissant_dans_Eleves_xml);
+							}
+
 							//my_echo("<p>Matière optionnelle pour $grp:<br />");
-							for($k=0;$k<count($tab_division[$ind_div]["option"][$ind_mat]["eleve"]);$k++) {
-								$attribut=array("uid");
-								//my_echo("Recherche: get_tab_attribut(\"groups\", \"cn=Classe_".$prefix."$div\", $attribut)<br />");
-								$tabtmp=get_tab_attribut("people", "employeenumber=".$tab_division[$ind_div]["option"][$ind_mat]["eleve"][$k], $attribut);
-								if(count($tabtmp)!=0) {
-									if(!in_array($tabtmp[0],$tab_eleve_uid)) {
-										//my_echo("Ajout à \$tab_eleve_uid<br />");
+							if($temoin_groupe_apparaissant_dans_Eleves_xml!="oui") {
+								for($k=0;$k<count($tab_division[$ind_div]["option"][$ind_mat]["eleve"]);$k++) {
+									$attribut=array("uid");
+									//my_echo("Recherche: get_tab_attribut(\"groups\", \"cn=Classe_".$prefix."$div\", $attribut)<br />");
+
+									$tabtmp=get_tab_attribut("people", "(|(employeenumber=".$tab_division[$ind_div]["option"][$ind_mat]["eleve"][$k].")(employeenumber=".sprintf("%05d",$tab_division[$ind_div]["option"][$ind_mat]["eleve"][$k])."))", $attribut);
+
+									if(count($tabtmp)!=0) {
+										if(!in_array($tabtmp[0],$tab_eleve_uid)) {
+											//my_echo("Ajout à \$tab_eleve_uid<br />");
+											$tab_eleve_uid[]=$tabtmp[0];
+										}
+									}
+								}
+							}
+							else {
+
+								for($k=0;$k<count($tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))]);$k++) {
+									// Recuperer l'uid correspondant a l'elenoet/employeeNumber stocke
+									$attribut=array("uid");
+
+									$tabtmp=get_tab_attribut("people", "(|(employeenumber=".$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))][$k].")(employeenumber=".sprintf("%05d",$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))][$k])."))", $attribut);
+
+									if((isset($tabtmp[0]))&&(!in_array($tabtmp[0],$tab_eleve_uid))) {
 										$tab_eleve_uid[]=$tabtmp[0];
 									}
 								}
 							}
+
+							if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+								my_echo_double_sortie(print_r($tab_eleve_uid),"pre");
+							}
+
 						}
 					}
 
@@ -4618,51 +4628,27 @@ fclose($f_tmp);
 					my_echo("</p>\n");
 				}
 			}
-			else{
+			else {
+				//=============================================================================================
 				// Pas de section "<SERVICE " dans ce groupe
 				$grp=$groupes[$i]["code"];
-				//$grp=ereg_replace("'","_",ereg_replace(" ","_",remplace_accents($grp)));
 				$grp=apostrophes_espaces_2_underscore(remplace_accents($grp));
 				$temoin_grp="";
 				$grp_mat="";
 
+				// Faute de section SERVICE, on ne récupère pas le grp_id_mat
+				// On n'a pas de $grp_id_mat faute de section SERVICE donc pas moyen d'identifier la matière associée au groupe et de chercher si cette matière a été repérée comme optionnelle
+
+				if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+					my_echo_double_sortie("\$groupes[$i][\"code\"]=".$groupes[$i]["code"]);
+				}
+
 				//my_echo("<p>\$grp=\$groupes[$i][\"code\"]=".$grp."<br />");
 
-				/*
-				// Pas de section "<SERVICE " dans ce groupe donc pas de CODE_MATIERE
-				if(isset($groupes[$i]["code_matiere"])) {
-					$grp_id_mat=$groupes[$i]["code_matiere"];
-					//my_echo("\$grp_id_mat=\$groupes[$i][\"code_matiere\"]=".$grp_id_mat."<br />");
-					// Recherche du nom court de matière
-					for($n=0;$n<count($matiere);$n++) {
-						if($matiere[$n]["code"]==$grp_id_mat) {
-							$grp_mat=$matiere[$n]["code_gestion"];
-						}
-					}
-				}
-				*/
-				//my_echo("\$grp_mat=".$grp_mat."<br />");
-
-
 				// Récupération des profs associés à ce groupe
+				// Impossible faute de section SERVICE
 				unset($tab_prof_uid);
 				$tab_prof_uid=array();
-				/*
-				// Pas de section "<SERVICE " dans ce groupe donc pas de sous-section ENSEIGNANT
-				if(isset($groupes[$i]["enseignant"])) {
-					for($m=0;$m<count($groupes[$i]["enseignant"]);$m++) {
-						$employeeNumber="P".$groupes[$i]["enseignant"][$m]["id"];
-						$attribut=array("uid");
-						$tabtmp=get_tab_attribut("people", "employeenumber=$employeeNumber", $attribut);
-						if(count($tabtmp)!=0) {
-							$uid=$tabtmp[0];
-							if(!in_array($uid,$tab_prof_uid)) {
-								$tab_prof_uid[]=$uid;
-							}
-						}
-					}
-				}
-				*/
 
 				// Récupération des élèves associés aux classes de ce groupe
 				unset($tab_eleve_uid);
@@ -4677,6 +4663,10 @@ fclose($f_tmp);
 
 					//$tab_division[$ind_div]["option"][$k]["code_matiere"]
 
+					if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+						my_echo_double_sortie("Classe associee ".$div);
+					}
+
 					// Dans le cas de l'import XML, on récupère la liste des options suivies par les élèves
 					$ind_div="";
 					if($type_fichier_eleves=="xml") {
@@ -4686,6 +4676,11 @@ fclose($f_tmp);
 							//if(ereg_replace("'","_",ereg_replace(" ","_",remplace_accents($tab_division[$k]["nom"])))==$div) {
 							if(apostrophes_espaces_2_underscore(remplace_accents($tab_division[$k]["nom"]))==$div) {
 								$ind_div=$k;
+
+								if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+									my_echo_double_sortie("\$ind_div=".$ind_div);
+								}
+
 								break;
 							}
 						}
@@ -4695,23 +4690,23 @@ fclose($f_tmp);
 
 
 					// La matière est-elle optionnelle dans la classe?
+					$temoin_groupe_apparaissant_dans_Eleves_xml="non";
 					$temoin_matiere_optionnelle="non";
 					$ind_mat="";
-					if(($type_fichier_eleves=="xml")&&($ind_div!="")) {
-						for($k=0;$k<count($tab_division[$ind_div]["option"]);$k++) {
-						//for($k=0;$k<=count($tab_division[$ind_div]["option"]);$k++) {
-							//my_echo("\$tab_division[$ind_div][\"option\"][$k][\"code_matiere\"]=".$tab_division[$ind_div]["option"][$k]["code_matiere"]."<br />");
-							// $tab_division[$k]["option"][$n]["code_matiere"]
-							if($tab_division[$ind_div]["option"][$k]["code_matiere"]==$grp_id_mat) {
-								$temoin_matiere_optionnelle="oui";
-								$ind_mat=$k;
-								break;
-							}
+
+					//if(in_array($groupes[$i]["code"], $tab_groups)) {
+					if((in_array($groupes[$i]["code"], $tab_groups))||(in_array(apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"])), $tab_groups))) {
+						// Les inscriptions des eleves ont ete inscrites dans le ElevesSansAdresses.xml
+						$temoin_groupe_apparaissant_dans_Eleves_xml="oui";
+						$temoin_matiere_optionnelle="oui";
+						$ind_mat=$k;
+
+						if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+							my_echo_double_sortie("Matiere optionnelle apparaissant dans ElevesSansAdresses avec \$ind_mat=$ind_mat");
 						}
 					}
+
 					//my_echo("\$ind_mat=".$ind_mat."<br />");
-
-
 
 					if($chaine_div=="") {
 						$chaine_div=$div;
@@ -4720,7 +4715,9 @@ fclose($f_tmp);
 						$chaine_div.=" / ".$div;
 					}
 
-
+					if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+						my_echo_double_sortie("\$temoin_matiere_optionnelle=".$temoin_matiere_optionnelle);
+					}
 
 					if($temoin_matiere_optionnelle!="oui") {
 						//$attribut=array("memberUid");
@@ -4736,18 +4733,57 @@ fclose($f_tmp);
 						}
 					}
 					else{
+
+						if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+							my_echo_double_sortie("\$temoin_groupe_apparaissant_dans_Eleves_xml=".$temoin_groupe_apparaissant_dans_Eleves_xml);
+						}
+
 						//my_echo("<p>Matière optionnelle pour $grp:<br />");
-						for($k=0;$k<count($tab_division[$ind_div]["option"][$ind_mat]["eleve"]);$k++) {
-							$attribut=array("uid");
-							//my_echo("Recherche: get_tab_attribut(\"groups\", \"cn=Classe_".$prefix."$div\", $attribut)<br />");
-							$tabtmp=get_tab_attribut("people", "employeenumber=".$tab_division[$ind_div]["option"][$ind_mat]["eleve"][$k], $attribut);
-							if(count($tabtmp)!=0) {
-								if(!in_array($tabtmp[0],$tab_eleve_uid)) {
-									//my_echo("Ajout à \$tab_eleve_uid<br />");
+						if($temoin_groupe_apparaissant_dans_Eleves_xml!="oui") {
+							for($k=0;$k<count($tab_division[$ind_div]["option"][$ind_mat]["eleve"]);$k++) {
+								$attribut=array("uid");
+								//my_echo("Recherche: get_tab_attribut(\"groups\", \"cn=Classe_".$prefix."$div\", $attribut)<br />");
+								$tabtmp=get_tab_attribut("people", "(|(employeenumber=".$tab_division[$ind_div]["option"][$ind_mat]["eleve"][$k].")(employeenumber=".sprintf("%05d",$tab_division[$ind_div]["option"][$ind_mat]["eleve"][$k])."))", $attribut);
+
+								if(count($tabtmp)!=0) {
+									if(!in_array($tabtmp[0],$tab_eleve_uid)) {
+										//my_echo("Ajout à \$tab_eleve_uid<br />");
+										$tab_eleve_uid[]=$tabtmp[0];
+									}
+								}
+							}
+						}
+						else {
+
+							if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+								my_echo_double_sortie("count(\$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents(\$groupes[$i]['code']))])=count(\$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents(".$groupes[$i]['code']."))])=count(\$tab_groups_member[".apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))."])=".count($tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))]));
+							}
+
+							for($k=0;$k<count($tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))]);$k++) {
+								// Recuperer l'uid correspondant a l'elenoet/employeeNumber stocke
+								//$tabtmp=search_people("employeeNumber=".$tab_groups_member[$groupes[$i]["code"]][$k]);
+
+								if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+									my_echo_double_sortie("\$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents(\$groupes[$i]['code']))][$k]=\$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents(".$groupes[$i]['code']."))][$k]=\$tab_groups_member[".apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]['code']))."][$k]=".$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]['code']))][$k]);
+								}
+
+								$attribut=array("uid");
+								$tabtmp=get_tab_attribut("people", "(|(employeenumber=".$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))][$k].")(employeenumber=".sprintf("%05d",$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))][$k])."))", $attribut);
+
+								if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+									my_echo_double_sortie(print_r($tabtmp),"pre");
+								}
+
+								if((isset($tabtmp[0]))&&(!in_array($tabtmp[0],$tab_eleve_uid))) {
 									$tab_eleve_uid[]=$tabtmp[0];
 								}
 							}
 						}
+
+						if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+							my_echo_double_sortie(print_r($tab_eleve_uid),"pre");
+						}
+
 					}
 				}
 
@@ -5133,6 +5169,8 @@ fclose($f_tmp);
 	}
 
 	my_echo($infos_corrections_gecos);
+
+	$chaine.=$infos_corrections_gecos;
 
 	if($nb_echecs==0) {
 		//my_echo("<p>Aucune opération tentée n'a échoué.</p>\n");
