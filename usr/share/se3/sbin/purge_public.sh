@@ -14,11 +14,10 @@ then
         exit
 fi
 
+. /etc/se3/config_c.cache.sh
 
 
-PURGE=`echo "SELECT value FROM params WHERE name='purge_public'" | mysql -h localhost se3db -N`
-
-if [ "$PURGE" == "1" ]
+if [ "$purge_public" == "1" ]
 then
         rm -Rf /var/se3/Docs/public/* > /dev/null
 fi
