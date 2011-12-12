@@ -48,8 +48,10 @@ if ($action == "change") {
 
 	if ($_GET[varb] == "proxy") {
 		system("/usr/bin/sudo /usr/share/se3/scripts/modifProxy.sh $_GET[valeur]");
-	} else {	
-		$resultat=mysql_query("INSERT into params (`value`, `name`) VALUES ('$_GET[valeur]','$_GET[varb]')");
+	} else {
+                //$resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$default_page_dem', '$name_params', 'homepage $userGroups', '1')");
+                    
+		$resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$_GET[valeur]','$_GET[varb]','$_GET[descr]','$_GET[cat]')");
 		if ($resultat == FALSE) {
 			mysql_query("UPDATE params set value='$_GET[valeur]' where name='$_GET[varb]'");
 		}
@@ -143,11 +145,11 @@ echo "</td></tr>\n";
 echo "<TR><TD>".gettext("Affiche la page d'&#233;tat")."</TD><TD align=\"center\">";
 if ($affiche_etat=="0") {
 	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Permet d\'afficher l\'&#233;tat du serveur &#224; chaque d&#233;marrage de l\'interface')")."\">";
-	echo "<a href=conf_params.php?action=change&amp;varb=affiche_etat&amp;valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
+	echo "<a href=conf_params.php?action=change&amp;varb=affiche_etat&amp;valeur=1&amp;cat=6><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
 	echo "</u>";
 } else {
 	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Permet de ne plus faire afficher l\'interface de l\'&#233;tat du serveur &#224; chaque lancement de l\'interface d\'administration du serveur.')")."\">";
-	echo "<a href=conf_params.php?action=change&amp;varb=affiche_etat&amp;valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\" ></a>";
+	echo "<a href=conf_params.php?action=change&amp;varb=affiche_etat&amp;valeur=0&amp;cat=6><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\" ></a>";
 	echo "</u>";
 }
 echo "</td></tr>\n";
@@ -260,11 +262,11 @@ echo "</td></tr>\n";
 echo "<TR><TD>".gettext("Corbeille r&#233;seau")."</TD><TD align=\"center\">";
 if ($corbeille=="0") {
 	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b>')")."\">";
-	echo "<a href=conf_params.php?action=change&amp;varb=corbeille&amp;valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
+	echo "<a href=conf_params.php?action=change&amp;varb=corbeille&amp;valeur=1&amp;cat=4><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
 	echo "</u>";
 } else {
 	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b>')")."\">";
-	echo "<a href=conf_params.php?action=change&amp;varb=corbeille&amp;valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
+	echo "<a href=conf_params.php?action=change&amp;varb=corbeille&amp;valeur=0&amp;cat=4><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
 	echo "</u>";
 }
 echo "</td></tr>\n";
@@ -294,11 +296,11 @@ echo "</td></tr>\n";
 echo "<TR><TD>".gettext("Masquage du script &#224; l'ouverture de session windows")."</TD><TD align=\"center\">";
 if ($hide_logon=="0") {
 	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Le script de connexion de windows est actuellement visible des utilisateurs.<br><br> Cliquez sur le bouton si vous voulez le masquer.')")."\">";
-	echo "<a href=conf_params.php?action=change&amp;varb=hide_logon&amp;valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
+	echo "<a href=conf_params.php?action=change&amp;varb=hide_logon&amp;valeur=1&amp;cat=4><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
 	echo "</u>";
 } else {
 	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Le script de connexion de windows est actuellement masqu&#233;.<br><br>Cliquez sur le bouton si vous voulez le rendre visible des utilisateurs. ')")."\">";
-	echo "<a href=conf_params.php?action=change&amp;varb=hide_logon&amp;valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
+	echo "<a href=conf_params.php?action=change&amp;varb=hide_logon&amp;valeur=0&amp;cat=4><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
 	echo "</u>";
 }
 echo "</td></tr>\n";
@@ -579,20 +581,21 @@ if ($action=="add_com") {
 }
 echo "</td></tr>\n";
 
+
 // Partages
 echo "<TR><TD colspan=\"2\" align=\"center\" class=\"menuheader\">\n";
 echo gettext("Partages");
 echo "</TD></TR>";
 
 
-echo "<tr><td>".gettext("Purge journali&#232;re de la partition public ")."</td><td align=\"center\">";
+echo "<tr><td>".gettext("Purge journali&#232;re de la ressource public ")."</td><td align=\"center\">";
 
 if ($purge_public=="1") {
         echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer ici afin de d&#233;sactiver la purge automatique du partage public. <br>Cela permet de supprimer automatiquement toutes les nuits les fichiers dans la partition public.')")."\">";
-        echo "<a href=conf_params.php?action=change&amp;varb=purge_public&amp;valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
+        echo "<a href=conf_params.php?action=change&amp;varb=purge_public&amp;valeur=0&amp;cat=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
 } else {
         echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Cliquer ici afin d\'activer une purge automatique de la partition public.')")."\">";
-        echo "<a href=conf_params.php?action=change&amp;varb=purge_public&amp;valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
+        echo "<a href=conf_params.php?action=change&amp;varb=purge_public&amp;valeur=1&amp;cat=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
 }
 
 echo "</td></tr>";
