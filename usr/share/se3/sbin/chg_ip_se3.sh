@@ -340,7 +340,7 @@ if [ -n "$dhcp_wins" ]; then
 	
 fi
 
-echo "UPDATE params SET value='$NEW_IP' WHERE name='semask';" >> /tmp/maj_chgt_ip_se3.sql
+echo "UPDATE params SET value='$NEW_NETMASK' WHERE name='se3mask';" >> /tmp/maj_chgt_ip_se3.sql
 mysql -u$dbuser -p$dbpass $dbname < /tmp/maj_chgt_ip_se3.sql
 
 #
