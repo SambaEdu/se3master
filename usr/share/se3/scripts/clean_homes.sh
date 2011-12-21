@@ -25,7 +25,14 @@ function usage {
 }
 
 
+function ldap_status {
 
+if [ ! -e /var/run/slapd.pid ];then
+	echo "ERREUR: Le serveur ldap ne semble pas fonctionner"
+	echo "Interuption du script"
+	exit 1
+fi
+}
 
 
 if [ $# -eq "0" ]  # Script appele sans argument?
@@ -35,11 +42,6 @@ then
 fi
 
 
-if [ ! -e /var/run/slapd.pid ];then
-	echo "ERREUR: Le serveur ldap ne semble pas fonctionner"
-	echo "Interuption du script"
-	exit 1
-fi
 
 
 
@@ -96,15 +98,26 @@ END
 fi
 
 
-if [ "$VARSE3" == "1" ]; then 
+if [ "$VARSE3" == "1" -o "$CLEAN" == "1" ]; then 
     echo "Recherche et suppression vieux fichiers sur le partage Classes"
-    find /var/se3/Classes -nouser -print -exec rm -rf "{}" \; 2>/dev/null
+	ldap_status()
+    find /var/se3/Classes/* -nouser -type f -print -exec rm -f "{}" \; 2>/dev/null
+	find /var/se3/Classes/* -nouser -type d -print -exec rmdir "{}" \; 2>/dev/null
+
     echo "Recherche et suppression vieux fichiers sur partage Docs"
-    find /var/se3/Docs -nouser -print -exec rm -rf "{}" \; 2>/dev/null
+	ldap_status()
+    find /var/se3/Docs/* -nouser -type f -print -exec rm -f "{}" \; 2>/dev/null
+	find /var/se3/Docs/* -nouser -type d -print -exec rmdir "{}" \; 2>/dev/null
+
     echo "Recherche et suppression vieux fichiers sur partage Progs"
-    find /var/se3/Progs -nouser -print -exec rm -rf "{}" \; 2>/dev/null
+	ldap_status()
+    find /var/se3/Progs/* -nouser -type f -print -exec rm -f "{}" \; 2>/dev/null
+	find /var/se3/Progs/* -nouser -type d -print -exec rmdir "{}" \; 2>/dev/null
+
     echo "Recherche et suppression vieux fichiers sur partage prof"
-    find /var/se3/prof -nouser -print -exec rm -rf "{}" \; 2>/dev/null
+	ldap_status()
+    find /var/se3/prof/* -nouser -type f -print -exec rm -f "{}" \; 2>/dev/null
+	find /var/se3/prof/* -nouser -type d -print -exec rmdir "{}" \; 2>/dev/null
 fi
 
 if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then 
@@ -114,18 +127,16 @@ if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then
 	bpc_etat="1"
     fi
     echo "Recherche et suppression vieux profils XP / Seven"
+	ldap_status()
     find /home/profiles/ -maxdepth 1  -type d -nouser -print -exec rm -rf "{}" \;
     #    find /home/admin/profiles/ -maxdepth 1  -type d -nouser -print -exec rm -rf "{}" \;
     #     find /home/ -maxdepth 4 -nouser -print -exec rm -rf "{}" \; 2>/dev/null
 
 
     if [ "$CLEAN" == "1" ]; then 
-	echo "Recherche et suppression vieux fichiers sur /homes"
-	find /home/ -nouser -print -exec rm -rf "{}" \; 2>/dev/null
 	echo "Recherche et suppression vieux fichiers /home/admin/Trash_users"
 	find /home/admin/Trash_users -name _Trash_[0-9_]* -print -exec rm -rf "{}" \; 2>/dev/null
-	echo "Recherche et suppression vieux fichiers sur /var/se3/"
-	find /var/se3/ -nouser -print -exec rm -rf "{}" \; 2>/dev/null
+	
     fi
 
     LADATE=$(date +%d-%m-%Y)
@@ -133,6 +144,7 @@ if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then
 
     cpt=0
     cd /home
+	ldap_status()
     ls /home | while read A
     do
 	if [ -d "/home/$A"  -a ! -L /home/$A ]; then
@@ -145,27 +157,22 @@ if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then
 		    chown -R admin:admins /home/admin/Trash_users/$A 
 		else 
 		    if [ "$A" != "templates" -a "$A" != "netlogon" -a "$A" != "admin" -a "$A" != "samba" -a "$A" != "sauvegarde" -a "$A" != "profiles" ]; then
-			if [ -z "$(getfacl $A 2>/dev/null|grep owner|grep $A)"  ]; then
+				if [ -z "$(getfacl $A 2>/dev/null|grep owner|grep $A)"  ]; then
 			  
-			    if [ "$ONLY" == "1" ]; then 
-			      echo "$A n'est pas proprio de son Home... mise en $dest."
-				if [ "$cpt" == "0" ]; then
-				  mkdir -p /home/admin/Trash_users
-				  chown admin:admins /home/admin/Trash_users
-				  mkdir -p ${dest}
-				fi
-			      mv /home/$A $dest/
-			      rm -rf /home/profiles/$A
-			      chown -R admin:admins $dest/$A
-			      cpt=1
-			    else
-			      echo Suppression fichiers $A sur /home
-			      rm -fr /home/profiles/$A
-			      rm -fr /home/$A 
-			    fi
-			  
-		      fi  
-		    fi
+			    	echo "$A n'est pas proprio de son Home... mise en $dest."
+					if [ "$cpt" == "0" ]; then
+						mkdir -p /home/admin/Trash_users
+						chown admin:admins /home/admin/Trash_users
+						mkdir -p ${dest}
+					fi
+					mv /home/$A $dest/
+					rm -rf /home/profiles/$A
+					chown -R admin:admins $dest/$A
+					cpt=1
+			    
+				fi  
+		    
+			fi
 		fi
 	fi
 	
@@ -182,16 +189,15 @@ if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then
 
 
 fi
-
-
 if  [ "$DELETE" == "1" -o "$MOVE" == "1" ]; then
     dest=/home/admin/Trash_users/_Trash_$(date +%Y%m%d_%H%M%S)
     fich=/var/www/se3/Admin/mv_Trash_$(date +%Y%m%d%H%M%S)
     cpt=0
+	   
     echo "Parcours de la Corbeille...<br />"
     ldapsearch -xLLL -b ou=Trash,$ldap_base_dn uid | grep "^uid: " | sed -e "s/^uid: //" | while read uid
     do
-	#echo "Controle de $uid" | tee -a $fich
+	#echo "Controle de $uid"
 	  if [ -d "/home/$uid" ]; then
 		if [ "$MOVE" == "1" ]; then 
 		
@@ -200,10 +206,10 @@ if  [ "$DELETE" == "1" -o "$MOVE" == "1" ]; then
 			  chown admin:admins /home/admin/Trash_users
 			  mkdir -p ${dest}
 			  if [ "$?" != "0" ]; then
-			      echo "ERREUR: La creation du dossier ${dest} a echoue." | tee -a $fich
+			      echo "ERREUR: La creation du dossier ${dest} a echoue."
 			      exit 1
 			  fi
-			  echo "Deplacement vers ${dest}: <br>" | tee -a $fich
+			  echo "Deplacement vers ${dest}: <br>"
 		    else
 			  echo ", "|tee -a $fich
 		    fi
@@ -214,13 +220,13 @@ if  [ "$DELETE" == "1" -o "$MOVE" == "1" ]; then
 
 		    cpt=$(($cpt+1))
 		else
-		     echo  "Suppression de /home/$uid <br>" | tee -a $fich
+		     echo  "Suppression de /home/$uid <br>"
 		     rm -fr /home/$uid 
 #  		     echo "rm -fr /home/$uid <br>" 
 	   fi
 	    
 	  else
-	    echo "/home/$uid n'existe pas <br>"| tee -a $fich
+	    echo "/home/$uid n'existe pas <br>"
 	  fi
 
 	# A VOIR pour LCS:
