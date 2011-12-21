@@ -188,29 +188,38 @@ chgrp nut /var/lib/nut
 
 #droits de base sur var/se3 (sauf public enlevé volontairement)
 # setfacl -m d:g::rwx /var/se3/Docs/public
-chgrp admins /var/se3
+chown admin:admins /var/se3
 chmod 755 /var/se3
+
 
 #partage Progs
 mkdir -p /var/se3/Progs
 chmod 775 /var/se3/Progs
 chown $OPTION admin:admins /var/se3/Progs
-chown admin:admins /var/se3/Progs/ro
-chown admin:admins /var/se3/Progs/rw
-chown admin:admins /var/se3/Progs/install
-chmod 775 /var/se3/Progs/rw /var/se3/Progs/ro
-setfacl -m d:u::rwx /var/se3/Progs/rw
-setfacl -m d:g::rwx /var/se3/Progs/rw
-#setfacl -m d:o::rwx /var/se3/Progs/rw
+setfacl $OPTION -m g:admins:rwx /var/se3/Progs
+setfacl $OPTION -m d:g:admins:rwx /var/se3/Progs
+
+#ro
+chown admin:lcs-users /var/se3/Progs/ro
+chmod 755 /var/se3/Progs/ro
 setfacl -m d:u::rwx /var/se3/Progs/ro
 setfacl -m d:g::rx /var/se3/Progs/ro
 setfacl -m d:o::rx /var/se3/Progs/ro
-setfacl $OPTION -m g:admins:rwx /var/se3/Progs
-setfacl $OPTION -m d:g:admins:rwx /var/se3/Progs
+setfacl -m g:admins:rwx /var/se3/Progs/ro
+setfacl -m d:g:admins:rwx /var/se3/Progs/ro
+
+#rw
+chown admin:admins /var/se3/Progs/rw
+chmod 775 /var/se3/Progs/rw 
+setfacl -m d:u::rwx /var/se3/Progs/rw
+setfacl -m d:g::rwx /var/se3/Progs/rw
+#setfacl -m d:o::rwx /var/se3/Progs/rw
 
 
 # droit sur /var/se3/Progs/install 
 if [ -e /var/se3/Progs/install ]; then
+	chown admin:admins /var/se3/Progs/install
+	[ ! -e /var/se3/Progs/install/domscripts ] && ln -s /home/netlogon/domscripts /var/se3/Progs/install/domscripts
 	setfacl $OPTION -m  u:www-se3:rx /var/se3/Progs/install
 	setfacl $OPTION -m  d:u:www-se3:rx /var/se3/Progs/install
 	setfacl -R -m  u:adminse3:rx /var/se3/Progs/install
