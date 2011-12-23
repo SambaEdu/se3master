@@ -100,24 +100,24 @@ fi
 
 if [ "$VARSE3" == "1" -o "$CLEAN" == "1" ]; then 
     echo "Recherche et suppression vieux fichiers sur le partage Classes"
-	ldap_status()
+    ldap_status
     find /var/se3/Classes/* -nouser -type f -print -exec rm -f "{}" \; 2>/dev/null
-	find /var/se3/Classes/* -nouser -type d -print -exec rmdir "{}" \; 2>/dev/null
+    find /var/se3/Classes/* -nouser -type d -print -exec rmdir "{}" \; 2>/dev/null
 
     echo "Recherche et suppression vieux fichiers sur partage Docs"
-	ldap_status()
+    ldap_status
     find /var/se3/Docs/* -nouser -type f -print -exec rm -f "{}" \; 2>/dev/null
-	find /var/se3/Docs/* -nouser -type d -print -exec rmdir "{}" \; 2>/dev/null
+    find /var/se3/Docs/* -nouser -type d -print -exec rmdir "{}" \; 2>/dev/null
 
     echo "Recherche et suppression vieux fichiers sur partage Progs"
-	ldap_status()
+    ldap_status
     find /var/se3/Progs/* -nouser -type f -print -exec rm -f "{}" \; 2>/dev/null
-	find /var/se3/Progs/* -nouser -type d -print -exec rmdir "{}" \; 2>/dev/null
+    find /var/se3/Progs/* -nouser -type d -print -exec rmdir "{}" \; 2>/dev/null
 
     echo "Recherche et suppression vieux fichiers sur partage prof"
-	ldap_status()
+    ldap_status
     find /var/se3/prof/* -nouser -type f -print -exec rm -f "{}" \; 2>/dev/null
-	find /var/se3/prof/* -nouser -type d -print -exec rmdir "{}" \; 2>/dev/null
+    find /var/se3/prof/* -nouser -type d -print -exec rmdir "{}" \; 2>/dev/null
 fi
 
 if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then 
@@ -127,7 +127,7 @@ if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then
 	bpc_etat="1"
     fi
     echo "Recherche et suppression vieux profils XP / Seven"
-	ldap_status()
+	ldap_status
     find /home/profiles/ -maxdepth 1  -type d -nouser -print -exec rm -rf "{}" \;
     #    find /home/admin/profiles/ -maxdepth 1  -type d -nouser -print -exec rm -rf "{}" \;
     #     find /home/ -maxdepth 4 -nouser -print -exec rm -rf "{}" \; 2>/dev/null
@@ -144,7 +144,7 @@ if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then
 
     cpt=0
     cd /home
-	ldap_status()
+	ldap_status
     ls /home | while read A
     do
 	if [ -d "/home/$A"  -a ! -L /home/$A ]; then
