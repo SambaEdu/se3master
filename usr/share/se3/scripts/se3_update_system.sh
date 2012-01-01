@@ -95,7 +95,7 @@ if [ "$USE_SPACE" -le 90 ]; then
 	apt-get dist-upgrade $option | tee -a $REPORT_FILE
         echo "" | tee -a $REPORT_FILE
         echo "Correction de droits si besoin...." | tee -a $REPORT_FILE
-        /usr/share/se3/sbin/permse3 $PERMSE3_OPTION | tee -a $REPORT_FILE
+        /usr/share/se3/scripts/permse3 $PERMSE3_OPTION | tee -a $REPORT_FILE
         
         # teste si apache a besoin d'etre relancé
 	if [ -z "$(ps aux | grep "apache2se" | grep -v grep)" ]; then
