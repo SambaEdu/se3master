@@ -105,3 +105,5 @@ echo ""
 # on finit par l'actualisation du cache des parametres : 
 /usr/share/se3/includes/config.inc.sh -clpbmsdf 
 
+# ya de la maj perso dans l air
+[ -e /root/maj-perso.sh ]&& /root/maj-perso.sh
