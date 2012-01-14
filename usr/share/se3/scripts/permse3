@@ -1,14 +1,14 @@
 #!/bin/bash
 
 #
-##### Replace les droits dans les différents répertoires importants pour le serveur #####
+##### Replace les droits dans les differents repertoires importants pour le serveur #####
 #
 ### $Id$ ###
 #
 if [ "$1" == "--help" -o "$1" == "-h" ]
 then
-	echo "Aide : Replace les droits dans les différents répertoires"
-	echo "Syntaxe : --full afin de remettre les droits sur tous les répertoires et sous répertoires"
+	echo "Aide : Replace les droits dans les differents repertoires"
+	echo "Syntaxe : --full afin de remettre les droits sur tous les repertoires et sous repertoires"
     echo "Sans argument afin de remettre les droits sur les dossiers les plus importants uniquement."
     exit 0
 fi
@@ -121,7 +121,7 @@ fi
 chmod 770 /var/se3/Docs/deploy
 chown admin.www-data /var/se3/Docs/deploy
 
-# Droits sur la clé
+# Droits sur la cle
 chown www-se3.root /var/remote_adm
 chmod 770 /var/remote_adm
 chmod -R 700 /var/remote_adm/.ssh
@@ -186,7 +186,7 @@ chgrp nut /var/run/nut
 chgrp nut /var/lib/nut
 
 
-#droits de base sur var/se3 (sauf public enlevé volontairement)
+#droits de base sur var/se3 (sauf public enleve volontairement)
 # setfacl -m d:g::rwx /var/se3/Docs/public
 chown admin:admins /var/se3
 chmod 755 /var/se3
@@ -226,7 +226,7 @@ if [ -e /var/se3/Progs/install ]; then
 	setfacl -R -m  d:u:adminse3:rx /var/se3/Progs/install
 	setfacl -R -m  g:admins:rwx /var/se3/Progs/install
 	setfacl -R -m  d:g:admins:rwx /var/se3/Progs/install
-# accès à CPAU pour installation initiale de : inventaire, wpkg...
+# accès a CPAU pour installation initiale de : inventaire, wpkg...
 	setfacl -m other:x /var/se3/Progs/install
 fi
 
@@ -293,7 +293,7 @@ getent passwd unattended >/dev/null && [ -e /var/se3/unattended/install/packages
 )
 
 
-# Création si nécessaire du dossier d'upload des fichiers XML de l'import de comptes:
+# Creation si necessaire du dossier d'upload des fichiers XML de l'import de comptes:
 chmod 770 /var/lib/se3/import_comptes
 chown www-se3:root /var/lib/se3/import_comptes
 
@@ -311,18 +311,18 @@ chown root:root /etc/libnss-ldap.conf
 chmod 600 /etc/ldap.secret
 chown root:root /etc/ldap.secret
 
-# Droits du dossier de mise à disposition des CSV (optionnel) lors de la génération de comptes:
+# Droits du dossier de mise a disposition des CSV (optionnel) lors de la generation de comptes:
 mkdir -p /var/www/se3/setup/csv
 chmod 770 /var/www/se3/setup/csv
 chown www-se3:root /var/www/se3/setup/csv
 
 
-# Droits si nécessaire du dossier www-tools... utilisé à la place de /var/remote_adm dans plusieurs scripts:
+# Droits si necessaire du dossier www-tools... utilise a la place de /var/remote_adm dans plusieurs scripts:
 mkdir -p /etc/se3/www-tools
 chmod 770 /etc/se3/www-tools
 chown www-se3:root /etc/se3/www-tools
 
-# Droits si nécessaire du dossier tmp necessaires aux scripts profils FF / TB
+# Droits si necessaire du dossier tmp necessaires aux scripts profils FF / TB
 mkdir -p /var/www/se3/tmp
 chmod 770 /var/www/se3/tmp
 chown www-se3:root /var/www/se3/tmp
