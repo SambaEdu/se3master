@@ -70,7 +70,9 @@ if [ ! -e maj/maj$NEXT_MINOR_MAJ.sh ] && [ ! -e maj/maj$NEXT_MAJOR_MAJ.sh ] ; th
 		# on finit par l'actualisation du cache des parametres : 
 		/usr/share/se3/includes/config.inc.sh -clpbmsdf 
 		# ya de la maj perso dans l air
-		[ -e /root/maj-perso.sh ] && /root/maj-perso.sh
+		if [ -e "/root/maj-perso.sh" ]; then 
+			/root/maj-perso.sh
+		fi
 		exit 0
 	fi
 else
@@ -110,4 +112,7 @@ echo ""
 /usr/share/se3/includes/config.inc.sh -clpbmsdf 
 
 # ya de la maj perso dans l air
-[ -e /root/maj-perso.sh ] && /root/maj-perso.sh
+if [ -e "/root/maj-perso.sh" ]; then 
+	/root/maj-perso.sh
+fi
+exit 0
