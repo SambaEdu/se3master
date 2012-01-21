@@ -67,6 +67,10 @@ if [ ! -e maj/maj$NEXT_MINOR_MAJ.sh ] && [ ! -e maj/maj$NEXT_MAJOR_MAJ.sh ] ; th
 	
 	if [ ! "$CONT" = "C" ]; then
 		echo "Pas de script de maj a lancer pour cette fois...."
+		# on finit par l'actualisation du cache des parametres : 
+		/usr/share/se3/includes/config.inc.sh -clpbmsdf 
+		# ya de la maj perso dans l air
+		[ -e /root/maj-perso.sh ] && /root/maj-perso.sh
 		exit 0
 	fi
 else
@@ -106,4 +110,4 @@ echo ""
 /usr/share/se3/includes/config.inc.sh -clpbmsdf 
 
 # ya de la maj perso dans l air
-[ -e /root/maj-perso.sh ]&& /root/maj-perso.sh
+[ -e /root/maj-perso.sh ] && /root/maj-perso.sh
