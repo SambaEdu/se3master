@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## $Id: maj133.sh 5921 2010-11-06 14:14:02Z keyser $ ##
+## $Id$ ##
 
 # path fichier de logs
 LOG_DIR="/var/log/se3"
