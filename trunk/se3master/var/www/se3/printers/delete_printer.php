@@ -149,7 +149,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
                     			$mpcount=count($mp_all);
                     			for ($loop=0; $loop < count($mp_all); $loop++) {
                     				$imp=$mp_all[$loop];
-                    				if (preg_match("/$filtre_imp"/,$imp)) $mp[$lmloop++]=$imp;
+                    				if (preg_match("/$filtre_imp/",$imp)) $mp[$lmloop++]=$imp;
                     			}
                 		}
                 		if ( count($mp)>15) $size=15; else $size=count($mp); // Definition de la taille du formulaire liste

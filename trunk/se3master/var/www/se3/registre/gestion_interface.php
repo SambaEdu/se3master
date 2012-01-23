@@ -91,7 +91,12 @@ if ($testniveau) {
 		echo "<a href=\"cle_export.php?action=export\">".gettext("Exporter mes cl&#233s ?")."</a></p></p>";
 	}
 	if ($testniveau>2) {
-		echo"<BR><a href=\"ajout_cle.php?ajout=8\">".gettext("Importer un .reg")."</a><br>";
+		echo "<form method=\"post\" enctype=\"multipart/form-data\" action=\"import_reg.php\">";
+		echo "<BR>".gettext("Importer un fichier de cl&#233s au format .reg");
+		echo "<BR><input type=\"file\" name=\"fichier\" size=\"30\">";
+		echo "<input type=\"hidden\" name=\"action\" value=\"file\" />";
+		echo "<input type=\"submit\" name=\"upload\" value=\"Incorporer \">";
+		echo "</form>";
 	}
 
 	echo "<h3>".gettext("Gestion des groupes de cl&#233s :")." </h3>";
