@@ -280,7 +280,7 @@ for ($i=1; $i<= $nombre; $i++) {
     $f="fich$i";
     echo "<tr><td align='left'><font size='-2'>".gettext("Fichier")." $i</font></td>\n";
     echo "<td><input type=\"file\" name=\"$f\" size='20'></td></tr><p>\n";
-    echo "<INPUT TYPE='hidden' name='MAX_FILE_SIZE' value=50000>";
+    echo "<INPUT TYPE='hidden' name='MAX_FILE_SIZE' value=20000000>";
 }
 echo "</table><p></p>\n\n";
 
@@ -404,7 +404,7 @@ if ( $type==2 ) {
         $f="fich$i";
 		echo "<tr><td align='left'<font size='-2'>Fichier $i</font></td> ";
 		echo "<td><input type=\"file\" name=\"$f\" size='20'></td></tr><p>";
-		echo "<INPUT TYPE='hidden' name='MAX_FILE_SIZE' value=100000>";
+		echo "<INPUT TYPE='hidden' name='MAX_FILE_SIZE' value=20000000>";
 	}
 	echo "</table><p></p>";
 
