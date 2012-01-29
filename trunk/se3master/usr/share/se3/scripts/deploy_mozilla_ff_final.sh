@@ -32,6 +32,10 @@ mkdir -p /var/se3/save
 #/usr/share/se3/includes/config.inc.sh -cm
 
 
+if [ "$1" == "refparams" ]; then 
+	exit 0
+fi
+
 #Seuls les homes deja existants seront complétés
 CHEMIN_FF_SOURCE="/etc/skel/user/profil/appdata/Mozilla"
 
