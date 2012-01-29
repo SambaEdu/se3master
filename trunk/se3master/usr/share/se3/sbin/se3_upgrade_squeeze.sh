@@ -1,6 +1,6 @@
 #!/bin/sh
 
-## $Id: se3_upgrade_lenny.sh 6505 2011-10-06 12:34:00Z keyser $ ##
+## $Id$ ##
 
 #####Script permettant de migrer un serveur Se3 de Etch en Squeeze#####
 
@@ -66,7 +66,7 @@ deb-src http://ftp.fr.debian.org/debian/ squeeze main non-free contrib
 deb http://security.debian.org/ squeeze/updates main contrib non-free
 
 # entree pour clamav derniere version
-deb http://ftp2.de.debian.org/debian-volatile squeeze/volatile main
+# deb http://ftp2.de.debian.org/debian-volatile squeeze/volatile main
 
 END
 }
@@ -119,8 +119,6 @@ echo "*********************************************"
 echo "* Script de migration de Etch vers Squeeze    *" | tee -a $fichier_log
 echo "*********************************************"
 # echo "        /!\ ----- ATTENTION ---- /!\ 
-# Le script videra la base de clefs de registre durant la migration
-# Si vous avez des clefs personnelles veuillez les sauvegarder avant !!
 # "
 echo -e "$COLTXT"
 POURSUIVRE
@@ -135,9 +133,18 @@ echo -e "$COLPARTIE"
 echo "Preparation et tests du systeme" | tee -a $fichier_log
 echo -e "$COLTXT"
 
-# 
-# DEBIAN_VERSION=`cat /etc/debian_version`
-# [ "$DEBIAN_VERSION" != "4.0" ] && ERREUR "Ce script doit être lance sous etch !!!"
+# On teste la version de debian
+ 
+if  ! egrep -q "^5.0" /etc/debian_version;  then
+        if egrep -q "^6.0" /etc/debian_version; then
+                echo "Votre serveur est deja en version Debian Squeeze"
+                exit 0
+        else
+                echo "Votre serveur n'est pas en version Debian Lenny."
+                echo "Operation annulee !"
+                exit 1
+        fi
+fi
 
 LINE_TEST
 
@@ -200,11 +207,13 @@ fi
 #init des params
 . /usr/share/se3/includes/config.inc.sh -cml
 
+# On teste si on a de la place pour faire la maj
 PARTROOT=`df | grep "/\$" | sed -e "s/ .*//"`
 PARTROOT_SIZE=$(fdisk -s $PARTROOT)
 rm -f /root/dead.letter
 if [ "$PARTROOT_SIZE" -le 1800000 ]; then
 	ERREUR "La partition racine fait moins de 1.8Go, c'est insuffisant pour passer en Squeeze" | tee -a $fichier_log
+	exit 1
 fi
 
 if [ "$replica_status" == "" -o "$replica_status" == "0" ]
@@ -247,56 +256,6 @@ if [ ! -e $chemin_log/phase1-ok ]; then
     touch $chemin_log/phase1-ok
 fi
 
-# 
-# echo -e "$COLPARTIE"
-# echo "Partie 2a : Suppression paquet cupsys (sera remplace par cups une fois en lenny) " 
-# echo -e "$COLTXT"
-# 
-# POURSUIVRE
-# apt-get remove cupsys cupsys-client || erreur="yes"
-# 
-# 	
-# echo -e "$COLPARTIE"
-# echo "Partie 2b : Suppression paquet backuppc et se3-ocs" 
-# echo -e "$COLTXT"
-# echo "les paquet backuppc et ocs doivent etre supprimes avant la migration. "
-# echo "Il sera possible d'installer les modules correspondants une fois la migration effectuee."
-# 
-# POURSUIVRE
-# rm -f /etc/backuppc/config.pl.divert
-# rm -f /etc/backuppc/localhost.pl.divert
-# rm -f /etc/backuppc/apache.conf.divert
-# rm -f /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm.divert
-# rm -f /usr/share/backuppc/image/BackupPC_stnd.css
-# rm -f /usr/share/backuppc/image/BackupPC_stnd.css.ori
-# 
-# 
-# 
-# if [ ! -z "$(dpkg-divert --list | grep "se3$" | grep /etc/backuppc/config.pl)" ]; then
-# dpkg-divert --package se3 --remove --rename /etc/backuppc/config.pl 
-# fi 
-# 
-# if [ ! -z "$(dpkg-divert --list | grep "se3$" | grep /etc/backuppc/localhost.pl)" ]; then
-# dpkg-divert --package se3 --remove --rename /etc/backuppc/localhost.pl 
-# fi 
-# 
-# if [ ! -z "$(dpkg-divert --list | grep "se3$" | grep /etc/backuppc/apache.conf)" ]; then
-# dpkg-divert --package se3 --remove --rename /etc/backuppc/apache.conf
-# fi 
-# 
-# if [ ! -z "$(dpkg-divert --list | grep "se3$" | grep /usr/share/backuppc/image/BackupPC_stnd.css)" ]; then
-# dpkg-divert --package se3 --remove --rename /usr/share/backuppc/image/BackupPC_stnd.css 
-# fi 
-# 
-# if [ ! -z "$(dpkg-divert --list | grep "se3$" | grep /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm)" ]; then
-#  
-# dpkg-divert --package se3 --remove --rename /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm
-# fi 
-# 
-# 
-# # apt-get remove backuppc --purge
-# # supression entree backuppc base sql
-# echo "DELETE FROM params WHERE name='backuppc'"| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 
 
 df -h | grep backuppc && umount /var/lib/backuppc
@@ -304,16 +263,22 @@ if [ ! -z "$(df -h | grep /var/lib/backuppc/)" ]; then
     ERREUR "Il semble qu'une ressource soit montee sur /var/lib/backuppc. Il faut la demonter puis relancer"
     exit 1
 fi
-# 
-# apt-get remove backuppc se3-ocs ocsinventory-agent --purge || erreur="yes"
-# rm -f /etc/apache2se/conf.d/ocsinventory.conf 
-# echo "DELETE FROM params WHERE name='inventaire'"| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-# #. /usr/share/se3/includes/config.inc.sh -o
 
+## Install de insert avant de basculer en squeeze
+apt-get install insserv -y
+
+## LDAP
 # purges trace slapd backup 
 rm -rf /var/backups/slapd*
 rm -rf /var/backups/${ldap_base_dn}*
 
+cat /var/lib/ldap/DB_CONFIG | grep -v "sactivation logs ldap" > /root/migresqueeze/DB_CONFIG
+cp /root/migresqueeze/DB_CONFIG /var/lib/ldap/DB_CONFIG
+cp /etc/ldap/slapd.conf /root/migresqueeze/
+
+mkdir /var/run/slapd >/dev/null
+chown -R openldap:openldap /var/ldap/
+chown -R openldap:openldap /var/run/slapd
 
 # echo "" > /etc/environment 
 if [ "$erreur" == "yes" ]; then 
@@ -334,8 +299,10 @@ POURSUIVRE
 [ -z "$LANG" ] && export LANG=fr_FR@euro 
 
 
+# Creation du source.list squeeze
 
 GENSOURCELIST
+
 # On se lance
 echo "Dpkg::Options {\"--force-confold\";}" > /etc/apt/apt.conf	
 # 	echo "Dpkg::Options {\"--force-confnew\";}" > /etc/apt/apt.conf
@@ -363,7 +330,7 @@ touch $chemin_log/phase3-ok
 echo "mise a jour de lib6 et des locales OK" | tee -a $fichier_log
 
 echo -e "$COLPARTIE"
-echo "Partie 4 : Migration en Sqeeze - installations des paquets restants" 
+echo "Partie 4 : Migration en Squeeze - installations des paquets restants" 
 echo -e "$COLTXT"
 POURSUIVRE
 echo -e "$COLINFO"
@@ -389,130 +356,19 @@ echo "migration du systeme OK" | tee -a $fichier_log
 apt-get install ssmtp -y >/dev/null 
 
 
-echo -e "$COLPARTIE"
-echo "Partie 5 : Nettoyage de la BDD et des fichiers obsoletes" 
-echo -e "$COLTXT"
-
-if [ -e /home/netlogon/EnableGPO.bat ]; then
-    mv  /home/netlogon/EnableGPO.bat /root/
-    rm -f /home/netlogon/*.bat
-    rm -f /home/netlogon/*.txt
-    mv  /root/EnableGPO.bat /home/netlogon/
-else
-    rm -f /home/netlogon/*.bat
-    rm -f /home/netlogon/*.txt
-fi
-
-echo -e "$COLINFO"
-echo "Déplacement si existant des homes orphelins dans le home d'admin (Trash_users)"
-echo -e "$COLTXT"
-mkdir -p /home/admin/Trash_users
-find /home -maxdepth 1 -nouser -exec mv -v {} /home/admin/Trash_users/ \; 
-chown -R admin /home/admin/Trash_users
-
-
-echo -e "$COLINFO"
-echo "Suppression des anciens profils XP obsoletes des repertoires personnels"
-echo "ceci peut etre assez long la commande se lancera ce soir a 20h00"
-sleep 2
-echo -e "$COLTXT"
-
-at_script="$chemin_log/clean_old_profiles.sh"
-cat > $at_script <<END
-#!/bin/bash
-ls /home/ | while read A
-do
-     if [ -e "/home/\$A/profile" ]; then
-	echo "Suppression de l'ancien profil XP de \$A" 
-	rm -fr /home/\$A/profile
-     fi
-done
-END
-chmod 700 $at_script
-at 20:00 -f $at_script
-sleep 2
-
-echo -e "$COLINFO"
-echo "Nettoyage de se3db - cles, groupes de cles et restrictions"
-echo -e "$COLTXT"
-echo "TRUNCATE TABLE restrictions" | mysql $dbname -u $dbuser -p$dbpass 
-
-echo "La table restriction est desormais vide. 
-Les cles et les groupes de cles peuvent egalement être vides sans risque si vous n'avez pas de cles personnelles.
-Cela a l'avantage de ne pas garder des cles opsoletes ou incompatibles lors de votre migration ! 
-
-Il vous suffira de mettre a jour la base de cles une fois sous lenny pour importer celles par defaut" 
-
-REPONSE=""
-while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
-do
-    echo -e "$COLTXT"
-    echo -e "On remet a zero les tables ? (${COLCHOIX}O/n${COLTXT}) $COLSAISIE\c"
-    read REPONSE
-    if [ -z "$REPONSE" ]; then
-	    REPONSE="o"
-    fi
-done
-
-if [ "$REPONSE" == "o" -o "$REPONSE" == "O" ]; then
-    echo "on vide !"
-    echo "TRUNCATE TABLE corresp" | mysql $dbname -u $dbuser -p$dbpass
-    echo "TRUNCATE TABLE modele"| mysql $dbname -u $dbuser -p$dbpass
-    
-else
-    echo "On laisse les choses en place !"
-fi
 
 echo -e "$COLPARTIE"
-echo "Partie 6 : Mise a jour des paquets se3 sous lenny"  | tee -a $fichier_log
+echo "Partie 6 : Mise a jour des paquets se3 sous squeeze"  | tee -a $fichier_log
 echo -e "$COLTXT"
 
 GENSOURCESE3
 
 /usr/share/se3/scripts/install_se3-module.sh se3 | tee -a $fichier_log
 
-# Recuperation des params LDAP
-#
-# Mise a jour annuaire (suite changement dans samba)
-#/usr/share/se3/sbin/migrationLenny.sh
 
-# 
-# echo -e "$COLINFO"
-# echo "Modification de l'attribut sambaPwdLastSet de tous les utilisateurs"
-# echo -e "$COLTXT"
-# # Modification de l'attribut sambaPwdLastSet
-# ldapsearch -xLLL -D $adminRdn,$ldap_base_dn -w $adminPw objectClass=person uid| grep uid:| cut -d ' ' -f2| while read uid
-# do
-# 		(
-# 		echo "dn: uid=$uid,$peopleRdn,$ldap_base_dn"
-# 		echo "changetype: modify"
-# 		echo "replace: sambaPwdLastSet"
-# 		echo "sambaPwdLastSet: 1"
-# 		) | ldapmodify -x -D $adminRdn,$ldap_base_dn -w $adminPw >/dev/null 2>&1
-# 		if [ "$?" != "0" ]
-# 		then
-# 			#corbeille
-# 			  (
-# 	                echo "dn: uid=$uid,ou=Trash,$ldap_base_dn"
-# 	                echo "changetype: modify"
-# 	                echo "replace: sambaPwdLastSet"
-# 	                echo "sambaPwdLastSet: 1"
-# 	                ) | ldapmodify -x -D $adminRdn,$ldap_base_dn -w $adminPw >/dev/null
-# 
-# 		fi
-# done
-
-# Modification du fichier php.ini
-
-# Modif des parametres apache pour les scripts de creation des comptes
-# perl -pi -e 's&;include_path = ".:/usr/share/php"&include_path=".:/var/www/se3/includes"&' /etc/php5/apache2/php.ini
-# sed "s/#AddDefaultCharset.*/AddDefaultCharset ISO-8859-1/" -i /etc/apache2se/apache2.conf
-# perl -pi -e "s/OCS_MODPERL_VERSION 1/OCS_MODPERL_VERSION 2/" /etc/apache2se/conf.d/ocsinventory.conf
 echo -e "$COLINFO"
 echo "Redemarrage des services...."
 echo -e "$COLCMD"
-# A desactiver ! utf8 not rulaize !
-# perl -pi -e 's&#AddDefaultCharset.*&AddDefaultCharset	UTF8&' /etc/apache2se/apache2.conf
 /etc/init.d/apache2se restart
 /etc/init.d/mysql restart
 /etc/init.d/samba restart
