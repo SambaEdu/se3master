@@ -68,6 +68,9 @@ deb http://security.debian.org/ squeeze/updates main contrib non-free
 # entree pour clamav derniere version
 # deb http://ftp2.de.debian.org/debian-volatile squeeze/volatile main
 
+# Pour wine
+deb http://www.lamaresh.net/apt squeeze main
+
 END
 }
 
