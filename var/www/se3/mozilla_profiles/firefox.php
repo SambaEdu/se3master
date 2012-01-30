@@ -136,7 +136,7 @@ if ($config==""||$config=="init") {
                     }
                     
                     
-                    
+                    system("sudo /usr/share/se3/scripts/deploy_mozilla_ff_final.sh refparams 2>&1");
                     ////On change la page pour les groupe ou le user selectionne
                 }
                 
@@ -347,12 +347,12 @@ if ($config==""||$config=="init") {
                         $no_ie = "checked";
                         $form .= "<li>Firefox utilise actuellement son propre fichier de configuration pour d&#233;finir son proxy</li>\n";
                      }
-                if ($firefox_use_ie == "default") $form .= "<li>La configuration actuelle a Firefox utilise actuellement son propre fichier de configuration pour d&#233;finir son proxy</li>\n";  
+                //if ($firefox_use_ie == "default") $form .= "<li>La configuration actuelle a Firefox utilise actuellement son propre fichier de configuration pour d&#233;finir son proxy</li>\n";  
                 //<br><br>
                 $form .= "</ul>\n";
                 if ($firefox_use_ie == "default") { 
-                    $form .= "<font color=red>La configuration actuelle a &#233;t&#233; g&#233;n&#233;r&#233;e automatiquement lors de l'installation et ne prend pas en compte les configuration d'internet explorer.<BR>\n";
-                    $form .= "Vous devriez la modifier ou la revalider pour que cela soit le cas.</font>";
+                    $form .= "<font color=red>La configuration actuelle a &#233;t&#233; g&#233;n&#233;r&#233;e automatiquement lors de l'installation ou la mise &#224; jour et ne prend pas en compte la configuration d'internet explorer.<BR>\n";
+                    $form .= "Afin de finaliser la configuration du proxy, vous devez la modifier avec vos propres choix ou revalider les param&#232;tres d&#233;tect&#233;s par d&#233;faut s'ils vous conviennent.</font>";
                 }
                 $form .= "<h3>".gettext("D&#233finir un nouveau proxy et / ou un nouveau type")." </h3>";
 		$form .= "<INPUT TYPE=\"TEXT\" NAME=\"new_proxy_url\" size=30>";
@@ -454,7 +454,7 @@ if ($config==""||$config=="init") {
 
                             echo gettext("Traitement en cours pour le groupe Classe")." <A href=\"/annu/group.php?filter=$grp\">$grp</A><br>";
 
-                            system("echo \"sudo /usr/share/se3/scripts/modif_profil_mozilla_ff.sh $grp $page_dem \n\" >> /tmp/$nomscript");
+                            system("echo \"sudo /usr/share/se3/scripts/modif_profil_mozilla_ff.sh $grp $page_dem $option \n\" >> /tmp/$nomscript");
 
                     }
             }
@@ -467,7 +467,7 @@ if ($config==""||$config=="init") {
                             echo gettext("Traitement en cours pour le groupe Equipe")." <A href=\"/annu/group.php?filter=$grp\">$grp</A><br>";
                             //echo gettext("La page de d&#233;marrage pour le groupe Equipe")." <A href=\"/annu/group.php?filter=$grp\">$grp</A>";gettext(" a &#233;t&#233; fix&#233;e &#224; ")."<B>\"$page_dem\"</B><br>";
 
-                            system("echo \"sudo /usr/share/se3/scripts/modif_profil_mozilla_ff.sh $grp $page_dem \n\" >> /tmp/$nomscript");
+                            system("echo \"sudo /usr/share/se3/scripts/modif_profil_mozilla_ff.sh $grp $page_dem $option \n\" >> /tmp/$nomscript");
                     }
             }
             if (count($autres_gr) ) {
@@ -477,7 +477,7 @@ if ($config==""||$config=="init") {
                             $nbr_user=$nbr_user+count($people);
                             echo gettext("Traitement en cours pour le groupe")." <A href=\"/annu/group.php?filter=$grp\">$grp</A><br>";
                             ////echo gettext("La page de d&#233;marrage pour tout le groupe")." <A href=\"/annu/group.php?filter=$grp\">$grp</A>".gettext(" a &#233;t&#233; fix&#233;e &#224;")." <B>\"$page_dem\"</B><br>";
-                            system("echo \"sudo /usr/share/se3/scripts/modif_profil_mozilla_ff.sh $grp $page_dem \n\" >> /tmp/$nomscript");
+                            system("echo \"sudo /usr/share/se3/scripts/modif_profil_mozilla_ff.sh $grp $page_dem $option \n\" >> /tmp/$nomscript");
 
                     }
             }
