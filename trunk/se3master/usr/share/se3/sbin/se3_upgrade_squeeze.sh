@@ -87,9 +87,9 @@ END
 }
 #date
 LADATE=$(date +%d-%m-%Y)
-chemin_log="/root/migration_lenny2squeeze"
-mkdir -p $chemin_log
-fichier_log="$chemin_log/migration-$LADATE.log"
+chemin_migr="/root/migration_lenny2squeeze"
+mkdir -p $chemin_migr
+fichier_log="$chemin_migr/migration-$LADATE.log"
 touch $fichier_log
 
 
@@ -116,7 +116,7 @@ export  DEBIAN_PRIORITY
 
 echo -e "$COLTITRE"
 echo "*********************************************"
-echo "* Script de migration de Etch vers Squeeze    *" | tee -a $fichier_log
+echo "* Script de migration de Lenny vers Squeeze *" | tee -a $fichier_log
 echo "*********************************************"
 # echo "        /!\ ----- ATTENTION ---- /!\ 
 # "
@@ -127,8 +127,14 @@ sleep 1
 
 [ -e /root/debug ] && DEBUG="yes"
 [ -e /root/nodl ] && NODL="yes"
+
+
+### mode debug et nodl pour le moment ###
 NODL="yes"
-  
+DEBUG="yes"
+#########################################  
+
+
 echo -e "$COLPARTIE"
 echo "Preparation et tests du systeme" | tee -a $fichier_log
 echo -e "$COLTXT"
@@ -233,6 +239,7 @@ fi
 
 if [ ! -e $chemin_log/phase1-ok ]; then
 
+
     echo -e "$COLINFO"
     echo "mise a jour des paquets disponibles....Patientez svp"
     echo -e "$COLTXT"
@@ -259,35 +266,41 @@ fi
 
 
 df -h | grep backuppc && umount /var/lib/backuppc
-if [ ! -z "$(df -h | grep /var/lib/backuppc/)" ]; then 
+if [ ! -z "$(df -h | grep /var/lib/backuppc)" ]; then 
     ERREUR "Il semble qu'une ressource soit montee sur /var/lib/backuppc. Il faut la demonter puis relancer"
     exit 1
 fi
 
+echo -e "$COLPARTIE"
+echo "Partie 2 : Installation prealable du paquet insserv" 
+echo -e "$COLTXT"
 ## Install de insert avant de basculer en squeeze
 apt-get install insserv -y
+
+
+if [ "$erreur" == "yes" ]; then 
+  echo -e "$COLERREUR Une erreur s'est produite lors de l'installation"
+#   echo "il serait plus prudent de couper le script et de resoudre le probleme avant de poursuivre"
+   POURSUIVRE
+else
+  touch $chemin_log/phase2-ok
+fi
 
 ## LDAP
 # purges trace slapd backup 
 rm -rf /var/backups/slapd*
 rm -rf /var/backups/${ldap_base_dn}*
 
-cat /var/lib/ldap/DB_CONFIG | grep -v "sactivation logs ldap" > /root/migresqueeze/DB_CONFIG
-cp /root/migresqueeze/DB_CONFIG /var/lib/ldap/DB_CONFIG
-cp /etc/ldap/slapd.conf /root/migresqueeze/
+cat /var/lib/ldap/DB_CONFIG | grep -v "sactivation logs ldap" > $chemin_migr/DB_CONFIG
+cp $chemin_migr/DB_CONFIG /var/lib/ldap/DB_CONFIG
+cp /etc/ldap/slapd.conf $chemin_migr/
 
-mkdir /var/run/slapd >/dev/null
-chown -R openldap:openldap /var/ldap/
+mkdir -p /var/run/slapd 
+chown -R openldap:openldap /var/lib/ldap/
 chown -R openldap:openldap /var/run/slapd
 
 # echo "" > /etc/environment 
-if [ "$erreur" == "yes" ]; then 
-  echo -e "$COLERREUR Une erreur s'est produite lors de la supression des paquets"
-  echo "il serait plus prudent de couper le script et de resoudre le probleme avant de poursuivre"
-  POURSUIVRE
-else
-  touch $chemin_log/phase2-ok
-fi
+
 
 echo -e "$COLPARTIE"
 echo "Partie 3 : Migration en Squeeze - installations des paquets prioritaires" 
@@ -325,9 +338,10 @@ apt-get install libc6 locales wine -y < /dev/tty
 if [ "$?" != "0" ]; then
 	mv /etc/apt/sources.list_save_migration /etc/apt/sources.list 
 	ERREUR "Une erreur s'est produite lors de la mise a jour des paquets lib6 et locales. Reglez le probleme et relancez le script"
+	exit 1
 fi
 touch $chemin_log/phase3-ok
-echo "mise a jour de lib6 et des locales OK" | tee -a $fichier_log
+echo "mise a jour de lib6 locales et wine ---> OK" | tee -a $fichier_log
 
 echo -e "$COLPARTIE"
 echo "Partie 4 : Migration en Squeeze - installations des paquets restants" 
@@ -346,6 +360,7 @@ if [ "$?" != "0" ]; then
 	echo "Vous devrez terminer la migration manuellement une fois votre probleme regle"
 	echo -e "$COLTXT"
 	ERREUR "la migration ne peut se poursuivre"
+	exit 1
 	#/usr/share/se3/scripts/install_se3-module.sh se3
 fi
 
@@ -355,7 +370,13 @@ echo "migration du systeme OK" | tee -a $fichier_log
 #Install ssmtp si necessaire
 apt-get install ssmtp -y >/dev/null 
 
-
+# Retour Slapd.conf
+/ect/init.d/slapd stop
+sed -i "s/#SLAPD_CONF=/SLAPD_CONF=\"\/etc\/ldap\/slapd.conf\"/g" /etc/default/slapd
+cp $chemin_migr/slapd.conf /etc/ldap/slapd.conf
+chown openldap:openldap /etc/ldap/slapd.conf
+sleep 2
+/ect/init.d/slapd start
 
 echo -e "$COLPARTIE"
 echo "Partie 6 : Mise a jour des paquets se3 sous squeeze"  | tee -a $fichier_log
@@ -372,6 +393,10 @@ echo -e "$COLCMD"
 /etc/init.d/apache2se restart
 /etc/init.d/mysql restart
 /etc/init.d/samba restart
+
+# modif base sql
+mysql -e "UPDATE se3db.params SET value = 'squeeze' WHERE value = 'lenny';" 
+
 
 echo -e "$COLINFO"
 echo "Termine !!!"
