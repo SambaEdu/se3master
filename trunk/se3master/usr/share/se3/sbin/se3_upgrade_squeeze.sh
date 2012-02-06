@@ -372,7 +372,7 @@ echo "migration du systeme OK" | tee -a $fichier_log
 apt-get install ssmtp -y >/dev/null 
 
 # Retour Slapd.conf
-/ect/init.d/slapd stop
+/etc/init.d/slapd stop
 sed -i "s/#SLAPD_CONF=/SLAPD_CONF=\"\/etc\/ldap\/slapd.conf\"/g" /etc/default/slapd
 cp $chemin_migr/slapd.conf /etc/ldap/slapd.conf
 chown openldap:openldap /etc/ldap/slapd.conf
