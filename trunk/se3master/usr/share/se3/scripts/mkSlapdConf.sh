@@ -3,11 +3,11 @@
 #
 ## $Id$ ##
 #
-##### Met en place la réplication LDAP avec syncrepl #####
+##### Met en place la rï¿½plication LDAP avec syncrepl #####
 
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
-	echo "Met en place la réplication LDAP (syncrepl) à partir des données de la base sql"
+	echo "Met en place la rï¿½plication LDAP (syncrepl) ï¿½ partir des donnï¿½es de la base sql"
 	echo "Usage : -r replace l'annuaire en annuaire local sans replication"
 	echo "-h Cette aide"
 	exit
@@ -20,7 +20,7 @@ mkdir -p /var/se3/save/ldap/
 	
 if [ -e /var/lock/syncrepl.lock ]
 then
-	echo "lock trouvé"
+	echo "lock trouvï¿½"
 	logger -t "SLAPD" "Lock syncrepl.lock existant"
 	exit 1
 fi	
@@ -29,7 +29,7 @@ fi
 # if [ -e /root/.my.cnf ]; then
 # 	. /root/.my.cnf 2>/dev/null
 # else
-#         echo "Fichier de conf inaccessible désolé !!"
+#         echo "Fichier de conf inaccessible dï¿½solï¿½ !!"
 #         echo "le script ne peut se poursuivre"
 #         exit 1
 # fi
@@ -48,7 +48,7 @@ then
 #         /usr/bin/mysql -u $user -p$password -D se3db -e "UPDATE params set value='' WHERE name='replica_ip'"
 #         /usr/bin/mysql -u $user -p$password -D se3db -e "UPDATE params set value='0' WHERE name='replica_status'"
 #         /usr/bin/mysql -u $user -p$password -D se3db -e "UPDATE params set value='127.0.0.1' WHERE name='ldap_server'"
-	echo "Annuaire replacé en mode annuaire local"
+	echo "Annuaire replacï¿½ en mode annuaire local"
 fi
 
 #
@@ -59,7 +59,7 @@ then
 fi
 
 #########################################################################################
-# 	Recup et vérif  des données dans la base SQL					#
+# 	Recup et vï¿½rif  des donnï¿½es dans la base SQL					#
 #########################################################################################
 # replica_status=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='replica_status'" | grep -v value`
 # replica_ip=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='replica_ip'" | grep -v value`
@@ -71,10 +71,10 @@ fi
 # adminPw=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='adminPw'" | grep -v value`
 
 
-# Vérification des variables
+# Vï¿½rification des variables
 if [ "$ldap_server" = "" -o "$adminRdn" = "" ]
 then
-	echo "Impossible de connaître la base dn et/ou l'admin"
+	echo "Impossible de connaï¿½tre la base dn et/ou l'admin"
 	echo "le script ne peut se poursuivre"
 	exit 1
 fi
@@ -125,7 +125,7 @@ fi
 #################################################################################
 # 	On supprime l'existant							#
 #################################################################################
-# On vire le répertoire des logs de slurpd
+# On vire le rï¿½pertoire des logs de slurpd
 if [ \( -d "/var/spool/slurpd/replica" \) ]
 then
 	rm -Rf /var/spool/slurpd/replica
@@ -145,7 +145,7 @@ fi
 
 # On crypte le mot de passe
 ldap_passwd=`cat /etc/ldap.secret`
-# vérifie la concordence avcc la base SQL
+# vï¿½rifie la concordence avcc la base SQL
 if [ "$ldap_passwd" != "$adminPw" ]
 then
 	# Implique un changement de mot de passe, on change donc celui de ldap.secret
@@ -179,7 +179,7 @@ cat $PEM2 >> /etc/ldap/slapd.pem
 # Fichier slapd.conf
 echo "# This is the main ldapd configuration file. See slapd.conf(5) for more
 # info on the configuration options.
-# Créé pour Se3 par mkSlapdConf.sh
+# Crï¿½ï¿½ pour Se3 par mkSlapdConf.sh
 
 # Schema and objectClass definitions
 include         /etc/ldap/schema/core.schema
@@ -271,7 +271,7 @@ access to attrs=userPassword
 	by self write
 	by * none
 
-# ACLs proposées par Bruno Bzeznic
+# ACLs proposï¿½es par Bruno Bzeznic
 access to attrs=userpassword
 	by self write
 	by users none
@@ -300,7 +300,7 @@ sizelimit	3500
 " >> /etc/ldap/slapd.conf
 
 #################################################################################
-# Crée le fichier /etc/default/slapd						#
+# Crï¿½e le fichier /etc/default/slapd						#
 #################################################################################
 
 echo "# Default location of the slapd.conf file
@@ -389,7 +389,7 @@ echo "syncrepl rid=0
 echo "# Replication Slave Syncrepl
 include /etc/ldap/syncrepl.conf" >> /etc/ldap/slapd.conf 
 
-# Modiife les différents fichiers de conf
+# Modiife les diffï¿½rents fichiers de conf
 serveurs="$ldap_server $LDAP_LOCAL"
 fi
 
@@ -400,7 +400,7 @@ if [ "$replica_status" = "3" ]
 then
 	serveurs="$ldap_server $replica_ip"
 	
-	# touch syncrepl vide pour indiquer la méthode
+	# touch syncrepl vide pour indiquer la mï¿½thode
 	
 echo "moduleload syncprov
 overlay syncprov
@@ -420,7 +420,7 @@ fi
 #################################################################################
 if [ "$replica_status" = "0" ]
 then
-	# Modiife les différents fichiers de conf
+	# Modiife les diffï¿½rents fichiers de conf
 	serveurs="$ldap_server"
 fi
 
@@ -429,7 +429,7 @@ fi
 #################################################################################
 if [ "$replica_status" = "2" ]
 then
-	# Modiife les différents fichiers de conf
+	# Modiife les diffï¿½rents fichiers de conf
 	serveurs="$ldap_server $replica_ip"
 	echo "updatedn \"$adminRdn,$ldap_base_dn\" " >> /etc/ldap/slapd.conf
         echo "updateref \"ldap://$ldap_server:389\"" >> /etc/ldap/slapd.conf
@@ -441,7 +441,7 @@ fi
 #################################################################################
 if [ "$replica_status" = "1" ]
 then
-	# Modiife les différents fichiers de conf
+	# Modiife les diffï¿½rents fichiers de conf
 	serveurs="$ldap_server $replica_ip"
 	echo "replica host=$replica_ip:389" >> /etc/ldap/slapd.conf
         echo "  binddn=\"$adminRdn,$ldap_base_dn\"" >> /etc/ldap/slapd.conf
@@ -458,7 +458,7 @@ fi
 #################################################################################
 
 #################################################################################
-# 		Création de : libnss-ldap.conf pam_ldap.conf ldap.conf		#
+# 		Crï¿½ation de : libnss-ldap.conf pam_ldap.conf ldap.conf		#
 #################################################################################
 echo "ldap_version 3
 base $ldap_base_dn
@@ -472,7 +472,7 @@ tls_checkpeer no
 bind_policy soft
 nss_initgroups_ignoreusers root,openldap,plugdev,disk,kmem,tape,audio,daemon,lp,rdma,fuse,video,dialout,floppy,cdrom,tty" > /etc/libnss-ldap.conf
 
-# Création de pam_ldap.conf
+# Crï¿½ation de pam_ldap.conf
 echo "ldap_version 3
 base $ldap_base_dn
 rootbinddn $adminRdn,$ldap_base_dn
@@ -482,7 +482,7 @@ pam_crypt local
 ssl start_tls
 tls_checkpeer no" > /etc/pam_ldap.conf
 
-# Création de ldap.conf
+# Crï¿½ation de ldap.conf
 echo "HOST $serveurs
 BASE $ldap_base_dn
 TLS_REQCERT never
@@ -509,6 +509,9 @@ if [ "$1" == "index" ]
 [ "$1" != "installinit" ] && /etc/init.d/slapd start
 sleep 1
 [ "$1" != "installinit" ] && /etc/init.d/samba reload
+
+chown -R openldap:openldap /etc/ldap
+chown -R openldap:openldap /var/lib/ldap
 
 # Supprime le lock
 rm -f /var/lock/syncrepl.lock
