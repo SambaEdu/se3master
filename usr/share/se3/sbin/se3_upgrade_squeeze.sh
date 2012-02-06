@@ -298,9 +298,7 @@ cat /var/lib/ldap/DB_CONFIG | grep -v "sactivation logs ldap" > $chemin_migr/DB_
 cp $chemin_migr/DB_CONFIG /var/lib/ldap/DB_CONFIG
 cp /etc/ldap/slapd.conf $chemin_migr/
 
-mkdir -p /var/run/slapd 
 chown -R openldap:openldap /var/lib/ldap/
-chown -R openldap:openldap /var/run/slapd
 
 # echo "" > /etc/environment 
 
