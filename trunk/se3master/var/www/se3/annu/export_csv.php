@@ -75,7 +75,7 @@ if (!$testaction) {
 	fclose($get);
 
 	echo gettext("Les fichiers export_eleves.csv et export_profs.csv ont &#233;t&#233; g&#233;n&#233;r&#233;s")."<br><br>";
-	echo "<a href=\"export_csv.php?download=export_eleves\">".gettext("T&#233;l&#233;charger le fichier &#233;&#232;lves")."</a><br>";
+	echo "<a href=\"export_csv.php?download=export_eleves\">".gettext("T&#233;l&#233;charger le fichier &#233;l&#232;ves")."</a><br>";
 	echo "<a href=\"export_csv.php?download=export_profs\">".gettext("T&#233;l&#233;charger le fichier profs")."</a>";
 	
 	include ("pdp.inc.php");
