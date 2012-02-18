@@ -61,7 +61,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 	// Affichage des machines sans parc
 	if ($_POST['sansparc']=="oui") {
 		echo "<h3>Machines sans parc</h3>\n";
-		echo "<br>";
+		echo "<br />\n";
 
 		echo "<FORM method=\"post\" action=\"cherche_machine.php\">\n";
 		echo "<input type=\"hidden\" name=\"sansparc\" value=\"oui\">\n";
@@ -71,64 +71,67 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			echo "<input type=\"hidden\" name=\"affiche_all\" value=\"yes\">\n";
 			echo "<input type=\"submit\" value=\"".gettext("Voir toutes les machines")."\">\n";
 		}
-		echo "</form>";
-		echo "<br><br>";
+		echo "</form>\n";
+		echo "<br /><br />\n";
 
-		echo "<FORM method=\"post\" action=\"create_parc.php\">\n";
-		echo "<table>\n";
+		echo "<form method=\"post\" action=\"create_parc.php\">\n";
+		//echo "<table>\n";
 		$list_computer=search_machines("(&(cn=*)(objectClass=ipHost))","computers");
-            	if ( count($list_computer)>0) {
+		//echo "count(\$list_computer)=".count($list_computer)."<br />\n";
+		if (count($list_computer)>0) {
 			$color="#B4CDCD";
-	        	for ($loopa=0; $loopa < count($list_computer); $loopa++) {
+			echo "<table>\n";
+			for ($loopa=0; $loopa < count($list_computer); $loopa++) {
+				//echo "<p>\$list_computer[$loopa]['cn']=".$list_computer[$loopa]["cn"]."<br />\n";
 				$exist_parc = search_parcs($list_computer[$loopa]["cn"]);
-				if ((isset($exist_parc[0]["cn"]))&&($exist_parc[0]["cn"] == "")) {
+				//echo "\$exist_parc[0]['cn']=".$exist_parc[0]["cn"]."<br />\n";
+				if ((!isset($exist_parc[0]["cn"]))||($exist_parc[0]["cn"]=="")) {
 					$computer_parc="no";
 				} else {
-				        $computer_parc="yes";
+					$computer_parc="yes";
 				}
-				
+				//echo "\$computer_parc=$computer_parc<br />";
+	
 				$mpenc=$list_computer[$loopa]['cn'];
-                    		$icone="computer.png";
-		                // $inventaire_act=inventaire_actif();
+				$icone="computer.png";
+				// $inventaire_act=inventaire_actif();
 				// Initialisation
 				$retourOs="";
 				if($inventaire=="1") {
-		                        // Type d'icone en fonction de l'OS
-		                        $retourOs = type_os($mpenc);
-		                        if($retourOs == "0") { $icone="computer.png"; }
-		                        elseif($retourOs == "Linux") { $icone="linux.png"; }
-		                        elseif($retourOs == "XP") { $icone="winxp.png"; }
-		                        elseif($retourOs == "98") { $icone="win.png"; }
-		                        else { $icone="computer.png"; }
-				}	
-			
+					// Type d'icone en fonction de l'OS
+					$retourOs = type_os($mpenc);
+					if($retourOs == "0") { $icone="computer.png"; }
+					elseif($retourOs == "Linux") { $icone="linux.png"; }
+					elseif($retourOs == "XP") { $icone="winxp.png"; }
+					elseif($retourOs == "98") { $icone="win.png"; }
+					else { $icone="computer.png"; }
+				}
 
 				$ip=avoir_ip($mpenc);
 				if ((isset($_POST['affiche_all']))&&($_POST['affiche_all']=="yes")) {
 					if ($color=="#E0EEEE") { $color="#B4CDCD"; } else {$color="#E0EEEE"; }
-			   		$affiche_result_prov = "<tr bgcolor=$color><td>&nbsp;&nbsp;";
+					$affiche_result_prov = "<tr bgcolor=$color><td>&nbsp;&nbsp;";
 					$affiche_result_prov .= "<img width=\"15\" height=\"15\" style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"$retourOs\">\n";
-
 					$affiche_result_prov .= $list_computer[$loopa]['cn'];
 					echo "$affiche_result_prov";
 					echo "</td><td>$ip";
 					echo "</td></tr>\n";
-				} else {	
+				} else {
 					if ($computer_parc=="no") {
 						if ($color=="#E0EEEE") { $color="#B4CDCD"; } else {$color="#E0EEEE"; }
-			   			$affiche_result_prov = "<tr bgcolor=$color><td>&nbsp;&nbsp;";
-			   			$affiche_result_prov .= "<input type=\"checkbox\" name=\"new_computers[]\" value=\"$mpenc\"></td><td>&nbsp;&nbsp;";
+						$affiche_result_prov = "<tr bgcolor=$color><td>&nbsp;&nbsp;";
+						$affiche_result_prov .= "<input type=\"checkbox\" name=\"new_computers[]\" value=\"$mpenc\"></td><td>&nbsp;&nbsp;";
 
 
 						$affiche_result_prov .= "<input type=\"hidden\" name=\"create_parc\" value=\"true\">\n";
 						$affiche_result_prov .= "<img width=\"15\" height=\"15\" style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"$retourOs\">\n";
-						
+
 						$affiche_result_prov .= "$mpenc";
 						echo "$affiche_result_prov";
 						echo "</td><td>$ip";
 						echo "</td></tr>\n";
 					}
-				}	
+				}
 			}
 			echo "</table>\n";
 			echo "<input type=\"submit\" value=\"".gettext("Ajouter &#224; un parc")."\">\n";
@@ -170,28 +173,28 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			}
 			if ((count($computer)==1) || (count($computer_ip)==1)) {
 				$ipHost=avoir_ip($mpenc);
-				echo "<a href=show_histo.php?selectionne=2&mpenc=$mpenc>$mpenc</a> ($ipHost) se trouve dans les parcs : ";
+				echo "<a href=show_histo.php?selectionne=2&mpenc=$mpenc>$mpenc</a> ($ipHost) se trouve dans les parcs&nbsp;: ";
 				for ($loopa=0; $loopa < 1; $loopa++) {
-			        
 				//	echo $computer[$loopa]["cn"];
-					echo "<BR><BR>";
+					echo "<br /><br />\n";
 					$list_parcs=search_machines("(&(member=cn=$mpenc,$computersRdn,$ldap_base_dn)(objectClass=groupOfNames))","parcs");
 					if (count($list_parcs)>0) {
 						for ($loop=0; $loop < count($list_parcs); $loop++) {
 							$parc=$list_parcs[$loop]["cn"];
 							echo "<A HREF=\"show_parc.php?parc=$parc\">".$list_parcs[$loop]["cn"]."</A>";
-							echo "<BR>";
-
+							echo "<br />\n";
 						}
 					}
 					if (count($list_parcs)==0) {
-						echo "<br>";
+						echo "<br />\n";
 						echo "La machine $mpenc ne se trouve dans aucun parc";
-						echo "<br><br><center>";
-						echo "<A HREF=../parcs/cherche_machine.php>Retour</A>\n";	
-						echo "</center>";
+						echo "<br /><br /><center>";
+						echo "<a href=../parcs/cherche_machine.php>Retour</a>\n";
+						echo "</center>\n";
 					}
-                	        }
+				}
+
+				include "pdp.inc.php";
 
 				exit;
 			}
