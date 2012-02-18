@@ -53,6 +53,8 @@ $_SESSION["pageaide"]="Gestion_des_parcs";
 
 //debug_var();
 
+//echo "netbios_name=$netbios_name<br />";
+
 if (is_admin("computers_is_admin",$login)=="Y") {
 
 	//titre
@@ -82,54 +84,56 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			$color="#B4CDCD";
 			echo "<table>\n";
 			for ($loopa=0; $loopa < count($list_computer); $loopa++) {
-				//echo "<p>\$list_computer[$loopa]['cn']=".$list_computer[$loopa]["cn"]."<br />\n";
-				$exist_parc = search_parcs($list_computer[$loopa]["cn"]);
-				//echo "\$exist_parc[0]['cn']=".$exist_parc[0]["cn"]."<br />\n";
-				if ((!isset($exist_parc[0]["cn"]))||($exist_parc[0]["cn"]=="")) {
-					$computer_parc="no";
-				} else {
-					$computer_parc="yes";
-				}
-				//echo "\$computer_parc=$computer_parc<br />";
+				if($list_computer[$loopa]['cn']!=$netbios_name) {
+					//echo "<p>\$list_computer[$loopa]['cn']=".$list_computer[$loopa]["cn"]."<br />\n";
+					$exist_parc = search_parcs($list_computer[$loopa]["cn"]);
+					//echo "\$exist_parc[0]['cn']=".$exist_parc[0]["cn"]."<br />\n";
+					if ((!isset($exist_parc[0]["cn"]))||($exist_parc[0]["cn"]=="")) {
+						$computer_parc="no";
+					} else {
+						$computer_parc="yes";
+					}
+					//echo "\$computer_parc=$computer_parc<br />";
 	
-				$mpenc=$list_computer[$loopa]['cn'];
-				$icone="computer.png";
-				// $inventaire_act=inventaire_actif();
-				// Initialisation
-				$retourOs="";
-				if($inventaire=="1") {
-					// Type d'icone en fonction de l'OS
-					$retourOs = type_os($mpenc);
-					if($retourOs == "0") { $icone="computer.png"; }
-					elseif($retourOs == "Linux") { $icone="linux.png"; }
-					elseif($retourOs == "XP") { $icone="winxp.png"; }
-					elseif($retourOs == "98") { $icone="win.png"; }
-					else { $icone="computer.png"; }
-				}
+					$mpenc=$list_computer[$loopa]['cn'];
+					$icone="computer.png";
+					// $inventaire_act=inventaire_actif();
+					// Initialisation
+					$retourOs="";
+					if($inventaire=="1") {
+						// Type d'icone en fonction de l'OS
+						$retourOs = type_os($mpenc);
+						if($retourOs == "0") { $icone="computer.png"; }
+						elseif($retourOs == "Linux") { $icone="linux.png"; }
+						elseif($retourOs == "XP") { $icone="winxp.png"; }
+						elseif($retourOs == "98") { $icone="win.png"; }
+						else { $icone="computer.png"; }
+					}
 
-				$ip=avoir_ip($mpenc);
-				if ((isset($_POST['affiche_all']))&&($_POST['affiche_all']=="yes")) {
-					if ($color=="#E0EEEE") { $color="#B4CDCD"; } else {$color="#E0EEEE"; }
-					$affiche_result_prov = "<tr bgcolor=$color><td>&nbsp;&nbsp;";
-					$affiche_result_prov .= "<img width=\"15\" height=\"15\" style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"$retourOs\">\n";
-					$affiche_result_prov .= $list_computer[$loopa]['cn'];
-					echo "$affiche_result_prov";
-					echo "</td><td>$ip";
-					echo "</td></tr>\n";
-				} else {
-					if ($computer_parc=="no") {
+					$ip=avoir_ip($mpenc);
+					if ((isset($_POST['affiche_all']))&&($_POST['affiche_all']=="yes")) {
 						if ($color=="#E0EEEE") { $color="#B4CDCD"; } else {$color="#E0EEEE"; }
 						$affiche_result_prov = "<tr bgcolor=$color><td>&nbsp;&nbsp;";
-						$affiche_result_prov .= "<input type=\"checkbox\" name=\"new_computers[]\" value=\"$mpenc\"></td><td>&nbsp;&nbsp;";
-
-
-						$affiche_result_prov .= "<input type=\"hidden\" name=\"create_parc\" value=\"true\">\n";
 						$affiche_result_prov .= "<img width=\"15\" height=\"15\" style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"$retourOs\">\n";
-
-						$affiche_result_prov .= "$mpenc";
+						$affiche_result_prov .= $list_computer[$loopa]['cn'];
 						echo "$affiche_result_prov";
 						echo "</td><td>$ip";
 						echo "</td></tr>\n";
+					} else {
+						if ($computer_parc=="no") {
+							if ($color=="#E0EEEE") { $color="#B4CDCD"; } else {$color="#E0EEEE"; }
+							$affiche_result_prov = "<tr bgcolor=$color><td>&nbsp;&nbsp;";
+							$affiche_result_prov .= "<input type=\"checkbox\" name=\"new_computers[]\" value=\"$mpenc\"></td><td>&nbsp;&nbsp;";
+
+
+							$affiche_result_prov .= "<input type=\"hidden\" name=\"create_parc\" value=\"true\">\n";
+							$affiche_result_prov .= "<img width=\"15\" height=\"15\" style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"$retourOs\">\n";
+
+							$affiche_result_prov .= "$mpenc";
+							echo "$affiche_result_prov";
+							echo "</td><td>$ip";
+							echo "</td></tr>\n";
+						}
 					}
 				}
 			}
