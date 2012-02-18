@@ -240,37 +240,42 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 					// on extrait les machines a virer
 					for ($loop=0; $loop < count($old_computers); $loop++) {
 						$computer=$old_computers[$loop];
-						// On verifie si ce n'est pas une imprimante
-						$resultat=search_imprimantes("printer-name=$computer","printers");
-						$suisje_printer="non";
-						for ($loopp=0; $loopp < count($resultat); $loopp++) {
-							if ($computer==$resultat[$loopp]['printer-name']) {
-								$suisje_printer="yes";	
-								continue;
-							}	
+						if($computer==$netbios_name) {
+							echo "<span style='color:red'>On ne supprime pas le serveur SE3 lui-même&nbsp;: $netbios_name</span><br />\n";
 						}
-						$pDn = "cn=".$parc.",".$parcsRdn.",".$ldap_base_dn;
-						if ($suisje_printer=="yes") {
-							// je suis une imprimante
-							echo gettext("Suppression de l'imprimante")." $computer ".gettext("du parc")." <U>$parc</U><BR>\n";
-									$cDn = "cn=".$computer.",".$printersRdn.",".$ldap_base_dn;
-						} else {
-							// je suis un ordinateur
-							echo gettext("Suppression de l'ordinateur")." $computer ".gettext("du parc")." <U>$parc</U><BR>\n";
-							$cDn = "cn=".$computer.",".$computersRdn.",".$ldap_base_dn;
-							// Test la machine prof pour italc
-							$machine_prof=search_description_parc("$parc");
-							if($computer==$machine_prof) {
-								echo "<br>Attention : vous ne disposez plus de machine professeur pour le parc $parc";
-							        modif_description_parc ($parc,"0");
+						else {
+							// On verifie si ce n'est pas une imprimante
+							$resultat=search_imprimantes("printer-name=$computer","printers");
+							$suisje_printer="non";
+							for ($loopp=0; $loopp < count($resultat); $loopp++) {
+								if ($computer==$resultat[$loopp]['printer-name']) {
+									$suisje_printer="yes";	
+									continue;
+								}	
 							}
-						}
-						// on supprime
-						exec ("/usr/share/se3/sbin/groupDelEntry.pl \"$cDn\" \"$pDn\"");
+							$pDn = "cn=".$parc.",".$parcsRdn.",".$ldap_base_dn;
+							if ($suisje_printer=="yes") {
+								// je suis une imprimante
+								echo gettext("Suppression de l'imprimante")." $computer ".gettext("du parc")." <U>$parc</U><BR>\n";
+										$cDn = "cn=".$computer.",".$printersRdn.",".$ldap_base_dn;
+							} else {
+								// je suis un ordinateur
+								echo gettext("Suppression de l'ordinateur")." $computer ".gettext("du parc")." <U>$parc</U><BR>\n";
+								$cDn = "cn=".$computer.",".$computersRdn.",".$ldap_base_dn;
+								// Test la machine prof pour italc
+								$machine_prof=search_description_parc("$parc");
+								if($computer==$machine_prof) {
+									echo "<br>Attention : vous ne disposez plus de machine professeur pour le parc $parc";
+									    modif_description_parc ($parc,"0");
+								}
+							}
+							// on supprime
+							exec ("/usr/share/se3/sbin/groupDelEntry.pl \"$cDn\" \"$pDn\"");
 
-						// Modif pour italc
-						exec ("/usr/bin/sudo /usr/share/se3/scripts/italc_generate.sh");
-						echo "<BR>";
+							// Modif pour italc
+							exec ("/usr/bin/sudo /usr/share/se3/scripts/italc_generate.sh");
+							echo "<br />";
+						}
 					}
 				}
 				// si demande de suppression complete
@@ -278,96 +283,99 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 					// On teste si la machine appartient a d'autres parcs
 					// Si oui il faut verifier que cela n'implique pas la suppression de l'autre parc.
 					for ($loopa=0; $loopa < count($supprime_all); $loopa++) {
-						$computer=$supprime_all[$loopa];
-						// On verifie si ce n'est pas une imprimante
-						$resultat=search_imprimantes("printer-name=$computer","printers");
-						$suisje_printer="non";
-						for ($loopp=0; $loopp < count($resultat); $loopp++) {
-							if ($computer==$resultat[$loopp]['printer-name']) {
-								$suisje_printer="yes";	
-								continue;
-							}
-						}	
-						if ($suisje_printer=="yes") {
-							echo "<h3>".gettext("Avertissement")."</h3>";
-							echo "<br>";
-							echo "$computer ";
-							echo gettext("est une imprimante.");
-							echo "<br>";
-							echo gettext("Vous devez passer par le menu imprimante pour la supprimer d&#233;finitivement");
-						} else {
-							// on a bien une machine, on peut la supprimer
-							// On cherche d'abord si elle appartient pas a un autre parc.
-							$list_parcs=search_machines("(&(member=cn=$computer,$computersRdn,$ldap_base_dn)(objectClass=groupOfNames))","parcs");
-							if (count($list_parcs)>0) {
+						if($computer==$netbios_name) {
+							echo "<span style='color:red'>On ne supprime pas le serveur SE3 lui-même&nbsp;: $netbios_name</span><br />\n";
+						}
+						else {
+							$computer=$supprime_all[$loopa];
+							// On verifie si ce n'est pas une imprimante
+							$resultat=search_imprimantes("printer-name=$computer","printers");
+							$suisje_printer="non";
+							for ($loopp=0; $loopp < count($resultat); $loopp++) {
+								if ($computer==$resultat[$loopp]['printer-name']) {
+									$suisje_printer="yes";	
+									continue;
+								}
+							}	
+							if ($suisje_printer=="yes") {
+								echo "<h3>".gettext("Avertissement")."</h3>";
 								echo "<br>";
-								echo "<h3>".gettext("Suppression des autres parcs")."</h3>";
+								echo "$computer ";
+								echo gettext("est une imprimante.");
 								echo "<br>";
-								for ($loop=0; $loop < count($list_parcs); $loop++) {
-									echo "Suppression du parc : ";
-									$parc = $list_parcs[$loop]["cn"];	
-									supprime_machine_parc($computer,$parc);
-									echo $parc;
-									echo "<BR>";
-									// Test la machine prof pour italc
-									$machine_prof=search_description_parc("$parc");
-									if($computer==$machine_prof) {
-										echo "Attention : vous ne disposez plus de machine professeur pour le parc $parc";
-									        modif_description_parc ($parc,"0");
+								echo gettext("Vous devez passer par le menu imprimante pour la supprimer d&#233;finitivement");
+							} else {
+								// on a bien une machine, on peut la supprimer
+								// On cherche d'abord si elle appartient pas a un autre parc.
+								$list_parcs=search_machines("(&(member=cn=$computer,$computersRdn,$ldap_base_dn)(objectClass=groupOfNames))","parcs");
+								if (count($list_parcs)>0) {
+									echo "<br>";
+									echo "<h3>".gettext("Suppression des autres parcs")."</h3>";
+									echo "<br>";
+									for ($loop=0; $loop < count($list_parcs); $loop++) {
+										echo "Suppression du parc : ";
+										$parc = $list_parcs[$loop]["cn"];	
+										supprime_machine_parc($computer,$parc);
+										echo $parc;
+										echo "<BR>";
+										// Test la machine prof pour italc
+										$machine_prof=search_description_parc("$parc");
+										if($computer==$machine_prof) {
+											echo "Attention : vous ne disposez plus de machine professeur pour le parc $parc";
+											    modif_description_parc ($parc,"0");
+										}
 									}
 								}
-							}
-							// Puis enfin on supprime la machine elle meme de l'annuaire
-							echo "<h3>".gettext("Suppression compl&#233;te de ")." $computer ".gettext("de l'annuaire")."</h3>";
-							// Nettoyage de l'inventaire
-							echo "Suppression de l'inventaire";
-                                                        echo "<br>";
-                                                        suppr_inventaire($computer);
-							// voir si on doit pas nettoyer les connexions
-							// Vire dans le dhcp
-                        	// On teste si la table existe
-/*                        	$exec = mysql_query("SHOW TABLES FROM `se3db` LIKE 'se3_dhcp'");
-                        	$tables =array();
-                        	while($row = mysql_fetch_row($exec)) {
-                        		$tables[] = $row[0];
-                        	}
-                        	if(in_array('se3_dhcp',$tables)){
-                    	        $dhcp_ok = 1;
-                        	}
-                        	if ($dhcp_ok==1) {
-*/
-                        	if ($dhcp=="1") {
-                                    echo "Suppression du dhcp";
-				    echo "<br>";
-				    $suppr_query = "DELETE FROM `se3_dhcp` where `name` = '$computer'";
-	                            mysql_query($suppr_query);
-	                            // On relance dhcp si celui-ci est active.
-                                    exec("sudo /usr/share/se3/scripts/makedhcpdconf",$ret);
-                                
-                            }
+								// Puis enfin on supprime la machine elle meme de l'annuaire
+								echo "<h3>".gettext("Suppression compl&#233;te de ")." $computer ".gettext("de l'annuaire")."</h3>";
+								// Nettoyage de l'inventaire
+								echo "Suppression de l'inventaire";
+								echo "<br>";
+								suppr_inventaire($computer);
+								// voir si on doit pas nettoyer les connexions
+								// Vire dans le dhcp
+								// On teste si la table existe
+								/*
+								$exec = mysql_query("SHOW TABLES FROM `se3db` LIKE 'se3_dhcp'");
+								$tables =array();
+								while($row = mysql_fetch_row($exec)) {
+									$tables[] = $row[0];
+								}
+								if(in_array('se3_dhcp',$tables)){
+									$dhcp_ok = 1;
+								}
+								if ($dhcp_ok==1) {
+								*/
+								if ($dhcp=="1") {
+									echo "Suppression du dhcp";
+									echo "<br>";
+									$suppr_query = "DELETE FROM `se3_dhcp` where `name` = '$computer'";
+									mysql_query($suppr_query);
+									// On relance dhcp si celui-ci est active.
+									exec("sudo /usr/share/se3/scripts/makedhcpdconf",$ret);
+								}
 						
-							// La virer de wpkg 
-						        echo "Suppression des rapports wpkg";
-							echo "<br>";
-							$rapport_computer="/var/se3/unattended/install/wpkg/rapports/".$computer.".txt";
-							$log_computer="/var/se3/unattended/install/wpkg/rapports/".$computer.".log";
-							if(file_exists($rapport_computer)) { @unlink($rapport_computer); }
-							if(file_exists($log_computer)) { @unlink($log_computer);}
+								// La virer de wpkg 
+								    echo "Suppression des rapports wpkg";
+								echo "<br>";
+								$rapport_computer="/var/se3/unattended/install/wpkg/rapports/".$computer.".txt";
+								$log_computer="/var/se3/unattended/install/wpkg/rapports/".$computer.".log";
+								if(file_exists($rapport_computer)) { @unlink($rapport_computer); }
+								if(file_exists($log_computer)) { @unlink($log_computer);}
 							
-							// On relance le script pour italc
-							echo "Suppression d'italc";
-							exec ("/usr/bin/sudo /usr/share/se3/scripts/italc_generate.sh");
+								// On relance le script pour italc
+								echo "Suppression d'italc";
+								exec ("/usr/bin/sudo /usr/share/se3/scripts/italc_generate.sh");
 
 							
-							exec ("/usr/share/se3/sbin/entryDel.pl cn=$computer,".$dn["computers"],$output,$returnval);
-							exec ("/usr/share/se3/sbin/entryDel.pl uid=$computer$,".$dn["computers"]);
-							exec("/usr/bin/touch /tmp/csvtodo",$ret);
-							exec("sudo /usr/share/se3/sbin/update-csv.sh",$ret);
-							
-							
+								exec ("/usr/share/se3/sbin/entryDel.pl cn=$computer,".$dn["computers"],$output,$returnval);
+								exec ("/usr/share/se3/sbin/entryDel.pl uid=$computer$,".$dn["computers"]);
+								exec("/usr/bin/touch /tmp/csvtodo",$ret);
+								exec("sudo /usr/share/se3/sbin/update-csv.sh",$ret);
+							}
 						}
-					}	
-				}	
+					}
+				}
 				// Suppression des delegations sans parc
 				echo "<H3>".gettext("Suppression des d&#233;l&#233;gations sans parc")."</H3>";
 				nettoie_delegation();
@@ -375,7 +383,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 				exec ("/usr/share/se3/sbin/printers_group.pl");
 				// Lance le script de mise a jour pour wpkg
 				update_wpkg();
-			}	
+			}
 		}
 	}
 }
