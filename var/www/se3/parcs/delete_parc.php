@@ -98,19 +98,21 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 				$form.="<p>".gettext("S&#233;lectionnez les machines sans parc &#224; supprimer : ")."</p>\n";
 				$form.="<p><select size=\"".$size."\" name=\"supprime_all[]\" multiple=\"multiple\">\n";
 				for ($loopa=0; $loopa < count($list_computer); $loopa++) {
-					$exist_parc = search_parcs($list_computer[$loopa]["cn"]);
-					// Si pas de parc on affiche
-					if (($exist_parc[0]["cn"])=="") {
-						$mpenc=$list_computer[$loopa]['cn']; 
-						// Filtrage selon critere
-						if ("$filtrecomp"=="") {
-							$form .= "<option value=".$mpenc.">".$mpenc;
-						} else {
-							//$lmloop=0;
-							$mpcount=count($mpenc);
-							$mach=$mpenc;
-							if (preg_match("/$filtrecomp/",$mach)) {
+					if($list_computer[$loopa]["cn"]!=$netbios_name) {
+						$exist_parc = search_parcs($list_computer[$loopa]["cn"]);
+						// Si pas de parc on affiche
+						if (($exist_parc[0]["cn"])=="") {
+							$mpenc=$list_computer[$loopa]['cn']; 
+							// Filtrage selon critere
+							if ("$filtrecomp"=="") {
 								$form .= "<option value=".$mpenc.">".$mpenc;
+							} else {
+								//$lmloop=0;
+								$mpcount=count($mpenc);
+								$mach=$mpenc;
+								if (preg_match("/$filtrecomp/",$mach)) {
+									$form .= "<option value=".$mpenc.">".$mpenc;
+								}
 							}
 						}
 					}
