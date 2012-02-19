@@ -221,7 +221,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 					$form.="<p><select size=\"".$size."\" name=\"new_computers[]\" multiple=\"multiple\">\n";
 					echo $form;
 					for ($loop=0; $loop < count($list_new_machines); $loop++) {
-						if ("$list_new_machines[$loop]" != "se3") echo "<option value=\"".$list_new_machines[$loop]."\">".$list_new_machines[$loop];
+						if ("$list_new_machines[$loop]" != "$netbios_name") echo "<option value=\"".$list_new_machines[$loop]."\">".$list_new_machines[$loop];
                                         }
 					$form="</select></p>\n";
 
