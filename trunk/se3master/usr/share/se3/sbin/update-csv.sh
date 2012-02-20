@@ -98,7 +98,7 @@ Dans le cas ou vous ne corrigeriez pas, les reinstallations unattended risquerai
 #  cat  /tmp/emailunattended_generate
 fi
 if [ -e $UNATTENDCSV ]; then
-    unix2dos $UNATTENDCSV
+    todos $UNATTENDCSV
     mkdir -p $UNATTENDEDSITE
     cp -f $UNATTENDCSV $UNATTENDEDSITE
 fi
