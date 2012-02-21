@@ -25,7 +25,6 @@
    */
 
 
-
 include "entete.inc.php";
 include "ldap.inc.php";
 include "ihm.inc.php";
@@ -42,7 +41,7 @@ $action=$_GET['action'];
 echo "<h1>".gettext("Annuaire")."</h1>\n";
  
 aff_trailer ("3");
-if ((is_admin("Annu_is_admin",$login)=="Y")||($uid==$login)) {
+if ((is_admin("Annu_is_admin",$login)=="Y") || (is_admin("Sovajon_is_admin",$login)=="Y")||($uid==$login)) {
     // suppression d'un  profil nt d'utilisateur en cas de pb
     if ($uid == "admin" )  {
       	echo "<div class=error_msg>".gettext("Vous ne pouvez pas effacer le profil administrateur !")."</div>";
@@ -85,7 +84,7 @@ if ((is_admin("Annu_is_admin",$login)=="Y")||($uid==$login)) {
 	  }
     }
   } else {
-    	echo "<div class=error_msg>".gettext("Cette fonctionnalit&#233;, n&#233;cessite les droits d'administrateur de l'annuaire SE3 !")."</div>";
+    	echo "<div class=error_msg>".gettext("Cette fonctionnalit&#233;, n&#233;cessite le droit sovajon_is_admin")."</div>";
   }
 
 include ("pdp.inc.php");
