@@ -181,21 +181,22 @@ if [ "$NODL" != "yes" ]; then
 
 	tar -xzf $ARCHIVE_FILE
 	cd $SCRIPTS_DIR
-	MD5_CTRL_LOCAL1=$(md5sum se3_upgrade_lenny.sh)
+	MD5_CTRL_LOCAL1=$(md5sum se3_upgrade_squeeze.sh)
 	# MD5_CTRL_LOCAL3=$(md5sum migration_UTF8.sh)
 	cd -
-	MD5_CTRL1=$(cat se3_upgrade_lenny.md5)
+	MD5_CTRL1=$(cat se3_upgrade_squeeze.md5)
 	#MD5_CTRL2=$(cat migration_ldap_lenny.md5)
 	# MD5_CTRL3=$(cat migration_UTF8.md5)
 	chmod +x *.sh
 
-	[ "$MD5_CTRL1" != "$MD5_CTRL_LOCAL1" ] && RELANCE="YES" && cp se3_upgrade_lenny.sh $SCRIPTS_DIR/
-# 	[ "$MD5_CTRL2" != "$MD5_CTRL_LOCAL2" ] && cp migration_ldap_etch.sh $SCRIPTS_DIR/
-	# [ "$MD5_CTRL3" != "$MD5_CTRL_LOCAL3" ] && cp migration_UTF8.sh $SCRIPTS_DIR/
+	if [ "$MD5_CTRL1" != "$MD5_CTRL_LOCAL1" ]; then
+		RELANCE="YES" 
+		cp se3_upgrade_squeeze.sh $SCRIPTS_DIR/
+	fi
 	if [ "$RELANCE" == "YES" ]
 	then
 		echo -e "$COLINFO"
-		echo "Les scripts de migration ont ete mis a jour depuis le serveur central, veuiller relancer se3_upgrade_lenny.sh"
+		echo "Les scripts de migration ont ete mis a jour depuis le serveur central, veuiller relancer se3_upgrade_squeeze.sh"
 		echo "afin de prendre en compte les changements"
 		exit 1
 		echo -e "$COLTXT"
@@ -356,7 +357,7 @@ apt-get dist-upgrade $option  < /dev/tty
 
 
 if [ "$?" != "0" ]; then
-	echo -e "$COLERREUR Une erreur s'est produite lors de la migration vers lenny"
+	echo -e "$COLERREUR Une erreur s'est produite lors de la migration vers squeeze"
 	 GENSOURCELIST
 	echo "Vous devrez terminer la migration manuellement une fois votre probleme regle"
 	echo -e "$COLTXT"
