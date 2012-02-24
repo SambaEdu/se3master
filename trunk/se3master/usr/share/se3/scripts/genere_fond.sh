@@ -74,7 +74,12 @@ if [ -z "$1" -o ! -e "/usr/bin/convert" ]; then
     exit 0
 fi
 
-if [ $(cat $chemin_param_fond/actif.txt 2>/dev/null) != "1" ]; then
+if [ ! -e "$chemin_param_fond/actif.txt" ]; then
+    exit 0
+fi
+
+t=$(cat $chemin_param_fond/actif.txt 2>/dev/null)
+if [ "$t" != "1" ]; then
     exit 0
 fi
 
