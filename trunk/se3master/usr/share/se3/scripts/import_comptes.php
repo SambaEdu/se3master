@@ -89,6 +89,8 @@
 
 	//my_echo("\$creer_equipes_vides=$creer_equipes_vides<br />");
 
+	my_echo("<div id='div_signalements' style='display:none; color:red;'><strong>Signalements</strong><br /></div>\n");
+
 	my_echo("<a name='menu'></a>");
 	my_echo("<h3>Menu</h3>");
 	my_echo("<blockquote>\n");
@@ -682,6 +684,9 @@
 		// C'est un fichier Eleves...XML
 		// *****************************
 
+		// Pour avoir accès aux erreurs XML:
+		libxml_use_internal_errors(true);
+
 		$ele_xml=simplexml_load_file($eleves_file);
 		if($ele_xml) {
 			$nom_racine=$ele_xml->getName();
@@ -799,7 +804,7 @@
 						}
 			
 					}
-			
+
 					if($debug_import_comptes=='y') {
 						my_echo("<pre style='color:green;'><b>Tableau \$eleves[$i]&nbsp;:</b>");
 						my_print_r($eleves[$i]);
@@ -1046,20 +1051,23 @@
 					//flush();
 					$i++;
 				}
-	
-				my_echo("DEBUG_ELEVES_1<br /><pre style='color:green'><b>eleves</b><br />\n");
-				my_print_r($eleves);
-				my_echo("</pre><br />DEBUG_ELEVES_2<br />\n");
-	
-				my_echo("DEBUG_TAB_GROUPS_1<br /><pre style='color:green'><b>tab_groups</b><br />\n");
-				my_print_r($tab_groups);
-				my_echo("</pre><br />DEBUG_TAB_GROUPS_2<br />\n");
-	
-				my_echo("DEBUG_TAB_GROUPS_MEMBER_1<br /><pre style='color:green'><b>tab_groups_member</b><br />\n");
-				my_print_r($tab_groups_member);
-				my_echo("</pre><br />DEBUG_TAB_GROUPS_MEMBER_2<br />\n");
-	
+
 				my_echo("</table>\n");
+
+				if($debug_import_comptes=='y') {
+					my_echo("DEBUG_ELEVES_1<br /><pre style='color:green'><b>eleves</b><br />\n");
+					my_print_r($eleves);
+					my_echo("</pre><br />DEBUG_ELEVES_2<br />\n");
+	
+					my_echo("DEBUG_TAB_GROUPS_1<br /><pre style='color:green'><b>tab_groups</b><br />\n");
+					my_print_r($tab_groups);
+					my_echo("</pre><br />DEBUG_TAB_GROUPS_2<br />\n");
+	
+					my_echo("DEBUG_TAB_GROUPS_MEMBER_1<br /><pre style='color:green'><b>tab_groups_member</b><br />\n");
+					my_print_r($tab_groups_member);
+					my_echo("</pre><br />DEBUG_TAB_GROUPS_MEMBER_2<br />\n");
+				}
+
 				//my_echo("___ ... ___");
 				my_echo("</blockquote>\n");
 				if($chrono=='y') {my_echo("<p>Fin de l'opération: ".date_et_heure()."</p>\n");}
@@ -1217,7 +1225,21 @@
 		else{
 			//$eleves_xml_file
 			//my_echo("<p>ERREUR lors de l'ouverture du fichier ".$eleves_xml_file['name']." (<i>".$eleves_xml_file['tmp_name']."</i>).</p>\n");
-			my_echo("<p style='color:red;'>ERREUR lors de l'ouverture du fichier '$eleves_file'</p>\n");
+
+			my_echo("<script type='text/javascript'>
+	document.getElementById('div_signalements').style.display='';
+	document.getElementById('div_signalements').innerHTML=document.getElementById('div_signalements').innerHTML+'<br /><a href=\'#erreur_eleves_file\'>Erreur</a> lors de l\'ouverture du fichier <b>$eleves_file</b>';
+</script>\n");
+
+			my_echo("<p style='color:red;'><a name='erreur_eleves_file'></a>ERREUR lors de l'ouverture du fichier '$eleves_file'</p>\n");
+
+			my_echo("<div style='color:red;'>");
+			foreach(libxml_get_errors() as $xml_error) {
+				my_echo($xml_error->message."<br />");
+			}
+			my_echo("</div>");
+
+			libxml_clear_errors();
 		}
 	}
 
@@ -1238,6 +1260,9 @@
 
 	// Lecture du XML de STS...
 	$temoin_au_moins_un_prof_princ="";
+
+	// Pour avoir accès aux erreurs XML:
+	libxml_use_internal_errors(true);
 
 	$sts_xml=simplexml_load_file($sts_xml_file);
 	if($sts_xml) {
@@ -2177,7 +2202,21 @@
 	}
 	else {
 		//my_echo("<p>ERREUR lors de l'ouverture du fichier ".$sts_xml_file['name']." (<i>".$sts_xml_file['tmp_name']."</i>).</p>\n");
-		my_echo("<p>ERREUR lors de l'ouverture du fichier '$sts_xml_file'.</p>\n");
+
+		my_echo("<script type='text/javascript'>
+document.getElementById('div_signalements').style.display='';
+document.getElementById('div_signalements').innerHTML=document.getElementById('div_signalements').innerHTML+'<br /><a href=\'#erreur_sts_file\'>Erreur</a> lors de l\'ouverture du fichier <b>$sts_xml_file</b>';
+</script>\n");
+
+		my_echo("<p style='color:red'><a name='erreur_sts_file'></a>ERREUR lors de l'ouverture du fichier '$sts_xml_file'.</p>\n");
+
+		my_echo("<div style='color:red;'>");
+		foreach(libxml_get_errors() as $xml_error) {
+			my_echo($xml_error->message."<br />");
+		}
+		my_echo("</div>");
+
+		libxml_clear_errors();
 	}
 
 	if($temoin_creation_fichiers!="non") {
@@ -2887,11 +2926,14 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				else {
 					// Pas de F_UID.TXT fourni pour imposer des logins.
 
-if(strtolower($nom)=="andro") {
-$f_tmp=fopen("/tmp/debug_accents.txt","a+");
-fwrite($f_tmp,"creer_uid($nom,$prenom)\n");
-fclose($f_tmp);
-}
+					/*
+					if(strtolower($nom)=="andro") {
+					$f_tmp=fopen("/tmp/debug_accents.txt","a+");
+					fwrite($f_tmp,"creer_uid($nom,$prenom)\n");
+					fclose($f_tmp);
+					}
+					*/
+
 					// Création d'un uid:
 					if(!$uid=creer_uid($nom,$prenom)) {
 						$temoin_erreur_eleve="o";
@@ -2913,11 +2955,13 @@ fclose($f_tmp);
 						my_echo("Ajout de l'élève $prenom $nom (<i>$uid</i>): ");
 						if($simulation!="y") {
 							# DBG system ("echo 'add_suser : $uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber' >> /tmp/comptes.log");
-if(strtolower($nom)=="andro") {
-$f_tmp=fopen("/tmp/debug_accents.txt","a+");
-fwrite($f_tmp,"add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber)\n");
-fclose($f_tmp);
-}
+							/*
+							if(strtolower($nom)=="andro") {
+							$f_tmp=fopen("/tmp/debug_accents.txt","a+");
+							fwrite($f_tmp,"add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber)\n");
+							fclose($f_tmp);
+							}
+							*/
 							if(add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber)) {
 								my_echo("<font color='green'>SUCCES</font>");
 								$nouveaux_comptes++;
@@ -4695,14 +4739,16 @@ fclose($f_tmp);
 					$ind_mat="";
 
 					//if(in_array($groupes[$i]["code"], $tab_groups)) {
-					if((in_array($groupes[$i]["code"], $tab_groups))||(in_array(apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"])), $tab_groups))) {
-						// Les inscriptions des eleves ont ete inscrites dans le ElevesSansAdresses.xml
-						$temoin_groupe_apparaissant_dans_Eleves_xml="oui";
-						$temoin_matiere_optionnelle="oui";
-						$ind_mat=$k;
+					if(is_array($tab_groups)) {
+						if((in_array($groupes[$i]["code"], $tab_groups))||(in_array(apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"])), $tab_groups))) {
+							// Les inscriptions des eleves ont ete inscrites dans le ElevesSansAdresses.xml
+							$temoin_groupe_apparaissant_dans_Eleves_xml="oui";
+							$temoin_matiere_optionnelle="oui";
+							$ind_mat=$k;
 
-						if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
-							my_echo_double_sortie("Matiere optionnelle apparaissant dans ElevesSansAdresses avec \$ind_mat=$ind_mat");
+							if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+								my_echo_double_sortie("Matiere optionnelle apparaissant dans ElevesSansAdresses avec \$ind_mat=$ind_mat");
+							}
 						}
 					}
 
