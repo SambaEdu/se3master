@@ -70,11 +70,16 @@ then
 	usage 1
 fi
 
+# filtrage 
+user=$(echo "$1" | tr 'A-Z' 'a-z' | sed "s/[\$_$]//g")
+machine=$(echo "$2" | tr 'A-Z' 'a-z')
+[ "$user" == "adminse3" -o "$user" == "$machine" ] && exit 0
+
 if [ "$LOGON" == "1" ]
 then
-	rc_logon $1 $2 $3 $4 $5
+	rc_logon $user $machine $3 $4 $5
 elif [  $LOGOUT == "1" ]
 then
-	rc_logout $1 $2 $3 $4 $5
+	rc_logout $user $machine $3 $4 $5
 fi
 exit $?
