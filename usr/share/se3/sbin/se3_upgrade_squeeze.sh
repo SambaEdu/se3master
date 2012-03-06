@@ -133,7 +133,7 @@ sleep 1
 
 
 ### mode debug et nodl pour le moment ###
-NODL="yes"
+# NODL="yes"
 DEBUG="yes"
 #########################################  
 
@@ -328,13 +328,39 @@ apt-get -qq update || ERREUR "Une erreur s'est produite lors de la mise a jour d
 echo "Ok !"
 echo -e "$COLINFO"
 echo "Maj si besoin de debian-archive-keyring"
+echo -e "$COLTXT"
 
 apt-get install debian-archive-keyring --allow-unauthenticated
 apt-get -qq update 
-echo "mise a jour de lib6 et des locales" | tee -a $fichier_log
-echo -e "$COLTXT"
-echo -e "${COLINFO}Ne pas s'alarmer des erreurs sur les locales, c'est inevitable a cette etape de la migration\n Il est egalement possible que le noyau en cours se desinstalle, un autre sera installe ensuite$COLTXT"
 
+
+#Supression des fonts pourries MS 
+if [ -e "/usr/share/doc/ttf-mscorefonts-installer" ]; then
+	echo -e "$COLINFO"
+	echo "Suppression fonts MS inutiles"
+	echo -e "$COLTXT"
+	apt-get remove ttf-mscorefonts-installer -y 
+	apt-get autoremove -y
+fi
+
+
+BPC_SCRIPT="/etc/init.d/backuppc"
+BPC_PID="/var/run/backuppc/BackupPC.pid"
+
+if [ -e "$BPC_SCRIPT" ]; then
+	echo -e "$COLINFO"
+	echo "Test bon fonctionnenment backuppc et Suppression en cas de besoin"
+	echo -e "$COLTXT"
+	if [ ! -e "$BPC_PID" ]; then
+		$BPC_SCRIPT start || apt-get remove backuppc --purge -y 
+	fi
+fi
+
+
+echo "mise a jour de lib6 des locales et de wine" | tee -a $fichier_log
+
+echo -e "${COLINFO}Ne pas s'alarmer des erreurs sur les locales, c'est inevitable a cette etape de la migration\n Il est egalement possible que le noyau en cours se desinstalle, un autre sera installe ensuite$COLTXT"
+echo -e "$COLTXT"
 apt-get install libc6 locales wine -y < /dev/tty 
 
 if [ "$?" != "0" ]; then
@@ -344,6 +370,12 @@ if [ "$?" != "0" ]; then
 fi
 touch $chemin_log/phase3-ok
 echo "mise a jour de lib6 locales et wine ---> OK" | tee -a $fichier_log
+
+
+if [ -e "/usr/share/ocsinventory-server" ]; then
+	apt-get install ocsinventory-server -y 
+fi
+
 
 echo -e "$COLPARTIE"
 echo "Partie 4 : Migration en Squeeze - installations des paquets restants" 
@@ -378,7 +410,7 @@ sed -i "s/#SLAPD_CONF=/SLAPD_CONF=\"\/etc\/ldap\/slapd.conf\"/g" /etc/default/sl
 cp $chemin_migr/slapd.conf /etc/ldap/slapd.conf
 chown openldap:openldap /etc/ldap/slapd.conf
 sleep 2
-/ect/init.d/slapd start
+/etc/init.d/slapd start
 
 echo -e "$COLPARTIE"
 echo "Partie 6 : Mise a jour des paquets se3 sous squeeze"  | tee -a $fichier_log
@@ -399,6 +431,8 @@ echo -e "$COLCMD"
 # modif base sql
 mysql -e "UPDATE se3db.params SET value = 'squeeze' WHERE value = 'lenny';" 
 
+# nettoyage
+apt-get autoremove
 
 echo -e "$COLINFO"
 echo "Termine !!!"
