@@ -1,27 +1,27 @@
 ## $Id$ ##
-# Extinction programm�e des postes xp tous les 1/4h
+# Extinction programmee des postes xp tous les 1/4h
 59,14,29,44 * * * * root /usr/share/se3/sbin/cron_wolstop.pl &>/dev/null
 #
 # Lancement update deux fois par jour pour affichage plus rapide dans page diagnostic et module
 00 06,12 * * * root /usr/bin/apt-get update &>/dev/null
 #
-# vidage de la table session de mysql 1 fois par mois � 22h30
+# vidage de la table session de mysql 1 fois par mois a 22h30
 30 22 1 * * root /usr/share/se3/sbin/clean_session_mysql.sh > /dev/null
 #
-# vidage logs ldap 1h45 tous les dimanches
+# vidage logs ldap 22h30 tous les dimanches
 30 22 * * 7 root /usr/share/se3/sbin/clean_log_ldap.sh > /dev/null
 #
+# verif maj 07h45 tous les dimanches
+#45 07 * * 7 root /usr/share/se3/sbin/verif_maj_dispo.sh > /dev/null
+#
 
-# Controle des pb de nom_parc=nom_machine
-00 22 * * * root /usr/share/se3/sbin/se3_controle_noms_parcs_et_machines_pour_wpkg.sh > /dev/null 2>&1
-
-### Sauvegarde ldap, mysql et acls de /var/se3 tous les jours � 23h15###
+### Sauvegarde ldap, mysql et acls de /var/se3 tous les jours a 23h15###
 45 18 * * * root /usr/share/se3/sbin/lance_sauve_system.sh > /dev/null 2>&1
 #
 # sauvegarde sur bande 23h50
 50 23 * * 1-5 root /usr/share/se3/sbin/sauve.sh >/dev/null
 #
-# mise � l'heure 23h00
+# mise a l'heure 23h00
 00 23 * * * root /usr/share/se3/sbin/settime.sh
 # Nettoyage des fichiers de lock logonpl 00h45
 45 0 * * 1-5 root /usr/share/se3/sbin/lckclean.sh 2>/dev/null
@@ -29,10 +29,10 @@
 */5 * * * * root /usr/share/se3/sbin/cron_alertes.pl 2>/dev/null
 10 5 * * * root /usr/share/se3/sbin/warn_invent.pl 2>/dev/null
 #
-# Attribution du droit smbweb_is_open si le mot de passe "date de naissance" a �t� chang�: inactif par d�faut.
+# Attribution du droit smbweb_is_open si le mot de passe "date de naissance" a ete change: inactif par defaut.
 30 18 * * * root /usr/share/se3/scripts/smbweb_open_for_passwd_changed.sh > /dev/null 2>&1
 
-# Actualisation d'unattend.csv par rapport � l'annuaire. On pourrait l'int�grer avec un "at" dans machineadd.pl,machinedel...
+# Actualisation d'unattend.csv par rapport a l'annuaire. On pourrait l'integrer avec un "at" dans machineadd.pl,machinedel...
 29 18 * * * root /usr/share/se3/scripts/unattended_generate.sh > /dev/null 2>&1
 
 ### quotas ###
@@ -44,9 +44,8 @@
 #
 01 21 * * * root /usr/share/se3/scripts/quota_fixer_mysql.sh Toutlemonde Toutespartitions actu >/dev/null
 
-# restart clamav freshclam 1 fois par jour pour �viter blocage potentiel sur logs
-03 21 * * * root [ -e /etc/init.d/clamav-freshclam ] && /etc/init.d/clamav-freshclam restart >/dev/null
-
+# restart clamav freshclam 1 fois par jour pour eviter blocage potentiel sur logs
+03 21 * * * root [ -e /etc/init.d/clamav-freshclam ] &&  PATH="/usr/sbin:/usr/bin:/sbin:/bin" && /etc/init.d/clamav-freshclam restart >/dev/null
 
 # purge des elements de la corbeille de + de 2 jours ou overfill
 0 1  * * *   root  /usr/share/se3/sbin/vide_corbeille.sh >/dev/null 2>&1
@@ -58,4 +57,5 @@
 */5 * * * * root /usr/share/se3/sbin/update-csv.sh >/dev/null 2>&1
 
 # Purge repertoire public toutes les nuits
-0   1   *   *   *   /usr/share/se3/sbin/purge_public.sh >/dev/null 2>&1
+0   1   *   *   *   root    /usr/share/se3/sbin/purge_public.sh >/dev/null 2>&1
+
