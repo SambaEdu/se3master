@@ -82,7 +82,8 @@ echo -e "$COLCMD\c"
 
 ## recuperation des variables necessaires pour interoger mysql ###
 
-. /usr/share/se3/includes/config.inc.sh -dm
+. /etc/se3/config_d.cache.sh 
+. /etc/se3/config_o.cache.sh 
 
 
 #
@@ -201,7 +202,7 @@ if [ -e /var/se3/unattended/install/site/unattend.txt ]; then
 fi
 
 #
-# Mise à jour de /etc/network/interfaces
+# Mise a jour de /etc/network/interfaces
 #
 echo -e "$COLTXT"
 echo "Mise à jour de /etc/network/interfaces"
@@ -210,6 +211,22 @@ cp -f /etc/network/interfaces /etc/network/interfaces.ori
 echo "cat /etc/network/interfaces.ori | sed -e \"s/address $OLD_IP/address $NEW_IP/g\" | sed -e \"s/netmask $OLD_NETMASK/netmask $NEW_NETMASK/g\" | sed -e \"s/network $OLD_NETWORK/network $NEW_NETWORK/g\" | sed -e \"s/broadcast $OLD_BROADCAST/broadcast $NEW_BROADCAST/g\" | sed -e \"s/gateway $OLD_GATEWAY/gateway $NEW_GATEWAY/g\" > /etc/network/interfaces"
 cat /etc/network/interfaces.ori | sed -e "s/address $OLD_IP/address $NEW_IP/g" | sed -e "s/netmask $OLD_NETMASK/netmask $NEW_NETMASK/g" | sed -e "s/network $OLD_NETWORK/network $NEW_NETWORK/g" | sed -e "s/broadcast $OLD_BROADCAST/broadcast $NEW_BROADCAST/g" | sed -e "s/gateway $OLD_GATEWAY/gateway $NEW_GATEWAY/g" > /etc/network/interfaces
 chmod 644 /etc/network/interfaces
+
+
+
+#
+# Mise a jour de  /etc/networks
+#
+echo -e "$COLTXT"
+echo "Mise à jour de /etc/networks"
+echo -e "$COLCMD\c"
+cp -f /etc/networks /etc/networks.ori
+echo "cat /etc/networks.ori | sed -e \"s/network $OLD_NETWORK/network $NEW_NETWORK/g\" > /etc/networks"
+cat /etc/networks.ori | sed -e "s/network $OLD_NETWORK/network $NEW_NETWORK/g" > /etc/networks
+chmod 644 /etc/networks 
+
+
+
 
 
 # Mise à jour de /etc/resolv.conf
@@ -343,6 +360,10 @@ fi
 echo "UPDATE params SET value='$NEW_NETMASK' WHERE name='se3mask';" >> /tmp/maj_chgt_ip_se3.sql
 mysql -u$dbuser -p$dbpass $dbname < /tmp/maj_chgt_ip_se3.sql
 
+#refresh cache params sql 
+/usr/share/se3/includes/config.inc.sh -clpbmsdf
+
+
 #
 # Redémarrage de l'interface réseau
 #
@@ -387,12 +408,24 @@ ldapmodify -x -D "$ADMIN_DN" -w $(cat /etc/ldap.secret) -f /tmp/maj_chgt_ip_se3.
 # maj params pour wpkg
 [ -e /usr/share/se3/scripts/wpkg_initvars.sh ] &&  /usr/share/se3/scripts/wpkg_initvars.sh
 
+[ -n "$dhcp_wins" ] && /usr/share/se3/scripts/makedhcpdconf 
+
+
+
+
 # domscripts
 /usr/share/se3/sbin/update-domscripts.sh 
 
-[ -n "$dhcp_wins" ] && /usr/share/se3/scripts/makedhcpdconf 
+# Nettoyage /home/netlogon/machine/
+echo "Nettoyage /home/netlogon/machine/"
+ 
+rm -rf /home/netlogon/machine/*
 
-. /usr/share/se3/includes/config.inc.sh -clpbmsdf
+
+# logonpy
+/usr/share/se3/sbin/update-logonpy.sh
+/usr/share/se3/sbin/update-smbconf.sh
+
 
 echo -e "$COLINFO"
 echo "Par sécurité:"
@@ -419,6 +452,9 @@ cp -f /etc/ldap/config.se3.ori /etc/ldap/config.se3
 echo \"UPDATE params SET value='http://$OLD_IP:909' WHERE name='urlse3';\" > /tmp/retablissement_ip_se3.sql
 echo \"UPDATE params SET value='$OLD_IP' WHERE name='ldap_server';\" >> /tmp/retablissement_ip_se3.sql
 echo \"UPDATE params SET value='$OLD_IP' WHERE name='se3ip';\" >> /tmp/retablissement_ip_se3.sql
+echo \"UPDATE params SET value='$NEW_NETMASK' WHERE name='se3mask';\" >> /tmp/maj_chgt_ip_se3.sql
+
+
 "> retablissement_config_initiale.sh
 if [ -n "$dhcp_wins" ]; then
 echo "	
@@ -429,7 +465,7 @@ fi
 
 echo "
 mysql -u$dbuser -p$dbpass $dbname < /tmp/retablissement_ip_se3.sql
-
+. /usr/share/se3/includes/config.inc.sh -clpbmsdf
 echo \"dn: cn=$NOM_NETBIOS_SE3,ou=Computers,$BASE_DN\" > /tmp/retablissement_chgt_ip_se3.ldif
 echo \"changetype: modify\" >> /tmp/retablissement_chgt_ip_se3.ldif
 echo \"replace: ipHostNumber\" >> /tmp/retablissement_chgt_ip_se3.ldif
@@ -445,9 +481,19 @@ echo \"\" >> /tmp/retablissement_chgt_ip_se3.ldif
 /etc/init.d/apache2se start
 
 ldapmodify -x -D \"$ADMIN_DN\" -w $(cat /etc/ldap.secret) -f /tmp/retablissement_chgt_ip_se3.ldif
-/usr/share/se3/sbin/update-domscripts.sh 
 [ -e /usr/share/se3/scripts/wpkg_initvars.sh ] &&  /usr/share/se3/scripts/wpkg_initvars.sh
-. /usr/share/se3/includes/config.inc.sh -clpbmsdf" >> retablissement_config_initiale.sh
+
+# domscripts
+/usr/share/se3/sbin/update-domscripts.sh 
+
+# Nettoyage /home/netlogon/machine/
+rm -rf /home/netlogon/machine/*
+
+
+# logonpy
+/usr/share/se3/sbin/update-logonpy.sh
+/usr/share/se3/sbin/update-smbconf.sh
+" >> retablissement_config_initiale.sh
 
 
 if [ -n "$dhcp_wins" ]; then	
