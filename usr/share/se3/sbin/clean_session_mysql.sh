@@ -1,17 +1,17 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Franck Molle
-# distribué sous licence GPL
+# distribue sous licence GPL
 # 12/2005
 #
-##### Permet de vider la table session de se3db afin d'eviter le debordement, script lancé une fois / mois par cron #####
+##### Permet de vider la table session et delester connexions de se3db afin d'eviter le debordement, script lancé une fois / mois par cron #####
 ##$Id$##
 #
 
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
-	echo "permet de vider la table session de la base mysql se3bd"
-	echo "Ce script est lancé une fois par mois en crontab /etc/crontab.monthly"
+	echo "permet de vider la table session  et nettoyer la table connexions de la base mysql se3bd"
+	echo "Ce script est lance une fois par mois en crontab /etc/crontab.monthly"
 	echo ""
 	echo "Usage : aucune option"
 	exit
@@ -37,4 +37,8 @@ fi
 ## vidage de la table session
 echo "Vidage de la table session"
 echo "TRUNCATE sessions"|mysql -h $dbhost $dbname -u $dbuser -p$dbpass
+
+echo "delestage de la table connexions"
+echo "delete from connexions where logintime<date_sub(now(),INTERVAL 90 DAY)"|mysql -h $dbhost $dbname -u $dbuser -p$dbpass
+
 exit 0
