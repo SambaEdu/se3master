@@ -189,7 +189,7 @@ echo "	<body>\n";
         
     }
 	if ($do !="4") 	$html .= "<li><a href=\"ldap_cleaner.php?do=4\" target=\"main\">Vider la corbeille et purger les fichiers inutiles sur /var/se3</a>".msgaide($msg5)."</li><br>\n";
-	$html .= "<H3>R&#233;solution de probl&#233;me</H3>\n";
+	$html .= "<H3>R&#233;solution de probl&#232;me</H3>\n";
         $html .= "<li><a href=\"ldap_cleaner.php?do=5\" target=\"main\">Programmer la recherche et la suppression des fichiers utilisateurs obsol&#232;tes sur les partitions de stockage</a>".msgaide($msg7)."</li>\n";
 	
         $html .="<p></p>";
