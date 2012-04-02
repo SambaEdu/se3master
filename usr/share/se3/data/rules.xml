@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+ï»¿<?xml version="1.0" encoding="UTF-8"?>
 <se3mod>
 <nom>SE3</nom>
 <version>V 0.1</version>
@@ -85,7 +85,7 @@
 </Regle>
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
-<Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\{22d6f312-b0f6-11d0-94ab-0080c74c7e95}</Chemin>
+<Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{22d6f312-b0f6-11d0-94ab-0080c74c7e95}</Chemin>
 <Intitule>Lecteur Window Media</Intitule>
 <Composant>config</Composant>
 <Variable type="REG_EXPAND_SZ">StubPath</Variable>
@@ -95,7 +95,7 @@
 </Regle>
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
-<Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{22d6f312-b0f6-11d0-94ab-0080c74c7e95}</Chemin>
+<Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\{22d6f312-b0f6-11d0-94ab-0080c74c7e95}</Chemin>
 <Intitule>Lecteur Window Media</Intitule>
 <Composant>config</Composant>
 <Variable type="REG_EXPAND_SZ">StubPath</Variable>
@@ -136,7 +136,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\{89820200-ECBD-11cf-8B85-00AA005B4340}</Chemin>
-<Intitule>Mise à jour du bureau Windows</Intitule>
+<Intitule>Mise Ã  jour du bureau Windows</Intitule>
 <Composant>config</Composant>
 <Variable type="REG_EXPAND_SZ">StubPath</Variable>
 <ValeurSiCoche>regsvr32.exe /s /n /i:U shell32.dll</ValeurSiCoche>
@@ -151,6 +151,36 @@
 <Variable type="REG_EXPAND_SZ">StubPath</Variable>
 <ValeurSiCoche>rundll32.exe advpack.dll,LaunchINFSection C:\WINDOWS\INF\wmp11.inf,PerUserStub</ValeurSiCoche>
 <ValeurSiDecoche></ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>2000,XP</OS>
+<Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{60B49E34-C7CC-11D0-8953-00A0C90347FF}MICROS</Chemin>
+<Intitule>Personnalisation du navigateur web</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_EXPAND_SZ">StubPath</Variable>
+<ValeurSiCoche></ValeurSiCoche>
+<ValeurSiDecoche>RunDLL32 IEDKCS32.DLL,BrandIE4 SIGNUP</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>2000,XP,Vista,Seven</OS>
+<Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{26923b43-4d38-484f-9b9e-de460746276c}</Chemin>
+<Intitule>Internet Explorer (cle2)</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_EXPAND_SZ">StubPath</Variable>
+<ValeurSiCoche></ValeurSiCoche>
+<ValeurSiDecoche>C:\WINDOWS\system32\ie4uinit.exe -UserIconConfig</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>2000,XP,Vista,Seven</OS>
+<Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{60B49E34-C7CC-11D0-8953-00A0C90347FF}</Chemin>
+<Intitule>Browser customisation</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_EXPAND_SZ">StubPath</Variable>
+<ValeurSiCoche></ValeurSiCoche>
+<ValeurSiDecoche>"C:\WINDOWS\system32\rundll32.exe" "C:\WINDOWS\system32\iedkcs32.dll",BrandIEActiveSetup SIGNUP</ValeurSiDecoche>
 <commentaire></commentaire>
 </Regle>
 </regles>
@@ -168,7 +198,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Messenger\Client</Chemin>
-<Intitule>Désactiver msn messenger ( 1/2 clés)</Intitule>
+<Intitule>DÃ©sactiver msn messenger ( 1/2 clÃ©s)</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">PreventAutoRun</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -178,20 +208,10 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Messenger\Client</Chemin>
-<Intitule>Désactiver msn messenger ( 2/2 clés)</Intitule>
+<Intitule>DÃ©sactiver msn messenger ( 2/2 clÃ©s)</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">PreventRun</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
-<ValeurSiDecoche>0</ValeurSiDecoche>
-<commentaire></commentaire>
-</Regle>
-<Regle ClasseObjet="REGISTRE">
-<OS>TOUS</OS>
-<Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings</Chemin>
-<Intitule>BCDI  (probleme chargement page)</Intitule>
-<Composant>restrict</Composant>
-<Variable type="REG_DWORD">SyncMode5</Variable>
-<ValeurSiCoche>3</ValeurSiCoche>
 <ValeurSiDecoche>0</ValeurSiDecoche>
 <commentaire></commentaire>
 </Regle>
@@ -230,7 +250,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Désactiver le nettoyage de la zone de notification</Intitule>
+<Intitule>DÃ©sactiver le nettoyage de la zone de notification</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">noautotraynotify</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -240,7 +260,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Masquer l'horloge de la zone de notification système</Intitule>
+<Intitule>Masquer l'horloge de la zone de notification systÃ¨me</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">HideClock</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -250,7 +270,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>Désactiver le masquage des applis dans la barre des taches</Intitule>
+<Intitule>DÃ©sactiver le masquage des applis dans la barre des taches</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">EnableAutoTray</Variable>
 <ValeurSiCoche>0</ValeurSiCoche>
@@ -260,7 +280,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Verrouiller la Barre des tâches</Intitule>
+<Intitule>Verrouiller la Barre des tÃ¢ches</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">LockTaskBar</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -270,7 +290,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Ne pas afficher de barres d'outils personnalisées dans la Barre des tâches</Intitule>
+<Intitule>Ne pas afficher de barres d'outils personnalisÃ©es dans la Barre des tÃ¢ches</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoToolbarsOnTaskbar</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -280,7 +300,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Masquer l'accès aux menus contextuels pour la barre des tâches</Intitule>
+<Intitule>Masquer l'accÃ¨s aux menus contextuels pour la barre des tÃ¢ches</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoTrayContextMenu</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -300,19 +320,9 @@
 <Commentaire/>
  </Regle>
 <Regle ClasseObjet="REGISTRE">
-<OS>TOUS</OS>
-<Chemin>reg:///HKEY_CURRENT_USER\Control Panel\Desktop</Chemin>
-<Intitule>nom du papier peint (ex : i:\media\eleves\eleves.bmp)</Intitule>
-<Composant>config</Composant>
-<Variable type="REG_SZ">Wallpaper</Variable>
-<ValeurSiCoche>k:\profil\fond\fonns</ValeurSiCoche>
-<ValeurSiDecoche></ValeurSiDecoche>
-<commentaire></commentaire>
-</Regle>
-<Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\nonenum</Chemin>
-<Intitule>masquer l'icône poste de travail du bureau</Intitule>
+<Intitule>masquer l'icÃ´ne poste de travail du bureau</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">{20D0XPFE0-3AEA-1069-A2D2K-02K002B30309D}</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -322,7 +332,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer l'élément propriétés du menu contextuel de poste de travail</Intitule>
+<Intitule>masquer l'Ã©lÃ©ment propriÃ©tÃ©s du menu contextuel de poste de travail</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoPropertiesMyComputer</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -332,7 +342,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>masquer l'élément gérer du menu contextuel du poste de travail</Intitule>
+<Intitule>masquer l'Ã©lÃ©ment gÃ©rer du menu contextuel du poste de travail</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoManageMyComputerVerb</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -342,7 +352,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>ne pas ajouter de partages des documents récemment ouverts dans favoris réseau</Intitule>
+<Intitule>ne pas ajouter de partages des documents rÃ©cemment ouverts dans favoris rÃ©seau</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoRecentDocsNethood</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -352,7 +362,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\nonenum</Chemin>
-<Intitule>masquer l'icône mes documents du bureau</Intitule>
+<Intitule>masquer l'icÃ´ne mes documents du bureau</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">{XP50D2KFBA-AD25-11D0-92KA2K-02K00361B1103}</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -362,7 +372,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer l'élément propriétés du menu contextuel de mes documents</Intitule>
+<Intitule>masquer l'Ã©lÃ©ment propriÃ©tÃ©s du menu contextuel de mes documents</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoPropertiesMyDocuments</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -372,7 +382,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver la modification du chemin du raccourci mes documents</Intitule>
+<Intitule>dÃ©sactiver la modification du chemin du raccourci mes documents</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">DisablePersonalDirChange</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -382,7 +392,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\nonenum</Chemin>
-<Intitule>masquer l'icône de la corbeille du bureau</Intitule>
+<Intitule>masquer l'icÃ´ne de la corbeille du bureau</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">{6XP5FF0XP0-502K1-101B-9F02K-00AA002F95XPE}</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -392,7 +402,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer l'élément propriétés du menu contextuel de la corbeille</Intitule>
+<Intitule>masquer l'Ã©lÃ©ment propriÃ©tÃ©s du menu contextuel de la corbeille</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoPropertiesRecycleBin</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -402,7 +412,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver les modifications</Intitule>
+<Intitule>dÃ©sactiver les modifications</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoActiveDesktopChanges</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -422,7 +432,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer tous les éléments du bureau</Intitule>
+<Intitule>masquer tous les Ã©lÃ©ments du bureau</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoDesktop</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -432,7 +442,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver le redimensionnement des barres d'outils du bureau</Intitule>
+<Intitule>dÃ©sactiver le redimensionnement des barres d'outils du bureau</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoMovingBands</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -442,7 +452,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>quitter windows sans sauvegarder les modifications apportées au bureau</Intitule>
+<Intitule>quitter windows sans sauvegarder les modifications apportÃ©es au bureau</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoSaveSettings</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -452,7 +462,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>cacher l'icône voisinage réseau (ou favoris réseaux pour Me,2k et XP)</Intitule>
+<Intitule>cacher l'icÃ´ne voisinage rÃ©seau (ou favoris rÃ©seaux pour Me,2k et XP)</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoNetHood</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -462,7 +472,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer l'icône internet explorer du bureau</Intitule>
+<Intitule>masquer l'icÃ´ne internet explorer du bureau</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoInternetIcon</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -472,7 +482,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver active desktop</Intitule>
+<Intitule>dÃ©sactiver active desktop</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoActiveDesktop</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -480,19 +490,9 @@
 <commentaire></commentaire>
 </Regle>
 <Regle ClasseObjet="REGISTRE">
-<OS>TOUS</OS>
-<Chemin>reg:///HKEY_CURRENT_USER\Control Panel\Desktop</Chemin>
-<Intitule>disposition du papier peint [ 0=centré | 1=mosaïque ]</Intitule>
-<Composant>restrict</Composant>
-<Variable type="REG_DWORD">TileWallpaper</Variable>
-<ValeurSiCoche>2</ValeurSiCoche>
-<ValeurSiDecoche>0</ValeurSiDecoche>
-<commentaire></commentaire>
-</Regle>
-<Regle ClasseObjet="REGISTRE">
 <OS>XP</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver l'assistant nettoyage du bureau</Intitule>
+<Intitule>dÃ©sactiver l'assistant nettoyage du bureau</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoDesktopCleanupWizard</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -524,16 +524,16 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system</Chemin>
-<Intitule>Cacher le nom du dernier utilisateur dans la boîte de dialogue</Intitule>
+<Intitule>Cacher le nom du dernier utilisateur dans la boÃ®te de dialogue</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">DontDisplayLastUserName</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
 <ValeurSiDecoche>0</ValeurSiDecoche>
-<commentaire>On evite ainsi que l'utilisateur puisse relire le login de l'utilisateur qui l'a précédé.</commentaire>
+<commentaire>On evite ainsi que l'utilisateur puisse relire le login de l'utilisateur qui l'a prÃ©cÃ©dÃ©.</commentaire>
 </Regle>
 <Regle ClasseObjet="INFO">
 <OS>252</OS>
-<Intitule>"boite de dialogue propriété des disques, fichiers et répertoires"</Intitule>
+<Intitule>"boite de dialogue propriÃ©tÃ© des disques, fichiers et rÃ©pertoires"</Intitule>
 <Composant>LIGNE</Composant>
  <ValeurSiCoche/>
  <ValeurSiDecoche/>
@@ -542,7 +542,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer l'onglet matériel</Intitule>
+<Intitule>masquer l'onglet matÃ©riel</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoHardwareTab</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -562,7 +562,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer l'onglet sécurité</Intitule>
+<Intitule>masquer l'onglet sÃ©curitÃ©</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoSecurityTab</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -580,7 +580,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>XP</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\network</Chemin>
-<Intitule>ne pas déplacer les fichiers supprimés vers la corbeille</Intitule>
+<Intitule>ne pas dÃ©placer les fichiers supprimÃ©s vers la corbeille</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoRecycleFiles</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -590,7 +590,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>XP</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\network</Chemin>
-<Intitule>afficher la boîte de dialogue de confirmation lors de la suppression des fichiers</Intitule>
+<Intitule>afficher la boÃ®te de dialogue de confirmation lors de la suppression des fichiers</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">ConfirmFileDelete</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -618,7 +618,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>activer l'environnement classique (désactivation  activedesktop, themes)</Intitule>
+<Intitule>activer l'environnement classique (dÃ©sactivation  activedesktop, themes)</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">ClassicShell</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -656,7 +656,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver l'accès aux paramètres d'animation des menus</Intitule>
+<Intitule>dÃ©sactiver l'accÃ¨s aux paramÃ¨tres d'animation des menus</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoChangeAnimation</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -676,7 +676,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver le suivi utilisateur</Intitule>
+<Intitule>dÃ©sactiver le suivi utilisateur</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoInstrumentation</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -686,7 +686,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>désactiver le menu fichier dans les fenêtres de l'environnement</Intitule>
+<Intitule>dÃ©sactiver le menu fichier dans les fenÃªtres de l'environnement</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoFileMenu</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -696,7 +696,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>désactiver le menu contextuel (clique droit) dans les dossiers de l'environnement</Intitule>
+<Intitule>dÃ©sactiver le menu contextuel (clique droit) dans les dossiers de l'environnement</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoViewContextMenu</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -744,7 +744,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>Win9x</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\Explorer\User Shell Folders</Chemin>
-<Intitule>Chemin vers Menu Démarrer</Intitule>
+<Intitule>Chemin vers Menu DÃ©marrer</Intitule>
 <Composant>config</Composant>
 <Variable type="REG_SZ">Start Menu</Variable>
 <ValeurSiCoche>K:\profil\Demarrer</ValeurSiCoche>
@@ -754,7 +754,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>Win9x</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\Explorer\User Shell Folders</Chemin>
-<Intitule>Chemin vers Menu Démarrer/Programmes</Intitule>
+<Intitule>Chemin vers Menu DÃ©marrer/Programmes</Intitule>
 <Composant>config</Composant>
 <Variable type="REG_SZ">Programs</Variable>
 <ValeurSiCoche>K:\profil\Demarrer\Programmes</ValeurSiCoche>
@@ -764,7 +764,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>Win9x</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\Explorer\User Shell Folders</Chemin>
-<Intitule>Chemin vers Menu Démarrer/Démarrage</Intitule>
+<Intitule>Chemin vers Menu DÃ©marrer/DÃ©marrage</Intitule>
 <Composant>config</Composant>
 <Variable type="REG_SZ">Startup</Variable>
 <ValeurSiCoche>K:\profil\Demarrer\Programmes\Demarrage</ValeurSiCoche>
@@ -774,7 +774,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>Win9x</OS>
 <Chemin>reg:///HKEY_LOCAL_MACHINE\Network\Logon</Chemin>
-<Intitule>Désactiver l'autologon</Intitule>
+<Intitule>DÃ©sactiver l'autologon</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">LMLogon</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -784,7 +784,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>Win9x</OS>
 <Chemin>reg:///HKEY_LOCAL_MACHINE\software\Microsoft\Windows\CurrentVersion\Policies\Network</Chemin>
-<Intitule>Désactiver le cache des mots de passe windows</Intitule>
+<Intitule>DÃ©sactiver le cache des mots de passe windows</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">DisablePwdCaching</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -793,7 +793,7 @@
 </Regle>
 <Regle ClasseObjet="INFO">
 <OS>252</OS>
-<Intitule>"voisinage réseau"</Intitule>
+<Intitule>"voisinage rÃ©seau"</Intitule>
 <Composant>LIGNE</Composant>
  <ValeurSiCoche/>
  <ValeurSiDecoche/>
@@ -802,7 +802,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer ordinateurs proches dans les favoris réseau</Intitule>
+<Intitule>masquer ordinateurs proches dans les favoris rÃ©seau</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoComputersNearMe</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -812,7 +812,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\network</Chemin>
-<Intitule>masquer tout le réseau dans les favoris réseau</Intitule>
+<Intitule>masquer tout le rÃ©seau dans les favoris rÃ©seau</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoEntireNetwork</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -822,7 +822,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced</Chemin>
-<Intitule>cacher les fichiers et répertoires cachés...</Intitule>
+<Intitule>cacher les fichiers et rÃ©pertoires cachÃ©s...</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Hidden</Variable>
 <ValeurSiCoche>0</ValeurSiCoche>
@@ -832,7 +832,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>désactiver la recherche des raccourcis manquants</Intitule>
+<Intitule>dÃ©sactiver la recherche des raccourcis manquants</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">LinkResolveIgnoreLinkInfo</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -842,7 +842,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>désactiver les connexions/déconnexions réseau</Intitule>
+<Intitule>dÃ©sactiver les connexions/dÃ©connexions rÃ©seau</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoNetConnectDisconnect</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -862,7 +862,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>XP</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\network</Chemin>
-<Intitule>désactiver les fonctionnalités de gravage de cd</Intitule>
+<Intitule>dÃ©sactiver les fonctionnalitÃ©s de gravage de cd</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoCdBurning</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -872,7 +872,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>XP</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\network</Chemin>
-<Intitule>masquer les documents partagés du poste de travail</Intitule>
+<Intitule>masquer les documents partagÃ©s du poste de travail</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoSharedDocuments</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -882,7 +882,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>XP</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\netcache</Chemin>
-<Intitule>désactiver la configuration utilisateur des fichiers hors connexion</Intitule>
+<Intitule>dÃ©sactiver la configuration utilisateur des fichiers hors connexion</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoConfigCache</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -904,7 +904,17 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings</Chemin>
-<Intitule>Désactiver la mémorisation des mots de passe par internet explorer</Intitule>
+<Intitule>DÃ©sactiver la mÃ©morisation des mots de passe par internet explorer</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">DisablePasswordCaching</Variable>
+<ValeurSiCoche>1</ValeurSiCoche>
+<ValeurSiDecoche>0</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER \SOFTWARE \Microsoft \Windows \CurrentVersion \InternetSettings</Chemin>
+<Intitule>DÃ©sactiver la mÃ©morisation des mots de passe par internet explorer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">DisablePasswordCaching</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -922,20 +932,20 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings</Chemin>
-<Intitule>entrez les valeurs pour votre proxy (ex : srvproxy:2K0)</Intitule>
+<Intitule>ne pas utiliser le proxy pour les adresses commenÃ§ant par (sÃ©parateur = ; ) :</Intitule>
 <Composant>config</Composant>
-<Variable type="REG_SZ">ProxyServer</Variable>
-<ValeurSiCoche></ValeurSiCoche>
+<Variable type="REG_SZ">ProxyOverride</Variable>
+<ValeurSiCoche>172.16.0.0;diderot.org</ValeurSiCoche>
 <ValeurSiDecoche></ValeurSiDecoche>
 <commentaire></commentaire>
 </Regle>
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings</Chemin>
-<Intitule>ne pas utiliser le proxy pour les adresses commençant par (séparateur = ; ) :</Intitule>
+<Intitule>entrez les valeurs pour votre proxy (ex : srvproxy:2K0)</Intitule>
 <Composant>config</Composant>
-<Variable type="REG_SZ">ProxyOverride</Variable>
-<ValeurSiCoche></ValeurSiCoche>
+<Variable type="REG_SZ">ProxyServer</Variable>
+<ValeurSiCoche>172.16.3.80:3128</ValeurSiCoche>
 <ValeurSiDecoche></ValeurSiDecoche>
 <commentaire></commentaire>
 </Regle>
@@ -945,8 +955,18 @@
 <Intitule>url du script de configuration automatique du proxy (ex : http://srvproxy/cgi-bin/slis.pac)</Intitule>
 <Composant>config</Composant>
 <Variable type="REG_SZ">AutoConfigURL</Variable>
-<ValeurSiCoche>http://172.17.254.252/cgi-bin/slis.pac</ValeurSiCoche>
+<ValeurSiCoche>http://wpad.diderot.org/wpad.dat</ValeurSiCoche>
 <ValeurSiDecoche>http://172.17.254.252/cgi-bin/slis.pac</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>2000,XP,Vista,Seven</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings</Chemin>
+<Intitule>DÃ©sactiver le proxy automatique</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">EnableAutodial</Variable>
+<ValeurSiCoche>0</ValeurSiCoche>
+<ValeurSiDecoche>1</ValeurSiDecoche>
 <commentaire></commentaire>
 </Regle>
 <Regle ClasseObjet="REGISTRE">
@@ -962,7 +982,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver la modification des paramètres proxy</Intitule>
+<Intitule>dÃ©sactiver la modification des paramÃ¨tres proxy</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Proxy</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -980,7 +1000,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Restrictions</Chemin>
-<Intitule>Désactiver les modifications de la barre d'outils</Intitule>
+<Intitule>DÃ©sactiver les modifications de la barre d'outils</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoBrowserBars</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -990,7 +1010,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Désactiver la personnalisation des boutons de la barre de boutons du navigateur</Intitule>
+<Intitule>DÃ©sactiver la personnalisation des boutons de la barre de boutons du navigateur</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoToolbarCustomize</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
@@ -1000,7 +1020,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Désactiver la personnalisation des barres d'outils du navigateur</Intitule>
+<Intitule>DÃ©sactiver la personnalisation des barres d'outils du navigateur</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoBandCustomize</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
@@ -1010,47 +1030,47 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions</Chemin>
-<Intitule>Désactiver la possibilité d'afficher ou non certaines barres d'outils</Intitule>
+<Intitule>DÃ©sactiver la possibilitÃ© d'afficher  certaines barres d'outils</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoToolbarOptions</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
-<ValeurSiDecoche>0</ValeurSiDecoche>
+<ValeurSiDecoche>SUPPR</ValeurSiDecoche>
 <commentaire></commentaire>
 </Regle>
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions</Chemin>
-<Intitule>Désactiver la barre des boutons</Intitule>
+<Intitule>DÃ©sactiver la barre des boutons</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoToolBar</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
-<ValeurSiDecoche>0</ValeurSiDecoche>
+<ValeurSiDecoche>SUPPR</ValeurSiDecoche>
 <commentaire></commentaire>
 </Regle>
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions</Chemin>
-<Intitule>Désactiver la barre d'adresse</Intitule>
+<Intitule>DÃ©sactiver la barre d'adresse</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoAddressBar</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
-<ValeurSiDecoche>0</ValeurSiDecoche>
+<ValeurSiDecoche>SUPPR</ValeurSiDecoche>
 <commentaire></commentaire>
 </Regle>
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions</Chemin>
-<Intitule>Désactiver la barre de liens</Intitule>
+<Intitule>DÃ©sactiver la barre de liens</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoLinksBar</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
-<ValeurSiDecoche>0</ValeurSiDecoche>
+<ValeurSiDecoche>SUPPR</ValeurSiDecoche>
 <commentaire></commentaire>
 </Regle>
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Configurer les boutons de la barre de boutons (à activer pour configurer l'affichage ou non</Intitule>
+<Intitule>Configurer les boutons de la barre de boutons (Ã  activer pour configurer l'affichage ou non</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">SpecifyDefaultButtons</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
@@ -1060,7 +1080,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Masquer le bouton Précédente</Intitule>
+<Intitule>Masquer le bouton PrÃ©cÃ©dente</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">btnback</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
@@ -1080,7 +1100,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Masquer le bouton Arrêter</Intitule>
+<Intitule>Masquer le bouton ArrÃªter</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">btnstop</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
@@ -1100,7 +1120,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Masquer le bouton Démarrage</Intitule>
+<Intitule>Masquer le bouton DÃ©marrage</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">btnhome</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
@@ -1140,7 +1160,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Masquer le bouton Média</Intitule>
+<Intitule>Masquer le bouton MÃ©dia</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">btnmedia</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
@@ -1160,7 +1180,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Masquer le bouton Plein écran</Intitule>
+<Intitule>Masquer le bouton Plein Ã©cran</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">btnfullscreen</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
@@ -1210,7 +1230,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>Masquer le bouton Édition</Intitule>
+<Intitule>Masquer le bouton Ã‰dition</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">btnconfig</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
@@ -1267,6 +1287,46 @@
 <ValeurSiDecoche>0</ValeurSiDecoche>
 <commentaire></commentaire>
 </Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions</Chemin>
+<Intitule>DÃ©sactiver la possibilitÃ© d'afficher ou non certaines barres d'outils</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">NoToolbarOptions</Variable>
+<ValeurSiCoche>2</ValeurSiCoche>
+<ValeurSiDecoche>0</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions</Chemin>
+<Intitule>DÃ©sactiver la barre des boutons</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">NoToolBar</Variable>
+<ValeurSiCoche>2</ValeurSiCoche>
+<ValeurSiDecoche>0</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions</Chemin>
+<Intitule>DÃ©sactiver la barre d'adresse</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">NoAddressBar</Variable>
+<ValeurSiCoche>2</ValeurSiCoche>
+<ValeurSiDecoche>0</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions</Chemin>
+<Intitule>DÃ©sactiver la barre de liens</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">NoLinksBar</Variable>
+<ValeurSiCoche>2</ValeurSiCoche>
+<ValeurSiDecoche>0</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
 <Regle ClasseObjet="INFO">
 <OS>252</OS>
 <Intitule>"configurer les menus"</Intitule>
@@ -1278,7 +1338,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\restrictions</Chemin>
-<Intitule>Menu Fichier : désactiver la commande Enregistrer sous...</Intitule>
+<Intitule>Menu Fichier : dÃ©sactiver la commande Enregistrer sous...</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoBrowserSaveAs</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1288,7 +1348,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\restrictions</Chemin>
-<Intitule>Menu Fichier : désactiver la commande Ouvrir</Intitule>
+<Intitule>Menu Fichier : dÃ©sactiver la commande Ouvrir</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoFileOpen</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1298,7 +1358,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\restrictions</Chemin>
-<Intitule>Menu Affichage : désactiver la commande Source</Intitule>
+<Intitule>Menu Affichage : dÃ©sactiver la commande Source</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoViewSource</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1318,7 +1378,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\restrictions</Chemin>
-<Intitule>Désactiver le menu Aide</Intitule>
+<Intitule>DÃ©sactiver le menu Aide</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoHelpMenu</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1358,7 +1418,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\restrictions</Chemin>
-<Intitule>Désactiver le menu contextuel</Intitule>
+<Intitule>DÃ©sactiver le menu contextuel</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoBrowserContextMenu</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1368,7 +1428,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\restrictions</Chemin>
-<Intitule>Menu Affichage : désactiver la commande Plein écran</Intitule>
+<Intitule>Menu Affichage : dÃ©sactiver la commande Plein Ã©cran</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoTheaterMode</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1377,7 +1437,7 @@
 </Regle>
 <Regle ClasseObjet="INFO">
 <OS>252</OS>
-<Intitule>"général"</Intitule>
+<Intitule>"gÃ©nÃ©ral"</Intitule>
 <Composant>LIGNE</Composant>
  <ValeurSiCoche/>
  <ValeurSiDecoche/>
@@ -1386,7 +1446,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Restrictions</Chemin>
-<Intitule>désactiver la modification des options</Intitule>
+<Intitule>dÃ©sactiver la modification des options</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoBrowserOptions</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1396,9 +1456,9 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\control panel</Chemin>
-<Intitule>désactiver l'onglet général</Intitule>
+<Intitule>dÃ©sactiver l'onglet gÃ©nÃ©ral</Intitule>
 <Composant>restrict</Composant>
-<Variable type="REG_DWORD">généralTab</Variable>
+<Variable type="REG_DWORD">gÃ©nÃ©ralTab</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
 <ValeurSiDecoche>0</ValeurSiDecoche>
 <commentaire></commentaire>
@@ -1406,7 +1466,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\control panel</Chemin>
-<Intitule>désactiver l'onglet sécurité</Intitule>
+<Intitule>dÃ©sactiver l'onglet sÃ©curitÃ©</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">SecurityTab</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1416,7 +1476,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\control panel</Chemin>
-<Intitule>désactiver l'onglet contenu</Intitule>
+<Intitule>dÃ©sactiver l'onglet contenu</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">ContentTab</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1426,7 +1486,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\control panel</Chemin>
-<Intitule>désactiver l'onglet connexions</Intitule>
+<Intitule>dÃ©sactiver l'onglet connexions</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">ConnectionsTab</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1436,7 +1496,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\control panel</Chemin>
-<Intitule>désactiver l'onglet programmes</Intitule>
+<Intitule>dÃ©sactiver l'onglet programmes</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">ProgramsTab</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1446,7 +1506,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\control panel</Chemin>
-<Intitule>désactiver l'onglet avancés</Intitule>
+<Intitule>dÃ©sactiver l'onglet avancÃ©s</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">AdvancedTab</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1455,7 +1515,7 @@
 </Regle>
 <Regle ClasseObjet="INFO">
 <OS>252</OS>
-<Intitule>"onglet avancé"</Intitule>
+<Intitule>"onglet avancÃ©"</Intitule>
 <Composant>LIGNE</Composant>
  <ValeurSiCoche/>
  <ValeurSiDecoche/>
@@ -1463,10 +1523,50 @@
 </Regle>
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Cache</Chemin>
+<Intitule>Vider le dossier Tempory Internet Files Ã  la fermeture du navigateur</Intitule>
+<Composant>config</Composant>
+<Variable type="REG_DWORD">Persistent</Variable>
+<ValeurSiCoche>0</ValeurSiCoche>
+<ValeurSiDecoche>0</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Infodelivery\Restrictions</Chemin>
+<Intitule>dÃ©sactiver l'affichage des chaÃ®nes</Intitule>
+<Composant>config</Composant>
+<Variable type="REG_DWORD">NoChannelUI</Variable>
+<ValeurSiCoche>1</ValeurSiCoche>
+<ValeurSiDecoche>1</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
+<Intitule>dÃ©sactiver la saisie semi-automatique dans les formulaires</Intitule>
+<Composant>config</Composant>
+<Variable type="REG_DWORD">FormSuggest</Variable>
+<ValeurSiCoche>1</ValeurSiCoche>
+<ValeurSiDecoche>1</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
+<Intitule>ne pas autoriser la saisie semi-automatique Ã  enregistrer des mots de passe</Intitule>
+<Composant>config</Composant>
+<Variable type="REG_DWORD">FormSuggest Passwords</Variable>
+<ValeurSiCoche>1</ValeurSiCoche>
+<ValeurSiDecoche>1</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Ftp</Chemin>
 <Intitule>Activer le mode FTP passif (fonctionnement compatible avec les Para-feux)</Intitule>
 <Composant>config</Composant>
-<Variable type="REG_EXPAND_SZ">Use PASV</Variable>
+<Variable type="REG_SZ">Use PASV</Variable>
 <ValeurSiCoche>yes</ValeurSiCoche>
 <ValeurSiDecoche>yes</ValeurSiDecoche>
 <commentaire></commentaire>
@@ -1474,7 +1574,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer</Chemin>
-<Intitule>répertoire d'enregistrement des fichiers téléchargés (ex : p:\mes documents)</Intitule>
+<Intitule>rÃ©pertoire d'enregistrement des fichiers tÃ©lÃ©chargÃ©s (ex : p:\mes documents)</Intitule>
 <Composant>config</Composant>
 <Variable type="REG_SZ">Download Directory</Variable>
 <ValeurSiCoche></ValeurSiCoche>
@@ -1484,7 +1584,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Main</Chemin>
-<Intitule>Afficher une notification à chaque erreur de script</Intitule>
+<Intitule>Afficher une notification Ã  chaque erreur de script</Intitule>
 <Composant>config</Composant>
 <Variable type="REG_SZ">Error Dlg Displayed On Every Error</Variable>
 <ValeurSiCoche>no</ValeurSiCoche>
@@ -1494,7 +1594,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Main</Chemin>
-<Intitule>Désactiver le débugger de script</Intitule>
+<Intitule>DÃ©sactiver le dÃ©bugger de script</Intitule>
 <Composant>config</Composant>
 <Variable type="REG_SZ">Disable Script Debugger</Variable>
 <ValeurSiCoche>yes</ValeurSiCoche>
@@ -1514,7 +1614,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver la modification de paramètres dans l'onglet avancées</Intitule>
+<Intitule>dÃ©sactiver la modification de paramÃ¨tres dans l'onglet avancÃ©es</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Advanced</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1524,7 +1624,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Main</Chemin>
-<Intitule>Désactiver la vérification des mises à jour de IE</Intitule>
+<Intitule>DÃ©sactiver la vÃ©rification des mises Ã  jour de IE</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoUpdateCheck</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1534,7 +1634,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings</Chemin>
-<Intitule>Désactiver l'enregistrement des pages cryptées sur le disque</Intitule>
+<Intitule>DÃ©sactiver l'enregistrement des pages cryptÃ©es sur le disque</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">DisableCachingOfSSLPages</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1543,28 +1643,8 @@
 </Regle>
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
-<Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Cache</Chemin>
-<Intitule>Vider le dossier Tempory Internet Files à la fermeture du navigateur</Intitule>
-<Composant>restrict</Composant>
-<Variable type="REG_DWORD">Persistent</Variable>
-<ValeurSiCoche>1</ValeurSiCoche>
-<ValeurSiDecoche>0</ValeurSiDecoche>
-<commentaire></commentaire>
-</Regle>
-<Regle ClasseObjet="REGISTRE">
-<OS>TOUS</OS>
-<Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Infodelivery\Restrictions</Chemin>
-<Intitule>désactiver l'affichage des chaînes</Intitule>
-<Composant>restrict</Composant>
-<Variable type="REG_DWORD">NoChannelUI</Variable>
-<ValeurSiCoche>1</ValeurSiCoche>
-<ValeurSiDecoche>0</ValeurSiDecoche>
-<commentaire></commentaire>
-</Regle>
-<Regle ClasseObjet="REGISTRE">
-<OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver la modification des paramètres de configuration automatique</Intitule>
+<Intitule>dÃ©sactiver la modification des paramÃ¨tres de configuration automatique</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Autoconfig</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1574,31 +1654,11 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
-<Intitule>désactiver la saisie semi-automatique dans les formulaires</Intitule>
-<Composant>restrict</Composant>
-<Variable type="REG_DWORD">FormSuggest</Variable>
-<ValeurSiCoche>1</ValeurSiCoche>
-<ValeurSiDecoche>0</ValeurSiDecoche>
-<commentaire></commentaire>
-</Regle>
-<Regle ClasseObjet="REGISTRE">
-<OS>TOUS</OS>
-<Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
-<Intitule>ne pas autoriser la saisie semi-automatique à enregistrer des mots de passe</Intitule>
-<Composant>restrict</Composant>
-<Variable type="REG_DWORD">FormSuggest Passwords</Variable>
-<ValeurSiCoche>1</ValeurSiCoche>
-<ValeurSiDecoche>0</ValeurSiDecoche>
-<commentaire></commentaire>
-</Regle>
-<Regle ClasseObjet="REGISTRE">
-<OS>TOUS</OS>
-<Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
-<Intitule>désactiver la modification du navigateur par défaut</Intitule>
+<Intitule>dÃ©sactiver la modification du navigateur par dÃ©faut</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">CheckIfDefault</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
-<ValeurSiDecoche>0</ValeurSiDecoche>
+<ValeurSiDecoche>SUPPR</ValeurSiDecoche>
 <commentaire></commentaire>
 </Regle>
 <Regle ClasseObjet="REGISTRE">
@@ -1614,17 +1674,17 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>désactiver la navigation sur les disques et les répertoires (par ex, l'url suivante est ref</Intitule>
+<Intitule>dÃ©sactiver la navigation sur les disques et les rÃ©pertoires (par ex, l'url suivante est ref</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoFileUrl</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
 <ValeurSiDecoche>0</ValeurSiDecoche>
-<commentaire>par ex, l'url suivante est refusée file:///c:\essai\</commentaire>
+<commentaire>par ex, l'url suivante est refusÃ©e file:///c:\essai\</commentaire>
 </Regle>
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Restrictions</Chemin>
-<Intitule>désactiver l'impression des pages web (force l'utilisation du copier/coller afin d'éviter)</Intitule>
+<Intitule>dÃ©sactiver l'impression des pages web (force l'utilisation du copier/coller afin d'Ã©viter)</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoPrinting</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1634,7 +1694,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\outlook express</Chemin>
-<Intitule>outlook : bloquer les pièces jointes qui pourraient  contenir un virus</Intitule>
+<Intitule>outlook : bloquer les piÃ¨ces jointes qui pourraient  contenir un virus</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">BlockExeAttachments</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1644,7 +1704,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\restrictions</Chemin>
-<Intitule>désactiver l'option enregistrer ce programme sur le disque</Intitule>
+<Intitule>dÃ©sactiver l'option enregistrer ce programme sur le disque</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoSelectDownloadDir</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1653,8 +1713,58 @@
 </Regle>
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Cache</Chemin>
+<Intitule>Vider le dossier Tempory Internet Files Ã  la fermeture du navigateur</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">Persistent</Variable>
+<ValeurSiCoche>1</ValeurSiCoche>
+<ValeurSiDecoche>0</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Infodelivery\Restrictions</Chemin>
+<Intitule>dÃ©sactiver l'affichage des chaÃ®nes</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">NoChannelUI</Variable>
+<ValeurSiCoche>1</ValeurSiCoche>
+<ValeurSiDecoche>0</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
+<Intitule>dÃ©sactiver la saisie semi-automatique dans les formulaires</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">FormSuggest</Variable>
+<ValeurSiCoche>1</ValeurSiCoche>
+<ValeurSiDecoche>0</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
+<Intitule>ne pas autoriser la saisie semi-automatique Ã  enregistrer des mots de passe</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">FormSuggest Passwords</Variable>
+<ValeurSiCoche>1</ValeurSiCoche>
+<ValeurSiDecoche>0</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
+<Intitule>dÃ©sactiver la modification du navigateur par dÃ©faut</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">CheckIfDefault</Variable>
+<ValeurSiCoche>1</ValeurSiCoche>
+<ValeurSiDecoche>0</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Main</Chemin>
-<Intitule>Afficher des messages d'erreur HTTP simplifiés</Intitule>
+<Intitule>Afficher des messages d'erreur HTTP simplifiÃ©s</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_SZ">Friendly http errors</Variable>
 <ValeurSiCoche>yes</ValeurSiCoche>
@@ -1664,7 +1774,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Main</Chemin>
-<Intitule>Afficher une notification de téléchargement terminé</Intitule>
+<Intitule>Afficher une notification de tÃ©lÃ©chargement terminÃ©</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_SZ">NotifyDownloadComplete</Variable>
 <ValeurSiCoche>yes</ValeurSiCoche>
@@ -1682,7 +1792,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver l'appel à l'assistant de connexion</Intitule>
+<Intitule>dÃ©sactiver l'appel Ã  l'assistant de connexion</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Connection Wizard</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1692,7 +1802,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver la modification des paramètres de connexion</Intitule>
+<Intitule>dÃ©sactiver la modification des paramÃ¨tres de connexion</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Connection Settings</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1710,7 +1820,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver la modification des paramètres du gestionnaire d'accès</Intitule>
+<Intitule>dÃ©sactiver la modification des paramÃ¨tres du gestionnaire d'accÃ¨s</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Ratings</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1720,7 +1830,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver la modification des paramètres de certificats</Intitule>
+<Intitule>dÃ©sactiver la modification des paramÃ¨tres de certificats</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Certificates</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1730,7 +1840,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver la modification des paramètres de l'assistant profil</Intitule>
+<Intitule>dÃ©sactiver la modification des paramÃ¨tres de l'assistant profil</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Profiles</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1740,7 +1850,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver la modification des paramètres microsoft wallet</Intitule>
+<Intitule>dÃ©sactiver la modification des paramÃ¨tres microsoft wallet</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Wallet</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1750,7 +1860,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\identities</Chemin>
-<Intitule>gestionnaire d'identifications : empêcher les utilisateurs d'utiliser des identifications</Intitule>
+<Intitule>gestionnaire d'identifications : empÃªcher les utilisateurs d'utiliser des identifications</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">locked down</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1759,7 +1869,7 @@
 </Regle>
 <Regle ClasseObjet="INFO">
 <OS>252</OS>
-<Intitule>"onglet général"</Intitule>
+<Intitule>"onglet gÃ©nÃ©ral"</Intitule>
 <Composant>LIGNE</Composant>
  <ValeurSiCoche/>
  <ValeurSiDecoche/>
@@ -1768,7 +1878,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\Internet Explorer\Main</Chemin>
-<Intitule>url de la page de démarrage de ie</Intitule>
+<Intitule>url de la page de dÃ©marrage de ie</Intitule>
 <Composant>config</Composant>
 <Variable type="REG_SZ">Start Page</Variable>
 <ValeurSiCoche>http://wawadeb.crdp.ac-caen.fr</ValeurSiCoche>
@@ -1778,7 +1888,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver le changement des paramètres page de démarrage</Intitule>
+<Intitule>dÃ©sactiver le changement des paramÃ¨tres page de dÃ©marrage</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">HomePage</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1788,7 +1898,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver le changement des paramètres fichiers internet temporaires</Intitule>
+<Intitule>dÃ©sactiver le changement des paramÃ¨tres fichiers internet temporaires</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Cache</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1798,7 +1908,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver le changement des paramètres historique</Intitule>
+<Intitule>dÃ©sactiver le changement des paramÃ¨tres historique</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">History</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1808,7 +1918,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver le changement des paramètres de couleurs</Intitule>
+<Intitule>dÃ©sactiver le changement des paramÃ¨tres de couleurs</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Colors</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1818,7 +1928,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver le changement des paramètres de couleur de liens</Intitule>
+<Intitule>dÃ©sactiver le changement des paramÃ¨tres de couleur de liens</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">links</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1828,7 +1938,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver le changement des paramètres de polices</Intitule>
+<Intitule>dÃ©sactiver le changement des paramÃ¨tres de polices</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Fonts</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1838,7 +1948,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver le changement des paramètres de langue</Intitule>
+<Intitule>dÃ©sactiver le changement des paramÃ¨tres de langue</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Languages</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1848,7 +1958,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver le changement des paramètres d'accessibilité</Intitule>
+<Intitule>dÃ©sactiver le changement des paramÃ¨tres d'accessibilitÃ©</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Accessibility</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1866,7 +1976,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver la vérification au démarrage</Intitule>
+<Intitule>dÃ©sactiver la vÃ©rification au dÃ©marrage</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">CheckIfDefault</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1876,7 +1986,37 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
-<Intitule>désactiver la fonctionnalité rétablir les paramètres web</Intitule>
+<Intitule>dÃ©sactiver la fonctionnalitÃ© rÃ©tablir les paramÃ¨tres web</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">ResetWebSettings</Variable>
+<ValeurSiCoche>1</ValeurSiCoche>
+<ValeurSiDecoche>SUPPR</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
+<Intitule>dÃ©sactiver la modification des paramÃ¨tres de la messagerie</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">Messaging</Variable>
+<ValeurSiCoche>1</ValeurSiCoche>
+<ValeurSiDecoche>SUPPR</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
+<Intitule>dÃ©sactiver la modification des paramÃ¨tres du calendrier et des contacts</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">CalendarContact</Variable>
+<ValeurSiCoche>1</ValeurSiCoche>
+<ValeurSiDecoche>0</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
+<Intitule>dÃ©sactiver la fonctionnalitÃ© rÃ©tablir les paramÃ¨tres web</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">ResetWebSettings</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1886,19 +2026,9 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
-<Intitule>désactiver la modification des paramètres de la messagerie</Intitule>
+<Intitule>dÃ©sactiver la modification des paramÃ¨tres de la messagerie</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">Messaging</Variable>
-<ValeurSiCoche>1</ValeurSiCoche>
-<ValeurSiDecoche>0</ValeurSiDecoche>
-<commentaire></commentaire>
-</Regle>
-<Regle ClasseObjet="REGISTRE">
-<OS>TOUS</OS>
-<Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
-<Intitule>désactiver la modification des paramètres du calendrier et des contacts</Intitule>
-<Composant>restrict</Composant>
-<Variable type="REG_DWORD">CalendarContact</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
 <ValeurSiDecoche>0</ValeurSiDecoche>
 <commentaire></commentaire>
@@ -1928,7 +2058,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>Désactiver le parcours</Intitule>
+<Intitule>DÃ©sactiver le parcours</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoViewOnDrive</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1938,7 +2068,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>Désactiver Autorun</Intitule>
+<Intitule>DÃ©sactiver Autorun</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoDriveAutoRun</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1963,13 +2093,13 @@
 <Intitule>programme avertissement quotas</Intitule>
 <Composant>config</Composant>
 <Variable type="REG_SZ">overfill</Variable>
-<ValeurSiCoche>iexplore http://se3:909</ValeurSiCoche>
+<ValeurSiCoche>iexplore http://annuaire.diderot.org:909</ValeurSiCoche>
 <ValeurSiDecoche>iexplore http://se3:909</ValeurSiDecoche>
-<commentaire>programme lancé à l'ouverture de session en cas d'overfill</commentaire>
+<commentaire>programme lancÃ© Ã  l'ouverture de session en cas d'overfill</commentaire>
 </Regle>
 <Regle ClasseObjet="INFO">
 <OS>252</OS>
-<Intitule>"menu démarrer classique"</Intitule>
+<Intitule>"menu dÃ©marrer classique"</Intitule>
 <Composant>LIGNE</Composant>
  <ValeurSiCoche/>
  <ValeurSiDecoche/>
@@ -1978,7 +2108,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>masquer paramètres\active desktop</Intitule>
+<Intitule>masquer paramÃ¨tres\active desktop</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoSetActiveDesktop</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1988,7 +2118,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>masquer panneau de configuration, imprimantes, connexion à distance</Intitule>
+<Intitule>masquer panneau de configuration, imprimantes, connexion Ã  distance</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoSetFolders</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -1998,7 +2128,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>masquer paramètres\options des dossiers</Intitule>
+<Intitule>masquer paramÃ¨tres\options des dossiers</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoFolderOptions</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2008,7 +2138,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer paramètres\barre des tâches et menu démarrer</Intitule>
+<Intitule>masquer paramÃ¨tres\barre des tÃ¢ches et menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nosettaskbar</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2018,7 +2148,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>effacer l'historique des documents récemments ouverts</Intitule>
+<Intitule>effacer l'historique des documents rÃ©cemments ouverts</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">clearrecentdocsonexit</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2028,7 +2158,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer le menu mes documents récents</Intitule>
+<Intitule>masquer le menu mes documents rÃ©cents</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">norecentdocshistory</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2038,7 +2168,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver le glisser-déplacer des menus contextuels dans le menu démarrer</Intitule>
+<Intitule>dÃ©sactiver le glisser-dÃ©placer des menus contextuels dans le menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nochangestartmenu</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2048,7 +2178,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver l'accès à windows update</Intitule>
+<Intitule>dÃ©sactiver l'accÃ¨s Ã  windows update</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoWindowsUpdate</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2058,7 +2188,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer le menu favoris du menu démarrer</Intitule>
+<Intitule>masquer le menu favoris du menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nofavoritesmenu</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2068,7 +2198,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer le menu documents récents du menu démarrer</Intitule>
+<Intitule>masquer le menu documents rÃ©cents du menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">norecentdocsmenu</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2078,7 +2208,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer le menu rechercher du menu démarrer</Intitule>
+<Intitule>masquer le menu rechercher du menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nofind</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2088,7 +2218,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer le menu exécuter du menu démarrer</Intitule>
+<Intitule>masquer le menu exÃ©cuter du menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoRun</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2098,7 +2228,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer l'icône connexions réseau du menu démarrer</Intitule>
+<Intitule>masquer l'icÃ´ne connexions rÃ©seau du menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nonetworkconnections</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2107,7 +2237,7 @@
 </Regle>
 <Regle ClasseObjet="INFO">
 <OS>252</OS>
-<Intitule>"menu démarrer xp"</Intitule>
+<Intitule>"menu dÃ©marrer xp"</Intitule>
 <Composant>LIGNE</Composant>
  <ValeurSiCoche/>
  <ValeurSiDecoche/>
@@ -2116,7 +2246,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver le groupe de programmes commun à tous les utilisateurs</Intitule>
+<Intitule>dÃ©sactiver le groupe de programmes commun Ã  tous les utilisateurs</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nocommongroups</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2126,7 +2256,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>activer le menu démarrer classique</Intitule>
+<Intitule>activer le menu dÃ©marrer classique</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nosimplestartmenu</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2136,7 +2266,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer l'icône mes documents du menu démarrer</Intitule>
+<Intitule>masquer l'icÃ´ne mes documents du menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nosmmydocs</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2146,7 +2276,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer l'icône ma musique du menu démarrer</Intitule>
+<Intitule>masquer l'icÃ´ne ma musique du menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nostartmenumymusic</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2156,7 +2286,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer l'icône mes images du menu démarrer</Intitule>
+<Intitule>masquer l'icÃ´ne mes images du menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nosmmypictures</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2166,7 +2296,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer l'icône favoris réseau du menu démarrer</Intitule>
+<Intitule>masquer l'icÃ´ne favoris rÃ©seau du menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nostartmenunetworkplaces</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2186,7 +2316,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer la liste des raccourcis fréquemments utilisés</Intitule>
+<Intitule>masquer la liste des raccourcis frÃ©quemments utilisÃ©s</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoStartMenuMfuProgramsList</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2196,7 +2326,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer la liste tous les programmes du menu démarrer</Intitule>
+<Intitule>masquer la liste tous les programmes du menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoStartMenuMorePrograms</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2206,7 +2336,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer le nom d'utilisateur du menu de démarrage</Intitule>
+<Intitule>masquer le nom d'utilisateur du menu de dÃ©marrage</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoUsernameInStartMenu</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2216,7 +2346,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver le masquage des raccourcis peu utilisés</Intitule>
+<Intitule>dÃ©sactiver le masquage des raccourcis peu utilisÃ©s</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">IntelliMenus</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2226,7 +2356,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver le groupe de programmes propre à chaque utilisateur</Intitule>
+<Intitule>dÃ©sactiver le groupe de programmes propre Ã  chaque utilisateur</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nostartmenusubfolders</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2236,7 +2366,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer le menu aide du menu démarrer</Intitule>
+<Intitule>masquer le menu aide du menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nosmhelp</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2246,7 +2376,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>ajouter l'option fermeture de session au menu démarrer</Intitule>
+<Intitule>ajouter l'option fermeture de session au menu dÃ©marrer</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">ForceStartMenuLogoff</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2256,7 +2386,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver les info-bulles</Intitule>
+<Intitule>dÃ©sactiver les info-bulles</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">nosmballoontip</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2286,7 +2416,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System</Chemin>
-<Intitule>désactiver l'accès aux paramètres d'affichage</Intitule>
+<Intitule>dÃ©sactiver l'accÃ¨s aux paramÃ¨tres d'affichage</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoDispCPL</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2316,7 +2446,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\activedesktop</Chemin>
-<Intitule>masquer les onglets apparence et thèmes</Intitule>
+<Intitule>masquer les onglets apparence et thÃ¨mes</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoDispAppearancePage</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2336,7 +2466,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\control panel\desktop</Chemin>
-<Intitule>activer l'écran de veille</Intitule>
+<Intitule>activer l'Ã©cran de veille</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">screensaveactive</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2352,9 +2482,19 @@
 <Commentaire/>
 </Regle>
 <Regle ClasseObjet="REGISTRE">
+<OS>2000,XP,Vista,Seven</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows nt\printers\wizard</Chemin>
+<Intitule>DÃ©sactiver la dÃ©couverte automatique des imprimantes sur le rÃ©seau</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">Downlevel Browse</Variable>
+<ValeurSiCoche></ValeurSiCoche>
+<ValeurSiDecoche>1</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>désactiver la suppression d'imprimante</Intitule>
+<Intitule>dÃ©sactiver la suppression d'imprimante</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoDeletePrinter</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2364,7 +2504,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer</Chemin>
-<Intitule>désactiver l'ajout d'imprimante</Intitule>
+<Intitule>dÃ©sactiver l'ajout d'imprimante</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoAddPrinter</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2373,7 +2513,7 @@
 </Regle>
 <Regle ClasseObjet="INFO">
 <OS>252</OS>
-<Intitule>"réseau"</Intitule>
+<Intitule>"rÃ©seau"</Intitule>
 <Composant>LIGNE</Composant>
  <ValeurSiCoche/>
  <ValeurSiDecoche/>
@@ -2382,7 +2522,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Network</Chemin>
-<Intitule>désactiver l'accès aux paramètres réseau</Intitule>
+<Intitule>dÃ©sactiver l'accÃ¨s aux paramÃ¨tres rÃ©seau</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoNetSetup</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2392,7 +2532,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System</Chemin>
-<Intitule>désactiver l'accès aux paramètres mot de passe</Intitule>
+<Intitule>dÃ©sactiver l'accÃ¨s aux paramÃ¨tres mot de passe</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoSecCPL</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2401,7 +2541,7 @@
 </Regle>
 <Regle ClasseObjet="INFO">
 <OS>252</OS>
-<Intitule>"thèmes xp"</Intitule>
+<Intitule>"thÃ¨mes xp"</Intitule>
 <Composant>LIGNE</Composant>
  <ValeurSiCoche/>
  <ValeurSiDecoche/>
@@ -2410,7 +2550,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>XP</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\system</Chemin>
-<Intitule>chemin du thème XP [classique = | XP=%windir%\resources\themes\luna\luna.msstyles]</Intitule>
+<Intitule>chemin du thÃ¨me XP [classique = | XP=%windir%\resources\themes\luna\luna.msstyles]</Intitule>
 <Composant>config</Composant>
 <Variable type="REG_SZ">SetVisualStyle</Variable>
 <ValeurSiCoche></ValeurSiCoche>
@@ -2420,7 +2560,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver l'accès au panneau de configuration</Intitule>
+<Intitule>dÃ©sactiver l'accÃ¨s au panneau de configuration</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoControlPanel</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2430,7 +2570,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>XP</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>masquer l'option thèmes</Intitule>
+<Intitule>masquer l'option thÃ¨mes</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoThemesTab</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2440,7 +2580,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>XP</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\system</Chemin>
-<Intitule>empêcher la sélection des styles des fenêtres et des boutons</Intitule>
+<Intitule>empÃªcher la sÃ©lection des styles des fenÃªtres et des boutons</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NovisualStyleChoice</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2450,7 +2590,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>XP</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\system</Chemin>
-<Intitule>empêcher la sélection de la taille de police</Intitule>
+<Intitule>empÃªcher la sÃ©lection de la taille de police</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoSizeChoice</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2460,7 +2600,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>XP</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\system</Chemin>
-<Intitule>empêcher la sélection de la couleur du thème</Intitule>
+<Intitule>empÃªcher la sÃ©lection de la couleur du thÃ¨me</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoColorChoice</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2489,9 +2629,19 @@
 <ValeurSiDecoche/>
 <Commentaire/>
  </Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>2000,XP,Vista,Seven</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run</Chemin>
+<Intitule>warnquotas</Intitule>
+<Composant>config</Composant>
+<Variable type="REG_SZ">WarnQuota</Variable>
+<ValeurSiCoche>iexplore http://se3.org:909</ValeurSiCoche>
+<ValeurSiDecoche></ValeurSiDecoche>
+<commentaire>Avertissement quota</commentaire>
+</Regle>
 <Regle ClasseObjet="INFO">
 <OS>252</OS>
-<Intitule>"gestionnaire des tâches"</Intitule>
+<Intitule>"gestionnaire des tÃ¢ches"</Intitule>
 <Composant>LIGNE</Composant>
  <ValeurSiCoche/>
  <ValeurSiDecoche/>
@@ -2500,7 +2650,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\system</Chemin>
-<Intitule>Interdire à l'utilisateur de changer son mot de passe à l'aide des touches Alt Ctrl Suppr</Intitule>
+<Intitule>Interdire Ã  l'utilisateur de changer son mot de passe Ã  l'aide des touches Alt Ctrl Suppr</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">DisableChangePassword</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2510,7 +2660,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\system</Chemin>
-<Intitule>désactiver le gestionnaire des tâches</Intitule>
+<Intitule>dÃ©sactiver le gestionnaire des tÃ¢ches</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">DisableTaskMgr</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2520,7 +2670,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\system</Chemin>
-<Intitule>Interdire à l'utilisateur de verrouiller l'ordinateur à l'aide des touches Alt Ctrl Suppr</Intitule>
+<Intitule>Interdire Ã  l'utilisateur de verrouiller l'ordinateur Ã  l'aide des touches Alt Ctrl Suppr</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">DisableLockWorkstation</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2529,7 +2679,7 @@
 </Regle>
 <Regle ClasseObjet="INFO">
 <OS>252</OS>
-<Intitule>"paramètres réseau w9x"</Intitule>
+<Intitule>"paramÃ¨tres rÃ©seau w9x"</Intitule>
 <Composant>LIGNE</Composant>
  <ValeurSiCoche/>
  <ValeurSiDecoche/>
@@ -2538,7 +2688,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Network</Chemin>
-<Intitule>désactiver les contrôles de partage des imprimantes</Intitule>
+<Intitule>dÃ©sactiver les contrÃ´les de partage des imprimantes</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoPrintSharingControl</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2548,7 +2698,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Network</Chemin>
-<Intitule>désactiver les contrôles de partage des fichiers</Intitule>
+<Intitule>dÃ©sactiver les contrÃ´les de partage des fichiers</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoFileSharingControl</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2558,7 +2708,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>Win9x</OS>
 <Chemin>reg:///HKEY_LOCAL_MACHINE\Network\Logon</Chemin>
-<Intitule>Interdir de faire echap au login sous win9x, positionner la clé à 1 pour la rendre active</Intitule>
+<Intitule>Interdir de faire echap au login sous win9x, positionner la clÃ© Ã  1 pour la rendre active</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">MustBeValidated</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2567,7 +2717,7 @@
 </Regle>
 <Regle ClasseObjet="INFO">
 <OS>252</OS>
-<Intitule>"paramètres systèmes w9x"</Intitule>
+<Intitule>"paramÃ¨tres systÃ¨mes w9x"</Intitule>
 <Composant>LIGNE</Composant>
  <ValeurSiCoche/>
  <ValeurSiDecoche/>
@@ -2586,7 +2736,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System</Chemin>
-<Intitule>désactiver les outils de modification du registre</Intitule>
+<Intitule>dÃ©sactiver les outils de modification du registre</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">DisableRegistryTools</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2596,7 +2746,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer</Chemin>
-<Intitule>désactiver les mises à jour automatiques de windows, positionner à 1 pour activer la clé</Intitule>
+<Intitule>dÃ©sactiver les mises Ã  jour automatiques de windows, positionner Ã  1 pour activer la clÃ©</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoAutoUpdate</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2606,7 +2756,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>TOUS</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Control Panel\Keyboard</Chemin>
-<Intitule>activation du clavier numérique [0=désactivé | 2=activé]</Intitule>
+<Intitule>activation du clavier numÃ©rique [0=dÃ©sactivÃ© | 2=activÃ©]</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">InitialKeyboardIndicators</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
@@ -2614,19 +2764,9 @@
 <commentaire></commentaire>
 </Regle>
 <Regle ClasseObjet="REGISTRE">
-<OS>TOUS</OS>
-<Chemin>reg:///HKEY_CURRENT_USER\Control Panel\PowerCfg</Chemin>
-<Intitule>gestion d'énergie [0=ordinateur de bureau | 1=ordinateur portable | 2=présentation | 3=touj</Intitule>
-<Composant>restrict</Composant>
-<Variable type="REG_DWORD">CurrentPowerPolicy</Variable>
-<ValeurSiCoche>3</ValeurSiCoche>
-<ValeurSiDecoche>0</ValeurSiDecoche>
-<commentaire></commentaire>
-</Regle>
-<Regle ClasseObjet="REGISTRE">
 <OS>Win9x</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System</Chemin>
-<Intitule>masquer l'onglet périphériques</Intitule>
+<Intitule>masquer l'onglet pÃ©riphÃ©riques</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoDevMgrPage</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2636,7 +2776,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>Win9x</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System</Chemin>
-<Intitule>masquer l'onglet profils matériels</Intitule>
+<Intitule>masquer l'onglet profils matÃ©riels</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoConfigPage</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2646,7 +2786,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>Win9x</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System</Chemin>
-<Intitule>masquer l'onglet système fichiers</Intitule>
+<Intitule>masquer l'onglet systÃ¨me fichiers</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoFileSysPage</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2656,7 +2796,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>Win9x</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System</Chemin>
-<Intitule>masquer l'onglet mémoire virtuelle</Intitule>
+<Intitule>masquer l'onglet mÃ©moire virtuelle</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoVirtMemPage</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2666,7 +2806,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>Win9x</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\WinOldApp</Chemin>
-<Intitule>désactiver les applications msdos</Intitule>
+<Intitule>dÃ©sactiver les applications msdos</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoRealMode</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2676,10 +2816,20 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>Win9x</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\WinOldApp</Chemin>
-<Intitule>désactiver la ligne de commande msdos</Intitule>
+<Intitule>dÃ©sactiver la ligne de commande msdos</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">disabled</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
+<ValeurSiDecoche>0</ValeurSiDecoche>
+<commentaire></commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>TOUS</OS>
+<Chemin>reg:///HKEY_CURRENT_USER\Control Panel\PowerCfg</Chemin>
+<Intitule>gestion d'Ã©nergie [0=ordinateur de bureau | 1=ordinateur portable | 2=prÃ©sentation | 3=touj</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_SZ">CurrentPowerPolicy</Variable>
+<ValeurSiCoche>3</ValeurSiCoche>
 <ValeurSiDecoche>0</ValeurSiDecoche>
 <commentaire></commentaire>
 </Regle>
@@ -2724,7 +2874,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\NetCache</Chemin>
-<Intitule>désactiver l'utilisation de dossiers et de fichiers hors connexion</Intitule>
+<Intitule>dÃ©sactiver l'utilisation de dossiers et de fichiers hors connexion</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoCacheViewer</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2734,7 +2884,7 @@
 <Regle ClasseObjet="REGISTRE">
 <OS>2000,XP,Vista,Seven</OS>
 <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced</Chemin>
-<Intitule>Desactiver le scan du reseau par XP à la recherche de partages</Intitule>
+<Intitule>Desactiver le scan du reseau par XP Ã  la recherche de partages</Intitule>
 <Composant>restrict</Composant>
 <Variable type="REG_DWORD">NoNetCrawling</Variable>
 <ValeurSiCoche>1</ValeurSiCoche>
@@ -2750,6 +2900,16 @@
 <ValeurSiCoche>1</ValeurSiCoche>
 <ValeurSiDecoche>0</ValeurSiDecoche>
 <commentaire>essai</commentaire>
+</Regle>
+<Regle ClasseObjet="REGISTRE">
+<OS>XP,Vista,Seven</OS>
+<Chemin>reg:///HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ADIHdAudAddService</Chemin>
+<Intitule>DÃ©sactivation du son pour  Dell T3500</Intitule>
+<Composant>restrict</Composant>
+<Variable type="REG_DWORD">Start</Variable>
+<ValeurSiCoche>4</ValeurSiCoche>
+<ValeurSiDecoche>3</ValeurSiDecoche>
+<commentaire>DÃ©sactive la carte son</commentaire>
 </Regle>
 </regles>
 </categorie>
