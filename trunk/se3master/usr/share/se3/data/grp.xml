@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+ï»¿<?xml version="1.0" encoding="UTF-8"?>
 <se3mod>
 <nom>Groupe de cles</nom>
 <version>V 0.1</version>
@@ -49,11 +49,19 @@
 <value>0</value>
 </regle>
 <regle>
+<clef>HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings\ResetWebSettings</clef>
+<value>0</value>
+</regle>
+<regle>
 <clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel\CheckIfDefault</clef>
 <value>0</value>
 </regle>
 <regle>
 <clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel\CalendarContact</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings\Messaging</clef>
 <value>0</value>
 </regle>
 <regle>
@@ -109,6 +117,10 @@
 <value>0</value>
 </regle>
 <regle>
+<clef>HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings\CheckIfDefault</clef>
+<value>0</value>
+</regle>
+<regle>
 <clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel\Autoconfig</clef>
 <value>0</value>
 </regle>
@@ -125,7 +137,7 @@
 <value>0</value>
 </regle>
 <regle>
-<clef>HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\control panel\généralTab</clef>
+<clef>HKEY_CURRENT_USER\software\policies\microsoft\internet explorer\control panel\gÃ©nÃ©ralTab</clef>
 <value>0</value>
 </regle>
 <regle>
@@ -238,6 +250,18 @@
 </regle>
 <regle>
 <clef>HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer\SpecifyDefaultButtons</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions\NoLinksBar</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions\NoAddressBar</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions\NoToolBar</clef>
 <value>0</value>
 </regle>
 <regle>
@@ -529,7 +553,7 @@
 <value>0</value>
 </regle>
 <regle>
-<clef>System\toto</clef>
+<clef>HKEY_CURRENT_USER\software\policies\microsoft\windows nt\printers\wizard\Downlevel Browse</clef>
 <value>0</value>
 </regle>
 <regle>
@@ -538,6 +562,10 @@
 </regle>
 <regle>
 <clef>HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer\NoToolbarCustomize</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions\NoToolbarOptions</clef>
 <value>0</value>
 </regle>
 <regle>
@@ -617,6 +645,10 @@
 <value>0</value>
 </regle>
 <regle>
+<clef>HKEY_CURRENT_USER \SOFTWARE \Microsoft \Windows \CurrentVersion \InternetSettings\DisablePasswordCaching</clef>
+<value>0</value>
+</regle>
+<regle>
 <clef>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\NoDrives</clef>
 <value>0</value>
 </regle>
@@ -656,8 +688,52 @@
 <clef>HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer\notrayitemsdisplay</clef>
 <value>0</value>
 </regle>
+<regle>
+<clef>HKEY_CURRENT_USER\Software\SolidCAM\SolidCAM2009\Paths\Application</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\Software\SolidCAM\SolidCAM2009\Paths\Cpath</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\Software\SolidCAM\SolidCAM2009\Paths\User Directory</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\Software\SolidCAM\SolidCAM2009\Paths\Tables Directory</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\Software\SolidCAM\SolidCAM2009\Machine\Milling Machine</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\Software\SolidCAM\SolidCAM2009\Machine\Turning Machine</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\Software\SolidCAM\SolidCAM2009\Machine\Wire-Cut Machine</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\EnableAutodial</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ADIHdAudAddService\Start</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\HLS_IPADDR</clef>
+<value>0</value>
+</regle>
+<regle>
+<clef>System\toto</clef>
+<value>0</value>
+</regle>
 </categorie>
-<categorie nom="Optimisation et Sécurité">
+<categorie nom="Optimisation et SÃ©curitÃ©">
 <regle>
 <clef>HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\ExcludeProfileDirs</clef>
 <value>0</value>
@@ -697,6 +773,14 @@
 <regle>
 <clef>HKEY_CURRENT_USER\Control Panel\Desktop\TileWallpaper</clef>
 <value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Cache\Persistent</clef>
+<value>1</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings\FormSuggest</clef>
+<value>1</value>
 </regle>
 <regle>
 <clef>HKEY_CURRENT_USER\Control Panel\Desktop\Wallpaper</clef>
@@ -767,6 +851,10 @@
 <value>0</value>
 </regle>
 <regle>
+<clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Infodelivery\Restrictions\NoChannelUI</clef>
+<value>1</value>
+</regle>
+<regle>
 <clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\NetCache\NoCacheViewer</clef>
 <value>1</value>
 </regle>
@@ -777,6 +865,10 @@
 <regle>
 <clef>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState\use search asst</clef>
 <value>0</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings\FormSuggest Passwords</clef>
+<value>1</value>
 </regle>
 <regle>
 <clef>HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer\ForceStartMenuLogoff</clef>
@@ -791,27 +883,35 @@
 <value>0</value>
 </regle>
 <regle>
-<value>1</value>
+<clef>HKEY_CURRENT_USER \SOFTWARE \Microsoft \Windows \CurrentVersion \InternetSettings\DisablePasswordCaching</clef>
+<value>0</value>
 </regle>
 </categorie>
 <categorie nom="proxy">
 <regle>
 <clef>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ProxyEnable</clef>
-<value>0</value>
+<value>1</value>
 </regle>
 <regle>
 <clef>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ProxyServer</clef>
-<value>0</value>
+<value>1</value>
 </regle>
 <regle>
 <clef>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ProxyOverride</clef>
-<value>0</value>
+<value>1</value>
 </regle>
 <regle>
 <clef>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\AutoConfigURL</clef>
-<value>0</value>
+<value>1</value>
 </regle>
 <regle>
+<clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel\Proxy</clef>
+<value>1</value>
+</regle>
+</categorie>
+<categorie nom="quotas">
+<regle>
+<clef>HKEY_CURRENT_USER\SOFTWARE\Microsoft\windows\currentversion\Run\overfill</clef>
 <value>1</value>
 </regle>
 </categorie>
@@ -1041,6 +1141,10 @@
 <value>1</value>
 </regle>
 <regle>
+<clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions\NoToolbarOptions</clef>
+<value>1</value>
+</regle>
+<regle>
 <clef>HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer\NoToolbarCustomize</clef>
 <value>1</value>
 </regle>
@@ -1208,6 +1312,10 @@
 </regle>
 <regle>
 <clef>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Network\NoNetSetup</clef>
+<value>1</value>
+</regle>
+<regle>
+<clef>HKEY_CURRENT_USER\software\policies\microsoft\windows nt\printers\wizard\Downlevel Browse</clef>
 <value>1</value>
 </regle>
 <regle>
@@ -1399,6 +1507,18 @@
 <value>1</value>
 </regle>
 <regle>
+<clef>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{60B49E34-C7CC-11D0-8953-00A0C90347FF}MICROS\StubPath</clef>
+<value>1</value>
+</regle>
+<regle>
+<clef>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{26923b43-4d38-484f-9b9e-de460746276c}\StubPath</clef>
+<value>1</value>
+</regle>
+<regle>
+<clef>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{60B49E34-C7CC-11D0-8953-00A0C90347FF}\StubPath</clef>
+<value>1</value>
+</regle>
+<regle>
 <clef>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{22d6f312-b0f6-11d0-94ab-0080c74c7e95}\StubPath</clef>
 <value>1</value>
 </regle>
@@ -1443,11 +1563,15 @@
 <value>1</value>
 </regle>
 <regle>
+<clef>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\EnableAutodial</clef>
+<value>1</value>
+</regle>
+<regle>
 <clef>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\SyncMode5</clef>
 <value>1</value>
 </regle>
 </categorie>
-<categorie nom="Restrictions légères">
+<categorie nom="Restrictions lÃ©gÃ¨res">
 <regle>
 <clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel\Advanced</clef>
 <value>1</value>
@@ -1529,6 +1653,10 @@
 <value>1</value>
 </regle>
 <regle>
+<clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\InternetExplorer\Toolbars\Restrictions\NoToolbarOptions</clef>
+<value>1</value>
+</regle>
+<regle>
 <clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Restrictions\NoBrowserBars</clef>
 <value>1</value>
 </regle>
@@ -1566,50 +1694,6 @@
 </regle>
 <regle>
 <clef>HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System\DisableRegistryTools</clef>
-<value>1</value>
-</regle>
-</categorie>
-<categorie nom="SambaEdu3 config 9x">
-<regle>
-<clef>HKEY_CURRENT_USER\software\microsoft\windows\currentversion\Explorer\User Shell Folders\Desktop</clef>
-<value>0</value>
-</regle>
-<regle>
-<clef>HKEY_CURRENT_USER\software\microsoft\windows\currentversion\Explorer\User Shell Folders\Programs</clef>
-<value>0</value>
-</regle>
-<regle>
-<clef>HKEY_CURRENT_USER\software\microsoft\windows\currentversion\Explorer\User Shell Folders\Startup</clef>
-<value>0</value>
-</regle>
-<regle>
-<clef>HKEY_CURRENT_USER\software\microsoft\windows\currentversion\Explorer\User Shell Folders\Start Menu</clef>
-<value>0</value>
-</regle>
-<regle>
-<clef>HKEY_CURRENT_USER\software\microsoft\windows\currentversion\Explorer\User Shell Folders\personal</clef>
-<value>0</value>
-</regle>
-<regle>
-<clef>HKEY_CURRENT_USER\software\microsoft\windows\currentversion\Explorer\User Shell Folders\appdata</clef>
-<value>0</value>
-</regle>
-<regle>
-<clef>HKEY_LOCAL_MACHINE\Network\Logon\LMLogon</clef>
-<value>0</value>
-</regle>
-<regle>
-<clef>HKEY_LOCAL_MACHINE\software\Microsoft\Windows\CurrentVersion\Policies\Network\DisablePwdCaching</clef>
-<value>0</value>
-</regle>
-</categorie>
-<categorie nom="test">
-<regle>
-<clef>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\{89820200-ECBD-11cf-8B85-00AA005B4383}\StubPath</clef>
-<value>0</value>
-</regle>
-<regle>
-<clef>HKEY_CURRENT_USER\software\microsoft\windows\currentversion\policies\explorer\NoUsernameInStartMenu</clef>
 <value>1</value>
 </regle>
 </categorie>
