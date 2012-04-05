@@ -26,6 +26,10 @@ function usage {
 	exit $1;
 }
 
+function clean_scripts
+{
+	rm -f $AVAIL/*~
+}
 function list_all_shares
 {
 	IFS=,
@@ -181,6 +185,8 @@ if (( ARGS > $# ))
 then
 	usage 1
 fi
+
+clean_scripts
 
 if (( ADD == 1 ))
 then
