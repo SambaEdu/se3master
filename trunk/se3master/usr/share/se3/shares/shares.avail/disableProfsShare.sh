@@ -3,6 +3,7 @@
 #shares_Win2K: prof
 #shares_WinXP: prof
 #shares_Vista: prof
+#shares_Seven: prof
 #action: start
 #level: 01
 
