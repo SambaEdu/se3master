@@ -3,6 +3,7 @@
 #shares_Win2K: homes
 #shares_WinXP: homes
 #shares_Vista: homes
+#shares_Seven: homes
 #shares_CIFSFS: homes
 #action: start
 #level: 10
