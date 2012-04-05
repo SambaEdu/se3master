@@ -177,9 +177,6 @@ dn: cn=$machine,${computersRdn},${ldap_base_dn}
 changetype: modify
 replace: ipHostNumber
 ipHostNumber: $ip
--
-replace: registeredAddress
-registeredAddress: $ipHostNumber
 -" >> ${ldif_modif}
 
 			if [ "$corrige_mac_si_ip_change" == "y" ]; then
