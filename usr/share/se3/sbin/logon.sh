@@ -23,7 +23,7 @@ function rc_logon {
 		[ ! -x $script ] && continue
 		if [ "$VERBOSE" == "1" ]
 		then
-			echo "Running: $(basename $script) $2 $3 $4 $5"
+			echo "Running: $(basename $script) $2 $3 $4 $5" >> /var/log/samba/debug.log
 		fi
 		$script $2 $3 $4 $5
 		if (( $? != 0 ))
@@ -41,7 +41,7 @@ function rc_logout {
 		[ ! -x $script ] && continue
 		if [ "$VERBOSE" == "1" ]
 		then
-			echo "Running: $(basename $script) $2 $3 $4 $5"
+			echo "Running: $(basename $script) $2 $3 $4 $5" >> /var/log/samba/debug.log
 		fi
 		$script $2 $3 $4 $5
 		if (( $? != 0 ))
@@ -71,15 +71,20 @@ then
 fi
 
 # filtrage 
-user=$(echo "$1" | tr 'A-Z' 'a-z' | sed "s/[\$_$]//g")
-machine=$(echo "$2" | tr 'A-Z' 'a-z')
-[ "$user" == "adminse3" -o "$user" == "$machine" ] && exit 0
-
+user=$(echo "$2" | tr 'A-Z' 'a-z' | sed "s/[\$_$]//g")
+machine=$(echo "$3" | tr 'A-Z' 'a-z' | sed "s/[\$_$]//g")
+if [ "$user" == "$machine" ]
+then
+       exit 0
+elif [ "$user" == "adminse3" ]
+then
+       exit 0
+fi       
 if [ "$LOGON" == "1" ]
 then
-	rc_logon $user $machine $3 $4 $5
-elif [  $LOGOUT == "1" ]
+	rc_logon $1 $user $machine $4 $5
+elif [  "$LOGOUT" == "1" ]
 then
-	rc_logout $user $machine $3 $4 $5
+	rc_logout $1 $user $machine $4 $5
 fi
 exit $?
