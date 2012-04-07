@@ -14,8 +14,6 @@
 	// $debug_import_comptes peut être initialisée dans se3orlcs_import_comptes.php
 	//$debug_import_comptes="y";
 
-	//my_echo("<p style='background-color:red;'>\$servertype=$servertype</p>");
-
 	// Choix de destination des my_echo():
 	$dest_mode="file";
 	// On va écrire dans le fichier $echo_file et non dans la page courante... ce qui serait problématique depuis que cette page PHP n'est plus visitée depuis un navigateur.
@@ -48,6 +46,8 @@
 */
 	//exit();
 
+	//my_echo("<p style='background-color:red;'>\$servertype=$servertype</p>");
+	//my_echo("<p style='background-color:red;'>\$debug_import_comptes=$debug_import_comptes</p>");
 
 	// Récupération du type des groupes Equipe_* et Matiere_*
 	$sql="SELECT value FROM params WHERE name='type_Equipe_Matiere'";

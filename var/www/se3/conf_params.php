@@ -41,39 +41,54 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BO
 DY></HTML>");
 
-$action = $_GET[action];
+$action = $_GET['action'];
 
 // Change dans la base
 if ($action == "change") {
 
-	if ($_GET[varb] == "proxy") {
-		system("/usr/bin/sudo /usr/share/se3/scripts/modifProxy.sh $_GET[valeur]");
+	if ($_GET['varb'] == "proxy") {
+		system("/usr/bin/sudo /usr/share/se3/scripts/modifProxy.sh ".$_GET['valeur']);
 	} else {
                 //$resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$default_page_dem', '$name_params', 'homepage $userGroups', '1')");
                     
-		$resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$_GET[valeur]','$_GET[varb]','$_GET[descr]','$_GET[cat]')");
+		$resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('".$_GET['valeur']."','".$_GET['varb']."','".$_GET['descr']."','".$_GET['cat']."')");
 		if ($resultat == FALSE) {
-			mysql_query("UPDATE params set value='$_GET[valeur]' where name='$_GET[varb]'");
+			mysql_query("UPDATE params set value='$_GET[valeur]' where name='".$_GET['varb']."';");
 		}
 	}
-	if ($_GET[varb] == "corbeille") {
+	if ($_GET['varb'] == "corbeille") {
 		system("sudo /usr/share/se3/sbin/update-smbconf.sh");
 	}
-	if ($_GET[varb] == "defaultintlevel") {
-		setintlevel($_GET[valeur]);
-		echo "<SCRIPT LANGUAGE=JavaScript>";
+	if ($_GET['varb'] == "defaultintlevel") {
+		setintlevel($_GET['valeur']);
+		echo "<SCRIPT LANGUAGE='JavaScript'>";
 		echo "setTimeout('top.location.href=\"index.html\"',\"10\")";
 		echo "</SCRIPT>";
 		exit;
 	}	
 
-	if ($_GET[varb] == "defaultshell") {
+	if ($_GET['varb'] == "defaultshell") {
 		$shell_orig=$defaultshell;
 		$shell_mod=$_GET['valeur'];
 		exec ("/usr/share/se3/sbin/changeShellAllUsers.pl $shell_orig $shell_mod",$AllOutPut,$ReturnValue);
 	
 	}
-exec('/usr/bin/sudo /usr/share/se3/scripts/refresh_cache_params.sh');
+
+	if ($_GET['varb'] == "autoriser_partage_public") {
+		$sql="SELECT 1=1 FROM params WHERE name='autoriser_partage_public';";
+		$test=mysql_query($sql);
+		if(mysql_num_rows($test)==0) {
+			$sql="INSERT INTO params SET name='autoriser_partage_public', value='".$_GET['valeur']."', descr='Autoriser l''acces au partage Docs/public', cat='1';";
+			$insert=mysql_query($sql);
+		}
+		else {
+			$sql="UPDATE params SET value='".$_GET['valeur']."' WHERE name='autoriser_partage_public';";
+			$update=mysql_query($sql);
+		}
+		exec ("/usr/bin/sudo /usr/share/se3/scripts/autoriser_partage_public.sh autoriser=".$_GET['valeur'],$AllOutPut,$ReturnValue);
+	}
+
+	exec('/usr/bin/sudo /usr/share/se3/scripts/refresh_cache_params.sh');
 }
 
 
@@ -107,7 +122,7 @@ if ($action=="modif_intlevel") {
 	echo "<option"; if ($defaultintlevel=="4") { echo " selected"; } echo " value=\"4\">".gettext("Exp&#233;rimental")."</option>";
 	echo "</select>\n";
 	echo "<u onmouseover=\"return escape".gettext("('Permet de s&#233;lectionner le niveau de l\'interface Se3.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\" alt=\"help\"></u>";
-	echo "</form>";
+	echo "</form>\n";
 } else {
 	if ($defaultintlevel=="1") { $intlevel="D&#233;butant"; }
 	if ($defaultintlevel=="2") { $intlevel="Interm&#233;diaire"; }
@@ -199,7 +214,7 @@ echo "</td></tr>\n";
 // Gestion des comptes utilisateur
 echo "<TR><TD colspan=\"2\" align=\"center\" class=\"menuheader\">\n";
 echo gettext("Configuration des comptes utilisateurs");
-echo "</TD></TR>";
+echo "</TD></TR>\n";
 
 // uidPolicy
 echo "<TR><TD>".gettext("Format des logins")."</TD><TD align=\"center\">";
@@ -308,7 +323,8 @@ echo "</td></tr>\n";
 // Configuration du serveur smtp 
 echo "<TR><TD colspan=\"2\" align=\"center\" class=\"menuheader\">\n";
 echo gettext("Configuration de l'exp&#233;dition des messages syst&#232;me");
-echo "</TD></TR>";
+echo "</TD></TR>
+";
 // domaine 
 echo "<TR><TD>".gettext("Domaine")." </TD><TD align=\"center\">";
 if ($action == "modif_domain") {
@@ -349,7 +365,7 @@ echo "</td></tr>\n";
 // Configuration des serveurs 
 echo "<TR><TD colspan=\"2\" align=\"center\" class=\"menuheader\">\n";
 echo gettext("Configuration pour les mises &#224; jour ");
-echo "</TD></TR>";
+echo "</TD></TR>\n";
 
 
 // Adresse du Proxy
@@ -440,7 +456,7 @@ echo "</td></tr>\n";
 // Configuration des serveurs 
 echo "<TR><TD colspan=\"2\" align=\"center\" class=\"menuheader\">\n";
 echo gettext("Configuration de l'annuaire")." ($ldap_base_dn) ";
-echo "</TD></TR>";
+echo "</TD></TR>\n";
 
 
 // YALA
@@ -460,7 +476,7 @@ echo "</td></tr>\n";
 // Sauvegarde distance 
 echo "<TR><TD colspan=\"2\" align=\"center\" class=\"menuheader\">\n";
 echo gettext("Sauvegarde");
-echo "</TD></TR>";
+echo "</TD></TR>\n";
 
 
 // Sauvegarde
@@ -488,7 +504,7 @@ if ($svgsyst_cnsv_hebdo=="1") {
 	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Cliquer ici afin d\'activer une sauvegarde journali&#232;re. <br><b>Attention</b> Si vous utilisez backuppc (sauvegarde int&#233;gr&#233;e &#224; Se3) cette option est d&#233;conseill&#233;e.<br> Utiliser cela si vous ne souhaitez pas utiliser de syst&#232;me de sauvegarde. Voir la documentation pour plus d\'explication.')")."\">";
 	echo "<a href=conf_params.php?action=change&amp;varb=svgsyst_cnsv_hebdo&amp;valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
 }
-echo "</td></tr>";
+echo "</td></TR>\n";
 
 echo "<tr><td>".gettext("Sauvegarde Samba")."</td><td align=\"center\">";
 
@@ -500,7 +516,7 @@ if ($svgsyst_varlibsamba=="1") {
 	echo "<a href=conf_params.php?action=change&amp;varb=svgsyst_varlibsamba&amp;valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
 }
 
-echo "</td></tr>";
+echo "</td></TR>\n";
 
 echo "<tr><td>".gettext("Sauvegarde ACL de /var/se3")."</td><td align=\"center\">";
 
@@ -512,13 +528,14 @@ if ($svgsyst_aclvarse3=="1") {
 	echo "<a href=conf_params.php?action=change&amp;varb=svgsyst_aclvarse3&amp;valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
 }
 
-echo "</td></tr>";
+echo "</td></TR>\n";
 
 
 // Serveurs de com
 echo "<TR><TD colspan=\"2\" align=\"center\" class=\"menuheader\">\n";
 echo gettext("Configuration des serveurs de communication");
-echo "</TD></TR>";
+echo "</TD></TR>
+";
 
 
 // Serveur Slis
@@ -585,21 +602,34 @@ echo "</td></tr>\n";
 // Partages
 echo "<TR><TD colspan=\"2\" align=\"center\" class=\"menuheader\">\n";
 echo gettext("Partages");
-echo "</TD></TR>";
+echo "</TD></TR>
+";
 
 
 echo "<tr><td>".gettext("Purge journali&#232;re de la ressource public ")."</td><td align=\"center\">";
 
 if ($purge_public=="1") {
-        echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer ici afin de d&#233;sactiver la purge automatique du partage public. <br>Cela permet de supprimer automatiquement toutes les nuits les fichiers dans la partition public.')")."\">";
+        echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer ici afin de d&#233;sactiver la purge automatique du partage public. <br>Cela permet de supprimer automatiquement toutes les nuits les fichiers dans la ressource public.')")."\">";
         echo "<a href=conf_params.php?action=change&amp;varb=purge_public&amp;valeur=0&amp;cat=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
 } else {
-        echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Cliquer ici afin d\'activer une purge automatique de la partition public.')")."\">";
+        echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Cliquer ici afin d\'activer une purge automatique de la ressource public.')")."\">";
         echo "<a href=conf_params.php?action=change&amp;varb=purge_public&amp;valeur=1&amp;cat=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
 }
 
-echo "</td></tr>";
+echo "</td></tr>\n";
 
+echo "<tr><td>".gettext("Autoriser l'acc&#232;s &#224; la ressource public ")."</td><td align=\"center\">";
+
+if ($autoriser_partage_public=="y") {
+        echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer ici afin de d'interdire l'acc&#232;s au dossier /var/se3/Docs/public')")."\">";
+        echo "<a href=conf_params.php?action=change&amp;varb=autoriser_partage_public&amp;valeur=n&amp;cat=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
+} else {
+        echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Cliquer ici afin de d'autoriser l'acc&#232;s au dossier /var/se3/Docs/public')")."\">";
+        echo "<a href=conf_params.php?action=change&amp;varb=autoriser_partage_public&amp;valeur=y&amp;cat=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
+}
+
+echo "</td></TR>
+";
 
 echo "</table></center>";
 

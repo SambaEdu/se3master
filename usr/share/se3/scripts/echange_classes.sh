@@ -49,8 +49,21 @@ if [ ! -z "$1" -a -e "/var/se3/Classes/$1" ]; then
 				setfacl -R -x g:$GRP_CLASSE /var/se3/Classes/$1/$echange
 				setfacl -R -x d:g:$GRP_CLASSE /var/se3/Classes/$1/$echange
 
-				#Interdiction d'accès à public:
-				setfacl -m g:$GRP_CLASSE:r /var/se3/Docs/public
+				if [ -e /var/www/se3/includes/config.inc.php ]; then
+					dbhost=`cat /var/www/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
+					dbname=`cat /var/www/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d \" -f 2`
+					dbuser=`cat /var/www/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 |cut -d \" -f 2`
+					dbpass=`cat /var/www/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 |cut -d \" -f 2`
+				else
+					echo "Fichier de conf inaccessible"
+					exit 1
+				fi
+
+				acces_partage_public=$(echo "SELECT value FROM params WHERE name='autoriser_partage_public';"|mysql -N -h $dbhost -u $dbuser -p$dbpass $dbname)
+				if [ "$acces_partage_public" != "n" ]; then
+					#Interdiction d'accès à public:
+					setfacl -m g:$GRP_CLASSE:r /var/se3/Docs/public
+				fi
 			;;
 			"actif")
 																
@@ -69,10 +82,23 @@ if [ ! -z "$1" -a -e "/var/se3/Classes/$1" ]; then
 				#echo "setfacl -R -m d:g:$GRP_CLASSE:rwx /var/se3/Classes/$1/$echange"
 				setfacl -R -m d:g:$GRP_CLASSE:rwx /var/se3/Classes/$1/$echange
 
-				#Levée de l'interdiction d'accès à public:
-				#setfacl -m g:$1:rwx /var/se3/Docs/public
-				#echo "setfacl -x g:$GRP_CLASSE /var/se3/Docs/public"
-				setfacl -x g:$GRP_CLASSE /var/se3/Docs/public
+				if [ -e /var/www/se3/includes/config.inc.php ]; then
+					dbhost=`cat /var/www/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
+					dbname=`cat /var/www/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d \" -f 2`
+					dbuser=`cat /var/www/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 |cut -d \" -f 2`
+					dbpass=`cat /var/www/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 |cut -d \" -f 2`
+				else
+					echo "Fichier de conf inaccessible"
+					exit 1
+				fi
+
+				acces_partage_public=$(echo "SELECT value FROM params WHERE name='autoriser_partage_public';"|mysql -N -h $dbhost -u $dbuser -p$dbpass $dbname)
+				if [ "$acces_partage_public" != "n" ]; then
+					#Levée de l'interdiction d'accès à public:
+					#setfacl -m g:$1:rwx /var/se3/Docs/public
+					#echo "setfacl -x g:$GRP_CLASSE /var/se3/Docs/public"
+					setfacl -x g:$GRP_CLASSE /var/se3/Docs/public
+				fi
 			;;
 		esac
 	fi
