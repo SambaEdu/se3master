@@ -63,6 +63,8 @@ if echo "$*" | grep "acl_default" > /dev/null; then
 	fi
 fi
 
+
+
 [ "$HTML" == "0" ] && (
 echo -e "$COLTITRE"
 echo "#####################################################"
@@ -515,20 +517,39 @@ else
 		fi
 		echo -e "$COLCMD\c "
 
-		# A l'interieur de Docs/public (sauf modif des ACL), tout le monde peut tout faire...
-		chown $OPT admin:root /var/se3/Docs/public
-		# ==================
-		# Faut-il mettre -R?
-		chmod $OPT 777 /var/se3/Docs/public
-		#setfacl -m m:rwx /var/se3/Docs/public
-		setfacl $OPT -m u::rwx /var/se3/Docs/public
-		setfacl $OPT -m g::rwx /var/se3/Docs/public
-		setfacl $OPT -m o::rwx /var/se3/Docs/public
-		setfacl $OPT -m d:m:rwx /var/se3/Docs/public
-		setfacl $OPT -m d:u::rwx /var/se3/Docs/public
-		setfacl $OPT -m d:g::rwx /var/se3/Docs/public
-		setfacl $OPT -m d:o::rwx /var/se3/Docs/public
-		# ==================
+		if [ -e /var/www/se3/includes/config.inc.php ]; then
+			dbhost=`cat /var/www/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
+			dbname=`cat /var/www/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d \" -f 2`
+			dbuser=`cat /var/www/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 |cut -d \" -f 2`
+			dbpass=`cat /var/www/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 |cut -d \" -f 2`
+		else
+			echo "Fichier de conf inaccessible"
+			exit 1
+		fi
+
+		acces_partage_public=$(echo "SELECT value FROM params WHERE name='autoriser_partage_public';"|mysql -N -h $dbhost -u $dbuser -p$dbpass $dbname)
+		if [ "$acces_partage_public" != "n" ]; then
+			# A l'interieur de Docs/public (sauf modif des ACL), tout le monde peut tout faire...
+			chown $OPT admin:admins /var/se3/Docs/public
+			# ==================
+			# Faut-il mettre -R?
+			chmod $OPT 777 /var/se3/Docs/public
+			#setfacl -m m:rwx /var/se3/Docs/public
+			setfacl $OPT -m u::rwx /var/se3/Docs/public
+			setfacl $OPT -m g::rwx /var/se3/Docs/public
+			setfacl $OPT -m o::rwx /var/se3/Docs/public
+			setfacl $OPT -m d:m:rwx /var/se3/Docs/public
+			setfacl $OPT -m d:u::rwx /var/se3/Docs/public
+			setfacl $OPT -m d:g::rwx /var/se3/Docs/public
+			setfacl $OPT -m d:o::rwx /var/se3/Docs/public
+			# ==================
+		else
+			if [ "$OPT" = "-R" ]; then
+				/usr/share/se3/scripts/autoriser_partage_public.sh autoriser=n recursif
+			else
+				/usr/share/se3/scripts/autoriser_partage_public.sh autoriser=n
+			fi
+		fi
 
 		mkdir -p /var/se3/Docs/deploy
 		chown admin:www-data /var/se3/Docs/deploy
