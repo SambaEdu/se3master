@@ -575,7 +575,7 @@ switch ($action) {
     //modification des cles du modele : passage de la valeur par defaut ou de l'antidote de $mod";
     case "modifcle":
         $suppr = $_GET['suppr'];
-        $cle = split("-", $liste);
+        $cle = preg_split("/-/", $liste);
         for ($i; $i < count($cle) + 1; $i++) {
             if ($cle[$i]) {
                 if ($suppr) {
