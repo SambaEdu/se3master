@@ -71,20 +71,24 @@ then
 fi
 
 # filtrage 
-user=$(echo "$2" | tr 'A-Z' 'a-z' | sed "s/[\$_$]//g")
-machine=$(echo "$3" | tr 'A-Z' 'a-z' | sed "s/[\$_$]//g")
+user=$(echo "$2" | tr 'A-Z' 'a-z' | sed "s/[\$_]$//")
+machine=$(echo "$3" | tr 'A-Z' 'a-z' |  sed "s/[\$_]$//")
+
+# on teste si windows fait des siennes
 if [ "$user" == "$machine" ]
 then
        exit 0
 elif [ "$user" == "adminse3" ]
 then
        exit 0
-fi       
+fi      
+
+# ok, on transmet les infos sans transformation
 if [ "$LOGON" == "1" ]
 then
-	rc_logon $1 $user $machine $4 $5
+        rc_logon $1 $2 $3 $4 $5
 elif [  "$LOGOUT" == "1" ]
 then
-	rc_logout $1 $user $machine $4 $5
+        rc_logout $1 $2 $3 $4 $5
 fi
 exit $?
