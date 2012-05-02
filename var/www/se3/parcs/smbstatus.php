@@ -45,7 +45,7 @@ if (is_admin("system_is_admin",$login)!="Y")
 $smb_login = smbstatus();
 	
 echo "<H1>".gettext("Connexions aux ressources samba")."</H1>\n";
-echo "<H3>".gettext("Il y a "). count($out). gettext(" connexions en cours")."</H3>";
+echo "<H3>".gettext("Il y a "). count($smb_login). gettext(" connexions en cours")."</H3>";
 
 // Si on a des connexions
 if (count($smb_login)>0) {
@@ -54,7 +54,7 @@ if (count($smb_login)>0) {
 		echo "<TR><TD class='menuheader'>".gettext("Identifiant")."</TD>";
         	echo "<TD class='menuheader'>".gettext("Machine")."</TD>";
         	echo "<TD class='menuheader'>".gettext("Adresse IP")."</TD></TR>\n";
-}
+
 
 
 foreach($smb_login as $nom => $val) {
@@ -63,6 +63,7 @@ foreach($smb_login as $nom => $val) {
     	echo "<TD><a href=\"show_histo.php?selectionne=2&mpenc=$nom\">$nom</a></TD>";
     	echo "<TD><a href=\"show_histo.php?selectionne=1&ipaddr=".$val['ip']."\">".$val['ip']."</a></TD>";
     	echo"</TR>";
+}
 }
 echo "</TABLE>\n";
 
