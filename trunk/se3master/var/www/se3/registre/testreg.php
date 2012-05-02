@@ -106,7 +106,7 @@ if ($test) {
     if (($cat) and !($cat == "tout")) {
         $ajout = " and corresp.categorie = '$cat'";
         if ($sscat) {
-            $ajoutsscat = " AND corresp.sscat='$sscat';";
+            $ajoutsscat = " AND corresp.sscat='$sscat'";
             echo "<h3>" . gettext("Sous-cat&#233gorie :") . " $sscat</h3>";
         } else {
             $ajoutsscat = "";
@@ -125,7 +125,7 @@ if ($test) {
         }
         $ajoutpasaffiche = "";
     }
-    $query = "Select Intitule,corresp.CleID,corresp.valeur,genre,OS,antidote,type,chemin,restrictions.valeur,restrictions.groupe,restrictions.priorite
+    $query = "Select Intitule,corresp.CleID,corresp.valeur,corresp.genre,corresp.OS,corresp.antidote,corresp.type,corresp.chemin,restrictions.valeur,restrictions.groupe,restrictions.priorite
             from corresp,restrictions 
             where corresp.CleID = restrictions.cleID " . $ajout . $ajoutsscatvide . $ajoutsscat . " and ( ";
     for ($i = 0; $i < count($templates2); $i++) {
