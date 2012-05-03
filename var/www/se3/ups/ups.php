@@ -147,7 +147,7 @@ if ($pcable!='' && $pversion!='' &&  $pmarque!='' && $pport!='' && $pcable!='' &
 	if ($pport=="2") {$pport="/dev/ttyS1";}
 	if ($pport=="3") {$pport="/dev/usb/hiddev0";}
 	$texte = "[myups]\n";
-	if($pport=="/dev/usb/hiddev0") {$pdriver="hidups";}
+	if($pport=="/dev/usb/hiddev0") {$pdriver="usbhid-ups";}
 	$texte .= "driver = $pdriver\n";
 	$texte .= "port = $pport\n";
 	if($pcable!="0") {$texte .= "cable = $pcable\n";}
