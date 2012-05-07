@@ -33,7 +33,7 @@ case `cat /etc/debian_version` in
 	6.0*)
 	    install_script="install_se3_squeeze.sh"
 	    ;;
-	7.0*)
+	wheezy*)
 	    install_script="install_se3_wheezy.sh"
 	    ;;
 	*)
