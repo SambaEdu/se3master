@@ -153,6 +153,9 @@ case $DEBVER in
     6.0*)
 	echo "Debian squeeze detectee."
 	;;
+    7.0*)
+	echo "Debian wheezy detectee."
+	;;
     *)
 	echo "Version Debian inconnue"
 	;;
