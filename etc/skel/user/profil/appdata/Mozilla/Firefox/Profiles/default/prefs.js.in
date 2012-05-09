@@ -17,3 +17,6 @@ user_pref("extensions.disabledObsolete", true);
 user_pref("extensions.lastAppVersion", "1.0");
 user_pref("network.cookie.prefsMigrated", true);
 user_pref("signon.rememberSignons", false);
+user_pref("browser.safebrowsing.enabled", false);
+user_pref("browser.safebrowsing.malware.enabled", false);
+
