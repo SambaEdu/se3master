@@ -177,8 +177,9 @@ function decode_pass($string_auth) {
 	fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$string_auth_clean: ".$string_auth_clean."\n");
         // Decodage de la chaine d'authentification cote serveur avec une cle privee
         //$commande="/usr/bin/python ".$path_to_wwwse3."/includes/decode.py $string_auth";
-        $commande="/usr/bin/python ".$path_to_wwwse3."/includes/decode.py $string_auth_clean";
-        fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$commande".$commande."\n");
+        $commande="(/usr/bin/python $path_to_wwwse3/includes/decode.py '$string_auth_clean')";
+        fputs($fpdebug,date("j/m/y:H:i")." : function decode_pass() : \$commande : ".$commande."\n");
+        unset($AllOutPut);
         exec ($commande,$AllOutPut,$ReturnValue);
         // Extraction des parametres
         //print_r($AllOutPut);
