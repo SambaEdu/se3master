@@ -165,7 +165,11 @@ if ((is_admin("computers_is_admin", $login) == "Y") or (is_admin("parc_can_view"
                     echo "</form>\n";
                     echo "</td>\n";
                 }
-
+				echo "<td><form action=\"show_parc.php\" method=\"post\">\n";
+				echo "<input type=\"hidden\" name=\"parc\" value=\"$parc\" />";
+				echo "<input type=\"submit\" value=\"".gettext($action_parc['btnListerTitre'])."\" />";
+				echo "</form>\n";
+                echo "</td>\n";
                 echo "</tr>\n";
 
                 echo "<tr>\n";
