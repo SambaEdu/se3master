@@ -81,26 +81,26 @@ if ($_POST['mode'] == 'ping_ip') {
     $machine = $_POST['nom_machine'];
     if (is_dir('/home/netlogon/machine/' . $machine)) {
         if (is_file('/home/netlogon/machine/' . $machine . '/gpt.ini')) {
-            echo "<img type=\"image\" src=\"../elements/images/enabled.png\" border=\"0\" title=\"" . $machine . " : int�gration OK \"/>";
+            echo "<img type=\"image\" src=\"../elements/images/enabled.png\" border=\"0\" title=\"" . $machine . " : int&#233;gration OK \"/>";
         } else {
-            echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"" . $machine . " : probl�me avec les domscripts\"/>";
+            echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"" . $machine . " : probl&#232;me avec les domscripts\"/>";
         }
     } else {
         $session = get_smbsess($machine);
         if ($session['login']) {
-            echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"" . $machine . " : probl�me avec les domscripts, le script de logon ne se lance pas \"/>";
+            echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"" . $machine . " : probl&#232;me avec les domscripts, le script de logon ne se lance pas \"/>";
         } elseif (fping($_POST['ip'])) {
             unset($texte);
             exec("sudo /usr/share/se3/scripts/force_gpo.sh " . $machine . " " . $_POST['ip'], $texte, $ret);
             if ($ret) {
                 // afficher les codes d'erreur en fonction des r�sultats du script
-                echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"" . $machine . " : probl�me avec les domscripts, le script de logon a renvoye une erreur " . $ret;
+                echo "<img type=\"image\" src=\"../elements/images/warning.png\" border=\"0\" title=\"" . $machine . " : probl&#232;me avec les domscripts, le script de logon a renvoy&#233; une erreur " . $ret;
                 foreach ($texte as $ligne) {
                     echo $ligne . "<br>";
                 }
                 echo "\"/>";
             } else {
-                echo "<img type=\"image\" src=\"../elements/images/enabled.png\" border=\"0\" title=\"" . $machine . " : int�gration OK \"/>";
+                echo "<img type=\"image\" src=\"../elements/images/enabled.png\" border=\"0\" title=\"" . $machine . " : int&#233;gration OK \"/>";
             }
         } else {
             echo "<img type=\"image\" src=\"../elements/images/disabled.png\" border=\"0\" title=\"" . $machine . " : il faut allumer la machine \"/>";
