@@ -30,7 +30,7 @@
 	$action_parc=array();
 
 	$action_parc['pageTitre'] = "Actions sur les stations";
-
+	$action_parc['arrayLogonTitre'] = "Gpo";
 	$action_parc['btnEteindreTitre'] = "Eteindre tous les postes";
 	$action_parc['msgConfirmEteindre'] = "Etes-vous sur de vouloir &#233;teindre le parc $parc ?";
 	$action_parc['msgConfirmEteindreMachine'] = "Etes-vous sur de vouloir &#233;teindre la machine ";
