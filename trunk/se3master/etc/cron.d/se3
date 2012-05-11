@@ -1,6 +1,6 @@
 ## $Id$ ##
 # Extinction programmee des postes xp tous les 1/4h
-59,14,29,44 * * * * root /usr/share/se3/sbin/cron_wolstop.pl &>/dev/null
+59,14,29,44 * * * * root /usr/share/se3/sbin/cron_wolstop.pl >/dev/null 2>&1
 #
 # Lancement update deux fois par jour pour affichage plus rapide dans page diagnostic et module
 00 06,12 * * * root /usr/bin/apt-get update &>/dev/null
@@ -14,6 +14,8 @@
 # verif maj 07h45 tous les dimanches
 #45 07 * * 7 root /usr/share/se3/sbin/verif_maj_dispo.sh > /dev/null
 #
+# Controle des pb de nom_parc=nom_machine
+00 22 * * * root /usr/share/se3/sbin/se3_controle_noms_parcs_et_machines_pour_wpkg.sh > /dev/null 2>&1
 
 ### Sauvegarde ldap, mysql et acls de /var/se3 tous les jours a 23h15###
 45 18 * * * root /usr/share/se3/sbin/lance_sauve_system.sh > /dev/null 2>&1
@@ -57,5 +59,4 @@
 */5 * * * * root /usr/share/se3/sbin/update-csv.sh >/dev/null 2>&1
 
 # Purge repertoire public toutes les nuits
-0   1   *   *   *   root    /usr/share/se3/sbin/purge_public.sh >/dev/null 2>&1
-
+0   1   *   *   * root /usr/share/se3/sbin/purge_public.sh >/dev/null 2>&1
