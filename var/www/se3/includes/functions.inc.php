@@ -303,13 +303,12 @@ function isauth()
                 - Si non, renvoie ""
                 - Si oui, renvoie l'uid de la personne
     */
-
     // Initialisation:
     $login="";
 
-    global $HTTP_COOKIE_VARS, $authlink;
-    if ( ! empty($HTTP_COOKIE_VARS["SambaEdu3"])):
-        $sess=$HTTP_COOKIE_VARS["SambaEdu3"];
+    global $authlink;
+    if ( ! empty($_COOKIE["SambaEdu3"])):
+        $sess=$_COOKIE["SambaEdu3"];
         $result=mysql_query("SELECT login FROM sessions WHERE sess='$sess'", $authlink);
         if ($result && mysql_num_rows($result)):
                $login=mysql_result($result,0,0);
@@ -428,11 +427,11 @@ function open_session($login, $passwd,$al)
 function close_session()
 {
     /* Ferme la session en cours */
-    global $HTTP_COOKIE_VARS, $authlink, $secook;
-    if (empty($HTTP_COOKIE_VARS["SambaEdu3"])):
+    global $authlink, $secook;
+    if (empty($_COOKIE["SambaEdu3"])):
         $login="";
     else:
-        $sess=$HTTP_COOKIE_VARS["SambaEdu3"];
+        $sess=$_COOKIE["SambaEdu3"];
         $result=mysql_query("DELETE FROM sessions WHERE sess='$sess'", $authlink);
         setcookie ("SambaEdu3", "", 0,"/","",$secook);
     endif;
@@ -453,10 +452,10 @@ function close_session()
 function readhelp()
 {
     // Lis l'etat du flag help dans la table session
-    global $HTTP_COOKIE_VARS, $authlink;
+    global $authlink;
     $ret=0;
-    if (! empty($HTTP_COOKIE_VARS["SambaEdu3"])):
-        $sess=$HTTP_COOKIE_VARS["SambaEdu3"];
+    if (! empty($_COOKIE["SambaEdu3"])):
+        $sess=$_COOKIE["SambaEdu3"];
         $result = mysql_query("SELECT help FROM sessions WHERE sess='$sess'",$authlink);
         if ($result && mysql_num_rows($result)):
             $ret=mysql_result($result,0,0);
@@ -481,11 +480,11 @@ function readhelp()
 function changehelp()
 {
     // Change l'etat du flag help dans la table session
-    global $HTTP_COOKIE_VARS, $authlink;
+    global $authlink;
 
     $ret=0;
-    if (! empty($HTTP_COOKIE_VARS["SambaEdu3"])):
-        $sess=$HTTP_COOKIE_VARS["SambaEdu3"];
+    if (! empty($_COOKIE["SambaEdu3"])):
+        $sess=$_COOKIE["SambaEdu3"];
         $query="SELECT help FROM sessions WHERE sess='$sess'";
         $result = mysql_query($query,$authlink);
         if ($result):
@@ -512,10 +511,10 @@ function changehelp()
 function getintlevel()
 {
     /* Lis le niveau d'interface dans la table session */
-    global $HTTP_COOKIE_VARS, $authlink;
+    global $authlink;
     $ret=0;
-    if (! empty($HTTP_COOKIE_VARS["SambaEdu3"])):
-        $sess=$HTTP_COOKIE_VARS["SambaEdu3"];
+    if (! empty($_COOKIE["SambaEdu3"])):
+        $sess=$_COOKIE["SambaEdu3"];
         $result = mysql_query("SELECT intlevel FROM sessions WHERE sess='$sess'",$authlink);
         if ($result && mysql_num_rows($result)):
             $ret=mysql_result($result,0,0);
@@ -537,10 +536,10 @@ function getintlevel()
 
 function setintlevel($new_level)
 {
-    global $HTTP_COOKIE_VARS, $authlink;
+    global $authlink;
 
-    if (! empty($HTTP_COOKIE_VARS["SambaEdu3"])):
-        $sess=$HTTP_COOKIE_VARS["SambaEdu3"];
+    if (! empty($_COOKIE["SambaEdu3"])):
+        $sess=$_COOKIE["SambaEdu3"];
         $result = mysql_query("UPDATE sessions SET intlevel=$new_level WHERE sess='$sess'",$authlink);
     if (!$result) echo "Erreur d'ecriture dans la table sessions\n";
     endif;
