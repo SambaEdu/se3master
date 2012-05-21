@@ -25,6 +25,8 @@
 if [ -e /root/debug ]; then
 set -x
 fi
+mv /etc/sudoers /etc/sudoers.orig
+mv /etc/sudoers.se3 /etc/sudoers
 #Init annuaire et mise en place DB_CONFIG de se3
 /etc/init.d/slapd stop
 cp -a /var/lib/ldap/DB_CONFIG /root/DB_CONFIG_squeeze.ori
@@ -1064,9 +1066,8 @@ fi
 
 [ ! -z `getent group | grep "lcs-users:x:108"` ] && /usr/share/se3/sbin/se3_modif_gidNumber.sh
 
-if [ ! -e ${MIGFOLDER} ]; then
-	/usr/share/se3/sbin/install_quotas.sh
-fi
+/usr/share/se3/sbin/install_quotas.sh
+
 ### ajout keyser  version 1.0 ###
 
 # ajout des chemins de se3 ds le path de root
