@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Franck Molle
 # distribue sous licence GPL
