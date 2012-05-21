@@ -32,7 +32,7 @@ fi
 touch /mirror/mirror_rsync.sh
 chmod 700 /mirror/mirror_rsync.sh
 
-echo "#!/bin/sh
+echo "#!/bin/bash
 
 source /mirror/param_mirror_rsync.sh
 
