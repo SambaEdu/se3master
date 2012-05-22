@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #/usr/share/se3/sbin/mirroring_mise_en_place.sh
 #
