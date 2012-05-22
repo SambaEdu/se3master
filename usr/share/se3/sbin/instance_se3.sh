@@ -104,12 +104,7 @@ smbpasswd -w $adminPw
 # Shares conf
 /usr/share/se3/sbin/update-share.sh -d
 
-# Slave
-SLAVE_TEST=`ldapsearch -xLLL "(&(objectclass=*)(l=esclave))"`
-if [ ! -z "$SLAVE_TEST" ]; then
-    echo "Esclave!"
-	mv -f /var/www/se3/includes/menu.d/.51ressources.inc  /var/www/se3/includes/menu.d/51ressources.inc
-fi
+
 
 # Templates
 for template in base admin eleves profs
@@ -123,19 +118,6 @@ do
 		fi
 	done
 done
-
-
-
-# Backuppc
-
-#cd /usr/share/backuppc/lib/BackupPC/CGI
-#rm -f Lib.pm
-#if [ "$debian_vers" == "4.0" ]; then
-#	ln -s Lib.pm.etch Lib.pm
-#else
-#	ln -s Lib.pm.lenny Lib.pm
-#fi
-#cd - >/dev/null
 
 
 # Firefox
