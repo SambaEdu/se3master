@@ -257,7 +257,7 @@ switch ($action) {
         if (($cat) and !($cat == "tout")) {
             $ajout = " and corresp.categorie = '$cat'";
             if ($_GET['sscat']) {
-                $ajoutsscat = " AND corresp.sscat='$sscat';";
+                $ajoutsscat = " AND corresp.sscat='$sscat' ";
             } else {
                 $ajoutsscat = "";
             }
