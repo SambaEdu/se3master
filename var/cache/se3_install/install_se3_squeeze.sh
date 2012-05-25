@@ -27,6 +27,7 @@ set -x
 fi
 mv /etc/sudoers /etc/sudoers.orig
 mv /etc/sudoers.se3 /etc/sudoers
+chmod 440 /etc/sudoers
 #Init annuaire et mise en place DB_CONFIG de se3
 /etc/init.d/slapd stop
 cp -a /var/lib/ldap/DB_CONFIG /root/DB_CONFIG_squeeze.ori
@@ -331,9 +332,11 @@ if [ ! "$rep" = "n" ]; then
 	if [ -z "$MYSQLPW" ]; then
 		echo -e "vous n'avez pas saisi de mot de passe root MySQL, celui-ci va être généré aléatoirement"
 		MYSQLPW=`date | md5sum | cut -c 1-6 | sed -e s'/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g'`
+		MYSQLPW=$(makepasswd)
+		echo "$MYSQLPW"
 	fi
 	echo -e "$COLCMD\c "
-	mysqladmin password $MYSQLPW 2>/dev/null && echo -e "${COLINFO}Le mot de passe root MySQL a été initialisé à $MYSQLPW"
+	mysqladmin password $MYSQLPW && echo -e "${COLINFO}Le mot de passe root MySQL a été initialisé à $MYSQLPW"
 	echo "[client]">/root/.my.cnf
 	echo "password=$MYSQLPW">>/root/.my.cnf
 	echo "user=root">>/root/.my.cnf
