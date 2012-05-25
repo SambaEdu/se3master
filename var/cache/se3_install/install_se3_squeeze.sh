@@ -25,15 +25,6 @@
 if [ -e /root/debug ]; then
 set -x
 fi
-mv /etc/sudoers /etc/sudoers.orig
-mv /etc/sudoers.se3 /etc/sudoers
-chmod 440 /etc/sudoers
-#Init annuaire et mise en place DB_CONFIG de se3
-/etc/init.d/slapd stop
-cp -a /var/lib/ldap/DB_CONFIG /root/DB_CONFIG_squeeze.ori
-rm -rf /var/lib/ldap/*
-cp /var/cache/se3_install/conf/DB_CONFIG /var/lib/ldap/ 
-chown openldap:openldap /var/lib/ldap/*
 
 #Couleurs
 COLTITRE="\033[1;35m"	# Rose
@@ -270,6 +261,21 @@ if [ ! "$rep" = "n" ]; then
 		fi
 	fi
 fi
+
+echo -e "$COLINFO"
+echo "Traitement sudoers et init ldap"
+echo -e "$COLTXT "
+mv /etc/sudoers /etc/sudoers.orig
+mv /etc/sudoers.se3 /etc/sudoers
+chmod 440 /etc/sudoers
+#Init annuaire et mise en place DB_CONFIG de se3
+/etc/init.d/slapd stop
+cp -a /var/lib/ldap/DB_CONFIG /root/DB_CONFIG_squeeze.ori
+rm -rf /var/lib/ldap/*
+cp /var/cache/se3_install/conf/DB_CONFIG /var/lib/ldap/ 
+chown openldap:openldap /var/lib/ldap/*
+
+
 #
 # Configuration de SambaEdu
 #
