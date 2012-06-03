@@ -300,28 +300,28 @@ if ($_GET['action'] == "change") {
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
-		case "seven":
-			$valeur_seven=($_GET['valeur']==1) ? 1 : 0;
-			echo $valeur_seven;
-			$resultat=mysql_query("SELECT * FROM params WHERE name='support_seven'");
-			if(mysql_num_rows($resultat)==0){
-				$sql = "INSERT INTO params VALUES('','support_seven','$valeur_seven','','Installation du backport samba pour seven','6')";
-			} else {
-				$sql = "UPDATE params SET value='$valeur_seven' where name='support_seven'";
-			}
-
-			if ($valeur_seven == 1) {
-				system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-seven",$return);
-				if($return==0) {
-				mysql_query($sql);
-				echo "Support seven activ&#233;.<br>\n";
-				}
-				else{
-				echo "Un probl&#232;me est survenu lors de l'installation du backport samba.<br>\n";
-				}
-
-			}
-			break;
+// 		case "seven":
+// 			$valeur_seven=($_GET['valeur']==1) ? 1 : 0;
+// 			echo $valeur_seven;
+// 			$resultat=mysql_query("SELECT * FROM params WHERE name='support_seven'");
+// 			if(mysql_num_rows($resultat)==0){
+// 				$sql = "INSERT INTO params VALUES('','support_seven','$valeur_seven','','Installation du backport samba pour seven','6')";
+// 			} else {
+// 				$sql = "UPDATE params SET value='$valeur_seven' where name='support_seven'";
+// 			}
+// 
+// 			if ($valeur_seven == 1) {
+// 				system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-seven",$return);
+// 				if($return==0) {
+// 				mysql_query($sql);
+// 				echo "Support seven activ&#233;.<br>\n";
+// 				}
+// 				else{
+// 				echo "Un probl&#232;me est survenu lors de l'installation du backport samba.<br>\n";
+// 				}
+// 
+// 			}
+// 			break;
 		default:
 			echo "Erreur : Module '$module' inconnu !<br>\n";
 	} // \switch ($_GET[varb])
@@ -678,48 +678,48 @@ echo "</td></tr>\n";
 
 
 // Menu support seven
-$resultat=mysql_query("SELECT * FROM params WHERE name='support_seven'");
-if(mysql_num_rows($resultat)==0){
-	$support_seven=0;
-}
-else{
-	$ligne=mysql_fetch_object($resultat);
-	if($ligne->value=="1"){
-		$support_seven=1;
-	}
-	else {
-		$support_seven=0;
-	}
-}
-echo "<tr><td>".gettext("Support des clients seven")."</TD>";
-// On teste si on a bien la derniere version
-// Cas particulier fond d'ecran n'est pas un paquet
-$seven_version_install = exec("apt-cache policy samba | grep \"Install\" | cut -d\" \" -f4");
-// $fond_version_dispo = exec("apt-cache policy se3-fond | grep \"Candidat\" | cut -d\":\" -f2");
-echo "<TD align=\"center\">$seven_version_install</TD>";
-//$seven_version_install="1";
-$seven_version_dispo = exec("apt-cache policy samba | grep \"Candidat\" | cut -d\" \" -f4");
-if ("$seven_version_install" == "$seven_version_dispo") {
-	echo "<TD align=\"center\">";
-	echo "<u onmouseover=\"return escape".gettext("('Pas de nouvelle version de samba backport disponible')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\"></u>";
-	echo "</TD>";
-} else {
-	echo "<TD align=\"center\">";
-	echo "<u onmouseover=\"return escape".gettext("('Cliquer ici pour lancer l\'installation ou la mise &#224; jour de samba backport.')")."\"><a href=\"conf_modules.php?action=change&varb=seven&valeur=1\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/warning.png\"></a></u>";
-	echo "</TD>";
-
-}
-echo "<TD align=\"center\">";
-if ($support_seven=="0") {
-	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Permet d\'activer le support des stations seven en installant une version de samba ad&#233;quate)')")."\">";
-	echo "<a href=conf_modules.php?action=change&varb=seven&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" ></a>";
-	echo "</u>";
-} else {
-	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Le support de seven est actif')")."\">";
-	echo "<IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\"></a>";
-	echo "</u>";
-}
-echo "</td></tr>\n";
+// $resultat=mysql_query("SELECT * FROM params WHERE name='support_seven'");
+// if(mysql_num_rows($resultat)==0){
+// 	$support_seven=0;
+// }
+// else{
+// 	$ligne=mysql_fetch_object($resultat);
+// 	if($ligne->value=="1"){
+// 		$support_seven=1;
+// 	}
+// 	else {
+// 		$support_seven=0;
+// 	}
+// }
+// echo "<tr><td>".gettext("Support des clients seven")."</TD>";
+// // On teste si on a bien la derniere version
+// // Cas particulier fond d'ecran n'est pas un paquet
+// $seven_version_install = exec("apt-cache policy samba | grep \"Install\" | cut -d\" \" -f4");
+// // $fond_version_dispo = exec("apt-cache policy se3-fond | grep \"Candidat\" | cut -d\":\" -f2");
+// echo "<TD align=\"center\">$seven_version_install</TD>";
+// //$seven_version_install="1";
+// $seven_version_dispo = exec("apt-cache policy samba | grep \"Candidat\" | cut -d\" \" -f4");
+// if ("$seven_version_install" == "$seven_version_dispo") {
+// 	echo "<TD align=\"center\">";
+// 	echo "<u onmouseover=\"return escape".gettext("('Pas de nouvelle version de samba backport disponible')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\"></u>";
+// 	echo "</TD>";
+// } else {
+// 	echo "<TD align=\"center\">";
+// 	echo "<u onmouseover=\"return escape".gettext("('Cliquer ici pour lancer l\'installation ou la mise &#224; jour de samba backport.')")."\"><a href=\"conf_modules.php?action=change&varb=seven&valeur=1\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/warning.png\"></a></u>";
+// 	echo "</TD>";
+// 
+// }
+// echo "<TD align=\"center\">";
+// if ($support_seven=="0") {
+// 	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Permet d\'activer le support des stations seven en installant une version de samba ad&#233;quate)')")."\">";
+// 	echo "<a href=conf_modules.php?action=change&varb=seven&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" ></a>";
+// 	echo "</u>";
+// } else {
+// 	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Le support de seven est actif')")."\">";
+// 	echo "<IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\"></a>";
+// 	echo "</u>";
+// }
+// echo "</td></tr>\n";
 
 
 
