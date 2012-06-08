@@ -131,7 +131,7 @@ if ($config==""||$config=="init") {
                     mysql_query("DELETE FROM restrictions WHERE cleID='$row[0]' AND groupe='$userGroups'");
                     
                     if ($default_page_dem != "") { 
-                        $query = "INSERT INTO restrictions VALUES('','$row[0]','$userGroups','$default_page_dem')";
+                        $query = "INSERT INTO restrictions VALUES('','$row[0]','$userGroups','$default_page_dem','')";
                         $resultat=mysql_query($query);
                     }
                     
@@ -251,19 +251,19 @@ if ($config==""||$config=="init") {
                             mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[1]'");
                             mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[2]'");
                             mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[3]'");
-                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[3]','base','')";
+                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[3]','base','','')";
                             $resultat=mysql_query($query);
-                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[1]','base','')";
+                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[1]','base','','')";
                             $resultat=mysql_query($query);
-                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[0]','base','0')";
+                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[0]','base','0','')";
                             mysql_query($query);
                              
                             break;
                         
                         case 1:
-                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[0]','base','1')";
+                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[0]','base','1','')";
                             mysql_query($query);
-                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[1]','base','$new_proxy_url')";
+                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[1]','base','$new_proxy_url','')";
                             $resultat=mysql_query($query);
                             if ($resultat == FALSE)  { 
                                 mysql_query("UPDATE restrictions set value='$new_proxy_url' where CleID='$val_cleid[1]'"); 
@@ -273,7 +273,7 @@ if ($config==""||$config=="init") {
                         
                         case 2:
                             mysql_query("UPDATE corresp set value='' WHERE cleID='$row[3]'");
-                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[3]','base','$new_proxy_url')";
+                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[3]','base','$new_proxy_url','')";
                             $resultat=mysql_query($query);
                             if ($resultat == FALSE) { 
                                 mysql_query("UPDATE restrictions set value='$new_proxy_url' where CleID='$val_cleid[3]'"); 
