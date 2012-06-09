@@ -87,7 +87,7 @@ foreach ($listes[0] as $key => $value) {
         }
     } else if ($testniveau >= "3") {
         if ((this_parc_delegate($login, $key, 'manage')) or (is_admin("computers_is_admin", $login) == "Y")) {
-            echo "<a href=\"affiche_restrictions.php?salles=$key\">$key </a>";
+            echo "<a href=\"affiche_restrictions.php?salles=$key&cat=tout\">$key </a>";
             echo $type;
             if (($type == "groupes" and  $key <> 'eleves' and $key <> 'profs' and $key <> 'base' and $key <> 'administratifs' and $key <> 'overfill') or $type == "parcs") {
                 echo "<a href=\"indexcle.php?template=$key&action=-1\"> monter </a>";
