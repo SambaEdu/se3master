@@ -325,7 +325,7 @@ foreach ($arr as $partit) {
             $result=mysql_query("SELECT CleID FROM restrictions WHERE CleID='$row[0]'");
             //echo $row[0];
             if(mysql_num_rows($result)==0){
-                    $query = "INSERT INTO restrictions VALUES('','$row[0]','overfill','$browser $urlse3')";
+                    $query = "INSERT INTO restrictions VALUES('','$row[0]','overfill','$browser $urlse3','')";
 
             } 
             else {
