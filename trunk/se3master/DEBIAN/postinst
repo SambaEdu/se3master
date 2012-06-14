@@ -41,13 +41,16 @@ case `cat /etc/debian_version` in
 	    exit 1
 	    ;;
 esac
-    
+    if [ ! -e /etc/sudoers ]; then
+		mv /etc/sudoers.se3 /etc/sudoers
+		chmod 440 /etc/sudoers
+	fi
     	cd /var/cache/se3_install/
 	if [ -f /etc/SeConfig.ph ]; then
 		echo "Voulez-vous faire la mise a jour de SambaEdu3 ? O/n"
 		read -t 20 rep || rep="o"
 		if [ "$rep" = "n" -o "$rep" = "N" ]; then
-			echo "Voulez-vous R�installer SambaEdu3 ? o/n"
+			echo "Voulez-vous Reinstaller SambaEdu3 ? o/n"
 			read rep 
 			#[ "$rep" = "o" ] && ./$install_script
 			[ "$rep" = "o" -o "$rep" = "O" ] && ./$install_script
