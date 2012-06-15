@@ -6,7 +6,7 @@ SambaEdu3 - 16 janvier 2005
 Chadefaux Philippe
 Interface d'administration de SambaEdu
 
-Ce script est distribué selon les termes de la licence GPL
+Ce script est distribuï¿½ selon les termes de la licence GPL
 
 Librairie d'outils
 ******************************************************************/
@@ -81,12 +81,12 @@ function der_inventaire($nom_machine) { // retourne la date du dernier inventair
 		}
 		
 		return $retour;
-	} else { // Pas d'inventaire à ce nom
+	} else { // Pas d'inventaire ï¿½ ce nom
 		return 0;
 	}	
 }
 
-function avoir_systemid($nom_machine) { // retourne l'ID de $nom_machine ou 0 à partir de la table hardware
+function avoir_systemid($nom_machine) { // retourne l'ID de $nom_machine ou 0 ï¿½ partir de la table hardware
         include "dbconfig.inc.php";
 	$dbnameinvent="ocsweb";
 
@@ -106,7 +106,7 @@ function avoir_systemid($nom_machine) { // retourne l'ID de $nom_machine ou 0 à 
 		}
 		
 		return $retour;
-	} else { // Pas d'inventaire à ce nom
+	} else { // Pas d'inventaire ï¿½ ce nom
 		return 0;
 	}	
 }
@@ -125,25 +125,25 @@ function type_os($nom_machine) { // retourne l'os de la machine
 		if ($ligne > 0) {
                 	while ($res = mysql_fetch_array($result)) {
 				$retour = $res["OSNAME"];
-				if (eregi('XP',$retour)) { // Pour le moment on a que 2 types d'icones 98 ou XP
+				if (preg_match('/XP/i',$retour)) { // Pour le moment on a que 2 types d'icones 98 ou XP
 					$retour="XP";
 					return $retour;
-				} elseif (eregi('2000',$retour)) {
+				} elseif (preg_match('2000',$retour)) {
 					$retour="XP";
 					return $retour;
-				} elseif (eregi('2003',$retour)) {
+				} elseif (preg_match('2003',$retour)) {
 					$retour="XP";
 					return $retour;
-				} elseif (eregi('ME',$retour)) {
+				} elseif (preg_match('/ME/i',$retour)) {
 					$retour="98";
 					return $retour;
-				} elseif (eregi('98',$retour)) {
+				} elseif (preg_match('/98/',$retour)) {
 				        $retour="98";
 					return $retour;
-				} elseif (eregi('95',$retour)) {
+				} elseif (preg_match('/95/',$retour)) {
 				         $retour="98";
 					 return $retour;
-				} elseif (eregi('Linux',$retour)) {
+				} elseif (preg_match('/Linux/i',$retour)) {
 				         $retour="Linux";
 					 return $retour;
 				} else return 0;
@@ -153,7 +153,7 @@ function type_os($nom_machine) { // retourne l'os de la machine
 			return 0;
 		}
 		
-	} else { // Pas d'inventaire à ce nom
+	} else { // Pas d'inventaire ï¿½ ce nom
 		return 0;
 	}	
 }
@@ -186,7 +186,7 @@ function test_cups() { //test si cups tourne
 	}								   
 }
 
-// pas utilisé pour le moment
+// pas utilisï¿½ pour le moment
 function start_cups() { //demarre ou stop cups
 	if (test_cups()==0) {
 		exec ("sudo /etc/init.d/cupsys start");
