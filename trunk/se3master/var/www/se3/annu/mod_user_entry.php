@@ -127,8 +127,7 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
 	}
 
 	$employeeNumber0=$employeeNumber;
-	//bug sur la regex--> mise en commentaire en attendant mieux (keyser)
-	//$employeeNumber=preg_replace("/[0-9A-Za-z]/","",$employeeNumber);
+	$employeeNumber=preg_replace("/[^0-9A-Za-z]/","",$employeeNumber);
 	
 	if($employeeNumber!=$employeeNumber0) {
 		$info_employeeNumber.="Un ou des caract&#232;res non valides ont &#233;t&#233; saisis dans le num&#233;ro '<b>$employeeNumber0</b>'";
