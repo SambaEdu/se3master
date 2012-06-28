@@ -113,7 +113,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		echo "</center>";
 	} else	{
 		// Verifie si le script existe dans /usr/share/se3/scripts-alertes
-		list($script_alert_exist, $options)=split(" ",$script_alert);
+		list($script_alert_exist, $options)=explode(" ",$script_alert);
 		if( ! file_exists("/usr/share/se3/scripts-alertes/$script_alert_exist")) {
 			echo "<center>";
 			echo gettext("Erreur le script ne semble pas exister dans /usr/share/se3/scripts-alertes");
