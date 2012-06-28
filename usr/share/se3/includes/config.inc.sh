@@ -103,6 +103,7 @@ elif [ "$VERSBOSE" == "2" ]; then
     echo "dbuser=\"${dbuser}\"" >> $fichier
     echo "dbpass=\"${dbpass}\"" >> $fichier
     chmod 700 $fichier
+    chown -R www-se3 /etc/se3
 fi
 
 
