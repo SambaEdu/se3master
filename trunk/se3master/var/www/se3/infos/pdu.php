@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
 # Taille de la sauvegarde
 # Olivier Lecluse 23/03/2001
 
-# Entête cgi
+# Entete cgi
 
 echo MIME-Version: 1.0
 echo Content-type: text/html
