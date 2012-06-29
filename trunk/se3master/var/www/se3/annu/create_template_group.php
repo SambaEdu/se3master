@@ -52,7 +52,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
 // Ajout strtolower pour passer le nom du template en minuscules		
 		$filter = strtolower($filter);
 
-		exec ("/bin/sh /usr/share/se3/scripts/createtemplateparc.sh \"$filter\" \"groupe\"",$retour);
+		exec ("/bin/bash /usr/share/se3/scripts/createtemplateparc.sh \"$filter\" \"groupe\"",$retour);
 
 		if(isset($retour)){
 			for($i=0;$i<count($retour);$i++){
