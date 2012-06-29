@@ -349,6 +349,8 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
 		if ( $userpwd && verifPwd($userpwd) ) {
 			userChangedPwd($uid, $userpwd);
 		}
+
+		echo "<p><a href='".$_SERVER['PHP_SELF']."?uid=".$uid."'>Retour</a></p>\n";
 	}
 } else {
 	echo "<div class=error_msg>".gettext("Cette fonctionnalit&#233; n&#233;cessite des droits d'administration SambaEdu !")."</div>";
