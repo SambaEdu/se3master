@@ -258,7 +258,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 						echo "<p>".gettext("Cr&#233;ation du dossier du template de parc ");
 						echo $_POST['newparc'];
 						echo "</p>";
-						exec ("/bin/sh /usr/share/se3/scripts/createtemplateparc.sh \"$newparc\"");
+						exec ("/bin/bash /usr/share/se3/scripts/createtemplateparc.sh \"$newparc\"");
 					}
 
 					echo gettext("Ajout de l'ordinateur")." $computer ".gettext("au parc")." <U>$parc</U><BR>";
@@ -308,7 +308,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			} else {
 				for($loop=0;$loop<count($parc);$loop++){
 					echo "<p>".gettext("Cr&#233;ation du dossier de template pour le parc")." $parc[$loop]</p>\n";
-					exec ("/bin/sh /usr/share/se3/scripts/createtemplateparc.sh \"$parc[$loop]\"");
+					exec ("/bin/bash /usr/share/se3/scripts/createtemplateparc.sh \"$parc[$loop]\"");
 				}
 			}
 
