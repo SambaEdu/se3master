@@ -286,7 +286,7 @@
 							*/
 							$fichier=fopen("$chemin_tmp/levee_restriction_echange_$list_classes[$loop].sh","w+");
 							if($fichier){
-								fwrite($fichier,"#!/bin/sh\n");
+								fwrite($fichier,"#!/bin/bash\n");
 								fwrite($fichier,"/usr/bin/sudo /usr/share/se3/scripts/echange_classes.sh \"$list_classes[$loop]\" \"actif\"\n");
 								chmod("$chemin_tmp/levee_restriction_echange_$list_classes[$loop].sh",0700);
 								fclose($fichier);
