@@ -245,7 +245,8 @@ function dispstats($idpers)
 
     if ($idpers):
         /* Renvoie le nombre de connexions */
-        $result=mysql_db_query("$DBAUTH","SELECT stat FROM personne WHERE id=$idpers", $authlink);
+        @mysql_select_db("$DBAUTH");
+        $result=mysql_query("SELECT stat FROM personne WHERE id=$idpers", $authlink);
     if ($result && mysql_num_rows($result)):
         $stat=mysql_result($result,0,0);
     mysql_free_result($result);
@@ -272,7 +273,8 @@ function displogin ($idpers)
 
     if ($idpers):
         /* Renvoie le timestamp du dernier login */
-        $result=mysql_db_query("$DBAUTH","SELECT date_format(last_log,'%e %m %Y � %T' ) FROM personne WHERE id=$idpers", $authlink);
+        @mysql_select_db("$DBAUTH");
+        $result=mysql_db_query("SELECT date_format(last_log,'%e %m %Y � %T' ) FROM personne WHERE id=$idpers", $authlink);
     if ($result && mysql_num_rows($result)):
         $der_log=mysql_result($result,0,0);
     mysql_free_result($result);
