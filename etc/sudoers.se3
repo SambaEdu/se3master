@@ -12,7 +12,7 @@
 # User alias specification
 
 # Cmnd alias specification
-Cmnd_Alias SE3CLONAGE=/usr/share/se3/scripts/pxe_gen_cfg.sh,/usr/share/se3/scripts/recup_rapport.php,/usr/share/se3/scripts/se3_get_sysresccd.sh,/usr/share/se3/scripts/se3_pxe_menu_ou_pas.sh,/usr/share/se3/scripts/se3_pxe_slitaz_cmdline.sh,/usr/share/se3/scripts/se3_tftp_boot_pxe.sh,/usr/share/se3/scripts/se3_tftp_menage_atq.sh,/usr/share/se3/scripts/set_password_menu_tftp.sh
+Cmnd_Alias SE3CLONAGE=/usr/share/se3/scripts/pxe_gen_cfg.sh,/usr/share/se3/scripts/recup_rapport.php,/usr/share/se3/scripts/se3_get_sysresccd.sh,/usr/share/se3/scripts/se3_pxe_menu_ou_pas.sh,/usr/share/se3/scripts/se3_pxe_slitaz_cmdline.sh,/usr/share/se3/scripts/se3_tftp_boot_pxe.sh,/usr/share/se3/scripts/se3_tftp_menage_atq.sh,/usr/share/se3/scripts/set_password_menu_tftp.sh,/usr/share/se3/scripts/se3_get_slitaz.sh,/usr/share/se3/scripts/se3_get_udpcast.sh
 Cmnd_Alias SE3DHCP=/usr/share/se3/scripts/makedhcpdconf,/usr/share/se3/scripts/move_dhcp_leases.sh
 Cmnd_Alias SE3DOMAIN=/usr/share/se3/scripts/integreDomaine.sh,/usr/share/se3/scripts/force-gpo.sh
 Cmnd_Alias MOZILLA=/usr/share/se3/scripts/modif_profil_mozilla_ff.sh,/usr/share/se3/scripts/deploy_mozilla_ff_final.sh,/usr/share/se3/scripts/deploy_mozilla_tb_final.sh
