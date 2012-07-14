@@ -125,7 +125,7 @@ INSERT INTO `params` ( `id` , `name` , `value` , `srv_id` , `descr` , `cat` )
 VALUES (
 '', 'ftpmaj', 'ftp://wawadeb.crdp.ac-caen.fr/pub/sambaedu', '0', 'Adresse de téléchargement des mises à jour', '1'
 );
-INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ("defaultintlevel","1","Niveau d'interface par défaut","1");
+INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ("defaultintlevel","3","Niveau d'interface par défaut","1");
 INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ("majzinbr","0","Indice de Mise a jour DLL VBS","4");
 INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ("xppass","","Mot de passe Administrateur sur 2000/XP","4");
 INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ("ntpserv", "ntp.ac-creteil.fr", "Serveur de temps", "1");
