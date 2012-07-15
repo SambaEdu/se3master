@@ -334,6 +334,15 @@ if [ ! "$rep" = "n" ]; then
 			read SE3PW
 			SE3PW=$(echo "$SE3PW" | sed -e 's/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g')
 		done
+	else
+		[ -z "$SE3PW" ] && SE3PW=$(makepasswd)
+			$NEWSE3PW=$(echo "$SE3PW" | sed -e 's/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g')
+			if [ "$SE3PW" !=" $NEWSE3PW" ]; then
+				echo -e "${COLERREUR}Suppression des caractères interdits :"
+				echo -e "${COLINFO}Le mot de passe adminstrateur du domaine sambaedu3 a été modifié pour $NEWSE3PW"
+				echo -e "${COLINFO}Prenez note du mot de passe et appuyer sur entree pour continuer"
+				read dum
+			fi
 	fi
 	if [ -z "$MYSQLPW" ]; then
 		echo -e "vous n'avez pas saisi de mot de passe root MySQL, celui-ci va être généré aléatoirement"
@@ -958,7 +967,7 @@ fi
 	if [ ! -e /root/.ssh/id_rsa.pub ]; then
 	    ssh-keygen -t rsa -N "" -f /root/.ssh/id_rsa -q
 	fi
-	cp /root/.ssh/id_rsa.pub /var/se3/Progs/install/installdll
+	cp /root/.ssh/id_rsa.pub /var/se3/Progs/install/
   
 	
 fi
@@ -968,23 +977,18 @@ cp -a /var/lib/samba/secrets.tdb /etc/save/
 
 # keyser modif du 4/4/05 - Config en fonction des serveur LCS / SLIS
 
-if [ "$LCS_OU_SLIS" = "yes" ]; then
+# if [ "$IFACEWEB_AUTOCONF" = "yes" ]; then
+
+
+if [ "$IFACEWEB_AUTOCONF" = "yes" -a "$LCS_IP" != "" ]; then
 
 	echo -e "$COLPARTIE"
 	echo "Section 6: "
 	echo "---------- "
 	echo -e "$COLTXT\c "
-	echo -e "Configuration automatique du positionnement de l'IP du SLIS ou LCS dans MySQL...\c "
-	if [ ! -z "$SLIS_IP" ]; then
-		echo "UPDATE params SET value=\"$SLIS_IP\" WHERE name=\"slisip\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
-		echo "UPDATE params SET value=\"$SLIS_IP\" WHERE name=\"ntpserv\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
-		echo "UPDATE params SET value=\"http://${SLIS_IP}:2000\" WHERE name=\"slis_url\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
-	else
-		if [ ! -z "$SLIS_LCS" ]; then
-			echo "UPDATE params SET value=\"$LCS_IP\" WHERE name=\"lcsip\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
-		fi
-	fi
-
+	echo -e "Configuration automatique du positionnement de l'IP LCS dans MySQL...\c "
+	echo "UPDATE params SET value=\"$LCS_IP\" WHERE name=\"lcsip\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
+	
 else
 
 	echo -e "$COLPARTIE"
@@ -1118,12 +1122,13 @@ echo -e "$COLTXT"
 echo -e "$COLTITRE"
 echo "Configuration du compte adminse3"
 echo -e "$COLTXT"
-XPPASS=`echo "SELECT value FROM params WHERE name='xppass'" | mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW -N`
+
 #saisir pass si necessaire
 # a Faire
 if [  -z "$XPPASS" ]; then
+# 	XPPASS=`echo "SELECT value FROM params WHERE name='xppass'" | mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW -N`
 	XPPASS_RDM="$(makepasswd)"
-	echo -e "${COLTXT}Lors de la jonction au domaine des machines Win 2000/XP, un compte local adminse3 sera créé.\nVeuillez saisir un mot de passe pour ce compte  [${COLDEFAUT}${XPPASS_RDM}${COLTXT}]  ${COLSAISIE}"
+	echo -e "${COLTXT}Lors de la jonction au domaine des machines Win 2000/XP, un compte local adminse3 sera créé.\nVeuillez saisir un mot de passe pour ce compte (caractères spéciaux interdits)  [${COLDEFAUT}${XPPASS_RDM}${COLTXT}]  ${COLSAISIE}"
 	read XPPASS
 	echo -e "${COLTXT}"
 	[  -z "$XPPASS" ] && XPPASS="$XPPASS_RDM"
