@@ -17,6 +17,14 @@ else
         echo "Fichier de conf inaccessible"
         exit 1
 fi
+machine=`echo "$2" | grep -e '^[0-9]*.[0-9]*.[0-9]*.[0-9]'`
+if [ -z "$machine" ]; then
+    machine=$(echo "$2" | tr 'A-Z' 'a-z')
+else
+    #machinetmp=`findsmb | grep $machine | cut -d' ' -f3`
+    machinetmp=`nmblookup -A $machine | sed -n '2p' | cut -d' ' -f1 | sed 's/^[ \t]*//;s/[ \t]*$//'`
+    machine=$(echo "$machinetmp" | tr 'A-Z' 'a-z')
+fi
 
-echo "update connexions set logouttime=now() where username='$1' and netbios_name='$2' and logouttime=0;" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
+echo "update connexions set logouttime=now() where username='$1' and netbios_name='$machine' and logouttime=0;" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
 
