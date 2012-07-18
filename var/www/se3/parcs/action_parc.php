@@ -238,19 +238,34 @@ if ((is_admin("computers_is_admin", $login) == "Y") or (is_admin("parc_can_view"
 
                         if ($suisje_printer != "1") {
                             // Inventaire
-                            $sessid = session_id();
-                            if (file_exists("/var/www/se3/includes/db_config.inc.php")) {
-                                $systemid = avoir_systemid($mpenc);
-                            }
+				//$sessid=session_id();
+				if (file_exists("/var/www/se3/includes/dbconfig.inc.php")) {
+					include_once "fonc_outils.inc.php";
+                                        $sessid=session_id();
+                                        $systemid=avoir_systemid($mpenc);
+				}
+
 
                             // Affichage du tableau
                             echo "<tr>\n";
                             // Affichage de l'icone informatique
                             echo "<td align=\"center\">\n";
                             if (isset($systemid)) {
-                                echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/computer.png\" onclick=\"popuprecherche('../ocsreports/machine.php?sessid=$sessid&amp;systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=500');\"  title=\"Station\" alt=\"Station\"></td>\n";
+                                // Type d'icone en fonction de l'OS - modif keyser
+                                    $retourOs = type_os($mpenc);
+                                    if($retourOs == "0") { $icone="computer_disable.png"; }
+                                    elseif($retourOs == "Linux") { $icone="linux.png"; }
+                                    elseif($retourOs == "XP") { $icone="winxp.png"; }
+                                    elseif($retourOs == "98") { $icone="win.png"; }
+                                    else { $icone="computer_disable.png"; }
+                                    $ip=avoir_ip($mpenc);
+                                    echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"".$retourOs." - ".$ip."\" alt=\"$retourOs\" WIDTH=20 HEIGHT=20 onclick=\"popuprecherche('../ocsreports/machine.php?sessid=$sessid&systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=500');\">";
+
+                                //echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/computer.png\" onclick=\"popuprecherche('../ocsreports/machine.php?sessid=$sessid&amp;systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=500');\"  title=\"Station\" alt=\"Station\"></td>\n";
                             } else {
-                                echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/computer.png\" title=\"Station\" alt=\"Station\"></td>\n";
+                                echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/computer_disable.png\" alt=\"Ordinateur\" WIDTH=20 HEIGHT=20 >";
+
+                                //echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/computer.png\" title=\"Station\" alt=\"Station\"></td>\n";
                             }
                             echo "<td align=center ><a href=show_histo.php?selectionne=2&amp;mpenc=$mp_en_cours>$mp_en_cours</a></td>\n";
                             echo "<td align=center>\n";
