@@ -27,8 +27,18 @@ corrige_mac_si_ip_change="y"
 
 # Parametres du script
 user=$1
-machine=$(echo "$2" | tr 'A-Z' 'a-z')
+
+# contrib Jacky chabanon 
+machine=`echo "$2" | grep -e '^[0-9]*.[0-9]*.[0-9]*.[0-9]'`
+if [ -z "$machine" ]; then
+    machine=$(echo "$2" | tr 'A-Z' 'a-z')
+else
+    machinetmp=`nmblookup -A $machine | sed -n '2p' | cut -d' ' -f1 | sed 's/^[ \t]*//;s/[ \t]*$//'`
+    machine=$(echo "$machinetmp" | tr 'A-Z' 'a-z')
+fi
+
 ip=$3
+
 if [ "$machine" == "clone" ]; then
     exit 0
 fi
@@ -48,11 +58,16 @@ SE3LOG=$DOSS_SE3LOG/connexions.log
 
 GET_MAC_FROM_IP()
 {
-	if [ -z "$newmac" ]; then
-    	nmblookup -A $1 | awk  '/MAC Address/ {print  $4}' | sed -e "s/-/:/g"
-    else
-        echo $newmac
-    fi
+if [ -z "$newmac" ]; then
+	newmac=$(nmblookup -A $1 | awk  '/MAC Address/ {print  $4}' | sed -e "s/-/:/g")
+	if [ "$newmac" == "00:00:00:00:00:00" ]; then 
+		newmac=$(arp $1 | awk '/ether/ { print $3}')
+	fi
+	echo $newmac
+	
+else
+       	echo $newmac
+fi
 }
 
 VIRE_DN()
