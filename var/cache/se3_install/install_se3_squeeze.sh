@@ -6,19 +6,7 @@
 # Ce script est diftribué selon les termes de la licence GPL
 # **********************************************************
 
-# Adaptation pour lenny keyser - Mars 2010
-# Activation mode debug
-# Ajout test carte rezo != eth0
-# modif PHPINI="/etc/php5/apache2/php.ini"
-# modif conf ldap pour utiliser script mkSlapdCfonf.sh
-# LDAPGRP="root" averifier
-# modif mrtg
-# modif $INITDAPACHE
-
-#$Id: install_se3_.sh 3911 2009-05-15 07:28:41Z gnumdk $
-
-# todo
-# déplacer la section clamav dans le postinst se3-clamav
+# Adaptation pour squeeze keyser - 2012
 
 #mode debug
 #touch /root/debug
@@ -149,12 +137,8 @@ case $DEBVER in
 	echo "Version Debian inconnue"
 	;;
 esac
-#if [ "$DEBVER" = "5.0.4" ]; then
-#	echo "Debian lenny détectée."
-#fi
 
-
-################# Detection de la disquette de conf auto ############
+################# Detection de la conf auto ############
 
 if [ -e /etc/se3/setup_se3.data ]; then
 	echo -e "${COLTXT}Un script de configuration automatique a été détecté .... ;) "
@@ -286,6 +270,7 @@ echo "---------- "
 echo -e "$COLTXT\c "
 if [ "$CONFSE3" = "yes" ]; then
 	rep="y"
+	sleep 3
 else
 	echo -e "Voulez-vous configurer SambaEdu3 ? (${COLCHOIX}O/n${COLTXT}) $COLSAISIE\c "
 	read rep
@@ -352,6 +337,7 @@ if [ ! "$rep" = "n" ]; then
 	fi
 	echo -e "$COLCMD\c "
 	mysqladmin password $MYSQLPW && echo -e "${COLINFO}Le mot de passe root MySQL a été initialisé à $MYSQLPW"
+	sleep 2
 	echo "[client]">/root/.my.cnf
 	echo "password=$MYSQLPW">>/root/.my.cnf
 	echo "user=root">>/root/.my.cnf
@@ -674,6 +660,7 @@ if [ "$SLAPD_AUTOCONF" = "yes" ]; then
 	echo -e "$COLTXT\c "
 	echo -e "Configuration automatique de SLAPD sur le serveur SE3...."
 	rep="y"
+	sleep 2
 else
 	echo -e "$COLTITRE\c "
 	echo "Récapitulatif de la configuration LDAP"
@@ -743,6 +730,7 @@ if [ "$SLAPD_AUTOCONF" = "yes" ]; then
 	echo "---------- "
 	echo -e "$COLTXT\c "
 	echo -e "Intégration des données dans l'annuaire...."
+	sleep 2
 else
 	echo -e "$COLPARTIE"
 	echo "Section 4: "
@@ -825,6 +813,7 @@ if [ "$SMB_AUTOCONF" = "yes" ]; then
 	echo "---------- "
 	echo -e "$COLTXT\c "
 	echo -e "Configuration automatique de Samba ...."
+	sleep 2
 else
 
 	echo -e "$COLPARTIE"
@@ -987,6 +976,7 @@ if [ "$IFACEWEB_AUTOCONF" = "yes" -a "$LCS_IP" != "" ]; then
 	echo "---------- "
 	echo -e "$COLTXT\c "
 	echo -e "Configuration automatique du positionnement de l'IP LCS dans MySQL...\c "
+	sleep 1
 	echo "UPDATE params SET value=\"$LCS_IP\" WHERE name=\"lcsip\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 	
 else
@@ -1079,6 +1069,12 @@ fi
 
 [ ! -z `getent group | grep "lcs-users:x:108"` ] && /usr/share/se3/sbin/se3_modif_gidNumber.sh
 
+echo -e "$COLPARTIE"
+	echo "Section 7: "
+	echo "---------- "
+	echo -e "$COLTXT\c "
+	echo -e "Activation des quotas disques \c "
+	sleep 1
 /usr/share/se3/sbin/install_quotas.sh
 
 ### ajout keyser  version 1.0 ###
@@ -1105,7 +1101,13 @@ setfacl -m d:o::rwx /var/se3/Progs/rw
 rm  -f /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 
 # Instanciation
-echo "Instanciation en cours..."
+echo -e "$COLPARTIE"
+	echo "Section 8: "
+	echo "---------- "
+	echo -e "$COLTXT\c "
+	echo -e "Instanciation initiale du serveur... \c "
+	sleep 1
+
 /usr/share/se3/sbin/instance_se3.sh 
 
 # Relance apache2se
@@ -1116,13 +1118,15 @@ echo -e "$COLTXT"
 
 
 # installation script intégration clients linux - deplace ds se3-domain
+echo -e "$COLPARTIE"
+	echo "Section 9: "
+	echo "---------- "
+	echo -e "$COLTXT\c "
+	echo -e "Configuration du compte adminse3... \c "
+	sleep 1
 
 
-# installation des zorn tools
-echo -e "$COLTITRE"
-echo "Configuration du compte adminse3"
-echo -e "$COLTXT"
-
+XPPASS="$ADMINSE3PW"
 #saisir pass si necessaire
 # a Faire
 if [  -z "$XPPASS" ]; then
@@ -1133,11 +1137,20 @@ if [  -z "$XPPASS" ]; then
 	echo -e "${COLTXT}"
 	[  -z "$XPPASS" ] && XPPASS="$XPPASS_RDM"
 	echo "UPDATE params SET value=\"$XPPASS\" WHERE name=\"xppass\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
+	echo -e "${COLINFO}Le mot de passe adminse3 a été initialisé à $XPPASS dans la BDD"
+	echo -e "$COLTXT\c "
 fi
+
 
 ### Creation adminse3 dans annuaire et mise en place privileges admin-adminse3 pour mise au domaine
 /usr/share/se3/sbin/create_adminse3.sh
 
+echo -e "$COLPARTIE"
+	echo "Section 10: "
+	echo "---------- "
+	echo -e "$COLTXT\c "
+	echo -e "Mise en place des droits et configuration finale... \c "
+	sleep 1
 ### remise en place des droits par défaut
 /usr/share/se3/scripts/permse3
 
