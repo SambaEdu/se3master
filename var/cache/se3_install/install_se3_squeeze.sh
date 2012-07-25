@@ -322,7 +322,7 @@ if [ ! "$rep" = "n" ]; then
 	else
 		[ -z "$SE3PW" ] && SE3PW=$(makepasswd)
 			$NEWSE3PW=$(echo "$SE3PW" | sed -e 's/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g')
-			if [ "$SE3PW" !=" $NEWSE3PW" ]; then
+			if [ "$SE3PW" !="$NEWSE3PW" ]; then
 				echo -e "${COLERREUR}Suppression des caractères interdits :"
 				echo -e "${COLINFO}Le mot de passe adminstrateur du domaine sambaedu3 a été modifié pour $NEWSE3PW"
 				echo -e "${COLINFO}Prenez note du mot de passe et appuyer sur entree pour continuer"
@@ -1136,10 +1136,10 @@ if [  -z "$XPPASS" ]; then
 	read XPPASS
 	echo -e "${COLTXT}"
 	[  -z "$XPPASS" ] && XPPASS="$XPPASS_RDM"
-	echo "UPDATE params SET value=\"$XPPASS\" WHERE name=\"xppass\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
-	echo -e "${COLINFO}Le mot de passe adminse3 a été initialisé à $XPPASS dans la BDD"
-	echo -e "$COLTXT\c "
 fi
+echo "UPDATE params SET value=\"$XPPASS\" WHERE name=\"xppass\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
+echo -e "${COLINFO}Le mot de passe adminse3 a été initialisé à $XPPASS dans la BDD"
+echo -e "$COLTXT\c "
 
 
 ### Creation adminse3 dans annuaire et mise en place privileges admin-adminse3 pour mise au domaine
