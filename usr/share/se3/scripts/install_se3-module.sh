@@ -369,6 +369,30 @@ touch $chemin_param_fond/install_ok.txt
 fi
 
 ;;
+
+
+# Installation du paquet se3-clients-linux
+"se3-clients-linux")
+    # On vérifie que le serveur NTP fourni dans la configuration du Se3
+    # est bien valide.
+    fichier="/etc/se3/config_c.cache.sh"
+    SERVEUR_NTP=$(grep -E '^ntpserv=' "$fichier" | cut -d'=' -f'2-' | tr -d '"')
+    if [ -z "$SERVEUR_NTP" ]; then
+        echo "Désolé, le nom du serveur NTP récupéré dans le fichier \"$fichier\" est vide."
+        exit 1
+    else
+        if ! ntpdate "$SERVEUR_NTP" > /dev/null 2>&1; then
+            echo "Désolé, mais le serveur NTP dont le nom a été récupéré" \
+                 "dans le fichier \"$fichier\" ne semble pas fonctionner."
+            exit 1
+        fi
+    fi
+    install_module
+    ;;
+
+
+
+
 *)
 echo "Le module $SE3MODULE n'existe pas ou n'est pas pris en charge par se3 pour le moment" | tee -a $REPORT_FILE
 MAIL_REPORT
