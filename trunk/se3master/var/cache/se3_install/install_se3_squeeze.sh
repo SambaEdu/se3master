@@ -1149,6 +1149,16 @@ if [  -z "$XPPASS" ]; then
 	echo -e "${COLTXT}"
 	[  -z "$XPPASS" ] && XPPASS="$XPPASS_RDM"
 fi
+
+NEWXPPASS=$(echo "$XPPASS" | sed -e 's/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g')
+if [ "$XPPASS" != "$NEWXPPASS" ]; then
+		echo -e "${COLERREUR}Suppression des caractères interdits :"
+		echo -e "${COLINFO}Le mot de passe root mysqla été modifié pour $NEWXPPASS"
+		sleep 2
+		XPPASS="$NEWXPPASS"
+fi
+
+
 echo "UPDATE params SET value=\"$XPPASS\" WHERE name=\"xppass\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 echo -e "${COLINFO}Le mot de passe adminse3 a été initialisé à $XPPASS dans la BDD"
 echo -e "$COLTXT\c "
