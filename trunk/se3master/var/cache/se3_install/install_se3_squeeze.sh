@@ -320,21 +320,33 @@ if [ ! "$rep" = "n" ]; then
 			SE3PW=$(echo "$SE3PW" | sed -e 's/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g')
 		done
 	else
-		[ -z "$SE3PW" ] && SE3PW=$(makepasswd)
-			$NEWSE3PW=$(echo "$SE3PW" | sed -e 's/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g')
-			if [ "$SE3PW" !="$NEWSE3PW" ]; then
-				echo -e "${COLERREUR}Suppression des caractères interdits :"
-				echo -e "${COLINFO}Le mot de passe adminstrateur du domaine sambaedu3 a été modifié pour $NEWSE3PW"
-				echo -e "${COLINFO}Prenez note du mot de passe et appuyer sur entree pour continuer"
-				read dum
-			fi
+		if [ -z "$SE3PW" ]; then 
+			SE3PW=$(makepasswd)
+		fi
+		NEWSE3PW=$(echo "$SE3PW" | sed -e 's/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g')
+		if [ "$SE3PW" != "$NEWSE3PW" ]; then
+			echo -e "${COLERREUR}Suppression des caractères interdits :"
+			echo -e "${COLINFO}Le mot de passe adminstrateur du domaine sambaedu3 a été modifié pour $NEWSE3PW"
+			echo -e "${COLINFO}Prenez note du mot de passe et appuyer sur entree pour continuer"
+			read dum
+			SE3PW="$NEWSE3PW"
+		fi
 	fi
+	
 	if [ -z "$MYSQLPW" ]; then
-		echo -e "vous n'avez pas saisi de mot de passe root MySQL, celui-ci va être généré aléatoirement"
-		MYSQLPW=`date | md5sum | cut -c 1-6 | sed -e s'/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g'`
 		MYSQLPW=$(makepasswd)
+		echo -e "vous n'avez pas saisi de mot de passe root MySQL, celui-ci va être généré aléatoirement"
 		echo "$MYSQLPW"
 	fi
+	
+	NEWMYSQLPW=$(echo "$MYSQLPW" | sed -e 's/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g')
+	if [ "$MYSQLPW" != "$NEWMYSQLPW" ]; then
+		echo -e "${COLERREUR}Suppression des caractères interdits :"
+		echo -e "${COLINFO}Le mot de passe root mysqla été modifié pour $NEWMYSQLPW"
+		MYSQLPW="$NEWMYSQLPW"
+	fi
+
+
 	echo -e "$COLCMD\c "
 	mysqladmin password $MYSQLPW && echo -e "${COLINFO}Le mot de passe root MySQL a été initialisé à $MYSQLPW"
 	sleep 2
