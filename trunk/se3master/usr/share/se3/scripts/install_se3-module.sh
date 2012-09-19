@@ -219,7 +219,7 @@ se3-dhcp)
 		# Activation dans l'interfesse
 		mysql -h $dbhost -u $dbuser -p$dbpass -D $dbname -e "UPDATE params SET value='1' WHERE name='dhcp';"
 
-		# restauration de l'état précédent du dhcp si necessaire
+		# restauration de l'etat precedent du dhcp si necessaire
 		# [ -e /root/dhcpd.conf ] && mv /root/dhcpd.conf /etc/dhcp3/dhcpd.conf
 		# [ ! -z $DHCP_ON_BOOT ] && /usr/sbin/update-rc.d dhcp3-server default
 
@@ -372,17 +372,17 @@ fi
 
 
 # Installation du paquet se3-clients-linux
-"se3-clients-linux")
-    # On vérifie que le serveur NTP fourni dans la configuration du Se3
+se3-clients-linux)
+    # On verifie que le serveur NTP fourni dans la configuration du Se3
     # est bien valide.
     fichier="/etc/se3/config_c.cache.sh"
     SERVEUR_NTP=$(grep -E '^ntpserv=' "$fichier" | cut -d'=' -f'2-' | tr -d '"')
     if [ -z "$SERVEUR_NTP" ]; then
-        echo "Désolé, le nom du serveur NTP récupéré dans le fichier \"$fichier\" est vide."
+        echo "Desole, le nom du serveur NTP recupere dans le fichier \"$fichier\" est vide."
         exit 1
     else
         if ! ntpdate "$SERVEUR_NTP" > /dev/null 2>&1; then
-            echo "Désolé, mais le serveur NTP dont le nom a été récupéré" \
+            echo "Desole, mais le serveur NTP dont le nom a ete recupere" \
                  "dans le fichier \"$fichier\" ne semble pas fonctionner."
             exit 1
         fi
