@@ -305,13 +305,13 @@ if ($_GET['action'] == "change") {
 			echo $valeur_linux;
 			$resultat=mysql_query("SELECT * FROM params WHERE name='support_linux'");
 			if(mysql_num_rows($resultat)==0){
-				$sql = "INSERT INTO params VALUES('','support_linux','$valeur_linux','','Installation du backport se3-clients-linux pour linux','6')";
+				$sql = "INSERT INTO params VALUES('','support_linux','$valeur_linux','','Installation du paquet se3-clients-linux','6')";
 			} else {
 				$sql = "UPDATE params SET value='$valeur_linux' where name='support_linux'";
 			}
 
 			if ($valeur_linux == 1) {
-				system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-clients-linux",$return);
+				system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-clients-linux 2>&1",$return);
 				if($return==0) {
 				mysql_query($sql);
 				echo "Support linux activ&#233;.<br>\n";
