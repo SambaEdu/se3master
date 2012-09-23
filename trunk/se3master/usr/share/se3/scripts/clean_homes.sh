@@ -27,7 +27,7 @@ function usage {
 
 function ldap_status {
 
-if [ ! -e /var/run/slapd.pid ];then
+if [ ! -e /var/run/slapd/slapd.pid ];then
 	echo "ERREUR: Le serveur ldap ne semble pas fonctionner"
 	echo "Interuption du script"
 	exit 1
