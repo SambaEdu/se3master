@@ -28,8 +28,10 @@ corrige_mac_si_ip_change="y"
 # Parametres du script
 user=$1
 
-# contrib Jacky chabanon 
-machine=`echo "$2" | grep -e '^[0-9]*.[0-9]*.[0-9]*.[0-9]'`
+# test pour les clients linux
+regex_ip='^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$'
+machine=$(echo "$2" | grep -E "$regex_ip")
+
 if [ -z "$machine" ]; then
     machine=$(echo "$2" | tr 'A-Z' 'a-z')
 else
