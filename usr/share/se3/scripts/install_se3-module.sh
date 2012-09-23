@@ -132,6 +132,26 @@ if ( ! wget -q --output-document=/dev/null 'ftp://wawadeb.crdp.ac-caen.fr/welcom
 	exit 1
 fi
 }
+
+verif_install()
+{
+mod_install=$(apt-cache policy $1 | grep "Install" | cut -d" " -f4)
+mod_candidat=$(apt-cache policy $1 | grep "Candidat" | cut -d" " -f4)
+
+if [ -z "$mod_candidat" ]; then
+echo "Installation de $1 impossible, module non disponible sur le depot !!!" tee -a $REPORT_FILE
+exit 1
+fi
+
+
+if [ "$mod_install" == "$mod_candidat" ]; then
+	echo "Installation de $1 $mod_install Ok !" tee -a $REPORT_FILE
+else
+	echo "Installation de $1 $mod_install KO !!!!\nAbandon !" tee -a $REPORT_FILE
+	exit 1
+fi
+}
+
 install_module()
 {
 echo "Installation ou MAJ de $SE3MODULE" | tee -a $REPORT_FILE
@@ -143,14 +163,20 @@ echo "" | tee -a $REPORT_FILE
 
 echo "Installation du paquet $SE3MODULE et de ses dependances" | tee -a $REPORT_FILE
 LC_ALL=C apt-get install $SE3MODULE -y --force-yes $opt | tee -a $REPORT_FILE
+
+verif_install $SE3MODULE 
+
+
 if [ ! -z "$M2" ]; then
 echo "Installation du paquet complementaire $M2" | tee -a $REPORT_FILE
 LC_ALL=C apt-get install $M2 -y --force-yes $opt | tee -a $REPORT_FILE
+verif_install $M2
 fi
 
 if [ ! -z "$M3" ]; then
 echo "Installation du paquet complementaire $M3" | tee -a $REPORT_FILE
 LC_ALL=C apt-get install $M3 -y --force-yes $opt | tee -a $REPORT_FILE
+verif_install $M3
 fi
 
 # L'envoi d'un mail est superflu
@@ -162,11 +188,6 @@ remove_module()
 echo "Supression de $SE3MODULE" | tee -a $REPORT_FILE
 apt-get remove $SE3MODULE -y | tee -a $REPORT_FILE
 }
-
-if [ "$nomaj" == "1" ]; then
-echo "systeme de maj non disponible pour le moment"
-exit 0
-fi
 
 
 ## on installe quoi comme module ?
@@ -322,22 +343,23 @@ if [ "$remove" ==  "1" ]; then
 fi
 
 ;;
-se3-seven)
-echo "Installation ou MAJ du support seven (samba backport)" | tee -a $REPORT_FILE
-LINE_TEST
-TEST_LOCK
-echo "deb http://backports.debian.org/debian-backports lenny-backports main" > /etc/apt/sources.list.d/smb_backport.list
-echo "Mise a jour de la liste des paquets disponibles ....." | tee -a $REPORT_FILE
-apt-get update -qq && (echo "Liste mise a jour avec succes" | tee -a $REPORT_FILE)
-echo "" | tee -a $REPORT_FILE
-
-echo "Installation du paquet Samba et de ses dependances" | tee -a $REPORT_FILE
-echo "Dpkg::Options {\"--force-confnew\";}" > /etc/apt/apt.conf
-apt-get -t lenny-backports install samba -y --force-yes $opt 2>&1 | tee -a $REPORT_FILE 
-apt-get -t lenny-backports install samba-common-bin -y --force-yes $opt 2>&1 | tee -a $REPORT_FILE 
-rm -f /etc/apt/apt.conf
-MAIL_REPORT
-;;
+# 
+# se3-seven) inutile sous squeeze !
+# echo "Installation ou MAJ du support seven (samba backport)" | tee -a $REPORT_FILE
+# LINE_TEST
+# TEST_LOCK
+# echo "deb http://backports.debian.org/debian-backports lenny-backports main" > /etc/apt/sources.list.d/smb_backport.list
+# echo "Mise a jour de la liste des paquets disponibles ....." | tee -a $REPORT_FILE
+# apt-get update -qq && (echo "Liste mise a jour avec succes" | tee -a $REPORT_FILE)
+# echo "" | tee -a $REPORT_FILE
+# 
+# echo "Installation du paquet Samba et de ses dependances" | tee -a $REPORT_FILE
+# echo "Dpkg::Options {\"--force-confnew\";}" > /etc/apt/apt.conf
+# apt-get -t lenny-backports install samba -y --force-yes $opt 2>&1 | tee -a $REPORT_FILE 
+# apt-get -t lenny-backports install samba-common-bin -y --force-yes $opt 2>&1 | tee -a $REPORT_FILE 
+# rm -f /etc/apt/apt.conf
+# MAIL_REPORT
+# ;;
 
 se3-fondecran)
 SE3MODULE="gsfonts"
