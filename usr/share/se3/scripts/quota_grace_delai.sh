@@ -7,14 +7,13 @@
 #
 
 grep xfs /etc/fstab >/dev/null
-if [ "$?" == "0" ]
-then
+if [ "$?" = "0" ]; then
         SET_QUOTA="/usr/sbin/setquota -F xfs"
 else
         SET_QUOTA="/usr/sbin/setquota"
 fi
 
-if [ $# -ne 2 -o "$1" = "--help" -o "$1" = "-h"]; then
+if [ $# -ne 2 -o "$1" = "--help" -o "$1" = "-h" ]; then
 #echo "Le nombre d'arguments du script est incorrect!"
 echo 
 echo "Passer en arguments dans l'ordre :"
@@ -31,7 +30,7 @@ fi
 test "$1" -gt 0 -o "$1" -eq 0 2>/dev/null
 # Un entier positif est soit égal à 0 soit plus grand que 0.
 
-if [ $? -ne "0" ] ; then
+if [ $? -ne "0" ]; then
 echo "ERREUR DE SYNTAXE:"
 echo
 echo "Ce script n'admet, comme 1er argument, qu'un nombre de jours (entier positif)!"
@@ -39,7 +38,7 @@ echo
 exit 1
 fi
 
-if [ ! $2 == "/home" -a ! $2 == "/var/se3" ] ; then
+if [ ! $2 = "/home" -a ! $2 = "/var/se3" ] ; then
 echo "ERREUR DE SYNTAXE:"
 echo
 echo "Ce script n'admet, comme 2eme argument, que:"
@@ -49,7 +48,7 @@ exit 1
 fi
 
 #teste l'install du paquet quota
-if [ -ne /usr/sbin/setquota ]; then
+if [ ! -f /usr/sbin/setquota ]; then
 ERREUR "Le paquet quota n'est pas installé.\nEffectuez:\n\tapt-get update\n\tapt-get install quota"
 exit 1
 fi

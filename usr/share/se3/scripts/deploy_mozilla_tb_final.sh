@@ -53,7 +53,7 @@ AIDE()
 
 }
 
-if [ "$1" == "--help" -o "$1" == "-h" -o "$1" == "" ]
+if [ "$1"  "--help" -o "$1"  "-h" -o "$1"  "" ]
 then
 AIDE
 fi
@@ -65,7 +65,7 @@ fi
 
 OPTION="$2"
 
-if [ "$OPTION" != "force_move" -o "$OPTION" == "no_move" ]
+if [ "$OPTION" != "force_move" -o "$OPTION"  "no_move" ]
 then
 AIDE
 fi
@@ -98,7 +98,7 @@ lcsIp=`echo "SELECT value FROM params WHERE name='lcsIp'" | mysql -h $dbhost $db
 # Les compte crees par les utilisateurs seront ignorés
 CHEMIN_TB_SOURCE="${path2UserSkel}/profil/appdata/Thunderbird"
 
-if [ "$1" == "all" ]; then
+if [ "$1"  "all" ]; then
 	list=$(ls /home | grep -v netlogon | grep -v templates)
 else
 
@@ -255,16 +255,16 @@ do
 					fi
 				fi
 
-				if [ "$PROFIL_DEL" == "ok" ]; then
+				if [ "$PROFIL_DEL"  "ok" ]; then
 					rm -rf $CHEMIN_TB_CIBLE
 				fi
 
-				if [ "$OPTION" == "force_move" -a "$PROFIL_DEL" != "ok" ]; then
+				if [ "$OPTION"  "force_move" -a "$PROFIL_DEL" != "ok" ]; then
 					echo "<font color=red>On écrase le profil existant mais on sauvegarde sur ${CHEMIN_TB_CIBLE}_sauve_${LADATE} </font><br>"
  					mv $CHEMIN_TB_CIBLE ${CHEMIN_TB_CIBLE}_sauve_${LADATE}
 				fi
 notifier
-				if [ "$PROFIL_DEL" == "ok" -o "$OPTION" == "force_move" ]; then
+				if [ "$PROFIL_DEL"  "ok" -o "$OPTION"  "force_move" ]; then
 						echo "Le profil TB de <A HREF="/annu/people.php?uid=$user">$user</A> est régénéré avec les paramètres $MAIL <br>"
 						#echo ""
 

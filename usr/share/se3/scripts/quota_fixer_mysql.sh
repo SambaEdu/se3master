@@ -183,7 +183,7 @@ fi
 fi
 
 # securite et correctif pour eviter un quota sur les comptes importants :
-if [ "$user" == "admin" -o "$user" == "adminse3" -o "$user" == "root" -o "$user" == "www-se3" ]; then
+if [ "$user" = "admin" -o "$user" = "adminse3" -o "$user" = "root" -o "$user" = "www-se3" ]; then
 	#user est un compte systeme : on imposte un quota 0. CORRECTIF du 26/09/10 pour effet retroactif sur le compte adminse3 qui n'etait pas protege.
 	qsoft=0
 	qhard=0
@@ -203,7 +203,7 @@ done
 
 CREER_FICHIER()
 {
-    if [ "$2" == "/home" ]; then
+    if [ "$2" = "/home" ]; then
 ### protège les serveurs vmware (essentiellement) contre la création des homes de tous les users par création d'un fichier vide sur /home
       if [ ! -e /home/$1 ] ; then
         if [ ! -e /home/quotas_tmp ]; then
@@ -239,12 +239,12 @@ quotah=$4
 [ "$partition" != "/home" -a "$partition" != "/var/se3" -a "$partition" != "Toutespartitions" ] && exit
 
 #creation de la liste des users pour lesquels il faut refixer les quotas: $liste_users
-if [ "$user_grp" == "Toutlemonde" ] ; then
+if [ "$user_grp" = "Toutlemonde" ] ; then
   
   #~ liste_users=$(ldapsearch -x -b ou=People,$BASEDN uid | grep "^dn: " | cut -d, -f1 | cut -d= -f2)
   liste_users=$(ldapsearch -x -b ou=People,$BASEDN uid | grep "^uid: " | cut -d" " -f2 | grep -v "^admin$" | grep -v "^www-se3$" | grep -v "^root$" )
   #~ type="g"
-  if [ "$2" == "Toutespartitions" ]; then
+  if [ "$2" = "Toutespartitions" ]; then
     partition=/home
     test_exist_user=`echo "SELECT nom FROM quotas WHERE type=\"u\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
     #liste les groupes qui ont encore un quota affecté après les changements -> on regardera si $user appartient à chacun d'eux
@@ -296,7 +296,7 @@ else
           echo "SUPPRESSION DES QUOTAS SUR $user_grp: RECALCUL DES QUOTAS EN FONCTION DES APPARTENANCES A D'AUTRES GROUPES."
 
 	# PATCH pour suppression des users-groupes ayant disparu de l'annuaire : on supprime toute référence de tout "type" dans la table.
-	if [ "$ERREURFLAG" == "1" ]; then
+	if [ "$ERREURFLAG" = "1" ]; then
 		`echo "DELETE FROM quotas WHERE nom=\"$user_grp\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 	else
 		# dans ce cas, on sait si type=u ou g, on supprime uniquement l'entrée correspondante. (un groupe et un utilisateur peuvent avoir le meme nom)
@@ -305,7 +305,7 @@ else
   fi
 
 # PATCH pour suppression des users-groupes ayant disparu de l'annuaire
-[ "$ERREURFLAG" == "1" ] && echo ERREUR "Sortie."  
+[ "$ERREURFLAG" = "1" ] && echo ERREUR "Sortie."  
 
   # on empeche les betises !
   liste_users="$(echo "$liste_users" | grep -v "^admin$" | grep -v "^adminse3$" | grep -v "^www-se3$" | grep -v "^root$" )"
@@ -329,7 +329,7 @@ else
   #liste les groupes qui ont encore un quota affecté après les changements -> on regardera si $user appartient à chacun d'eux
   #liste_groupes=`echo "SELECT nom FROM quotas WHERE type=\"g\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
   
-  if [ "$2" == "Toutespartitions" ]; then
+  if [ "$2" = "Toutespartitions" ]; then
     partition=/home
     test_exist_user=`echo "SELECT nom FROM quotas WHERE type=\"u\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
     #liste les groupes qui ont encore un quota affecté après les changements -> on regardera si $user appartient à chacun d'eux
