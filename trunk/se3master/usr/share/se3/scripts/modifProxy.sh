@@ -54,11 +54,11 @@ PREF_JS_FF="/etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs
 
 if [ -n "$PROXY" ]; then
 
-	if [ "$slisip" == "$PROXY"  ];	then
+	if [ "$slisip" = "$PROXY"  ];	then
 		SETMYSQL proxy_url "http://$slisip/cgi-bin/slis.pac" "url du proxy pour le navigateur" 1
 		SETMYSQL proxy_type "2" "type du proxy (param IE / aucun / manuel / url auto" 1
 	else
-		if [ "$dhcp" == "1" ]; then 
+		if [ "$dhcp" = "1" ]; then 
 			/usr/share/se3/scripts/makedhcpdconf 
 			SETMYSQL proxy_url "http://$se3ip/se3.pac" "url du proxy pour le navigateur" 1
 			SETMYSQL proxy_type "2" "type du proxy (param IE / aucun / manuel / url auto" 1

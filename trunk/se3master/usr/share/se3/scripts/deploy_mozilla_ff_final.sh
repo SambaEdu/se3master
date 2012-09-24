@@ -6,7 +6,7 @@
 # franck molle 10/2011
 
 
-if [ "$1" == "-h" -o "$1" == "--help" ]
+if [ "$1" = "-h" -o "$1" = "--help" ]
 then
 	echo "Script permettant de ventiler les profils firefox en tenant compte de la presence d'un slis ou non"
 	echo "Si l'ip du slis est déclarée dans l'interface, le proxy sera déclaré dans le pref.js des clients"
@@ -19,7 +19,7 @@ LADATE=$(date +%D_%Hh%M | sed -e "s!/!_!g")
 WWWPATH="/var/www"
 
 
-if [ "$1" == "shedule" ]; then 
+if [ "$1" = "shedule" ]; then 
 	at now +1 minute -f $0  
 	exit 0
 fi
@@ -32,7 +32,7 @@ mkdir -p /var/se3/save
 #/usr/share/se3/includes/config.inc.sh -cm
 
 
-if [ "$1" == "refparams" ]; then 
+if [ "$1" = "refparams" ]; then 
 	exit 0
 fi
 
