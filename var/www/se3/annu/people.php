@@ -230,6 +230,11 @@ echo "<table width=\"80%\"><tr><td>";
 
   		echo "</ul>\n";
   	}
+	
+	//modif proposee par Laurent COOPER
+	if ((are_you_in_group($user["uid"],"Profs")=="true") && file_exists("/var/www/se3/annu/teacher.php")) {
+	echo " \n <ul style=\"color:red;\"> \n <li> <a href=\"teacher.php\"> Mes services </a> </li> </ul>\n";
+	}
 
 	// Affichage des photos si presence du trombinoscope
         $tab_type=array("gif","png","jpg","jepg");
