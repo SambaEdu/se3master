@@ -116,7 +116,11 @@ if (isset($quota) or isset($suppr)) {
 				$uids = search_uids ("(cn=".$grp.")");
 				$people = search_people_groups ($uids,"(sn=*)","cat");
 				$nbr_user=$nbr_user+count($people);
-				system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $grp $partition $quota $[$quota *($depassement+100)/100] \n\" >> /tmp/$nomscript");
+				//system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $grp $partition $quota $[$quota *($depassement+100)/100] \n\" >> /tmp/$nomscript");
+
+				$hard_quota = (int) ($quota * ($depassement+100)/100 );
+				system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $grp $partition $quota $hard_quota \n\" >> /tmp/$nomscript");
+
 			}
   		}
 
@@ -125,7 +129,10 @@ if (isset($quota) or isset($suppr)) {
 				$uids = search_uids ("(cn=".$grp.")");
 				$people = search_people_groups ($uids,"(sn=*)","cat");
 				$nbr_user=$nbr_user+count($people);
-				system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $grp $partition $quota $[$quota *($depassement+100)/100] \n\" >> /tmp/$nomscript");
+				
+				$hard_quota = (int) ($quota * ($depassement+100)/100 );
+				system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $grp $partition $quota $hard_quota \n\" >> /tmp/$nomscript");
+
 			}
   		}
 
@@ -135,7 +142,10 @@ if (isset($quota) or isset($suppr)) {
 				$uids = search_uids ("(cn=".$grp.")");
 				$people = search_people_groups ($uids,"(sn=*)","cat");
 				$nbr_user=$nbr_user+count($people);
-				system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $grp $partition $quota $[$quota *($depassement+100)/100] \n\" >> /tmp/$nomscript");
+				
+				$hard_quota = (int) ($quota * ($depassement+100)/100 );
+				system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $grp $partition $quota $hard_quota \n\" >> /tmp/$nomscript");
+
 			}
   		}
 						   
@@ -145,7 +155,11 @@ if (isset($quota) or isset($suppr)) {
 				$uids = search_uids ("(cn=".$grp.")");
 				$people = search_people_groups ($uids,"(sn=*)","cat");
 				$nbr_user=$nbr_user+count($people);
-				system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $grp $partition $quota $[$quota *($depassement+100)/100] \n\" >> /tmp/$nomscript");
+				
+				$hard_quota = (int) ($quota * ($depassement+100)/100 );
+// 				echo $hard_quota;
+				system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $grp $partition $quota $hard_quota \n\" >> /tmp/$nomscript");
+
 			}
   		}
 	
@@ -157,7 +171,11 @@ if (isset($quota) or isset($suppr)) {
 			 	if($user!="admin" and $user!="root" and $user!="www-se3" and $user!="adminse3"){
 		 			//comme $user existe et non admin et non root => fixe le quota!
 		 			$nbr_user=$nbr_user+1;
-		 			system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $user $partition $quota $[$quota *($depassement+100)/100] \n\" >> /tmp/$nomscript");
+		 			
+					$hard_quota = (int) ($quota * ($depassement+100)/100 );
+// 					echo $hard_quota;
+					system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $grp $partition $quota $hard_quota \n\" >> /tmp/$nomscript");
+
 				}
 	 		}
   		}
@@ -165,17 +183,22 @@ if (isset($quota) or isset($suppr)) {
 }//fin du if($quota valide)
 
 //le script se supprime a la fin de son exec
-system("echo \"rm -f /tmp/$nomscript \n\" >> /tmp/$nomscript");
+//system("echo \"rm -f /tmp/$nomscript \n\" >> /tmp/$nomscript");
 chmod ("/tmp/$nomscript",0700);
 
 // on est alors dans le cas: if(isset($quota or $suppr)) donc on execute le script 
-if($nbr_user>100){
+if($nbr_user>100000){
         //execution differee d'une minute pour ne pas attendre la page trop longtemps
 	echo "<h3>".gettext("Les nouveaux quotas fix&#233;s concernant de nombreux utilisateurs")." ($nbr_user), ".gettext("ils ne seront effectifs et affich&#233;s que dans quelques minutes: pour actualiser cette page")." <a href=\"quota_fixer.php\"> ".gettext("cliquer ici")."</a></h3>\n";
-	exec("at -f /tmp/$nomscript now + 1 minute");
+	system ("echo \"#!/bin/bash\n\" > /tmp/lanceur.sh");
+	system ("echo \"/bin/bash /tmp/$nomscript\n\" >> /tmp/lanceur.sh");
+
+	chmod ("/tmp/lanceur.sh",0700);
+
+	system("at -f /tmp/lanceur.sh now + 1 minute");
 } else {
 	//execution immediate du script /root/tmp_quotas.sh
-	exec("/tmp/$nomscript");
+	exec("/tmp/$nomscript &");
 }
 
 
