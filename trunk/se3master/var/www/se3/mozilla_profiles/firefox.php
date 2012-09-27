@@ -506,7 +506,7 @@ if ($config==""||$config=="init") {
 		system("echo \"rm -f /tmp/$nomscript \n\" >> /tmp/$nomscript");
 		chmod ("/tmp/$nomscript",0700);
 		
-		if($nbr_user>50){
+		if($nbr_user>50000){
 			//execution differee d'une minute pour ne pas attendre la page trop longtemps
 			echo "<h4>".gettext("Requ&#234;te lanc&#233;e en arri&#232;re-plan d'ici &#224; 1mn")."</h4>";
 			system("at -f /tmp/$nomscript now + 1 minute");
