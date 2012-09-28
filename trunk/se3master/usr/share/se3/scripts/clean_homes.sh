@@ -10,7 +10,8 @@
 # /usr/share/se3/includes/config.inc.sh -l ----> marche pas avec le getops !!!
 . /etc/se3/config_l.cache.sh
 
-function usage {
+usage()
+{
 	echo "script permettant le nettoyage des homes et / ou /var/se3 suite bascule annuelle" 
 	echo "usage: $0 -c -d -o -m -t -s -v -h"
 	echo "       -c :  clean - supressions vieux fichiers sans proprio"
@@ -25,7 +26,8 @@ function usage {
 }
 
 
-function ldap_status {
+ldap_status()
+{
 
 if [ ! -e /var/run/slapd/slapd.pid ];then
 	echo "ERREUR: Le serveur ldap ne semble pas fonctionner"
@@ -75,13 +77,13 @@ done
 # . /usr/share/se3/includes/config.inc.sh -mlv
 
 
-if [ "$TRASH" == "1" ]; then 
+if [ "$TRASH" = "1" ]; then 
   rm -rf /home/admin/Trash_users
 fi
 
 
 
-if [ "$SHEDUL" == "1" ]; then 
+if [ "$SHEDUL" = "1" ]; then 
   at_script="/tmp/clean_homes_at.sh"
   cat > $at_script <<END
 #!/bin/bash
@@ -89,7 +91,7 @@ $0 -$opt
 END
 
   chmod 700 $at_script
-  if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then 
+  if [ "$ONLY" = "1" -o "$CLEAN" = "1" ]; then 
       at 20:00 -f $at_script
   else
       at now -f $at_script  
@@ -98,7 +100,7 @@ END
 fi
 
 
-if [ "$VARSE3" == "1" -o "$CLEAN" == "1" ]; then 
+if [ "$VARSE3" = "1" -o "$CLEAN" = "1" ]; then 
     echo "Recherche et suppression vieux fichiers sur le partage Classes"
     ldap_status
     find /var/se3/Classes/* -nouser -type f -print -exec rm -f "{}" \; 2>/dev/null
@@ -120,7 +122,7 @@ if [ "$VARSE3" == "1" -o "$CLEAN" == "1" ]; then
     find /var/se3/prof/* -nouser -type d -print -exec rmdir "{}" \; 2>/dev/null
 fi
 
-if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then 
+if [ "$ONLY" = "1" -o "$CLEAN" = "1" ]; then 
 
     if [ -e /var/run/backuppc/BackupPC.pid ]; then
 	invoke-rc.d backuppc stop
@@ -133,7 +135,7 @@ if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then
     #     find /home/ -maxdepth 4 -nouser -print -exec rm -rf "{}" \; 2>/dev/null
 
 
-    if [ "$CLEAN" == "1" ]; then 
+    if [ "$CLEAN" = "1" ]; then 
 	echo "Recherche et suppression vieux fichiers /home/admin/Trash_users"
 	find /home/admin/Trash_users -name _Trash_[0-9_]* -print -exec rm -rf "{}" \; 2>/dev/null
 	
@@ -160,7 +162,7 @@ if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then
 				if [ -z "$(getfacl $A 2>/dev/null|grep owner|grep $A)"  ]; then
 			  
 			    	echo "$A n'est pas proprio de son Home... mise en $dest."
-					if [ "$cpt" == "0" ]; then
+					if [ "$cpt" = "0" ]; then
 						mkdir -p /home/admin/Trash_users
 						chown admin:admins /home/admin/Trash_users
 						mkdir -p ${dest}
@@ -182,14 +184,14 @@ if [ "$ONLY" == "1" -o "$CLEAN" == "1" ]; then
 
     
 
-    if [ "$bpc_etat" == "1" ]; then
+    if [ "$bpc_etat" = "1" ]; then
 	    invoke-rc.d backuppc start
     fi
 
 
 
 fi
-if  [ "$DELETE" == "1" -o "$MOVE" == "1" ]; then
+if  [ "$DELETE" = "1" -o "$MOVE" = "1" ]; then
     dest=/home/admin/Trash_users/_Trash_$(date +%Y%m%d_%H%M%S)
     fich=/var/www/se3/Admin/mv_Trash_$(date +%Y%m%d%H%M%S)
     cpt=0
@@ -199,7 +201,7 @@ if  [ "$DELETE" == "1" -o "$MOVE" == "1" ]; then
     do
 	#echo "Controle de $uid"
 	  if [ -d "/home/$uid" ]; then
-		if [ "$MOVE" == "1" ]; then 
+		if [ "$MOVE" = "1" ]; then 
 		
 		    if [ "$cpt" = "0" ]; then
 			  mkdir -p /home/admin/Trash_users
@@ -239,7 +241,7 @@ if  [ "$DELETE" == "1" -o "$MOVE" == "1" ]; then
 fi
 
 
-# if [ "$BACKUP" == "1" ]; then 
+# if [ "$BACKUP" = "1" ]; then 
 # getmysql "5" $VERSBOSE /etc/se3/config_b.cache.sh
 # fi
 
