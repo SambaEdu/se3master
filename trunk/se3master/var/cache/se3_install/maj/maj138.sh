@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## $Id:$ ##
+## $Id$ ##
 
 # path fichier de logs
 LOG_DIR="/var/log/se3"
