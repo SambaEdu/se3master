@@ -25,7 +25,7 @@ sed -i 's/^skip-bdb/#skip-bdb/g'  /etc/mysql/my.cnf
 # nscd sucks !
 if [ -e /etc/init.d/nscd  ]; then
 	insserv -r nscd
-	/etc/init.d/nscdstop
+	/etc/init.d/nscd stop
 fi
 
 exit 0		
