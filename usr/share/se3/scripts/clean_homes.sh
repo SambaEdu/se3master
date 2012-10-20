@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# $Id: mv_Trash_Home.sh 6499 2011-09-22 22:36:35Z keyser $
+# $Id$
 # Script destine a gerer les comptes orphelins globalement en remplacement  de mv_Trash_Home.sh, delHome.pl 
 # Auteur: Franck Molle
 # Derniere modification: 10/2011
@@ -218,12 +218,14 @@ if  [ "$DELETE" = "1" -o "$MOVE" = "1" ]; then
 		    echo "$uid"|tee -a $fich
 		    mv /home/$uid ${dest}/
 		    chown -R admin ${dest}/$uid 
+			rm -f /var/se3/Docs/trombine/$uid.* 
 # 		   echo "mv /home/$uid ${dest}/ <br>"
 
 		    cpt=$(($cpt+1))
 		else
-		     echo  "Suppression de /home/$uid <br>"
-		     rm -fr /home/$uid 
+			echo  "Suppression de /home/$uid <br>"
+			rm -fr /home/$uid 
+			rm -f /var/se3/Docs/trombine/$uid.* 
 #  		     echo "rm -fr /home/$uid <br>" 
 	   fi
 	    
