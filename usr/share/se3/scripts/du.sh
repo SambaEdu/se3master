@@ -16,6 +16,22 @@ then
 	exit
 fi	
 
+chemin_lock="/var/lock"
+# Nom du fichier de lock:
+fich_lock="$chemin_lock/du.lck"
+
+
+/usr/bin/find $chemin_lock -name du.lock -cmin +15 -delete
+
+
+
+if [  -e "$fich_lock" ]; then
+	echo "Instance en cours.....Patientez 15 mn qu'elle se termine"
+	exit 1
+fi
+
+touch "$fich_lock"
+
 if [ ! -e $1 ]; then
   echo "Le répertoire passé en argument n'existe pas!"
   exit 1
@@ -43,3 +59,5 @@ else
   
   echo "</TABLE><BR>"
 fi
+
+rm -f "$fich_lock"
