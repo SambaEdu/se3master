@@ -29,6 +29,10 @@ require ("config.inc.php");
 require ("functions.inc.php");
 $login=isauth();
 if ($login == "") header("Location:$urlauth");
+
+$registred=2;
+setparam("registred",2);
+
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
