@@ -23,7 +23,7 @@ cat <<EOF
 EOF
 
 titre="1"
-df | while true
+df -P -x tmpfs | while true
 do
 	read ligne
 	if [ "$ligne" = "" ]; then
