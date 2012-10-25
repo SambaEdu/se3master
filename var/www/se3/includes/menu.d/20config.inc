@@ -34,7 +34,7 @@
         gettext("Param&#232;tres serveur"),"conf_params.php?cat=1","se3_is_admin", 1,
         gettext("Action serveur"),"action_serv.php","se3_is_admin", 1,
     	gettext("Modules"),"conf_modules.php","se3_is_admin", 2,
-	    gettext("Onduleur"),"ups/ups.php","system_is_admin", 1,
+	gettext("Onduleur"),"ups/ups.php","system_is_admin", 1,
         gettext("Alertes"),"alertes/alertes.php","se3_is_admin", 3,
         ));
     }
@@ -44,7 +44,8 @@
         gettext("Param&#232;tres serveur"),"conf_params.php?cat=1","se3_is_admin", 1,
         gettext("Action serveur"),"action_serv.php","se3_is_admin", 1,
     	gettext("Modules"),"conf_modules.php","se3_is_admin", 2,
-	    gettext("Onduleur"),"ups/ups.php","system_is_admin", 1,
+	gettext("Onduleur"),"ups/ups.php","system_is_admin", 1,
+        gettext("Alertes"),"alertes/alertes.php","se3_is_admin", 3,
         ));
     }
 	$liens=array_merge($liens,$liens1);
