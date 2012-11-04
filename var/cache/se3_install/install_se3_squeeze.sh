@@ -1000,6 +1000,7 @@ else
 	echo -e "Présence éventuelle de SLIS ou LCS ...\n"
 	IPOK="NO"
 	REPONSE=""
+	[ "$LCS_OU_SLIS" = "no" ] && REPONSE="3"
 	while [ "$REPONSE" != "1" -a "$REPONSE" != "2" -a "$REPONSE" != "3" ]
 	do
 			echo -e "$COLTXT\c "
