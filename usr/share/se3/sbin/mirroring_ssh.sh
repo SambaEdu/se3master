@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #/usr/share/se3/sbin/miroring_ssh.sh
 ##/usr/share/se3/sbin/miroring_mise_en_place.sh
@@ -428,7 +428,7 @@ done
 
 #===================================================================
 echo -e "$COLCMD"
-echo '#!/bin/sh' > $tmp/traitement_disque_destination.sh
+echo '#!/bin/bash' > $tmp/traitement_disque_destination.sh
 #Faut-il effectuer des initialisations de variables?
 echo "DDLOCAL=$DDLOCAL" >> $tmp/traitement_disque_destination.sh
 echo "DISK1=$DISK1" >> $tmp/traitement_disque_destination.sh
@@ -438,7 +438,7 @@ echo "PARTHOME=$PARTHOME" >> $tmp/traitement_disque_destination.sh
 echo "PARTVARSE3=$PARTVARSE3" >> $tmp/traitement_disque_destination.sh
 echo "PARTVAR=$PARTVAR" >> $tmp/traitement_disque_destination.sh
 
-#cat $chemin/traitement_disque_destination.sh | sed -e 's!#!/bin/sh!!' >> $tmp/traitement_disque_destination.sh
+#cat $chemin/traitement_disque_destination.sh | sed -e 's!#!/bin/bash!!' >> $tmp/traitement_disque_destination.sh
 
 echo '#Couleurs
 COLTITRE="\033[1;35m"	# Rose
@@ -1411,7 +1411,7 @@ fi
 #Cette variable doit être initialisée ici parce qu'elle est utilisée en début de script $scriptmirror.
 
 
-echo "#!/bin/sh" > /mirror/$scriptmirror
+echo "#!/bin/bash" > /mirror/$scriptmirror
 
 if [ "$DDLOCAL" = "1" ]; then
 	echo "/mirror/$scriptumountdisk2 2>/dev/null" >> /mirror/$scriptmirror
@@ -1626,7 +1626,7 @@ else
 
 
 
-	echo '#! /bin/sh
+	echo '#! /bin/bash
 
 NAME="aclrestore"
 DESC="Restauration des ACL au premier démarrage uniquement"
@@ -1653,7 +1653,7 @@ exit 0
 ' > $tmp/aclrestore
 
 
-	echo '#!/bin/sh
+	echo '#!/bin/bash
 
 if [ -e "/root/part_home_list_acls.txt" ]; then
 	cd /home

@@ -415,7 +415,7 @@ if [ "$REPONSE" == "o" ]; then
 			echo -e "Le script ne peut se poursuivre normalement."
 			echo -e "Vos disques ne sont peut etre pas strictement identiques."
 			echo -e "$COLTXT"
-			echo -e "Vous pouvez executer cfdisk et partitionner manuellement de la meme façon que le 1er disque."
+			echo -e "Vous pouvez executer cfdisk et partitionner manuellement de la meme facon que le 1er disque."
 			echo ""
 			echo -e "Pour rappel, voici l'ordre dans lequel elles devront apparaitre:"
 			echo -e "${COLTXT}Partition SWAP :\t${COLINFO} $PARTSWAP_CIBLE"
@@ -445,7 +445,7 @@ if [ "$REPONSE" == "o" ]; then
 		fi
 	else
 		echo -e "$COLTXT"
-		echo -e "Vous pouvez executer cfdisk et partitionner manuellement de la meme façon que le 1er disque."
+		echo -e "Vous pouvez executer cfdisk et partitionner manuellement de la meme facon que le 1er disque."
 		echo ""
 		echo -e "Pour rappel, voici l'ordre dans lequel elles devront apparaitre:"
 		echo -e "${COLTXT}Partition SWAP :\t${COLINFO} $PARTSWAP_CIBLE"
@@ -661,7 +661,7 @@ PARTVARSE3_CIBLE=$PARTVARSE3_CIBLE
 #            /usr/share/se3/sbin/genere_mirror_rsync_sh.sh
 " > /mirror/param_mirror_rsync.sh
 
-sh /usr/share/se3/sbin/genere_mirror_rsync_sh.sh
+bash /usr/share/se3/sbin/genere_mirror_rsync_sh.sh
 
 
 ###################### fin creation des scripts ###############################
@@ -692,7 +692,7 @@ echo -e "$COLTITRE"
 echo "Installation de grub"
 echo -e "$COLCMD"
 grub-install --root-directory=/mirror/part_root --no-floppy --recheck hd1 
-echo -e "$COLINFO Grub installé !!"
+echo -e "$COLINFO Grub installe !!"
 
 chroot /mirror/part_root updategrub 
 sed "s/hd1/hd0/" -i /mirror/part_root/boot/grub/menu.lst  
