@@ -188,8 +188,7 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
 					<select name="shell">
 					<option <?php if ($user[0]["shell"] == "/bin/bash") echo "selected" ?>>/bin/bash</option>
 					<option <?php if ($user[0]["shell"] == "/bin/true") echo "selected" ?>>/bin/true</option>
-					<option <?php if ($user[0]["shell"] == "/usr/lib/sftp-server") echo "selected" ?>>/usr/lib/sftp-server</option>
-				</select>
+					</select>
 			</td>
 				<td>
 					<font color="orange">
