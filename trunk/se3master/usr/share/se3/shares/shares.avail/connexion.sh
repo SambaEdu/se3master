@@ -63,7 +63,7 @@ GET_MAC_FROM_IP()
 if [ -z "$newmac" ]; then
 	newmac=$(nmblookup -A $1 | awk  '/MAC Address/ {print  $4}' | sed -e "s/-/:/g")
 	if [ "$newmac" == "00:00:00:00:00:00" ]; then 
-		newmac=$(arp $1 | awk '/ether/ { print $3}')
+		newmac=$(arp -n $1 | awk '/ether/ { print $3 }')
 	fi
 	echo $newmac
 	
