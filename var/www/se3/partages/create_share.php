@@ -50,7 +50,7 @@ foreach ($_POST as $cle=>$val) {
 function valid_uid_or_group($entry) {
   	if ($entry !="") {
 		// Splitage de $share_user_list
-		$tmp = preg_split ("/[\ \]/",$entry,20);
+		$tmp = preg_split ("/\[ \]/",$entry,20);
 		for ( $loop=0; $loop < count($tmp); $loop++) {
 			// Recherche si c'est un utilisateur ou un groupe
 			$return=strpos( $tmp[$loop], "@");
