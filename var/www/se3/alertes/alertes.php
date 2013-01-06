@@ -26,7 +26,10 @@
 include "entete.inc.php";
 include "ldap.inc.php";
 include "ihm.inc.php";
-require "dbconfig.inc.php";
+//require "dbconfig.inc.php";
+if ($inventaire=="1") { // Si inventaire on on inclu le fichier de conf
+    include_once "dbconfig.inc.php";  
+}
 
 $action=$_POST['action'];
 if (!$action) { $action=$_GET['action']; }
