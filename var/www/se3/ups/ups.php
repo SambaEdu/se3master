@@ -132,6 +132,11 @@ if ($_POST['slave']=="yes") {
 			fputs($fp,$upsd_var);
 			fclose($fp);
 
+                        $fp=fopen("/etc/nut/nut.conf","w+");
+                        $hosts_var = "MODE=standalone\n";
+                        fputs($fp,$hosts_var);
+                        fclose($fp);
+                        
 			exec ("/usr/bin/sudo /usr/share/se3/scripts/ups.sh");
 			echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"2; URL=ups.php\">";
   		} else {
@@ -167,6 +172,11 @@ if ($pcable!='' && $pversion!='' &&  $pmarque!='' && $pport!='' && $pcable!='' &
 
 	$fp=fopen("/etc/nut/hosts.conf","w+");
 	$hosts_var = "MONITOR myups@localhost \"Local UPS\"\n";
+	fputs($fp,$hosts_var);
+	fclose($fp);
+        
+        $fp=fopen("/etc/nut/nut.conf","w+");
+	$hosts_var = "MODE=standalone\n";
 	fputs($fp,$hosts_var);
 	fclose($fp);
 
