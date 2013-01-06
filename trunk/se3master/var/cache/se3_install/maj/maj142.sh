@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## $Id: maj141.sh 7458 2012-10-29 09:11:35Z keyser $ ##
+## $Id$ ##
 
 # path fichier de logs
 LOG_DIR="/var/log/se3"
@@ -15,14 +15,19 @@ LADATE=$(date +%d-%m-%Y)
 echo "Mise a jour 142 :
 - Passage a bash des derniers scripts en bin/sh
 - Contournement du bug libnss sur squeeze
+- Prise en compte pb onduleur avec nut
 - Suppression bash sftp pour LCS" >> $HISTORIQUE_MAJ
  
 /usr/share/se3/scripts/mkSlapdConf.sh
+
+echo "MODE=standalone" > /etc/nut/nut.conf
 
 
 echo "Mise a jour 142 :
 - Passage a bash des derniers scripts en bin/sh
 - Contournement du bug libnss sur squeeze
+- Prise en compte pb onduleur avec nut
 - Suppression bash sftp pour LCS"
+
 
 exit 0		
