@@ -25,8 +25,11 @@
 include "entete.inc.php";
 include "ldap.inc.php";
 include "ihm.inc.php";
-require "dbconfig.inc.php";
-
+//require "dbconfig.inc.php";
+include_once "config.inc.php";
+if ($inventaire=="1") { // Si inventaire on on inclu le fichier de conf
+    include_once "dbconfig.inc.php";  
+}
 //***************D�inition des droits de lecture  et aide en ligne
 
 if (is_admin("computers_is_admin",$login)=="Y")  {
