@@ -46,7 +46,9 @@ fi
 
 
 
-SSL="start_tls"
+# SSL="start_tls" fix bug libnss squeeze desactivation tls
+SSL="off"
+
 if [ "$replica_status" = "2" ]
 then
 	SSL="off"
