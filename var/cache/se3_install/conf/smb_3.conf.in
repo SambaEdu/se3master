@@ -21,7 +21,7 @@
 	ldap user suffix = #PEOPLE#
 	ldap group suffix = #GROUPS#
 	ldap admin dn = #ADMINRDN#,#BASEDN#
-	ldap ssl = start_tls
+	ldap ssl = off
 	ldapsam:trusted = No
 	ldap passwd sync = yes 
 	create mask = 0700
