@@ -1,12 +1,13 @@
 #!/bin/bash
 #
-##### Script de génération de fonds #####
+##### Script de gÃ©nÃ©ration de fonds #####
 #
-# Auteur: Stéphane Boireau (A.S. - Relais de Bernay/Pont-Audemer (27))
+# Auteur: StÃ©phane Boireau (A.S. - Relais de Bernay/Pont-Audemer (27))
 #
 ## $Id$ ##
 #
 # /usr/share/se3/sbin/mkwall.sh
+
 
 
 chemin_param_fond="/etc/se3/fonds_ecran"
@@ -60,11 +61,11 @@ fi
 
 temoin=""
 
-# Paramètres propres à un utilisateur/groupe:
+# ParamÃ¨tres propres Ã  un utilisateur/groupe:
 if [ "$1" = "admin" ]; then
     if [ -e "$chemin_param_fond/fond_admin.txt" ]; then
-        # Le statut actif sert à savoir si on souhaite utiliser les paramètres de fonds pour cet utilisateur/groupe.
-        # Cela permet de désactiver sans supprimer les péréférences.
+        # Le statut actif sert Ã  savoir si on souhaite utiliser les paramÃ¨tres de fonds pour cet utilisateur/groupe.
+        # Cela permet de dÃ©sactiver sans supprimer les pÃ©rÃ©fÃ©rences.
         if [ $(cat "$chemin_param_fond/fond_admin.txt") = "actif" ]; then
             source "$chemin_param_fond/parametres_admin.sh"
             source "$chemin_param_fond/annotations_admin.sh" 2>/dev/null
@@ -77,7 +78,7 @@ else
         test_membre_overfill=$(ldapsearch -xLLL "(&(memberuid=$1)(cn=overfill))" cn | grep "^cn: ")
         #if [ ! -z "$test_membre_overfill" -a $(cat "$chemin_param_fond/overfill.txt") = "actif" ]; then
         if [ ! -z "$test_membre_overfill" -a $(cat "$chemin_param_fond/fond_overfill.txt") = "actif" ]; then
-            # L'utilisateur a dépassé son quota...
+            # L'utilisateur a dÃ©passÃ© son quota...
             if [ $(cat "$chemin_param_fond/fond_overfill.txt") = "actif" ]; then
                 source "$chemin_param_fond/parametres_overfill.sh"
                 source "$chemin_param_fond/annotations_overfill.sh" 2>/dev/null
@@ -106,8 +107,8 @@ else
         test_membre_eleve=$(ldapsearch -xLLL "(&(memberuid=$1)(cn=Eleves))" cn | grep "^cn: ")
         #echo "test_membre_eleve=$test_membre_eleve"
         if [ ! -z "$test_membre_eleve" ]; then
-            # Utilisateur élève
-            # Dans le cas d'un élève, le groupe Classe est prioritaire (pour l'image) sur le groupe eleves.
+            # Utilisateur Ã©lÃ¨ve
+            # Dans le cas d'un Ã©lÃ¨ve, le groupe Classe est prioritaire (pour l'image) sur le groupe eleves.
             classe=$(ldapsearch -xLLL "(&(memberuid=$1)(cn=Classe*))" cn | grep "^cn: " | sed -e "s/^cn: //")
             #echo "classe=$classe"
             if [ ! -z "$classe" ]; then
@@ -148,7 +149,7 @@ else
 fi
 
 
-# Si aucune génération de fond n'est prévue pour l'utilisateur courant, on quitte:
+# Si aucune gÃ©nÃ©ration de fond n'est prÃ©vue pour l'utilisateur courant, on quitte:
 if [ -z "$temoin" ]; then
     echo " pas de fond pour $1"
     # Suppression du fichier de lock s'il existe:
@@ -166,7 +167,7 @@ else
 	orig="$base"
 fi
 
-# Génération du fond commun s'il n'existe pas:
+# GÃ©nÃ©ration du fond commun s'il n'existe pas:
 # il est genere en jpeg par l'interface, mais xp veut du bmp, il sera converti si besoin
 if [ ! -e "${dossier_base_fond}/$orig.jpg" ]; then
        /usr/bin/convert -size ${largeur}x${hauteur} gradient:${couleur1}-${couleur2} jpeg:${dossier_base_fond}/$orig.jpg
@@ -189,17 +190,17 @@ fi
 rm -f ${dossier_base_fond}/$1_*.$ext
 
 #===============================================================
-# Génération de la chaine des infos à afficher:
+# GÃ©nÃ©ration de la chaine des infos Ã  afficher:
 chaine=""
 if [ "$annotation_nom" = "1" ]; then
     nom_prenom=$(ldapsearch -xLLL uid=$1 cn | grep "^cn: " | sed -e "s/^cn: //")
     #chaine="$nom_prenom"
-    chaine=$(echo "$nom_prenom" | tr "'���������������������զ����ݾ�������������������������������" "_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz" | sed -e "s|[^A-Za-z_ -]||g" | sed -e "s|�|AE|g" | sed -e "s|�|OE|g" | sed -e "s|�|ae|g" | sed -e "s|�|oe|g")
+    chaine=$(echo "$nom_prenom" | tr "'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚÝ¾´áàâäãåçéèêëîïìíñôöðòóõ¨ûüùúýÿ¸" "_AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz" | sed -e "s|[^A-Za-z_ -]||g" | sed -e "s|Æ|AE|g" | sed -e "s|¼|OE|g" | sed -e "s|æ|ae|g" | sed -e "s|½|oe|g")
 fi
 
 if [ "$annotation_classe" = "1" ]; then
     if [ -z "$classe" ]; then
-        # Cas d'un élève dans le groupe overfill:
+        # Cas d'un Ã©lÃ¨ve dans le groupe overfill:
         classe=$(ldapsearch -xLLL "(&(memberUid=$1)(cn=Classe_*))" cn | grep "^cn: " | sed -e "s/^cn: //")
     fi
     if [ -z "$classe" ]; then
@@ -215,7 +216,7 @@ if [ "$annotation_classe" = "1" ]; then
     fi
 fi
 
-# Génération de l'image:
+# GÃ©nÃ©ration de l'image:
 if [ "$(cat "$chemin_param_fond/annotations_${base}.txt" 2>/dev/null)" = "actif" ]; then
     /usr/bin/convert -fill ${couleur_txt} -pointsize $taille_police -draw "gravity North text 0,0 '$chaine'" ${dossier_base_fond}/$orig.jpg ${prefix}${dossier_base_fond}/$1_$orig.$ext
     if [ "$(cat "$chemin_param_fond/photos_${base}.txt" 2>/dev/null)" = "actif" ]; then
@@ -242,7 +243,7 @@ fi
 if [ -n "$image_a_inserer" -a -e "$image_a_inserer" ]; then
 	# Insertion de l'image $image_a_inserer
 
-	# Si il n'y a pas d'image propre a l'utilisateur on fait une copie du mod�le du groupe de l'utilisateur
+	# Si il n'y a pas d'image propre a l'utilisateur on fait une copie du modèle du groupe de l'utilisateur
 	# Et on va modifier la copie
 	[ ! -f ${dossier_base_fond}/$1_$orig.$ext ] && cp ${dossier_base_fond}/$orig.$ext ${dossier_base_fond}/$1_$orig.$ext
 
