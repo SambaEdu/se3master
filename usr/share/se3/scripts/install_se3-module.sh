@@ -39,6 +39,7 @@ M2="$2"
 M3="$3"
 
 . /etc/se3/config_m.cache.sh
+. /etc/se3/config_l.cache.sh
 
 if [ "$1" = "--help" -o "$1" = "" -o "$1" = "-h" ]
 then
@@ -389,6 +390,20 @@ chown www-se3 $chemin_param_fond/parametres_generation_fonds.sh
 chmod 750 $chemin_param_fond/parametres_generation_fonds.sh
 touch $chemin_param_fond/install_ok.txt
 fi
+
+# creation du droit ldap fond_can_change
+echo "dn: cn=fond_can_change,${rightsRdn},${ldap_base_dn}
+objectClass: groupOfNames
+cn: fond_can_change
+member: uid=admin,${peopleRdn},${ldap_base_dn}
+" | ldapadd -x -D ${adminRdn},${ldap_base_dn} -w ${adminPw}
+
+  mkdir -p /var/www/se3/Admin/fonds_ecran/courant
+  chown www-se3 /var/www/se3/Admin/fonds_ecran/courant
+
+  mkdir -p /var/lib/se3/fonds_ecran
+  chown www-se3 /var/lib/se3/fonds_ecran
+
 
 ;;
 
