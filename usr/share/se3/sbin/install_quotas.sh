@@ -31,16 +31,6 @@ echo -e "$COLTITRE"
 echo -e "Installation et activation des quotas"
 echo -e "$COLTXT"
 
-if [ -e /usr/sbin/setquota ]; then
-	echo "La paquet quota est déjà installé."
-else
-	echo "Installation du paquet quota lancée..."
-	echo -e "$COLCMD\c"
-	apt-get update
-	apt-get -d install quota-se3
-	dpkg -i /var/cache/apt/archives/quota-se3_3.04-1_i386.deb
-fi
-
 LADATE=$(date +%D_%Hh%M | sed -e "s!/!_!g")
 FSTAB_TMP="/tmp/fstab"
 FSTAB_ORI="/etc/fstab"
@@ -76,7 +66,7 @@ umount /home
 umount /var/se3
 mount -a
 if [ $? != 0 ]; then
-echo "** ERREUR ** lors du remontage des partitions XFS, verifiez que la noyau est bien compilé avec les quotas xfs"  | tee -a $FICHIERLOG 
+echo "** ERREUR ** lors du remontage des partitions XFS, restauration du fichier de sauvegarde"  | tee -a $FICHIERLOG 
 mv  $FSTAB_SAUV /etc/fstab
 mount -a
 else
