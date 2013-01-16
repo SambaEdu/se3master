@@ -14,6 +14,8 @@
 	// $debug_import_comptes peut être initialisée dans se3orlcs_import_comptes.php
 	//$debug_import_comptes="y";
 
+	//my_echo("<p style='background-color:red;'>\$servertype=$servertype</p>");
+
 	// Choix de destination des my_echo():
 	$dest_mode="file";
 	// On va écrire dans le fichier $echo_file et non dans la page courante... ce qui serait problématique depuis que cette page PHP n'est plus visitée depuis un navigateur.
@@ -46,8 +48,6 @@
 */
 	//exit();
 
-	//my_echo("<p style='background-color:red;'>\$servertype=$servertype</p>");
-	//my_echo("<p style='background-color:red;'>\$debug_import_comptes=$debug_import_comptes</p>");
 
 	// Récupération du type des groupes Equipe_* et Matiere_*
 	$sql="SELECT value FROM params WHERE name='type_Equipe_Matiere'";
@@ -422,6 +422,12 @@
 
 	//exit;
 
+	// 20130115
+	// Initialisation:
+	$uaj="";
+	$uaj_tronque="";
+	$tab_eleve_autre_etab=array();
+
 	// Partie ELEVES:
 	//$type_fichier_eleves=isset($_POST['type_fichier_eleves']) ? $_POST['type_fichier_eleves'] : "csv";
 	if($type_fichier_eleves=="csv") {
@@ -719,6 +725,37 @@
 				my_echo("</h3>\n");
 				my_echo("<blockquote>\n");
 
+				// 20130115
+				$uaj="";
+				$uaj_tronque="";
+				$annee_scolaire="";
+				$date_export="";
+				$objet_parametres=($ele_xml->PARAMETRES);
+				foreach ($objet_parametres->children() as $key => $value) {
+					if(strtoupper($key)=='UAJ') {
+						$uaj=trim($value);
+						$uaj_tronque=substr(substr($uaj,0,strlen($uaj)-1), 1);
+					}
+					elseif(strtoupper($key)=='ANNEE_SCOLAIRE') {
+						$annee_scolaire=trim($value)."-".(trim($value)+1);
+					}
+					elseif(strtoupper($key)=='HORODATAGE') {
+						$date_export=trim($value);
+					}
+				}
+				my_echo("<p>");
+				if($uaj!="") {
+					my_echo("Fichier XML Élèves de l'établissement $uaj ($uaj_tronque) ");
+				}
+				if($annee_scolaire!="") {
+					my_echo("pour l'année scolaire $annee_scolaire ");
+				}
+				if($date_export!="") {
+					my_echo("exporté le $date_export");
+					crob_setParam('xml_ele_last_import',$date_export,"Date du dernier export XML Eleves importé");
+				}
+				my_echo("</p>");
+
 				my_echo("<h4>Analyse du fichier pour extraire les informations élèves...");
 				if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 				my_echo("</h4>\n");
@@ -734,6 +771,7 @@
 			
 				$tab_champs_eleve=array("ID_NATIONAL",
 				"ELENOET",
+				"ID_ELEVE_ETAB",
 				"NOM",
 				"PRENOM",
 				"DATE_NAISS",
@@ -803,6 +841,14 @@
 							}
 						}
 			
+					}
+
+					//20130115
+					// Est-ce que l'elenoet enregistré est bien un elenoet de l'établissement ou un élève importé d'un autre établissement?
+					if(($uaj_tronque!="")&&(isset($eleves[$i]['elenoet']))&&(isset($eleves[$i]['id_eleve_etab']))&&(!preg_match("/".$elenoet.$uaj_tronque."/", $eleves[$i]['id_eleve_etab']))) {
+						my_echo("<p style='color:red'>L'élève ".$eleves[$i]['nom']." ".$eleves[$i]['prenom']." a été importé d'un autre établissement (<em>".$eleves[$i]['id_eleve_etab']."-&gt;".preg_replace("/[0]*".$eleves[$i]['elenoet']."/","",$eleves[$i]['id_eleve_etab'])."</em>).<br />Son elenoet (<em>".$eleves[$i]['elenoet']."</em>) est celui qu'il avait dans son ancien établissement.<br />Cet elenoet n'est pas encore valide<br />Vous devrez créer le compte à la main en attendant que Sconet/Siècle soit nettoyé/mis à jour.</p>\n");
+						$tab_eleve_autre_etab[]=$eleves[$i]['nom']."|".$eleves[$i]['prenom']."|".$eleves[$i]['code_sexe']."|".$eleves[$i]['date_naiss'];
+						unset($eleves[$i]['elenoet']);
 					}
 
 					if($debug_import_comptes=='y') {
@@ -1021,7 +1067,9 @@
 										$tab_groups_member[$eleves[$i]["structures"][$j]["code_structure"]]=array();
 									}
 	
-									if(!in_array($eleves[$i]['eleve_id'], $tab_groups_member[$eleves[$i]["structures"][$j]["code_structure"]])) {
+									// 20130115
+									//if(!in_array($eleves[$i]['eleve_id'], $tab_groups_member[$eleves[$i]["structures"][$j]["code_structure"]])) {
+									if((!in_array($eleves[$i]['eleve_id'], $tab_groups_member[$eleves[$i]["structures"][$j]["code_structure"]]))&&($eleves[$i]['elenoet'])) {
 										//$tab_groups_member[$eleves[$i]["structures"][$j]["code_structure"]][]=$eleves[$i]['eleve_id'];
 										$tab_groups_member[$eleves[$i]["structures"][$j]["code_structure"]][]=$eleves[$i]['elenoet'];
 									}
@@ -1086,100 +1134,103 @@
 					//if(isset($eleves[$i]["structures"][0]["code_structure"])) {
 					//if(isset($eleves[$i]["structures"])) {
 					if(isset($eleves[$i]["classe"])) {
-						//$numero=$eleves[$i]["elenoet"];
-						$numero=sprintf("%05d",$eleves[$i]["elenoet"]);
-						$tabnumero[]="$numero";
-						$eleve[$numero]=array();
-						$eleve[$numero]["numero"]="$numero";
-						$eleve[$numero]["nom"]=$eleves[$i]["nom"];
-						//my_echo("\$eleve[$numero][\"nom\"]=".$eleves[$i]["nom"]."<br />\n");
-						//my_echo("<p>\$eleve[$numero][\"nom\"]=".$eleve[$numero]["nom"]." ");
-						$eleve[$numero]["prenom"]=$eleves[$i]["prenom"];
-						//my_echo("\$eleve[$numero][\"prenom\"]=".$eleve[$numero]["prenom"]." ");
-						$tmpdate=explode("/",$eleves[$i]["date_naiss"]);
-						$eleve[$numero]["date"]=$tmpdate[2].$tmpdate[1].$tmpdate[0];
-						if($eleves[$i]["code_sexe"]==1) {$eleve[$numero]["sexe"]="M";}else{$eleve[$numero]["sexe"]="F";}
+						// 20130115
+						if(isset($eleves[$i]["elenoet"])) {
+							//$numero=$eleves[$i]["elenoet"];
+							$numero=sprintf("%05d",$eleves[$i]["elenoet"]);
+							$tabnumero[]="$numero";
+							$eleve[$numero]=array();
+							$eleve[$numero]["numero"]="$numero";
+							$eleve[$numero]["nom"]=$eleves[$i]["nom"];
+							//my_echo("\$eleve[$numero][\"nom\"]=".$eleves[$i]["nom"]."<br />\n");
+							//my_echo("<p>\$eleve[$numero][\"nom\"]=".$eleve[$numero]["nom"]." ");
+							$eleve[$numero]["prenom"]=$eleves[$i]["prenom"];
+							//my_echo("\$eleve[$numero][\"prenom\"]=".$eleve[$numero]["prenom"]." ");
+							$tmpdate=explode("/",$eleves[$i]["date_naiss"]);
+							$eleve[$numero]["date"]=$tmpdate[2].$tmpdate[1].$tmpdate[0];
+							if($eleves[$i]["code_sexe"]==1) {$eleve[$numero]["sexe"]="M";}else{$eleve[$numero]["sexe"]="F";}
 	
-						//$eleve[$numero]["division"]=$eleves[$i]["structures"][0]["code_structure"];
-						$eleve[$numero]["division"]=$eleves[$i]["classe"];
+							//$eleve[$numero]["division"]=$eleves[$i]["structures"][0]["code_structure"];
+							$eleve[$numero]["division"]=$eleves[$i]["classe"];
 	
-						//my_echo(" en ".$eleve[$numero]["division"]."<br />");
-						//my_echo("\$eleve[$numero][\"division\"]=".$eleve[$numero]["division"]."<br />");
+							//my_echo(" en ".$eleve[$numero]["division"]."<br />");
+							//my_echo("\$eleve[$numero][\"division\"]=".$eleve[$numero]["division"]."<br />");
 	
-						$chaine="";
-						$chaine.=$eleve[$numero]["numero"];
-						$chaine.="|";
-						$chaine.=remplace_accents($eleve[$numero]["nom"]);
-						$chaine.="|";
-						$chaine.=remplace_accents($eleve[$numero]["prenom"]);
-						$chaine.="|";
-						$chaine.=$eleve[$numero]["date"];
-						$chaine.="|";
-						$chaine.=$eleve[$numero]["sexe"];
-						$chaine.="|";
-						$chaine.=$eleve[$numero]["division"];
-						if($fich) {
-							//fwrite($fich,$chaine."\n");
-							fwrite($fich,html_entity_decode($chaine)."\n");
-						}
-	
-						//my_echo("Parcours des divisions existantes: ");
-						$temoin_new_div="oui";
-						for($k=0;$k<count($tab_division);$k++) {
-							//my_echo($tab_division[$k]["nom"]." (<i>$k</i>) ");
-							if($eleve[$numero]["division"]==$tab_division[$k]["nom"]) {
-								$temoin_new_div="non";
-								//my_echo(" (<font color='green'><i>BINGO</i></font>) ");
-								break;
+							$chaine="";
+							$chaine.=$eleve[$numero]["numero"];
+							$chaine.="|";
+							$chaine.=remplace_accents($eleve[$numero]["nom"]);
+							$chaine.="|";
+							$chaine.=remplace_accents($eleve[$numero]["prenom"]);
+							$chaine.="|";
+							$chaine.=$eleve[$numero]["date"];
+							$chaine.="|";
+							$chaine.=$eleve[$numero]["sexe"];
+							$chaine.="|";
+							$chaine.=$eleve[$numero]["division"];
+							if($fich) {
+								//fwrite($fich,$chaine."\n");
+								fwrite($fich,html_entity_decode($chaine)."\n");
 							}
-						}
-						if($temoin_new_div=="oui") {
-							//$k++;
-							$tab_division[$k]=array();
-							//$tab_division[$k]["nom"]=ereg_replace("'","_",ereg_replace(" ","_",remplace_accents($eleve[$numero]["division"])));
-							$tab_division[$k]["nom"]=$eleve[$numero]["division"];
-							$tab_division[$k]["option"]=array();
-							//my_echo("<br />Nouvelle classe: \$tab_division[$k][\"nom\"]=".$tab_division[$k]["nom"]."<br />");
-						}
 	
-						// Et pour les options, on conserve $eleves? NON
-						//$eleves[$i]["options"][$j]
-						if(isset($eleves[$i]["options"])) {
-							$eleve[$numero]["options"]=array();
-							for($j=0;$j<count($eleves[$i]["options"]);$j++) {
-								$eleve[$numero]["options"][$j]=array();
-								$eleve[$numero]["options"][$j]["code_matiere"]=$eleves[$i]["options"][$j]["code_matiere"];
-								// Les autres champs ne sont pas très utiles...
+							//my_echo("Parcours des divisions existantes: ");
+							$temoin_new_div="oui";
+							for($k=0;$k<count($tab_division);$k++) {
+								//my_echo($tab_division[$k]["nom"]." (<i>$k</i>) ");
+								if($eleve[$numero]["division"]==$tab_division[$k]["nom"]) {
+									$temoin_new_div="non";
+									//my_echo(" (<font color='green'><i>BINGO</i></font>) ");
+									break;
+								}
+							}
+							if($temoin_new_div=="oui") {
+								//$k++;
+								$tab_division[$k]=array();
+								//$tab_division[$k]["nom"]=ereg_replace("'","_",ereg_replace(" ","_",remplace_accents($eleve[$numero]["division"])));
+								$tab_division[$k]["nom"]=$eleve[$numero]["division"];
+								$tab_division[$k]["option"]=array();
+								//my_echo("<br />Nouvelle classe: \$tab_division[$k][\"nom\"]=".$tab_division[$k]["nom"]."<br />");
+							}
 	
-								//my_echo("Option suivie: \$eleve[$numero][\"options\"][$j][\"code_matiere\"]=".$eleve[$numero]["options"][$j]["code_matiere"]."<br />");
+							// Et pour les options, on conserve $eleves? NON
+							//$eleves[$i]["options"][$j]
+							if(isset($eleves[$i]["options"])) {
+								$eleve[$numero]["options"]=array();
+								for($j=0;$j<count($eleves[$i]["options"]);$j++) {
+									$eleve[$numero]["options"][$j]=array();
+									$eleve[$numero]["options"][$j]["code_matiere"]=$eleves[$i]["options"][$j]["code_matiere"];
+									// Les autres champs ne sont pas très utiles...
 	
-								// TESTER SI L'OPTION EST DEJA DANS LA LISTE DES OPTIONS DE LA CLASSE.
-								//my_echo("Options existantes: ");
-								$temoin_nouvelle_option="oui";
-								for($n=0;$n<count($tab_division[$k]["option"]);$n++) {
-									//my_echo($tab_division[$k]["option"][$n]["code_matiere"]." (<i>$k - $n</i>)");
-									if($tab_division[$k]["option"][$n]["code_matiere"]==$eleve[$numero]["options"][$j]["code_matiere"]) {
-										$temoin_nouvelle_option="non";
-										//my_echo(" (<font color='green'><i>BINGO</i></font>) ");
-										break;
+									//my_echo("Option suivie: \$eleve[$numero][\"options\"][$j][\"code_matiere\"]=".$eleve[$numero]["options"][$j]["code_matiere"]."<br />");
+	
+									// TESTER SI L'OPTION EST DEJA DANS LA LISTE DES OPTIONS DE LA CLASSE.
+									//my_echo("Options existantes: ");
+									$temoin_nouvelle_option="oui";
+									for($n=0;$n<count($tab_division[$k]["option"]);$n++) {
+										//my_echo($tab_division[$k]["option"][$n]["code_matiere"]." (<i>$k - $n</i>)");
+										if($tab_division[$k]["option"][$n]["code_matiere"]==$eleve[$numero]["options"][$j]["code_matiere"]) {
+											$temoin_nouvelle_option="non";
+											//my_echo(" (<font color='green'><i>BINGO</i></font>) ");
+											break;
+										}
 									}
-								}
-								//my_echo("<br />");
-								if($temoin_nouvelle_option=="oui") {
-									//$n++;
-									$tab_division[$k]["option"][$n]=array();
-									$tab_division[$k]["option"][$n]["code_matiere"]=$eleve[$numero]["options"][$j]["code_matiere"];
-									$tab_division[$k]["option"][$n]["eleve"]=array();
-									//my_echo("Nouvelle option: \$tab_division[$k][\"option\"][$n][\"code_matiere\"]=".$tab_division[$k]["option"][$n]["code_matiere"]."<br />");
-								}
-								//my_echo("<br />");
-								$tab_division[$k]["option"][$n]["eleve"][]=$eleve[$numero]["numero"];
+									//my_echo("<br />");
+									if($temoin_nouvelle_option=="oui") {
+										//$n++;
+										$tab_division[$k]["option"][$n]=array();
+										$tab_division[$k]["option"][$n]["code_matiere"]=$eleve[$numero]["options"][$j]["code_matiere"];
+										$tab_division[$k]["option"][$n]["eleve"]=array();
+										//my_echo("Nouvelle option: \$tab_division[$k][\"option\"][$n][\"code_matiere\"]=".$tab_division[$k]["option"][$n]["code_matiere"]."<br />");
+									}
+									//my_echo("<br />");
+									$tab_division[$k]["option"][$n]["eleve"][]=$eleve[$numero]["numero"];
 	
-							//	my_echo("<p>Membres actuels de l'option ".$tab_division[$k]["option"][$n]["code_matiere"]." de ".$tab_division[$k]["nom"].": ");
-							//	for($m=0;$m<count($tab_division[$k]["option"][$n]["eleve"]);$m++) {
-							//		my_echo($tab_division[$k]["option"][$n]["eleve"][$m]." ");
-							//	}
-							//	my_echo(" ($m)</p>");
+								//	my_echo("<p>Membres actuels de l'option ".$tab_division[$k]["option"][$n]["code_matiere"]." de ".$tab_division[$k]["nom"].": ");
+								//	for($m=0;$m<count($tab_division[$k]["option"][$n]["eleve"]);$m++) {
+								//		my_echo($tab_division[$k]["option"][$n]["eleve"][$m]." ");
+								//	}
+								//	my_echo(" ($m)</p>");
+								}
 							}
 						}
 					}
@@ -5217,6 +5268,29 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 	my_echo($infos_corrections_gecos);
 
 	$chaine.=$infos_corrections_gecos;
+
+	if(count($tab_eleve_autre_etab)>0) {
+		$tmp_txt="Un ou des élèves n'ont pas été enregistrés dans l'annuaire parce qu'importés d'un autre établissement avec un identifiant non encore mis à jour.\n";
+		//my_echo("<p>".$tmp_txt."</p><ul>");
+		//$chaine.=$tmp_txt;
+		$chaine.="<p style='color:red'>".$tmp_txt."</p><ul>";
+		for($loop=0;$loop<count($tab_eleve_autre_etab);$loop++) {
+			$tmp_tab=explode("|", $tab_eleve_autre_etab[$loop]);
+			if($servertype=="SE3") {
+				$tmp_txt="<a href='../annu/add_user.php?nom=".remplace_accents($tmp_tab[0])."&amp;prenom=".remplace_accents($tmp_tab[1])."&amp;sexe=".($tmp_tab[2]!="1" ? "F" : "M")."&amp;naissance=".formate_date_aaaammjj($tmp_tab[3])."' target='_blank'>".$tmp_tab[0]." ".$tmp_tab[1]." (".($tmp_tab[2]!="1" ? "fille" : "garçon") .") né".($tmp_tab[2]!="1" ? "e" : "")." le ".$tmp_tab[3]."</a>";
+			}
+			else {
+				$tmp_txt=$tmp_tab[0]." ".$tmp_tab[1]." (".($tmp_tab[2]!="1" ? "fille" : "garçon") .") né".($tmp_tab[2]!="1" ? "e" : "")." le ".$tmp_tab[3];
+			}
+			//my_echo("<li>".$tmp_txt."</li>");
+			//$chaine.=$tmp_txt."\n";
+			$chaine.="<li>".$tmp_txt."</li>";
+		}
+		$tmp_txt="Vous devrez les créer à la main en attendant que Sconet/Sts soit à jour (<em>généralement fin septembre</em>).";
+		//my_echo("</ul><p>$tmp_txt</p>");
+		//$chaine.=$tmp_txt;
+		$chaine.="</ul><p>$tmp_txt</p>";
+	}
 
 	if($nb_echecs==0) {
 		//my_echo("<p>Aucune opération tentée n'a échoué.</p>\n");

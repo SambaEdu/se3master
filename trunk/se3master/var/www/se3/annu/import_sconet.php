@@ -242,6 +242,11 @@
 				echo "</tr>\n";
 				echo "</table>\n";
 
+				$date_export_xml_precedent=crob_getParam('xml_ele_last_import');
+				if($date_export_xml_precedent!="") {
+					echo "<p>Le précédent export XML élève importé datait du <strong>$date_export_xml_precedent</strong>.</p>\n";
+				}
+
 				echo "<h4>Fichier professeurs et emploi du temps</h4>\n";
 
 				echo "<p>Veuillez fournir le fichier XML <i>(STS_emp_RNE_ANNEE.xml)</i>:<br />\n";
@@ -251,6 +256,14 @@
 			        echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('<b>Le cheminement pour effectuer cet export depuis Sconet est:</b><br />STS-web/Mise &#224; jour/Exports/Emplois du temps')")."\"><img name=\"action_image1\"  src=\"$helpinfo\"></u>\n";
 
 				echo "</p>\n";
+
+				/*
+				$date_export_xml_precedent=crob_getParam('xml_sts_last_import');
+				if($date_export_xml_precedent!="") {
+					echo "<p>Le précédent export XML de STS importé datait du <strong>$date_export_xml_precedent</strong>.</p>\n";
+				}
+				*/
+
 				echo "<br />\n";
 
 				echo "<h4>Fichier optionnel de logins</h4>\n";
