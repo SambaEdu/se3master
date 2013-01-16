@@ -49,11 +49,11 @@ echo "<h1>".gettext("Annuaire")."</h1>\n";
 $_SESSION["pageaide"]="Annuaire";
 aff_trailer ("7");
 
-$nom=isset($_POST['nom']) ? $_POST['nom'] : "";
-$prenom=isset($_POST['prenom']) ? $_POST['prenom'] : "";
-$naissance=isset($_POST['naissance']) ? $_POST['naissance'] : "";
+$nom=isset($_POST['nom']) ? $_POST['nom'] : (isset($_GET['nom']) ? $_GET['nom'] : "");
+$prenom=isset($_POST['prenom']) ? $_POST['prenom'] : (isset($_GET['prenom']) ? $_GET['prenom'] : "");
+$naissance=isset($_POST['naissance']) ? $_POST['naissance'] : (isset($_GET['naissance']) ? $_GET['naissance'] : "");
 $userpw=isset($_POST['userpw']) ? $_POST['userpw'] : "";
-$sexe=isset($_POST['sexe']) ? $_POST['sexe'] : "";
+$sexe=isset($_POST['sexe']) ? $_POST['sexe'] : (isset($_GET['sexe']) ? $_GET['sexe'] : "");
 $categorie=isset($_POST['categorie']) ? $_POST['categorie'] : "";
 $add_user=isset($_POST['add_user']) ? $_POST['add_user'] : "";
 $string_auth=isset($_POST['string_auth']) ? $_POST['string_auth'] : "";
@@ -70,7 +70,8 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
         	if(isset($Res1[0])) {$userpwd = $Res1[0];} else {$userpwd=false;}
 		}
     // Ajout d'un utilisateur
-    if (    ( !$nom || !$prenom )    // absence de nom ou de prenom
+    if (    (!isset($_POST['add_user']))
+         || ( !$nom || !$prenom )    // absence de nom ou de prenom
          || ( !$naissance && ( !$userpwd || ( $userpwd && !verifPwd($userpwd) ) ) ) // pas de date de naissance et mot de passe absent ou invalide
          || ( $naissance && !verifDateNaissance($naissance) )  // date de naissance invalide
          || ( ($naissance && verifDateNaissance($naissance)) && ($userpwd && !verifPwd($userpwd)) )  // date de naissance mais password invalide
@@ -207,6 +208,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
         	if (!$naissance ) $naissance="00000000";
         		if (!$userpwd ) $userpwd=$naissance;
         		// Creation du nouvel utilisateur
+        		//echo "<pre>/usr/share/se3/sbin/userAdd.pl \"$prenom\" \"$nom\" \"$userpwd\" \"$naissance\" \"$sexe\" \"$categorie\"</pre>";
         		exec ("/usr/share/se3/sbin/userAdd.pl \"$prenom\" \"$nom\" \"$userpwd\" \"$naissance\" \"$sexe\" \"$categorie\"",$AllOutPut,$ReturnValue);
         		// Compte rendu de creation
         		if ($ReturnValue == "0") {
@@ -235,7 +237,9 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
          	 	echo "<div class='error_msg'>".gettext("Erreur lors de la cr&#233;ation du nouvel utilisateur")." $prenom $nom
                   	<font color='black'>(".gettext("type d'erreur :")." $ReturnValue)
                   	</font>,".gettext(" veuillez contacter")."
-                  	<A HREF='mailto:$MelAdminLCS?subject=PB creation nouvel utilisateur Se3'>".gettext("l'administrateur du syst&#232;me")."</A></div><BR>\n";
+                  	<a href='mailto:$MelAdminLCS?subject=PB creation nouvel utilisateur Se3'>".gettext("l'administrateur du syst&#232;me")."</a></div><br />\n";
+            	echo "<p><br /></p>\n";
+            	echo "<p><em>NOTES&nbsp;:</em> A propos des erreurs, une erreur 255 peut appara&icirc;tre quand on tente d'ajouter un utilisateur toto (<em>qui n'existait pas dans la branche People</em>), alors qu'un toto existait dans un groupe (<em>Eleves, Profs ou Administratifs</em>).</p>\n";
         	}
       }
     }

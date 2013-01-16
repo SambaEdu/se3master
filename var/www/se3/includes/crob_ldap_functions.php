@@ -2075,4 +2075,41 @@ function recup_from_trash($uid) {
 	return $recup;
 }
 
+//====================================================
+function crob_getParam($name) {
+	$sql="SELECT value FROM params WHERE name='".mysql_real_escape_string($name)."';";
+	$res=mysql_query($sql);
+	if(mysql_num_rows($res)>0) {
+		$lig=mysql_fetch_object($res);
+		return $lig->value;
+	}
+	else {
+		return "";
+	}
+}
+//====================================================
+function crob_setParam($name,$value,$descr) {
+	$sql="DELETE FROM params WHERE name='".mysql_real_escape_string($name)."';";
+	$del=mysql_query($sql);
+
+	$sql="INSERT INTO params SET name='$name', descr='$descr', cat='0', value='".mysql_real_escape_string($value)."';";
+	$insert=mysql_query($sql);
+	if($insert) {return true;} else  {return false;}
+}
+//====================================================
+function formate_date_aaaammjj($date) {
+	$tab_date=explode("/",$date);
+
+	$retour="";
+
+	if(isset($tab_date[2])) {
+		$retour.=sprintf("%04d",$tab_date[2]).sprintf("%02d",$tab_date[1]).sprintf("%02d",$tab_date[0]);
+	}
+	else {
+		$retour.=$date;
+	}
+
+	return $retour;
+}
+
 ?>
