@@ -325,7 +325,7 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
 				}
 			}
 
-			$entry["employeeNumber"] = $employeeNumber;
+			if($employeeNumber!="") {$entry["employeeNumber"] = $employeeNumber;}
 		}
 		// Modification des entrees
 		$ds = @ldap_connect ( $ldap_server, $ldap_port );
@@ -339,6 +339,19 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
 				}
 			}
 			@ldap_close ( $ds );
+
+			if((isset($user[0]["employeeNumber"]))&&($user[0]["employeeNumber"]!="")&&($employeeNumber=='')) {
+				// Il faut vider l'employeeNumber
+				$tab_attr=array();
+				$tab_attr["employeeNumber"]=$user[0]["employeeNumber"];
+				if(modify_attribut ("uid=".$uid, "people", $tab_attr, "del")) {
+					echo "<strong>".gettext("L'employeeNumber a &#233;t&#233; correctement vid&#233;.")."</strong><br />\n";
+				}
+				else {
+					echo "<strong>".gettext("Echec de la modification de l'employeeNumber, veuillez contacter")." </strong><A HREF='mailto:$MelAdminLCS?subject=PB modification entrees utilisateur'>".gettext("l'administrateur du syst&#232;me")."</A><br />\n";
+				}
+			}
+
 		} else {
 			echo gettext("Erreur de connection &#224; l'annuaire, veuillez contacter")." </strong><A HREF='mailto:$MelAdminLCS?subject=PB connection a l'annuaire'>".gettext("l'administrateur du syst&#232;me</A>administrateur")."<br />\n";
 		}
@@ -349,7 +362,7 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
 			userChangedPwd($uid, $userpwd);
 		}
 
-		echo "<p><a href='".$_SERVER['PHP_SELF']."?uid=".$uid."'>Retour</a></p>\n";
+		echo "<p><a href='".$_SERVER['PHP_SELF']."?uid=".$uid."'>Retour vers la fiche de $uid</a></p>\n";
 	}
 } else {
 	echo "<div class=error_msg>".gettext("Cette fonctionnalit&#233; n&#233;cessite des droits d'administration SambaEdu !")."</div>";
