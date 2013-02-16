@@ -13,11 +13,17 @@ REPORT_FILE="$LOG_DIR/log_maj141"
 LADATE=$(date +%d-%m-%Y)
 
 echo "Mise a jour 141:
+- Effacement des enregistrements foireux dans cn=machines
 - Correctif pour mysql sup 5.1.12
 - Suppression de l'utilisation de nscd (doublons uidnumbers) " >> $HISTORIQUE_MAJ
  
 echo "- Correctif pour mysql sup 5.1.12
 - Suppression de l'utilisation de nscd (doublons uidnumbers)"
+
+
+echo "- Effacement des enregistrements foireux dans cn=machines"
+/usr/share/se3/sbin/clean_ip_machine.sh
+
 
 # On assure la comptibilite mysql superieur a 5.1.12
 sed -i 's/^skip-bdb/#skip-bdb/g'  /etc/mysql/my.cnf
@@ -29,3 +35,7 @@ if [ -e /etc/init.d/nscd  ]; then
 fi
 
 exit 0		
+
+
+
+
