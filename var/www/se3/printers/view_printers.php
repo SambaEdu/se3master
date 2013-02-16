@@ -31,7 +31,7 @@
 include "entete.inc.php";
 include "printers.inc.php";
 include "ihm.inc.php";     // pour is_admin()
-include "ldap.inc.php";
+//include "ldap.inc.php";
 
 require_once ("lang.inc.php");
 bindtextdomain('se3-printers',"/var/www/se3/locale");
