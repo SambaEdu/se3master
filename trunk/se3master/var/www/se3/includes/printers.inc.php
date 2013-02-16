@@ -26,6 +26,8 @@
 
 
 require_once("lang.inc.php");
+require_once("config.inc.php");
+require_once("ldap.inc.php");
 bindtextdomain('se3-core',"/var/www/se3/locale");
 textdomain ('se3-core');
 
@@ -181,7 +183,10 @@ function search_imprimantes ($filter,$branch) {
 
   $ds = @ldap_connect ( $ldap_server, $ldap_port );
   if ( $ds ) {
-    $r = @ldap_bind ( $ds ); // Bind anonyme
+    //$r = @ldap_bind ( $ds ); // Bind anonyme
+    $adminLdap = get_infos_admin_ldap2();
+    $r = @ldap_bind($ds, $adminLdap["adminDn"], $adminLdap["adminPw"]); // Bind admin LDAP
+    
     if ($r) {
       $result = @ldap_list ( $ds, $dn[$branch], $filter, $ldap_printer_attr );
 	if ($result) {
