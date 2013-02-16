@@ -109,7 +109,7 @@ then
 	sleep 2
 
 	# On sauvegarde LDAP
-	DATE="$(date +%M%k%d%m%Y)"
+	DATE="$(date +%d%m%Y)"
 	SAUV_LDAP=ldap_$DATE.ldif
 	/usr/sbin/slapcat > /var/se3/save/ldap/$SAUV_LDAP
 
@@ -286,6 +286,12 @@ access to attrs=sambaNtPassword
 	by self write
 	by users none
 	by anonymous auth
+	
+access to attrs=printer-uri
+        by self write
+        by users none
+        by anonymous auth
+
 
 # The admin dn has full write access
 access to *
