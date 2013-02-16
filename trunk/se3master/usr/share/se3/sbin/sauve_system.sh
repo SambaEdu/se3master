@@ -204,7 +204,7 @@ mkdir -p "$dossier_svg/etc"
 mkdir -p "$dossier_svg/acl"
 
 ladate=$(date +"%Y.%m.%d-%H.%M.%S");
-jour=$(date +%a)
+jour=$(date +%a| tr -d ".")
 semaine=$(date +%V)
 
 if [ $svg_hebdo = "oui" ]; then
@@ -326,6 +326,8 @@ if [ -e /root/.my.cnf ]; then
 			#base=$(echo "$A" | sed -e "s!/$!!")
 			if [ -e "$dossier_svg/mysql/$base.$jour.sql" ]; then
 				rm -f "$dossier_svg/mysql/$base.$jour.sql"
+				# sup scories
+				rm -f "$dossier_svg/mysql/$base.$jour..sql" 
 			fi
 			mysqldump -uroot --default-character-set=latin1 $base > "$dossier_svg/mysql/$base.$jour.sql"
 		fi
@@ -338,6 +340,7 @@ echo -e "$COLTXT"
 echo "Sauvegarde de LDAP"
 echo -e "$COLCMD\c"
 #ldapsearch -xLLL -D "cn=admin,$(cat /etc/ldap/ldap.conf | grep '^BASE' | tr '\t' " " | sed -e 's/ \{2,\}/ /g' | cut -d' ' -f2)" -w $(cat /etc/ldap.secret) > "$dossier_svg/ldap/ldap.$jour.ldif"
+rm -f $dossier_svg/ldap/ldap.$jour..ldif
 ldapsearch -xLLL -D $(grep ^rootdn /etc/ldap/slapd.conf|tr "\t" " " | sed -e "s/ \{2,\}/ /g" | sed -e "s/'//g"  | sed -e 's/"//g' | cut -d" " -f2) -w $(cat /etc/ldap.secret) > "$dossier_svg/ldap/ldap.$jour.ldif"
 #=====================================
 test_volume=$(du -sk "$dossier_svg/ldap/ldap.$jour.ldif" | tr "\t" " " | cut -d" " -f1)
@@ -389,9 +392,12 @@ if echo "$*" | grep "varlibsamba" > /dev/null; then
 	echo -e "$COLCMD\c"
 	if [ -e "$dossier_svg/samba/var_lib_samba.$jour.tar.gz" ]; then
 			rm -f "$dossier_svg/samba/var_lib_samba.$jour.tar.gz"
+			rm -f "$dossier_svg/samba/var_lib_samba.$jour..tar.gz"
 	fi
 	if [ -e "$dossier_svg/samba/var_lib_samba_secrets_tdb.$jour" ]; then
 			rm -f "$dossier_svg/samba/var_lib_samba_secrets_tdb.$jour"
+			rm -f "$dossier_svg/samba/var_lib_samba_secrets_tdb..$jour"
+	fi
 	fi
 	tar -czf "$dossier_svg/samba/var_lib_samba.$jour.tar.gz" /var/lib/samba
 else
@@ -399,9 +405,11 @@ else
 	echo -e "$COLCMD\c"
 	if [ -e "$dossier_svg/samba/var_lib_samba.$jour.tar.gz" ]; then
 			rm -f "$dossier_svg/samba/var_lib_samba.$jour.tar.gz"
+			rm -f "$dossier_svg/samba/var_lib_samba.$jour..tar.gz"
 	fi
 	if [ -e "$dossier_svg/samba/var_lib_samba_secrets_tdb.$jour" ]; then
 			rm -f "$dossier_svg/samba/var_lib_samba_secrets_tdb.$jour"
+			rm -f "$dossier_svg/samba/var_lib_samba_secrets_tdb..$jour"
 	fi
 	cp /var/lib/samba/secrets.tdb "$dossier_svg/samba/var_lib_samba_secrets_tdb.$jour"
 fi
@@ -412,6 +420,7 @@ echo "Sauvegarde de /etc"
 echo -e "$COLCMD\c"
 if [ -e "$dossier_svg/etc/etc.$jour.tar.gz" ]; then
         rm -f "$dossier_svg/etc/etc.$jour.tar.gz"
+        rm -f "$dossier_svg/etc/etc.$jour..tar.gz"
 fi
 tar -czf "$dossier_svg/etc/etc.$jour.tar.gz" /etc
 
