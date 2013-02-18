@@ -64,7 +64,15 @@ fi
 
 export  DEBIAN_PRIORITY
 [ "$debug" != "1" ] && apt-get clean
-USE_SPACE=$(df -hPl | grep "/var$" | awk '{print $5}' | sed -e s/%//)
+
+#USE_SPACE=$(df -hPl | grep "/var$" | awk '{print $5}' | sed -e s/%//)
+t=$(df -h| grep "/var$"|grep "^/")
+if [ -z "$t" ]; then
+	USE_SPACE=$(df -h | grep "/var$" | awk '{print $4}' | sed -e s/%//)
+else
+	USE_SPACE=$(df -h | grep "/var$" | awk '{print $5}' | sed -e s/%//)
+fi
+
 if [ "$USE_SPACE" -le 90 ]; then
         echo "Résultat de la demande de mise à jour système du $LADATE :" > $REPORT_FILE
         echo "" >> $REPORT_FILE
