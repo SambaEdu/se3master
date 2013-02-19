@@ -1190,7 +1190,9 @@ function get_infos_admin_ldap2() {
     $adminLdap = array();
 
     // Etablir la connexion au serveur et la selection de la base?
-
+    global $dbhost,$dbname,$dbuser,$dbpass;
+    $authlink = mysql_connect($dbhost,$dbuser,$dbpass);
+    @mysql_select_db($dbname); 
     $sql = "SELECT value FROM params WHERE name='adminRdn'";
     $res1 = mysql_query($sql);
     if (mysql_num_rows($res1) == 1) {
