@@ -368,7 +368,7 @@ else
 fi
 #=====================================
 cp -f /var/lib/ldap/DB_CONFIG $dossier_svg/ldap/DB_CONFIG.$jour
-
+rm -f $dossier_svg/ldap/DB_CONFIG.$jour.
 #if [ "$(du -sm /var/lib/ldap | tr '\t' ' ' | cut -d' ' -f1)" -lt $volume_ldap_max ]; then
 #	/etc/init.d/slapd stop
 #	if [ -e "$dossier_svg/ldap/var_lib_ldap.$jour.tar.gz" ]; then
@@ -398,7 +398,7 @@ if echo "$*" | grep "varlibsamba" > /dev/null; then
 			rm -f "$dossier_svg/samba/var_lib_samba_secrets_tdb.$jour"
 			rm -f "$dossier_svg/samba/var_lib_samba_secrets_tdb..$jour"
 	fi
-	fi
+	
 	tar -czf "$dossier_svg/samba/var_lib_samba.$jour.tar.gz" /var/lib/samba
 else
 	echo "Sauvegarde de /var/lib/samba/secrets.tdb"
