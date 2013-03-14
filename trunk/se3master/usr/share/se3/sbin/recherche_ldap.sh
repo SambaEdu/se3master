@@ -84,7 +84,7 @@ do
 	liste=($(ldapsearch -xLLL -b ou=$branche,$BASEDN $motif $pref|grep "^$pref: "|sed -e "s|^$pref: ||"))
 	if [ -n "${liste[0]}" ]; then
 		echo -e "$COLINFO"
-		echo "Branche People:"
+		echo "Branche $branche:"
 		n=0
 		while [ "$n" -lt "${#liste[*]}" ]
 		do
