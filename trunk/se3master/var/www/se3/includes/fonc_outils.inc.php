@@ -429,7 +429,7 @@ function type_os($nom_machine) { // retourne l'os de la machine
 		if ($ligne > 0) {
                 	while ($res = mysql_fetch_array($result)) {
 				$retour = $res["OSNAME"];
-				if (preg_match('/XP/i',$retour)) { // Pour le moment on a que 2 types d'icones 98 ou XP
+				if (preg_match('/XP/i',$retour)) { // 4 types d'icones 98 / XP / 7 / Linux
 					$retour="XP";
 					return $retour;
 				} elseif (preg_match('/2000/i',$retour)) {
@@ -444,8 +444,8 @@ function type_os($nom_machine) { // retourne l'os de la machine
 				} elseif (preg_match('/98/i',$retour)) {
 				        $retour="98";
 					return $retour;
-				} elseif (preg_match('/95/i',$retour)) {
-				         $retour="98";
+				} elseif (preg_match('/7/i',$retour)) {
+				         $retour="7";
 					 return $retour;
 				} elseif (preg_match('/Linux/i',$retour)) {
 				         $retour="Linux";
