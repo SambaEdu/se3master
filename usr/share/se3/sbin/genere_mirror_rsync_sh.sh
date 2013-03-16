@@ -57,7 +57,7 @@ FORMATE_DUREE() {
 
 /mirror/umount_DISK2.sh 2>/dev/null
 
-date_rsync=\$(date +%a_%Hh%M)
+date_rsync=\$(date +%a%Hh%M)
 FICHIERLOG=\"/mirror/log_rsync_\${date_rsync}\"
 touch \$FICHIERLOG
 

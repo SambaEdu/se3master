@@ -1420,7 +1420,7 @@ else
 	echo "ssh root@$IPDISTANT \"$DOSSMIRROR/$scriptumountdisk2 2>/dev/null\"" >> /mirror/$scriptmirror
 fi
 
-echo 'FICHIERLOG="/mirror/log_rsync_'${LOCALISATION_DISQUE}'_`date +%a_%Hh%M`"' >> /mirror/$scriptmirror
+echo 'FICHIERLOG="/mirror/log_rsync_'${LOCALISATION_DISQUE}'_`date +%a%Hh%M`"' >> /mirror/$scriptmirror
 echo 'touch $FICHIERLOG' >> /mirror/$scriptmirror
 echo 'echo "Fichier de log du" `date` > $FICHIERLOG '  >> /mirror/$scriptmirror
 
