@@ -49,6 +49,11 @@ echo "<h1>".gettext("Annuaire")."</h1>\n";
 $_SESSION["pageaide"]="Annuaire";
 aff_trailer ("7");
 
+if (!isset($_SESSION['comptes_crees'])) {
+	$_SESSION['comptes_crees'] = array(array())  ;  // un sous-tableau par compte ; le deuxième tavbleau est, dans l'ordre nom, prenom, classe (?? en fait, non) (ou 'prof'), uid, password
+	array_splice($_SESSION['comptes_crees'], 0, 1);
+	}
+
 $nom=isset($_POST['nom']) ? $_POST['nom'] : (isset($_GET['nom']) ? $_GET['nom'] : "");
 $prenom=isset($_POST['prenom']) ? $_POST['prenom'] : (isset($_GET['prenom']) ? $_GET['prenom'] : "");
 $naissance=isset($_POST['naissance']) ? $_POST['naissance'] : (isset($_GET['naissance']) ? $_GET['naissance'] : "");
@@ -71,10 +76,11 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 		}
     // Ajout d'un utilisateur
     if (    (!isset($_POST['add_user']))
-         || ( !$nom || !$prenom )    // absence de nom ou de prenom
-         || ( !$naissance && ( !$userpwd || ( $userpwd && !verifPwd($userpwd) ) ) ) // pas de date de naissance et mot de passe absent ou invalide
-         || ( $naissance && !verifDateNaissance($naissance) )  // date de naissance invalide
-         || ( ($naissance && verifDateNaissance($naissance)) && ($userpwd && !verifPwd($userpwd)) )  // date de naissance mais password invalide
+	|| ( !$nom || !$prenom )    // absence de nom ou de prenom
+        || ( $userpwd && !verifPwd($userpwd) ) // mot de passe invalide
+	|| ( $naissance && !verifDateNaissance($naissance) )  // date de naissance invalide
+        || ( ($naissance && verifDateNaissance($naissance)) && ($userpwd && !verifPwd($userpwd)) )  // date de naissance mais password invalide
+//	|| ($userpwd && !verifPwd($userpwd) )  // password invalide
        ) {
       ?>
 	  <form name = "auth" action="add_user.php" method="post" onSubmit = "encrypt(document.auth)">
@@ -98,7 +104,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 		</td>
               <td>
                 <font color="#FF9900">
-                  &nbsp;<?php echo gettext("(YYYYMMDD) ce champ est optionnel, mais s'il n'est pas renseign&#233;, le champ mot de passe est obligatoire."); ?>
+                  &nbsp;<?php echo gettext("(YYYYMMDD) ce champ est optionnel."); ?>
                 </font>
               </td>
             </tr>
@@ -110,10 +116,31 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 		      </td>
               <td>
                 <font color="#FF9900">
-                  &nbsp;<?php echo gettext("Si le champ mot de passe est laiss&#233; vide, c'est la date de naissance qui sera utilis&#233;e."); ?>
+                  &nbsp;<?php echo gettext("ce champ est optionnel"); ?>
                 </font>
               </td>
             </tr>
+            <tr>
+              <td colspan="3" valign="top">
+		<?php
+			echo '<blockquote><font color="#FF9900">';	
+			echo gettext('Si le champ mot de passe est laiss&#233; vide, un mot de passe sera cr&#233;&#233; selon la politique de mot de passe par d&#233;faut qui est d&#233;finie &#224; : ');
+			switch ($pwdPolicy) {
+				case 0:		// date de naissance
+					echo gettext("date de naissance (YYYYMMDD)");
+					echo gettext("<br />Si ni la date de naissance ni le mot de passe ne sont renseign&#233;es, un mot de passe semi-al&#233;atoire sera g&#233;n&#233;r&#233;");
+					break;
+				case 1:		// semi-aleatoire
+					echo gettext("semi-al&#233;atoire (6 car.)");
+					break;
+				case 2:		// aleatoire
+					echo gettext("al&#233;atoire (8 car.)");
+		        		break;
+			}
+			echo '</font></blockquote>';	
+	
+		?>
+              </td>
             <tr>
               <td><?php echo gettext("Sexe :"); ?></td>
               <td colspan="2">
@@ -181,8 +208,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
             	if ( ($userpwd) && !verifPwd($userpwd) ){
               		echo "<div class='error_msg'>";
                     	echo gettext("Vous devez proposer un mot de passe d'une longueur comprise entre 4 et 8 caract&#232;res
-                    alphanum&#233;riques avec obligatoirement un des caract&#232;res sp&#233;ciaux suivants")."&nbsp;".$char_spec."&nbsp;".gettext("ou &#224; d&#233;faut laisser le champ mot de passe vide et dans ce cas c'est la date de naissance
-                    qui sera utilis&#233;e.")."
+                    alphanum&#233;riques avec obligatoirement un des caract&#232;res sp&#233;ciaux suivants")."&nbsp;".$char_spec."&nbsp;".gettext("ou &#224; d&#233;faut laisser le champ mot de passe vide et dans ce cas un mot de passe sera cr&#233;&#233;.")."
                   </div><BR>\n";
             }
             if ( ($naissance) && !verifDateNaissance($naissance) ){
@@ -204,9 +230,32 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
                 echo gettext("Echec de cr&#233;ation : L'utilisateur")." <font color=\"black\"> $prenom $nom</font>".gettext(" est d&#233;ja pr&#233;sent dans l'annuaire.");
               	echo "</div><BR>\n";
       	} else {
-        	// Positionnement de la date de naissance ou du mot de passe par defaut
-        	if (!$naissance ) $naissance="00000000";
-        		if (!$userpwd ) $userpwd=$naissance;
+		switch ($pwdPolicy) {
+			case 0:		// date de naissance
+			       	if ((!$naissance) && (!$userpwd) ) {
+					exec("/usr/share/se3/sbin/gen_pwd.sh -s", $out);
+					$userpwd=$out[0];
+					$naissance="00000000";
+				} else {
+					if (!$userpwd) $userpwd=$naissance;
+				} 
+				break;
+			case 1:		// semi-aleatoire
+				if (!$naissance ) $naissance="00000000";
+				if (!$userpwd) {
+					exec("/usr/share/se3/sbin/gen_pwd.sh -s", $out);
+					$userpwd=$out[0];
+				}
+				break;
+			case 2:		// aleatoire
+				if (!$naissance ) $naissance="00000000";
+				if (!$userpwd) {
+					exec("/usr/share/se3/sbin/gen_pwd.sh -a", $out);
+					$userpwd=$out[0];
+				}
+				break;
+			}
+			
         		// Creation du nouvel utilisateur
         		//echo "<pre>/usr/share/se3/sbin/userAdd.pl \"$prenom\" \"$nom\" \"$userpwd\" \"$naissance\" \"$sexe\" \"$categorie\"</pre>";
         		exec ("/usr/share/se3/sbin/userAdd.pl \"$prenom\" \"$nom\" \"$userpwd\" \"$naissance\" \"$sexe\" \"$categorie\"",$AllOutPut,$ReturnValue);
@@ -220,11 +269,14 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 					$users = search_people ("(cn=$cn)");
 					if ( count ($users) ) {
 						echo gettext("Son identifiant est ")."<STRONG>".$users[0]["uid"]."</STRONG><BR>\n";
+						echo gettext("Son mot de passe est ")."<STRONG>".$userpwd."</STRONG><BR>\n";
+						$nouveau = array('nom'=>"$nom", 'pre'=>"$prenom", 'uid'=>$users[0]["uid"], 'pwd'=>"$userpwd");
+						$_SESSION['comptes_crees'][]=$nouveau;
 						echo "<LI><A HREF=\"add_user_group.php?uid=".$users[0]["uid"]."\">".gettext("Ajouter &#224; des groupes...")."</A>\n";
 					}
 	
 					if((isset($_POST['create_home']))&&($_POST['create_home']=='y')) {
-						echo "<p><b>Cr�ation du dossier personnel de ".$users[0]["uid"]."</b><br />";
+						echo "<p><b>Cr&#233;ation du dossier personnel de ".$users[0]["uid"]."</b><br />";
 						exec("sudo /usr/share/se3/scripts/modif_profil_mozilla_ff.sh ".$users[0]["uid"]." http://www.google.fr create_homes",$ReturnValue2);
 						echo "<pre style='color:red'>";
 						foreach($ReturnValue2 as $key => $value) {
@@ -243,6 +295,9 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
         	}
       }
     }
+    
+include("listing.inc.php");
+
 } else {
 	echo "<div class=error_msg>".gettext("Cette application, n&#233;cessite les droits d'administrateur du serveur SambaEdu !")."</div>";
 }

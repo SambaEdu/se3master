@@ -53,11 +53,40 @@ if(!isset($_POST['is_posted'])) {
 	echo "<p>Cette page est destin&#233;e &#224; r&#233;initialiser/modifier les mots de passe par lots.</p>\n";
 	echo "<p>Vous pouvez&nbsp;:</p>\n";
 	echo "<table summary='Choix du mode'>\n";
+//	echo "<tr>\n";
+//	echo "<td valign='top'><input type='radio' name='reinit_mode' id='reinit_mode_naissance' value='naissance' onchange='teste_radio()' checked /></td><td><label for='reinit_mode_naissance'> r&#233;initialiser les mots de passe &#224; la date de naissance pour un ou des groupes.</label></td>\n";
+//	echo "</tr>\n";
 	echo "<tr>\n";
-	echo "<td valign='top'><input type='radio' name='reinit_mode' id='reinit_mode_naissance' value='naissance' onchange='teste_radio()' checked /></td><td><label for='reinit_mode_naissance'> r&#233;initialiser les mots de passe &#224; la date de naissance pour un ou des groupes.</label></td>\n";
-	echo "</tr>\n";
-	echo "<tr>\n";
-	echo "<td valign='top'><input type='radio' name='reinit_mode' id='reinit_mode_alea' value='alea' onchange='teste_radio()' /></td><td><label for='reinit_mode_alea'> modifier al&#233;atoirement les mots de passe pour un ou des groupes.</label></td>\n";
+	echo "<td valign='top'><input type='radio' name='reinit_mode' id='reinit_mode_alea' checked='checked'";
+
+	switch ($pwdPolicy) {
+	    case 0:
+	        echo " value='naissance'";
+	        break;
+	    case 1:
+	        echo " value='semi'";
+	        break;
+	    case 2:
+	        echo " value='alea'";
+	        break;
+	}
+
+	echo "onchange='teste_radio()' /></td><td><label for='reinit_mode_alea'> modifier les mots de passe pour un ou des groupes.</label><br />";
+	echo "<span style='color:#FF9900;'>La politique de mot de passe actuelle est : ";
+
+	switch ($pwdPolicy) {
+	    case 0:
+	        echo "bas&#233;e sur la date de naissance";
+	        break;
+	    case 1:
+	        echo "semi-al&#233;atoire (6 car.)";
+	        break;
+	    case 2:
+	        echo "al&#233;atoire (8 car.)";
+	        break;
+	}
+
+	echo "</span></td>\n";
 	echo "</tr>\n";
 	echo "<tr>\n";
 	echo "<td valign='top'><input type='radio' name='reinit_mode' id='reinit_mode_csv' value='csv' onchange='teste_radio()' /></td><td><label for='reinit_mode_csv'> imposer les mots de passe d'apr&#232;s un fichier CSV au format&nbsp;: <b>LOGIN;MOTDEPASSE;</b></label><br />\n";
@@ -171,10 +200,10 @@ if(!isset($_POST['is_posted'])) {
 
 	echo "<script type='text/javascript'>
 	function teste_radio() {
-		if(document.getElementById('reinit_mode_naissance').checked==true) {
+		/*if(document.getElementById('reinit_mode_naissance').checked==true) {
 			document.getElementById('div_choix_groupes').style.display='';
 			document.getElementById('div_validation').style.display='none';
-		}
+		}*/
 
 		if(document.getElementById('reinit_mode_alea').checked==true) {
 			document.getElementById('div_choix_groupes').style.display='';
@@ -190,7 +219,7 @@ if(!isset($_POST['is_posted'])) {
 	teste_radio();
 </script>\n";
 
-	//echo "</center>\n";
+	
 	include ("pdp.inc.php");
 	die();
 }
@@ -210,7 +239,7 @@ if(!isset($reinit_mode)) {
 	die();
 }
 
-$tab_reinit_mode=array('naissance','alea','csv');
+$tab_reinit_mode=array('naissance','alea','semi','csv');
 if(!in_array($reinit_mode, $tab_reinit_mode)) {
 	echo "<p style='color:red'>Le mode de r&#233;initialisation/changement des mots de passe choisi est invalide.</p>";
 	echo "<p><a href='".$_SERVER['PHP_SELF']."'>Retour</a></p>";
@@ -274,9 +303,15 @@ if($reinit_mode=='csv') {
 }
 else {
 
-	$option="";
-	if($reinit_mode=='alea') {
-		$option=" 'alea'";
+	switch ($pwdPolicy) {
+	    case 1:
+	        $option=" 'semi'";
+	        break;
+	    case 2:
+	        $option=" 'alea'";
+	        break;
+	    default:
+	        $option="";
 	}
 
 	// Liste des groupes a traiter
@@ -350,6 +385,55 @@ else {
 	}
 }
 //echo "</center>\n";
+
+if (file_exists("/tmp/changement_mdp.csv")) {
+//  dédoublonner les utilisateurs qui auraient été modifiés plusieurs fois : garder le dernier uniquement
+
+	if ($hdle = fopen("/tmp/changement_mdp.csv", "r")) {
+	
+		$listing = array(array());  // une ligne par compte ; le deuxieme parametre est, dans l'ordre nom, prenom, classe (si groupe classe), uid, password
+		array_splice($listing, 0, 1);
+
+		while ($data = fgetcsv($hdle, 0, ";")) {
+			// nom;prenom;uid;mdp;classe 
+		$num = count($data);
+		if ($num >= 5) {
+			$nouveau = array('nom'=>"$data[0]", 'pre'=>"$data[1]", 'cla' => "$data[4]", 'uid'=>"$data[2]", 'pwd'=>"$data[3]");
+			$doublon = false;
+			foreach($listing as &$key) {
+				if ($key['uid'] == $nouveau['uid']){  // doublon
+					$doublon = true;
+					$key['pwd'] = $nouveau['pwd'];
+					//mettre à jour la classe si besoin ou la conserver
+					if ($nouveau['cla'] != '') { $key['cla'] = $nouveau['cla'] ;}
+					break;
+				}
+			}
+			unset($key);
+			
+			if (!$doublon) { $listing[] = $nouveau; }
+		}
+		
+	}        
+	fclose($hdle);
+}	
+
+}
+
+// Lien pour la récupération du mailing
+	if (count($listing, COUNT_RECURSIVE) > 1) {
+		$serial_listing=serialize($listing);
+
+		$lien="<a href=\"#\" onclick=\"document.getElementById('postlisting').submit(); return false;\">T&#233;l&#233;charger le listing des mots de passe modifi&#233;s...</a>";
+
+		echo("<table><tr><td><img src='../elements/images/pdffile.png'></td><td>");
+		echo($lien);
+		echo("<form id='postlisting' action='../annu/listing.php' method='post''>");
+		echo("<input type='hidden' name='hiddeninput' value='$serial_listing' />");
+		echo("<input type='checkbox' name='purge_csv_data' value='y' checked='checked' /> Purger le fichier temporaire apr&#232;s t&#233;l&#233;chargement du fichier");
+		echo("<br />Il n'est peut-&#234;tre pas tr&#232;s prudent de conserver inutilement ces donn&#233;es sur le serveur");
+		echo("</form></td></tr></table>");
+	}
 
 include ("pdp.inc.php");
 

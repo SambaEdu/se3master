@@ -6,6 +6,7 @@
 ##### Reinitialisation de mot de passe pour les utilisateurs #####
 # Stephane Boireau, Academie de Rouen
 
+
 if [ "$1" = "--help" -o "$1" = "-h" -o -z "$1" ]
 then
 		echo "Reinitialisation des mots de passe pour les utilisateurs"
@@ -16,8 +17,8 @@ then
 		echo "             sh $0 Classe_2ND3"
 		echo "             ou"
 		echo "             sh $0 Eleves"
-		echo "        Vous pouvez aussi mettre 'alea' en \$2 pour mettre des mots de passe"
-		echo "        aleatoires."
+		echo "        Vous pouvez aussi mettre en \$2 'alea' pour mettre des mots de passe"
+		echo "        aleatoires ou 'semi' pour mettre des mots de passe semi-aleatoires."
 		echo "        Dernière alternative: Fournir en parametre \$1 la chaine:"
 		echo "             sh $0 csv=CHEMIN/FICHIER.csv"
 		echo "        au format:"
@@ -68,26 +69,6 @@ if [ -z "$BASEDN" -o -z "$ROOTDN" -o -z "$PASSDN" ]; then
 	PASSDN=$(cat /etc/ldap.secret)
 fi
 
-GEN_MDP() {
-	nbcarmdp=8
-	caract="0 1 2 3 4 5 6 7 8 9 A Z E R T Y U I O P Q S D F G H J K L M W X C V B N a z e r t y u i o p q s d f g h j k l m w x c v b n"
-
-	IFS=" "
-	liste=($(echo $caract))
-	nbcaract=${#liste[*]}
-	password=""
-	cpt=1
-	while [ $cpt -le $nbcarmdp ]
-	do
-		#index=$(echo "$RANDOM*$nbcaract/32767" | bc)
-		index=$(($RANDOM*$nbcaract/32767))
-		ajout=${liste[$index]}
-		password=${password}${ajout}
-		cpt=$(($cpt+1))
-	done
-	echo $password
-}
-
 echo "Sauvegarde de l'annuaire..."
 #echo "ldapsearch -xLLL -D $ROOTDN -w $PASSDN > /var/se3/save/ldap_$(date +%Y%m%d%H%M%S).ldif"
 ldapsearch -xLLL -D $ROOTDN -w $PASSDN > /var/se3/save/ldap_$(date +%Y%m%d%H%M%S).ldif
@@ -102,7 +83,7 @@ groupe=$1
 
 fichcsv=""
 
-if [ "$2" = "alea" ]; then
+if [ "$2" = "alea" -o "$2" = "semi" ]; then
 	alea=y
 	dest=/home/admin/Bureau/changement_mdp_${1}_$(date +%Y%m%d%H%M%S).csv
 	touch ${dest}
@@ -112,6 +93,13 @@ else
 	if [ "${1:0:4}" = "csv=" -a -e "${1:4}" ]; then
 		fichcsv=${1:4}
 	fi
+fi
+
+# fichier csv temporaire destine a l'impression pdf du listing des comptes modifies
+temp=/tmp/changement_mdp.csv
+if [ ! -e ${temp} ]; then
+	touch ${temp}
+	chown admin ${temp}
 fi
 
 if [ -n "$fichcsv" ]; then
@@ -126,6 +114,7 @@ if [ -n "$fichcsv" ]; then
 			else
 				echo -e "$uid: \tModificatiation du mot de passe en $pass"
 				/usr/share/se3/sbin/userChangePwd.pl $uid $pass
+# a faire...				echo "$nom;$prenom;$uid;$mdp;$classe;" | tee -a $temp
 			fi
 		fi
 	done < $fichcsv
@@ -149,6 +138,7 @@ else
 					/usr/share/se3/sbin/userChangePwd.pl $uid $date
 					if [ "$?" = "0" ]; then
 						echo "OK"
+# a faire...						echo "$nom;$prenom;$uid;$mdp;$classe;" | tee -a $temp
 					else
 						echo "ERREUR"
 					fi
@@ -157,9 +147,13 @@ else
 				fi
 			fi
 		else
-			# On met un mot de passe aleatoire
-			mdp=$(GEN_MDP)
-	
+			# On met un mot de passe aleatoire ou semi-aleatoire
+			if [ "$2" = "alea" ]; then
+				mdp=$(/usr/share/se3/sbin/gen_pwd.sh -a)
+			else
+				mdp=$(/usr/share/se3/sbin/gen_pwd.sh -s)
+			fi
+
 			mail=$(ldapsearch -xLLL uid=$uid mail | grep "^mail:" | sed -e "s/^mail: //")
 			nom=$(ldapsearch -xLLL uid=$uid sn | grep "^sn:" | sed -e "s/^sn: //")
 			prenom=$(ldapsearch -xLLL uid=$uid givenName | grep "^givenName:" | sed -e "s/^givenName: //")
@@ -174,12 +168,16 @@ else
 				/usr/share/se3/sbin/userChangePwd.pl $uid $mdp
 				if [ "$?" = "0" ]; then
 					echo "$groupe;$nom;$prenom;$mail;$uid;$mdp;$classe" | tee -a $dest
+					echo "$nom;$prenom;$uid;$mdp;$classe" | tee -a $temp
 				else
 					echo "$groupe;$nom;$prenom;$mail;$uid;ECHEC changement MDP;$classe" | tee -a $dest
 				fi
 			else
-				echo "$groupe;$nom;$prenom;$mail;$uid;ECHEC generation MDP???;$classe" | tee -a $dest
+				echo "$groupe;$nom;$prenom;$mail;$uid;ECHEC generation MDP???;$classe  sortie : $mdp" | tee -a $dest
 			fi
+
+			chown www-se3 ${temp}  # pour permettre sa suppression
+
 		fi
 	done
 fi

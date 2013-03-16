@@ -7,14 +7,13 @@
 		Auteur: Stéphane Boireau (ex-Animateur de Secteur pour les TICE sur Bernay/Pont-Audemer (27))
 		Portage LCS : jean-Luc Chrétien jean-luc.chretien@tice;accaen.fr
 		Dernière modification: 03/12/2011
+		modifs Christian Westphal 17/03/2013 christian.westphal@ac-strasbourg.fr
 	*/
 
 	include "se3orlcs_import_comptes.php";
 
 	// $debug_import_comptes peut être initialisée dans se3orlcs_import_comptes.php
 	//$debug_import_comptes="y";
-
-	//my_echo("<p style='background-color:red;'>\$servertype=$servertype</p>");
 
 	// Choix de destination des my_echo():
 	$dest_mode="file";
@@ -48,6 +47,8 @@
 */
 	//exit();
 
+	//my_echo("<p style='background-color:red;'>\$servertype=$servertype</p>");
+	//my_echo("<p style='background-color:red;'>\$debug_import_comptes=$debug_import_comptes</p>");
 
 	// Récupération du type des groupes Equipe_* et Matiere_*
 	$sql="SELECT value FROM params WHERE name='type_Equipe_Matiere'";
@@ -82,6 +83,8 @@
 	$tab_nouveaux_comptes=array();
 	$tab_comptes_avec_employeeNumber_mis_a_jour=array();
 
+	// listing pour l'impression des comptes
+	$listing = array(array());  // une ligne par compte ; le deuxième parametre est, dans l'ordre nom, prenom, classe (ou 'prof'), uid, password
 
 	if(file_exists($pathscripts."/creation_branche_Trash.sh")) {
 		exec("/bin/bash ".$pathscripts."/creation_branche_Trash.sh > /dev/null",$retour);
@@ -427,6 +430,7 @@
 	$uaj="";
 	$uaj_tronque="";
 	$tab_eleve_autre_etab=array();
+
 
 	// Partie ELEVES:
 	//$type_fichier_eleves=isset($_POST['type_fichier_eleves']) ? $_POST['type_fichier_eleves'] : "csv";
@@ -2477,13 +2481,33 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							if(($uid!='')&&($temoin_erreur_prof!="o")) {
 								if($prof[$cpt]["sexe"]==1) {$sexe="M";} else {$sexe="F";}
 								$naissance=$date;
-								$password=$naissance;
-								//my_echo("Ajout du professeur $prenom $nom (<i style='color:magenta;'>$uid</i>): ");
+
+								switch ($pwdPolicy) {
+									case 0:		// date de naissance
+										$password=$naissance;
+										break;
+									case 1:		// semi-aleatoire
+										$out=array();
+										exec("/usr/share/se3/sbin/gen_pwd.sh -s", $out);
+										$password=$out[0];
+										break;
+									case 2:		// aleatoire
+										$out=array();
+										exec("/usr/share/se3/sbin/gen_pwd.sh -a", $out);
+										$password=$out[0];
+										break;
+								}
+
 								if($simulation!="y") {
 									if(add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber)) {
 										my_echo("<font color='green'>SUCCES</font>");
-										$nouveaux_comptes++;
 										$tab_nouveaux_comptes[]=$uid;
+										$listing[$nouveaux_comptes]['nom']="$nom";
+										$listing[$nouveaux_comptes]['pre']="$prenom";
+										$listing[$nouveaux_comptes]['cla']="prof";
+										$listing[$nouveaux_comptes]['uid']="$uid";
+										$listing[$nouveaux_comptes]['pwd']="$password";
+										$nouveaux_comptes++;
 									}
 									else{
 										my_echo("<font color='red'>ECHEC</font>");
@@ -2515,13 +2539,34 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 								//$sexe=$prof[$cpt]["sexe"];
 								if($prof[$cpt]["sexe"]==1) {$sexe="M";}else{$sexe="F";}
 								$naissance=$date;
-								$password=$naissance;
+
+								switch ($pwdPolicy) {
+									case 0:		// date de naissance
+										$password=$naissance;
+										break;
+									case 1:		// semi-aleatoire
+										$out=array();
+										exec("/usr/share/se3/sbin/gen_pwd.sh -s", $out);
+										$password=$out[0];
+										break;
+									case 2:		// aleatoire
+										$out=array();
+										exec("/usr/share/se3/sbin/gen_pwd.sh -a", $out);
+										$password=$out[0];
+										break;
+								}
 								my_echo("Ajout du professeur $prenom $nom (<i>$uid</i>): ");
+
 								if($simulation!="y") {
 									if(add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber)) {
 										my_echo("<font color='green'>SUCCES</font>");
-										$nouveaux_comptes++;
 										$tab_nouveaux_comptes[]=$uid;
+										$listing[$nouveaux_comptes]['nom']="$nom";
+										$listing[$nouveaux_comptes]['pre']="$prenom";
+										$listing[$nouveaux_comptes]['cla']="prof";
+										$listing[$nouveaux_comptes]['uid']="$uid";
+										$listing[$nouveaux_comptes]['pwd']="$password";
+										$nouveaux_comptes++;
 									}
 									else{
 										my_echo("<font color='red'>ECHEC</font>");
@@ -2951,14 +2996,35 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					if(($uid!='')&&($temoin_erreur_eleve!="o")) {
 						$sexe=$eleve[$numero]["sexe"];
 						$naissance=$eleve[$numero]["date"];
-						$password=$naissance;
+						$ele_div=$eleve[$numero]['division'];
+
+						switch ($pwdPolicy) {
+							case 0:		// date de naissance
+								$password=$naissance;
+								break;
+							case 1:		// semi-aleatoire
+								$out=array();
+								exec("/usr/share/se3/sbin/gen_pwd.sh -s", $out);
+								$password=$out[0];
+								break;
+							case 2:		// aleatoire
+								$out=array();
+								exec("/usr/share/se3/sbin/gen_pwd.sh -a", $out);
+								$password=$out[0];
+								break;
+						}
 
 						if($simulation!="y") {
 							# DBG system ("echo 'add_suser : $uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber' >> /tmp/comptes.log");
 							if(add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber)) {
 								my_echo("<font color='green'>SUCCES</font>");
-								$nouveaux_comptes++;
 								$tab_nouveaux_comptes[]=$uid;
+								$listing[$nouveaux_comptes]['nom']="$nom";
+								$listing[$nouveaux_comptes]['pre']="$prenom";
+								$listing[$nouveaux_comptes]['cla']="$ele_div";
+								$listing[$nouveaux_comptes]['uid']="$uid";
+								$listing[$nouveaux_comptes]['pwd']="$password";
+								$nouveaux_comptes++;
 							}
 							else{
 								my_echo("<font color='red'>ECHEC</font>");
@@ -3002,7 +3068,24 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						*/
 						$sexe=$eleve[$numero]["sexe"];
 						$naissance=$eleve[$numero]["date"];
-						$password=$naissance;
+						$ele_div=$eleve[$numero]["division"];
+
+						switch ($pwdPolicy) {
+							case 0:		// date de naissance
+								$password=$naissance;
+								break;
+							case 1:		// semi-aleatoire
+								$out=array();
+								exec("/usr/share/se3/sbin/gen_pwd.sh -s", $out);
+								$password=$out[0];
+								break;
+							case 2:		// aleatoire
+								$out=array();
+								exec("/usr/share/se3/sbin/gen_pwd.sh -a", $out);
+								$password=$out[0];
+								break;
+						}
+
 						my_echo("Ajout de l'élève $prenom $nom (<i>$uid</i>): ");
 						if($simulation!="y") {
 							# DBG system ("echo 'add_suser : $uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber' >> /tmp/comptes.log");
@@ -3015,8 +3098,13 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							*/
 							if(add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber)) {
 								my_echo("<font color='green'>SUCCES</font>");
-								$nouveaux_comptes++;
 								$tab_nouveaux_comptes[]=$uid;
+								$listing[$nouveaux_comptes]['nom']="$nom";
+								$listing[$nouveaux_comptes]['pre']="$prenom";
+								$listing[$nouveaux_comptes]['cla']="$ele_div";
+								$listing[$nouveaux_comptes]['uid']="$uid";
+								$listing[$nouveaux_comptes]['pwd']="$password";
+								$nouveaux_comptes++;
 							}
 							else{
 								my_echo("<font color='red'>ECHEC</font>");
@@ -5395,6 +5483,22 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		exec("chown $user_web /tmp/debug_se3lcs.txt");
 	}
 
+// Lien pour la récupération du mailing
+	if (count($listing, COUNT_RECURSIVE) > 1) {
+		$serial_listing=serialize($listing);
+	
+		my_echo("<form id='postlisting' action='../annu/listing.php' method='post' style='display:none;'>");
+		my_echo("<input type='hidden' name='hiddeninput' value='$serial_listing' />");
+		my_echo("</form><p>");
+
+		$lien="<a href=\"#\" onclick=\"document.getElementById('postlisting').submit(); return false;\">T&#233;l&#233;charger le listing des utilisateurs import&#233;s...</a>";
+
+		my_echo("<table><tr><td><img src='../elements/images/pdffile.png'></td><td>");
+		my_echo($lien);
+		my_echo("<br /><span style='color:red;'>Attention, les donn&#233;es ne seront pas conserv&#233;es en quittant cette page ! Enregistrez le fichier PDF...</span></td></tr></table></p>");
+
+	}
+
 
 	// Envoi par mail de $chaine et $echo_http_file
 	if ( $servertype=="SE3" ) {
@@ -5426,6 +5530,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		$entete="From: root@$domain";
 		mail("$adressedestination", "$sujet", "$message", "$entete") or my_echo("<p style='color:red;'><b>ERREUR</b> lors de l'envoi du rapport par mail.</p>\n");
 	}
+
 	my_echo("</body>\n</html>\n");
 
 ?>
