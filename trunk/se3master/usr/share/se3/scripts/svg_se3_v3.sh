@@ -198,7 +198,7 @@ mkdir -p "$dossier_svg/samba"
 mkdir -p "$dossier_svg/etc"
 
 ladate=$(date +"%Y.%m.%d-%H.%M.%S");
-jour=$(date +%a)
+jour=$(date +%a|tr -d ".")
 semaine=$(date +%V)
 
 if [ $svg_hebdo="oui" ]; then
