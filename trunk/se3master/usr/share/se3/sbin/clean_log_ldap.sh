@@ -10,12 +10,12 @@ if [ "$1" = "--help" -o "$1" = "-h" ]
 then
 echo "permet de vider les logs ldap,"
 echo "teste et corrige le group mapping sur Profs et Eleves"
-echo "Ce script est lance tous les jours par cron à 01h45"
+echo "Ce script est lance tous les jours par cron Ã  01h45"
 echo ""
 echo "Usage : aucune option"
 fi
 
-## On relance ldap pour créer un checkpoint
+## On relance ldap pour crÃ©er un checkpoint
 /etc/init.d/slapd restart
 /usr/bin/db4.8_archive -d -h /var/lib/ldap
  
