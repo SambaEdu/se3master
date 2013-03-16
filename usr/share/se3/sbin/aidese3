@@ -8,7 +8,7 @@ if [ "$1" == "--help" -o "$1" == "-h" ]
 then
 	echo "Permet d'obtenir la fonction de chaque script de SambaEdu"
 	echo "Les scripts se trouve dans /usr/share/se3/[sbin ou script]" 
-	echo "Usage : aidese3 [début du nom] pour n'avoir que les scripts commençant par"
+	echo "Usage : aidese3 [dÃ©but du nom] pour n'avoir que les scripts commenÃ§ant par"
 	echo "--help cette aide"
 	
 	exit

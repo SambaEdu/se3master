@@ -2,13 +2,13 @@
 
 ## $Id$ ##
 #
-##### Permet de crÈer un compte d'assistance pour l'interface web pdt 1 heure #####
+##### Permet de cr√©er un compte d'assistance pour l'interface web pdt 1 heure #####
 #
 
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
-	echo "Script permettant de crÈer un compte pour les services d'assistance acadÈmique."
-	echo "Le compte permet l'accËs complet ‡ l'interface web, il est dÈtruit aprËs une heure."
+	echo "Script permettant de cr√©er un compte pour les services d'assistance acad√©mique."
+	echo "Le compte permet l'acc√®s complet √† l'interface web, il est d√©truit apr√®s une heure."
 	
 	echo "Usage : pas d'option"
 	exit
@@ -33,8 +33,8 @@ PASS=`date | md5sum | cut -c 3-9`
 
 if [ "$ADM" = "1" ]
 then
-echo "Le compte assist existe dÈj‡"
-echo "VÈrifiez que le compte n'est pas un compte utilisateur comme par ex thibault assis"
+echo "Le compte assist existe d√©j√†"
+echo "V√©rifiez que le compte n'est pas un compte utilisateur comme par ex thibault assis"
 echo "vous pouver ensuite changer le mot de passe avec userChangePwd.pl assist PASS"
 exit 1
 fi
