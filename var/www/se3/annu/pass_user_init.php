@@ -41,6 +41,11 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
 
 	//Aide
 	$_SESSION["pageaide"]="Annuaire";
+	
+	if (!isset($_SESSION['comptes_crees'])) {
+		$_SESSION['comptes_crees'] = array(array())  ;  // un sous-tableau par compte ; le deuxième tableau est, dans l'ordre nom, prenom, classe (?? en fait, non) (ou 'prof'), uid, password
+		array_splice($_SESSION['comptes_crees'], 0, 1);
+	}
 
 	echo "<h1>".gettext("Annuaire")."</h1>\n";
 
@@ -48,7 +53,7 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
 
 	// Recherche d'utilisateurs dans la branche people
 	$filter="(uid=$uid_init)";
-	$ldap_search_people_attr = array("gecos");
+	$ldap_search_people_attr = array("gecos","givenName","sn");
 
 	$ds = @ldap_connect ( $ldap_server, $ldap_port );
 	if ( $ds ) {
@@ -61,11 +66,47 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
         			if ( $info["count"]) {
           				for ($loop=0; $loop<$info["count"];$loop++) {
          					$gecos = $info[0]["gecos"][0];
+         					
+         					$prenom = $info[0]["givenname"][0];
+         					$nom = $info[0]["sn"][0];
          					$tmp = preg_split ("/,/",$info[0]["gecos"][0],4);
          					$date_naiss=$tmp[1];
-         					echo gettext("Vous avez choisi de r&#233;initiliser le mot de passe &#224; la date de naissance")."<br><br>";
-        					// echo $date_naiss;
-        		 			userChangedPwd($uid_init, $date_naiss);
+         					
+         					switch ($pwdPolicy) {
+							case 0:		// date de naissance
+								$userpwd=$date_naiss;
+								echo gettext("Mot de passe r&#233;initialis&#233; &#224; la date de naissance : ");
+								break;
+							case 1:		// semi-aleatoire
+								exec("/usr/share/se3/sbin/gen_pwd.sh -s", $out);
+								$userpwd=$out[0];
+								echo gettext("Mot de passe r&#233;initialis&#233; &#224; : ");
+								break;
+							case 2:		// aleatoire
+								exec("/usr/share/se3/sbin/gen_pwd.sh -a", $out);
+								$userpwd=$out[0];
+								break;
+								echo gettext("Mot de passe r&#233;initialis&#233; &#224; : ");
+							}
+
+	       					echo $userpwd."<br><br>";
+        		 			userChangedPwd($uid_init, $userpwd);
+        		 			
+        		 			// ajouter vérification de doublon en cas de modifs successives pour un même uid.
+        		 			$doublon = false;
+        		 			foreach($_SESSION['comptes_crees'] as &$key) {
+							if ($key['uid'] == $uid_init){  // doublon : mise à jour pwd
+								$doublon = true;
+								$key['pwd'] = $userpwd;
+								break;
+							}
+						}
+						if (!$doublon) {
+							$nouveau = array('nom'=>"$nom", 'pre'=>"$prenom", 'uid'=>"$uid_init", 'pwd'=>"$userpwd");
+							$_SESSION['comptes_crees'][]=$nouveau;
+						}
+						$doublon = false;
+
            				}
         			}
         			
@@ -81,6 +122,9 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
   	} else {
     		$error = gettext("Erreur de connection au serveur LDAP");
   	}
+  	
+include("listing.inc.php");
+
 }
 
 include("pdp.inc.php");

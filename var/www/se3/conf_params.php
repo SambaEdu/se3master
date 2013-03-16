@@ -36,7 +36,6 @@ textdomain ('se3-core');
 //aide 
 $_SESSION["pageaide"]="L\'interface_web_administrateur#Configuration_g.C3.A9n.C3.A9rale";
 
-
 if (ldap_get_right("se3_is_admin",$login)!="Y")
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BO
 DY></HTML>");
@@ -94,6 +93,7 @@ if ($action == "change") {
 
 
 require ("config.inc.php");
+
 
 echo "<h1>".gettext("Param&#233;trage du serveur")."</H1>\n";
 
@@ -242,6 +242,31 @@ if ($action=="modif_uidP") {
 	if ($uidPolicy=="5") { $uidP=gettext("nomprenom (tronqu&#233; &#224; 18)"); }
 	echo "<u onmouseover=\"return escape".gettext("('Permet de modifier le format de login.<br> Ce changement ne modifie pas les comptes d&#233;j&#224; cr&#233;&#233;s.<br><br>Les types disponibles sont :<br>prenom.nom<br>prenom.nom (tronqu&#233; &#224; 19)<br>pnom (tronqu&#233; &#224; 19)<br>pnom (tronqu&#233; &#224; 8)<br>nomp (troqu&#233; &#224; 8).<br>nomprenom (tronqu&#233; &#224; 18).<br><br>Si vous avez un Slis, vous devez choisir nomp (troqu&#233; &#224; 8). ')")."\">";
 	echo "<a href=conf_params.php?action=modif_uidP>$uidP</a>";
+	echo "</u>";
+}	
+echo "</td></tr>\n";
+
+
+// pwdPolicy
+echo "<TR><TD>".gettext("Mots de passe par d&#233;faut")."</TD><TD align=\"center\">";
+if ($action=="modif_pwdP") {
+	echo "<form method=\"get\" action=\"conf_params.php\">";
+	echo "<input type=\"hidden\" name=\"action\" value=\"change\">";
+	echo "<input type=\"hidden\" name=\"varb\" value=\"pwdPolicy\">";
+	echo "<select name =\"valeur\" ONCHANGE=\"this.form.submit();\">";
+	echo "<option"; if ($pwdPolicy=="0") { echo " selected"; } echo " value=\"0\">".gettext("bas&#233; sur la date de naissance")."</option>";
+	echo "<option"; if ($pwdPolicy=="1") { echo " selected"; } echo " value=\"1\">".gettext("semi-al&#233;atoire (6 car.)")."</option>";
+	echo "<option"; if ($pwdPolicy=="2") { echo " selected"; } echo " value=\"2\">".gettext("al&#233;atoire (8 car.)")."</option>";
+	echo "</select>\n";
+	echo "<u onmouseover=\"return escape".gettext("('Permet de choisir le format des mots de passe.')")."\">";
+	echo "<img name=\"action_image2\"  src=\"../elements/images/system-help.png\" alt=\"Help\">";
+	echo "</u></form>";
+} else {
+	if ($pwdPolicy=="0") { $pwdP=gettext("bas&#233; sur la date de naissance"); }
+	if ($pwdPolicy=="1") { $pwdP=gettext("semi-al&#233;atoire (6 car.)"); }
+	if ($pwdPolicy=="2") { $pwdP=gettext("al&#233;atoire (8 car.)"); }
+	echo "<u onmouseover=\"return escape".gettext("('Permet de choisir le format des mots de passe. ')")."\">";
+	echo "<a href=conf_params.php?action=modif_pwdP>$pwdP</a>";
 	echo "</u>";
 }	
 echo "</td></tr>\n";
