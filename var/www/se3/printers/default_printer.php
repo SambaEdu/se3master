@@ -8,6 +8,7 @@
    Patrice André <h.barca@free.fr>
    Cedric Bellegarde <cbellegarde@ac-nantes.fr>
    Carip-Académie de Lyon -avril-juin-2004
+   17/03/2013 : ne liste que les imprimantes du parc
    Distribué selon les termes de la licence GPL
    ============================================= */
    
@@ -50,22 +51,27 @@ if (is_admin("se3_is_admin",$login)=="Y") {
 	    		echo "</SELECT>&nbsp;&nbsp;\n";
 	    		echo "<INPUT TYPE=\"submit\" VALUE=\"".gettext("Valider")."\">\n";
 	    		echo "</FORM>\n";
+        	} else {
+			echo "<center>";
+			echo "Il n'existe encore aucun parc";
+			echo "</center>";
         	}
     	} elseif (!$add_print) {
-        	// Creation d'un tableau des nouvelles imprimantes à  intégrer
-        	$list_imprimantes=search_imprimantes("(&(printer-name=*)(objectClass=printerService))","printers"); 
+        	// Creation de deux tableaux : toutes les imprimantes et celles du parc seulement
+        	$list_imprimantes = array();
+        	$list_toutes_imprimantes=search_imprimantes("(&(printer-name=*)(objectClass=printerService))","printers"); 
 		
-        	echo "<H1>".gettext("S&#233lection de l'imprimante")."</H1>";
-  /*      	if (count($list_imprimantes)>0) {
-            		// Filtrage des noms
-            		echo "<FORM ACTION=\"default_printer.php\" METHOD=\"post\">\n";
-            		echo "<P>".gettext("Lister les noms contenant:")." </P>";
-            		echo "<INPUT TYPE=\"text\" NAME=\"filtre_imp\"\n VALUE=\"$filtre_imp\" SIZE=\"8\">";
-            		echo "<INPUT TYPE=\"hidden\" NAME=\"parc\" VALUE=\"$parc\">\n"; 
-	    		echo "<INPUT TYPE=\"hidden\" NAME=\"filtre\" VALUE=\"$filtre\">\n"; 
-            		echo "<INPUT TYPE=\"submit\" VALUE=\"".gettext("Valider")."\">\n";       
-	    		echo "</FORM>\n";
-        	}*/
+        	echo "<H1>".gettext("S&#233lection de l'imprimante pour le parc ")."$parc"."</H1>";
+
+		// Lecture des membres du parc
+		$mp_all=gof_members($parc,"parcs",1);
+		
+		foreach ($list_toutes_imprimantes as $membre_imprim) {
+			if (in_array($membre_imprim['printer-name'], $mp_all, true)) {
+				$list_imprimantes[] = $membre_imprim;
+			}	
+		}
+        	        		
     		// Affichage du formulaire de liste des imprimantes 
 		if ( count($list_imprimantes)>15) $size=15; else $size=count($list_imprimantes);
 		if ( count($list_imprimantes)>0) {
