@@ -102,6 +102,10 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 	// Lecture des membres du parc
 	 $mp_all=gof_members($parc,"parcs",1);
 	if ((!isset($filtrecomp))||("$filtrecomp"=="")) {$mp=$mp_all;}
+	
+	
+	// Recherche de l'impra=imante par defaut
+	$imprim_defaut = get_default_printer($parc);
 			
 	$nombre_machine=count($mp);
 
@@ -272,8 +276,9 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		$tableau_printer .=  "<td class='menuheader'></td>\n";
 		$tableau_printer .=  "<td class='menuheader' align=\"center\">Imprimantes</td>\n";
 		$tableau_printer .=  "<td class='menuheader' align=\"center\">Adresse IP</td>\n";
-                $tableau_printer .=  "<td class='menuheader' align=\"center\">".gettext("Supprimer du parc")."</td>";
-                $tableau_printer .=  "<td class='menuheader' align=\"center\">".gettext("Supprimer compl&#232;tement")."</td></tr>\n";
+                $tableau_printer .=  "<td class='menuheader' align=\"center\">".gettext("Supprimer du parc")."</td>\n";
+                $tableau_printer .=  "<td class='menuheader' align=\"center\">".gettext("Supprimer compl&#232;tement")."</td>\n";
+                $tableau_printer .=  "<td class='menuheader' align=\"center\">".gettext("Par d&#233;faut")."</td>";
 		$tableau_printer .=  "</tr>\n";
 
 		$suisje_printer="0";
@@ -321,6 +326,13 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 				$tableau_printer .= "<td align=\"center\">$printer_ip</td>";
                                 $tableau_printer .= "<td align=\"center\"><INPUT type=\"checkbox\" name=\"old_computers[]\" id=\"del_$loop\"  value=\"$mpenc\"></td>";
                                 $tableau_printer .= "<td align=\"center\"><INPUT type=\"checkbox\" name=\"supprime_all[]\" id=\"sup_$loop\"  value=\"$mpenc\" onClick=\"coche_machine('del_$loop',true)\"></td>\n";
+                                $tableau_printer .= "<td align=\"center\">";
+                                
+                                if ($imprim_defaut == $mp[$loop]) {
+                                	$tableau_printer .= "<img style=\"border: 0px solid ;\" src=\"../elements/images/enabled.png\" title=\"par defaut\" alt=\"par defaut\" >";
+                                }
+                                
+                                $tableau_printer .= "</td>\n";
                                 $tableau_printer .= "</tr>";
 			} else {
                                 echo "<tr>";
@@ -330,7 +342,6 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		                        if($retourOs == "0") { $icone="computer_disable.png"; }
 		                        elseif($retourOs == "Linux") { $icone="linux.png"; }
 		                        elseif($retourOs == "XP") { $icone="winxp.png"; }
-                                        elseif($retourOs == "7") { $icone="win7.png"; }
 		                        elseif($retourOs == "98") { $icone="win.png"; }
 		                        else { $icone="computer_disable.png"; }
 					$ip=avoir_ip($mpenc);
@@ -430,7 +441,9 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 
                     echo "<h3>".count($mp)." station(s) dans le parc "."$parc</h3>";
                 }
-		echo "<input type=\"submit\" value=\"".gettext("Valider")."\">\n";
+                
+                
+                echo "<input type=\"submit\" value=\"".gettext("Valider")."\">\n";
 		echo "</FORM>\n";
 		echo "</center>";
 	} else {

@@ -8,7 +8,7 @@
    Patrice André <h.barca@free.fr>
    Cedric Bellegarde <cbellegarde@ac-nantes.fr>
    Carip-Académie de Lyon -avril-juin-2004
-   17/03/2013 : ne liste que les imprimantes du parc
+   CW 17/03/2013 : ne liste que les imprimantes du parc
    Distribué selon les termes de la licence GPL
    ============================================= */
    

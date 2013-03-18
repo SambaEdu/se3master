@@ -281,4 +281,61 @@ function printers_members ($gof,$branch,$extract) {   // Recherche les imprimant
   }
   return $ret;
 }
+
+
+
+
+//function people_get_variables($uid, $mode) {
+function get_default_printer($parc_cn) {
+
+
+    /**
+     * Retourne le nom de l'imprimante par défaut
+
+     * @Parametres $parc_cn - Le cn du parc
+
+     * @Return  une chaine contenant le cn de l'imprimante par default du parc_cn
+
+     */
+    global $ldap_server, $ldap_port, $dn;
+    global $error;
+    $error = "";
+
+    // LDAP attribute
+//    $ldap_people_attr = array(
+    $ldap_printer_attr = array(
+        "cn",		// nom du parc
+        "owner"		// contient le cn de l'imprimante par defaut
+    );
+
+    $ds = @ldap_connect($ldap_server, $ldap_port);
+    if ($ds) {
+        $r = @ldap_bind($ds); // Bind anonyme
+        if ($r) {
+//            $result = @ldap_read($ds, "uid=" . $uid . "," . $dn["people"], "(objectclass=posixAccount)", $ldap_people_attr);
+            $result = @ldap_read($ds, "cn=" . $parc_cn . "," . $dn["parcs"], "(objectclass=groupOfNames)", $ldap_printer_attr);
+            if ($result) {
+                $info = @ldap_get_entries($ds, $result);
+                if ($info["count"]) {
+
+                    if(isset($info[0]["owner"][0])) {            	
+                    	$foo = ldap_explode_dn($info[0]["owner"][0],0);
+                    	$ret = substr($foo[0],3);
+                    }
+                }
+                @ldap_free_result($result);
+            }
+        } else {
+            $error = gettext("Echec du bind anonyme");
+        }
+
+        @ldap_close($ds);
+    } else {
+        $error = gettext("Erreur de connection au serveur LDAP");
+    }
+
+    return $ret;
+}
+
+
 ?>
