@@ -5,14 +5,14 @@
 # **********************************************************
 # Auteur: Olivier LECLUSE
 # Colorisation: 18/05/2005
-# Ce script est distribué selon les termes de la licence GPL
+# Ce script est distribuÃ© selon les termes de la licence GPL
 # **********************************************************
 
 cd /var/cache/se3_install
 
 CONT=$1
 
-#Couleurs - désactivation des couleurs - keyser car posant pb avec 
+#Couleurs - dÃ©sactivation des couleurs - keyser car posant pb avec 
 # lors de l'affichage ds une page web
 
 
@@ -23,7 +23,7 @@ LADATE=$(date +%d-%m-%Y)
 LOG_DIR="/var/log/se3"
 
 #
-# Détection de la distribution
+# DÃ©tection de la distribution
 #
 
 # Creation de l'utilisateur www-se3 et du rep cgi-binse -- a retirer par la suite
@@ -57,7 +57,7 @@ if [ ! -d /usr/share/se3/scripts-alertes ]; then
 fi
 
 echo -e "$COLTXT"
-echo "Détection de la distribution..."
+echo "DÃ©tection de la distribution..."
 echo -e "$COLCMD\c"
 
 if [ -e /etc/redhat-release ]; then
@@ -91,7 +91,7 @@ if [ -e /etc/mandrake-release ]; then
 fi
 if [ -e /etc/debian_version ]; then
 	echo -e "$COLINFO\c"
-	echo "Debian détectée, félicitation ;-)"
+	echo "Debian dÃ©tectÃ©e, fÃ©licitation ;-)"
 	DISTRIB="DEB"
 	WWWPATH="/var/www"
 	APACHE="www-se3"
@@ -107,7 +107,7 @@ if [ -e /etc/debian_version ]; then
 fi
 
 #
-# Récupération des paramètres de connexion à la base
+# RÃ©cupÃ©ration des paramÃ¨tres de connexion Ã  la base
 #
 
 echo -e "$COLCMD\c"
@@ -125,7 +125,7 @@ fi
 LDAPIP=`echo "SELECT value FROM params WHERE name='ldap_server'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$LDAPIP" ]; then
 	echo -e "$COLERREUR"
-	echo "Impossible d'accéder aux paramètres SambaEdu."
+	echo "Impossible d'accÃ©der aux paramÃ¨tres SambaEdu."
 	echo -e "$COLTXT"
 	exit 1
 fi
@@ -135,10 +135,10 @@ chmod 0440 /etc/sudoers
 
 
 #
-# Mise à jour des scripts et de l'interface
+# Mise Ã  jour des scripts et de l'interface
 #
 echo -e "$COLTXT"
-echo "Mise à jour de l'interface..."
+echo "Mise Ã  jour de l'interface..."
 echo -e "$COLCMD\c"
 tar -zxf wwwse3.tgz -C $WWWPATH 2>/dev/null
 
@@ -182,7 +182,7 @@ cp -a reg/majdll.exe /home/netlogon
 chown admin.admins /home/netlogon/
 
 #
-# Rétablissement du script mkslurpd
+# RÃ©tablissement du script mkslurpd
 #
 echo -e "$COLCMD\c"
 mv /usr/share/se3/sbin/mkslurpd /usr/share/se3/sbin/mkslurpd.old

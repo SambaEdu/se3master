@@ -4,7 +4,7 @@
 # distribue sous licence GPL
 # 12/2005
 #
-##### Permet de vider la table session et delester connexions de se3db afin d'eviter le debordement, script lancé une fois / mois par cron #####
+##### Permet de vider la table session et delester connexions de se3db afin d'eviter le debordement, script lancÃ© une fois / mois par cron #####
 ##$Id$##
 #
 

@@ -6,14 +6,14 @@
 #
 ## $Id ##
 #
-# Dernière modif: 12/09/2006
+# DerniÃ¨re modif: 12/09/2006
 
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
 	echo "Script permettant de changer le domaine mail des utilisateurs"
 	echo "dans l'annuaire LDAP."
 	echo "Usage : Aucune option"
-	echo "        Il suffit de répondre aux questions."
+	echo "        Il suffit de rÃ©pondre aux questions."
 	exit
 fi
 
@@ -26,11 +26,11 @@ bon_domaine=""
 while [ -z "$bon_domaine" ]
 do
 	echo ""
-	echo "Quel est le nom du domaine mail à mettre en place?"
+	echo "Quel est le nom du domaine mail Ã  mettre en place?"
 	echo -e "Domaine: \c"
 	read bon_domaine
 
-	echo "L'adresse mail de toto sera transformée en toto@$bon_domaine"
+	echo "L'adresse mail de toto sera transformÃ©e en toto@$bon_domaine"
 	echo -e "Est-ce correct? (o/n) \c"
 	read REPONSE
 
@@ -41,7 +41,7 @@ done
 
 echo ""
 echo "Sauvegarde initiale du LDAP."
-echo "Le serveur LDAP va être arrêté puis redémarré."
+echo "Le serveur LDAP va Ãªtre arrÃªtÃ© puis redÃ©marrÃ©."
 echo "Appuyez sur ENTREE pour poursuivre..."
 read PAUSE
 
@@ -58,23 +58,23 @@ ldapsearch -xLLL -D "$ROOTDN" -w "$(cat /etc/ldap.secret)" > $tmp/ldapsearch_${l
 /etc/init.d/slapd stop
 sleep 5
 if ps aux | grep slapd | grep -v grep > /dev/null ;then
-	echo "ERREUR: Le serveur LDAP n'est semble-t-il pas arrêté."
-	echo "Par précaution, le script s'arrête là."
+	echo "ERREUR: Le serveur LDAP n'est semble-t-il pas arrÃªtÃ©."
+	echo "Par prÃ©caution, le script s'arrÃªte lÃ ."
 	exit
 else
-	echo "LDAP arrêté."
+	echo "LDAP arrÃªtÃ©."
 fi
-# Le /var/lib/ldap a tendance à être trop gros pour faire une sauvegarde tar
+# Le /var/lib/ldap a tendance Ã  Ãªtre trop gros pour faire une sauvegarde tar
 #tar -czf $tmp/var_lib_ldap_${ladate}.tar.gz /var/lib/ldap
 slapcat > $tmp/slapcat_${ladate}.ldif
 /etc/init.d/slapd start
 sleep 5
 
 if ps aux | grep slapd | grep -v grep > /dev/null ;then
-	echo "LDAP redémarré."
+	echo "LDAP redÃ©marrÃ©."
 else
-	echo "ERREUR: Le serveur LDAP n'est semble-t-il pas redémarré."
-	echo "Par précaution, le script s'arrête là."
+	echo "ERREUR: Le serveur LDAP n'est semble-t-il pas redÃ©marrÃ©."
+	echo "Par prÃ©caution, le script s'arrÃªte lÃ ."
 	exit
 fi
 
@@ -82,27 +82,27 @@ echo "#!/bin/bash" > $tmp/restaure_ldap.sh
 echo "/etc/init.d/slapd stop
 sleep 5
 if ps aux | grep slapd | grep -v grep > /dev/null ;then
-	echo \"ERREUR: Le serveur LDAP n'est semble-t-il pas arrêté.\"
-	echo \"Par précaution, le script s'arrête là.\"
+	echo \"ERREUR: Le serveur LDAP n'est semble-t-il pas arrÃªtÃ©.\"
+	echo \"Par prÃ©caution, le script s'arrÃªte lÃ .\"
 	exit
 else
-	echo \"LDAP arrêté.\"
+	echo \"LDAP arrÃªtÃ©.\"
 fi
 cd /
 tar -xzf $tmp/var_lib_ldap_${ladate}.tar.gz
 /etc/init.d/slapd start
 if ps aux | grep slapd | grep -v grep > /dev/null ;then
-	echo \"LDAP redémarré.\"
+	echo \"LDAP redÃ©marrÃ©.\"
 else
-	echo \"ERREUR: Le serveur LDAP n'est semble-t-il pas redémarré.\"
-	echo \"Il faut le redémarrer à la main.\"
+	echo \"ERREUR: Le serveur LDAP n'est semble-t-il pas redÃ©marrÃ©.\"
+	echo \"Il faut le redÃ©marrer Ã  la main.\"
 	exit
 fi" >> $tmp/restaure_ldap.sh
 
 chmod +x $tmp/restaure_ldap.sh
 
 echo ""
-echo "Début des corrections..."
+echo "DÃ©but des corrections..."
 ldapsearch -xLLL -b "ou=People,$BASE" uid | grep "^uid: " | sed -e "s/^uid: //" | while read login
 do
 	if [ "$login" != "ldapadm" -a "$login" != "smbadm" -a "$login" != "samba" -a "$login" != "root" -a "$login" != "admin" ]; then
@@ -117,9 +117,9 @@ do
 	fi
 done
 
-echo "Terminé."
+echo "TerminÃ©."
 
 echo ""
-echo "Pour restaurer le LDAP en cas de problème, lancer:"
+echo "Pour restaurer le LDAP en cas de problÃ¨me, lancer:"
 echo "$tmp/restaure_ldap.sh"
 echo ""

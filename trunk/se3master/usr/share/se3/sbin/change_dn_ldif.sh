@@ -76,7 +76,7 @@ if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
 	dbuser=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbuser=" | cut	-d = -f 2 |cut -d \" -f 2`
 	dbpass=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbpass=" | cut	-d = -f 2 |cut -d \" -f 2`
 	else
-	echo "Fichier de conf inaccessible désolé !!"
+	echo "Fichier de conf inaccessible dÃ©solÃ© !!"
 	echo "le script ne peut se poursuivre"
 	exit 1
 	fi
@@ -86,7 +86,7 @@ if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
 	while [ "$REPONSE" != "g" -a "$REPONSE" != "f" ]
 	do
 		echo -e "$COLTXT"
-		echo -e "Voulez vous générer un fichier ldif depuis l'annuaire courant\n ou bien utiliser un fichier préalablement sauvegardé ? (${COLCHOIX}g/f${COLTXT}) $COLSAISIE\c"
+		echo -e "Voulez vous gÃ©nÃ©rer un fichier ldif depuis l'annuaire courant\n ou bien utiliser un fichier prÃ©alablement sauvegardÃ© ? (${COLCHOIX}g/f${COLTXT}) $COLSAISIE\c"
 		read REPONSE
 
 	done
@@ -97,13 +97,13 @@ if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
 		echo -e "$COLCMD"
 		echo "patientez exportation de l'annaire en cours....."
 		echo -e "$COLTXT"
-				ldapsearch -xLLL -D "$ROOTDN" -w "$PASSLDAP" objectClass=* > /tmp/export_ldap.ldif && echo -e "$COLCMD Exportation effectueé avec succès"
+				ldapsearch -xLLL -D "$ROOTDN" -w "$PASSLDAP" objectClass=* > /tmp/export_ldap.ldif && echo -e "$COLCMD Exportation effectueÃ© avec succÃ¨s"
 		if [ $? != 0 ]; then
-		ERREUR "L'exportation du fichier ldif a echoué !"
+		ERREUR "L'exportation du fichier ldif a echouÃ© !"
 		fi
 	else
 		echo -e "$COLTXT"
-		echo "Avant de continuer, vous devez avoir déposé votre fichier ldif nommé export_ldap.ldif  dans /tmp"
+		echo "Avant de continuer, vous devez avoir dÃ©posÃ© votre fichier ldif nommÃ© export_ldap.ldif  dans /tmp"
 		echo -e "$COLTXT"
 		POURSUIVRE
 	fi
@@ -111,7 +111,7 @@ if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
 
 
 
-### Verification que le serveur ldap est bien sur se3 et non pas déporté"
+### Verification que le serveur ldap est bien sur se3 et non pas dÃ©portÃ©"
 
 #### Tout semble ok on peut poursuivre #
 # echo "ce script va vous permettre de changer la base dn de l'annuaire sur votre fichier ldif "
@@ -166,10 +166,10 @@ close(SORTIE);'> /root/change_dn.pl
 chmod 700 /root/change_dn.pl
 ### appel  du prog perl pour changer la chaine de caractere correspondant a la base dn ####
 
-/root/change_dn.pl "$BASEDNT" "$NBASEDN" "$BASEDN" && echo -e "$COLCMD Nouveau fichier ldif généré avec succès dans /root/export_ldap_mod.ldif"
-#/root/changedn.pl "$BASEDNT" "$NBASEDN" "$BASEDN" && echo -e "$COLCMD Nouveau fichier ldif généré avec succès dans /root/export_ldap_mod.ldif"
+/root/change_dn.pl "$BASEDNT" "$NBASEDN" "$BASEDN" && echo -e "$COLCMD Nouveau fichier ldif gÃ©nÃ©rÃ© avec succÃ¨s dans /root/export_ldap_mod.ldif"
+#/root/changedn.pl "$BASEDNT" "$NBASEDN" "$BASEDN" && echo -e "$COLCMD Nouveau fichier ldif gÃ©nÃ©rÃ© avec succÃ¨s dans /root/export_ldap_mod.ldif"
 if [ $? != 0 ]; then
-ERREUR "Le traitement du fichier ldif a echoué"
+ERREUR "Le traitement du fichier ldif a echouÃ©"
 fi
 
 

@@ -37,7 +37,7 @@ FSTAB_ORI="/etc/fstab"
 echo "" > $FSTAB_TMP
 
 echo -e "$COLTXT"
-echo "Modification de fstab si nécessaire..."
+echo "Modification de fstab si nÃ©cessaire..."
 echo -e "$COLCMD\c"
 while read LIGNE
 do

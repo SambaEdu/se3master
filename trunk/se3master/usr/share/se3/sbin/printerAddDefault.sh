@@ -18,27 +18,27 @@ fi
 
 BASEDN=`echo "SELECT value FROM params WHERE name='ldap_base_dn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$BASEDN" ]; then
-        echo "Impossible d'accéder au paramètre BASEDN"
+        echo "Impossible d'accÃ©der au paramÃ¨tre BASEDN"
         exit 1
 fi
 PARCSRDN=`echo "SELECT value FROM params WHERE name='parcsRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$PARCSRDN" ]; then
-        echo "Impossible d'accéder au paramètre PARCSRDN"
+        echo "Impossible d'accÃ©der au paramÃ¨tre PARCSRDN"
         exit 1
 fi
 PRINTERSRDN=`echo "SELECT value FROM params WHERE name='printersRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$PRINTERSRDN" ]; then
-        echo "Impossible d'accéder au paramètre PRINTERSRDN"
+        echo "Impossible d'accÃ©der au paramÃ¨tre PRINTERSRDN"
         exit 1
 fi
 ADMINRDN=`echo "SELECT value FROM params WHERE name='adminRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$ADMINRDN" ]; then
-        echo "Impossible d'accéder au paramètre ADMINRDN"
+        echo "Impossible d'accÃ©der au paramÃ¨tre ADMINRDN"
         exit 1
 fi
 ADMINPW=`echo "SELECT value FROM params WHERE name='adminPw'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$ADMINPW" ]; then
-        echo "Impossible d'accéder au paramètre ADMINPW"
+        echo "Impossible d'accÃ©der au paramÃ¨tre ADMINPW"
         exit 1
 fi
 

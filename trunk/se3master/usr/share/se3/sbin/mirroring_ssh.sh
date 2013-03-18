@@ -10,12 +10,12 @@
 # au choix de l'utilisateur
 # modestement ecrit par Franck Molle, dernieres modifs 08/2004
 
-#Script humblement modifié par Stéphane Boireau pour permettre le rsync vers une machine distante.
+#Script humblement modifiÃ© par StÃ©phane Boireau pour permettre le rsync vers une machine distante.
 #Modifs: 04/04/2005
 
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
-	echo "Permet de mettre en place un mirroring entre le disque principal et un deuxième disque"
+	echo "Permet de mettre en place un mirroring entre le disque principal et un deuxiÃ¨me disque"
 	echo "Script interactif"
 	echo "Usage : aucune option"
 	exit
@@ -24,17 +24,17 @@ fi
 
 #Chemin des scripts:
 chemin="."
-#Passer par la suite à /usr/share/se3/sbin/
+#Passer par la suite Ã  /usr/share/se3/sbin/
 
 
 
 #================================================
-#Clé publique du compte root local:
+#ClÃ© publique du compte root local:
 clepublique="/var/remote_adm/.ssh/id_rsa.pub"
-#Cette clé sans PASSPHRASE va permettre l'éexécution automatique en crontab
+#Cette clÃ© sans PASSPHRASE va permettre l'Ã©exÃ©cution automatique en crontab
 #(i.e. sans intervention humaine pour une saisie de mot de passe) du script de mirroring.
 
-#INUTILE: On en crée une autre!
+#INUTILE: On en crÃ©e une autre!
 #================================================
 
 
@@ -83,7 +83,7 @@ ERREUR()
 
 		rm -f "$tmp/erreur.txt"
 	fi
-	#A décommenter après la phase de debug:
+	#A dÃ©commenter aprÃ¨s la phase de debug:
 	#rm -fr $tmp
 	echo -e "$COLTXT"
 	exit 0
@@ -114,7 +114,7 @@ POURSUIVRE()
 AFFICHHD()
 {
 	echo -e "$COLTXT"
-	echo "Voici la liste des disques trouvés sur votre machine:"
+	echo "Voici la liste des disques trouvÃ©s sur votre machine:"
 	echo -e "$COLCMD"
 	TEMOIN=""
 	if /bin/dmesg | grep hd | grep drive | grep -v driver | grep -v ROM; then
@@ -127,11 +127,11 @@ AFFICHHD()
 	fi
 
 	if [ "$TEMOIN" != "OK" ]; then
-		echo -e "${COLINFO}Les méthodes précédentes de détection n'ont pas fonctionné."
-		echo "Deux autres méthodes vont être tentées."
-		echo "Si elles échouent, il vous faudra connaitre"
+		echo -e "${COLINFO}Les mÃ©thodes prÃ©cÃ©dentes de dÃ©tection n'ont pas fonctionnÃ©."
+		echo "Deux autres mÃ©thodes vont Ãªtre tentÃ©es."
+		echo "Si elles Ã©chouent, il vous faudra connaitre"
 		echo -e "l'identifiant (hda, hdb,...) du disque pour poursuivre.${COLCMD}"
-		#Sur les IBM Thinkpad, les commandes précédentes ne donnent rien alors que /dev/hda est bien présent.
+		#Sur les IBM Thinkpad, les commandes prÃ©cÃ©dentes ne donnent rien alors que /dev/hda est bien prÃ©sent.
 		#/bin/dmesg | grep dev | grep host | grep bus | grep target | grep lun | cut -d ":" -f 1 | sed -e "s/ //g" | sed -e "s!ide/host0/bus0/target0/lun0!hda!g" | sed -e "s!ide/host0/bus0/target1/lun0!hdb!g" | sed -e "s!ide/host0/bus1/target0/lun0!hdc!g" | sed -e "s!ide/host0/bus1/target1/lun0!hdd!g"
 		#if /bin/dmesg | grep dev | grep host | grep bus | grep target | grep lun | cut -d ":" -f 1 | sed -e "s/ //g" | sed -e "s!ide/host0/bus0/target0/lun0!hda!g" | sed -e "s!ide/host0/bus0/target1/lun0!hdb!g" | sed -e "s!ide/host0/bus1/target0/lun0!hdc!g" | sed -e "s!ide/host0/bus1/target1/lun0!hdd!g"; then
 		if /bin/dmesg | grep dev | grep host | grep bus | grep target | grep lun > /dev/null; then
@@ -154,9 +154,9 @@ AFFICHHD()
 			TEMOIN=$(cat /tmp/TEMOIN)
 			rm -f /tmp/TEMOIN
 			echo -e "$COLINFO"
-			echo "Un message éventuel indiquant:"
+			echo "Un message Ã©ventuel indiquant:"
 			echo -e "${COLERREUR}Disk /dev/XdY doesn't contain a valid partition table"
-			echo -e "${COLINFO}signifie seulement que le périphérique /dev/XdY ne doit pas être un disque dur."
+			echo -e "${COLINFO}signifie seulement que le pÃ©riphÃ©rique /dev/XdY ne doit pas Ãªtre un disque dur."
 		fi
 	fi
 
@@ -165,7 +165,7 @@ AFFICHHD()
 		if ls /dev/hd* | grep "[0-9]" > /dev/null; then
 			ls /dev/hd* | grep "[0-9]" | sed -e "s!/dev/!!g" | sed -e "s/[0-9]*//g"
 		else
-			echo -e "${COLINFO}Le(s) disque(s) dur(s) n'a/ont pas été identifié(s) par mon script.\nCela ne vous empêche pas de poursuivre,\nmais il faut alors connaitre le périphérique...${COLTXT}"
+			echo -e "${COLINFO}Le(s) disque(s) dur(s) n'a/ont pas Ã©tÃ© identifiÃ©(s) par mon script.\nCela ne vous empÃªche pas de poursuivre,\nmais il faut alors connaitre le pÃ©riphÃ©rique...${COLTXT}"
 		fi
 	fi
 }
@@ -183,7 +183,7 @@ echo "****************************************************************"
 echo "* Ce script va mettre en place un mirroring a l'aide de rsync  *"
 echo "* entre HDA / SDA / etc ... et un 2eme disque de votre choix.  *"
 #==========================
-echo "* Le 2è disque dur pourra se trouver sur une machine distante. *"
+echo "* Le 2Ã¨ disque dur pourra se trouver sur une machine distante. *"
 #==========================
 echo "*                                                              *"
 echo -e "*${COLERREUR}           /!\ ATTENTION /!\   A CE QUE VOUS FAITES    ${COLINFO}       *"
@@ -198,23 +198,23 @@ read OK
 
 echo -e "$COLPARTIE"
 echo "*********************"
-echo "* Présence de rsync *"
+echo "* PrÃ©sence de rsync *"
 echo "*********************"
 
-# Détection de rsync et installation si nécessaire:
+# DÃ©tection de rsync et installation si nÃ©cessaire:
 if [ -e /usr/bin/rsync ]; then
         echo -e "${COLTXT}"
 	#echo ""
-        echo "Rsync est déjà installé."
+        echo "Rsync est dÃ©jÃ  installÃ©."
 else
         REPONSE=""
         while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
         do
 		echo -e "${COLTXT}"
-                echo "Rsync est nécessaire au mirroring, mais ne semble pas installé."
+                echo "Rsync est nÃ©cessaire au mirroring, mais ne semble pas installÃ©."
                 echo -e "Voulez-vous l'installer maintenant?"
-                echo "(une connexion à internet est nécessaire)"
-                echo -e "Réponse: (${COLCHOIX}o/n${COLTXT}) [${COLDEFAUT}o${COLTXT}] ${COLSAISIE}\c"
+                echo "(une connexion Ã  internet est nÃ©cessaire)"
+                echo -e "RÃ©ponse: (${COLCHOIX}o/n${COLTXT}) [${COLDEFAUT}o${COLTXT}] ${COLSAISIE}\c"
                 read REPONSE
 
 		if [ -z "$REPONSE" ]; then
@@ -223,7 +223,7 @@ else
 	done
         if [ "$REPONSE" = "o" ]; then
 	        echo -e "${COLTXT}"
-                echo "Installation de rsync lancée:"
+                echo "Installation de rsync lancÃ©e:"
 	        echo -e "${COLCMD}"
                 apt-get update
                 apt-get install rsync
@@ -263,8 +263,8 @@ do
 			fi
 		else
 			echo -e "${COLERREUR}"
-			echo "Aucune partition n'a été trouvée sur $DISK1"
-			echo "Vous avez dû vous tromper de disque."
+			echo "Aucune partition n'a Ã©tÃ© trouvÃ©e sur $DISK1"
+			echo "Vous avez dÃ» vous tromper de disque."
 			echo ""
 			echo -e "${COLTXT}Tapez ENTREE pour corriger."
 			read PAUSE
@@ -278,7 +278,7 @@ done
 echo -e "${COLCMD}"
 sfdisk -d /dev/$DISK1 > /tmp/part
 
-#Détection des partitions du disque source:
+#DÃ©tection des partitions du disque source:
 PARTSWAP=`fdisk -l /dev/$DISK1 | grep swap | sed -e "s/ .*//" | sed -e "s/\/dev\///" `
 PARTROOT=`df | grep "/\$" | sed -e "s/ .*//" | sed -e "s/\/dev\///" `
 PARTHOME=`df | grep "/home" | sed -e "s/ .*//" | sed -e "s/\/dev\///"`
@@ -287,7 +287,7 @@ PARTVARSE3=`df | grep "/var/se3" | sed -e "s/ .*//" | sed -e "s/\/dev\///"`
 TSTVAR=`df | grep "/var"| grep -v /var/se3`
 
 echo -e "${COLTXT}"
-echo "Le script a détecté les partitions suivantes:"
+echo "Le script a dÃ©tectÃ© les partitions suivantes:"
 echo ""
 echo -e "${COLTXT}Partition SWAP :\t${COLINFO} $PARTSWAP"
 echo -e "${COLTXT}Partition Racine :\t${COLINFO} $PARTROOT"
@@ -296,7 +296,7 @@ if [ ! -z "$TSTVAR" ]; then
 	PARTVAR=`df | grep "/var"| grep -v /var/se3 | sed -e "s/ .*//" | sed -e "s/\/dev\///"`
 	echo -e "${COLTXT}Partition /VAR :\t${COLINFO} $PARTVAR"
 else
-	# echo -e "Pas de Partition /var de detectée "
+	# echo -e "Pas de Partition /var de detectÃ©e "
 	PARTVAR="aucune"
 fi
 echo -e "${COLTXT}Partition /HOME :\t${COLINFO} $PARTHOME"
@@ -353,7 +353,7 @@ if [ "$DETECTOK" = "n" ]; then
                         PARTVARSE3=hda4
                 fi
 
-		#Récapitulatif des partitions:
+		#RÃ©capitulatif des partitions:
 		echo -e "$COLTXT"
 		echo "Voici la liste de vos partitions:"
 		echo -e "Partition SWAP :\t${COLINFO} $PARTSWAP ${COLTXT}"
@@ -385,29 +385,29 @@ echo "* Choix du disque dur destination *"
 echo "***********************************"
 
 echo -e "$COLINFO"
-echo "Le disque dur peut être:"
+echo "Le disque dur peut Ãªtre:"
 echo "     - un disque dur local (dans le serveur)"
 echo "     - un disque dur distant (dans une autre machine)"
 echo ""
-echo "Dans le cas où vous optez pour un disque dur distant,"
+echo "Dans le cas oÃ¹ vous optez pour un disque dur distant,"
 echo "voici quelques indications:"
 echo "     - La machine distante doit disposer de deux disques durs:"
-echo "          . Un pour le système distant."
+echo "          . Un pour le systÃ¨me distant."
 echo "          . Un autre pour accueillir le miroir du disque source."
 echo ""
-echo "     - Un mécanisme d'authentification automatique par clé publique/clé privée"
-echo "       va être mis en place pour que les scripts sur ce serveur puissent accéder"
-echo "       en SSH à la machine distante sans saisie de mot de passe."
-echo "       La sécurité de la machine distante dépend donc de la machine locale."
-echo "       Si un intrus obtient l'accès root sur la machine locale, il aura"
-echo "       automatiquement l'accès root sur la machine distante."
-echo "       Songez-y si la machine distante à d'autres fonctions que la fonction"
+echo "     - Un mÃ©canisme d'authentification automatique par clÃ© publique/clÃ© privÃ©e"
+echo "       va Ãªtre mis en place pour que les scripts sur ce serveur puissent accÃ©der"
+echo "       en SSH Ã  la machine distante sans saisie de mot de passe."
+echo "       La sÃ©curitÃ© de la machine distante dÃ©pend donc de la machine locale."
+echo "       Si un intrus obtient l'accÃ¨s root sur la machine locale, il aura"
+echo "       automatiquement l'accÃ¨s root sur la machine distante."
+echo "       Songez-y si la machine distante Ã  d'autres fonctions que la fonction"
 echo "       de sauvegarde."
 
 #NOTE: On pourrait n'utiliser qu'un seul disque dur sur la machine distante.
 #      Il faudrait alors booter sur une distribution live disposant d'un serveur SSH
 #      sur la machine distante.
-#      L'inconvénient, c'est qu'en cas de reboot sur la machine distante (coupure de courant, maintenance,...),
+#      L'inconvÃ©nient, c'est qu'en cas de reboot sur la machine distante (coupure de courant, maintenance,...),
 #      il faut refaire la mise en place de l'authentification automatique.
 
 DDLOCAL=""
@@ -417,7 +417,7 @@ do
 	echo "Souhaitez-vous effectuer un miroir:"
 	echo -e "     (${COLCHOIX}1${COLTXT}) local,"
 	echo -e "     (${COLCHOIX}2${COLTXT}) distant."
-	echo -e "Réponse: [${COLDEFAUT}1${COLTXT}] ${COLSAISIE}\c"
+	echo -e "RÃ©ponse: [${COLDEFAUT}1${COLTXT}] ${COLSAISIE}\c"
 	read DDLOCAL
 
 	if [ -z "$DDLOCAL" ]; then
@@ -472,7 +472,7 @@ ERREUR()
 		mail $email -s"[Mise en place Mirroring SSH] ERREUR" < "$tmp/erreur.txt"
 		rm -f "$tmp/erreur.txt"
 	fi
-	#A décommenter après la phase de debug:
+	#A dÃ©commenter aprÃ¨s la phase de debug:
 	#rm -fr $tmp
 	echo -e "$COLTXT"
 	exit 0
@@ -502,7 +502,7 @@ POURSUIVRE()
 AFFICHHD()
 {
 	echo -e "$COLTXT"
-	echo "Voici la liste des disques trouvés sur votre machine:"
+	echo "Voici la liste des disques trouvÃ©s sur votre machine:"
 	echo -e "$COLCMD"
 	TEMOIN=""
 	if /bin/dmesg | grep hd | grep drive | grep -v driver | grep -v ROM; then
@@ -515,11 +515,11 @@ AFFICHHD()
 	fi
 
 	if [ "$TEMOIN" != "OK" ]; then
-		echo -e "${COLINFO}Les méthodes précédentes de détection n ont pas fonctionné."
-		echo "Deux autres méthodes vont être tentées."
-		echo "Si elles échouent, il vous faudra connaitre"
+		echo -e "${COLINFO}Les mÃ©thodes prÃ©cÃ©dentes de dÃ©tection n ont pas fonctionnÃ©."
+		echo "Deux autres mÃ©thodes vont Ãªtre tentÃ©es."
+		echo "Si elles Ã©chouent, il vous faudra connaitre"
 		echo -e "l identifiant (hda, hdb,...) du disque pour poursuivre.${COLCMD}"
-		#Sur les IBM Thinkpad, les commandes précédentes ne donnent rien alors que /dev/hda est bien présent.
+		#Sur les IBM Thinkpad, les commandes prÃ©cÃ©dentes ne donnent rien alors que /dev/hda est bien prÃ©sent.
 		#/bin/dmesg | grep dev | grep host | grep bus | grep target | grep lun | cut -d ":" -f 1 | sed -e "s/ //g" | sed -e "s!ide/host0/bus0/target0/lun0!hda!g" | sed -e "s!ide/host0/bus0/target1/lun0!hdb!g" | sed -e "s!ide/host0/bus1/target0/lun0!hdc!g" | sed -e "s!ide/host0/bus1/target1/lun0!hdd!g"
 		#if /bin/dmesg | grep dev | grep host | grep bus | grep target | grep lun | cut -d ":" -f 1 | sed -e "s/ //g" | sed -e "s!ide/host0/bus0/target0/lun0!hda!g" | sed -e "s!ide/host0/bus0/target1/lun0!hdb!g" | sed -e "s!ide/host0/bus1/target0/lun0!hdc!g" | sed -e "s!ide/host0/bus1/target1/lun0!hdd!g"; then
 		if /bin/dmesg | grep dev | grep host | grep bus | grep target | grep lun > /dev/null; then
@@ -542,9 +542,9 @@ AFFICHHD()
 			TEMOIN=$(cat /tmp/TEMOIN)
 			rm -f /tmp/TEMOIN
 			echo -e "$COLINFO"
-			echo "Un message éventuel indiquant:"
+			echo "Un message Ã©ventuel indiquant:"
 			echo -e "${COLERREUR}Disk /dev/XdY doesn t contain a valid partition table"
-			echo -e "${COLINFO}signifie seulement que le périphérique /dev/XdY ne doit pas être un disque dur."
+			echo -e "${COLINFO}signifie seulement que le pÃ©riphÃ©rique /dev/XdY ne doit pas Ãªtre un disque dur."
 		fi
 	fi
 
@@ -553,14 +553,14 @@ AFFICHHD()
 		if ls /dev/hd* | grep "[0-9]" > /dev/null; then
 			ls /dev/hd* | grep "[0-9]" | sed -e "s!/dev/!!g" | sed -e "s/[0-9]*//g"
 		else
-			echo -e "${COLINFO}Le(s) disque(s) dur(s) n a/ont pas été identifié(s) par mon script.\nCela ne vous empêche pas de poursuivre,\nmais il faut alors connaitre le périphérique...${COLTXT}"
+			echo -e "${COLINFO}Le(s) disque(s) dur(s) n a/ont pas Ã©tÃ© identifiÃ©(s) par mon script.\nCela ne vous empÃªche pas de poursuivre,\nmais il faut alors connaitre le pÃ©riphÃ©rique...${COLTXT}"
 		fi
 	fi
 }
 
 echo -e "$COLPARTIE"
 echo "********************************************"
-echo "* Opérations sur le disque dur destination *"
+echo "* OpÃ©rations sur le disque dur destination *"
 echo "********************************************"
 
 if [ "$DDLOCAL" = "1" ]; then
@@ -575,7 +575,7 @@ DISK2OK="n"
 while [ "$DISK2OK" != "o" ]
 do
 	echo -e "$COLTXT"
-	echo -e "Quel est votre deuxième disque? [${COLDEFAUT}hdb${COLTXT}] ${COLSAISIE}\c"
+	echo -e "Quel est votre deuxiÃ¨me disque? [${COLDEFAUT}hdb${COLTXT}] ${COLSAISIE}\c"
 	read  DISK2
 	if [ -z "$DISK2" ]; then
 		DISK2="hdb"
@@ -585,7 +585,7 @@ do
         while [ "$DISK2OK" != "o" -a "$DISK2OK" != "n" ]
         do
 		echo -e "$COLTXT"
-		echo -e "Votre deuxième disque est${COLINFO} $DISK2 ${COLTXT}"
+		echo -e "Votre deuxiÃ¨me disque est${COLINFO} $DISK2 ${COLTXT}"
 		echo -e "Est-ce correct? (${COLCHOIX}o/n${COLTXT}) [${COLDEFAUT}o${COLTXT}] ${COLSAISIE}\c"
 		read DISK2OK
 		if [ -z "$DISK2OK" ]; then
@@ -595,30 +595,30 @@ do
 done
 
 echo -e "$COLTXT"
-echo "Test de la validité de votre choix."
+echo "Test de la validitÃ© de votre choix."
 if [ "$DDLOCAL" = "1" ]; then
 	if [ "$DISK2" = "$DISK1"  ]; then
-		echo -e "${COLERREUR}Erreur! Vous avez saisi la même valeur pour le 1er et le 2ème disque."
+		echo -e "${COLERREUR}Erreur! Vous avez saisi la mÃªme valeur pour le 1er et le 2Ã¨me disque."
 		echo -e "${COLERREUR}Le script ne peut mettre en place un mirroring sur le meme disque."
 		echo -e "$COLTXT"
 		exit 1
 	fi
 else
-	#Arranger un test pour ne pas écraser le disque dur courant...
+	#Arranger un test pour ne pas Ã©craser le disque dur courant...
 	if mount | grep "/dev/$DISK2 " > /dev/null; then
-		echo -e "${COLERREUR}Erreur! Vous avez choisi un disque  actuellement monté."
-		echo -e "${COLERREUR}Le disque dur /dev/$DISK2 sera intégralement repartitionné et reformaté."
+		echo -e "${COLERREUR}Erreur! Vous avez choisi un disque  actuellement montÃ©."
+		echo -e "${COLERREUR}Le disque dur /dev/$DISK2 sera intÃ©gralement repartitionnÃ© et reformatÃ©."
 		echo -e "${COLERREUR}Le script ne peut mettre en place un mirroring sur le disque de l OS distant."
 		echo -e "$COLTXT"
 		exit 1
 	fi
 fi
 
-#NOTE: A revoir: On pourrait envisager un mirroring intégral
-#      juste à des fins de sauvegarde sur le disque dur de l OS distant...
-#      Il ne serait alors pas possible/commode de remplacer le disque source en cas de pépin,
-#      mais la sauvegarde serait tout de même assurée.
-#      REVOIR les tests effectués pour permettre une telle sauvegarde.
+#NOTE: A revoir: On pourrait envisager un mirroring intÃ©gral
+#      juste Ã  des fins de sauvegarde sur le disque dur de l OS distant...
+#      Il ne serait alors pas possible/commode de remplacer le disque source en cas de pÃ©pin,
+#      mais la sauvegarde serait tout de mÃªme assurÃ©e.
+#      REVOIR les tests effectuÃ©s pour permettre une telle sauvegarde.
 
 echo -e "$COLCMD"
 #DISK2PARTS=`sfdisk -l /dev/$DISK2 2>/dev/null`
@@ -626,8 +626,8 @@ DISK2PARTS=`/sbin/sfdisk -l /dev/$DISK2 2>/dev/null`
 
 if [ -z "$DISK2PARTS" ]; then
 #if ! sfdisk -l /dev/$DISK2 2>/dev/null > /dev/null; then
-        echo -e "${COLERREUR}Erreur! Aucun disque $DISK2 détecté."
-        echo -e "${COLERREUR}Vous avez saisi une valeur erronée pour le 2ème disque."
+        echo -e "${COLERREUR}Erreur! Aucun disque $DISK2 dÃ©tectÃ©."
+        echo -e "${COLERREUR}Vous avez saisi une valeur erronÃ©e pour le 2Ã¨me disque."
         exit 1
 fi
 
@@ -659,7 +659,7 @@ do
 	fi
 done
 if [ "$REPONSE" = "n" ]; then
-	echo -e "${COLERREUR}Action abandonnée, rien n a été modifié.${COLTXT}"
+	echo -e "${COLERREUR}Action abandonnÃ©e, rien n a Ã©tÃ© modifiÃ©.${COLTXT}"
 	exit 0
 fi
 
@@ -668,45 +668,45 @@ fi
 
 echo -e "$COLPARTIE"
 echo "**********************************"
-echo "* Création des points de montage *"
+echo "* CrÃ©ation des points de montage *"
 echo "*  pour les partitions miroirs   *"
 echo "**********************************"
 
 echo -e "$COLTXT"
-#Création des repertoires de travail si besoin
+#CrÃ©ation des repertoires de travail si besoin
 if  [ -e $DOSSMIRROR ]; then
-	echo -e "Le répertoire $DOSSMIRROR existe déjà...."
+	echo -e "Le rÃ©pertoire $DOSSMIRROR existe dÃ©jÃ ...."
 else
 	mkdir -p $DOSSMIRROR
 fi
 
 if  [ -e $DOSSMIRROR/part_root ]; then
-	echo -e "Le répertoire $DOSSMIRROR/part_root existe déjà...."
+	echo -e "Le rÃ©pertoire $DOSSMIRROR/part_root existe dÃ©jÃ ...."
 else
 	mkdir $DOSSMIRROR/part_root
 fi
 
 if [ "$PARTVAR" != "aucune" ]; then
         if  [ -e $DOSSMIRROR/part_var ]; then
-        	echo -e "Le répertoire $DOSSMIRROR/part_var existe déjà...."
+        	echo -e "Le rÃ©pertoire $DOSSMIRROR/part_var existe dÃ©jÃ ...."
         else
         	mkdir $DOSSMIRROR/part_var
         fi
 fi
 
 if  [ -e $DOSSMIRROR/part_home ]; then
-	echo -e "Le répertoire $DOSSMIRROR/part_home existe déjà...."
+	echo -e "Le rÃ©pertoire $DOSSMIRROR/part_home existe dÃ©jÃ ...."
 else
 	mkdir $DOSSMIRROR/part_home
 fi
 
 if  [ -e $DOSSMIRROR/part_varse3 ]; then
-	echo -e "Le répertoire $DOSSMIRROR/part_varse3 existe déjà...."
+	echo -e "Le rÃ©pertoire $DOSSMIRROR/part_varse3 existe dÃ©jÃ ...."
 else
 	mkdir $DOSSMIRROR/part_varse3
 fi
 
-echo "Terminé."
+echo "TerminÃ©."
 
 
 
@@ -714,37 +714,37 @@ echo "Terminé."
 
 echo -e "$COLPARTIE"
 echo "***************************"
-echo "* Création des partitions *"
+echo "* CrÃ©ation des partitions *"
 echo "***************************"
 
-# Création des partitions du 2eme disque
+# CrÃ©ation des partitions du 2eme disque
 REPONSE=""
 while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 do
         echo -e "$COLTXT"
-        echo -e "Voulez-vous créer les partitions et formater le disque ${COLINFO}$DISK2 ${COLTXT}? (${COLCHOIX}o/n$COLTXT)"
-        echo -e "${COLERREUR}Attention le contenu de $DISK2 sera effacé.${COLTXT}"
-	echo -e "Réponse: ${COLSAISIE}\c"
+        echo -e "Voulez-vous crÃ©er les partitions et formater le disque ${COLINFO}$DISK2 ${COLTXT}? (${COLCHOIX}o/n$COLTXT)"
+        echo -e "${COLERREUR}Attention le contenu de $DISK2 sera effacÃ©.${COLTXT}"
+	echo -e "RÃ©ponse: ${COLSAISIE}\c"
         read REPONSE
 done
 
 echo ""
 if [ "$REPONSE" = "o" ]; then
         echo -e "$COLTXT"
-        echo "Création des partitions et des systèmes de fichiers:"
+        echo "CrÃ©ation des partitions et des systÃ¨mes de fichiers:"
         echo -e "$COLCMD"
         #sfdisk /dev/$DISK2 < /tmp/part
         /sbin/sfdisk /dev/$DISK2 < /tmp/part
         if [ $? != 0 ]; then
 		echo ""
-                echo -e "${COLERREUR}Erreur lors de la création des partitions de $DISK2 "
+                echo -e "${COLERREUR}Erreur lors de la crÃ©ation des partitions de $DISK2 "
                 echo -e "Le script ne peut se poursuivre normalement."
 		echo ""
-                echo -e "${COLINFO}Vos disques ne sont peut-être pas strictement identiques."
-                echo -e "Vous pouvez exécuter cfdisk et partitionner manuellement de la même façon que le 1er disque."
+                echo -e "${COLINFO}Vos disques ne sont peut-Ãªtre pas strictement identiques."
+                echo -e "Vous pouvez exÃ©cuter cfdisk et partitionner manuellement de la mÃªme faÃ§on que le 1er disque."
 
 		echo -e "$COLTXT"
-                echo -e "Pour rappel, voici l ordre dans lequel elles devront apparaître:"
+                echo -e "Pour rappel, voici l ordre dans lequel elles devront apparaÃ®tre:"
                 echo -e "Partition SWAP :\t${COLINFO} $PARTSWAP_CIBLE ${COLTXT}"
                 echo -e "Partition Racine :\t${COLINFO} $PARTROOT_CIBLE ${COLTXT}"
                 if [ "$PARTVAR" != "aucune" ]; then
@@ -756,11 +756,11 @@ if [ "$REPONSE" = "o" ]; then
                 while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
                 do
                         echo -e "$COLTXT"
-                        echo -e "Voulez-vous créer les partitions à la main maintenant? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
+                        echo -e "Voulez-vous crÃ©er les partitions Ã  la main maintenant? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
                         read REPONSE
                 done
                 if [ "$REPONSE" = "n" ]; then
-                        echo -e "${COLERREUR}Opération annulée, rien n a été effectué !!! ${COLTXT}"
+                        echo -e "${COLERREUR}OpÃ©ration annulÃ©e, rien n a Ã©tÃ© effectuÃ© !!! ${COLTXT}"
                         exit 1
                 fi
                 while [ "$REPONSE" != "1" -a "$REPONSE" != "2" ]
@@ -768,7 +768,7 @@ if [ "$REPONSE" = "o" ]; then
                         echo -e "$COLTXT"
                         echo -e "Voulez-vous lancer:"
 			echo -e "   (${COLCHOIX}1${COLTXT}) cfdisk"
-			echo -e "       (j ai eu des problèmes avec le lancement de cfdisk en SSH)"
+			echo -e "       (j ai eu des problÃ¨mes avec le lancement de cfdisk en SSH)"
 			echo -e "   (${COLCHOIX}2${COLTXT}) fdisk"
 			echo -e "Choix: $COLSAISIE\c"
                         read REPONSE
@@ -785,13 +785,13 @@ if [ "$REPONSE" = "o" ]; then
 	echo "Ne pas s affoler pour un message indiquant:"
 	echo -e "${COLERREUR}sfdisk: ERROR: sector 0 does not have an msdos signature${COLINFO}"
 	echo "lors du partitionnement du disque distant."
-	echo "Cela survient notamment lorsque le disque dur n était pas encore partitionné."
-	echo "C est sans conséquence pour la suite."
+	echo "Cela survient notamment lorsque le disque dur n Ã©tait pas encore partitionnÃ©."
+	echo "C est sans consÃ©quence pour la suite."
 
 	POURSUIVRE
 
 	echo -e "$COLTXT"
-	echo "Création des systèmes de fichiers sur les partitions créées:"
+	echo "CrÃ©ation des systÃ¨mes de fichiers sur les partitions crÃ©Ã©es:"
 	sleep 1
 	if [ "$PARTVAR" != "aucune" ]; then
 		#echo -e "$COLTXT"
@@ -810,7 +810,7 @@ if [ "$REPONSE" = "o" ]; then
                 exit 1
         fi
 
-	#Renseignement d un fichier pour permettre la récupération des infos par le script mirroring_ssh.sh
+	#Renseignement d un fichier pour permettre la rÃ©cupÃ©ration des infos par le script mirroring_ssh.sh
 	echo "DISK2=$DISK2
 PARTSWAP_CIBLE=$PARTSWAP_CIBLE
 PARTROOT_CIBLE=$PARTROOT_CIBLE
@@ -819,7 +819,7 @@ PARTVARSE3_CIBLE=$PARTVARSE3_CIBLE
 PARTVAR_CIBLE=$PARTVAR_CIBLE" > $DOSSMIRROR/liste_infos_disque2.txt
 
 	echo -e "$COLTITRE"
-	echo "Partitionnement et création des systèmes de fichiers terminés."
+	echo "Partitionnement et crÃ©ation des systÃ¨mes de fichiers terminÃ©s."
 
 	#sleep 1
 
@@ -842,11 +842,11 @@ if [ "$DDLOCAL" = "1" ]; then
 	#****************************************************************
 	#****************************************************************
 	#A REVOIR
-	#Il va falloir regénérer un $tmp/traitement_disque_destination.sh
+	#Il va falloir regÃ©nÃ©rer un $tmp/traitement_disque_destination.sh
 	#avec les variables $DISK1, $PARTSWAP,...
 	#
 	#A TESTER:
-	#Peut-être que le problème ne se pose que lors d'une copie/exécution à travers SSH...?
+	#Peut-Ãªtre que le problÃ¨me ne se pose que lors d'une copie/exÃ©cution Ã  travers SSH...?
 	#****************************************************************
 	#****************************************************************
 
@@ -874,21 +874,21 @@ else
 			echo "Test..."
 			echo -e "$COLCMD\c"
 			if ping -c1 $IPDISTANT | grep "1 packets received" > /dev/null; then
-				echo -e "${COLINFO}La machine $IPDISTANT a répondu au ping.${COLTXT}"
+				echo -e "${COLINFO}La machine $IPDISTANT a rÃ©pondu au ping.${COLTXT}"
 				REPIPDISTOK="o"
 			else
-				echo -e "${COLERREUR}La machine $IPDISTANT n'a pas répondu au ping.${COLTXT}"
+				echo -e "${COLERREUR}La machine $IPDISTANT n'a pas rÃ©pondu au ping.${COLTXT}"
 
 				REPPOURSUIVRE=""
 				while [ "$REPPOURSUIVRE" != "1" -a "$REPPOURSUIVRE" != "2" -a "$REPPOURSUIVRE" != "3" ]
 				do
 					echo -e "$COLTXT"
 					echo "Souhaitez-vous:"
-					echo -e "     (${COLCHOIX}1${COLTXT}) poursuivre néanmoins"
-					echo "         (s'il est normal que la machine ne réponde pas au ping),"
+					echo -e "     (${COLCHOIX}1${COLTXT}) poursuivre nÃ©anmoins"
+					echo "         (s'il est normal que la machine ne rÃ©ponde pas au ping),"
 					echo -e "     (${COLCHOIX}2${COLTXT}) corriger,"
 					echo -e "     (${COLCHOIX}3${COLTXT}) ou abandonner?"
-					echo -e "Réponse: ${COLSAISIE}\c"
+					echo -e "RÃ©ponse: ${COLSAISIE}\c"
 					read REPPOURSUIVRE
 				done
 
@@ -904,9 +904,9 @@ else
 
 		#AI-JE VRAIMENT BESOIN DE CE MOT DE PASSE PAR LA SUITE???
 		#echo -e "$COLINFO"
-		#echo "Pour la saisie du mot de passe, il ne va rien s'afficher (sécurité),"
-		#echo "mais ne vous inquiétez pas pour autant pour le fonctionnement de"
-		#echo "votre clavier et de vos doigts carrés;o)."
+		#echo "Pour la saisie du mot de passe, il ne va rien s'afficher (sÃ©curitÃ©),"
+		#echo "mais ne vous inquiÃ©tez pas pour autant pour le fonctionnement de"
+		#echo "votre clavier et de vos doigts carrÃ©s;o)."
 		#echo -e "$COLTXT"
 		#echo -e "Mot de passe root distant: ${COLMDP}\c"
 		#stty -echo
@@ -918,7 +918,7 @@ else
 		while [ "$REPDISTOK" != "o" -a "$REPDISTOK" != "n" ]
 		do
 			echo -e "$COLINFO"
-			echo "Vous avez choisi pour le mirroring distant les paramètres suivants:"
+			echo "Vous avez choisi pour le mirroring distant les paramÃ¨tres suivants:"
 			echo -e "     - IP:$COLINFO $IPDISTANT $COLTXT"
 			echo -e "$COLTXT"
 			echo -e "Est-ce correct? (${COLCHOIX}o/n${COLTXT}) [${COLDEFAUT}o${COLTXT}] ${COLSAISIE}\c"
@@ -948,39 +948,39 @@ else
 
 	echo -e "$COLINFO"
 	echo "NOTE: Pour effectuer le mirroring vers une distribution Live Digloo,"
-	echo "      il est nécessaire de disposer d'une version avec rsync présent,"
-	echo "      pas seulement dans l'image installée, mais aussi dans la distribution"
-	echo "      Digloo Live elle-même."
-	echo "      Il faut de plus modifier un paramètre du fichier /etc/ssh/sshd_config"
-	echo "      En effet, il n'est pas possible, par défaut, de se connecter en root"
-	echo "      à une Digloo Live."
+	echo "      il est nÃ©cessaire de disposer d'une version avec rsync prÃ©sent,"
+	echo "      pas seulement dans l'image installÃ©e, mais aussi dans la distribution"
+	echo "      Digloo Live elle-mÃªme."
+	echo "      Il faut de plus modifier un paramÃ¨tre du fichier /etc/ssh/sshd_config"
+	echo "      En effet, il n'est pas possible, par dÃ©faut, de se connecter en root"
+	echo "      Ã  une Digloo Live."
 	echo "      Il faut modifier la ligne 'PermitRootLogin no' en 'PermitRootLogin yes'"
-	echo "      Il faut ensuite arrêter et redémarrer ssh:"
+	echo "      Il faut ensuite arrÃªter et redÃ©marrer ssh:"
 	echo "         /etc/init.d/ssh stop"
 	echo "         /etc/init.d/ssh start"
 
 
 	echo -e "$COLTXT"
-	#echo "Repère pour la colonne=======================================================80"
-	echo "Mise en place de la clé publique locale"
+	#echo "RepÃ¨re pour la colonne=======================================================80"
+	echo "Mise en place de la clÃ© publique locale"
 	echo "dans le fichier authorized_keys distant."
-	echo "Il va vous être demandé de saisir une PASSPHRASE lors de la génération des"
-	echo "clés publique/privée."
+	echo "Il va vous Ãªtre demandÃ© de saisir une PASSPHRASE lors de la gÃ©nÃ©ration des"
+	echo "clÃ©s publique/privÃ©e."
 	echo -e "Il est indispensable de laisser ${COLERREUR}vide${COLTXT} cette PASSPHRASE."
 	echo "Et vous allez ensuite devoir saisir le mot de passe root distant:"
 	echo -e "$COLCMD"
 	#cat $clepublique | ssh root@$IPDISTANT 'sh -c "mkdir -p /root/.ssh && cat - >>/root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys"'
 
-	#if [ ! -e "/root/.ssh/id_dsa" -o ! -e "/root/.ssh/id_dsa.pub" ]; then mkdir -p /root/.ssh && ssh-keygen -t dsa -f ~/.ssh/id_dsa; else echo -e "${COLINFO}Les clés publique/privée existent déjà.${$COLCMD}";fi && cat ~/.ssh/id_dsa.pub | ssh root@$IPDISTANT 'sh -c "mkdir -p /root/.ssh && cat - >>/root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys"'
+	#if [ ! -e "/root/.ssh/id_dsa" -o ! -e "/root/.ssh/id_dsa.pub" ]; then mkdir -p /root/.ssh && ssh-keygen -t dsa -f ~/.ssh/id_dsa; else echo -e "${COLINFO}Les clÃ©s publique/privÃ©e existent dÃ©jÃ .${$COLCMD}";fi && cat ~/.ssh/id_dsa.pub | ssh root@$IPDISTANT 'sh -c "mkdir -p /root/.ssh && cat - >>/root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys"'
 	if [ ! -e "/root/.ssh/id_dsa" -o ! -e "/root/.ssh/id_dsa.pub" ]; then
 		mkdir -p /root/.ssh && ssh-keygen -t dsa -f ~/.ssh/id_dsa
 	else
-		echo -e "${COLINFO}Les clés publique/privée existent déjà.${COLCMD}"
+		echo -e "${COLINFO}Les clÃ©s publique/privÃ©e existent dÃ©jÃ .${COLCMD}"
 	fi
 	cat ~/.ssh/id_dsa.pub | ssh root@$IPDISTANT 'sh -c "mkdir -p /root/.ssh && cat - >>/root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys"'
 
 	if [ "$?" != "0" ]; then
-		ERREUR "La mise en place de la clé publique locale\ndans le fichier authorized_keys distant a échoué."
+		ERREUR "La mise en place de la clÃ© publique locale\ndans le fichier authorized_keys distant a Ã©chouÃ©."
 	fi
 
 
@@ -989,10 +989,10 @@ else
 	#echo '' > $tmp/passwdgroupmin.sh
 
 	echo -e "$COLINFO"
-	echo "Si la distribution distante est une distribution SE3 installée sur disque dur,"
-	echo "vous pouvez répondre 'n' à la question suivante."
-	echo "En revanche, si le système distant est une distribution live (SysRescCD,"
-	echo "Digloo (live)), il convient, pour éviter des problèmes d'uid/uidNumber"
+	echo "Si la distribution distante est une distribution SE3 installÃ©e sur disque dur,"
+	echo "vous pouvez rÃ©pondre 'n' Ã  la question suivante."
+	echo "En revanche, si le systÃ¨me distant est une distribution live (SysRescCD,"
+	echo "Digloo (live)), il convient, pour Ã©viter des problÃ¨mes d'uid/uidNumber"
 	echo "et gid/gidNumber, de remanier (en RAM) les fichiers suivants:"
 	echo "   - /etc/passwd"
 	echo "   - /etc/group"
@@ -1048,21 +1048,21 @@ echo "*************************************************"
 
 echo -e "$COLINFO"
 echo "Pour des besoins de synchronisation RSYNC+SSH entre SE3 SysRescCD live,"
-echo "j ai bricolé ce script réduisant au minimum les fichiers /etc/passwd"
+echo "j ai bricolÃ© ce script rÃ©duisant au minimum les fichiers /etc/passwd"
 echo "et /etc/group"
 echo "Cela permet de ne pas avoir des correspondances uid/uidNumber et gid/gidNumber"
-echo "différentes entre les deux OS."
+echo "diffÃ©rentes entre les deux OS."
 
 REPONSE=""
 while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 do
 	echo -e "$COLTXT"
-	echo -e "Souhaitez-vous mettre en place ces fichiers réduits? (${COLCHOIX}o/n${COLTXT}) [${COLDEFAUT}n${COLTXT}] $COLSAISIE\c"
+	echo -e "Souhaitez-vous mettre en place ces fichiers rÃ©duits? (${COLCHOIX}o/n${COLTXT}) [${COLDEFAUT}n${COLTXT}] $COLSAISIE\c"
 	read REPONSE
 
 	if [ "$REPONSE" = "" ]; then
 		REPONSE="n"
-		ERREUR "Vous avez souhaité abandonner."
+		ERREUR "Vous avez souhaitÃ© abandonner."
 	fi
 done
 
@@ -1078,7 +1078,7 @@ if [ "$REPONSE" = "o" ]; then
 		echo "La distribution est-elle:"
 		echo -e "   (${COLCHOIX}1${COLTXT}) SysRescCD"
 		echo -e "   (${COLCHOIX}2${COLTXT}) Digloo (live)"
-		echo -e "Réponse: $COLSAISIE\c"
+		echo -e "RÃ©ponse: $COLSAISIE\c"
 		read REPONSE
 	done
 
@@ -1101,17 +1101,17 @@ if [ "$REPONSE" = "o" ]; then
 			#NOTE: Sur Digloo, il faut effectuer:
 			# passwd
 			# ifconfig eth0 192.168.52.8
-			#Ne pas s inquiéter pour un message: "eth0: duplicate address detected"
+			#Ne pas s inquiÃ©ter pour un message: "eth0: duplicate address detected"
 			# sed -e "s/PermitRootLogin no/PermitRootLogin yes/" /etc/ssh/sshd_config > /tmp/sshd_config.tmp
 			# cp /tmp/sshd_config.tmp /etc/ssh/sshd_config
 			# /etc/init.d/ssh stop
 			# /etc/init.d/ssh start
-			#Si vous en êtes ici, vous avez déjà dû le faire;o).
+			#Si vous en Ãªtes ici, vous avez dÃ©jÃ  dÃ» le faire;o).
 		;;
 	esac
 
 	echo -e "$COLINFO"
-	echo "Voilà les fichiers mis en place:"
+	echo "VoilÃ  les fichiers mis en place:"
 	echo -e "$COLTXT"
 	echo "/etc/passwd:"
 	echo -e "$COLCMD\c"
@@ -1123,18 +1123,18 @@ if [ "$REPONSE" = "o" ]; then
 	cat /etc/group
 
 	#echo -e "$COLINFO"
-	#echo "Une sauvegarde des fichiers initiaux a été effectuée dans /tmp"
+	#echo "Une sauvegarde des fichiers initiaux a Ã©tÃ© effectuÃ©e dans /tmp"
 	#echo ""
-	#echo "Pour mes bricolages de mirroring, il reste à:"
-	#echo "   - configurer le réseau: net-setup eth0"
-	#echo "   - mettre un mot de passe à root (passwd)"
-	#echo "   - démarrer le serveur SSH: /etc/init.d/sshd start"
+	#echo "Pour mes bricolages de mirroring, il reste Ã :"
+	#echo "   - configurer le rÃ©seau: net-setup eth0"
+	#echo "   - mettre un mot de passe Ã  root (passwd)"
+	#echo "   - dÃ©marrer le serveur SSH: /etc/init.d/sshd start"
 fi
 
 
 echo -e "${COLTITRE}"
 echo "***********"
-echo "* Terminé *"
+echo "* TerminÃ© *"
 echo "***********"
 echo -e "${COLTXT}"
 echo "Appuyez sur ENTREE pour poursuivre."
@@ -1149,7 +1149,7 @@ read PAUSE
 		#scp passwdgroupmin.sh root@$IPDISTANT:/root/tmp/
 
 		echo -e "$COLTXT"
-		echo "Exécution du script distant passwdgroupmin.sh "
+		echo "ExÃ©cution du script distant passwdgroupmin.sh "
 		echo -e "$COLCMD"
 		ssh root@$IPDISTANT "sh /root/tmp/passwdgroupmin.sh "
 	fi
@@ -1164,35 +1164,35 @@ read PAUSE
 	scp /tmp/part root@$IPDISTANT:/tmp/
 
 	echo -e "$COLTXT"
-	echo "Exécution du script distant traitement_disque_destination.sh"
+	echo "ExÃ©cution du script distant traitement_disque_destination.sh"
 	echo -e "$COLCMD"
 	ssh root@$IPDISTANT "sh /root/tmp/traitement_disque_destination.sh"
 fi
 
 
 
-# Test du succès du script traitement_disque_destination.sh
-# Ou plutôt de l'absence de renvoi d'un code d'erreur.
+# Test du succÃ¨s du script traitement_disque_destination.sh
+# Ou plutÃ´t de l'absence de renvoi d'un code d'erreur.
 #if [ "$?" != "0" ]; then
-#	ERREUR "Le script traitement_disque_destination.sh a renvoyé un code d'erreur."
+#	ERREUR "Le script traitement_disque_destination.sh a renvoyÃ© un code d'erreur."
 #fi
 
 if [ "$?" != "0" ]; then
 	echo -e "$COLERREUR"
-	echo "Il semble que le script traitement_disque_destination.sh ait renvoyé"
+	echo "Il semble que le script traitement_disque_destination.sh ait renvoyÃ©"
 	echo "un code d'erreur."
 
 	echo -e "$COLINFO"
-	echo "Cela m'est arrivé avec un message"
+	echo "Cela m'est arrivÃ© avec un message"
 	echo -e "    ${COLERREUR}TERM environment variable not set.${COLINFO}"
-	echo "dont je n'ai pas réussi à identifier la source."
+	echo "dont je n'ai pas rÃ©ussi Ã  identifier la source."
 
 	POURSUIVRE "Souhaitez-vous poursuivre"
 fi
 
 
 
-#Il faut récupérer les infos suivantes dans le shell courant qui est parent de celui de traitement_disque_destination.sh:
+#Il faut rÃ©cupÃ©rer les infos suivantes dans le shell courant qui est parent de celui de traitement_disque_destination.sh:
 #	DISK2
 #	PARTSWAP_CIBLE
 #	PARTROOT_CIBLE
@@ -1202,14 +1202,14 @@ fi
 
 
 echo -e "$COLTXT"
-echo "Récupération des infos sur les partitions du disque destination."
+echo "RÃ©cupÃ©ration des infos sur les partitions du disque destination."
 echo -e "$COLCMD"
 if [ "$DDLOCAL" = "2" ]; then
 	mkdir -p /mirror
 	scp root@$IPDISTANT:/tmp/mirror/liste_infos_disque2.txt /mirror/
 fi
 if [ ! -e "/mirror/liste_infos_disque2.txt" ]; then
-	ERREUR "Les infos concernant le disque destination n'ont pas pu être récupérées."
+	ERREUR "Les infos concernant le disque destination n'ont pas pu Ãªtre rÃ©cupÃ©rÃ©es."
 fi
 
 DISK2=$(cat /mirror/liste_infos_disque2.txt | grep "^DISK2=" | sed -e "s!^DISK2=!!")
@@ -1223,14 +1223,14 @@ PARTVAR_CIBLE=$(cat /mirror/liste_infos_disque2.txt | grep "^PARTVAR_CIBLE=" | s
 
 
 #A ARRANGER: Utiliser une variable $scriptmirror
-#            pour permettre à la fois un mirroring local
+#            pour permettre Ã  la fois un mirroring local
 #            et un mirroring distant.
 if [ "$DDLOCAL" = "1" ]; then
 	scriptmirror="mirror_rsync.sh"
 else
 	scriptmirror="mirror_rsync_distant.sh"
 fi
-#ATTENTION: La variable $scriptmirror doit être définie avant les ajouts en crontab.
+#ATTENTION: La variable $scriptmirror doit Ãªtre dÃ©finie avant les ajouts en crontab.
 
 
 
@@ -1239,7 +1239,7 @@ fi
 
 echo -e "$COLPARTIE"
 echo "*****************************************"
-echo "* Planification des tâches de mirroring *"
+echo "* Planification des tÃ¢ches de mirroring *"
 echo "*****************************************"
 
 ######### traitement de la crontab #############
@@ -1248,9 +1248,9 @@ while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 do
 	echo -e "$COLTXT"
 	echo -e "Voulez-vous mettre en place le script rsync en crontab ? (${COLCHOIX}o/n${COLTXT}) [${COLDEFAUT}o${COLTXT}]"
-	echo -e "Il se lancera tous les jours ouvrables à l'heure de votre choix."
-	echo -e "Il vous sera aussi proposé de le lancer plusieurs fois par jour."
-	echo -e "Réponse: ${COLSAISIE}\c"
+	echo -e "Il se lancera tous les jours ouvrables Ã  l'heure de votre choix."
+	echo -e "Il vous sera aussi proposÃ© de le lancer plusieurs fois par jour."
+	echo -e "RÃ©ponse: ${COLSAISIE}\c"
 	read REPONSE
 	if [ -z "$REPONSE" ]; then
 		REPONSE="o"
@@ -1263,7 +1263,7 @@ if [ "$REPONSE" = "o" ]; then
         while [ "$CRONAJOUT" != "n" ]
         do
 		echo -e "$COLTXT"
-                echo -e "Vous allez devoir préciser à quel moment de la journée le script s'exécutera."
+                echo -e "Vous allez devoir prÃ©ciser Ã  quel moment de la journÃ©e le script s'exÃ©cutera."
                 echo
                 echo -e "Veuillez indiquer les heures et les minutes sous la forme hh:mn [${COLDEFAUT}02:30${COLTXT}] $COLSAISIE\c"
                 read HMCRON
@@ -1275,7 +1275,7 @@ if [ "$REPONSE" = "o" ]; then
                 while [ "$CRONOK" != "o" -a "$CRONOK" != "n" ]
                 do
 			echo -e "$COLTXT"
-			echo -e "Vous voulez que le script se lance tous les jours à $HMCRON"
+			echo -e "Vous voulez que le script se lance tous les jours Ã  $HMCRON"
 			echo -e "Est-ce correct? (${COLCHOIX}o/n${COLTXT}) [${COLDEFAUT}o${COLTXT}] ${COLSAISIE}\c"
 			read CRONOK
 			if [ -z "$CRONOK" ]; then
@@ -1288,14 +1288,14 @@ if [ "$REPONSE" = "o" ]; then
                                 HCRON=`echo $HMCRON | cut -d: -f1`
                                 echo "$MCRON $HCRON * * * root /mirror/$scriptmirror" >> /etc/crontab
 				echo -e "$COLTXT"
-                                echo "Modification de la crontab effectuée."
+                                echo "Modification de la crontab effectuÃ©e."
 
 				CRONAJOUT=""
                                 while [ "$CRONAJOUT" != "o" -a "$CRONAJOUT" != "n" ]
                                 do
 					echo -e "$COLTXT"
-					echo "Vous avez choisi que le script se lance tous les jours à $HMCRON"
-					echo -e "Voulez-vous qu'il se lance également à un autre moment ? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
+					echo "Vous avez choisi que le script se lance tous les jours Ã  $HMCRON"
+					echo -e "Voulez-vous qu'il se lance Ã©galement Ã  un autre moment ? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
 					read CRONAJOUT
                                 done
                         fi
@@ -1303,7 +1303,7 @@ if [ "$REPONSE" = "o" ]; then
 fi
 
 
-#Ne faut-il pas redémarrer cron?
+#Ne faut-il pas redÃ©marrer cron?
 
 
 
@@ -1319,18 +1319,18 @@ echo "**************************"
 ##########
 # Configuration de l'envoi de mail ####
 echo -e "$COLINFO"
-echo -e "En cas de problème lors du mirroring des disques,"
+echo -e "En cas de problÃ¨me lors du mirroring des disques,"
 echo -e "le script vous previendra par mail."
-echo -e "Pour que cela soit possible, Exim doit être configuré."
-echo -e "Il ne l'est pas par défaut lors d'une installation avec Digloo."
-echo -e "Vous pourrez configurer Exim plus tard en lançant /usr/sbin/eximconfig"
+echo -e "Pour que cela soit possible, Exim doit Ãªtre configurÃ©."
+echo -e "Il ne l'est pas par dÃ©faut lors d'une installation avec Digloo."
+echo -e "Vous pourrez configurer Exim plus tard en lanÃ§ant /usr/sbin/eximconfig"
 REPONSE=""
 while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 do
 	echo -e "$COLTXT"
-	echo -e "Préférez-vous configurer Exim immédiatement ? (${COLCHOIX}o/n${COLTXT}) [${COLDEFAUT}o${COLTXT}]"
+	echo -e "PrÃ©fÃ©rez-vous configurer Exim immÃ©diatement ? (${COLCHOIX}o/n${COLTXT}) [${COLDEFAUT}o${COLTXT}]"
 	echo
-	echo -e "Réponse: $COLSAISIE\c"
+	echo -e "RÃ©ponse: $COLSAISIE\c"
 	read REPONSE
 	if [ -z "$REPONSE" ]; then
 		REPONSE="o"
@@ -1339,7 +1339,7 @@ done
 if [ "$REPONSE" = "o" ]; then
 	echo -e "$COLTXT"
 	echo -e "Lancement de la configuration d'exim."
-	echo -e "En général, la configuration à choisir est la N°3."
+	echo -e "En gÃ©nÃ©ral, la configuration Ã  choisir est la NÂ°3."
 	# echo -e "Appuyez sur entree pour continuer"
 	echo -e "$COLCMD"
 	/usr/sbin/eximconfig
@@ -1372,15 +1372,15 @@ done
 
 
 
-################# Création des scripts ########################
+################# CrÃ©ation des scripts ########################
 
 echo -e "$COLPARTIE"
 echo "************************"
-echo "* Création des scripts *"
+echo "* CrÃ©ation des scripts *"
 echo "************************"
 
 echo -e "$COLTXT"
-echo "Création des scripts..."
+echo "CrÃ©ation des scripts..."
 if [ "$DDLOCAL" = "2" ]; then
 	echo "Et copie des scripts vers la machine $IPDISTANT"
 fi
@@ -1388,7 +1388,7 @@ fi
 echo -e "$COLCMD"
 mkdir -p /mirror
 
-# Création du script rsync
+# CrÃ©ation du script rsync
 touch /mirror/$scriptmirror
 chmod 700 /mirror/$scriptmirror
 
@@ -1408,7 +1408,7 @@ if [ "$DDLOCAL" = "1" ]; then
 else
 	scriptumountdisk2="umount_${IPDISTANT}_$DISK2.sh"
 fi
-#Cette variable doit être initialisée ici parce qu'elle est utilisée en début de script $scriptmirror.
+#Cette variable doit Ãªtre initialisÃ©e ici parce qu'elle est utilisÃ©e en dÃ©but de script $scriptmirror.
 
 
 echo "#!/bin/bash" > /mirror/$scriptmirror
@@ -1438,10 +1438,10 @@ fi
 echo -e 'if [ $? != 0 ]; then' >> /mirror/$scriptmirror
 echo -e "echo \"** ERREUR ** lors du montage de la partition / de $DISK2\"  | tee -a \$FICHIERLOG " >> /mirror/$scriptmirror
 echo -e 'echo "Le script ne peut se poursuivre." | tee -a $FICHIERLOG '>> /mirror/$scriptmirror
-echo -e "echo \"VÉRIFIEZ LE BON FONCTIONNEMENT DU $DISK2\" | tee -a \$FICHIERLOG " >> /mirror/$scriptmirror
+echo -e "echo \"VÃ‰RIFIEZ LE BON FONCTIONNEMENT DU $DISK2\" | tee -a \$FICHIERLOG " >> /mirror/$scriptmirror
 echo -e "touch /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
 echo -e "echo \"Rapport de fonctionnement du script de mirroring lors de son lancement.\" > /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
-echo -e "echo \"Voici les problèmes constatés:\" >> /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
+echo -e "echo \"Voici les problÃ¨mes constatÃ©s:\" >> /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
 echo -e "echo \"\" >> /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
 echo -e 'cat $FICHIERLOG >> /mirror/mail_alerte.txt' >> /mirror/$scriptmirror
 echo -e "mail $MAIL_ADMIN -s \"[Alerte /mirror/$scriptmirror] Pb avec le script\" < /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
@@ -1518,10 +1518,10 @@ if [ "$PARTVAR" != "aucune" ]; then
 	echo -e 'if [ $? != 0 ]; then' >> /mirror/$scriptmirror
 	echo -e "echo \"** ERREUR ** lors du montage de la partition /var de $DISK2\"  | tee -a \$FICHIERLOG " >> /mirror/$scriptmirror
 	echo -e 'echo "Le script ne peut se poursuivre." | tee -a $FICHIERLOG '>> /mirror/$scriptmirror
-	echo -e "echo \"VÉRIFIEZ LE BON FONCTIONNEMENT DU $DISK2\" | tee -a \$FICHIERLOG " >> /mirror/$scriptmirror
+	echo -e "echo \"VÃ‰RIFIEZ LE BON FONCTIONNEMENT DU $DISK2\" | tee -a \$FICHIERLOG " >> /mirror/$scriptmirror
 	echo -e "touch /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
 	echo -e "echo \"Rapport de fonctionnement du script de mirroring lors de son lancement.\" > /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
-	echo -e "echo \"Voici les problèmes constatés:\" >> /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
+	echo -e "echo \"Voici les problÃ¨mes constatÃ©s:\" >> /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
 	echo -e "echo \"\" >> /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
 	echo -e 'cat $FICHIERLOG >> /mirror/mail_alerte.txt' >> /mirror/$scriptmirror
 	echo -e "mail $MAIL_ADMIN -s \"[Alerte /mirror/$scriptmirror] Pb avec le script\" < /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
@@ -1568,10 +1568,10 @@ fi
 echo -e 'if [ $? != 0 ]; then' >> /mirror/$scriptmirror
 echo -e "echo \"** ERREUR ** lors du montage de la partition /home de $DISK2\"  | tee -a \$FICHIERLOG " >> /mirror/$scriptmirror
 echo -e 'echo "Le script ne peut se poursuivre." | tee -a $FICHIERLOG '>> /mirror/$scriptmirror
-echo -e "echo \"VÉRIFIEZ LE BON FONCTIONNEMENT DU $DISK2\" | tee -a \$FICHIERLOG " >> /mirror/$scriptmirror
+echo -e "echo \"VÃ‰RIFIEZ LE BON FONCTIONNEMENT DU $DISK2\" | tee -a \$FICHIERLOG " >> /mirror/$scriptmirror
 echo -e "touch /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
 echo -e "echo \"Rapport de fonctionnement du script de mirroring lors de son lancement.\" > /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
-echo -e "echo \"Voici les problèmes constatés:\" >> /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
+echo -e "echo \"Voici les problÃ¨mes constatÃ©s:\" >> /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
 echo -e "echo \"\" >> /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
 echo -e 'cat $FICHIERLOG >> /mirror/mail_alerte.txt' >> /mirror/$scriptmirror
 echo -e "mail $MAIL_ADMIN -s \"[Alerte /mirror/$scriptmirror] Pb avec le script\" < /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
@@ -1605,18 +1605,18 @@ else
 	#==============================================================
 	#==============================================================
 	#NOTE: Si la machine distante ne dispose pas d'un annuaire LDAP synchro avec l'annuaire du serveur SE3
-	#      la restauration des ACL sur le poste distant n'est pas possible à ce stade.
-	#      Elle devra être assurée lors du redémarrage sur le disque miroir.
+	#      la restauration des ACL sur le poste distant n'est pas possible Ã  ce stade.
+	#      Elle devra Ãªtre assurÃ©e lors du redÃ©marrage sur le disque miroir.
 	#
 	#echo "ssh root@$IPDISTANT \"cd /mirror/part_home/ && setfacl --restore=part_home_list_acls.txt && cd / && umount /dev/$PARTHOME_CIBLE\"" >> /mirror/$scriptmirror
 
-	# J'ai choisi de placer le part_home_list_acls.txt dans /root/ par sécurité, mais on pourrait conserver celui de /home/
+	# J'ai choisi de placer le part_home_list_acls.txt dans /root/ par sÃ©curitÃ©, mais on pourrait conserver celui de /home/
 
-	#Avec /root/.profile, il est nécessaire de se loguer une fois en root sur le disque miroir une fois remis en disque principal:
+	#Avec /root/.profile, il est nÃ©cessaire de se loguer une fois en root sur le disque miroir une fois remis en disque principal:
 	#echo "ssh root@$IPDISTANT \"cp -f /mirror/part_home/part_home_list_acls.txt /root/ && if ! cat /root/.profile | grep part_home_list_acls.txt > /dev/null; then echo 'if [ -e \"/root/part_home_list_acls.txt\" ]; then cd /home; setfacl --restore=/root/part_home_list_acls.txt && rm -f /root/part_home_list_acls.txt;fi' >> /root/.profile;fi && cd / && umount /dev/$PARTHOME_CIBLE\"" >> /mirror/$scriptmirror
 
-	#Avec /etc/init.d/rcS, il ne devrait pas être nécessaire de se loguer:
-	#Le script est lancé trop tôt (avant le démarrage d'OpenLDAP).
+	#Avec /etc/init.d/rcS, il ne devrait pas Ãªtre nÃ©cessaire de se loguer:
+	#Le script est lancÃ© trop tÃ´t (avant le dÃ©marrage d'OpenLDAP).
 	#echo "ssh root@$IPDISTANT \"mount -t ext3 /dev/$PARTROOT_CIBLE /mirror/part_root;cp -f /mirror/part_home/part_home_list_acls.txt /mirror/part_root/root/ && if ! cat /mirror/part_root/etc/init.d/rcS | grep part_home_list_acls.txt > /dev/null; then echo 'if [ -e \"/root/part_home_list_acls.txt\" ]; then cd /home; setfacl --restore=/root/part_home_list_acls.txt && rm -f /root/part_home_list_acls.txt;fi' >> /mirror/part_root/etc/init.d/rcS;fi && cd / && umount /dev/$PARTHOME_CIBLE;umount /dev/$PARTROOT_CIBLE\"" >> /mirror/$scriptmirror
 
 
@@ -1629,7 +1629,7 @@ else
 	echo '#! /bin/bash
 
 NAME="aclrestore"
-DESC="Restauration des ACL au premier démarrage uniquement"
+DESC="Restauration des ACL au premier dÃ©marrage uniquement"
 DAEMON="/root/aclrestore.sh"
 
 case "$1" in
@@ -1697,10 +1697,10 @@ fi
 echo -e 'if [ $? != 0 ]; then' >> /mirror/$scriptmirror
 echo -e "echo \"** ERREUR ** lors du montage de la partition /var/se3 de $DISK2\"  | tee -a \$FICHIERLOG " >> /mirror/$scriptmirror
 echo -e 'echo "Le script ne peut se poursuivre." | tee -a $FICHIERLOG '>> /mirror/$scriptmirror
-echo -e "echo \"VÉRIFIEZ LE BON FONCTIONNEMENT DU $DISK2\" | tee -a \$FICHIERLOG " >> /mirror/$scriptmirror
+echo -e "echo \"VÃ‰RIFIEZ LE BON FONCTIONNEMENT DU $DISK2\" | tee -a \$FICHIERLOG " >> /mirror/$scriptmirror
 echo -e "touch /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
 echo -e "echo \"Rapport de fonctionnement du script de mirroring lors de son lancement:\" > /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
-echo -e "echo \"Voici les problèmes constatés:\" >> /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
+echo -e "echo \"Voici les problÃ¨mes constatÃ©s:\" >> /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
 echo -e "echo \"\" >> /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
 echo -e 'cat $FICHIERLOG >> /mirror/mail_alerte.txt' >> /mirror/$scriptmirror
 echo -e "mail $MAIL_ADMIN -s \"[Alerte /mirror/$scriptmirror] Pb avec le script\" < /mirror/mail_alerte.txt" >> /mirror/$scriptmirror
@@ -1734,18 +1734,18 @@ else
 	#==============================================================
 	#==============================================================
 	#NOTE: Si la machine distante ne dispose pas d'un annuaire LDAP synchro avec l'annuaire du serveur SE3
-	#      la restauration des ACL sur le poste distant n'est pas possible à ce stade.
-	#      Elle devra être assurée lors du redémarrage sur le disque miroir.
+	#      la restauration des ACL sur le poste distant n'est pas possible Ã  ce stade.
+	#      Elle devra Ãªtre assurÃ©e lors du redÃ©marrage sur le disque miroir.
 	#
 	#echo "ssh root@$IPDISTANT \"cd /mirror/part_varse3/ && setfacl --restore=part_var_se3_list_acls.txt && cd / && umount /dev/$PARTVARSE3_CIBLE\"" >> /mirror/$scriptmirror
 
-	# J'ai choisi de placer le part_var_se3_list_acls.txt dans /root/ par sécurité, mais on pourrait conserver celui de /var/se3/
+	# J'ai choisi de placer le part_var_se3_list_acls.txt dans /root/ par sÃ©curitÃ©, mais on pourrait conserver celui de /var/se3/
 
-	#Avec /root/.profile, il est nécessaire de se loguer une fois en root sur le disque miroir une fois remis en disque principal:
+	#Avec /root/.profile, il est nÃ©cessaire de se loguer une fois en root sur le disque miroir une fois remis en disque principal:
 	#echo "ssh root@$IPDISTANT \"cp -f /mirror/part_varse3/part_var_se3_list_acls.txt /root/ && if ! cat /root/.profile | grep part_var_se3_list_acls.txt > /dev/null; then echo 'if [ -e \"/root/part_var_se3_list_acls.txt\" ]; then cd /var/se3; setfacl --restore=/root/part_var_se3_list_acls.txt && rm -f /root/part_var_se3_list_acls.txt;fi' >> /root/.profile;fi && cd / && umount /dev/$PARTVARSE3_CIBLE\"" >> /mirror/$scriptmirror
 
-	#Avec /etc/init.d/rcS, il ne devrait pas être nécessaire de se loguer:
-	#Le script est lancé trop tôt (avant le démarrage d'OpenLDAP).
+	#Avec /etc/init.d/rcS, il ne devrait pas Ãªtre nÃ©cessaire de se loguer:
+	#Le script est lancÃ© trop tÃ´t (avant le dÃ©marrage d'OpenLDAP).
 	#echo "ssh root@$IPDISTANT \"mount -t ext3 /dev/$PARTROOT_CIBLE /mirror/part_root;cp -f /mirror/part_varse3/part_var_se3_list_acls.txt /mirror/part_root/root/ && if ! cat /mirror/part_root/etc/init.d/rcS | grep part_var_se3_list_acls.txt > /dev/null; then echo 'if [ -e \"/root/part_var_se3_list_acls.txt\" ]; then cd /var/se3; setfacl --restore=/root/part_var_se3_list_acls.txt && rm -f /root/part_var_se3_list_acls.txt;fi' >> /mirror/part_root/etc/init.d/rcS;fi && cd / && umount /dev/$PARTVARSE3_CIBLE;umount /dev/$PARTROOT_CIBLE\"" >> /mirror/$scriptmirror
 
 
@@ -1766,13 +1766,13 @@ fi
 
 echo "echo -e '\033[1;35m'" >> /mirror/$scriptmirror
 echo "echo '***********'" >> /mirror/$scriptmirror
-echo "echo '* Terminé *'" >> /mirror/$scriptmirror
+echo "echo '* TerminÃ© *'" >> /mirror/$scriptmirror
 echo "echo '***********'" >> /mirror/$scriptmirror
 echo "echo -e '\033[0;37m'" >> /mirror/$scriptmirror
 
 
 
-# Création du script mount_disk2
+# CrÃ©ation du script mount_disk2
 if [ "$DDLOCAL" = "1" ]; then
 	scriptmountdisk2="mount_$DISK2.sh"
 else
@@ -1796,7 +1796,7 @@ fi
 
 
 
-# Création du script umount_disk2
+# CrÃ©ation du script umount_disk2
 touch /mirror/$scriptumountdisk2
 chmod 700 /mirror/$scriptumountdisk2
 echo "umount /dev/$PARTROOT_CIBLE" > /mirror/$scriptumountdisk2
@@ -1816,7 +1816,7 @@ fi
 
 
 
-# Création du script install_lilo_disk2
+# CrÃ©ation du script install_lilo_disk2
 touch /mirror/$scriptinstalllilodisk2
 chmod 700 /mirror/$scriptinstalllilodisk2
 echo "cp $DOSSMIRROR/lilo2.conf $DOSSMIRROR/part_root/lilo2.conf" > /mirror/$scriptinstalllilodisk2
@@ -1831,7 +1831,7 @@ fi
 
 
 
-# Création du fichier de conf de lilo pour le 2e disque
+# CrÃ©ation du fichier de conf de lilo pour le 2e disque
 if [ "$DDLOCAL" = "1" ]; then
 	fichlilo2="lilo2.conf"
 else
@@ -1852,13 +1852,13 @@ fi
 
 
 echo -e "$COLTXT"
-echo "Fin de la création des scripts."
+echo "Fin de la crÃ©ation des scripts."
 
 POURSUIVRE
 
 
 
-###################### fin de la création des scripts ###############################
+###################### fin de la crÃ©ation des scripts ###############################
 
 clear
 
@@ -1868,24 +1868,24 @@ echo "* FIN *"
 echo "*******"
 
 echo -e "$COLINFO"
-echo "Script d'installation terminé !!!"
+echo "Script d'installation terminÃ© !!!"
 echo ""
 echo ""
-echo "Le script d'installation a généré trois scripts dans /mirror !"
+echo "Le script d'installation a gÃ©nÃ©rÃ© trois scripts dans /mirror !"
 echo "Le script principal rsync /mirror/$scriptmirror"
 echo
 echo "Un script /mirror/$scriptmountdisk2 vous permettant de monter les partitions"
 echo "de $DISK2 dans les sous repertoires de /mirror afin d'en visualiser le contenu."
 echo
-echo "Un script /mirror/$scriptumountdisk2 vous permettant de démonter vos partitions"
+echo "Un script /mirror/$scriptumountdisk2 vous permettant de dÃ©monter vos partitions"
 echo "de $DISK2 dans les sous repertoires de /mirror"
 echo
 
 if [ "$DDLOCAL" = "2" ]; then
 	echo "Comme vous avez optez pour un mirroring vers un poste distant,"
-	echo "ce sont les scripts $scriptmountdisk2 et $scriptumountdisk2 situés"
-	echo "sur la machine $IPDISTANT que vous devrez exécuter si le besoin"
-	echo "d'accès au données mirrorées se fait sentir."
+	echo "ce sont les scripts $scriptmountdisk2 et $scriptumountdisk2 situÃ©s"
+	echo "sur la machine $IPDISTANT que vous devrez exÃ©cuter si le besoin"
+	echo "d'accÃ¨s au donnÃ©es mirrorÃ©es se fait sentir."
 fi
 
 REPONSE=""
@@ -1893,13 +1893,13 @@ while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 do
         echo -e "$COLTXT"
 	echo "Voulez-vous lancer le script rsync de suite "
-	echo -e "afin d'effectuer une première synchronisation des disques? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
+	echo -e "afin d'effectuer une premiÃ¨re synchronisation des disques? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
 	read REPONSE
 done
 
 if [ "$REPONSE" = "o" ]; then
         echo -e "$COLTXT"
-	echo "Script lancé !"
+	echo "Script lancÃ© !"
         echo -e "$COLCMD"
 	cd /mirror/
 	./$scriptmirror
