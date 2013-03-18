@@ -17,19 +17,19 @@ else
 fi
 BASEDN=`echo "SELECT value FROM params WHERE name='ldap_base_dn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$BASEDN" ]; then
-        echo "Impossible d'accéder au paramètre BASEDN"
+        echo "Impossible d'accÃ©der au paramÃ¨tre BASEDN"
         exit 1
 fi
 
 RIGHTSRDN=`echo "SELECT value FROM params WHERE name='RightsRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$RIGHTSRDN" ]; then
-        echo "Impossible d'accéder au paramètre RIGHTSRDN"
+        echo "Impossible d'accÃ©der au paramÃ¨tre RIGHTSRDN"
         exit 1
 fi
 		
 PEOPLERDN=`echo "SELECT value FROM params WHERE name='peopleRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$PEOPLERDN" ]; then
-        echo "Impossible d'accéder au paramètre PEOPLERDN"
+        echo "Impossible d'accÃ©der au paramÃ¨tre PEOPLERDN"
         exit 1
 fi
 

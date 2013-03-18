@@ -1,12 +1,12 @@
 #!/bin/bash
 #
-##### Script de sauvegarde de divers paramètres SE3 #####
+##### Script de sauvegarde de divers paramÃ¨tres SE3 #####
 #
 # Auteur : Stephane Boireau (Bernay/Pont-Audemer (27))
 #
 ## $Id ##
 #
-# Dernière modif: 07/04/2007
+# DerniÃ¨re modif: 07/04/2007
 
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
 	echo "Script permettant de consulter la configuration MySQL"
@@ -16,7 +16,7 @@ if [ "$1" = "--help" -o "$1" = "-h" ]; then
 	echo " - des bases MySQL suivantes: 'se3db' et 'mysql'"
 	echo " - de /var/lib/samba ou juste /var/lib/samba/secrets.tdb"
 	echo ""
-	echo "Usage : Lancer sans paramètres"
+	echo "Usage : Lancer sans paramÃ¨tres"
 	exit
 fi
 
@@ -24,7 +24,7 @@ fi
 export LANG=fr_FR.UTF-8
 
 #
-# Récupération des paramètres mysql
+# RÃ©cupÃ©ration des paramÃ¨tres mysql
 #
 if [ -e /var/www/se3/includes/config.inc.php ]; then
 	dbhost=`cat /var/www/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
@@ -38,7 +38,7 @@ else
 fi
 
 #
-# Récupération des paramètres de sauvegarde
+# RÃ©cupÃ©ration des paramÃ¨tres de sauvegarde
 #
 svgsyst_cnsv_hebdo=`echo "SELECT value FROM params WHERE name='svgsyst_cnsv_hebdo'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 svgsyst_varlibsamba=`echo "SELECT value FROM params WHERE name='svgsyst_varlibsamba'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
@@ -60,7 +60,7 @@ fi
 if [ -z "$svgsyst_timeout" ]; then
 	svgsyst_timeout="4500"
 else
-	# Contrôler que c'est bien un nombre
+	# ContrÃ´ler que c'est bien un nombre
 	test=$(echo $svgsyst_timeout | sed -e "s/[0-9]//g")
 	if [ ! -z "$test" ]; then
 		svgsyst_timeout="4500"

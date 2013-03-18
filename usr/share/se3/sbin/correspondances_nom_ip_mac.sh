@@ -1,15 +1,15 @@
 #!/bin/bash
 #
-##### Script de génération du fichier de correspondance NOM;IP;MAC #####
+##### Script de gÃ©nÃ©ration du fichier de correspondance NOM;IP;MAC #####
 #
 # Auteur : Stephane Boireau (Bernay/Pont-Audemer (27))
 #
 ## $Id ##
 #
-# Dernière modif: 25/03/2007
+# DerniÃ¨re modif: 25/03/2007
 
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
-	echo "Script permettant de générer un fichier de correspondances NOM;IP;MAC pour"
+	echo "Script permettant de gÃ©nÃ©rer un fichier de correspondances NOM;IP;MAC pour"
 	echo "l'outil de post-clonage."
 	echo ""
 	echo "Usage : Pas d'option."
@@ -33,7 +33,7 @@ BASE=$(grep "^BASE" /etc/ldap/ldap.conf | cut -d" " -f2 )
 ldapsearch -xLLL -b ou=computers,$BASE cn | grep ^cn | cut -d" " -f2 | while read nom
 do
 	if [ ! -z $(echo ${nom:0:1} | sed -e "s/[0-9]//g") ]; then
-		# PB: on récupère les cn des entrées machines aussi (xpbof et xpbof$)
+		# PB: on rÃ©cupÃ¨re les cn des entrÃ©es machines aussi (xpbof et xpbof$)
 		ip=$(ldapsearch -xLLL -b ou=computers,$BASE cn=$nom ipHostNumber | grep ipHostNumber | cut -d" " -f2)
 		mac=$(ldapsearch -xLLL -b ou=computers,$BASE cn=$nom macAddress | grep macAddress | cut -d" " -f2)
 
@@ -54,5 +54,5 @@ sort ${fich_clients_ini} > ${fich_clients_ini}.tmp
 cat ${fich_clients_ini}.tmp | perl -pe 's/\n/\r\n/' > $fich_clients_ini
 rm -f ${fich_clients_ini}.tmp
 
-echo "Les fichiers ont été générés dans $dest"
-echo "Terminé."
+echo "Les fichiers ont Ã©tÃ© gÃ©nÃ©rÃ©s dans $dest"
+echo "TerminÃ©."

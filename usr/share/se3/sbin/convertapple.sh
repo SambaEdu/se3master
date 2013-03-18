@@ -14,7 +14,7 @@ then
 fi	
 
 #
-# Récupération des paramètres mysql
+# RÃ©cupÃ©ration des paramÃ¨tres mysql
 #
 if [ -e /var/www/se3/includes/config.inc.php ]; then
         dbhost=`cat /var/www/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
@@ -33,22 +33,22 @@ fi
 
 BASEDN=`echo "SELECT value FROM params WHERE name='ldap_base_dn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$BASEDN" ]; then
-        echo "Impossible d'accéder au paramètre BASEDN"
+        echo "Impossible d'accÃ©der au paramÃ¨tre BASEDN"
         exit 1
 fi
 PEOPLERDN=`echo "SELECT value FROM params WHERE name='peopleRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$PEOPLERDN" ]; then
-        echo "Impossible d'accéder au paramètre PEOPLEDN"
+        echo "Impossible d'accÃ©der au paramÃ¨tre PEOPLEDN"
         exit 1
 fi
 ADMINRDN=`echo "SELECT value FROM params WHERE name='adminRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$ADMINRDN" ]; then
-        echo "Impossible d'accéder au paramètre ADMINRDN"
+        echo "Impossible d'accÃ©der au paramÃ¨tre ADMINRDN"
         exit 1
 fi
 ADMINPW=`echo "SELECT value FROM params WHERE name='adminPw'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$ADMINPW" ]; then
-        echo "Impossible d'accéder au paramètre ADMINPW"
+        echo "Impossible d'accÃ©der au paramÃ¨tre ADMINPW"
         exit 1
 fi
 SE3NAME=`cat /etc/samba/smb.conf | grep "netbios name" |cut -d"=" -f2 | sed -e "s/ //g"`

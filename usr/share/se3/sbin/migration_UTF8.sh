@@ -2,7 +2,7 @@
 
 ## $Id$ ##
 
-##### Script destiné à passer en UTF-8. #####
+##### Script destinÃ© Ã  passer en UTF-8. #####
 
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
@@ -99,7 +99,7 @@ sleep 2
 test=$(ps aux | grep smbd | grep -v grep)
 if [ ! -z "$test" ]; then
 	echo -e "$COLERREUR"
-	echo "L'arret du serveur a échoue."
+	echo "L'arret du serveur a Ã©choue."
 	echo "Il reste au moins un processus samba:"
 	echo -e "$COLCMD\c"
 	ps aux | grep smbd | grep -v grep
@@ -142,7 +142,7 @@ echo "fr_FR.UTF-8 UTF-8" > /etc/locale.gen
 /usr/sbin/locale-gen
 
 echo -e "$COLTXT"
-echo -e "Redémarrage du serveur samba"
+echo -e "RedÃ©marrage du serveur samba"
 
 
 echo -e "$COLCMD\c"
@@ -153,12 +153,12 @@ if [ -z "$test" ]; then
 	echo "Le redemarrage du service samba a echoue."
 
 	echo -e "$COLTXT"
-	echo "Vous devrez redémarrer manuellement le service par:"
+	echo "Vous devrez redÃ©marrer manuellement le service par:"
 	echo -e "$COLCMD\c"
 	echo "   /etc/init.d/samba start"
 else
 	echo -e "$COLTXT"
-	echo "Rédémarrage du service samba réussi."
+	echo "RÃ©dÃ©marrage du service samba rÃ©ussi."
 fi
 
 
