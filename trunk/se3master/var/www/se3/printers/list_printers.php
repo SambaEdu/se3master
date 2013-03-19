@@ -105,19 +105,35 @@ if ((is_admin("printers_is_admin",$login)=="Y") AND ($login != "admin")) {
     		echo "<TABLE BORDER=0>";
     		for ($i=0; $i<$nb_parcs; $i++) {
         		$parc_name=$all_parcs[$i]['cn'];
-        		echo "<TR><TD WIDTH=200 BGCOLOR=\"cornflowerblue\"><B>$parc_name</B></TD></TR>";
+        		
+        		// Recherche de l'impra=imante par defaut
+			$imprim_defaut = get_default_printer($parc_name);
+
         		$printers_parc=printers_members($parc_name,"parcs",1);
         		$nb_printers_parc=count($printers_parc);
+        		
+        		echo "<TR><TH WIDTH=200 BGCOLOR=\"cornflowerblue\">&nbsp;$parc_name</TH><TH BGCOLOR=\"cornflowerblue\">&nbsp;".gettext("Travaux en cours")."&nbsp;</TH><TH BGCOLOR=\"cornflowerblue\"> &nbsp;".gettext("par d&#233;faut")."&nbsp;</TH></TR>";
+        		if ($nb_printers_parc == 0) {echo "<TR><td colspan=3><i> ".gettext("Aucune imprimante n'est rattach&#233;e &#224; ce parc")."</i></td></TR>";};
         		for ($j=0; $j<$nb_printers_parc; $j++) {
             			$sys= exec("/usr/bin/lpstat -o $printers_parc[$j]");
             			if ($sys != "") $status=gettext("OUI");
             			else $status=gettext("NON");
             			echo "<TR><TD WIDTH=200 BGCOLOR=\"lightsteelblue\"><LI><A href='view_printers.php?one_printer=$printers_parc[$j]'>$printers_parc[$j]</A></LI></TD>";
-            			echo "<TD><FONT COLOR=\"cornflowerblue\">".gettext("Travaux en cours")."=$status\n</FONT></TD></TR>";
+            			echo "<TD><FONT COLOR=\"cornflowerblue\">$status\n</FONT></TD>";
+            			
+            			if ($imprim_defaut == $printers_parc[$j]) {
+            				echo "<TD><img style=\"border: 0px solid ;\" src=\"../elements/images/enabled.png\" title=\"par defaut\" alt=\"par defaut\" ></TD>";
+            			} else {
+            				echo "<TD></TD>";
+            			}
+            			
+            			echo "</TR>";
         		}
         		echo "<TR><TD HEIGHT=30></TD></TR>";
     		}
     		echo "</TABLE>";
+
+	// par imprimante
 	} elseif ($view == "v_printers") {
 		$all_printers=search_printers("printer-name=*");
     		$nb_printers=count($all_printers);
