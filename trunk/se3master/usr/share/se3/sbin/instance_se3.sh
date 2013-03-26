@@ -130,6 +130,8 @@ if [ ! -e /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.j
 fi
 /etc/init.d/cron reload
 
+service apache2 reload
+service apache2se reload
 #/etc/init.d/slapd restart
 /var/cache/se3_install/depmaj/install_supervision_rouen.sh 
 
