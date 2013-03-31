@@ -86,7 +86,7 @@ done
 cd /root
 
 echo -e "$COLTXT"
-echo "Recréation des dossiers de classes"
+echo "RecrÃ©ation des dossiers de classes"
 echo -e "$COLCMD\c"
 updateClasses.pl -c ALL
 
