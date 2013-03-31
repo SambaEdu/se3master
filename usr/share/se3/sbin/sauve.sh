@@ -4,7 +4,7 @@
 
 ##### Lance la sauvegarde sur bande #####
 
-# Détection de la distrib
+# DÃ©tection de la distrib
 
 if [ -e /etc/redhat-release ]; then
         DISTRIB="RH"
@@ -25,7 +25,7 @@ MEDIA="tape_"
 XFSDUMP="/usr/sbin/xfsdump"
 ERASE="-E"
 
-# Récupération des paramètres mysql
+# RÃ©cupÃ©ration des paramÃ¨tres mysql
 
 if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
         dbhost=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
@@ -42,7 +42,7 @@ fi
 SAVBANDACTIV=`echo "SELECT value FROM params WHERE name='savbandactiv'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ "$SAVBANDACTIV" = "0" ]
 then
-	echo "Sauvegarde désactivée"
+	echo "Sauvegarde dÃ©sactivÃ©e"
 	exit 0
 fi
 
@@ -54,14 +54,14 @@ SAVHOME=`echo "SELECT value FROM params WHERE name='savhome'" | mysql -h $dbhost
 SAVSE3=`echo "SELECT value FROM params WHERE name='savse3'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 SAVSUSPEND=`echo "SELECT value FROM params WHERE name='savsuspend'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 
-# Vérification de l'intégrité des paramètres
+# VÃ©rification de l'intÃ©gritÃ© des paramÃ¨tres
 
 echo "-----------------------------" >> $SE3LOG
 date >> $SE3LOG
 echo "-----------------------------" >> $SE3LOG
 
 if [ -z "SAVDEVICE" ]; then
-	echo "Le périphérique de sauvegarde n'est pas renseigné ou l'accès à la base des paramètres est impossible. La sauvegarde a échouée." >> $SE3LOG
+	echo "Le pÃ©riphÃ©rique de sauvegarde n'est pas renseignÃ© ou l'accÃ¨s Ã  la base des paramÃ¨tres est impossible. La sauvegarde a Ã©chouÃ©e." >> $SE3LOG
 	echo "sauve.sh: Status FAILED" >> $SE3LOG
         exit 1
 fi
@@ -90,54 +90,54 @@ if [ ! "$SAVHOME" = "0" ]; then
 		echo "UPDATE params SET value=\"0\" WHERE name=\"savhome\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		ERASE=""
 		if [ "$SAVSE3" = "0" ]; then
-			# La sauvegarde est achevée avec succes
+			# La sauvegarde est achevÃ©e avec succes
 			if [ "$SAVBANDNBR" != "0" ]; then
 				echo "UPDATE params SET value=\"1\" WHERE name=\"savsuspend\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 			fi
 			echo "UPDATE params SET value=\"1\" WHERE name=\"savhome\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 			echo "UPDATE params SET value=\"0\" WHERE name=\"savbandnbr\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-			echo -e "Succès de la sauvegarde.\n Pensez à faire une rotation de la bande en cas de besoin." | mail -s "Sauvegarde SE3" $MELSAVADMIN
-			echo "sauve.sh: La sauvegarde s'est terminée avec succès" >> $SE3LOG
+			echo -e "SuccÃ¨s de la sauvegarde.\n Pensez Ã  faire une rotation de la bande en cas de besoin." | mail -s "Sauvegarde SE3" $MELSAVADMIN
+			echo "sauve.sh: La sauvegarde s'est terminÃ©e avec succÃ¨s" >> $SE3LOG
 		fi
 	fi
 	if [ "$STATUS" = "INTERRUPT" ]; then
 		echo "UPDATE params SET value=\"2\" WHERE name=\"savhome\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savsuspend\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-		# Incrémentation du compeur de bande
+		# IncrÃ©mentation du compeur de bande
 		let SAVBANDNBR+=1
 		echo "UPDATE params SET value=\"$SAVBANDNBR\" WHERE name=\"savbandnbr\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-		echo -e "Sauvegarde de /home inachevée.\n Lorsque vous aurez inséré une nouvelle bande, éditez les parametres de sauvegarde et mettez la variable savsuspend à 0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
+		echo -e "Sauvegarde de /home inachevÃ©e.\n Lorsque vous aurez insÃ©rÃ© une nouvelle bande, Ã©ditez les parametres de sauvegarde et mettez la variable savsuspend Ã  0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
 		exit 0
 	fi
-	# Il y a des erreurs non récupérables
+	# Il y a des erreurs non rÃ©cupÃ©rables
 	# Il faut recommencer le processus de savegarde entier /home et /var/se3 :-(
-	# La sauvegarde est placée en état suspendu
+	# La sauvegarde est placÃ©e en Ã©tat suspendu
 	if [ "$STATUS" = "QUIT" ]; then
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savhome\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savsuspend\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"0\" WHERE name=\"savbandnbr\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-		echo "Erreur lors de la sauvegarde de /home: Le média n'est plus utilisable, changez de bande puis éditez les parametres de sauvegarde et mettez la variable savsuspend à 0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
+		echo "Erreur lors de la sauvegarde de /home: Le mÃ©dia n'est plus utilisable, changez de bande puis Ã©ditez les parametres de sauvegarde et mettez la variable savsuspend Ã  0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
 		exit 1
 	fi
 	if [ "$STATUS" = "INCOMPLETE" ]; then
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savhome\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savsuspend\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"0\" WHERE name=\"savbandnbr\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-		echo "Erreur lors de la sauvegarde de /home: La sauvegarde est incomplete. Editez les parametres de sauvegarde et mettez la variable savsuspend à 0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
+		echo "Erreur lors de la sauvegarde de /home: La sauvegarde est incomplete. Editez les parametres de sauvegarde et mettez la variable savsuspend Ã  0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
 		exit 1
 	fi
 	if [ "$STATUS" = "FAULT" ]; then
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savhome\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savsuspend\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"0\" WHERE name=\"savbandnbr\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-		echo "Erreur lors de la sauvegarde de /home: Erreur logicielle. Editez les parametres de sauvegarde et mettez la variable savsuspend à 0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
+		echo "Erreur lors de la sauvegarde de /home: Erreur logicielle. Editez les parametres de sauvegarde et mettez la variable savsuspend Ã  0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
 		exit 1
 	fi
 	if [ "$STATUS" = "ERROR" ]; then
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savhome\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savsuspend\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"0\" WHERE name=\"savbandnbr\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-		echo "Erreur lors de la sauvegarde de /home: Erreur ressource. Editez les parametres de sauvegarde et mettez la variable savsuspend à 0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
+		echo "Erreur lors de la sauvegarde de /home: Erreur ressource. Editez les parametres de sauvegarde et mettez la variable savsuspend Ã  0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
 		exit 1
 	fi
 fi
@@ -160,27 +160,27 @@ if [ ! "$SAVSE3" = "0" ]; then
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savhome\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savse3\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"0\" WHERE name=\"savbandnbr\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-		echo -e "Succès de la sauvegarde.\n Pensez à faire une rotation de la bande en cas de besoin." | mail -s "Sauvegarde SE3" $MELSAVADMIN
-		echo "sauve.sh: La sauvegarde s'est terminée avec succès" >> $SE3LOG
+		echo -e "SuccÃ¨s de la sauvegarde.\n Pensez Ã  faire une rotation de la bande en cas de besoin." | mail -s "Sauvegarde SE3" $MELSAVADMIN
+		echo "sauve.sh: La sauvegarde s'est terminÃ©e avec succÃ¨s" >> $SE3LOG
 	fi
 	if [ "$STATUS" = "INTERRUPT" ]; then
 		echo "UPDATE params SET value=\"2\" WHERE name=\"savse3\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savsuspend\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-		# Incrémentation du compeur de bande
+		# IncrÃ©mentation du compeur de bande
 		let SAVBANDNBR+=1
 		echo "UPDATE params SET value=\"$SAVBANDNBR\" WHERE name=\"savbandnbr\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-		echo -e "Sauvegarde de /var/se3 inachevée.\n Lorsque vous aurez inséré une nouvelle bande, éditez les parametres de sauvegarde et mettez la variable savsuspend à 0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
+		echo -e "Sauvegarde de /var/se3 inachevÃ©e.\n Lorsque vous aurez insÃ©rÃ© une nouvelle bande, Ã©ditez les parametres de sauvegarde et mettez la variable savsuspend Ã  0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
 		exit 0
 	fi
-	# Il y a des erreurs non récupérables
+	# Il y a des erreurs non rÃ©cupÃ©rables
 	# Il faut recommencer le processus de savegarde entier /home et /var/se3 :-(
-	# La sauvegarde est placée en état suspendu
+	# La sauvegarde est placÃ©e en Ã©tat suspendu
 	if [ "$STATUS" = "QUIT" ]; then
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savhome\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savse3\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savsuspend\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"0\" WHERE name=\"savbandnbr\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-		echo "Erreur lors de la sauvegarde de /var/se3: Le média n'est plus utilisable, changez de bande puis éditez les parametres de sauvegarde et mettez la variable savsuspend à 0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
+		echo "Erreur lors de la sauvegarde de /var/se3: Le mÃ©dia n'est plus utilisable, changez de bande puis Ã©ditez les parametres de sauvegarde et mettez la variable savsuspend Ã  0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
 		exit 1
 	fi
 	if [ "$STATUS" = "INCOMPLETE" ]; then
@@ -188,7 +188,7 @@ if [ ! "$SAVSE3" = "0" ]; then
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savse3\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savsuspend\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"0\" WHERE name=\"savbandnbr\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-		echo "Erreur lors de la sauvegarde de /var/se3: La sauvegarde a été interrompue. Editez les parametres de sauvegarde et mettez la variable savsuspend à 0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
+		echo "Erreur lors de la sauvegarde de /var/se3: La sauvegarde a Ã©tÃ© interrompue. Editez les parametres de sauvegarde et mettez la variable savsuspend Ã  0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
 		exit 1
 	fi
 	if [ "$STATUS" = "FAULT" ]; then
@@ -196,7 +196,7 @@ if [ ! "$SAVSE3" = "0" ]; then
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savse3\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savsuspend\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"0\" WHERE name=\"savbandnbr\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-		echo "Erreur lors de la sauvegarde de /var/se3: Erreur logicielle. Editez les parametres de sauvegarde et mettez la variable savsuspend à 0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
+		echo "Erreur lors de la sauvegarde de /var/se3: Erreur logicielle. Editez les parametres de sauvegarde et mettez la variable savsuspend Ã  0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
 		exit 1
 	fi
 	if [ "$STATUS" = "ERROR" ]; then
@@ -204,7 +204,7 @@ if [ ! "$SAVSE3" = "0" ]; then
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savse3\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"1\" WHERE name=\"savsuspend\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
 		echo "UPDATE params SET value=\"0\" WHERE name=\"savbandnbr\""| mysql -h $dbhost $dbname -u $dbuser -p$dbpass
-		echo "Erreur lors de la sauvegarde de /var/se3: Erreur ressource. Editez les parametres de sauvegarde et mettez la variable savsuspend à 0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
+		echo "Erreur lors de la sauvegarde de /var/se3: Erreur ressource. Editez les parametres de sauvegarde et mettez la variable savsuspend Ã  0." | mail -s "Sauvegarde SE3" $MELSAVADMIN
 		exit 1
 	fi
 fi

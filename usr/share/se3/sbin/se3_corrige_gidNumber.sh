@@ -3,7 +3,7 @@
 #
 ## $Id$ ##
 #
-##### Script de correction pour de gidnumbers en passant de Slis a LCS - stéphane Boireau #####
+##### Script de correction pour de gidnumbers en passant de Slis a LCS - stÃ©phane Boireau #####
 
 # gidNumber du groupe slis
 # gid1=600
@@ -82,7 +82,7 @@ if [ "$?" != "0" ]; then
 fi
 
 echo -e "$COLTXT"
-echo "Modification des groupes propriétaires de $gid1 à $gid2 sur /var/se3" | tee -a $tmp/chg_proprio_var_se3.txt
+echo "Modification des groupes propriÃ©taires de $gid1 Ã  $gid2 sur /var/se3" | tee -a $tmp/chg_proprio_var_se3.txt
 echo -e "$COLCMD\c"
 find /var/se3/ -gid $gid1 | while read A
 do
@@ -92,7 +92,7 @@ do
 done
 
 echo -e "$COLTXT"
-echo "Modification des groupes propriétaires de $gid1 à $gid2 sur /home" | tee -a $tmp/chg_proprio_home.txt
+echo "Modification des groupes propriÃ©taires de $gid1 Ã  $gid2 sur /home" | tee -a $tmp/chg_proprio_home.txt
 echo -e "$COLCMD\c"
 find /home/ -gid $gid1 | while read A
 do
@@ -102,7 +102,7 @@ do
 done
 
 echo -e "$COLTXT"
-echo "Mofification du gidnumber de lcs-users pour passage à 5005..." | tee -a $tmp/chg_gidNumber_comptes.txt
+echo "Mofification du gidnumber de lcs-users pour passage Ã  5005..." | tee -a $tmp/chg_gidNumber_comptes.txt
 echo -e "$COLCMD\c"
 echo "dn: cn=lcs-users,ou=Groups,$BASEDN
 changetype: modify
@@ -112,7 +112,7 @@ gidNumber: $gid2
 ldapmodify -x -D $ROOTDN -w $PASSDN -f $tmp/lcs-users_modif.ldif | tee -a $tmp/lcs-users_modif.txt
 
 echo -e "$COLTXT"
-echo "Recherche des comptes à modifier..." | tee -a $tmp/chg_gidNumber_comptes.txt
+echo "Recherche des comptes Ã  modifier..." | tee -a $tmp/chg_gidNumber_comptes.txt
 echo -e "$COLCMD\c"
 ldapsearch -xLLL -b ou=People,$BASEDN gidNumber=$gid1 uid | grep "^uid: " | sed -e "s/^uid: //" | while read uid
 do
@@ -134,6 +134,6 @@ echo -e "   ${COLINFO}${tmp}"
 
 echo -e "$COLTITRE"
 echo "***********"
-echo "* Terminé *"
+echo "* TerminÃ© *"
 echo "***********"
 echo -e "$COLTXT"

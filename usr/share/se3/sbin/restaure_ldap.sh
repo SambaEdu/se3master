@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Script destiné à restaurer une sauvegarde de l'annuaire LDAP.
+# Script destinÃ© Ã  restaurer une sauvegarde de l'annuaire LDAP.
 # Auteur: Stephane Boireau
-# Dernière modification: 22/01/2008
+# DerniÃ¨re modification: 22/01/2008
 
 #Couleurs
 COLTITRE="\033[1;35m"   # Rose
@@ -83,26 +83,26 @@ mkdir -p ${dossier}
 
 ladate=$(date "+%Y%m%d.%H%M%S")
 
-# Sauvegarde préalable
+# Sauvegarde prÃ©alable
 echo -e "$COLTXT"
-echo "Sauvegarde préalable de l'annuaire dans son état actuel..."
+echo "Sauvegarde prÃ©alable de l'annuaire dans son Ã©tat actuel..."
 echo -e "$COLCMD\c"
 ldapsearch -xLLL -D "$ADMINRDN,$BASEDN" -w $ADMINPW > $dossier/svg_${ladate}.ldif
 
 if [ "$?" = "0" ]; then
 	echo -e "$COLTXT"
-	echo "Sauvegarde réussie."
+	echo "Sauvegarde rÃ©ussie."
 else
 	echo -e "$COLERREUR"
-	echo "Echec de la sauvegarde préalable."
-	echo "Il n'est pas très raisonnable de poursuivre sans disposer"
-	echo "d'une sauvegarde récente."
+	echo "Echec de la sauvegarde prÃ©alable."
+	echo "Il n'est pas trÃ¨s raisonnable de poursuivre sans disposer"
+	echo "d'une sauvegarde rÃ©cente."
 
 	REPONSE=""
 	while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 	do
 		echo -e "$COLTXT"
-		echo -e "Voulez-vous continuer néanmoins? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
+		echo -e "Voulez-vous continuer nÃ©anmoins? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
 		read REPONSE
 	done
 
@@ -116,7 +116,7 @@ else
 		while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 		do
 			echo -e "$COLTXT"
-			echo -e "Etes vous sûr de vouloir continuer? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
+			echo -e "Etes vous sÃ»r de vouloir continuer? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
 			read REPONSE
 		done
 	fi
@@ -130,14 +130,14 @@ else
 fi
 
 echo -e "$COLTXT"
-echo "Choix de la sauvegarde à restaurer"
+echo "Choix de la sauvegarde Ã  restaurer"
 cd $dossier
-echo -e "Les sauvegardes présentes dans le dossier ${COLINFO}${dossier}${COLTXT} sont:"
+echo -e "Les sauvegardes prÃ©sentes dans le dossier ${COLINFO}${dossier}${COLTXT} sont:"
 echo -e "$COLCMD\c"
 ls -lht *.ldif
 
 echo -e "$COLTXT"
-echo "Vous pouvez aussi choisir un fichier LDIF situé"
+echo "Vous pouvez aussi choisir un fichier LDIF situÃ©"
 echo "ailleurs dans l'aborescence."
 
 echo -e "$COLTXT"
@@ -175,13 +175,13 @@ REP=""
 while [ -z "$REP" ]
 do
 	echo -e "$COLTXT"
-	echo "Arrêt du serveur d'annuaire..."
+	echo "ArrÃªt du serveur d'annuaire..."
 	/etc/init.d/slapd stop
 	sleep 2
 	test=$(ps aux | grep slapd | grep -v grep)
 	if [ ! -z "$test" ]; then
 		echo -e "$COLERREUR"
-		echo "L'arrêt du serveur a échoué."
+		echo "L'arrÃªt du serveur a Ã©chouÃ©."
 		echo "Il reste au moins un processus slapd:"
 		echo -e "$COLCMD\c"
 		ps aux | grep slapd | grep -v grep
@@ -190,7 +190,7 @@ do
 		while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 		do
 			echo -e "$COLTXT"
-			echo -e "Voulez-vous réessayer d'arrêter slapd? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
+			echo -e "Voulez-vous rÃ©essayer d'arrÃªter slapd? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
 			read REPONSE
 		done
 
@@ -205,7 +205,7 @@ do
 done
 
 echo -e "$COLTXT"
-echo "Préparation de la nouvelle arborescence /var/lib/ldap"
+echo "PrÃ©paration de la nouvelle arborescence /var/lib/ldap"
 echo -e "$COLCMD\c"
 mv /var/lib/ldap /var/lib/ldap.${ladate}
 mkdir /var/lib/ldap
@@ -219,75 +219,75 @@ slapadd -c -l $SVG
 
 if [ "$?" = "0" ]; then
 	echo -e "$COLTXT"
-	echo "La commande a semble-t-il réussi."
+	echo "La commande a semble-t-il rÃ©ussi."
 	# Droits sur /var/lib/ldap
 # 	[ -z $(grep "3.1" /etc/debian_version) ] && chown -R openldap.openldap /var/lib/ldap
 	echo -e "$COLTXT"
-	echo -e "Redémarrage du serveur d'annuaire LDAP"
+	echo -e "RedÃ©marrage du serveur d'annuaire LDAP"
 	echo -e "$COLCMD\c"
 	/etc/init.d/slapd start
 	test=$(ps aux | grep slapd | grep -v grep)
 	if [ -z "$test" ]; then
 		echo -e "$COLERREUR"
-		echo "Le redémarrage du service slapd a échoué."
+		echo "Le redÃ©marrage du service slapd a Ã©chouÃ©."
 
 		echo -e "$COLTXT"
-		echo "Vous devrez redémarrer manuellement le service par:"
+		echo "Vous devrez redÃ©marrer manuellement le service par:"
 		echo -e "$COLCMD\c"
 		echo "   /etc/init.d/slapd start"
 	else
 		echo -e "$COLTXT"
-		echo "Rédémarrage du service slapd réussi."
+		echo "RÃ©dÃ©marrage du service slapd rÃ©ussi."
 	fi
 	  
 	echo -e "$COLTXT"
-	echo "Après redémarrage du LDAP, redémarrez si nécessaire les services samba"
+	echo "AprÃ¨s redÃ©marrage du LDAP, redÃ©marrez si nÃ©cessaire les services samba"
 	echo "et apache2se."
 	
 else
 	echo -e "$COLERREUR"
-	echo "La commande a renvoyé un code d'erreur."
+	echo "La commande a renvoyÃ© un code d'erreur."
 # 	[ -z $(grep "3.1" /etc/debian_version) ] && chown -R openldap.openldap /var/lib/ldap
 	REPONSE=""
 	while [ "$REPONSE" != "o" -a "$REPONSE" != "n" ]
 	do
 		echo -e "$COLTXT"
-		echo -e "Voulez-vous remettre en place l'arborescence précédente? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
+		echo -e "Voulez-vous remettre en place l'arborescence prÃ©cÃ©dente? (${COLCHOIX}o/n${COLTXT}) $COLSAISIE\c"
 		read REPONSE
 	done
 
 	if [ "$REPONSE" = "o" ]; then
 		echo -e "$COLTXT"
-		echo -e "Rétablissement de la version antérieure..."
+		echo -e "RÃ©tablissement de la version antÃ©rieure..."
 		echo -e "$COLCMD\c"
 		rm -fr /var/lib/ldap
 		mv /var/lib/ldap.${ladate} /var/lib/ldap
 
 		echo -e "$COLTXT"
-		echo -e "Redémarrage du serveur d'annuaire LDAP"
+		echo -e "RedÃ©marrage du serveur d'annuaire LDAP"
 		echo -e "$COLCMD\c"
 		/etc/init.d/slapd start
 		test=$(ps aux | grep slapd | grep -v grep)
 		if [ -z "$test" ]; then
 			echo -e "$COLERREUR"
-			echo "Le redémarrage du service slapd a échoué."
+			echo "Le redÃ©marrage du service slapd a Ã©chouÃ©."
 
 			echo -e "$COLTXT"
-			echo "Vous devrez redémarrer manuellement le service par:"
+			echo "Vous devrez redÃ©marrer manuellement le service par:"
 			echo -e "$COLCMD\c"
 			echo "   /etc/init.d/slapd start"
 		else
 			echo -e "$COLTXT"
-			echo "Rédémarrage du service slapd réussi."
+			echo "RÃ©dÃ©marrage du service slapd rÃ©ussi."
 		fi
 		echo -e "$COLTXT"
-		echo "Après redémarrage du LDAP, redémarrez si nécessaire les services samba"
+		echo "AprÃ¨s redÃ©marrage du LDAP, redÃ©marrez si nÃ©cessaire les services samba"
 		echo "et apache2se."
 		exit 1
 	else
 		echo -e "$COLERREUR"
-		echo "L'opération a échoué."
-		echo "Le serveur d'annuaire LDAP n'a pas été redémarré."
+		echo "L'opÃ©ration a Ã©chouÃ©."
+		echo "Le serveur d'annuaire LDAP n'a pas Ã©tÃ© redÃ©marrÃ©."
 		echo -e "$COLTXT"
 		exit 1
 	fi

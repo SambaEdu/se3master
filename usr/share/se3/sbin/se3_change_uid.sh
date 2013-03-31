@@ -43,7 +43,7 @@ if [ -z "$t" ]; then
 	exit
 fi
 
-# Tester si le nouvel uid existe déja
+# Tester si le nouvel uid existe dÃ©ja
 t=$(ldapsearch -xLLL -b $peopleRdn,$ldap_base_dn uid=$nouvel_uid)
 if [ -n "$t" ]; then
 	echo "ABANDON: Le nouvel uid $nouvel_uid existe deja dans la branche People."

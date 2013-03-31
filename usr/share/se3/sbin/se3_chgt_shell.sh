@@ -98,13 +98,13 @@ do
 
 	echo -e "$COLTXT"
 	echo -e "Vous avez-choisi ${COLINFO}$CHOIXSHELL${COLTXT}"
-	echo -e "Souhaitez vous poursuivre (${COLCHOIX}1${COLTXT}) ou préférez-vous corriger (${COLCHOIX}2${COLTXT})? $COLSAISIE\c"
+	echo -e "Souhaitez vous poursuivre (${COLCHOIX}1${COLTXT}) ou prÃ©fÃ©rez-vous corriger (${COLCHOIX}2${COLTXT})? $COLSAISIE\c"
 	read REPONSE
 done
 
 echo -e "$COLINFO"
 echo "Sauvegarde initiale du LDAP."
-echo "Le serveur LDAP va être arrêté puis redémarré."
+echo "Le serveur LDAP va Ãªtre arrÃªtÃ© puis redÃ©marrÃ©."
 echo -e "$COLTXT"
 echo "Appuyez sur ENTREE pour poursuivre..."
 read PAUSE
@@ -123,56 +123,56 @@ echo -e "$COLCMD\c"
 ldapsearch -xLLL -D "$ROOTDN" -w "$(cat /etc/ldap.secret)" > $tmp/ldapsearch_${ladate}.ldif
 
 echo -e "$COLTXT"
-echo "Arrêt du serveur LDAP..."
+echo "ArrÃªt du serveur LDAP..."
 echo -e "$COLCMD\c"
 /etc/init.d/slapd stop
 sleep 5
 if ps aux | grep slapd | grep -v grep > /dev/null ;then
 	echo -e "$COLERREUR"
-	echo "ERREUR: Le serveur LDAP n'est semble-t-il pas arrêté."
-	echo "        Par précaution, le script s'arrête là."
+	echo "ERREUR: Le serveur LDAP n'est semble-t-il pas arrÃªtÃ©."
+	echo "        Par prÃ©caution, le script s'arrÃªte lÃ ."
 	echo -e "$COLTXT"
 	exit
 else
 	echo -e "$COLTXT"
-	echo "Le serveur LDAP est arrêté."
+	echo "Le serveur LDAP est arrÃªtÃ©."
 fi
 
 echo -e "$COLTXT"
 echo "Sauvegarde avec slapcat..."
 echo -e "$COLCMD\c"
-# Problème: Avec le LDAP sur Sarge, le /var/lib/ldap peut enfler de façon fantastique.
+# ProblÃ¨me: Avec le LDAP sur Sarge, le /var/lib/ldap peut enfler de faÃ§on fantastique.
 #           Il se peut alors qu'il n'y ait pas la place dans /root/... pour sauvegarder le LDAP avec tar.
 #tar -czf $tmp/var_lib_ldap_${ladate}.tar.gz /var/lib/ldap
 slapcat > $tmp/slapcat_${ladate}.ldif
 
 echo -e "$COLTXT"
-echo "Redémarrage du serveur LDAP..."
+echo "RedÃ©marrage du serveur LDAP..."
 echo -e "$COLCMD\c"
 /etc/init.d/slapd start
 sleep 5
 
 if ps aux | grep slapd | grep -v grep > /dev/null ;then
 	echo -e "$COLTXT"
-	echo "Le serveur LDAP est redémarré."
+	echo "Le serveur LDAP est redÃ©marrÃ©."
 else
 	echo -e "$COLERREUR"
-	echo "ERREUR: Le serveur LDAP n'est semble-t-il pas redémarré."
-	echo "        Par précaution, le script s'arrête là."
-	echo "        Vous devez redémarrer le serveur LDAP à la main."
+	echo "ERREUR: Le serveur LDAP n'est semble-t-il pas redÃ©marrÃ©."
+	echo "        Par prÃ©caution, le script s'arrÃªte lÃ ."
+	echo "        Vous devez redÃ©marrer le serveur LDAP Ã  la main."
 	echo -e "$COLTXT"
 	exit
 fi
 
 echo -e "$COLINFO"
-echo "Le dossier $tmp contient des sauvegardes de l'annuaire au cas où..."
+echo "Le dossier $tmp contient des sauvegardes de l'annuaire au cas oÃ¹..."
 
 # Modification du shell:
 case $REPLISTE in
 	1)
 		echo -e "$COLTXT"
 		echo -e "Vous allez modifier le shell de ${COLERREUR}tous${COLTXT} les utilisateurs dans la branche ou=People."
-		echo -e "(excepté 'admin')"
+		echo -e "(exceptÃ© 'admin')"
 		
 		POURSUIVRE
 
@@ -262,6 +262,6 @@ case $REPLISTE in
 esac
 
 echo -e "$COLTITRE"
-echo "Terminé"
+echo "TerminÃ©"
 echo -e "$COLTXT"
 

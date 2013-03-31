@@ -37,13 +37,13 @@ Cela peut perturber WPKG et causer des lenteurs de connexion.
 
 Voici le mail qui a traite de ce probleme:
 ==========================================
-Symptome : lenteur à la connexion, impossibilité d'atteindre l'interface 
+Symptome : lenteur Ã  la connexion, impossibilitÃ© d'atteindre l'interface 
 de wpkg
 
 cause : profiles.xml fait 240 Mo
 
-diagnostique : une station porte le même nom qu'un parc ! ( quel ... a 
-fait ça ? ;-)  )
+diagnostique : une station porte le mÃªme nom qu'un parc ! ( quel ... a 
+fait Ã§a ? ;-) Â )
 ( Bien vu Jean Le Bail et merci )
 
 solution :
@@ -54,12 +54,12 @@ cd /var/se3/unattended/install/wpkg
 mv profiles.xml profiles.xml.bak
 mv hosts.xml hosts.xml.bak
 
-3) regénérer ces fichiers à partir des données de l'annuaire :
+3) regÃ©nÃ©rer ces fichiers Ã  partir des donnÃ©es de l'annuaire :
 Le plus facile est d'utiliser l'interface web du SE3
 en retirant puis rajouter un poste d'un parc.
-( ajouter le nouveau poste qui a été renommé )
+( ajouter le nouveau poste qui a Ã©tÃ© renommÃ© )
 
-4) Rétablir avec l'interface web les associations
+4) RÃ©tablir avec l'interface web les associations
 entre les applis et les postes et parcs.
 ( le fichiers profiles.xml initial sera vierge )
 
