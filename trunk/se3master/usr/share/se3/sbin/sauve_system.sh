@@ -1,12 +1,12 @@
 #!/bin/bash
 #
-##### Script de sauvegarde de divers paramètres SE3 #####
+##### Script de sauvegarde de divers paramÃ¨tres SE3 #####
 #
 # Auteur : Stephane Boireau (Bernay/Pont-Audemer (27))
 #
 ## $Id$ ##
 #
-# Dernière modif: 09/07/2011
+# DerniÃ¨re modif: 09/07/2011
 
 # Chemin des sauvegardes:
 #dossier_svg="/home/sauvegardes/fichiers_se3"
@@ -14,13 +14,13 @@ dossier_svg="/var/se3/save"
 
 # ===============================
 # Volume maximum pour effectuer la sauvegarde de /var/lib/ldap
-volume_ldap_max="100"	#### J'AI SUPPRIMé CE CHOIX... C'EST VITE ENORME AVEC SARGE ####
-# Si le volume de /var/lib/ldap dépasse 100Mo, on ne fait pas d'archive de /var/lib/ldap
-# Seul un export LDIF sera alors effectué.
+volume_ldap_max="100"	#### J'AI SUPPRIMÃ© CE CHOIX... C'EST VITE ENORME AVEC SARGE ####
+# Si le volume de /var/lib/ldap dÃ©passe 100Mo, on ne fait pas d'archive de /var/lib/ldap
+# Seul un export LDIF sera alors effectuÃ©.
 # ===============================
 
-# Pour conserver des fichiers de sauvegarde sur une année à raison de une par semaine.
-# En mettant 'oui' ci-dessous, 52 dossiers seront générés au bout d'une année.
+# Pour conserver des fichiers de sauvegarde sur une annÃ©e Ã  raison de une par semaine.
+# En mettant 'oui' ci-dessous, 52 dossiers seront gÃ©nÃ©rÃ©s au bout d'une annÃ©e.
 svg_hebdo="non"
 
 if [ -z "$1" -o "$1" = "--help" -o "$1" = "-h" ]; then
@@ -30,27 +30,27 @@ if [ -z "$1" -o "$1" = "--help" -o "$1" = "-h" ]; then
 	echo " - des bases MySQL suivantes: 'se3db' et 'mysql'"
 	echo " - de /var/lib/samba ou juste /var/lib/samba/secrets.tdb"
 	echo ""
-	echo "Usage : - Passer en paramètre \$1 la durée de vie en secondes du script de"
+	echo "Usage : - Passer en paramÃ¨tre \$1 la durÃ©e de vie en secondes du script de"
 	echo "          sauvegarde."
-	echo "          Passé ce délai, si le script est relancé, les tâches de sauvegarde"
-	echo "          précédentes seront interrompues."
-	echo "        - Passer 'conservation_hebdo' en paramètre \$2"
-	echo "          pour conserver des exemplaires par semaine sur une année."
-	echo "        - Passer 'backuppc' en paramètre \$2 ou \$3"
-	echo "          si la sauvegarde est lancée par backuppc."
-	echo "        - Passer 'forcer' en paramètre \$2 ou \$3"
-	echo "          si la sauvegarde doit être lancée malgré le fonctionnement"
+	echo "          PassÃ© ce dÃ©lai, si le script est relancÃ©, les tÃ¢ches de sauvegarde"
+	echo "          prÃ©cÃ©dentes seront interrompues."
+	echo "        - Passer 'conservation_hebdo' en paramÃ¨tre \$2"
+	echo "          pour conserver des exemplaires par semaine sur une annÃ©e."
+	echo "        - Passer 'backuppc' en paramÃ¨tre \$2 ou \$3"
+	echo "          si la sauvegarde est lancÃ©e par backuppc."
+	echo "        - Passer 'forcer' en paramÃ¨tre \$2 ou \$3"
+	echo "          si la sauvegarde doit Ãªtre lancÃ©e malgrÃ© le fonctionnement"
 	echo "          de backuppc."
-	echo "        - Passer 'noacl' en paramètre \$2 ou \$3 ou \$4"
+	echo "        - Passer 'noacl' en paramÃ¨tre \$2 ou \$3 ou \$4"
 	echo "          pour ne pas sauvegarder les ACL de /home et /var/se3"
-	echo "        - Passer 'varlibsamba' en paramètre \$2 ou \$3 ou \$4 ou \$5"
+	echo "        - Passer 'varlibsamba' en paramÃ¨tre \$2 ou \$3 ou \$4 ou \$5"
 	echo "          pour sauvegarder tout /var/lib/samba et pas seulement"
 	echo "          le /var/lib/samba/secrets.tdb"
 	exit
 fi
 
 # On bascule en mode conservation de 52 sauvegardes par an
-# en plus du roulement sur 7 jours si le paramètre ci-dessous est passé:
+# en plus du roulement sur 7 jours si le paramÃ¨tre ci-dessous est passÃ©:
 if [ "$2" = "conservation_hebdo" ]; then
 	svg_hebdo="oui"
 fi
@@ -66,14 +66,14 @@ ladate=$(date +"%Y.%m.%d-%H.%M.%S")
 
 
 
-# La sauvegarde peut être lancée en autonome ou bien via backupc.
-# Si backuppc tourne, la sauvegarde autonome est désactivée.
-# Sinon, elle peut être lancée manuellement ou via une tâche cron.
+# La sauvegarde peut Ãªtre lancÃ©e en autonome ou bien via backupc.
+# Si backuppc tourne, la sauvegarde autonome est dÃ©sactivÃ©e.
+# Sinon, elle peut Ãªtre lancÃ©e manuellement ou via une tÃ¢che cron.
 # Pour lancer la sauvegarde depuis backuppc,
-# passer dans les paramètres ($2 ou $3) la chaine 'backuppc'
+# passer dans les paramÃ¨tres ($2 ou $3) la chaine 'backuppc'
 if echo "$*" | grep "forcer" | grep -v grep > /dev/null; then
-	# Le paramètre 'forcer' permet de lancer manuellement la sauvegarde, même si backuppc tourne.
-	# Ne le faites que si voys êtes sûr de ne pas prvoquer une collision de sauvegardes
+	# Le paramÃ¨tre 'forcer' permet de lancer manuellement la sauvegarde, mÃªme si backuppc tourne.
+	# Ne le faites que si voys Ãªtes sÃ»r de ne pas prvoquer une collision de sauvegardes
 	# entre votre sauvegarde manuelle et la sauvegarde backuppc.
 	quitter="non"
 else
@@ -92,8 +92,8 @@ fi
 
 
 
-# Est-ce que la sauvegarde précédente est terminée?
-# et/ou s'est déroulée normalement?
+# Est-ce que la sauvegarde prÃ©cÃ©dente est terminÃ©e?
+# et/ou s'est dÃ©roulÃ©e normalement?
 if [ -e "$fich_lock" ]; then
 	t1=$(cat $fich_lock)
 	t_expiration=$(($t1+$1))
@@ -103,31 +103,31 @@ if [ -e "$fich_lock" ]; then
 	minutes=$((($difference-3600*$heures)/60))
 	secondes=$(($difference-3600*$heures-60*$minutes))
 	if [ $t2 -gt $t_expiration ]; then
-		echo "Problème avec $O" > /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
-		echo "Tâche initiée en $t1 et il est $t2 soit ${heures}H${minutes}M${secondes}S." >> /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
-		echo "La tâche de sauvegarde a dépassé le délai imparti." | tee -a /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
-		echo "Le fichier de lock n'a pas été supprimé." | tee -a /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
-		echo "Les processus encore en cours vont être supprimés." | tee -a /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
+		echo "ProblÃ¨me avec $O" > /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
+		echo "TÃ¢che initiÃ©e en $t1 et il est $t2 soit ${heures}H${minutes}M${secondes}S." >> /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
+		echo "La tÃ¢che de sauvegarde a dÃ©passÃ© le dÃ©lai imparti." | tee -a /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
+		echo "Le fichier de lock n'a pas Ã©tÃ© supprimÃ©." | tee -a /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
+		echo "Les processus encore en cours vont Ãªtre supprimÃ©s." | tee -a /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
 
 		if [ $(ps aux | grep $0 | grep -v grep | wc -l) -ge 2 ]; then
 			echo "Plusieurs exemplaires du script $0 tournent:" >> /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
 			ps aux | grep $0 | grep -v grep >> /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
 
-			# Problème comment identifier le processus courant?
+			# ProblÃ¨me comment identifier le processus courant?
 			# $(pidof $0) n'a pas l'air de fonctionner.
 			# Dois-je effectuer:
 			#rm -f $fich_lock
 			#killall $0
 			# Je viens de tester, cela ne fonctionne pas...
-			# Cela pose un problème...
-			# Si la première partie de la sauvegarde ne s'arrête pas et qu'on tue le processus,
+			# Cela pose un problÃ¨me...
+			# Si la premiÃ¨re partie de la sauvegarde ne s'arrÃªte pas et qu'on tue le processus,
 			# le script svg_se3... va se poursuivre et lancer la sauvegarde de la partie suivante...
 			# Si elle merdouille elle aussi, il peut falloir un certain nombre de tours pour tout purger.
 		fi
 
-		# Est-ce que je pourrais me contenter de tuer tous les processus qui touchent à $dossier_svg
+		# Est-ce que je pourrais me contenter de tuer tous les processus qui touchent Ã  $dossier_svg
 		if ps aux | grep $dossier_svg | grep -v "grep " > /dev/null; then
-			echo "Liste des processus dégagés lors du nettoyage:" >> /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
+			echo "Liste des processus dÃ©gagÃ©s lors du nettoyage:" >> /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
 			ps aux | grep $dossier_svg | grep -v "grep " >> /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
 			ps aux | grep $dossier_svg | grep -v "grep " | tr "\t" " " | sed -e "s/ \{2,\}/ /g" | cut -d" " -f2 | while read PID
 			do
@@ -136,11 +136,11 @@ if [ -e "$fich_lock" ]; then
 			done
 
 			if ps aux | grep $dossier_svg | grep -v "grep " > /dev/null; then
-				echo "Un des processus ne s'est pas arrêté." | tee -a /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
+				echo "Un des processus ne s'est pas arrÃªtÃ©." | tee -a /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
 				echo "On abandonne." | tee -a /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
 				quitter="oui"
 			else
-				echo "Le nettoyage a été effectué, mais il est curieux que le script ait dépassé le temps imparti pour la sauvegarde." | tee -a /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
+				echo "Le nettoyage a Ã©tÃ© effectuÃ©, mais il est curieux que le script ait dÃ©passÃ© le temps imparti pour la sauvegarde." | tee -a /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
 				quitter="non"
 			fi
 
@@ -148,11 +148,11 @@ if [ -e "$fich_lock" ]; then
 			mail_ssmtp=$(grep "^root=" /etc/ssmtp/ssmtp.conf | cut -d"=" -f2)
 
 			if [ ! -z "$mail_admin" ]; then
-				mail $mail_admin -s "[Serveur SE3] Problème avec le processus de sauvegarde" < /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
+				mail $mail_admin -s "[Serveur SE3] ProblÃ¨me avec le processus de sauvegarde" < /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
 			fi
 
 			if [ ! -z "$mail_ssmtp" ]; then
-				mail $mail_ssmtp -s "[Serveur SE3] Problème avec le processus de sauvegarde" < /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
+				mail $mail_ssmtp -s "[Serveur SE3] ProblÃ¨me avec le processus de sauvegarde" < /root/tmp/rapport_nettoyage_svgse3_${ladate}.txt
 			fi
 
 			if [ $quitter = "oui" ]; then
@@ -162,8 +162,8 @@ if [ -e "$fich_lock" ]; then
 
 		rm -f $fich_lock
 	else
-		echo "Une tâche de sauvegarde est déjà en cours..."
-		echo "Elle n'a pas atteint sa durée limite autorisée."
+		echo "Une tÃ¢che de sauvegarde est dÃ©jÃ  en cours..."
+		echo "Elle n'a pas atteint sa durÃ©e limite autorisÃ©e."
 		echo "Veuillez patienter."
 		exit
 	fi
@@ -171,7 +171,7 @@ fi
 
 
 
-# Création d'un fichier de LOCK:
+# CrÃ©ation d'un fichier de LOCK:
 date +%s > $fich_lock
 
 
@@ -210,13 +210,13 @@ semaine=$(date +%V)
 if [ $svg_hebdo = "oui" ]; then
 	if [ -e "$dossier_svg/svg_hebdo/num_semaine.txt" ]; then
 		if [ $semaine != $(cat "$dossier_svg/svg_hebdo/num_semaine.txt") ]; then
-			# C'est une nouvelle semaine qui commence... on met de côté la sauvegarde de la semaine précédente.
+			# C'est une nouvelle semaine qui commence... on met de cÃ´tÃ© la sauvegarde de la semaine prÃ©cÃ©dente.
 			echo $semaine > "$dossier_svg/svg_hebdo/num_semaine.txt"
-			# On supprime la sauvegarde de l'année précédente si elle existe
+			# On supprime la sauvegarde de l'annÃ©e prÃ©cÃ©dente si elle existe
 			if [ -d "$dossier_svg/svg_hebdo/semaine_${semaine}" ]; then
 				rm -fr $dossier_svg/svg_hebdo/semaine_${semaine}
 			fi
-			# et on (re)crée le dossier
+			# et on (re)crÃ©e le dossier
 			mkdir -p $dossier_svg/svg_hebdo/semaine_${semaine}
 			#cp -a $dossier_svg/mysql $dossier_svg/svg_hebdo/semaine_${semaine}
 			#cp -a $dossier_svg/ldap $dossier_svg/svg_hebdo/semaine_${semaine}
@@ -229,7 +229,7 @@ if [ $svg_hebdo = "oui" ]; then
 		fi
 	else
 		if [ -e $dossier_svg/mysql ]; then
-			# Une sauvegarde au moins a déjà été effectuée.
+			# Une sauvegarde au moins a dÃ©jÃ  Ã©tÃ© effectuÃ©e.
 			if [ ! -z "$(ls $dossier_svg/mysql)" ]; then
 				transfert_hebdo="y"
 			else
@@ -247,7 +247,7 @@ if [ $svg_hebdo = "oui" ]; then
 		do
 			liste=($(ls -t $dossier_svg/mysql/$base.*.sql))
 			if [ ${#liste[*]} -gt 0 ]; then
-				# On récupère la première sauvegarde de la semaine
+				# On rÃ©cupÃ¨re la premiÃ¨re sauvegarde de la semaine
 				cp -a ${liste[0]} $dossier_svg/svg_hebdo/semaine_${semaine}/mysql/
 			fi
 		done
@@ -256,12 +256,12 @@ if [ $svg_hebdo = "oui" ]; then
 		mkdir -p $dossier_svg/svg_hebdo/semaine_${semaine}/ldap
 		liste=($(ls -t $dossier_svg/ldap/DB_CONFIG.*))
 		if [ ${#liste[*]} -gt 0 ]; then
-			# On récupère la sauvegarde la plus récente de la semaine
+			# On rÃ©cupÃ¨re la sauvegarde la plus rÃ©cente de la semaine
 			cp -a ${liste[0]} $dossier_svg/svg_hebdo/semaine_${semaine}/ldap/
 		fi
 		liste=($(ls -t $dossier_svg/ldap/ldap.*.ldif))
 		if [ ${#liste[*]} -gt 0 ]; then
-			# On récupère la sauvegarde la plus récente de la semaine
+			# On rÃ©cupÃ¨re la sauvegarde la plus rÃ©cente de la semaine
 			cp -a ${liste[0]} $dossier_svg/svg_hebdo/semaine_${semaine}/ldap/
 		fi
 		if [ -e $dossier_svg/ldap/ldap.se3sav.tar.gz ]; then
@@ -275,7 +275,7 @@ if [ $svg_hebdo = "oui" ]; then
 		if [ ! -z "$test" ]; then
 			liste=($(ls -t $dossier_svg/samba/var_lib_samba.*.tar.gz))
 			if [ ${#liste[*]} -gt 0 ]; then
-				# On récupère la sauvegarde la plus récente de la semaine
+				# On rÃ©cupÃ¨re la sauvegarde la plus rÃ©cente de la semaine
 				cp -a ${liste[0]} $dossier_svg/svg_hebdo/semaine_${semaine}/samba/
 			fi
 		fi
@@ -284,7 +284,7 @@ if [ $svg_hebdo = "oui" ]; then
 		if [ ! -z "$test" ]; then
 			liste=($(ls -t $dossier_svg/samba/var_lib_samba_secrets_tdb.*))
 			if [ ${#liste[*]} -gt 0 ]; then
-				# On récupère la sauvegarde la plus récente de la semaine
+				# On rÃ©cupÃ¨re la sauvegarde la plus rÃ©cente de la semaine
 				cp -a ${liste[0]} $dossier_svg/svg_hebdo/semaine_${semaine}/samba/
 			fi
 		fi
@@ -292,7 +292,7 @@ if [ $svg_hebdo = "oui" ]; then
 		mkdir -p $dossier_svg/svg_hebdo/semaine_${semaine}/etc
 		liste=($(ls -t $dossier_svg/etc/etc.*.tar.gz))
 		if [ ${#liste[*]} -gt 0 ]; then
-			# On récupère la sauvegarde la plus récente de la semaine
+			# On rÃ©cupÃ¨re la sauvegarde la plus rÃ©cente de la semaine
 			cp -a ${liste[0]} $dossier_svg/svg_hebdo/semaine_${semaine}/etc/
 		fi
 
@@ -348,16 +348,16 @@ if [ "$test_volume" = "0" ]; then
 	mail_admin=$(ldapsearch -xLLL uid=admin mail | grep "^mail: " | sed -e "s/^mail: //")
 	mail_ssmtp=$(grep "^root=" /etc/ssmtp/ssmtp.conf | cut -d"=" -f2)
 
-	echo "La sauvegarde LDAP générée cette nuit est vide.
-L'état du LDAP doit perturber le fonctionnement du serveur.
-Il faut réagir avant que le roulement sur 7 jours soit achevé sinon vous n'aurez plus de sauvegarde valide de l'annuaire LDAP (sauf si la sauvegarde hebdomadaire est activée, auquel cas vous avez un roulement des fichiers sur une année)." > /root/tmp/rapport_pb_ldap_svgse3_${ladate}.txt
+	echo "La sauvegarde LDAP gÃ©nÃ©rÃ©e cette nuit est vide.
+L'Ã©tat du LDAP doit perturber le fonctionnement du serveur.
+Il faut rÃ©agir avant que le roulement sur 7 jours soit achevÃ© sinon vous n'aurez plus de sauvegarde valide de l'annuaire LDAP (sauf si la sauvegarde hebdomadaire est activÃ©e, auquel cas vous avez un roulement des fichiers sur une annÃ©e)." > /root/tmp/rapport_pb_ldap_svgse3_${ladate}.txt
 
 	if [ ! -z "$mail_admin" ]; then
-		mail $mail_admin -s "[Serveur SE3] Problème avec le processus de sauvegarde" < /root/tmp/rapport_pb_ldap_svgse3_${ladate}.txt
+		mail $mail_admin -s "[Serveur SE3] ProblÃ¨me avec le processus de sauvegarde" < /root/tmp/rapport_pb_ldap_svgse3_${ladate}.txt
 	fi
 
 	if [ ! -z "$mail_ssmtp" ]; then
-		mail $mail_ssmtp -s "[Serveur SE3] Problème avec le processus de sauvegarde" < /root/tmp/rapport_pb_ldap_svgse3_${ladate}.txt
+		mail $mail_ssmtp -s "[Serveur SE3] ProblÃ¨me avec le processus de sauvegarde" < /root/tmp/rapport_pb_ldap_svgse3_${ladate}.txt
 	fi
 else
 	if [ "$svg_hebdo" != "oui" ]; then
@@ -377,7 +377,7 @@ rm -f $dossier_svg/ldap/DB_CONFIG.$jour.
 #	tar -czf "$dossier_svg/ldap/var_lib_ldap.$jour.tar.gz" /var/lib/ldap
 #	/etc/init.d/slapd start
 #fi
-# Au cas où, on archive le LDAP vierge:
+# Au cas oÃ¹, on archive le LDAP vierge:
 if [ ! -e "$dossier_svg/ldap/ldap.se3sav.tar.gz" -a -e /var/lib/ldap.se3sav ]; then
 	if [ $(du -sk /var/lib/ldap.se3sav/ | tr "\t" " " | cut -d" " -f1) -le 10000 ]; then
 		# En principe le dossier fait ~1.5Mo
@@ -443,7 +443,7 @@ rm -f $fich_lock
 
 echo -e "$COLTITRE"
 echo "***********"
-echo "* Terminé *"
+echo "* TerminÃ© *"
 echo "***********"
 echo -e "$COLTXT"
 
