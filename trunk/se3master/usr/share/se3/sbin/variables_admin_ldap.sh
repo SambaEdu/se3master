@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # $Id$
-# Script destine à disposer de variable d'acces au LDAP pour simplifier l'ecriture de commandes ldpasearch, ldapadd, ldapdelete, ldapmodify
+# Script destine Ã  disposer de variable d'acces au LDAP pour simplifier l'ecriture de commandes ldpasearch, ldapadd, ldapdelete, ldapmodify
 # Auteur: Stephane Boireau
 # Derniere modification: 13/05/2009
 
@@ -13,7 +13,7 @@ fi
 if [ "$temoin" = "1" -o "$1" = "-h" -o "$1" = "--help" ]; then
 #if [ "$0" != "-bash" -o "$1" = "-h" -o "$1" = "--help" ]; then
 	echo "Ce script permet d'initialiser des variables BASEDN, ROOTDN et PASSDN"
-	echo "pour pouvoir ensuite effectuer des requêtes sur le ldap."
+	echo "pour pouvoir ensuite effectuer des requÃ¨tes sur le ldap."
 	#echo "   ldapsearch -xLLL -D \$ROOTDN -w \$PASSDN uid=toto"
 	#echo "   ldapdelete -xLLL -D \$ROOTDN -w \$PASSDN uid=toto,ou=People,\$BASEDN"
 	#echo "   ..."

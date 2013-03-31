@@ -2,7 +2,7 @@
 
 # $Id$
 
-# Script destine à tester/controler un couple uid/pass pour Linux et Samba
+# Script destine Ã  tester/controler un couple uid/pass pour Linux et Samba
 
 #Couleurs
 COLTITRE="\033[1;35m"	# Rose

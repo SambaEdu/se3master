@@ -92,7 +92,7 @@ if [ "$1" = "go" -a -e $fichcsv ]; then
 	ldapsearch -xLLL -D "$ROOTDN" -w "$PASSDN" > $dosstmp/ldapsearch_${ladate}.ldif
 	if [ "$?" != "0" ]; then
 		echo "ERREUR lors de la sauvegarde."
-		echo "Abandon par précaution."
+		echo "Abandon par prÃ©caution."
 		exit
 	fi
 
@@ -147,6 +147,6 @@ else
 			done
 		fi
 	done
-	echo "Vous pouvez relancer le script avec le paramètre 'go' pour changer l'uidNumber du doublon."
+	echo "Vous pouvez relancer le script avec le paramÃ¨tre 'go' pour changer l'uidNumber du doublon."
 fi
 

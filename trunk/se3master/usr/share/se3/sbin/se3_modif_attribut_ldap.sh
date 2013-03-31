@@ -2,7 +2,7 @@
 #
 ## $Id$ ##
 #
-##### Script de modification d'attributs LDAP - stéphane Boireau #####
+##### Script de modification d'attributs LDAP - stÃ©phane Boireau #####
 
 if [ -z "$3" -o "$1" = "-h" -o "$1" = "--help" ]; then
 	echo "Script de modification d'attributs LDAP"

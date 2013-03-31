@@ -3,7 +3,7 @@
 #
 ## $Id$ ##
 #
-##### Script de correction pour les doublons de gidnumbers - stéphane Boireau #####
+##### Script de correction pour les doublons de gidnumbers - stÃ©phane Boireau #####
 
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
@@ -13,19 +13,19 @@ then
 fi
 
 
-# Pour régler la collision clamav/lcs-users
-# Après traitement, on doit avoir:
+# Pour rÃ©gler la collision clamav/lcs-users
+# AprÃ¨s traitement, on doit avoir:
 #    clamav:    108
 #    lcs-users: 1000
-# Seul le gidNumber du groupe lcs-users et des comptes utilisateurs dont le gidNumber était 108 doiven être modifiés pour passer à 1000
+# Seul le gidNumber du groupe lcs-users et des comptes utilisateurs dont le gidNumber Ã©tait 108 doiven Ãªtre modifiÃ©s pour passer Ã  1000
 gid1=108
 gid2=1000
 
-# Pour régler la collision lcs-users/machines
-# Après traitement, on doit avoir:
+# Pour rÃ©gler la collision lcs-users/machines
+# AprÃ¨s traitement, on doit avoir:
 #    lcs-users: 1000
 #    machines:  999
-# Seul le gidNumber du groupe machines et des comptes machines doit être modifié dans la deuxième étape
+# Seul le gidNumber du groupe machines et des comptes machines doit Ãªtre modifiÃ© dans la deuxiÃ¨me Ã©tape
 gid3=1000
 gid4=999
 
@@ -84,7 +84,7 @@ echo -e "$COLCMD\c"
 ldapsearch -xLLL -D $ROOTDN -w $PASSDN > $tmp/svg_ldap_${ladate}.ldif
 
 echo -e "$COLTXT"
-echo "Modification des groupes propriétaires de $gid1 à $gid2 sur /var/se3" | tee -a $tmp/chg_proprio_var_se3.txt
+echo "Modification des groupes propriÃ©taires de $gid1 Ã  $gid2 sur /var/se3" | tee -a $tmp/chg_proprio_var_se3.txt
 echo -e "$COLCMD\c"
 find /var/se3/ -gid $gid1 | while read A
 do
@@ -94,7 +94,7 @@ do
 done
 
 echo -e "$COLTXT"
-echo "Modification des groupes propriétaires de $gid1 à $gid2 sur /home" | tee -a $tmp/chg_proprio_home.txt
+echo "Modification des groupes propriÃ©taires de $gid1 Ã  $gid2 sur /home" | tee -a $tmp/chg_proprio_home.txt
 echo -e "$COLCMD\c"
 find /home/ -gid $gid1 | while read A
 do
@@ -114,7 +114,7 @@ gidNumber: $gid2
 ldapmodify -x -D $ROOTDN -w $PASSDN -f $tmp/lcsusers_modif.ldif | tee -a $tmp/chg_gidNumber_lcs-users.txt
 
 echo -e "$COLTXT"
-echo "Recherche des comptes à modifier..." | tee -a $tmp/chg_gidNumber_comptes.txt
+echo "Recherche des comptes Ã  modifier..." | tee -a $tmp/chg_gidNumber_comptes.txt
 echo -e "$COLCMD\c"
 ldapsearch -xLLL -b ou=People,$BASEDN gidNumber=$gid1 uid | grep "^uid: " | sed -e "s/^uid: //" | while read uid
 do
@@ -147,7 +147,7 @@ gidNumber: $gid4
 	ldapmodify -x -D $ROOTDN -w $PASSDN -f $tmp/machines_modif.ldif | tee -a $tmp/chg_gidNumber_machines.txt
 
 	echo -e "$COLTXT"
-	echo "Recherche des comptes à modifier..." | tee -a $tmp/chg_gidNumber_comptes.txt
+	echo "Recherche des comptes Ã  modifier..." | tee -a $tmp/chg_gidNumber_comptes.txt
 	echo -e "$COLCMD\c"
 	ldapsearch -xLLL -b ou=Computers,$BASEDN gidNumber=$gid3 uid | grep "^uid: " | sed -e "s/^uid: //" | while read uid
 	do
@@ -173,6 +173,6 @@ echo -e "   ${COLINFO}${tmp}"
 
 echo -e "$COLTITRE"
 echo "***********"
-echo "* Terminé *"
+echo "* TerminÃ© *"
 echo "***********"
 echo -e "$COLTXT"

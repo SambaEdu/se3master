@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # $Id$
-# Script destiné à virer tous les membres d'un groupe
-# Auteur: Stéphane Boireau
-# Dernière modification: 26/02/2007
+# Script destinÃ© Ã  virer tous les membres d'un groupe
+# Auteur: StÃ©phane Boireau
+# DerniÃ¨re modification: 26/02/2007
 
 if [ "$1" == "--help" -o "$1" == "-h" ]
 then
         echo "Script de suppression des membres d'un groupe"
-        echo "Passer (éventuellement) en paramètre le nom du groupe."
+        echo "Passer (Ã©ventuellement) en paramÃ¨tre le nom du groupe."
         echo "--help cette aide"
 
         exit
@@ -39,7 +39,7 @@ if [ ! -z "$1" ]; then
 else
 	echo -e "$COLTXT"
 	echo "Veuillez saisir le nom du groupe dont vous souhaitez supprimer tous les membres."
-	echo "Le groupe lui-même ne sera pas supprimé."
+	echo "Le groupe lui-mÃªme ne sera pas supprimÃ©."
 	echo -e "Groupe: $COLSAISIE\c"
 	read groupe
 fi
@@ -86,5 +86,5 @@ ldapmodify -x -D $ROOTDN -w $PASSDN -f $tmp/vider_$groupe.ldif
 #rm -fr $tmp
 
 echo -e "$COLTITRE"
-echo "Terminé"
+echo "TerminÃ©"
 echo -e "$COLTXT"
