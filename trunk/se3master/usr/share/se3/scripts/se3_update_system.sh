@@ -16,6 +16,7 @@ fi
 REPORT_FILE="/root/mailtoadmin"
 echo "" > $REPORT_FILE
 LADATE=$(date +%x)
+LADATE2=$(date "+%Y.%m.%d")
 
 debug="0" #desactivation debug si =0
 MAIL_REPORT()
@@ -136,5 +137,5 @@ DEBIAN_PRIORITY="high"
 DEBIAN_FRONTEND="dialog" 
 export  DEBIAN_PRIORITY
 export  DEBIAN_FRONTEND
-mv $REPORT_FILE /var/log/update_system$LADATE.log
+mv $REPORT_FILE /var/log/update_system${LADATE2}.log
 exit 0
