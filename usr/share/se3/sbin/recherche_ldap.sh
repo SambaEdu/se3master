@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#
+## $Id$ ##
+#
+##### Permet de faire des recherches dans l'annuaire LDAP #####
+#
 # Derniere modif: 20130217
 
 #. /usr/share/se3/sbin/variables_admin_ldap.sh lib > /dev/null
@@ -78,10 +83,17 @@ if [ -z "$t" -o -z "$pref" -o -z "$valeur_motif" ]; then
 fi
 
 liste_complete=""
+liste_branche=""
+liste_result=""
 cpt=0
 for branche in People Groups Computers Parcs Rights
 do
+	#echo "ldapsearch -xLLL -b ou=$branche,$BASEDN $motif $pref|grep \"^$pref: \"|sed -e \"s|^$pref: ||\""
+	OLD_IFS=$IFS
+	IFS="
+"
 	liste=($(ldapsearch -xLLL -b ou=$branche,$BASEDN $motif $pref|grep "^$pref: "|sed -e "s|^$pref: ||"))
+	IFS=$OLD_IFS
 	if [ -n "${liste[0]}" ]; then
 		echo -e "$COLINFO"
 		echo "Branche $branche:"
@@ -89,7 +101,9 @@ do
 		while [ "$n" -lt "${#liste[*]}" ]
 		do
 			echo -e "${COLCHOIX}$cpt${COLTXT} - ${liste[$n]}"
-			liste_complete[$cpt]="-b ou=$branche,$BASEDN $pref=${liste[$n]}"
+			liste_complete[$cpt]="-b ou=$branche,$BASEDN $pref=\"${liste[$n]}\""
+			liste_branche[$cpt]="-b ou=$branche,$BASEDN"
+			liste_result[$cpt]=${liste[$n]}
 			n=$((n+1))
 			cpt=$((cpt+1))
 		done
@@ -132,7 +146,9 @@ if [ "$debug" = "y" ]; then
 fi
 
 echo -e "$COLCMD"
-ldapsearch -xLLL -D $ROOTDN -w$PASSDN ${liste_complete[$REP]}
+#echo ldapsearch -xLLL -D $ROOTDN -w$PASSDN ${liste_complete[$REP]}
+#ldapsearch -xLLL -D $ROOTDN -w$PASSDN ${liste_complete[$REP]}
+ldapsearch -xLLL -D $ROOTDN -w$PASSDN ${liste_branche[$REP]} $pref="${liste_result[$REP]}"
 
 echo -e "$COLTXT"
 
