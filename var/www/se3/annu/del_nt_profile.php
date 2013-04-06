@@ -43,9 +43,10 @@ echo "<h1>".gettext("Annuaire")."</h1>\n";
 aff_trailer ("3");
 if ((is_admin("Annu_is_admin",$login)=="Y") || (is_admin("Sovajon_is_admin",$login)=="Y")||($uid==$login)) {
     // suppression d'un  profil nt d'utilisateur en cas de pb
-    if ($uid == "admin" )  {
-      	echo "<div class=error_msg>".gettext("Vous ne pouvez pas effacer le profil administrateur !")."</div>";
-    } elseif (!$uid)  {
+//    if ($uid == "admin" )  {
+//      	echo "<div class=error_msg>".gettext("Vous ne pouvez pas effacer le profil administrateur !")."</div>";
+//    } elseif
+    if (!$uid)  {
       	echo "<div class=error_msg>".gettext("Vous devez pr&#233;ciser le login du compte pour effacer son profil ! !")."</div>";
     } elseif ($action == "del") {
         exec ("/usr/share/se3/sbin/userProfileDel.pl $uid $action",$AllOutPut,$ReturnValue);
