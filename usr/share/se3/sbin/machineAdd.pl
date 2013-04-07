@@ -2,7 +2,7 @@
 
 # $Id$ #
 
-##### Script utilisé par samba pour l'ajout des machines dans l'annuaire#####
+##### Script utilisÃ© par samba pour l'ajout des machines dans l'annuaire#####
 
 use Net::Domain;
 use Unicode::String qw(latin1 utf8);
@@ -50,7 +50,7 @@ system("/usr/share/se3/sbin/entryDel.pl \"uid=$machine_uid,$computersDn\"");
 }
 
 
-my $uidNumber = 30000; # n° à partir duquel la recherche est lancée
+my $uidNumber = 30000; # nÂ° Ã  partir duquel la recherche est lancÃ©e
 my $increment = 1024; # doit etre une puissance de 2
 if (defined(getpwuid($uidNumber))) {
 	do {
@@ -67,7 +67,7 @@ if (defined(getpwuid($uidNumber))) {
 			$uidNumber -= $increment;
 		}
 	} while $increment > 1;
-	# la boucle suivante est normalement exécutée au plus une fois
+	# la boucle suivante est normalement exÃ©cutÃ©e au plus une fois
 	while (defined(getpwuid($uidNumber))) {
 		$uidNumber++;
 	}
@@ -84,7 +84,7 @@ $lmPassword = $1;
 $ntPassword = $2;
 $sambasid = `net getlocalsid | cut -d: -f2 | sed -e \"s/ //g\"`;
 
-# Génération du mot de passe crypté
+# GÃ©nÃ©ration du mot de passe cryptÃ©
 $salt  = chr (rand(75) + 48);
 $salt .= chr (rand(75) + 48);
 $crypt = crypt $password, $salt;
@@ -107,10 +107,13 @@ $crypt = crypt $password, $salt;
 	 );
  
 $res = 0xffff & system @args;
-die("Erreur lors de l'ajoût de l'utilisateur.") if $res != 0;
+die("Erreur lors de l'ajoÃ»t de l'utilisateur.") if $res != 0;
 
 system("/usr/share/se3/shares/shares.avail/connexion.sh adminse3 $machine $ipAddress");
-
+# reconstruction pour wpkg
+if (-e "/usr/share/se3/scripts/update_hosts_profiles_xml.sh") {
+	system("/usr/share/se3/scripts/update_hosts_profiles_xml.sh $computersRdn $parcsRdn $baseDn");
+	}
 exit 0;
 
 
