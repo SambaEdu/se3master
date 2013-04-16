@@ -24,17 +24,7 @@ then
 	logger -t "SLAPD" "Lock syncrepl.lock existant"
 	exit 1
 fi	
-# 
-# ## recuperation des variables necessaires pour interoger mysql ###
-# if [ -e /root/.my.cnf ]; then
-# 	. /root/.my.cnf 2>/dev/null
-# else
-#         echo "Fichier de conf inaccessible desole !!"
-#         echo "le script ne peut se poursuivre"
-#         exit 1
-# fi
 
-# se3ip="$(expr "$(LC_ALL=C /sbin/ifconfig eth0 | grep 'inet addr')" : '.*inet addr:\([^ ]*\)')"
 
 
 # Permettre un retour sur l'annuaire local
@@ -58,17 +48,6 @@ then
   DEBIAN_VERSION=`cat /etc/debian_version`
 fi
 
-#########################################################################################
-# 	Recup et verif  des donnees dans la base SQL					#
-#########################################################################################
-# replica_status=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='replica_status'" | grep -v value`
-# replica_ip=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='replica_ip'" | grep -v value`
-# ldap_server=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='ldap_server'" | grep -v value`
-# ldap_base_dn=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='ldap_base_dn'" | grep -v value`
-# ldap_server=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='ldap_server'" | grep -v value`
-# ldap_server=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='ldap_server'" | grep -v value`
-# adminRdn=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='adminRdn'" | grep -v value`
-# adminPw=`/usr/bin/mysql -u $user -p$password -D se3db -e "SELECT value from params WHERE name='adminPw'" | grep -v value`
 
 
 # Verification des variables
@@ -105,7 +84,7 @@ touch /var/lock/syncrepl.lock
 # On stoppe ldap et samba
 if [ "$1" != "installinit" ]
 then
-	/etc/init.d/slapd stop
+	service slapd stop
 	sleep 2
 
 	# On sauvegarde LDAP
@@ -117,6 +96,8 @@ then
 	if [ -e "/var/lib/ldap/DB_CONFIG" ]
 	then
 		cp /var/lib/ldap/DB_CONFIG /var/se3/save/ldap/
+	else
+		cp /var/se3/save/ldap/DB_CONFIG /var/lib/ldap/
 	fi
 
 
@@ -215,10 +196,10 @@ allow bind_v2
 
 # Where the pid file is put. The init.d script
 # will not stop the server if you change this.
-pidfile		/var/run/slapd.pid
+pidfile		/var/run/slapd/slapd.pid
 
 # List of arguments that were passed to the server
-argsfile	/var/run/slapd.args
+argsfile	/var/run/slapd/slapd.args
 
 # Read slapd.conf(5) for possible values
 loglevel	0
@@ -309,40 +290,53 @@ sizelimit	3500
 # Cree le fichier /etc/default/slapd						#
 #################################################################################
 
-echo "# Default location of the slapd.conf file
-SLAPD_CONF=
+echo "# Default location of the slapd.conf file or slapd.d cn=config directory. If
+# empty, use the compiled-in default (/etc/ldap/slapd.d with a fallback to
+# /etc/ldap/slapd.conf).
+
+SLAPD_CONF=\"/etc/ldap/slapd.conf\"
 
 # System account to run the slapd server under. If empty the server
 # will run as root.
-SLAPD_USER=
+SLAPD_USER=\"openldap\"
 
 # System group to run the slapd server under. If empty the server will
 # run in the primary group of its user.
-SLAPD_GROUP=
+SLAPD_GROUP=\"openldap\"
 
 # Path to the pid file of the slapd server. If not set the init.d script
 # will try to figure it out from \$SLAPD_CONF (/etc/ldap/slapd.conf)
 SLAPD_PIDFILE=
-
-# Configure if db_recover should be called before starting slapd
-TRY_BDB_RECOVERY=yes
-
-# Configure if the slurpd daemon should be started. Possible values:
-# - yes:   Always start slurpd
-# - no:    Never start slurpd
-# - auto:  Start slurpd if a replica option is found in slapd.conf (default)
-SLURPD_START=auto
-
-# Additional options to pass to slapd and slurpd
-SLAPD_OPTIONS=\"\"
-SLURPD_OPTIONS=\"\"
 
 # slapd normally serves ldap only on all TCP-ports 389. slapd can also
 # service requests on TCP-port 636 (ldaps) and requests via unix
 # sockets.
 # Example usage:
 # SLAPD_SERVICES=\"ldap://127.0.0.1:389/ ldaps:/// ldapi:///\"
-SLAPD_SERVICES=\"ldap://0.0.0.0:389/ ldaps:///\" " > /etc/default/slapd
+SLAPD_SERVICES=\"ldap:/// ldapi:///\"
+
+# If SLAPD_NO_START is set, the init script will not start or restart
+# slapd (but stop will still work).  Uncomment this if you are
+# starting slapd via some other means or if you don't want slapd normally
+# started at boot.
+#SLAPD_NO_START=1
+
+# If SLAPD_SENTINEL_FILE is set to path to a file and that file exists,
+# the init script will not start or restart slapd (but stop will still
+# work).  Use this for temporarily disabling startup of slapd (when doing
+# maintenance, for example, or through a configuration management system)
+# when you don't want to edit a configuration file.
+SLAPD_SENTINEL_FILE=/etc/ldap/noslapd
+
+# For Kerberos authentication (via SASL), slapd by default uses the system
+# keytab file (/etc/krb5.keytab).  To use a different keytab file,
+# uncomment this line and change the path.
+#export KRB5_KTNAME=/etc/krb5.keytab
+
+# Additional options to pass to slapd
+SLAPD_OPTIONS=\"\"
+
+" > /etc/default/slapd
 
 SSL="start_tls"
 
@@ -434,38 +428,6 @@ then
 	serveurs="$ldap_server"
 fi
 
-#################################################################################
-#	Slave slurpd								#
-#################################################################################
-if [ "$replica_status" = "2" ]
-then
-	# Modiife les differents fichiers de conf
-	serveurs="$ldap_server $replica_ip"
-	echo "updatedn \"$adminRdn,$ldap_base_dn\" " >> /etc/ldap/slapd.conf
-        echo "updateref \"ldap://$ldap_server:389\"" >> /etc/ldap/slapd.conf
-		
-fi
-
-#################################################################################
-#	Master slurpd								#
-#################################################################################
-if [ "$replica_status" = "1" ]
-then
-	# Modiife les differents fichiers de conf
-	serveurs="$ldap_server $replica_ip"
-	echo "replica host=$replica_ip:389" >> /etc/ldap/slapd.conf
-        echo "  binddn=\"$adminRdn,$ldap_base_dn\"" >> /etc/ldap/slapd.conf
-	echo "  bindmethod=simple       credentials=$ldap_passwd" >> /etc/ldap/slapd.conf
-	echo "replogfile /var/spool/slurpd/replica/replogfile" >> /etc/ldap/slapd.conf
-	
-	if [ \( ! -d "/var/spool/slurpd/replica" \) ]
-	then
-        	mkdir -p /var/spool/slurpd/replica
-	fi
-		
-fi
-
-#################################################################################
 
 #################################################################################
 # 		Creation de : libnss-ldap.conf pam_ldap.conf ldap.conf		#
@@ -473,7 +435,7 @@ fi
 echo "ldap_version 3
 base $ldap_base_dn
 rootbinddn $adminRdn,$ldap_base_dn
-#bindpw pasecure
+#bindpw 
 host $serveurs
 #scope sub
 
@@ -486,7 +448,7 @@ nss_initgroups_ignoreusers root,openldap,plugdev,disk,kmem,tape,audio,daemon,lp,
 echo "ldap_version 3
 base $ldap_base_dn
 rootbinddn $adminRdn,$ldap_base_dn
-#bindpw pasecure
+#bindpw 
 host $serveurs
 pam_crypt local
 # ssl start_tls
@@ -518,12 +480,12 @@ if [ "$1" == "index" ]
 	fi
 
 
-[ "$1" != "installinit" ] && /etc/init.d/slapd start
-sleep 1
-[ "$1" != "installinit" ] && /etc/init.d/samba reload
-
 chown -R openldap:openldap /etc/ldap
 chown -R openldap:openldap /var/lib/ldap
+
+[ "$1" != "installinit" ] && service slapd start
+sleep 1
+[ "$1" != "installinit" ] && /etc/init.d/samba reload
 
 # Supprime le lock
 rm -f /var/lock/syncrepl.lock
