@@ -12,6 +12,14 @@ then
         exit
 fi	
 
+proxy=$(grep "http_proxy=" /etc/profile | head -n 1 | sed -e "s#.*//##;s/\"//")
+
+if [ ! -z "$proxy" ]; then
+export http_proxy="http://$proxy"
+export https_proxy="http://$proxy"
+export ftp_proxy="http://$proxy"
+fi
+
 
 REPORT_FILE="/root/mailtoadmin"
 echo "" > $REPORT_FILE
