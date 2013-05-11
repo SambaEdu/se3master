@@ -264,9 +264,11 @@ else {
     echo "<BR><BR>";
         
         
-//	echo "Pour mettre &#224; jour tous les paquets indiqu&#233;, il vous suffit de cliquer sur le bouton ci-dessous<BR>\n";
-//	echo "<BR><BR>";
+	echo "Vous pouvez consulter la liste des changements en consultant <a href='http://wwdeb.crdp.ac-caen.fr/mediase3/index.php/Mises_%C3%A0_jour' TARGET='_blank' >cette page</a> \n";
+	echo "<BR><BR>";
         echo "<FORM action=\"majtest.php?action=majse3 \"method=\"post\"><CENTER><INPUT type='submit' VALUE='Lancer la mise &#224; jour'></CENTER></FORM>\n";
+        
+
 }
 # pied de page
 include ("pdp.inc.php");
