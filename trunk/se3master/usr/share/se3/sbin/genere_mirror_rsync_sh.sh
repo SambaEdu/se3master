@@ -131,7 +131,7 @@ echo '' | tee -a \$FICHIERLOG
 
 echo 'rsync de la partition /var' | tee -a \$FICHIERLOG
 echo '' | tee -a \$FICHIERLOG
-/usr/bin/rsync -av --delete --exclude=/lock/* --exclude=/se3/* /var/* /mirror/part_var | tee -a \$FICHIERLOG
+/usr/bin/rsync -av --delete --exclude=/lock/* --exclude=/lib/backuppc/* --exclude=/se3/* /var/* /mirror/part_var | tee -a \$FICHIERLOG
 umount \$PARTVAR_CIBLE
 
 echo '' | tee -a \$FICHIERLOG
