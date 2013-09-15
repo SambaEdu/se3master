@@ -67,7 +67,7 @@ t0=\$(date +%s)
 t1=\$t0
 #==================================
 # partition /
-echo 'Controle de la partition Racine' | tee \$FICHIERLOG
+echo 'Controle de la partition Racine' | tee -a \$FICHIERLOG
 e2fsck \$PARTROOT_CIBLE
 echo '' | tee -a \$FICHIERLOG
 
@@ -87,7 +87,7 @@ if [ \$? != 0 ]; then
 fi
 echo '' | tee -a \$FICHIERLOG
 
-echo 'rsync de la partition Racine' | tee \$FICHIERLOG
+echo 'rsync de la partition Racine' | tee -a \$FICHIERLOG
 echo  | tee -a \$FICHIERLOG
 /usr/bin/rsync -av --delete --exclude=/home/* --exclude=/mirror/ --exclude=/tmp/* --exclude=/var/lock/* --exclude=/proc/* --exclude=/sys/* --exclude=/cdrom/* --exclude=/var/*  / /mirror/part_root | tee -a \$FICHIERLOG
 echo '' | tee -a \$FICHIERLOG
@@ -135,7 +135,7 @@ echo '' | tee -a \$FICHIERLOG
 umount \$PARTVAR_CIBLE
 
 echo '' | tee -a \$FICHIERLOG
-echo 'Redemarrage  de ldap, mysql et cron' | tee \$FICHIERLOG
+echo 'Redemarrage  de ldap, mysql et cron' | tee -a \$FICHIERLOG
 /etc/init.d/slapd start
 /etc/init.d/mysql start
 /etc/init.d/cron start
