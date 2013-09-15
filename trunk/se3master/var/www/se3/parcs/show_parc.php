@@ -410,10 +410,17 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 						$lig=mysql_fetch_object($res_rapport_tftp);
 						echo "<td align=\"center\">";
 						echo "<span style='font-size: x-small;' title='Dernier rapport: $lig->tache ($lig->statut)'><a href=\"../tftp/visu_rapport.php?id_machine=$lig->id\" target='_blank'>".$lig->date."</a></span>\n";
+						$st="$lig->statut";
+						if($st=="SUCCES") {
+							$cl="green";
+							} else {
+							$cl="red";
+						}
+						echo "<FONT color=$cl size=1>"."$lig->statut"."</font>";
 						echo "</td>\n";
 					}
 					else {
-						echo "<td align=\"center\" style='color:red'>".gettext("Aucun rapport")."</td>\n";
+						echo "<td align=\"center\" style='color:purple'>".gettext("Aucun rapport")."</td>\n";
 					}
 				}
 
