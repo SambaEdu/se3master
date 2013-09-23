@@ -277,7 +277,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 	
 					if((isset($_POST['create_home']))&&($_POST['create_home']=='y')) {
 						echo "<p><b>Cr&#233;ation du dossier personnel de ".$users[0]["uid"]."</b><br />";
-						exec("sudo /usr/share/se3/scripts/modif_profil_mozilla_ff.sh ".$users[0]["uid"]." http://www.google.fr create_homes",$ReturnValue2);
+						exec("sudo /usr/share/se3/shares/shares.avail/mkhome.sh ".$users[0]["uid"],$ReturnValue2);
 						echo "<pre style='color:red'>";
 						foreach($ReturnValue2 as $key => $value) {
 							echo "$value";
