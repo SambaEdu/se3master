@@ -61,6 +61,10 @@ esac
 		/usr/share/se3/scripts/permse3
 	    echo "Instanciation en cours..."
 		/usr/share/se3/sbin/instance_se3.sh 
+		echo "Maj sudoers..."
+		mv /etc/sudoers.se3 /etc/sudoers
+		chmod 440 /etc/sudoers
+
 	else
     		./$install_script
 	fi
