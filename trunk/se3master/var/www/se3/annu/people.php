@@ -177,9 +177,12 @@ echo "<table width=\"80%\"><tr><td>";
 	// Test de l'appartenance a la classe pour le droit  sovajon_is_admin
 	// Afin d'eviter les doublons si le mec est admin_is_admin il ne peut pas
 	// voir cette partie puisqu'il peut la voir par ailleurs
+
+	// si les droits étendus du groupe profs sont activés, le test sur la classe n'est pas nécessaire
+	$acl_group_profs_classes = exec("cd /var/se3/Classes; /usr/bin/getfacl . | grep group:Profs >/dev/null && echo 1");
 	
 	if (is_admin("Annu_is_admin",$login) != "Y") {
-  		if ((tstclass($login,$user["uid"])==1) and (ldap_get_right("sovajon_is_admin",$login)=="Y") and ($login != $user["uid"])) {
+  		if ((tstclass($login,$user["uid"])==1) or ($acl_group_profs_classes == 1) and (ldap_get_right("sovajon_is_admin",$login)=="Y") and ($login != $user["uid"])) {
   		   // On teste si $user[uid] n'est pas un prof
             if (are_you_in_group($user["uid"],"Eleves")=="true") {
 			echo "<br>\n";
