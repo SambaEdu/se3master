@@ -82,9 +82,11 @@ if (count($people)) {
 			if ((ldap_get_right("Annu_is_admin",$login) == "Y") || (ldap_get_right("annu_can_read",$login) == "Y")) {
       				echo "<A href=\"people.php?uid=".$people[$loop]["uid"]."\">".$people[$loop]["fullname"]."</A>";
 			} else {
-				// si on a les droits sovajon_is_admin on v&#233;rifie si on a la classe
+				// si on a les droits sovajon_is_admin on v&#233;rifie si on a la classe ou si les droits étendus du groupe prof sont activés
 				$uid_eleve=$people[$loop]["uid"];
-				if ((tstclass($login,$uid_eleve)==1) and (ldap_get_right("sovajon_is_admin",$login)=="Y") and ($people[$loop]["prof"]!=1)) {
+				$acl_group_profs_classes = exec("cd /var/se3/Classes; /usr/bin/getfacl . | grep group:Profs >/dev/null && echo 1");
+
+				if ((tstclass($login,$uid_eleve)==1) and ((ldap_get_right("sovajon_is_admin",$login)=="Y") or ($acl_group_profs_classes == 1)) and ($people[$loop]["prof"]!=1)) {
 					 echo "<A href=\"people.php?uid=".$people[$loop]["uid"]."\">".$people[$loop]["fullname"]."</A>";
 				} else {
 					echo $people[$loop]["fullname"];
@@ -206,8 +208,10 @@ if (preg_match("/Cours_/i", "$filter")) {
 // echo are_you_in_group($login,$classe);
 // pour pas avoir un double affichage
  if (ldap_get_right("Annu_is_admin",$login) != "Y") {
-        // Si sovajon_is_admin et prof de la classe
-        if ((ldap_get_right("sovajon_is_admin",$login)=="Y") and (are_you_in_group($login,$classe))) {
+        // Si sovajon_is_admin et prof de la classe ou droits étendus du groupe profs
+        $acl_group_profs_classes = exec("cd /var/se3/Classes; /usr/bin/getfacl . | grep group:Profs >/dev/null && echo 1");
+        
+        if ((ldap_get_right("sovajon_is_admin",$login)=="Y") and ((are_you_in_group($login,$classe) or ($acl_group_profs_classes == 1)))) {
 
                 // Affiche trombinoscope de la classe
                 echo "<ul style=\"color: red;\">\n";
