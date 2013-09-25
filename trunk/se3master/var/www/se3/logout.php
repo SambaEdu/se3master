@@ -23,10 +23,11 @@
    * file: logout.php
    */
 
-
+session_start();
 
 require ("config.inc.php");
 require ("functions.inc.php");
+unset($_SESSION['comptes_crees']) ;
 close_session();
 header("Location:auth.php?al=0");
 ?>
