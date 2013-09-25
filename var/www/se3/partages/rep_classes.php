@@ -328,7 +328,7 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 	echo "<br />\n";
 	echo "<H3>Rafraichir les r&#233;pertoires classes existants</H3>\n";
 	echo "<form action=\"rep_classes.php\" method=\"post\">\n";
-	$acl_group_profs_classes = exec("cd /var/se3/Classes; /usr/bin/getfacl . | grep default:group:Profs >/dev/null && echo 1");
+	$acl_group_profs_classes = exec("cd /var/se3/Classes; /usr/bin/getfacl . | grep group:Profs >/dev/null && echo 1");
 	if ($acl_group_profs_classes=="1") {
 		$CHECKED="checked";
 	}	
