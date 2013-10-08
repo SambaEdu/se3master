@@ -76,7 +76,7 @@ if (is_admin("printers_is_admin",$login)=="Y") {
                 } else {
                         $able="cups".$status;
                 }
-		exec ("/usr/bin/$able {$all_printers[$num]['printer-name']}");
+		exec ("/usr/sbin/$able {$all_printers[$num]['printer-name']}");
 	} elseif (isset($validq)) {
         if(file_exists("/usr/bin/accept")){
             $able=$queue;
