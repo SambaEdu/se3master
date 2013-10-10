@@ -252,7 +252,7 @@ se3-clonage)
 LINE_TEST
 # if [ ! -e /usr/sbin/atftpd ];	then
 
-	cp -a /etc/inetd.conf /etc/inetd.conf.${SE3MODULE}_$LADATE
+[ -e /etc/inetd.conf ] && cp -a /etc/inetd.conf /etc/inetd.conf.${SE3MODULE}_$LADATE
 # 	echo "Installation de atftpd" | tee -a $REPORT_FILE
 # 	apt-get install $option atftpd | tee -a $REPORT_FILE
 # 	echo "" | tee -a $REPORT_FILE
@@ -268,7 +268,7 @@ if [ -d /tftpboot ]; then
 
 fi
 install_module
-cp -a /etc/inetd.conf.${SE3MODULE}_$LADATE /etc/inetd.conf
+[ -e /etc/inetd.conf.${SE3MODULE}_$LADATE ] && cp -a /etc/inetd.conf.${SE3MODULE}_$LADATE /etc/inetd.conf
 ## Activation du tftp
 /usr/share/se3/scripts/se3_tftp_boot_pxe.sh start
 
