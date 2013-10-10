@@ -9,6 +9,8 @@ REPORT_FILE="$LOG_DIR/log_maj144"
 #mode debug on si =1
 [ -e /root/debug ] && DEBUG="1"
 LADATE=$(date +%d-%m-%Y)
+# insert donnees manquantes si besoin
+mysql -u $dbuser -p$dbpass -f se3db < /var/cache/se3_install/se3db.sql 2>/dev/null
 
 echo "Mise a jour 144 :
 - Fonctionnement ldap avec user openldap
