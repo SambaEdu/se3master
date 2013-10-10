@@ -93,6 +93,7 @@ INSERT INTO params VALUES (32, 'autologon', '1', 0, 'Login automatique sur l\'in
 INSERT INTO params VALUES (33, 'uidPolicy', 4, 0, 'Type de login', 1);
 INSERT INTO params VALUES (34, 'yala_bind', 0, 0, 'Droits sur l\'annuaire pour YALA', 2);
 INSERT INTO params VALUES ('', 'defaultshell', '/bin/bash', 0, 'Shell par défaut', 1);
+INSERT INTO params VALUES ('', 'pwdPolicy', '0', 0, 'Politique de mot de passe', 1);
 
 # Sauvegarde
 
