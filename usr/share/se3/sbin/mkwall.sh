@@ -326,6 +326,7 @@ if [ -n "$image_a_inserer" -a -e "$image_a_inserer" ]; then
 	else
 		convert ${dossier_base_fond}/$1.$ext ${dossier_base_fond}/$1.jpg
 		ln -s ${dossier_base_fond}/$1.jpg $dossier_www_fonds_courants/$1.jpg
+		chown www-se3 $dossier_www_fonds_courants/$1.jpg
 	fi
 	rm -f $image_a_inserer
 fi
