@@ -467,8 +467,8 @@ BASE $ldap_base_dn
 # 		Fin de la conf							#
 #################################################################################
 
-chmod 550 /etc/ldap/slapd.conf
-chmod 444 /etc/ldap/slapd.pem
+chmod 640 /etc/ldap/slapd.conf
+chmod 644 /etc/ldap/slapd.pem
 
 
 
@@ -482,6 +482,8 @@ if [ "$1" == "index" ]
 
 chown -R openldap:openldap /etc/ldap
 chown -R openldap:openldap /var/lib/ldap
+chown openldap:openldap /var/run/slapd
+
 
 [ "$1" != "installinit" ] && service slapd start
 sleep 1
