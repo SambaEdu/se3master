@@ -37,18 +37,18 @@ if [ -e /home/netlogon ]; then
 		chmod 664 /home/netlogon/domscripts/*
 	fi
 
-  setfacl -R -m  u:adminse3:rx /var/se3/Progs/install
-  setfacl -R -m  d:u:adminse3:rx /var/se3/Progs/install 
+	setfacl -R -m  u:adminse3:rx /var/se3/Progs/install
+	setfacl -R -m  d:u:adminse3:rx /var/se3/Progs/install 
 
-  # Droits sur CPAU
-  chown root:admins /home/netlogon/CPAU.exe
-  chmod 775 /home/netlogon/CPAU.exe
+	# Droits sur CPAU
+	chown root:admins /home/netlogon/CPAU.exe
+	chmod 775 /home/netlogon/CPAU.exe
 fi
 }
 
 if [ "$1" == "netlogon"  ]; then
-SETNETLOGON
-exit 0
+	SETNETLOGON
+	exit 0
 fi
 
 chmod 400 /root/.my.cnf
@@ -56,14 +56,23 @@ chmod 400 /root/.my.cnf
 # Apache
 chmod 544 /etc/default/apache2
 
-# Droits sur la conf de LDAP
+# Droits sur LDAP
 chmod 600 /etc/ldap.secret
+chown root:root /etc/ldap.secret
+
 chmod 640 /etc/ldap/slapd.conf
+
 chmod 644 /etc/ldap/slapd.pem
 
-# Droits sur /var/lib/ldap
-chown openldap.openldap /var/lib/ldap
-# chown openldap.openldap /var/lib/ldap/*
+chmod 644 /etc/pam_ldap.conf
+chown root:root /etc/pam_ldap.conf
+
+chmod 644 /etc/libnss-ldap.conf
+chown root:root /etc/libnss-ldap.conf
+
+chown openldap:openldap /var/run/slapd/
+chown -R openldap:openldap /etc/ldap
+chown -R openldap:openldap /var/lib/ldap
 
 # Droits sur admind
 chown root.root /usr/sbin/admind
@@ -134,9 +143,9 @@ fi
 
 # droits sur /var/log
 if [ -L /var/log ]; then
-LOGS_DIR="/var/se3/log"
+	LOGS_DIR="/var/se3/log"
 else
-LOGS_DIR="/var/log"
+	LOGS_DIR="/var/log"
 fi
 chown root ${LOGS_DIR}
 chown root ${LOGS_DIR}/*
@@ -146,23 +155,23 @@ chown -R  www-se3 ${LOGS_DIR}/se3
 chmod -R 750 ${LOGS_DIR}/se3
 
 if [ -e ${LOGS_DIR}/clamav ]; then
-chown -R clamav ${LOGS_DIR}/clamav
+	chown -R clamav ${LOGS_DIR}/clamav
 fi
 
 if [ -e ${LOGS_DIR}/squid ]; then
-chown -R proxy ${LOGS_DIR}/squid
+	chown -R proxy ${LOGS_DIR}/squid
 fi
 
 if [ -e ${LOGS_DIR}/squid3 ]; then
-chown -R proxy ${LOGS_DIR}/squid3
+	chown -R proxy ${LOGS_DIR}/squid3
 fi
 
 if [ -e ${LOGS_DIR}/dansguardian ]; then
-chown -R dansguardian /var/log/dansguardian
+	chown -R dansguardian /var/log/dansguardian
 fi
 
 if [ -e ${LOGS_DIR}/ocsinventory-NG ]; then
-chown -R www-se3 ${LOGS_DIR}/ocsinventory-NG
+	chown -R www-se3 ${LOGS_DIR}/ocsinventory-NG
 fi
 
 # mise en place droits sur /home/netlogon
@@ -170,13 +179,13 @@ SETNETLOGON
 
 
 if [ -e /home/templates ]; then
-# droits sur les templates
-chmod 775 /home/templates
-chown admin:admins /home/templates -R
-[ ! -e /home/templates/skeluser ] && ln -s /etc/skel/user /home/templates/skeluser
-chown -R www-se3 /etc/skel/user
-setfacl -R -m  u:www-se3:rwx /home/templates/ 2> /dev/null
-setfacl -R -m  d:u:www-se3:rwx /home/templates/ 2> /dev/null
+	# droits sur les templates
+	chmod 775 /home/templates
+	chown admin:admins /home/templates -R
+	[ ! -e /home/templates/skeluser ] && ln -s /etc/skel/user /home/templates/skeluser
+	chown -R www-se3 /etc/skel/user
+	setfacl -R -m  u:www-se3:rwx /home/templates/ 2> /dev/null
+	setfacl -R -m  d:u:www-se3:rwx /home/templates/ 2> /dev/null
 fi
 
 #droits pour nut
@@ -232,8 +241,8 @@ fi
 
 # inventaire
 if [ -e /var/se3/Progs/ro/inventory ]; then
-chown -R admin:admins /var/se3/Progs/ro/inventory
-setfacl -R -m m:rwx /var/se3/Progs/ro/inventory
+	chown -R admin:admins /var/se3/Progs/ro/inventory
+	setfacl -R -m m:rwx /var/se3/Progs/ro/inventory
 fi
 
 #partage Classes
@@ -281,8 +290,8 @@ getent passwd adminse3 >/dev/null && [ -e /var/se3/unattended/install/italc_keys
 setfacl -R -m u::rwx -m g::rx -m o::rx -m d:m:rwx -m d:u::rwx -m d:g::rx -m d:o::rx /var/se3/unattended/install
 
 if [ -e /var/www/se3/wpkg ]; then
-chown -R www-se3:www-data /var/www/se3/wpkg
-chmod 775 /var/www/se3/wpkg/bin/*
+	chown -R www-se3:www-data /var/www/se3/wpkg
+	chmod 775 /var/www/se3/wpkg/bin/*
 fi
 
 getent passwd unattended >/dev/null && [ -e /var/se3/unattended/install/packages ] && (
@@ -299,17 +308,9 @@ chown www-se3:root /var/lib/se3/import_comptes
 
 # Modification du proprio pour permettre une suppression de config specifique pour un poste par www-se3
 if [ -e "/tftpboot/pxelinux.cfg" ]; then
-  chown www-se3:root /tftpboot/pxelinux.cfg
+	chown www-se3:root /tftpboot/pxelinux.cfg
 fi
 
-
-# Droits conf ldap
-chmod 644 /etc/pam_ldap.conf
-chown root:root /etc/pam_ldap.conf
-chmod 644 /etc/libnss-ldap.conf
-chown root:root /etc/libnss-ldap.conf
-chmod 600 /etc/ldap.secret
-chown root:root /etc/ldap.secret
 
 # Droits du dossier de mise a disposition des CSV (optionnel) lors de la generation de comptes:
 mkdir -p /var/www/se3/setup/csv
@@ -330,8 +331,8 @@ chown www-se3:root /var/www/se3/tmp
 # Droits necessaires a l'interface fonds d'ecran
 
 if [ -e /etc/se3/fonds_ecran ]; then
-chmod 755 /etc/se3/fonds_ecran
-chmod 644 /etc/se3/fonds_ecran/*
-chown -R www-se3:root /etc/se3/fonds_ecran
+	chmod 755 /etc/se3/fonds_ecran
+	chmod 644 /etc/se3/fonds_ecran/*
+	chown -R www-se3:root /etc/se3/fonds_ecran
 fi
 exit 0
