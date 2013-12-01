@@ -67,9 +67,9 @@ t0=\$(date +%s)
 t1=\$t0
 #==================================
 # partition /
-echo 'Controle de la partition Racine' | tee -a \$FICHIERLOG
-e2fsck \$PARTROOT_CIBLE
-echo '' | tee -a \$FICHIERLOG
+#echo 'Controle de la partition Racine' | tee \$FICHIERLOG
+#e2fsck \$PARTROOT_CIBLE
+#echo '' | tee -a \$FICHIERLOG
 
 echo 'Montage de la partition Racine' | tee -a \$FICHIERLOG
 mount -t ext3 \$PARTROOT_CIBLE  /mirror/part_root
@@ -89,11 +89,11 @@ echo '' | tee -a \$FICHIERLOG
 
 echo 'rsync de la partition Racine' | tee -a \$FICHIERLOG
 echo  | tee -a \$FICHIERLOG
-/usr/bin/rsync -av --delete --exclude=/home/* --exclude=/mirror/ --exclude=/tmp/* --exclude=/var/lock/* --exclude=/proc/* --exclude=/sys/* --exclude=/cdrom/* --exclude=/var/*  / /mirror/part_root | tee -a \$FICHIERLOG
+/usr/bin/rsync -av --delete --exclude=/etc/fstab --exclude=/home/* --exclude=/mirror/ --exclude=/tmp/* --exclude=/var/lock/* --exclude=/proc/* --exclude=/sys/* --exclude=/cdrom/* --exclude=/var/*  / /mirror/part_root | tee -a \$FICHIERLOG
 echo '' | tee -a \$FICHIERLOG
 
 
-sed \"s#\$PARTROOTUUID#\$PARTROOTUUID_CIBLE#\" -i /mirror/part_root/boot/grub/menu.lst  
+sed \"s#\$PARTROOTUUID#\$PARTROOTUUID_CIBLE#\" -i /mirror/part_root/boot/grub/grub.cfg  
 
 umount \$PARTROOT_CIBLE
 
@@ -131,7 +131,7 @@ echo '' | tee -a \$FICHIERLOG
 
 echo 'rsync de la partition /var' | tee -a \$FICHIERLOG
 echo '' | tee -a \$FICHIERLOG
-/usr/bin/rsync -av --delete --exclude=/lock/* --exclude=/lib/backuppc/* --exclude=/se3/* /var/* /mirror/part_var | tee -a \$FICHIERLOG
+/usr/bin/rsync -av --delete --exclude=/lock/*  --exclude=/lib/backuppc/* --exclude=/se3/* /var/* /mirror/part_var | tee -a \$FICHIERLOG
 umount \$PARTVAR_CIBLE
 
 echo '' | tee -a \$FICHIERLOG
