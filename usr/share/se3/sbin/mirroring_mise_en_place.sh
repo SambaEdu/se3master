@@ -65,6 +65,17 @@ echo -e "${COLTITRE}
 read OK
 echo -e "${COLTXT}"
 
+
+if [ -n "$(df | grep vol0-lv_home)" ]; then
+echo -e "${COLERREUR}Il semble que votre disque soit en LVM "
+	echo -e "${COLERREUR}Le script ne peut mettre en place un mirroring avec du LVM pour le moment"
+	echo -e "$COLTXT"
+	exit 1
+
+fi
+
+
+
 # detection de rsync
 if [ -e /usr/bin/rsync ]; then
 	echo ""
@@ -246,16 +257,20 @@ fi
 DISK2OK="n"
 while [ "$DISK2OK" != "o" ]
 do
-
-	DEFAULT_DISK2="sdb"
-
-	liste_dd=($(sfdisk -g | grep -v "$DISK1:" | cut -d":" -f1))
-	if [ ${#liste_dd[*]} -ge 1 ]; then
+	DEFAULT_DISK2="/dev/sdb"
+	liste_dd=$(sfdisk -g | grep -v "$DISK1:" | cut -d":" -f1)
+    test1=${liste_dd[*]}
+    test2=($test1)
+    j=0
+    for i in $test1; do
+        j=$[j+1]
+    done    
+    if [ $j -ge 1 ]; then
 		cpt=0
-		while [ $cpt -le ${#liste_dd[*]} ]
+		while [ $cpt -le $j ]
 		do
-			if sfdisk -s ${liste_dd[$cpt]} >/dev/null 2>&1; then
-				DEFAULT_DISK2="${liste_dd[$cpt]}"
+			if sfdisk -s ${test2[$cpt]} >/dev/null 2>&1; then
+				DEFAULT_DISK2="${test2[$cpt]}"
 				break
 			fi
 
@@ -287,7 +302,7 @@ do
 	done
 done
 
-if [ "$DISK2" == "$DISK1"  ]; then
+if [ "$DISK2" = "$DISK1"  ]; then
 	echo -e "${COLERREUR}Erreur !! Vous avez saisi la meme valeur pour le 1er et le 2eme disque."
 	echo -e "${COLERREUR}Le script ne peut mettre en place un mirroring sur le meme disque."
 	echo -e "$COLTXT"
@@ -394,7 +409,7 @@ do
 	read REPONSE
 done
 
-if [ "$REPONSE" == "o" ]; then
+if [ "$REPONSE" = "o" ]; then
 
 	REP=""
 	while [ "$REP" != "1" -a  "$REP" != "2" ]
@@ -415,7 +430,7 @@ if [ "$REPONSE" == "o" ]; then
 			echo -e "Le script ne peut se poursuivre normalement."
 			echo -e "Vos disques ne sont peut etre pas strictement identiques."
 			echo -e "$COLTXT"
-			echo -e "Vous pouvez executer cfdisk et partitionner manuellement de la meme facon que le 1er disque."
+			echo -e "Vous pouvez executer cfdisk et partitionner manuellement de la meme façon que le 1er disque."
 			echo ""
 			echo -e "Pour rappel, voici l'ordre dans lequel elles devront apparaitre:"
 			echo -e "${COLTXT}Partition SWAP :\t${COLINFO} $PARTSWAP_CIBLE"
@@ -445,7 +460,7 @@ if [ "$REPONSE" == "o" ]; then
 		fi
 	else
 		echo -e "$COLTXT"
-		echo -e "Vous pouvez executer cfdisk et partitionner manuellement de la meme facon que le 1er disque."
+		echo -e "Vous pouvez executer cfdisk et partitionner manuellement de la meme façon que le 1er disque."
 		echo ""
 		echo -e "Pour rappel, voici l'ordre dans lequel elles devront apparaitre:"
 		echo -e "${COLTXT}Partition SWAP :\t${COLINFO} $PARTSWAP_CIBLE"
@@ -527,10 +542,9 @@ do
 	echo -e "Reponse: ${COLSAISIE}\c"
 	read REPONSE
 done
-
 ladate=$(date "+%Y%m%d%H%M%S")
 
-if [ "$REPONSE" == "o" ]; then
+if [ "$REPONSE" = "o" ]; then
 #####
 	while [ "$CRONAJOUT" != "n" ]
 	do
@@ -570,7 +584,7 @@ if [ "$REPONSE" == "o" ]; then
 			read CRONOK
 		done
 
-		if [ "$CRONOK" == "o" ]; then
+		if [ "$CRONOK" = "o" ]; then
 			MCRON=`echo $HMCRON | cut -d: -f2`
 			HCRON=`echo $HMCRON | cut -d: -f1`
 			echo "$MCRON $HCRON * * * root /mirror/mirror_rsync.sh" >> /etc/crontab
@@ -618,8 +632,9 @@ done
 
 ################# creation des scripts ########################
 
-PARTROOTUUID=$(vol_id -u $PARTROOT)
-PARTROOTUUID_CIBLE=$(vol_id -u $PARTROOT_CIBLE)
+#------------------ UUID partitions racine ------------------------------------"
+PARTROOTUUID=$(blkid | grep $PARTROOT | cut -d" " -f2 | sed s/\"\//g |  sed s"/UUID=//")
+PARTROOTUUID_CIBLE=$(blkid | grep $PARTROOT_CIBLE | cut -d" " -f2 | sed s/\"\//g |  sed s"/UUID=//")
 
 
 # creation du script rsync
@@ -691,12 +706,66 @@ mount -t ext3 $PARTROOT_CIBLE  /mirror/part_root
 echo -e "$COLTITRE"
 echo "Installation de grub"
 echo -e "$COLCMD"
-grub-install --root-directory=/mirror/part_root --no-floppy --recheck hd1 
-echo -e "$COLINFO Grub installe !!"
+grub-install --root-directory=/mirror/part_root --no-floppy --recheck $DISK2
+#grub-install --root-directory=/mirror/part_root --no-floppy --recheck hd1 
+echo -e "$COLINFO Grub installé !!"
 
-chroot /mirror/part_root updategrub 
-sed "s/hd1/hd0/" -i /mirror/part_root/boot/grub/menu.lst  
-sed "s#$PARTROOT_CIBLE#$PARTROOT#" -i /mirror/part_root/boot/grub/menu.lst  
+
+
+
+mount -t proc none /mirror/part_root/proc
+mount -o bind /dev /mirror/part_root/dev
+mount -t sysfs sys /mirror/part_root/sys
+
+mount $PARTVAR_CIBLE /mirror/part_root/var/
+
+chroot /mirror/part_root update-grub 
+# chroot /mirror/part_root/ /bin/bash
+# update-grub
+# /usr/sbin/grub-install --recheck --no-floppy $DISK2
+
+
+
+
+sed "s/hd1/hd0/" -i /mirror/part_root/boot/grub/grub.cfg  
+sed "s#$PARTROOT_CIBLE#$PARTROOT#" -i /mirror/part_root/boot/grub/grub.cfg
+
+echo "--------------- modification du fstab --------------------------------"
+old_uuid_part1=` blkid | grep $DISK1\1 | cut -d" " -f2 | sed s/\"\//g`
+old_uuid_part2=` blkid | grep $DISK1\2 | cut -d" " -f2 | sed s/\"\//g`
+old_uuid_part3=` blkid | grep $DISK1\3 | cut -d" " -f2 | sed s/\"\//g`
+old_uuid_part5=` blkid | grep $DISK1\5 | cut -d" " -f2 | sed s/\"\//g`
+old_uuid_part6=` blkid | grep $DISK1\6 | cut -d" " -f2 | sed s/\"\//g`
+
+new_uuid_part1=` blkid | grep $DISK2\1 | cut -d" " -f2 | sed s/\"\//g`
+new_uuid_part2=` blkid | grep $DISK2\2 | cut -d" " -f2 | sed s/\"\//g`
+new_uuid_part3=` blkid | grep $DISK2\3 | cut -d" " -f2 | sed s/\"\//g`
+new_uuid_part5=` blkid | grep $DISK2\5 | cut -d" " -f2 | sed s/\"\//g`
+new_uuid_part6=` blkid | grep $DISK2\6 | cut -d" " -f2 | sed s/\"\//g`
+
+#echo "------------------partition 1------------------------------------"
+#echo $old_uuid_part1
+#echo $new_uuid_part1
+#echo "------------------partition 2------------------------------------"
+#echo $old_uuid_part2
+#echo $new_uuid_part2
+#echo "------------------partition 3------------------------------------"
+#echo $old_uuid_part3
+#echo $new_uuid_part3
+#echo "------------------partition 5------------------------------------"
+#echo $old_uuid_part5
+#echo $new_uuid_part5
+#echo "------------------partition 6------------------------------------"
+#echo $old_uuid_part6
+#echo $new_uuid_part6
+
+sed "s#$old_uuid_part1#$new_uuid_part1#" -i  /mirror/part_root/etc/fstab
+sed "s#$old_uuid_part2#$new_uuid_part2#" -i  /mirror/part_root/etc/fstab
+sed "s#$old_uuid_part3#$new_uuid_part3#" -i  /mirror/part_root/etc/fstab
+sed "s#$old_uuid_part5#$new_uuid_part5#" -i  /mirror/part_root/etc/fstab
+sed "s#$old_uuid_part6#$new_uuid_part6#" -i  /mirror/part_root/etc/fstab
+
+umount /mirror/part_root/var/
 umount /mirror/part_root/
 cd /mirror/
 ./mirror_rsync.sh
