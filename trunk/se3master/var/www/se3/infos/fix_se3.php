@@ -62,6 +62,15 @@ if (isset($_GET['action'])) {
         echo "<h2>".gettext("Remise en place de tous les droits...")."</h2>";
         system("sudo /usr/share/se3/scripts/restore_droits.sh acl_default auto html");
     }
+    
+    if ($_GET['action'] == "adminse3_rest") {
+        echo "<h2>".gettext("Remise en place des droits d'int&#233;gration pour adminse3...")."</h2>";
+        echo '<pre>';
+        system("sudo /usr/share/se3/sbin/create_adminse3.sh");
+        echo '</pre>';
+        echo "ok";
+    }
+    
     if ($_GET['action'] == "force_profils_wpkg") {
         echo "<h2>".gettext("Raffraichissement des machines visibles dans wpkg...")."</h2>";
         // Lance le script pour wpkg
@@ -73,21 +82,25 @@ if (isset($_GET['action'])) {
         echo "<h2>".gettext("Renouvellement des rapports wpkg...")."</h2>";
         
         system("rm -f /var/se3/unattended/install/wpkg/rapports/rapports.xml ; /var/www/se3/wpkg/bin/rapports.sh");
+        system ("/bin/bash /usr/share/se3/scripts/update_hosts_profiles_xml.sh ou=Computers ou=Parcs $ldap_base_dn");
+	system ("/bin/bash /usr/share/se3/scripts/update_droits_xml.sh");
+	echo "ok";
     }
 }
 else {
 
 
-    if (($login==admin)||($login==assist)) {
+    if (($login==admin)||($login==assist)||($login==aieple01)) {
 	echo "<a href=\"fix_se3.php?action=adminse3pass\" onClick=\"alert('Vous allez afficher un mot de passe important, attention aux regards indiscrets !!');\">".gettext("Afficher le mot de passe adminse3")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des lenteurs de connexions')")."\"><img name=\"action_image1\"  src=\"../elements/images/system-help.png\"></u><br>";
     }
-    echo "<a href=\"fix_se3.php?action=rmprofiles\" onclick=\"return getlongconfirm();\">".gettext("Supprimer l'ensemble des profils Windows")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des lenteurs de connexions')")."\"><img name=\"action_image1\"  src=\"../elements/images/system-help.png\"></u><br>";
-    echo "<a href=\"fix_se3.php?action=permse3\" onclick=\"return getlongconfirm();\">".gettext("Remise en place des droits syst&#232;me par d&#233;faut")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des disfonctionnement dans l\'interface ou lors des connexions')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u><br>";
-    echo "<a href=\"fix_se3.php?action=restore_droits\" onclick=\"return getlongconfirm();\">".gettext("Remise en place des droits sur les comptes utilisateurs")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des problemes de droits pour les utilisateurs')")."\"><img name=\"action_image3\"  src=\"../elements/images/system-help.png\"></u><br>";
-    echo "<a href=\"fix_se3.php?action=restore_droits_full\" onclick=\"return getlongconfirm();\">".gettext("Remise en place de tous les droits")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des problemes de droits')")."\"><img name=\"action_image4\"  src=\"../elements/images/system-help.png\"></u><br>";
+    echo "<a href=\"fix_se3.php?action=adminse3_rest\">".gettext("Remise en place des droits d'int&#233;gration pour adminse3")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des probl&#232;mes d\'int&#233;gration des postes Windows')")."\"><img name=\"action_image4\"  src=\"../elements/images/system-help.png\"></u><br>";
+        echo "<a href=\"fix_se3.php?action=rmprofiles\" onclick=\"return getlongconfirm();\">".gettext("Supprimer l'ensemble des profils Windows")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des lenteurs de connexions')")."\"><img name=\"action_image1\"  src=\"../elements/images/system-help.png\"></u><br>";
+    echo "<a href=\"fix_se3.php?action=permse3\" onclick=\"return getlongconfirm();\">".gettext("Remise en place des droits syst&#232;me par d&#233;faut")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des dysfonctionnements dans l\'interface ou lors des connexions')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u><br>";
+    echo "<a href=\"fix_se3.php?action=restore_droits\" onclick=\"return getlongconfirm();\">".gettext("Remise en place des droits sur les comptes utilisateurs")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des probl&#232;mes de droits pour les utilisateurs')")."\"><img name=\"action_image3\"  src=\"../elements/images/system-help.png\"></u><br>";
+    echo "<a href=\"fix_se3.php?action=restore_droits_full\" onclick=\"return getlongconfirm();\">".gettext("Remise en place de tous les droits")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des probl&#232;mes de droits')")."\"><img name=\"action_image4\"  src=\"../elements/images/system-help.png\"></u><br>";
     if (file_exists("/var/se3/unattended/install/wpkg")) {
-    echo "<a href=\"fix_se3.php?action=force_profils_wpkg\" onclick=\"return getlongconfirm();\">".gettext("Raffraichissement des machines visibles dans wpkg")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez que certaines machines sont manquantes dans wpkg')")."\"><img name=\"action_image4\"  src=\"../elements/images/system-help.png\"></u><br>";
-    echo "<a href=\"fix_se3.php?action=force_rapports_wpkg\" onclick=\"return getlongconfirm();\">".gettext("Renouvellement des rapports wpkg")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des problemes de remontés des rapport wpkg')")."\"><img name=\"action_image4\"  src=\"../elements/images/system-help.png\"></u><br>";
+    echo "<a href=\"fix_se3.php?action=force_profils_wpkg\">".gettext("Raffraichissement des machines visibles dans wpkg")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez que certaines machines sont manquantes dans wpkg')")."\"><img name=\"action_image4\"  src=\"../elements/images/system-help.png\"></u><br>";
+    echo "<a href=\"fix_se3.php?action=force_rapports_wpkg\">".gettext("Renouvellement des rapports wpkg")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des probl&#232;mes de remont&#233;&#233;s des rapport wpkg')")."\"><img name=\"action_image4\"  src=\"../elements/images/system-help.png\"></u><br>";
     }
 }
 require ("pdp.inc.php");
