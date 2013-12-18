@@ -13,7 +13,7 @@ set_time_limit (300);
 		// dégage crétin
 		echo "dégage...";
 	} else {
-		$listing = unserialize(stripslashes($_POST['hiddeninput']));
+		$listing = unserialize(rawurldecode($_POST['hiddeninput']));
 
 // Tri du listing par classe/nom/prénom
 function trieleve($a,$b)

@@ -222,6 +222,10 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
     } else {
       	// Verification si ce nouvel utilisateur n'existe pas deja
       	$prenom = stripslashes($prenom); $nom = stripslashes($nom);
+      	// suppression des apostrophes - tant pis pour la noblesse
+	$prenom = str_replace("'", "", $prenom);
+	$nom = str_replace("'", "", $nom);
+	
       	$cn =utf8_encode($prenom." ".$nom);
       	$people_exist=search_people("(cn=$cn)");
 

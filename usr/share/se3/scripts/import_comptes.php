@@ -5485,7 +5485,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 // Lien pour la récupération du mailing
 	if (count($listing, COUNT_RECURSIVE) > 1) {
-		$serial_listing=serialize($listing);
+		$serial_listing=rawurlencode(serialize($listing));
 	
 		my_echo("<form id='postlisting' action='../annu/listing.php' method='post' style='display:none;'>");
 		my_echo("<input type='hidden' name='hiddeninput' value='$serial_listing' />");
