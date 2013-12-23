@@ -46,7 +46,8 @@ $parc=isset($_POST['parc']) ? $_POST['parc'] : (isset($_GET['parc']) ? $_GET['pa
 $parcs=isset($_POST['parcs']) ? $_POST['parcs'] : NULL;
 
 $creationdossiertemplate=isset($_POST['creationdossiertemplate']) ? $_POST['creationdossiertemplate'] : NULL;
-$mpenc=isset($_POST['mpenc']) ? $_POST['mpenc'] : NULL;
+//$mpenc=isset($_POST['mpenc']) ? $_POST['mpenc'] : NULL;
+$mpenc=isset($_POST['mpenc']) ? $_POST['mpenc'] : (isset($_GET['mpenc']) ? $_GET['mpenc'] : NULL);
 
 //aide
 $_SESSION["pageaide"]="Gestion_des_parcs";
