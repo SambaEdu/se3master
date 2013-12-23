@@ -50,6 +50,7 @@ $mpenc=isset($_GET['mpenc']) ? $_GET['mpenc'] : NULL;
 //aide
 $_SESSION["pageaide"]="Informations_syst%C3%A8me#Historique";
 
+//debug_var();
 
 // Affichage du formulaire de saisie d'adresse IP
 echo "<H1>".gettext("Historique des connexions")."</H1>";
@@ -224,6 +225,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 	// Affichage des renseignements sur la machine depuis la table connexions
 	
     	if (($selectionne=="2") && (isset($mpenc))) {
+        echo "<p><strong>$mpenc</strong> <a href='cherche_machine.php?mpenc=$mpenc' title='Voir les parcs de la machine.'><img src='../elements/images/computer.png' /></a></p>";
 		$mp=urldecode($mpenc);
 		$mp_curr=search_machines("(&(cn=$mp)(objectClass=ipHost))","computers");
 		echo "<P><STRONG>".gettext("Adresse IP inscrite dans l'annuaire:")." </STRONG><FONT color='red'>".$mp_curr[0]["ipHostNumber"]."</FONT></P>\n";
