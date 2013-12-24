@@ -128,7 +128,13 @@ if [ ! -e /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.j
     /usr/share/se3/scripts/modifProxy.sh $proxyurl
 
 fi
+
 /etc/init.d/cron reload
+
+echo "Maj sudoers..."
+cp -f /etc/sudoers.se3 /etc/sudoers
+chmod 440 /etc/sudoers
+
 
 service apache2 reload
 service apache2se reload
