@@ -168,11 +168,14 @@ function start_poste($action, $name)
     if (! is_printer($name)) {
         switch ($action) {
         case "wol":
-             if(fping($ip)) { 
-                 echo "Mise en marche de la machine  <b>$name</b> : ";
-                 echo "$name est d&#233;j&#224; en fonctionnement <br>";
-                 //echo "<br>";
-             }
+            exec("/usr/share/se3/sbin/tcpcheck 1 $ip:445 | grep alive",$arrval,$return_value);
+            if ($return_value != "1") {
+			    
+			   echo "$name est d&#233;j&#224; en fonctionnement <br>";
+                        }
+            
+            
+             
             elseif ($dhcp == 1 ) {
                 require_once ("dhcp/dhcpd.inc.php");
                 $reseau=get_vlan($ip);
