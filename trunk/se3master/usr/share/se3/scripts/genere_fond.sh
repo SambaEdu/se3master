@@ -174,7 +174,55 @@ if [ "$1" = "variable_bidon" ]; then
 				rm -f "$file"
 			fi
 		done
-        ;;
+	;;
+	"genere_base")
+
+		# Ou alors, mettre un témoin dans Consultation des paramétrages pour annoncer que tant que personne ne s'est connecté, on n'a pas le modèle?
+		# C'est embêtant pour faire les réglages.
+
+		temoin=""
+
+		if [ -z "$3" ]; then
+			echo "ERREUR : \$3 est vide : $*"
+			exit
+		fi
+
+		t=$(echo "$3"|sed -e "s/[A-Za-z0-9_]//g")
+		if [ -n "$t" ]; then
+			echo "ERREUR : La chaine '$3' comporte des caratères invalides: '$t'"
+			exit
+		fi
+
+		if [ -e "$chemin_param_fond/fond_$3.txt" ]; then
+			if [ $(cat "$chemin_param_fond/fond_$3.txt") = "actif" ]; then
+				source "$chemin_param_fond/parametres_$3.sh"
+				temoin=$3
+			fi
+		fi
+
+
+		# Si aucune generation de fond n'est prevue pour l'utilisateur courant, on quitte:
+		if [ -z "$temoin" ]; then
+			echo " Pas de fond pour $3"
+			# Suppression du fichier de lock s'il existe:
+			rm -f "/tmp/$3.fond.lck"
+			exit 0
+		fi
+
+
+		# Passage de variable:
+		base=$temoin
+		if [ "$base" == "admin" ]
+		then
+			orig="Adminse3"
+		else
+			orig="$base"
+		fi
+
+		/usr/bin/convert -size ${largeur}x${hauteur} gradient:${couleur1}-${couleur2} jpeg:${dossier_base_fond}/$orig.jpg
+		#echo "/usr/bin/convert -size ${largeur}x${hauteur} gradient:${couleur1}-${couleur2} jpeg:${dossier_base_fond}/$orig.jpg" >> /var/log/se3_mkwall_debug.log
+
+	;;
     esac
 fi
 if [ "$3" = "admin" ]; then

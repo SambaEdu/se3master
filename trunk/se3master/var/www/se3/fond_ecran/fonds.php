@@ -462,7 +462,7 @@ PRIMARY KEY ( `identifiant` )
 						if (file_exists("/var/se3/Docs/media/fonds_ecran/$wallgrp.jpg"))
 							echo "<td><img src=\"../Admin/$wallgrp.jpg?".rand(1,99999)."\" WIDTH=100 alt=\"Fond\"></td>\n";
 						else
-							echo "<td>Image introuvable!</td>";
+							echo "<td>Image /var/se3/Docs/media/fonds_ecran/$wallgrp.jpg introuvable!</td>";
 						echo "<td>$largeur</td>\n";
 						echo "<td>$hauteur</td>\n";
 						echo "<td>$couleur1</td>\n";
@@ -1216,20 +1216,46 @@ couleur2="'.$couleur2.'"
 										$fermeture=fclose($fichier);
 
 
-										//echo "exec(\"/usr/bin/sudo $chemin_scripts/genere_fond.sh variable_bidon nettoyer $groupe\");<br>";
-										// Génération du dégradé:
+										// Nettoyage préalable:
 										exec("/usr/bin/sudo $chemin_scripts/genere_fond.sh variable_bidon nettoyer $groupe",$tabretour);
-										/*
-										for($i=0;$i<count($tabretour);$i++){
-											echo "\$tabretour[$i]=$tabretour[$i]<br>";
+										if(count($tabretour)>0) {
+											echo "<p style='color:red'>Nettoyage prealable:<br />exec(\"/usr/bin/sudo $chemin_scripts/genere_fond.sh variable_bidon nettoyer $groupe\",\$tabretour);<br />";
+											for($i=0;$i<count($tabretour);$i++){
+												echo "\$tabretour[$i]=$tabretour[$i]<br>";
+											}
+											echo "</p>\n";
 										}
-										*/
+
+										// Génération du dégradé:
+										exec("/usr/bin/sudo $chemin_scripts/genere_fond.sh variable_bidon genere_base $groupe",$tabretour);
+										if(count($tabretour)>0) {
+											echo "<p style='color:red'>Generation degrade:<br />exec(\"/usr/bin/sudo $chemin_scripts/genere_fond.sh variable_bidon genere_base $groupe\",\$tabretour);<br />";
+											for($i=0;$i<count($tabretour);$i++){
+												echo "\$tabretour[$i]=$tabretour[$i]<br>";
+											}
+											echo "</p>\n";
+										}
+
 										//La 'variable_bidon' est là pour passer le test sur $1
 										//Il faut juste éviter de créer un dossier '/home/variable_bidon'
 										echo "<p>".gettext("Le nouveau fond a &#233;t&#233; g&#233;n&#233;r&#233; dans")." 'I:\\media\\fonds_ecran'.</p>\n";
 
 										// Mise en place d'une copie au format PNG pour l'interface web:
-										exec("/usr/bin/sudo $chemin_scripts/fond_jpg2png.sh $groupe");
+										// Le script fond_jpg2png.sh n'existe pas.
+										//echo "exec(\"/usr/bin/sudo $chemin_scripts/fond_jpg2png.sh $groupe\");<br />";
+										//exec("/usr/bin/sudo $chemin_scripts/fond_jpg2png.sh $groupe");
+
+										if((file_exists("/var/se3/Docs/media/fonds_ecran/$groupe.bmp"))&&
+										(!file_exists("/var/se3/Docs/media/fonds_ecran/$groupe.jpg"))) {
+											// Mise en place d'une copie au format JPG pour l'interface web:
+											exec("/usr/bin/sudo $chemin_scripts/fond_bmp2jpg.sh $groupe",$tabretour);
+											if(count($tabretour)>0) {
+												echo "<p style='color:red'>Copie JPG pour consultation web:<br />exec(\"/usr/bin/sudo $chemin_scripts/fond_bmp2jpg.sh $groupe\",\$tabretour);<br />";
+												for($i=0;$i<count($tabretour);$i++){
+													echo "\$tabretour[$i]=$tabretour[$i]<br>";
+												}
+											}
+										}
 									}
 
 									//$fermeture=mysql_close();
