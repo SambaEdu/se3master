@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS connexions (
   PRIMARY KEY  (id),
   UNIQUE KEY id_2 (id),
   KEY id (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # Contenu de la table `connexions`
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS params (
   UNIQUE KEY id (id),
   UNIQUE KEY name (name),
   KEY id_2 (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # Contenu de la table `params`
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS sessions (
   PRIMARY KEY  (id),
   UNIQUE KEY id_2 (id,sess),
   KEY id (id,sess)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # Structure de la table `categories`
@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS categories (
   CleID tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (catID,CleID),
   UNIQUE KEY `IntCat` (`IntCat`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # Contenu de la table `categories`
@@ -194,7 +194,7 @@ INSERT INTO categories VALUES (200, 'Ordinateurs', 2);
 CREATE TABLE IF NOT EXISTS configuration (
   cheminvbsse3 varchar(50) NOT NULL default '',
   cheminreseau varchar(100) NOT NULL default ''
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # Structure de la table `corresp`
@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS corresp (
   type varchar(20) NOT NULL default 'restrict',
   PRIMARY KEY  (chemin),
   UNIQUE KEY CleID (CleID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 
 #
@@ -228,7 +228,7 @@ CREATE TABLE IF NOT EXISTS modele (
   etat tinyint(4) default '1',
   PRIMARY KEY  (cle,`mod`),
   UNIQUE KEY modID (modID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 
 #
@@ -242,7 +242,7 @@ CREATE TABLE IF NOT EXISTS restrictions (
   valeur varchar(255) NOT NULL default '',
   PRIMARY KEY  (cleID,groupe),
   UNIQUE KEY resID (resID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 
 #
@@ -261,7 +261,7 @@ CREATE TABLE IF NOT EXISTS devoirs (
   liste_retard text NOT NULL,
   etat char(1) NOT NULL default 'D',
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 
 CREATE TABLE IF NOT EXISTS `alertes` (
@@ -311,7 +311,7 @@ CREATE TABLE IF NOT EXISTS delegation (
   niveau varchar(20) NOT NULL default '',
   PRIMARY KEY  (login,parc),
   UNIQUE KEY ID (ID)
-) TYPE=MyISAM ;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS actionse3 (
   action varchar(30) NOT NULL default '',
@@ -319,7 +319,7 @@ CREATE TABLE IF NOT EXISTS actionse3 (
   jour varchar(30) NOT NULL default '',
   heure time NOT NULL default '00:00:00',
   UNIQUE KEY parc (parc,jour,heure)
-) TYPE=MyISAM ;
+) ENGINE=MyISAM;
 
 -- 
 -- Structure de la table `quotas`
