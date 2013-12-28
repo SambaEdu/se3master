@@ -25,7 +25,8 @@
 if [ -e /root/debug ]; then
 set -x
 fi
-mv /etc/sudoers.se3 /etc/sudoers
+# cp -f /etc/sudoers.se3 /etc/sudoers
+
 
 #Init annuaire et mise en place DB_CONFIG de se3
 /etc/init.d/slapd stop
@@ -153,7 +154,7 @@ case $DEBVER in
     6.0*)
 	echo "Debian squeeze detectee."
 	;;
-    wheezy*)
+    7.*)
 	echo "Debian wheezy detectee."
 	;;
     *)
