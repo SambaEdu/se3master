@@ -8,7 +8,7 @@ CREATE TABLE categories (
   IntCat varchar(100) NOT NULL default '',
   CleID tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (catID,CleID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # Contenu de la table `categories`
@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS configuration;
 CREATE TABLE configuration (
   cheminvbsse3 varchar(50) NOT NULL default '',
   cheminreseau varchar(100) NOT NULL default ''
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # Contenu de la table `configuration`
@@ -51,7 +51,7 @@ CREATE TABLE corresp (
   type varchar(20) NOT NULL default 'restrict',
   PRIMARY KEY  (chemin),
   UNIQUE KEY CleID (CleID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # Contenu de la table `corresp`
@@ -99,7 +99,7 @@ CREATE TABLE modele (
   etat tinyint(4) default '1',
   PRIMARY KEY  (cle,mod),
   UNIQUE KEY modID (modID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # Contenu de la table `modele`
@@ -122,7 +122,7 @@ CREATE TABLE restrictions (
   valeur varchar(100) NOT NULL default '',
   PRIMARY KEY  (cleID,groupe),
   UNIQUE KEY resID (resID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 #
 # Contenu de la table `restrictions`
