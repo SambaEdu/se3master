@@ -250,7 +250,7 @@ echo -e "$COLINFO"
 echo "Traitement sudoers et init ldap"
 echo -e "$COLTXT "
 mv /etc/sudoers /etc/sudoers.orig
-mv /etc/sudoers.se3 /etc/sudoers
+cp /etc/sudoers.se3 /etc/sudoers
 chmod 440 /etc/sudoers
 #Init annuaire et mise en place DB_CONFIG de se3
 /etc/init.d/slapd stop
