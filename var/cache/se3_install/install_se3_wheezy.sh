@@ -709,12 +709,18 @@ if [ ! "$rep" = "n" ]; then
 
 	# Prise en compte des lignes spécifiques à la version 2.1.x backportée
 	
-	chmod 640 $SLAPDCONF
-	chown root.$LDAPGRP $SLAPDCONF
+# 	chmod 640 $SLAPDCONF
+# 	chown root.$LDAPGRP $SLAPDCONF
 	# pour bypasser le nouveau mode de conf slapd
 	mv /etc/ldap/slapd.d /etc/ldap/slapd.d.se3
 	/usr/sbin/slapindex 2>/dev/null
+	chown openldap.openldap /var/lib/ldap/*
 	$INITDSLAPD start
+	if [ "$?" != "0" ]; then
+		echo -e "$COLERREUR Erreur lors du lancement de ldap - impossible de poursuivre"
+		echo -e "$COLTXT\c "
+		exit 1
+	fi
 	sleep 2
 	echo "UPDATE params SET value=\"/etc/$SLAPDIR/slapd.conf\" WHERE name=\"path2slapdconf\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
 fi
