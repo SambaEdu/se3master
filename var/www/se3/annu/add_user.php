@@ -272,7 +272,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 					}
 					$users = search_people ("(cn=$cn)");
 					if ( count ($users) ) {
-						echo gettext("Son identifiant est ")."<STRONG>".$users[0]["uid"]."</STRONG><BR>\n";
+						echo gettext("Son identifiant est ")."<STRONG><a href='people.php?uid=".$users[0]["uid"]."' title=\"Modifier le compte.\">".$users[0]["uid"]."</a></STRONG><BR>\n";
 						echo gettext("Son mot de passe est ")."<STRONG>".$userpwd."</STRONG><BR>\n";
 						$nouveau = array('nom'=>"$nom", 'pre'=>"$prenom", 'uid'=>$users[0]["uid"], 'pwd'=>"$userpwd");
 						$_SESSION['comptes_crees'][]=$nouveau;
