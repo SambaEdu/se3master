@@ -66,7 +66,23 @@ list($user, $groups)=people_get_variables($uid, true);
 #############
 # Fin DEBUG #
 #############
-echo "<H3>".$user["fullname"]."</H3>\n";
+echo "<a href='people.php?uid=".$user["uid"]."' title=\"Rafraichir la page\"><H3>".$user["fullname"]."</H3></a>\n";
+
+if((ldap_get_right("Annu_is_admin",$login)=="Y")&&(isset($_GET['create_home']))&&($_GET['create_home']=='y')) {
+    echo "<p><b>Cr&#233;ation du dossier personnel de ".$user["uid"]."&nbsp;: </b>";
+    exec("sudo /usr/share/se3/shares/shares.avail/mkhome.sh ".$user["uid"],$ReturnValue2);
+    if(count($ReturnValue2)==0) {
+        echo "<span style='color:green'>OK</span></p>";
+    }
+    else {
+        echo "</p><pre style='color:red'>";
+        foreach($ReturnValue2 as $key => $value) {
+            echo "$value";
+        }
+    }
+    echo "</pre>";
+}
+
 echo "<table width=\"80%\"><tr><td>";  
 	if ($user["description"]) echo "<p>".$user["description"]."</p>";
   	if ( count($groups) ) {
@@ -143,6 +159,13 @@ echo "<table width=\"80%\"><tr><td>";
   		}
   		if (count($test_desac)==1) {
   			echo "<li><a href=\"desac_user_entry.php?uid=".$user["uid"]."\" onclick= return getconfirm()>".gettext("D&#233;sactiver ce compte")." </a><br>\n";
+            if(file_exists('/home/'.$user["uid"])) {
+                echo "<li><span style='color:black'>Le dossier personnel existe.</span></li>";
+            }
+            else {
+                echo "<li>Le dossier personnel n'existe pas.<br /><a href='people.php?uid=".$user["uid"]."&amp;create_home=y'>Cr&#233;er le dossier personnel maintenant</a><br />(<em>sinon, il sera cr&#233;&#233; lors de la premiere connexion de l'utilisateur</em>)</li>";
+            }
+
   		} else {
   			//si compte desactive
    			echo "<li><a href=\"desac_user_entry.php?uid=".$user["uid"]."&action=activ\" >".gettext("Activer ce compte")." </a><br>\n";
