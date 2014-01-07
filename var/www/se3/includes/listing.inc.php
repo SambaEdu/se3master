@@ -2,7 +2,7 @@
 
 if (count($_SESSION['comptes_crees']) >= 1) {
 	$serial_listing=rawurlencode(serialize($_SESSION['comptes_crees']));
-	$lien="<a href=\"#\" onclick=\"document.getElementById('postlisting').submit(); return false;\">T&#233;l&#233;charger le listing des derniers utilisateurs cr&#233;&#233;s...</a>";
+	$lien="<a href=\"#\" onclick=\"document.getElementById('postlisting').submit(); return false;\" target=\"_blank\">T&#233;l&#233;charger le listing des derniers utilisateurs cr&#233;&#233;s...</a>";
 
 	echo("<table><tr><td><img src='../elements/images/pdffile.png'></td><td>");
 	echo($lien);

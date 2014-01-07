@@ -424,7 +424,7 @@ if (file_exists("/tmp/changement_mdp.csv")) {
 	if (count($listing, COUNT_RECURSIVE) > 1) {
 		$serial_listing=serialize($listing);
 
-		$lien="<a href=\"#\" onclick=\"document.getElementById('postlisting').submit(); return false;\">T&#233;l&#233;charger le listing des mots de passe modifi&#233;s...</a>";
+		$lien="<a href=\"#\" onclick=\"document.getElementById('postlisting').submit(); return false;\" target=\"_blank\">T&#233;l&#233;charger le listing des mots de passe modifi&#233;s...</a>";
 
 		echo("<table><tr><td><img src='../elements/images/pdffile.png'></td><td>");
 		echo($lien);
