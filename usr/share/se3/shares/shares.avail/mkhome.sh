@@ -22,6 +22,12 @@ then
 fi	
 	
 user=$1
+if [ -z "$1" ]
+then
+	echo "Usage : mkhome.sh user"
+	exit 1
+fi
+
 . /etc/se3/config_m.cache.sh
 
 # Creation du repertoire perso le cas echeant
