@@ -151,33 +151,33 @@ else {
         
     }
     
-    // Menu support seven
-    $resultat=mysql_query("SELECT * FROM params WHERE name='support_seven'");
-    if(mysql_num_rows($resultat)==0){
-            $support_seven=0;
-    }
-    else{
-            $ligne=mysql_fetch_object($resultat);
-            if($ligne->value=="1"){
-                    $support_seven=1;
-            }
-            else {
-                    $support_seven=0;
-            }
-    }
-    if ($support_seven=="1") {
-        $seven_version_install = exec("apt-cache policy samba | grep \"Install\" | cut -d\" \" -f4");
-        
-        $seven_version_dispo = exec("apt-cache policy samba | grep \"Candidat\" | cut -d\" \" -f4");
-        // On teste si on a bien la derniere version
-
-        if ("$seven_version_install" != "$seven_version_dispo") {
-            echo "<tr><td>".gettext("Support des clients seven")."</TD>";
-            echo "<TD align=\"center\">$seven_version_install</TD>";
-            echo "<TD align=\"center\"><b>$seven_version_dispo</b></TD>";
-            echo "</tr>\n";
-        }
-    }
+//     // Menu support seven
+//     $resultat=mysql_query("SELECT * FROM params WHERE name='support_seven'");
+//     if(mysql_num_rows($resultat)==0){
+//             $support_seven=0;
+//     }
+//     else{
+//             $ligne=mysql_fetch_object($resultat);
+//             if($ligne->value=="1"){
+//                     $support_seven=1;
+//             }
+//             else {
+//                     $support_seven=0;
+//             }
+//     }
+//     if ($support_seven=="1") {
+//         $seven_version_install = exec("apt-cache policy samba | grep \"Install\" | cut -d\" \" -f4");
+//         
+//         $seven_version_dispo = exec("apt-cache policy samba | grep \"Candidat\" | cut -d\" \" -f4");
+//         // On teste si on a bien la derniere version
+// 
+//         if ("$seven_version_install" != "$seven_version_dispo") {
+//             echo "<tr><td>".gettext("Support des clients seven")."</TD>";
+//             echo "<TD align=\"center\">$seven_version_install</TD>";
+//             echo "<TD align=\"center\"><b>$seven_version_dispo</b></TD>";
+//             echo "</tr>\n";
+//         }
+//     }
 
     // Module clonage
     $clonage_actif = exec("dpkg -s se3-clonage | grep \"Status: install ok\" > /dev/null && echo 1");
