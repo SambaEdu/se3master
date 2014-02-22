@@ -646,10 +646,10 @@ echo "</td></tr>\n";
 echo "<tr><td>".gettext("Autoriser l'acc&#232;s &#224; la ressource public ")."</td><td align=\"center\">";
 
 if ($autoriser_partage_public=="y") {
-        echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer ici afin de d'interdire l'acc&#232;s au dossier /var/se3/Docs/public')")."\">";
+        echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer ici afin de d\'interdire l\'acc&#232;s au dossier /var/se3/Docs/public')")."\">";
         echo "<a href=conf_params.php?action=change&amp;varb=autoriser_partage_public&amp;valeur=n&amp;cat=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
 } else {
-        echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Cliquer ici afin de d'autoriser l'acc&#232;s au dossier /var/se3/Docs/public')")."\">";
+        echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Cliquer ici afin de d\'autoriser l\'acc&#232;s au dossier /var/se3/Docs/public')")."\">";
         echo "<a href=conf_params.php?action=change&amp;varb=autoriser_partage_public&amp;valeur=y&amp;cat=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
 }
 
