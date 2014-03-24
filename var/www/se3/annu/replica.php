@@ -144,7 +144,7 @@ if ($action == "Ok" || $replica=="0") {
 	//Si pas d'erreurs on peut modifier dans la table et lancer le script 
 	if ($ok != "0" && $ldap_ok != "0") {
 		
-		//Lance le script mkslurpd
+		//Lance le script mkslapd
 		$resultat=mysql_query("SELECT * from params where name='ldap_server'");
 		if ($resultat)
   	  		while ($r=mysql_fetch_array($resultat)) {
