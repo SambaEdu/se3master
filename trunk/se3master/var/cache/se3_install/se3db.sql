@@ -148,7 +148,7 @@ INSERT INTO `params` VALUES ('', 'se3mask', '', 0, 'masque sous reseau du serveu
 INSERT INTO `params` VALUES ('', 'ecard', '', 0, 'nom de la carte ethernet du serveur', 4);
 INSERT INTO `params` VALUES ('', 'corbeille', '0', 0, 'Etat activation de la corbeille', 4);
 INSERT INTO `params` VALUES ('', 'hide_logon', '1', 0, 'Visibilite script de login ou non', 4);
-INSERT INTO `params` VALUES ('', 'localmenu', '0', 0, 'menu demarrer en local ou distant', 4);
+INSERT INTO `params` VALUES ('', 'localmenu', '1', 0, 'menu demarrer en local ou distant', 4);
 # --------------------------------------------------------
 
 #
