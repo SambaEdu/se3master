@@ -2,7 +2,7 @@
 
 ## $Id$ ##
 #
-##### script permettant l'appel à diverses fonctions #####
+##### script permettant l'appel Ã  diverses fonctions #####
 #
 
 function getmypasswd {
@@ -66,16 +66,18 @@ MAIL_REPORT()
 [ -e /etc/ssmtp/ssmtp.conf ] && MAIL_ADMIN=$(cat /etc/ssmtp/ssmtp.conf | grep root | cut -d= -f2)
 if [ ! -z "$MAIL_ADMIN" ]; then
 	REPORT=$(cat $REPORT_FILE)
-	#On envoie un mail a  l'admin
+	#On envoie un mail aÂ  l'admin
 	echo "$REPORT"  | mail -s "$1" $MAIL_ADMIN
 fi
 }
 
 LINE_TEST()
 {
-if ( ! wget -q --output-document=/dev/null 'ftp://wawadeb.crdp.ac-caen.fr/welcome.msg') ; then
+if ( ! wget -q --output-document=/dev/null 'http://wawadeb.crdp.ac-caen.fr/index.html') ; then
 	ERREUR "Votre connexion internet ne semble pas fonctionnelle !!" 
 	exit 1
+else
+	echo "connexion internet Ok"
 fi
 }
 
@@ -86,12 +88,12 @@ do
 	h) echo "script permettant d'initialiser un ensemble de fonctions utiles" 
 	echo "usage: $0 aucune option | -h pour mode verbeux
 liste des fonctions disponibles :
-ERREUR  : prend en argument le message à afficher
+ERREUR  : prend en argument le message Ã  afficher
 POURSUIVRE : sans argument, permet de demander de poursuivre le script ou de l'abandonner
-MAIL_REPORT : envoi un mail a l'admin si ssmtp configuré, prend en argument le sujet. Le contenu du mail sera celui de la variable \$REPORT_FILE que l'on aura au préalable complété avec \">\". 
+MAIL_REPORT : envoi un mail a l'admin si ssmtp configurÃ©, prend en argument le sujet. Le contenu du mail sera celui de la variable \$REPORT_FILE que l'on aura au prÃ©alable complÃ©tÃ© avec \">\". 
 Ex : echo \"pas assez de place sur la partition\" > \$REPORT_FILE.  MAIL_REPORT \"se3 : avertissement\".
 SETMYSQL : permet d'inserer une entree ds la table params de se3db. 
-SETMYSQL \"name\" \"valeur\" \"description\" \"n° categorie\"
+SETMYSQL \"name\" \"valeur\" \"description\" \"nÂ° categorie\"
 "
 	exit 0;;
 	esac
