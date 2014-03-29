@@ -126,11 +126,13 @@ fi
 
 LINE_TEST()
 {
-if ( ! wget -q --output-document=/dev/null 'ftp://wawadeb.crdp.ac-caen.fr/welcome.msg') ; then
+if ( ! wget -q --output-document=/dev/null 'http://wawadeb.crdp.ac-caen.fr/index.html') ; then
 	echo "Votre connexion internet ne semble pas fonctionnelle !!" | tee -a $REPORT_FILE
 	MAIL_REPORT
 	echo "</pre>"
 	exit 1
+else
+	echo "Connexion internet Ok"
 fi
 }
 
