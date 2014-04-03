@@ -48,7 +48,7 @@ $result->code && warn "failed to delete entry ", $result->error ;
 $recherche = $ldap->search( base => $parcDn,
                          scope => "sub",
                          filter => "cn=*",
-                         attrs => "member"
+                         attrs => ['member']
                          );
 
 die("Echec à l'entrée dans ldap.\n") if ($result->code != 0);
