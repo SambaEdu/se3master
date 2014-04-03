@@ -58,7 +58,7 @@ foreach $entree_p ($recherche_p->all_entries()) {
             $recherche_h =$ldap->search( base => $computersDn,
                                          scope => "sub",
                                          filter => "cn=$cn_computer[1]",
-                                         attrs => "cn",
+                                         attrs => [ 'cn' ]
                                          );
 			if ($recherche_h->code()) {  # la machnine n'existe plus !
 			    $parc=$entree_p->get_value('dn',asref=>1);
@@ -157,8 +157,8 @@ for ($i=0;$i<=$#computern;$i++) {
 #Par défaut toutes les imprimantes sont accessibles au serveur Samba.
 $nb_printers=$#printer_n;
 
-$name_server =`/bin/hostname`;
-$name_server =~ s/\n//g;
+$name_server = $netbios_name;
+
 system ("/bin/rm -f /etc/samba/printers_se3/",$name_server,".inc");
 $i=0;
 foreach $k (@printer_n) {
