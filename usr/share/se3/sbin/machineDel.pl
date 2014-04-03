@@ -31,7 +31,7 @@ $ldap->bind(); # Anonymous BIND
 $res = $ldap->search(
    base => "cn=$machine,$computersDn",
    scope => 'base',
-   attrs => 'cn',
+   attrs => ['cn'],
    filter => "cn=$machine"
 );
 print "$machine n'existe pas dans $computersDn\n"  if $res->code;
@@ -68,7 +68,7 @@ system("/usr/share/se3/sbin/entryDel.pl \"cn=$machine,$computersDn\"");
 $res = $ldap->search(
    base => "$parcsDn",
    scope => 'base',
-   attrs => 'cn',
+   attrs => ['cn'],
    filter => 'member=cn='.$machine.','.$computerDn
 );
 print "$machine n'est pas dans un parc\n"  if $res->code;
