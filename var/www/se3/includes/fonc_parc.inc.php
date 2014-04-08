@@ -185,8 +185,10 @@ function avoir_systemid($nom_machine) { // retourne l'ID de $nom_machine ou 0 a 
 function fping($ip)
 {
 //	return exec("ping ".$ip." -c 1 -w 1 | grep received | awk '{print $4}'");
-    system("ping  -c1 -W1 -n ".$ip." > /dev/null", $ret);
-    if ( $ret == 0 ) {
+//      system("ping ".$ip." -c 1 -w 1 > /dev/null", $ret);
+
+	exec("/usr/share/se3/sbin/tcpcheck 1 $ip:445 | grep alive",$arrval,$ret);
+    if ( $ret != "1" ) {
         return 1;
     }
     else {
