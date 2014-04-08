@@ -197,12 +197,13 @@ function start_poste($action, $name)
                 echo "On reboote avec l'action <b>".$action."</b> le poste <b>".$name."</b> :<br>\n";
                 if (search_samba($name)) {
                     // machine windows
-                    $ret.=system ("/usr/bin/net rpc shutdown -t 2 -f -r -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"");
+                    system ("/usr/bin/net rpc shutdown -t 2 -f -r -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"");
+					system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." reboot");
                     echo "<br><br>";
                 }
                 else {
                     // poste linux : ne marchera pas, mais on verra plus tard...
-                    $ret.=system ( "/usr/bin/ssh -o StrictHostKeyChecking=no ".$name." reboot");
+                    system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." reboot");
                     echo "<br><br>";
                 }
             }
@@ -211,7 +212,7 @@ function start_poste($action, $name)
                 echo "On reboote avec l'action <b>".$action."</b> le poste <b>".$name."</b> :<br>\n";
                 echo "<b>Attention, reboot impossible</b>, la machine est injoignable ! <br><br>";
             }
-        return $ret;
+        
         break;
 
         case "shutdown":
@@ -220,12 +221,13 @@ function start_poste($action, $name)
             if (search_samba($name)) {
                 // machine windows
                  $ret.=system ("/usr/bin/net rpc shutdown -t 2 -f -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"");
+				 system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." halt");
                  echo "<br><br>";
                 //$ret.="/usr/bin/net rpc shutdown -t 2 -f -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"<br>";
                   }
                 else {
                     // poste linux : ne marchera pas, mais on verra plus tard...
-                    system ( "/usr/bin/ssh -o StrictHostKeyChecking=no ".$name." halt");
+                    system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." halt");
                     echo "<br><br>";
                 }
         }
