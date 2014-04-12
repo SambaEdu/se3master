@@ -427,7 +427,7 @@ function type_os($nom_machine) { // retourne l'os de la machine
 	$authlink_invent=@mysql_connect($_SESSION["SERVEUR_SQL"],$_SESSION["COMPTE_BASE"],$_SESSION["PSWD_BASE"]);
 	@mysql_select_db($dbnameinvent) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
 	
-	$query="select OSNAME from hardware where NAME='$nom_machine'";
+	$query="select OSNAME from hardware where NAME='$nom_machine' order by LASTDATE DESC limit 0,1";
 	$result = mysql_query($query,$authlink_invent);
 	if ($result) {
         	$ligne=mysql_num_rows($result);
@@ -443,17 +443,11 @@ function type_os($nom_machine) { // retourne l'os de la machine
 				} elseif (preg_match('/2003/i',$retour)) {
 					$retour="XP";
 					return $retour;
-				} elseif (preg_match('/ME/i',$retour)) {
-					$retour="98";
-					return $retour;
-				} elseif (preg_match('/98/i',$retour)) {
-				        $retour="98";
-					return $retour;
-				} elseif (preg_match('/7/i',$retour)) {
-				         $retour="7";
-					 return $retour;
 				} elseif (preg_match('/Linux/i',$retour)) {
 				         $retour="Linux";
+					 return $retour;
+				} elseif (preg_match('/7/i',$retour)) {
+				         $retour="7";
 					 return $retour;
 				} else return 0;
 				
