@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS connexions (
 
 CREATE TABLE IF NOT EXISTS params (
   id smallint(5) unsigned NOT NULL auto_increment,
-  name varchar(20) NOT NULL default '',
+  name varchar(50) NOT NULL default '',
   value varchar(100) NOT NULL default '',
   srv_id smallint(4) NOT NULL default '0',
   descr varchar(50) NOT NULL default '',
