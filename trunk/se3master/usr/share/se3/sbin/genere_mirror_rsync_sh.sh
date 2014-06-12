@@ -131,7 +131,7 @@ echo '' | tee -a \$FICHIERLOG
 
 echo 'rsync de la partition /var' | tee -a \$FICHIERLOG
 echo '' | tee -a \$FICHIERLOG
-/usr/bin/rsync -av --delete --exclude=/lock/*  --exclude=/lib/backuppc/* --exclude=/se3/* /var/* /mirror/part_var | tee -a \$FICHIERLOG
+/usr/bin/rsync -av --delete --exclude=/lock/*  --exclude=/lib/backuppc/* --exclude=/se3/* /var/ /mirror/part_var/ | tee -a \$FICHIERLOG
 umount \$PARTVAR_CIBLE
 
 echo '' | tee -a \$FICHIERLOG
@@ -169,13 +169,7 @@ echo '' | tee -a \$FICHIERLOG
 
 echo 'rsync de la partition /home' | tee -a \$FICHIERLOG
 echo '' | tee -a \$FICHIERLOG
-/usr/bin/rsync -av --delete /home/*  /mirror/part_home | tee -a \$FICHIERLOG
-# On ne sauvegarde plus les ACL sur /home parce qu'on sait les reconstruire
-#cd /home
-#echo 'Sauvegarde / Restauration des ACLS en cours pour /home ....'
-#getfacl -R . > /mirror/part_home/list_acls.txt
-#cd /mirror/part_home/
-#setfacl --restore=list_acls.txt
+/usr/bin/rsync -av --delete /home/  /mirror/part_home/ | tee -a \$FICHIERLOG
 cd /
 umount \$PARTHOME_CIBLE
 
