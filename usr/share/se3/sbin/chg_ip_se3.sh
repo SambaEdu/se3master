@@ -427,6 +427,15 @@ rm -rf /home/netlogon/machine/*
 /usr/share/se3/sbin/update-smbconf.sh
 
 
+
+# Reconfiguration de se3-clients-linux
+echo "Reconfiguration de se3-clients-linux si besoin est"
+CLIENTLINUX="$(aptitude search  se3-clients-linux | grep ^i)"
+if [ -n "$CLIENTLINUX"  ]; then
+     dpkg-reconfigure se3-clients-linux
+fi
+
+
 echo -e "$COLINFO"
 echo "Par sécurité:"
 echo -e "$COLTXT\c"
@@ -493,6 +502,15 @@ rm -rf /home/netlogon/machine/*
 # logonpy
 /usr/share/se3/sbin/update-logonpy.sh
 /usr/share/se3/sbin/update-smbconf.sh
+
+echo \"Reconfiguration de se3-clients-linux si besoin est\"
+CLIENTLINUX=\"$(aptitude search  se3-clients-linux | grep ^i)\"
+if [ -n \"$CLIENTLINUX\"  ]; then
+     dpkg-reconfigure se3-clients-linux
+fi
+
+
+
 " >> retablissement_config_initiale.sh
 
 
