@@ -259,6 +259,8 @@ chmod 700 /var/se3/Docs/trombine
 chown admin.admins /var/se3/Docs/trombine
 # Droits fond ecran, on empeche les petits camarades de voir les fonds des autres (trombi)
 chmod o=x /var/se3/Docs/media/fonds_ecran
+chown admin.admins /var/se3/Docs/media/fonds_ecran
+
 setfacl $OPTION -m g:admins:rwx /var/se3/Docs
 setfacl $OPTION -m d:g:admins:rwx /var/se3/Docs
 setfacl -m g:admins:rwx /var/se3/Docs/trombine
