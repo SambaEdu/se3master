@@ -999,6 +999,13 @@ function verif_employeeNumber($employeeNumber) {
 	$attribut=array("uid");
 	$tab4=get_tab_attribut("trash","employeenumber=".sprintf("%05d",$employeeNumber),$attribut);
 
+
+	$attribut=array("uid");
+	$tab5=get_tab_attribut("people","employeenumber=".preg_replace("/^0*/", "", $employeeNumber),$attribut);
+
+	$attribut=array("uid");
+	$tab6=get_tab_attribut("trash","employeenumber=".preg_replace("/^0*/", "", $employeeNumber),$attribut);
+
 	/*
 	echo "count($tab)=".count($tab)."<br />\n";
 	for($i=0;$i<count($tab);$i++){
@@ -1010,6 +1017,8 @@ function verif_employeeNumber($employeeNumber) {
 	elseif(count($tab2)>0){$tab2[-1]="people";return $tab2;}
 	elseif(count($tab3)>0){$tab3[-1]="trash";return $tab3;}
 	elseif(count($tab4)>0){$tab4[-1]="trash";return $tab4;}
+	elseif(count($tab5)>0){$tab5[-1]="people";return $tab5;}
+	elseif(count($tab6)>0){$tab6[-1]="trash";return $tab6;}
 	else{return false;}
 }
 
