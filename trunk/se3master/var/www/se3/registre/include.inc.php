@@ -338,7 +338,7 @@ function affichelistecat($cible, $testniveau, $cat) {
                 echo "<td class=\"enabledheader\" width=\"130\" height=\"30\" align=\"center\">";
             else
                 echo "<td class=\"menuheader\" width=\"130\" height=\"30\" align=\"center\">";
-            echo "<a href=\"$cible&cat=$row[0]\" >$row[0]</a></td>";
+            echo "<a href=\"$cible&cat=$row[0]\" >" . htmlentities($row[0]) . "</a></td>";
             if (($i % 7) == 0) {
                 echo "</tr><tr>";
             }
@@ -361,7 +361,7 @@ function affichelistecat($cible, $testniveau, $cat) {
         while ($row = mysql_fetch_row($resultat)) {
             if ($row[0]) {
                 echo "<td class=\"menucell\" width=\"130\" height=\"30\" align=\"center\">";
-                echo "<a href=\"$cible&cat=$cat&sscat=$row[0]\" >$row[0]</a></td>";
+                echo "<a href=\"$cible&cat=$cat&sscat=$row[0]\" >" . htmlentities($row[0]) . "</a></td>";
                 if (($i % 7) == 0) {
                     echo "</tr><tr>";
                 }
@@ -391,25 +391,25 @@ function affichelisteget($cible, $getcible1, $getcible2, $query, $affichetitle, 
             echo "<tr><td><DIV ALIGN=CENTER>";
             echo "<a href=\"#\" onClick=\"window.open('aide_cle.php?cle=$row[1]','aide','scrollbars=yes,width=600,height=620')\">";
             echo "<img src=\"/elements/images/system-help.png\" alt=\"" . gettext("Aide") . "\" title=\"$row[7]\" width=\"16\" height=\"18\" border=\"0\" /></a></td>";
-            echo "<td>$row[0]&nbsp;</DIV></td><td><DIV ALIGN=CENTER>&nbsp;$row[4]</DIV></td>";
+            echo "<td>" . htmlentities($row[0]) . "&nbsp;</DIV></td><td><DIV ALIGN=CENTER>&nbsp;" . htmlentities($row[4]) . "</DIV></td>";
             if ($row[6] == "config") {
                 if ($testniveau > 2) {
                     echo "<a href=\"$cible&$getcible1=$row[1]\"><td>";
-                    echo "<DIV ALIGN=CENTER>&nbsp;$row[2]</DIV> </td></a><td>&nbsp;</td>";
+                    echo "<DIV ALIGN=CENTER>&nbsp;" . htmlentities($row[2]) . "</DIV> </td></a><td>&nbsp;</td>";
                 } else {
-                    echo"<td><DIV ALIGN=CENTER>&nbsp;$row[2]</DIV><td>&nbsp;</td>";
+                    echo"<td><DIV ALIGN=CENTER>&nbsp;" . htmlentities($row[2]) . "</DIV><td>&nbsp;</td>";
                 }
             }
 
             if ($row[6] == "restrict") {
                 if ($testniveau > 2) {
                     echo "<a href=\"$cible&modifkey=$row[1] \"><td BGCOLOR=\"#a5d6ff\"><DIV ALIGN=CENTER>";
-                    echo "&nbsp;$row[2]</DIV> </td></a>";
+                    echo "&nbsp;" . htmlentities($row[2]) . "</DIV> </td></a>";
                     echo "<a href=\"$cible&$getcible1=$row[1]\"><td BGCOLOR=\"#e0dfde\">";
-                    echo "<DIV ALIGN=CENTER>$row[5]</DIV></td></a>";
+                    echo "<DIV ALIGN=CENTER>" . htmlentities($row[5]) . "</DIV></td></a>";
                 } else {
                     echo "<td BGCOLOR=\"#FF0000\"><DIV ALIGN=CENTER>";
-                    echo "&nbsp;$row[2]</DIV> </td><td BGCOLOR=\"#e0dfde\"><DIV ALIGN=CENTER>$row[5]</DIV></td>";
+                    echo "&nbsp;" . htmlentities($row[2]) . "</DIV> </td><td BGCOLOR=\"#e0dfde\"><DIV ALIGN=CENTER>" . htmlentities($row[5]) . "</DIV></td>";
                 }
             }
 

@@ -149,14 +149,14 @@ if ($test) {
             //bouton aide
             echo "<tr><td><a href=\"#\" onClick=\"window.open('aide_cle.php?cle=$row[1]','aide','scrollbars=yes,width=600,height=620')\">\n";
             echo "<img src=\"/elements/images/system-help.png\" alt=\"aide\" title=\"$row[7]\" width=\"15\" height=\"15\" border=\"0\"></a></td>\n";
-            echo "<td><DIV ALIGN=CENTER>$row[9]</DIV></td>\n";
-            echo "<td><DIV ALIGN=CENTER>$row[0]</DIV></td>\n";
-            echo "<td><DIV ALIGN=CENTER>$row[4]</DIV></td>\n";
+            echo "<td><DIV ALIGN=CENTER>" . htmlentities($row[9]) . "</DIV></td>\n";
+            echo "<td><DIV ALIGN=CENTER>" . htmlentities($row[0]) . "</DIV></td>\n";
+            echo "<td><DIV ALIGN=CENTER>" . htmlentities($row[2]) . "</DIV></td>\n";
             $act = False;
             if ($row['type'] == "config") {
                 $state = 1;
                 echo "<td BGCOLOR=#a5d6ff><DIV ALIGN=CENTER>
-					<a href=\"#\" onClick=\"window.open('edit_cle.php?cle=$row[1]&template=$row[9]&state=$state','Editer','scrollbars=no,width=400,height=200')\">$row[8]</a></DIV></td>";
+					<a href=\"#\" onClick=\"window.open('edit_cle.php?cle=$row[1]&template=$row[9]&state=$state','Editer','scrollbars=no,width=400,height=200')\">" . htmlentities($row[8]) . "</a></DIV></td>";
             } elseif ($row['type'] == "restrict") {
                 if ($row[8] == $row[5]) {
                     echo "<td BGCOLOR=#e0dfde><DIV ALIGN=CENTER>

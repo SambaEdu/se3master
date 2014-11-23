@@ -108,15 +108,15 @@ switch ($act) {
             $ligne = "</categories>\n</se3mod>\n";
             fputs($get, $ligne);
             fclose($get);
-            $get = fopen($fichier_mod_xml, "r");
-            header("Content-type: application/force-download");
-            header("Content-Length: " . filesize($fichier_mod_xml));
-            header("Content-Disposition: attachment; filename=modeles.xml");
-            readfile($fichier_mod_xml);
-            if (file_exists($fichier_mod_xml))
-                unlink($fichier_mod_xml);
-            mysql_close();
-
+            if (file_exists($fichier_mod_xml)) {
+	            header("Content-type: application/force-download");
+        	    header("Content-Length: " . filesize($fichier_mod_xml));
+            	    header("Content-Disposition: attachment; filename=modeles.xml");
+            	    readfile($fichier_mod_xml);
+		    exit;
+                    unlink($fichier_mod_xml);
+            }
+	    mysql_close();
 
             include "entete.inc.php";
             include "ldap.inc.php";
