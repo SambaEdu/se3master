@@ -108,7 +108,7 @@ switch ($modif) {
             echo gettext("Pour info :") . " $row[7] <br><br><table border=\"1\"><tr><td>&nbsp;</td><td>" . gettext("Ancienne valeur") . "</td>";
             echo "<td>" . gettext("Nouvelle valeur") . "</td></tr>";
             echo "<tr><td>" . gettext("Intitule") . "</td><td>$row[0]&nbsp;</td><td><INPUT TYPE=\"text\" NAME=\"newintit\" value=\"$row[0]\"size=\"70\"></td><tr>";
-            echo "<tr><td>" . gettext("Valeur") . "</td><td>$row[2]&nbsp;</td><td><INPUT TYPE=\"text\" NAME=\"newval\" value=\"$row[2]\" ></td><tr>";
+            echo "<tr><td>" . gettext("Valeur") . "</td> <td>" . htmlentities($row[2]) . "</td><td><INPUT TYPE=\"text\" NAME=\"newval\" value=\"" . $row[2] . "\"></td><tr>";
             echo "<tr><td>" . gettext("Categorie") . "</td><td>$row[8]&nbsp;</td><td><INPUT TYPE=\"text\"  NAME=\"newcatm\"><select name=\"newcat\" size=\"1\" >";
 
             //la cle est dans une categorie : on positionne le menu deroulant dessus
