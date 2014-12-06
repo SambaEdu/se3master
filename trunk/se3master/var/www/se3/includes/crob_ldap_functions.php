@@ -1648,8 +1648,8 @@ function add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber){
 	$attribut["sambaAcctFlags"]="[U          ]";
 	$attribut["sambaLMPassword"]="$sambaLMPassword";
 	$attribut["sambaNTPassword"]="$sambaNTPassword";
-	$attribut["userPassword"]="{crypt}$userPassword";
-
+	$attribut["userPassword"]="$userPassword";
+	$attribut["shadowLastChange"]=time();
 	// IL faut aussi l'employeeNumber
 	if("$employeeNumber"!=""){
 		$attribut["employeeNumber"]="$employeeNumber";

@@ -7,11 +7,8 @@ require '/etc/SeConfig.ph';
 die("Erreur d'argument.\n") if ($#ARGV != 1);
 ($uid, $password) = @ARGV;
 $dn = "uid=$uid,$peopleDn";
-# Génération du mot de passe crypté
-$salt  = chr (rand(75) + 48);
-$salt .= chr (rand(75) + 48);
-$crypt = crypt $password, $salt;
-
+# Generation du mot de passe crypte
+$crypt = `/usr/sbin/slappasswd -h {MD5} -s '$password'`;
 ($lmPassword, $ntPassword) = mkNtPasses($password);
 
 $ldap = Net::LDAP->new(
@@ -36,18 +33,19 @@ if (($res->entries)[0]) {
 $res = $ldap->modify(
 		     $dn,
 		     replace => {
-				 userPassword => "{crypt}$crypt",
+				 userPassword => $crypt,
 				 sambaNTPassword   => $ntPassword,
-				 sambaLMPassword   => $lmPassword
-				}
+				 sambaLMPassword   => $lmPassword,
+				 shadowLastChange  => time 				}
 		    );
 } else {
 $res = $ldap->modify(
 		     $dn,
 		     replace => {
-				 userPassword => "{crypt}$crypt",
+				 userPassword => $crypt,
 				 ntPassword   => $ntPassword,
-				 lmPassword   => $lmPassword
+				 lmPassword   => $lmPassword,
+				 shadowLastChange  => time
 				}
 		    );
 }

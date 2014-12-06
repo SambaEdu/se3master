@@ -12,10 +12,10 @@ if ( !$password ) {
                 exit 1;
 }
 
-# Génération du mot de passe crypté
-$salt  = chr (rand(75) + 48);
-$salt .= chr (rand(75) + 48);
-$crypt = crypt $password, $salt;
+# Generation du mot de passe crypte
+$crypt = `/usr/sbin/slappasswd -h {MD5} -s '$password'`;
+
+
 
 #return "$crypt";
 print "$crypt";

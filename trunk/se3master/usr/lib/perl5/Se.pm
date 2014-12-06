@@ -379,7 +379,7 @@ sub addUserEntry {
 	    'uidNumber',      $uidNumber,
 	    'gidNumber',      $gid,
 	    'homeDirectory',  "/home/$uid",
-	    'userPassword',   "{crypt}$crypt",
+	    'userPassword',   $crypt,
 	    'gecos',          $gecos,
 	    'sambaSID',      "$domainsid-$rid",
 	    'sambaPrimaryGroupSID', "$domainsid-513",
@@ -387,7 +387,9 @@ sub addUserEntry {
 	    'sambaNTPassword',     $ntPassword,
 	    'sambaPwdMustChange',  '2147483647',
             'sambaPwdLastSet',     '1',
-	    'sambaAcctFlags',      '[U          ]'
+	    'sambaAcctFlags',      '[U          ]',
+            'shadowLastChange',	time
+
 	   );
   } else {
   @entry = (
@@ -407,7 +409,7 @@ sub addUserEntry {
 	    'uidNumber',      $uidNumber,
 	    'gidNumber',      $gid,
 	    'homeDirectory',  "/home/$uid",
-	    'userPassword',   "{crypt}$crypt",
+	    'userPassword',   $crypt,
 	    'gecos',          $gecos,
 	    'rid',            $rid,
 	    'primaryGroupId', $pgrid,
@@ -643,9 +645,10 @@ sub gep2posixAccount {
   $uid = mkUid(unac_string('utf8', ($prenom1)), unac_string('utf8', ($nom1)));
 
   # Génération du mot de passe crypté
-  $salt  = chr (rand(75) + 48);
-  $salt .= chr (rand(75) + 48);
-  $crypt = crypt $password, $salt;
+#  $salt  = chr (rand(75) + 48);
+#  $salt .= chr (rand(75) + 48);
+#  $crypt = crypt $password, $salt;
+  $crypt = `/usr/sbin/slappasswd -h {MD5} -s '$password'`;
 
   # Génération de cn, givenName et sn
   $cn = ucfirst($prenom1);
