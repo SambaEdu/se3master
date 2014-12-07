@@ -111,13 +111,13 @@ if [ ! -d "/home/$user" -o ! -d "/home/$user/profil" ]; then
 else
 	if [ "localmenu" == "1" ]; then
 		# il faut creer le menu dans profiles	
-		pathDemarrer="/home/profiles/$user/Demarrer"
-		if [ -d /home/profiles/$user ]; then 
+		pathDemarrer="/home/profiles/$user.V2/Demarrer"
+		if [ -d /home/profiles/$user.V2 ]; then 
 			find "$pathDemarrer" -group root # -delete
 		else
-			mkdir -p "$pathDemarrer" && chown -R  $user:admins /home/profiles/$user
+			mkdir -p "$pathDemarrer" && chown -R  $user:lcs-users /home/profiles/$user.V2
 		fi
-		[ -d /home/$user/profil/Demarrer ] && mv /home/$user/profil/Demarrer /home/profiles/$user
+		[ -d /home/$user/profil/Demarrer ] && mv /home/$user/profil/Demarrer /home/profiles/$user.V2
 	fi
 	useruid=`getent passwd $user | gawk -F ':' '{print $3}'`
 	prop=`stat -c%u /home/$user`

@@ -36,7 +36,7 @@ $ldap->bind(); # Anonymous BIND
 $res = $ldap->search(
 		     base     => "$baseDn",
 		     scope    => 'sub',
-		     attrs    => 'dn',
+		     attrs    => ['dn'],
 		     filter   => "(&(memberUid=$rdnValue)(objectClass=posixGroup))"
 		    );
 
@@ -61,7 +61,7 @@ foreach $entry ($res->entries) {
 $res2 = $ldap->search(
 		     base     => "$baseDn",
 		     scope    => 'sub',
-		     attrs    => 'dn',
+		     attrs    => ['dn'],
 		     filter   => "(&(member=$dn)(objectClass=groupOfNames))"
 		    );
 
@@ -89,7 +89,7 @@ foreach $entry2 ($res2->entries) {
 $res3 = $ldap->search(
 		      base     => "$baseDn",
 		      scope    => 'sub',
-		      attrs    => 'dn',
+		      attrs    => ['dn'],
 		      filter   => "owner=$dn"
 		     );
 
