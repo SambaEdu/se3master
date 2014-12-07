@@ -208,7 +208,7 @@ function fping($ip)
 
 function ssh($ip)
 {
-	$fp=@fsockopen($ip,22,&$errno,&$errstr,5);
+	$fp=@fsockopen($ip,22,$errno,$errstr,5);
 	if (!$fp) {
 	   return 0;
 	} else {  return 1; }
@@ -226,7 +226,7 @@ function ssh($ip)
 
 function ts($ip)
 {
-	$fp=@fsockopen($ip,3389,&$errno,&$errstr,5);
+	$fp=@fsockopen($ip,3389,$errno,$errstr,5);
 	if (!$fp) {
 		return 0;
 	} else {
@@ -282,7 +282,7 @@ return $ts;
 
 function vnc($ip)
 {
-$fp=@fsockopen($ip,5900,&$errno,&$errstr,5);
+$fp=@fsockopen($ip,5900,$errno,$errstr,5);
 if (!$fp) {
  //  echo "$errstr ($errno)<br />\n";
    return 0;

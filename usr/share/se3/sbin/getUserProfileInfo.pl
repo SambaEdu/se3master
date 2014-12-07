@@ -22,7 +22,7 @@ die if $uid eq '';
   $test = $ldap->search(
                        base     => "$baseDn",
                        scope    => 'sub',
-                       attrs    => 'uid',
+                       attrs    => ['uid'],
                        filter   => "uid=$uid"
                       );
 

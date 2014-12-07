@@ -23,8 +23,8 @@ $ldap = Net::LDAP->new(
 		       version => "$slapdVersion"
 		      );
 $ldap->bind(
-	    $adminDn,
-	    password => $adminPw
+	    "$adminDn",
+	    password => "$adminPw"
 	   );
 $res = $ldap->modify(
 		      $dnWhereToAdd,
@@ -48,17 +48,17 @@ sub typeOfGroup {
   $res = $ldap->search(
 		       base     => "$dnToSearchIn",
 		       scope    => 'base',
-		       attrs    => 'objectClass',
+		       attrs    => ['objectClass'],
 		       filter   => 'objectClass=*'
 		      );
-  
+  die("Erreur LDAP : " . $res->error . ".\n") if ($res->code ne 0);  
   foreach $entry ($res->entries) {
     @classes  = $entry->get_value('objectClass');
   }
   foreach $classe (@classes) {
-    $type = $classe if ($classe =~ /posixgroup/i or $classe =~ /groupofnames/i);
+    $type = $classe if ($classe =~ /posixGroup/i or $classe =~ /groupOfNames/i);
   }
-  die ("Erreur de recherche sur $dnToSearchIn.\n") if (!defined($type));
+  die ("Erreur de recherche sur $dnToSearchIn pour $type.\n") if (!defined($type));
   
   if ($type =~ /posixGroup/i) {
     $attribute = 'memberUid';

@@ -22,7 +22,7 @@ $ldap->bind(
 $res = $ldap->search(
                     base     => "ou=groups,$baseDn",
                     scope    => 'sub',
-                    attrs    => 'dn',
+                    attrs    => ['dn'],
                     filter   => "(&(cn=Cours*))"
                     );
 

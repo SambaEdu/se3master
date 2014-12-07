@@ -13,7 +13,7 @@ $attribute = typeOfGroup($dnToSearchIn);
 $res = $ldap->search(
 		      base     => "$dnToSearchIn",
 		      scope    => 'base',
-		      attrs    => $attribute,
+		      attrs    => ['$attribute'],
 		      filter   => 'objectClass=*'
 		     );
 
@@ -44,7 +44,7 @@ sub typeOfGroup {
   $res = $ldap->search(
 		       base     => "$dnToSearchIn",
 		       scope    => 'base',
-		       attrs    => 'objectClass',
+		       attrs    => ['objectClass'],
 		       filter   => 'objectClass=*'
 		      );
   

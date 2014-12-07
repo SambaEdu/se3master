@@ -53,7 +53,7 @@ sub typeOfGroup {
   $res = $ldap->search(
 		       base     => "$dnToSearchIn",
 		       scope    => 'base',
-		       attrs    => 'objectClass',
+		       attrs    => ['objectClass'],
 		       filter   => 'objectClass=*'
 		      );
   
