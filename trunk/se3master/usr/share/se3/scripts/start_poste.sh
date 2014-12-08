@@ -41,11 +41,17 @@ else
 				echo "<br><h2>Action sur : $1</h2><br>"
 				if [ "$2" = "shutdown" ]; then
 					echo "<h3>Tentative d'arret de la machine $1</h3><br>"
-					/usr/bin/net rpc shutdown -t 2 -f -C "Arret demande par le serveur sambaEdu3" -S $1 -U "$1\adminse3%$PASSADM"
+                                        ldapsearch  -xLLL -b ${computersRdn},${ldap_base_dn} cn=$1 '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g" | while read I
+                                        do
+ 						/usr/bin/net rpc shutdown -t 30 -f -C "Arret demande par le serveur sambaEdu3" -I $I -U "$1\adminse3%$xppass"
+					done
 				fi
 				if [ "$2" = "reboot" ]; then
 					echo "<h3>Tentative de reboot de la machine $1</h3><br>"
-					/usr/bin/net rpc shutdown -t 2 -r -f -C "Arret demande par le serveur sambaEdu3" -S $1 -U "$1\adminse3%$PASSADM"
+                                        ldapsearch  -xLLL -b ${computersRdn},${ldap_base_dn} cn=$1 '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g" | while read I
+                                        do
+                                                /usr/bin/net rpc shutdown -t 30 -r -f -C "Arret demande par le serveur sambaEdu3" -I $I -U "$1\adminse3%$xppass"
+                                        done
 				fi
 				if [ "$2" = "wol" ]; then
 					echo "Tentative d'eveil pour la machine correspondant a l'adresse mac $D<br>"
