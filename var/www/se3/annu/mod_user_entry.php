@@ -264,6 +264,9 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
 
 			// fin verification des saisies
 		}
+
+		echo "<p><a href='people.php?uid=".$uid."'>Retour sans modification vers la fiche de $uid</a></p>\n";
+
 	} else {
 		// Positionnement des entrees a modifier
 		//$entry["sn"] =  stripslashes ( utf8_encode($nom) );
@@ -362,7 +365,8 @@ if (($isadmin=="Y") or ((tstclass($login,$uid)==1) and (ldap_get_right("sovajon_
 			userChangedPwd($uid, $userpwd);
 		}
 
-		echo "<p><a href='".$_SERVER['PHP_SELF']."?uid=".$uid."'>Retour vers la fiche de $uid</a></p>\n";
+		echo "<p><a href='".$_SERVER['PHP_SELF']."?uid=".$uid."'>Retour vers la modification des informations $uid</a></p>\n";
+		echo "<p><a href='people.php?uid=".$uid."'>Retour vers la fiche de $uid</a></p>\n";
 	}
 } else {
 	echo "<div class=error_msg>".gettext("Cette fonctionnalit&#233; n&#233;cessite des droits d'administration SambaEdu !")."</div>";
