@@ -56,7 +56,7 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
 	$texte .= "<option value=\"finit\">".gettext("finit par")."</option>\n";
 	$texte .= "</select>\n";
 	$texte .= "</td>\n";
-	$texte .= "<td><input type=\"text\" name=\"fullname\"></td>\n";
+	$texte .= "<td><input type=\"text\" name=\"fullname\" id=\"fullname\"></td>\n";
 	$texte .= "</tr>\n";
 	$texte .= "<tr>\n";
 	$texte .= "<td>".gettext("Nom :")."</td>\n";
@@ -107,6 +107,13 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
 	$texte .= "<div align=center><input type=\"submit\" Value=\"".gettext("Lancer la requ&#234;te")."\"></div>\n";
     	$texte .= "</form>\n";
 	echo "<BR>";
+
+	$texte.="<script type='text/javascript'>
+	if(document.getElementById('fullname')) {
+		document.getElementById('fullname').focus();
+	}
+</script>";
+
 	mktable($titre,$texte);
 }
   include ("pdp.inc.php");
