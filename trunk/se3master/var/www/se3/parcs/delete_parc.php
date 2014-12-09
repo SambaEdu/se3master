@@ -204,6 +204,9 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 					echo gettext("Le template de ce parc n'a pas &#233;t&#233; supprim&#233;.");
 					echo "<BR>";
 					echo gettext("Vous devez le faire &#224; la main");
+                                        echo "<br><br><CENTER>";
+					echo "<a href=\"delete_parc.php\">Retour</A>";
+					echo "</CENTER>";
 				}
 			} else {
 				// Suppression des machines dans le parc
@@ -383,6 +386,10 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 				exec ("/usr/share/se3/sbin/printers_group.pl");
 				// Lance le script de mise a jour pour wpkg
 				update_wpkg();
+                                echo "<br><br><CENTER>";
+				echo "<A HREF=\"show_parc.php?parc=$parc\">Retour</A>";
+                                //echo "<a href=\"delete_parc.php\">Retour</A>";
+				echo "</CENTER>";
 			}
 		}
 	}
