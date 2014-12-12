@@ -2758,7 +2758,7 @@
 <Chemin>reg:///HKEY_CURRENT_USER\Control Panel\Keyboard</Chemin>
 <Intitule>activation du clavier numérique [0=désactivé | 2=activé]</Intitule>
 <Composant>restrict</Composant>
-<Variable type="REG_DWORD">InitialKeyboardIndicators</Variable>
+<Variable type="REG_SZ">InitialKeyboardIndicators</Variable>
 <ValeurSiCoche>2</ValeurSiCoche>
 <ValeurSiDecoche>0</ValeurSiDecoche>
 <commentaire></commentaire>
