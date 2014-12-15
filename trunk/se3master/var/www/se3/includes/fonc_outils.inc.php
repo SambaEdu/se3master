@@ -197,8 +197,8 @@ function start_poste($action, $name)
                 echo "On reboote avec l'action <b>".$action."</b> le poste <b>".$name."</b> :<br>\n";
                 if (search_samba($name)) {
                     // machine windows
-                    system ("/usr/bin/net rpc shutdown -t 2 -f -r -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"");
-					system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." reboot");
+                    system ("/usr/bin/net rpc shutdown -t 2 -f -r -C 'Reboot demande par le serveur sambaEdu3' -I ".$ip." -U \"".$name."\adminse3%".$xppass."\"");
+		//			system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." reboot");
                     echo "<br><br>";
                 }
                 else {
@@ -209,7 +209,7 @@ function start_poste($action, $name)
             }
             else
             {
-                echo "On reboote avec l'action <b>".$action."</b> le poste <b>".$name."</b> :<br>\n";
+                ec	ho "On reboote avec l'action <b>".$action."</b> le poste <b>".$name."</b> :<br>\n";
                 echo "<b>Attention, reboot impossible</b>, la machine est injoignable ! <br><br>";
             }
         
@@ -220,8 +220,8 @@ function start_poste($action, $name)
             echo "On &#233;teint avec l'action <b>".$action."</b> le poste <b>".$name."</b> : <br>\n";
             if (search_samba($name)) {
                 // machine windows
-                 $ret.=system ("/usr/bin/net rpc shutdown -t 2 -f -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"");
-				 system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." halt");
+                 $ret.=system ("/usr/bin/net rpc shutdown -t 30 -f -C 'Arret demande par le serveur sambaEdu3' -I ".$ip." -U \"".$name."\adminse3%".$xppass."\"");
+		//		 system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." halt");
                  echo "<br><br>";
                 //$ret.="/usr/bin/net rpc shutdown -t 2 -f -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"<br>";
                   }
