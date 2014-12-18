@@ -124,23 +124,53 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 						if ($computer_parc=="no") {
 							if ($color=="#E0EEEE") { $color="#B4CDCD"; } else {$color="#E0EEEE"; }
 							$affiche_result_prov = "<tr bgcolor=$color><td>&nbsp;&nbsp;";
-							$affiche_result_prov .= "<input type=\"checkbox\" name=\"new_computers[]\" value=\"$mpenc\"></td><td>&nbsp;&nbsp;";
+							$affiche_result_prov .= "<input type=\"checkbox\" name=\"new_computers[]\" id=\"new_computers_$loopa\" value=\"$mpenc\"></td><td>&nbsp;&nbsp;";
 
 
 							$affiche_result_prov .= "<input type=\"hidden\" name=\"create_parc\" value=\"true\">\n";
 							$affiche_result_prov .= "<img width=\"15\" height=\"15\" style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"$retourOs\">\n";
 
-							$affiche_result_prov .= "$mpenc";
+							$affiche_result_prov .= "<label for=\"new_computers_$loopa\">$mpenc</label>";
 							echo "$affiche_result_prov";
-							echo "</td><td>$ip";
+							echo "</td><td><label for=\"new_computers_$loopa\">$ip</label>";
 							echo "</td></tr>\n";
 						}
 					}
 				}
 			}
 			echo "</table>\n";
+
+			if ((!isset($_POST['affiche_all']))||($_POST['affiche_all']!="yes")) {
+				echo "<p><a href='javascript: checkAll();'>Tout cocher</a> / <a href='javascript:UncheckAll();'>Tout d&eacute;cocher</a></p>";
+
+				echo "<script type='text/javascript'>
+	function checkAll(){
+		champs_input=document.getElementsByTagName('input');
+		for(i=0;i<champs_input.length;i++){
+			type=champs_input[i].getAttribute('type');
+			if(type==\"checkbox\"){
+				champs_input[i].checked=true;
+			}
+		}
+	}
+
+	function UncheckAll(){
+		champs_input=document.getElementsByTagName('input');
+		for(i=0;i<champs_input.length;i++){
+			type=champs_input[i].getAttribute('type');
+			if(type==\"checkbox\"){
+				champs_input[i].checked=false;
+			}
+		}
+	}
+</script>";
+
+			}
+
 			echo "<input type=\"submit\" value=\"".gettext("Ajouter &#224; un parc")."\">\n";
+
 			echo "</form>\n";
+
 		} else { echo "Il n'y a aucune machine"; }	
 	}
 	else {
@@ -244,7 +274,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 	        echo " <input type=\"submit\" value=\"".gettext("Valider")."\">\n";
 	
 		echo "<u onmouseover=\"return escape".gettext("('Donner le d&#233;but du nom ou de l\'adresse IP de la machine que vous souhaitez trouver.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\" alt=\"help\"></u> ";
-		
+
 		echo "</FORM>\n";
 		echo "<br>";
 
