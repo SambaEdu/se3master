@@ -37,7 +37,7 @@
 	$action_parc['btnAllumerTitre'] = "Allumer tous les postes";
 	$action_parc['btnProgrammerTitre'] = "Programmer";
 	$action_parc['btnRafraichirTitre'] = "Rafraichir la page";
-        $action_parc['btnListerTitre'] = "Lister le parc";
+    $action_parc['btnListerTitre'] = "Lister le parc";
         
 	//==============================
 	$action_parc['btnRebooterTitre'] = "Rebooter tous les postes";
@@ -46,6 +46,7 @@
 	//==============================
         
 	$action_parc['arrayStationTitre'] = "STATIONS CONCERNEES";
+    $action_parc['arrayIp'] = "ADRESSE IP";
 	$action_parc['arrayEtatTitre'] = "ETAT";
 	$action_parc['arrayConnexionTitre'] = "CONNEXION";
 	$action_parc['arrayControleTitre'] = "CONTROLE";
