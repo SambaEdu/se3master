@@ -37,6 +37,7 @@
 	$action_parc['btnRafraichirTitre'] = "Refresh this page";
 
 	$action_parc['arrayStationTitre'] = "COMPUTERS";
+	$action_parc['arrayIp'] = "IP ADRESS";
 	$action_parc['arrayEtatTitre'] = "STATUS";
 	$action_parc['arrayConnexionTitre'] = "CONNECTIONS";
 	$action_parc['arrayControleTitre'] = "CONTROL";
