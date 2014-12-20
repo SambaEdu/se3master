@@ -194,6 +194,7 @@ if ((is_admin("computers_is_admin", $login) == "Y") or (is_admin("parc_can_view"
                 echo "<TABLE border=1 width=\"60%\">\n<tr class=menuheader style=\"height: 30\">\n";
                 echo "<td align=\"center\"></td>\n";
                 echo "<td align=\"center\">" . $action_parc['arrayStationTitre'] . "</td>\n";
+                echo "<td align=\"center\">" . $action_parc['arrayIp'] . "</td>\n";
                 echo "<td align=\"center\">" . $action_parc['arrayEtatTitre'] . "</td>\n";
                 echo "<td align=\"center\">" . $action_parc['arrayConnexionTitre'] . "</td>\n";
                 echo "<td align=\"center\">" . $action_parc['arrayControleTitre'] . "</td>\n";
@@ -269,9 +270,11 @@ if ((is_admin("computers_is_admin", $login) == "Y") or (is_admin("parc_can_view"
                                 //echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/computer.png\" title=\"Station\" alt=\"Station\"></td>\n";
                             }
                             echo "<td align=center ><a href=show_histo.php?selectionne=2&amp;mpenc=$mp_en_cours>$mp_en_cours</a></td>\n";
+                            $iphost = $mp_curr[0]["ipHostNumber"];
+                            echo "<td align=center>$iphost</td>\n";
                             echo "<td align=center>\n";
                             //$etat
-                            $iphost = $mp_curr[0]["ipHostNumber"];
+                            
 
                             echo "<div id='divip$loop'><img src=\"../elements/images/spinner.gif\"></img></div>\n";
 
