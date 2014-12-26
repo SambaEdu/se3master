@@ -55,6 +55,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
         	echo "<H1>".gettext("S&#233lection du parc &#224 alimenter")."</H1>";
         	$list_parcs=search_machines("objectclass=groupOfNames","parcs"); //Liste des parcs existants
         	if ( count($list_parcs)>0) {
+                        sort($list_parcs);
             		echo "<FORM METHOD=\"post\">\n";
             		echo "<SELECT NAME=\"parc\" SIZE=\"10\">";        
 	    		for ($loop=0; $loop < count($list_parcs); $loop++) {
@@ -81,6 +82,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
         	// Affichage de la page de selection des imprimantes a ajouter au  parc
         	echo "<H1>".gettext("S&#233lection des imprimantes")."</H1>";
         	if (count($list_new_imprimantes)>0) {
+                        sort($list_new_imprimantes);
             		// Filtrage des noms
             		echo "<FORM ACTION=\"add_printer.php\" METHOD=\"post\">\n";
             		echo "<P>".gettext("Lister les noms contenant:")." </P>";
