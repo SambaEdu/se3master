@@ -9,7 +9,7 @@
 if [ "$1" = "-h" -o "$1" = "--help" ]
 then
 	echo "Script permettant de ventiler les profils firefox en tenant compte de la presence d'un slis ou non"
-	echo "Si l'ip du slis est déclarée dans l'interface, le proxy sera déclaré dans le pref.js des clients"
+	echo "Si l'ip du slis est déclarée dans l'interface, le proxy sera déclaré dans le prefs.js des clients"
 	echo "Usage : sauve_book en argument permet de sauvegarder les bookmarks d'un profil déja existant"
 	echo "Sans argument le profil est remplacé mais une sauvegarde de l'ancien est effectuée"
 exit
@@ -97,6 +97,20 @@ else
 	sed -i '/proxyurl/d'  $PREF_JS_BASE
 			sed -i '/proxytype/d'  $PREF_JS_BASE
 fi
+
+# copie prefs.js to clients-linux
+if [ -e /home/netlogon/clients-linux ]; then
+	for distrib in $(ls /home/netlogon/clients-linux/distribs)
+	do
+ # /home/netlogon/clients-linux/distribs/wheezy/skel/.mozilla/firefox/default/prefs.js
+
+		if  [ -e /home/netlogon/clients-linux/distribs/$distrib/skel/.mozilla/firefox/default/prefs.js ]; then
+			cp $PREF_JS_BASE /home/netlogon/clients-linux/distribs/$distrib/skel/.mozilla/firefox/default/prefs.js
+			echo "modif proxy par interface web le $LADATE" > /home/netlogon/clients-linux/distribs/$distrib/skel/.VERSION
+		fi
+	done
+fi
+
 
 for user in $(ls /home | grep -v netlogon | grep -v templates | grep -v profiles | grep -v _netlogon | grep -v _templates)
 do
