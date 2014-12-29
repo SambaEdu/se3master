@@ -5534,6 +5534,20 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		$message="Import du $debut_import\n";
 		$message.="$chaine\n";
 		$message.="\n";
+
+		if($rafraichir_classes=="y") {
+			if($nouveaux_comptes>0) {
+				$message.="Rafraichissement des classes lancé/effectué.\n";
+			}
+			else {
+				$message.="Pas de nouveau compte, donc pas de rafraichissement des classes lancé.\n";
+			}
+		}
+		else {
+			$message.="Pas de rafraichissement des classes demandé.\n";
+		}
+
+		$message.="\n";
 		$message.="Vous pouvez consulter le rapport détaillé à l'adresse $echo_http_file\n";
 		$entete="From: ".$tabssmtp["root"];
 		mail("$adressedestination", "$sujet", "$message", "$entete") or my_echo("<p style='color:red;'><b>ERREUR</b> lors de l'envoi du rapport par mail.</p>\n");
