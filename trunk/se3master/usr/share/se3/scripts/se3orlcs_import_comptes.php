@@ -113,7 +113,7 @@
 	// Pour effectuer des affichages de debug:
 	$debug_import_comptes="n";
 
-	// Chemins:
+	// Chemins (essentiellement):
 	if($servertype=="LCS") {
 		$racine_www="/var/www";
 		$www_import="/Annu/import_sconet.php";
@@ -124,6 +124,9 @@
 		$dossier_tmp_import_comptes="/var/lib/lcs/import_comptes";
 		$pathscripts="/usr/share/lcs/scripts";
 		$user_web = "www-data";
+
+		// $argv[17] pour SE3
+		$rafraichir_classes="n";
 	}
 	else {
 		$racine_www="/var/www/se3";
@@ -144,6 +147,11 @@
 		$dossier_tmp_import_comptes="/var/lib/se3/import_comptes";
 		$pathscripts="/usr/share/se3/scripts";
 		$user_web = "www-se3";
+
+		$rafraichir_classes="n";
+		if((isset($argv[17]))&&($argv[17]=="y")) {
+			$rafraichir_classes="y";
+		}
 	}
 
 	if($servertype=="LCS") {

@@ -5332,6 +5332,15 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		$chaine.="</p>\n";
 	}
 
+	if($rafraichir_classes=="y") {
+		if($nouveaux_comptes==0) {
+			$chaine.="<p>On ne lance pas de rafraichissement des classes.</p>\n";
+		}
+		else {
+			$chaine.="<p>Lancement du rafraichissement des classes dans quelques instants.</p>\n";
+		}
+	}
+
 	if($comptes_avec_employeeNumber_mis_a_jour==0) {
 		//my_echo("<p>Aucun compte existant sans employeeNumber n'a été récupéré/corrigé.</p>\n");
 		$chaine.="<p>Aucun compte existant sans employeeNumber n'a été récupéré/corrigé.</p>\n";
@@ -5499,6 +5508,17 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 	}
 
+	if($rafraichir_classes=="y") {
+		if($nouveaux_comptes>0) {
+			my_echo("<h2>Lancement effectif du rafraichissement des classes...</h2>\n<p>\n");
+			exec("/bin/bash ".$pathscripts."/se3_creer_tous_les_dossiers_de_classes.sh",$retour);
+			for($s=0;$s<count($retour);$s++) {
+				//my_echo(" \$retour[$s]=$retour[$s]<br />\n");
+				my_echo($retour[$s]."<br />\n");
+			}
+			my_echo("<br />Fin du rafraichissement des classes.</p>\n");
+		}
+	}
 
 	// Envoi par mail de $chaine et $echo_http_file
 	if ( $servertype=="SE3" ) {
@@ -5529,6 +5549,19 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		$message.="Vous pouvez consulter le rapport détaillé à l'adresse $echo_http_file\n";
 		$entete="From: root@$domain";
 		mail("$adressedestination", "$sujet", "$message", "$entete") or my_echo("<p style='color:red;'><b>ERREUR</b> lors de l'envoi du rapport par mail.</p>\n");
+
+		/*
+		if($rafraichir_classes=="y") {
+			if($nouveaux_comptes>0) {
+				my_echo("<p>Lancement effectif du rafraichissement des classes...<br />\n");
+				exec("/bin/bash ".$pathscripts."/se3_creer_tous_les_dossiers_de_classes.sh",$retour);
+				for($s=0;$s<count($retour);$s++) {
+					my_echo(" \$retour[$s]=$retour[$s]<br />\n");
+				}
+				my_echo("<br />Fin du rafraichissement des classes.</p>\n");
+			}
+		}
+		*/
 	}
 
 	my_echo("</body>\n</html>\n");

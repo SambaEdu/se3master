@@ -244,7 +244,7 @@
 
 				$date_export_xml_precedent=crob_getParam('xml_ele_last_import');
 				if($date_export_xml_precedent!="") {
-					echo "<p>Le précédent export XML élève importé datait du <strong>$date_export_xml_precedent</strong>.</p>\n";
+					echo "<p>Le pr&#233;c&#233;dent export XML &#233;l&#232;ve import&#233; datait du <strong>$date_export_xml_precedent</strong>.</p>\n";
 				}
 
 				echo "<h4>Fichier professeurs et emploi du temps</h4>\n";
@@ -343,6 +343,14 @@
 				echo "<label for='alimenter_groupe_pp' style='cursor: pointer;'>Cr&#233;er et alimenter le groupe Professeurs Principaux ? </label><input name='alimenter_groupe_pp' id='alimenter_groupe_pp' type='checkbox' value='y' />\n";
 				echo "&nbsp;&nbsp;";
 				echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('Le groupe des Professeurs Principaux...')")."\"><img name=\"action_image5\"  src=\"$helpinfo\"></u>\n";
+				echo "</li>\n";
+
+				// ===========================================================
+
+				echo "<li>\n";
+				echo "<label for='rafraichir_classes' style='cursor: pointer;'>Rafraichir/créer les dossiers de classes en fin d'import ? </label><input name='rafraichir_classes' id='rafraichir_classes' type='checkbox' value='y' />\n";
+				echo "&nbsp;&nbsp;";
+				echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('Les dossiers des nouveaux &#233;l&#232;ves dans le lecteur Classes ne sont pas cr&#233;&#233;s automatiquement lors de l import. Vous pouvez forcer ici la cr&#233;ation de ces dossiers.')")."\"><img name=\"action_image5\"  src=\"$helpinfo\"></u>\n";
 				echo "</li>\n";
 
 				echo "</ul>\n";
@@ -541,7 +549,7 @@
 
 					//if(!file_exists($racine_www."/includes/pclzip.lib.php")) {
 					if(!file_exists($chemin_www_includes."/pclzip.lib.php")) {
-						echo "<p style='color:red;'>Erreur : Un fichier ZIP a été fourni, mais la bibliothèque de dézippage est absente.</p>\n";
+						echo "<p style='color:red;'>Erreur : Un fichier ZIP a &#233;t&#233; fourni, mais la biblioth&#232;que de d&#233;zippage est absente.</p>\n";
 						require($pathlcsorse3."pdp.inc.php");
 						die();
 					}
@@ -578,14 +586,14 @@
 							//echo "<p>\$unzipped_max_filesize=".$unzipped_max_filesize."</p>\n";
 
 							if(($list_file_zip[0]['size']>$unzipped_max_filesize)&&($unzipped_max_filesize>0)) {
-								echo "<p style='color:red;'>Erreur : La taille du fichier extrait (<i>".$list_file_zip[0]['size']." octets</i>) dépasse la limite paramétrée (<i>$unzipped_max_filesize octets</i>).</p>\n";
+								echo "<p style='color:red;'>Erreur : La taille du fichier extrait (<i>".$list_file_zip[0]['size']." octets</i>) d&#233;passe la limite param&#233;tr&#233;e (<i>$unzipped_max_filesize octets</i>).</p>\n";
 								require($pathlcsorse3."pdp.inc.php");
 								die();
 							}
 
 							$res_extract=$archive->extract(PCLZIP_OPT_PATH, "$dossier_tmp_import_comptes/");
 							if ($res_extract != 0) {
-								echo "<p>Le fichier uploadé a été dézippé.</p>\n";
+								echo "<p>Le fichier upload&#233; a &#233;t&#233; d&#233;zipp&#233;.</p>\n";
 								$fichier_extrait=$res_extract[0]['filename'];
 								$res_copy=rename("$fichier_extrait" , "$dest_file");
 							}
@@ -732,6 +740,7 @@ decompte(cpt);
 			// ===========================================================
 			$corriger_gecos_si_diff=isset($_POST['corriger_gecos_si_diff']) ? $_POST['corriger_gecos_si_diff'] : 'n';
 			$alimenter_groupe_pp=isset($_POST['alimenter_groupe_pp']) ? $_POST['alimenter_groupe_pp'] : 'n';
+			$rafraichir_classes=isset($_POST['rafraichir_classes']) ? $_POST['rafraichir_classes'] : 'n';
 
 
 			// Dossier pour les CSV
@@ -780,33 +789,12 @@ decompte(cpt);
 			if(strlen(preg_replace("/_/","",$prefix))==0) {$prefix="";}
 			if (strlen($prefix)>0) {$prefix=$prefix."_";}
 
-/*
-			echo "\$resultat=exec(\"/usr/bin/sudo $php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp'\",$retour);";
-
-			$resultat=exec("/usr/bin/sudo $php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp'",$retour);
-
-*/
-
-/*
-			echo "\$resultat=exec(\"/usr/bin/sudo $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp'\",$retour);";
-
-			$resultat=exec("/usr/bin/sudo $chemin/import_comptes.php '$type_fichier_eleves' '$chemin/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp'",$retour);
-*/
-
 			$fich=fopen("$dossier_tmp_import_comptes/import_comptes.sh","w+");
-			//fwrite($fich,"#!/bin/bash\n/usr/bin/sudo $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers'\n");
 
-			// ===========================================================
-			// AJOUTS: 20070914 boireaus
-			//fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono'\n");
+			//fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff' '$temoin_f_uid' '$alimenter_groupe_pp'\n");
 
-			//fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres'\n");
+			fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff' '$temoin_f_uid' '$alimenter_groupe_pp' '$rafraichir_classes'\n");
 
-			//fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff'\n");
-
-			fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff' '$temoin_f_uid' '$alimenter_groupe_pp'\n");
-
-			//echo "<p>#!/bin/bash<br />\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff'</p>\n";
 			// ===========================================================
 
 
@@ -819,9 +807,9 @@ decompte(cpt);
 
 			//echo "\$resultat=exec(\"/usr/bin/at -f /var/remote_adm/import_comptes.sh $heure_aujourdhui:$d_minute_aujourdhui\",$retour);";
 			//$resultat=exec("/usr/bin/at -f $dossier_tmp_import_comptes/import_comptes.sh $heure_aujourdhui:$d_minute_aujourdhui",$retour);
-                        // sudo
-                        //echo "DBG >>/usr/bin/sudo $chemin/run_import_comptes.sh $dossier_tmp_import_comptes<br />";
-                        $resultat=exec("/usr/bin/sudo $chemin/run_import_comptes.sh $dossier_tmp_import_comptes", $retour);
+			// sudo
+			//echo "DBG >>/usr/bin/sudo $chemin/run_import_comptes.sh $dossier_tmp_import_comptes<br />";
+			$resultat=exec("/usr/bin/sudo $chemin/run_import_comptes.sh $dossier_tmp_import_comptes", $retour);
 
 			if(count($retour)>0){
 				echo "<p>Il semble que la programmation ait &#233;chou&#233;...";
@@ -852,49 +840,6 @@ decompte(cpt);
 
 			include $pathlcsorse3."pdp.inc.php";
 			flush();
-
-
-
-
-
-
-/*
-			//echo "On va lancer le script PHP.";
-
-			$type_fichier_eleves=$_POST['type_fichier_eleves'];
-
-			$tmp_eleves_file=$HTTP_POST_FILES['eleves_file']['tmp_name'];
-			$eleves_file=$HTTP_POST_FILES['eleves_file']['name'];
-			$size_eleves_file=$HTTP_POST_FILES['eleves_file']['size'];
-
-			if(is_uploaded_file($tmp_eleves_file)){
-				$dest_file="tmp/$eleves_file";
-				// SUR CA, IL VAUDRAIT SANS DOUTE MIEUX FORCER LE NOM DESTINATION POUR EVITER DES SALES BLAGUES
-
-				$source_file=stripslashes("$tmp_eleves_file");
-				$res_copy=copy("$source_file" , "$dest_file");
-
-				$php="/usr/bin/php";
-				$chemin="/home/www/html/steph/test_php-cli";
-				$resultat=exec("$php $chemin/traitement.php $type_fichier_eleves $chemin/$dest_file",$retour);
-				for($i=0;$i<count($retour);$i++){
-					echo "\$retour[$i]=$retour[$i]<br />";
-				}
-
-	//mer fev 28 12:53:29 steph@fuji:~/2007_02_21/se3
-	//$ cat /tmp/rapport_test.txt
-	//$type_fichier_eleves=csv
-	//$eleves_file=/home/www/html/steph/test_php-cli/tmp/exportCSVExtraction_20061018.csv
-	//mer fev 28 12:53:33 steph@fuji:~/2007_02_21/se3
-	//$
-
-
-	//On va lancer le script PHP.$retour[0]=
-
-
-
-			}
-*/
 
 		}
 
