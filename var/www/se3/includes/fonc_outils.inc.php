@@ -209,7 +209,7 @@ function start_poste($action, $name)
             }
             else
             {
-                ec	ho "On reboote avec l'action <b>".$action."</b> le poste <b>".$name."</b> :<br>\n";
+                echo "On reboote avec l'action <b>".$action."</b> le poste <b>".$name."</b> :<br>\n";
                 echo "<b>Attention, reboot impossible</b>, la machine est injoignable ! <br><br>";
             }
         
