@@ -223,7 +223,7 @@ if ($action=="modif_uidP") {
 	echo "<input type=\"hidden\" name=\"action\" value=\"change\">";
 	echo "<input type=\"hidden\" name=\"varb\" value=\"uidPolicy\">";
 	echo "<select name =\"valeur\" ONCHANGE=\"this.form.submit();\">";
-	echo "<option"; if ($uidPolicy=="0") { echo " selected"; } echo " value=\"0\">".gettext("prenom.nom")."</option>";
+	//echo "<option"; if ($uidPolicy=="0") { echo " selected"; } echo " value=\"0\">".gettext("prenom.nom")."</option>";
 	echo "<option"; if ($uidPolicy=="1") { echo " selected"; } echo " value=\"1\">".gettext("prenom.nom (tronqu&#233; &#224; 19)")."</option>";
 	echo "<option"; if ($uidPolicy=="2") { echo " selected"; } echo " value=\"2\">".gettext("pnom (tronqu&#233; &#224; 19)")."</option>";
 	echo "<option"; if ($uidPolicy=="3") { echo " selected"; } echo " value=\"3\">".gettext("pnom (tronqu&#233; &#224; 8)")."</option>";
