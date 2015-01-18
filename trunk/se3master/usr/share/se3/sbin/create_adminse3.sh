@@ -38,6 +38,9 @@ echo -e "$xppass\n$xppass"|(/usr/bin/smbpasswd -s root)
 net -U root%"$xppass" rpc rights grant admin SeMachineAccountPrivilege SePrintOperatorPrivilege
 net -U root%"$xppass" rpc rights grant adminse3 SeMachineAccountPrivilege SePrintOperatorPrivilege
 smbpasswd -d root
+passtmp=$(makepasswd)
+echo -e "$passtmp\n$passtmp"|(/usr/bin/smbpasswd -s root) 
+
 
 echo "Attention, la mise au domaine se fait maintenant avac le compte adminse3.
 Le compte root samba est maintenant desactive"
