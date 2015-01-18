@@ -61,6 +61,7 @@ esac
 		/usr/share/se3/scripts/permse3
 	    echo "Instanciation en cours..."
 		/usr/share/se3/sbin/instance_se3.sh 
+		/usr/share/se3/sbin/create_adminse3.sh
 		
 
 	else
