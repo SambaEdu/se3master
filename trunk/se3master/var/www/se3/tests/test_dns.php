@@ -26,7 +26,7 @@ require_once('entete_ajax.inc.php');
 // Verifie DNS
 
    $IP_WAWA=@gethostbyname('wawadeb.crdp.ac-caen.fr');
-   if ($IP_WAWA=="193.49.66.139") {
+   if ($IP_WAWA=="193.49.66.9") {
    	$ok="1";
    } else {
    	$ok="0";
