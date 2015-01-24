@@ -100,9 +100,6 @@ chown www-se3.root /usr/lib/perl5/Se.pm
 chmod -R 750 /etc/save
 chgrp -R admins /var/se3/save
 
-#echo "Positionnement des droits backuppc en arrière plan"
-#desormais gere par le paquet backuppc le script se nomme permbackuppc
-#/usr/share/se3/sbin/droit_backuppc.sh &
 
 # Droits sur ssmtp
 chown -R www-se3 /etc/ssmtp
