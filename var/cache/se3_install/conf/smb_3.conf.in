@@ -4,6 +4,7 @@
 
 # Global parameters
 [global]
+	server role = classic primary domain controller
 	workgroup = #DOMAIN#
 	netbios name = #NETBIOSNAME#
 	server string = Serveur SambaEdu 3
@@ -22,14 +23,14 @@
 	ldap group suffix = #GROUPS#
 	ldap admin dn = #ADMINRDN#,#BASEDN#
 	ldap ssl = off
-	ldapsam:trusted = No
+	ldapsam:trusted = Yes
 	ldap passwd sync = yes 
 	create mask = 0700
 	directory mask = 0700
 	inherit acls = Yes
 	printing = cups
-    	printcap = cups
-    	load printers = yes
+	printcap = cups
+	load printers = yes
 	hide unreadable = Yes
 	hide files = /inventaire/desktop.ini/profil/profile/profile.V2/$RECYCLE.BIN/gpoPASSWD/
 	hide dot files = yes
@@ -40,6 +41,8 @@
 	bind interfaces only = Yes
 	wide links = yes
 	unix extensions = no
+	get quota command = /usr/share/se3/sbin/smb_quota
+	acl allow execute always = True
 	include = /etc/samba/smb_%a.conf
 	
 [drivers]
