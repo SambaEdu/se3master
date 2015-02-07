@@ -37,12 +37,12 @@
 	dos charset = 850
 	unix charset = #CHARSET#
 	lanman auth = yes
-	notify:inotify = false
+	notify:inotify = Yes
 	bind interfaces only = Yes
 	wide links = yes
 	unix extensions = no
 	get quota command = /usr/share/se3/sbin/smb_quota
-	acl allow execute always = True
+	
 	include = /etc/samba/smb_%a.conf
 	
 [drivers]
@@ -71,15 +71,16 @@
 	read only = No
 
 [Progs]
-        root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
-        root preexec close = Yes
+	root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
+	root preexec close = Yes
 	comment = Partage programmes
 	path = /var/se3/Progs
 	read only = No
+	acl allow execute always = True
 
 [Classes]
 	root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
-        root preexec close = Yes
+	root preexec close = Yes
 	comment = Partage classes
 	path = /var/se3/Classes
 	read only = No
@@ -101,20 +102,24 @@
 	admin users = @admins
 	read only = No
 	browseable = No
+	acl allow execute always = True
+
 
 [admse3]
 	root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
-        root preexec close = Yes
+	root preexec close = Yes
 	comment = Administration des partages
 	path = /var/se3
 	valid users = @admins
 	admin users = @admins
 	read only = No
 	browseable = No
+	acl allow execute always = True
+	
 
 [admhomes]
 	root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
-        root preexec close = Yes
+	root preexec close = Yes
 	comment = Administration des homes
 	path = /home
 	valid users = @admins
