@@ -9,9 +9,9 @@
    * @Projet LCS / SambaEdu 
    
    * @auteurs  jLCF >:>  jean-luc.chretien@tice.ac-caen.fr
-   * @auteurs « oluve » olivier.le_monnier@crdp.ac-caen.fr
-   * @auteurs Olivier LECLUSE « wawa »  olivier.lecluse@crdp.ac-caen.fr
-   * @auteurs Plouf sudoification
+   * @auteurs  oluve  olivier.le_monnier@crdp.ac-caen.fr
+   * @auteurs Olivier LECLUSE  wawa   olivier.lecluse@crdp.ac-caen.fr
+   * @auteurs Plouf sudoification - HTMLPurifier
 
    * @Licence Distribue selon les termes de la licence GPL
    
@@ -34,18 +34,16 @@ textdomain ('se3-core');
 require ("config.inc.php");
 require ("functions.inc.php");
 
-//if ($SCRIPT_NAME != "/setup/index.php") {
-//	require ("entete.inc.php");
-//	if (ldap_get_right("se3_is_admin",$login)!="Y")
-//        die (gettext("Vous n'avez pas les droits suffisants pour acceder a cette fonction"));
-//	require ("pdp.inc.php");
-//} else {
-//	require("entete.inc.php");
-//	echo "<H1>".gettext("Parametrage general de SambaEdu3")."</H1>\n";
-//}
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
 
-//Aide
-//$_SESSION["pageaide"]="La_base_MySQL";
+if ( isset($_POST['submit']))  $submit = $purifier->purify($_POST['submit']);
+if ( isset($_POST['cat']))  $cat = $purifier->purify($_POST['cat']);
+elseif ( isset($_GET['cat'])) $cat = $purifier->purify($_GET['cat']);
+
+
 
 if (!isset($cat)) $cat=0;
 
@@ -66,8 +64,7 @@ if ((!isset($submit)) and (!isset($queri))) {
 }
 
 
-if (isset($_POST['submit'])) {
-	$submit=$_POST['submit'];
+if (isset($submit)) {
 	// Traitement du Form
 	$query="SELECT * from params";
 	if ($submit != 0) $query .= " WHERE cat=$submit";
@@ -81,15 +78,16 @@ if (isset($_POST['submit'])) {
 			// Exclusion de deux valeurs particulieres de la table params
 			if(($r["name"]!='dernier_import')&&($r["name"]!='imprt_cmpts_en_cours')){
 				$formname="form_".$r["name"];
-
+                                
+                                $formname = $purifier->purify($_POST["$formname"]);
 				// Si ancienne valeur n'est pas egale a la nouvelle
-				if ($_POST["$formname"]!=$r["value"]) {
+				if ($formname != $r["value"]) {
 				// Mise a jour de la base de donnees
-					$queri="UPDATE params SET value=\"".$_POST["$formname"]."\" WHERE name=\"".$r["name"]."\"";
+					$queri="UPDATE params SET value=\"".$formname."\" WHERE name=\"".$r["name"]."\"";
 					$result1=mysql_query($queri);
 
 					if ($result1) {
-						print gettext("Modification du param&#232;tre ")."<em><font color=\"red\">".$r["name"]."</font></em> ". gettext("de ")."<strong>".$r["value"]."</strong>".gettext(" en ")."<strong>".$_POST["$formname"]."</strong>"."<br />\n";
+						print gettext("Modification du param&#232;tre ")."<em><font color=\"red\">".$r["name"]."</font></em> ". gettext("de ")."<strong>".$r["value"]."</strong>".gettext(" en ")."<strong>".$formname."</strong>"."<br />\n";
 						$modif="1";
 					} else
 						print gettext("oops: la requete ") . "<strong>$queri</strong>" . gettext(" a provoqu&#233; une erreur");
@@ -102,13 +100,13 @@ if (isset($_POST['submit'])) {
 							$ldap_modify="1";
 						}
 						// Mise a jour des variables du config
-						$$r["name"]=$_POST["$formname"];
+						$$r["name"]=$formname;
 						$i++;
 					}
                                         // preparation des modifs a faire avec le correctSID.sh
                                         if ($r["name"]=="domainsid") {
                                             $sid_modify="1";
-                                            // Mise à jour des variables du config
+                                            // Mise a jour des variables du config
                                             $$r["name"]=$$formname;
                                             $i++;
                                         }
