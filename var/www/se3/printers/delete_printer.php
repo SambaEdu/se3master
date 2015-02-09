@@ -40,6 +40,18 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-printers',"/var/www/se3/locale");
 textdomain ('se3-printers');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $parc=$purifier->purify($_POST['parc']);
+  $choix=$purifier->purify($_POST['choix']);
+  $filtre_imp=$purifier->purify($_POST['filtre_imp']);
+  $old_printers=$purifier->purify($_POST['old_printers']);
+  $mp=$purifier->purify($_POST['mp']);
+  $delete_printer=$purifier->purify($_POST['delete_printer']);
+
 //aide
 $_SESSION["pageaide"]="Imprimantes";
 
@@ -91,12 +103,6 @@ function supprime_machine_parc($mpenc,$parc) {
 
 if (is_admin("se3_is_admin",$login)=="Y") {
 	
-	$choix = $_POST['choix'];
-	$parc = $_POST['parc'];
-	$filtre_imp = $_POST['filtre_imp'];
-	$old_printers = $_POST['old_printers'];
-	$mp = $_POST['mp'];
-	$delete_printer = $_POST['delete_printer'];
 
 	// Affichage de la page de selection du parc dans le cas du retrait d'imprimante(s) pour un parc.
     	if ( ($choix=="option1") && !isset($parc) ) {
