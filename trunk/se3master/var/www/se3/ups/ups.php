@@ -34,6 +34,14 @@ include ("ihm.inc.php");
 
 require_once("ups.commun.php");
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $slave=$purifier->purify($_POST['slave']);
+  $ipslave=$purifier->purify($_POST['ipslave']);
+
 //list ($idpers, $login)= isauth();
 //if ($idpers == "0")    header("Location:$urlauth");
 
@@ -55,21 +63,21 @@ $lien = "ups.php";
 $xmlfile = "/var/www/se3/ups/ups.xml";
 $conffile = "/etc/nut/ups.conf";
 
-$pmarque=$_POST['pmarque'];
-if ($pmarque==''){$pmarque=$_GET['pmarque'];}
-$pversion=$_POST['pversion'];
-if ($pversion==''){$pversion=$_GET['pversion'];}
-$pdriver=$_POST['pdriver'];
-if ($pdriver==''){$pdriver=$_GET['pdriver'];}
-$pcable=$_POST['pcable'];
-if ($pcable==''){$pcable=$_GET['pcable'];}
-$pport=$_POST['pport'];
-if ($pport==''){$pport=$_GET['pport'];}
-$ptype=$_POST['ptype'];
-if ($ptype==''){$ptype=$_GET['ptype'];}
+$pmarque=$purifier->purify($_POST['pmarque']);
+if ($pmarque==''){$pmarque=$purifier->purify($_GET['pmarque']);}
+$pversion=$purifier->purify($_POST['pversion']);
+if ($pversion==''){$pversion=$purifier->purify($_GET['pversion']);}
+$pdriver=$purifier->purify($_POST['pdriver']);
+if ($pdriver==''){$pdriver=$purifier->purify($_GET['pdriver']);}
+$pcable=$purifier->purify($_POST['pcable']);
+if ($pcable==''){$pcable=$purifier->purify($_GET['pcable']);}
+$pport=$purifier->purify($_POST['pport']);
+if ($pport==''){$pport=$purifier->purify($_GET['pport']);}
+$ptype=$purifier->purify($_POST['ptype']);
+if ($ptype==''){$ptype=$purifier->purify($_GET['ptype']);}
 
-$action=$_POST['action'];
-if ($action=='')($action=$_GET['action']);
+$action=$purifier->purify($_POST['action']);
+if ($action=='')($action=$purifier->purify($_GET['action']));
 
 $filiation = array();
 $lselect = array();
@@ -88,11 +96,11 @@ if ($action=="Configurer") {
 
 //########################### IP Master #########################################//
 
-if ($_POST['slave']=="yes") {
-	if ($_POST['ipslave']!="") {
+if ($slave=="yes") {
+	if ($ipslave!="") {
     		$ok=1;$i=1;
     		// split ipslave
-    		$chaine=preg_split("/;/",$_POST['ipslave']);
+    		$chaine=preg_split("/;/",$ipslave);
     		foreach($chaine as $resultat){
      			// verifie l ip
      			if (!is_string($resultat)) {$ok = 0;}
