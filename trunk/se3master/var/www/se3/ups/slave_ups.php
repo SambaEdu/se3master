@@ -32,6 +32,12 @@ include ("ihm.inc.php");
 
 require_once "ups.commun.php";
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+
 // list ($idpers, $login)= isauth();
 // if ($idpers == "0")    header("Location:$urlauth");
 
@@ -57,16 +63,14 @@ $lang_ups_titre = "Configuration de l'onduleur: Esclave ";
 
 //###############################################################################################//
 
-$ipmaster=isset($_POST['ipmaster']) ? $_POST['ipmaster'] : "";
+$ipmaster=isset($_POST['ipmaster']) ? $purifier->purify($_POST['ipmaster']) : "";
 
-//if ($_POST['ipmaster']!="") { // Si on a recu une IP on la verifie
 if ($ipmaster!="") { // Si on a recu une IP on la verifie
 	$ok=1;
 	if (!is_string($ipmaster)) {$ok = 0;}
-	//$ip_long = ip2long($_POST['ipmaster']);
+	
 	$ip_long = ip2long($ipmaster);
 	$ip_revers = long2ip($ip_long);
-	//if($_POST['ipmaster'] != $ip_revers) {$ok=0;}
 	if($ipmaster != $ip_revers) {$ok=0;}
 }
 
