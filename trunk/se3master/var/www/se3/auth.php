@@ -8,7 +8,7 @@
    * @Projet LCS / SambaEdu 
    
    * @auteurs  jLCF >:>  jean-luc.chretien@tice.ac-caen.fr
-   * @auteurs « oluve » olivier.le_monnier@crdp.ac-caen.fr
+   * @auteurs  oluve olivier.le_monnier@crdp.ac-caen.fr
    * @auteurs Olivier LECLUSE
 
    * @Licence Distribue selon les termes de la licence GPL
@@ -37,27 +37,36 @@
   require_once ("lang.inc.php");
   bindtextdomain('se3-core',"/var/www/se3/locale");
   textdomain ('se3-core');
-
-if ((!isset($_GET['al'])||($_GET['al']!=0)) && ((isset($_POST['login']) && $_POST['login'] != "" && isset($_POST['dummy']) && $_POST['dummy'] != "") || ($autologon==1))) {
-	$test_login=isset($_POST['login']) ? $_POST['login'] : "";
-	$test_string_auth=isset($_POST['string_auth']) ? $_POST['string_auth'] : "";
-	$test_al=isset($_GET['al']) ? $_GET['al'] : "";
+  
+  // HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $al=isset($_POST['al']) ? $purifier->purify($_POST['al']) : (isset($_GET['al']) ? $purifier->purify($_GET['al']) : "");
+  $login=isset($_POST['login']) ? $purifier->purify($_POST['login']) : (isset($_GET['login']) ? $purifier->purify($_GET['login']) : "");
+  $request=isset($_GET['request']) ? $purifier->purify($_GET['request']) : "";
+  
+  if ((!isset($al)||($al!=0)) && ((isset($login) && $login != "" && isset($dummy) && $dummy != "") || ($autologon==1))) {
+	$test_login=isset($login) ? $login : "";
+	$test_string_auth=isset($_POST['string_auth']) ? $purifier->purify($_POST['string_auth']) : "";
+	$test_al=isset($al) ? $al : "";
 	if(open_session($test_login, $test_string_auth, $test_al) == 1 ) {
-		if (isset($_GET['request']) && ($_GET['request'] != '')) {
-			header("Location:".rawurldecode($_GET['request']));
+		if (isset($request) && ($request != '')) {
+			header("Location:".rawurldecode($request));
 		} else {
 			// L'autologon se fait la...
 			header("Location:index.php");
 		}
 	} else {
-		if (!isset($_GET['request']) || ($_GET['request'] != '')) {
-			if (!isset($_POST['login'])||($_POST['login']=="")) {
-				header("Location:auth.php?al=0&error=2&request=".rawurlencode($_GET['request']));
+		if (!isset($request) || ($request != '')) {
+			if (!isset($login)||($login=="")) {
+				header("Location:auth.php?al=0&error=2&request=".rawurlencode($request));
 			} else {
-				header("Location:auth.php?al=0&error=1&request=".rawurlencode($_GET['request']));
+				header("Location:auth.php?al=0&error=1&request=".rawurlencode($request));
 			}
 		} else {
-			if (!isset($_POST['login'])||($_POST['login']=="")) {
+			if (!isset($login)||($login=="")) {
 				header("Location:auth.php?al=0&error=2");
 			} else {
 				header("Location:auth.php?al=0&error=1");
@@ -67,7 +76,7 @@ if ((!isset($_GET['al'])||($_GET['al']!=0)) && ((isset($_POST['login']) && $_POS
 } else {
 	header_crypto_html("Authentification SE3","");
 	$texte .= gettext("<P>Afin de pouvoir rentrer dans l'interface <EM>SambaEdu</EM>, vous devez indiquer votre identifiant et votre mot de passe sur le r&#233;seau.\n");
-	$texte .= "<form name = 'auth' action='auth.php?al=1&request=".rawurlencode($_GET['request'])."' method='post' onSubmit = 'encrypt(document.auth)'>\n";
+	$texte .= "<form name = 'auth' action='auth.php?al=1&request=".rawurlencode($request)."' method='post' onSubmit = 'encrypt(document.auth)'>\n";
 	$texte .= "<table><tr><td>\n";
 	$texte .= gettext("Identifiant")." :</td><td><INPUT TYPE='text' NAME='login' SIZE='20' MAXLENGTH='30'><BR>\n";
 	$texte .= "</td></tr><tr><td>\n";
