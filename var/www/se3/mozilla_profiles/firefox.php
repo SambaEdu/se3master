@@ -40,6 +40,11 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-mozilla',"/var/www/se3/locale");
 textdomain ('se3-mozilla');
 
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+
 //AUTHENTIFICATION
 if (is_admin("computer_is_admin",$login)!="Y")
 	die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
@@ -50,26 +55,26 @@ $_SESSION["pageaide"]="Gestion_Mozilla#Mozilla_Firefox";
 
 //debug_var();
 
-$choix=isset($_POST['choix']) ? $_POST['choix'] : (isset($_GET['choix']) ? $_GET['choix'] : "");
-$config=isset($_POST['config']) ? $_POST['config'] : (isset($_GET['config']) ? $_GET['config'] : "");
-$action=isset($_POST['action']) ? $_POST['action'] : (isset($_GET['action']) ? $_GET['action'] : "");
+$choix=isset($_POST['choix']) ? $purifier->purify($_POST['choix']) : (isset($_GET['choix']) ? $purifier->purify($_GET['choix']) : "");
+$config=isset($_POST['config']) ? $purifier->purify($_POST['config']) : (isset($_GET['config']) ? $purifier->purify($_GET['config']) : "");
+$action=isset($_POST['action']) ? $purifier->purify($_POST['action']) : (isset($_GET['action']) ? $purifier->purify($_GET['action']) : "");
 
-$autres_gr=isset($_POST['autres_gr']) ? $_POST['autres_gr'] : array();
-$classe_gr=isset($_POST['classe_gr']) ? $_POST['classe_gr'] : array();
-$equipe_gr=isset($_POST['equipe_gr']) ? $_POST['equipe_gr'] : array();
-$matiere_gr=isset($_POST['matiere_gr']) ? $_POST['matiere_gr'] : array();
+$autres_gr=isset($_POST['autres_gr']) ? $purifier->purify($_POST['autres_gr']) : array();
+$classe_gr=isset($_POST['classe_gr']) ? $purifier->purify($_POST['classe_gr']) : array();
+$equipe_gr=isset($_POST['equipe_gr']) ? $purifier->purify($_POST['equipe_gr']) : array();
+$matiere_gr=isset($_POST['matiere_gr']) ? $purifier->purify($_POST['matiere_gr']) : array();
 
 // Je n'ai pas vu a quoi sert $home
-$home=isset($_POST['home']) ? $_POST['home'] : "";
+$home=isset($_POST['home']) ? $purifier->purify($_POST['home']) : "";
 
-$page_dem=isset($_POST['page_dem']) ? $_POST['page_dem'] : "";
-$user=isset($_POST['user']) ? $_POST['user'] : "";
+$page_dem=isset($_POST['page_dem']) ? $purifier->purify($_POST['page_dem']) : "";
+$user=isset($_POST['user']) ? $purifier->purify($_POST['user']) : "";
 
-$default_page_dem=isset($_POST['default_page_dem']) ? $_POST['default_page_dem'] : "";
-$userGroups=isset($_POST['userGroups']) ? $_POST['userGroups'] : "";
+$default_page_dem=isset($_POST['default_page_dem']) ? $purifier->purify($_POST['default_page_dem']) : "";
+$userGroups=isset($_POST['userGroups']) ? $purifier->purify($_POST['userGroups']) : "";
 
-$new_proxy_type=isset($_POST['new_proxy_type']) ? $_POST['new_proxy_type'] : "";
-$new_proxy_url=isset($_POST['new_proxy_url']) ? $_POST['new_proxy_url'] : "";
+$new_proxy_type=isset($_POST['new_proxy_type']) ? $purifier->purify($_POST['new_proxy_type']) : "";
+$new_proxy_url=isset($_POST['new_proxy_url']) ? $purifier->purify($_POST['new_proxy_url']) : "";
 
 
 
@@ -205,7 +210,7 @@ if ($config==""||$config=="init") {
             }
             if($action=="set_proxy") {
                     
-                    $firefox_use_ie=isset($_POST['firefox_ie']) ? $_POST['firefox_ie'] : "";
+                    $firefox_use_ie=isset($_POST['firefox_ie']) ? $purifier->purify($_POST['firefox_ie']) : "";
 
                     //$script="/usr/share/se3/scripts/modif_profil_mozilla_ff.sh"; 
                     //echo "<h4>".gettext("Modification de la page de d&#233;marrage de Mozilla Firefox par defaut")."</h4>";
@@ -429,7 +434,7 @@ if ($config==""||$config=="init") {
 	$nbr_user=0;
 	system ("echo \"#!/bin/bash\n\" > /tmp/$nomscript");
 
-        $option=isset($_POST['option']) ? $_POST['option'] : "";
+        $option=isset($_POST['option']) ? $purifier->purify($_POST['option']) : "";
     
 	if($choix=="modif_proxy") {
 		//system("sudo /usr/share/se3/scripts/modif_profil_mozilla_ff.sh proxy $proxy_url $proxy_type");
