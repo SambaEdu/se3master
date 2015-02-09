@@ -33,14 +33,18 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-acls',"/var/www/se3/locale");
 textdomain ('se3-acls');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
 
 // Recuperation des variables
-$nom=isset($_POST['nom']) ? $_POST['nom'] : '';
-$classe=isset($_POST['classe']) ? $_POST['classe'] : '';
-$fullname=isset($_POST['fullname']) ? $_POST['fullname'] : '';
-$priority_name=isset($_POST['priority_name']) ? $_POST['priority_name'] : '';
-$priority_surname=isset($_POST['priority_surname']) ? $_POST['priority_surname'] : '';
-$priority_classe=isset($_POST['priority_classe']) ? $_POST['priority_classe'] : '';
+$nom=isset($_POST['nom']) ? $purifier->purify($_POST['nom']) : '';
+$classe=isset($_POST['classe']) ? $purifier->purify($_POST['classe']) : '';
+$fullname=isset($_POST['fullname']) ? $purifier->purify($_POST['fullname']) : '';
+$priority_name=isset($_POST['priority_name']) ? $purifier->purify($_POST['priority_name']) : '';
+$priority_surname=isset($_POST['priority_surname']) ? $purifier->purify($_POST['priority_surname']) : '';
+$priority_classe=isset($_POST['priority_classe']) ? $purifier->purify($_POST['priority_classe']) : '';
 
 // Aide
 $_SESSION["pageaide"]="ACL#En_utilisant_l.27interface_SambaEdu";

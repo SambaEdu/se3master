@@ -32,12 +32,17 @@
   require_once ("lang.inc.php");
   bindtextdomain('se3-acls',"/var/www/se3/locale");
   textdomain ('se3-acls');
+  
+  // HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
 
   // Aide
   $_SESSION["pageaide"]="ACL#En_utilisant_l.27interface_SambaEdu";
 
-	$group=isset($_POST['group']) ? $_POST['group'] : "";
-	$priority_group=isset($_POST['priority_group']) ? $_POST['priority_group'] : "contient";
+	$group=isset($_POST['group']) ? $purifier->purify($_POST['group']) : "";
+	$priority_group=isset($_POST['priority_group']) ? $purifier->purify($_POST['priority_group']) : "contient";
   
 if ($group=='') {
 	$filter = "(cn=*)";
