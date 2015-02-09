@@ -32,6 +32,18 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-core',"/var/www/se3/locale");
 textdomain ('se3-core');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $action=isset($_GET['action']) ? $purifier->purify($_GET['action']) : "";
+  $dc_read=isset($_GET['dc_read']) ? $purifier->purify($_GET['dc_read']) : "";
+  $dc_user=isset($_GET['dc_user']) ? $purifier->purify($_GET['dc_user']) : "";
+  $dc_serveur=isset($_GET['dc_serveur']) ? $purifier->purify($_GET['dc_serveur']) : "";
+  $dc_modules=isset($_GET['dc_modules']) ? $purifier->purify($_GET['dc_modules']) : "";
+  $dc_pass=isset($_GET['dc_pass']) ? $purifier->purify($_GET['dc_pass']) : "";
+  
 // Fonction pour obtenir les valeurs deja definies dans rsyncd.conf
 
 /**
@@ -64,18 +76,18 @@ echo "<H1>".gettext("Configure client sauvegarde ")."</H1>\n";
 if (is_admin("system_is_admin",$login)=="Y") {
 	
 	// Stop ou start rsync
-   	if ($_GET['action']=="stop") {
+   	if ($action=="stop") {
    		exec("sudo /usr/share/se3/scripts/mk_rsyncconf.sh stop");
 		sleep(5);
-   	} elseif($_GET['action']=="start") {	
+   	} elseif($action=="start") {	
    		exec("sudo /usr/share/se3/scripts/mk_rsyncconf.sh start");
 		sleep(10);
 	}	
    
    	// Creation du fichier de conf de rsyncd.conf 
-   	elseif ($_GET['action'] == "rsync_mod") {
+   	elseif ($action == "rsync_mod") {
 
-		if ($_GET['dc_read']!="no") {$_GET['dc_read']="yes"; }
+		if ($dc_read!="no") {$dc_read="yes"; }
 	
 		$fichier = "/tmp/rsyncd.conf";
 		$fp=fopen("$fichier","w+");
@@ -85,14 +97,14 @@ gid=root
 use chroot=no
 syslog facility=local5
 pid file=/var/run/rsyncd.pid
-auth users=".$_GET['dc_user']."
+auth users=".$dc_user."
 secrets file=/etc/rsyncd.secret
-hosts allow=".$_GET['dc_serveur']."
-read only=".$_GET['dc_read']."";
+hosts allow=".$dc_serveur."
+read only=".$dc_read."";
 
 
 		// Creation des modules a partir des repertoires a sauvegarder
-		$modules = preg_split("/;/",$_GET['dc_modules'],-1);
+		$modules = preg_split("/;/",$dc_modules,-1);
 		for ($i=0; $i < count($modules); $i++) {
 		
 			$rep_module = "$modules[$i]";
@@ -111,7 +123,7 @@ read only=".$_GET['dc_read']."";
 		
 		
 		// On lance le script de conf
-   		exec("sudo /usr/share/se3/scripts/mk_rsyncconf.sh start $_GET[dc_user] $_GET[dc_pass]");
+   		exec("sudo /usr/share/se3/scripts/mk_rsyncconf.sh start $dc_user $dc_pass");
 		unset($action);
    	}
 
