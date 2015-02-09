@@ -32,15 +32,20 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-deploy',"/var/www/se3/locale");
 textdomain ('se3-deploy');
 
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+
 //aide
 $_SESSION["pageaide"]="Le_module_D%C3%A9ploiement_dans_les_r%C3%A9pertoires_des_utilisateurs";
 
 if (is_admin("se3_is_admin",$login)=="Y") {
 
-	$path=$_GET['path'];
-	$chemin=$_GET['chemin'];
-	$repsup=$_GET['repsup'];
-	$repinf=$_GET['repinf'];
+	$path = $purifier->purify($_GET['path']);
+	$chemin = $purifier->purify($_GET['chemin']);
+	$repsup = $purifier->purify($_GET['repsup']);
+	$repinf = $purifier->purify($_GET['repinf']);
 
 	echo "<H1>".gettext("D&#233ploiement de fichiers")."</H1><P>";
 	echo "<small>";
