@@ -9,7 +9,7 @@
    * @Projet LCS / SambaEdu 
    
    * @auteurs  jLCF >:>  jean-luc.chretien@tice.ac-caen.fr
-   * @auteurs « oluve » olivier.le_monnier@crdp.ac-caen.fr
+   * @auteurs oluve olivier.le_monnier@crdp.ac-caen.fr
    * @auteurs Olivier LECLUSE
 
    * @Licence Distribu&#233; selon les termes de la licence GPL
@@ -30,10 +30,22 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-core',"/var/www/se3/locale");
 textdomain ('se3-core');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
 
+  $register=isset($_POST['register']) ? $purifier->purify($_POST['register']) : "";
+  $usage=isset($_POST['usage']) ? $purifier->purify($_POST['usage']) : "";
+  $srvcomm=isset($_POST['srvcomm']) ? $purifier->purify($_POST['srvcomm']) : "";
+  $typetab=isset($_POST['typetab']) ? $purifier->purify($_POST['typetab']) : "";
+  $dept=isset($_POST['dept']) ? $purifier->purify($_POST['dept']) : "";
+  $vernbr=isset($_POST['vernbr']) ? $purifier->purify($_POST['vernbr']) : "";
+  $rne=isset($_POST['rne']) ? $purifier->purify($_POST['rne']) : "";
+  
 // Demande de s'enregistrer
-if (isset ($_POST['register'])) {
-	if ($_POST['register'] == "yes") {
+if (isset ($register)) {
+	if ($register == "yes") {
 
 		// Verifie si proxy defini
 		$proxy=exec("cat /etc/profile | grep http_proxy= | cut -d= -f2");
@@ -46,7 +58,7 @@ if (isset ($_POST['register'])) {
 			require ("config.inc.php");
 			require ("functions.inc.php");
 			setparam("registred",3);
-			header("location:http://wawadeb.crdp.ac-caen.fr/majse3/register.php?usage=".$_POST['usage']."&srvcomm=".$_POST['srvcomm']."&typetab=".$_POST['typetab']."&dept=".$_POST['dept']."&vernbr=".$_POST['vernbr']."&rne=".$_POST['rne']."");
+			header("location:http://wawadeb.crdp.ac-caen.fr/majse3/register.php?usage=".$usage."&srvcomm=".$srvcomm."&typetab=".$typetab."&dept=".$dept."&vernbr=".$vernbr."&rne=".$rne."");
             	} else {
 			require ("entete.inc.php");
 			echo "<h1>".gettext("Recensement du serveur")."</h1>";
@@ -77,7 +89,7 @@ if (($login == "admin")&&($registred <= 1)) {
 	//require ("config.inc.php");
 	if ($registred=="1") {
 		echo "<H1><FONT color=red>".gettext("Mise a jour du recensement")."</FONT></H1>";
-		echo gettext("Vous avez recens&#233; votre serveur SambaEdu et nous vous en remercions. Afin d'affiner nos statistiques, nous avons &#233;t&#233; amen&#233;s &#224; ajouter le champ numéro RNE aux champs remont&#233;s dans notre base de donn&#233;e. Nous vous serions reconnaissants de bien vouloir compl&#233;ter &#224; nouveau le formulaire de recensement afin que nous puissions mettre a jour nos statistiques d'usage. D'avance, merci.");
+		echo gettext("Vous avez recens&#233; votre serveur SambaEdu et nous vous en remercions. Afin d'affiner nos statistiques, nous avons &#233;t&#233; amen&#233;s &#224; ajouter le champ numï¿½ro RNE aux champs remont&#233;s dans notre base de donn&#233;e. Nous vous serions reconnaissants de bien vouloir compl&#233;ter &#224; nouveau le formulaire de recensement afin que nous puissions mettre a jour nos statistiques d'usage. D'avance, merci.");
 	}
 
 	echo "<H1>".gettext("Recensement du serveur")."</H1>\n";
