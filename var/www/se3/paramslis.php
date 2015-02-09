@@ -37,6 +37,14 @@ require_once("lang.inc.php");
 bindtextdomain('se3-core',"/var/www/se3/locale");
 textdomain ('se3-core');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $config=isset($_POST['config']) ? $purifier->purify($_POST['config']) : "";
+  $new_slis_url=isset($_POST['new_slis_url']) ? $purifier->purify($_POST['new_slis_url']) : "";
+
 //aide
 $_SESSION["pageaide"]="Table_des_mati%C3%A8res";
 //AUTHENTIFICATION
@@ -44,7 +52,7 @@ if (is_admin("se3_is_admin",$login)!="Y")
    die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 
 
-if ($_POST['config']==""||$_POST['config']=="init") {
+if ($config==""||$config=="init") {
 	
 	echo "<H1>Interface du Slis</H1>\n";
 	echo "<br>";
@@ -63,7 +71,6 @@ if ($_POST['config']==""||$_POST['config']=="init") {
 	echo "</form>";
 } else {
 	echo "<H1>Interface du Slis</H1>\n";
-	$new_slis_url=$_POST['new_slis_url'];
 	$update_query="UPDATE params SET value='$new_slis_url' WHERE name='slis_url'";
 	$result_update=mysql_query($update_query);
 
