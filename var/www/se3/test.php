@@ -26,26 +26,29 @@
 
 
 
-	require ("config.inc.php");
-	require ("entete.inc.php");
+require ("config.inc.php");
+require ("entete.inc.php");
 
-	//require_once("lang.inc.php");
-	//bindtextdomain('se3-core',"/var/www/se3/locale");
-	//textdomain ('se3-core');
-	$prefix = "tests";
-	require_once("$prefix/messages/$lang/".$prefix."_messages.php");
+$prefix = "tests";
+require_once("$prefix/messages/$lang/".$prefix."_messages.php");
+        
+  // HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $action=isset($_GET['action']) ? $purifier->purify($_GET['action']) : "";
+  
 
-	//aide
-	$_SESSION["pageaide"]="Informations_syst%C3%A8me#Diagnostic";
+//aide
+$_SESSION["pageaide"]="Informations_syst%C3%A8me#Diagnostic";
 
-	// Si pas se3_is_admin
-	
-
+// Si pas se3_is_admin	
 if (ldap_get_right("se3_is_admin",$login)!="Y")
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 //	if (ldap_get_right("se3_is_admin",$login)=="Y")  {
 
-	if ((isset($_GET['action']))&&($_GET['action'] == "setadminse3smbpass")) {
+	if ((isset($action))&&($action == "setadminse3smbpass")) {
 			exec('/usr/bin/sudo /usr/share/se3/scripts/change_adminse3_smbpass.sh');
 	}
 
@@ -53,25 +56,25 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 		//	exec('/usr/bin/sudo /usr/share/se3/scripts/se3_update_system.sh --auto');
 		//    unset($action);
 		// }
-	if ((isset($_GET['action']))&&($_GET['action'] == "updatesystem")) {
+	if ((isset($action))&&($action == "updatesystem")) {
 		$info_1 = gettext("Mise &#224; jour syst&#232;me lanc&#233;e, ne fermez pas cette fen&#234;tre avant que le script ne soit termin&#233;. vous recevrez un mail r&#233;capitulatif de tout ce qui sera effectu&#233;...");
 		echo $info_1;
 		system('sleep 1; /usr/bin/sudo /usr/share/se3/scripts/se3_update_system.sh --auto &');
 		unset($action);
 	}
-	if ((isset($_GET['action']))&&($_GET['action'] == "settime")) {
+	if ((isset($action))&&($action == "settime")) {
 		exec('/usr/bin/sudo /usr/share/se3/sbin/settime.sh');
 	}
-	if ((isset($_GET['action']))&&($_GET['action'] == "startsamba")) {
+	if ((isset($action))&&($action == "startsamba")) {
 		exec('/usr/bin/sudo /usr/share/se3/scripts/services.sh samba restart');
 	}
-	if ((isset($_GET['action']))&&($_GET['action'] == "installse3-domain")) {
+	if ((isset($action))&&($action == "installse3-domain")) {
 		$info_1 = gettext("Mise &#224; jour lanc&#233;e, ne fermez pas cette fen&#234;tre avant que le script ne soit termin&#233;. vous recevrez un mail r&#233;capitulatif de tout ce qui sera effectu&#233;...");
 	echo $info_1;
 	system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh se3-domain");
 	}
 	
-	if ((isset($_GET['action']))&&($_GET['action'] == "exim_mod")) {
+	if ((isset($action))&&($action == "exim_mod")) {
 		$fichier = "/etc/ssmtp/ssmtp.conf";
 		$fp=fopen("$fichier","w+");
 		$DEFAUT = "
@@ -85,7 +88,7 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 	}
 
 
-	if ((isset($_GET['action']))&&($_GET['action'] == "mail_test")) {
+	if ((isset($action))&&($action == "mail_test")) {
        	$dc_root=exec('cat /etc/ssmtp/ssmtp.conf | grep root= | cut -d= -f2');
 	       $subject = gettext("Test de la configuration de votre serveur Se3");
         	$message = gettext("Message envoy&#233; par le serveur Se3");
