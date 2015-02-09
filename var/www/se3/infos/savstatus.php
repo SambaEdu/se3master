@@ -32,6 +32,21 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-infos',"/var/www/se3/locale");
 textdomain ('se3-infos');
 
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+
+$action=$purifier->purify($_GET['action']);
+$newstatus=$purifier->purify($_GET['newstatus']);
+$newhome=$purifier->purify($_GET['newhome']);
+$newse3=$purifier->purify($_GET['newse3']);
+$newbande=$purifier->purify($_GET['newbande']);
+$newdevice=$purifier->purify($_GET['newdevice']);
+$newmail=$purifier->purify($_GET['newmail']);
+$newniveau=$purifier->purify($_GET['newniveau']);
+$form_action=$purifier->purify($_GET['form_action']);
+
 if (is_admin("system_is_admin",$login)!="Y")
 	die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 
@@ -40,47 +55,47 @@ if (is_admin("system_is_admin",$login)!="Y")
 echo "<h1>".gettext("Sauvegarde sur bande")."</h1>\n";
 
 echo "<center>";
-if (isset($_GET['action'])) {
+if (isset($action)) {
 	echo gettext("L'action demand&#233;e a &#233;t&#233; effectu&#233;e, ")."\n";
 	echo "<br>\n";
-	if ($_GET['action']=="changestatus") {
-		if($_GET['newstatus']=="1") { echo "D&#233;sactive ou suspend la sauvegarde"; }
-		if($_GET['newstatus']=="0") { echo "Active la sauvegarde"; }
-		setparam(savsuspend,$_GET['newstatus']);
-		$savsuspend=$_GET['newstatus'];
+	if ($action=="changestatus") {
+		if($newstatus=="1") { echo "D&#233;sactive ou suspend la sauvegarde"; }
+		if($newstatus=="0") { echo "Active la sauvegarde"; }
+		setparam(savsuspend,$newstatus);
+		$savsuspend=$newstatus;
 	}	
 	
-	if ($_GET['action']=="changehome") {
-		setparam(savhome,$_GET['newhome']);
-		$savhome=$_GET['newhome'];
+	if ($action=="changehome") {
+		setparam(savhome,$newhome);
+		$savhome=$newhome;
 	}	
 	
-	if ($_GET['action']=="changese3") {
-		setparam(savse3,$_GET['newse3']);
-		$savse3=$_GET['newse3'];
+	if ($action=="changese3") {
+		setparam(savse3,$newse3);
+		$savse3=$newse3;
 	}	
-	if ($_GET['action']=="changebande") {
-		echo "Bande $savbandnbr -> ".$_GET['newbande'];
-		setparam(savbandnbr,$_GET['newbande']);
-		$savbandnbr=$_GET['newbande'];
+	if ($action=="changebande") {
+		echo "Bande $savbandnbr -> ".$newbande;
+		setparam(savbandnbr,$newbande);
+		$savbandnbr=$newbande;
 	}	
-	if ($_GET['action']=="changedevice") { 
-		setparam(savdevice,$_GET['newdevice']);
-		echo "$savdevice -> ".$_GET['newdevice'];
-		$savdevice=$_GET['newdevice'];
+	if ($action=="changedevice") { 
+		setparam(savdevice,$newdevice);
+		echo "$savdevice -> ".$newdevice;
+		$savdevice=$newdevice;
 	}
 
-	if ($_GET['action']=="changemail") { 
-		setparam(melsavadmin,$_GET['newmail']);
-		echo "$melsavadmin -> ".$_GET['newmail'];
-		$melsavadmin=$_GET['newmail'];
+	if ($action=="changemail") { 
+		setparam(melsavadmin,$newmail);
+		echo "$melsavadmin -> ".$newmail;
+		$melsavadmin=$newmail;
 	}	
 
-	if ($_GET['action']=="changeniveau") { 
-		setparam(savlevel,$_GET['newniveau']);
-		if ($_GET['newniveau']=="0") { echo "incr&#233;mentielle -> compl&#233;te"; }
-		if ($_GET['newniveau']=="1") { echo "compl&#233;te -> incr&#233;mentielle"; }
-		$savlevel=$_GET['newniveau'];
+	if ($action=="changeniveau") { 
+		setparam(savlevel,$newniveau);
+		if ($newniveau=="0") { echo "incr&#233;mentielle -> compl&#233;te"; }
+		if ($newniveau=="1") { echo "compl&#233;te -> incr&#233;mentielle"; }
+		$savlevel=$newniveau;
 	}	
 }
 
@@ -93,7 +108,7 @@ echo "</TD></TR>\n";
 echo "<TR><TD>\n";
 echo gettext("P&#233;riph&#233;rique de stockage : ");
 echo "</TD><TD align=\"center\">\n";
-if ($_GET['form_action'] == "modif_perif") {
+if ($form_action == "modif_perif") {
 	echo "<form method=\"get\" action=\"savstatus.php\">\n";
 	echo "<input type=\"hidden\" name=\"action\" value=\"changedevice\">\n";
 	echo "<input type=\"text\" name=\"newdevice\"  value=\"$savdevice\">\n";
@@ -113,7 +128,7 @@ echo "<TR><TD>\n";
 // parametrage du mail
 echo gettext("Mail responsable de la sauvegarde:");
 echo "</TD><TD align=\"center\">\n";
-if (($_GET['form_action'] == "modif_mail") || ($melsavadmin=="")) {
+if (($form_action == "modif_mail") || ($melsavadmin=="")) {
 	echo "<form method=\"get\" action=\"savstatus.php\">\n";
 	echo "<input type=\"hidden\" name=\"action\" value=\"changemail\">\n";
 	echo "<input type=\"text\" name=\"newmail\"  value=\"$melsavadmin\">\n";
@@ -132,7 +147,7 @@ echo "<TR><TD>\n";
 echo gettext("Niveau actuel de la sauvegarde:");
 echo "</TD><TD align=\"center\">";
 
-if ($_GET['form_action'] == "modif_niveau") {
+if ($form_action == "modif_niveau") {
 	echo "<form method=\"get\" action=\"savstatus.php\">\n";
 	echo "<input type=\"hidden\" name=\"action\" value=\"changeniveau\">\n";
 	echo "<select name =\"newniveau\" ONCHANGE=\"this.form.submit();\">";
@@ -158,7 +173,7 @@ echo "<TR><TD>\n";
 echo gettext("Bande");
 echo "</TD><TD align=\"center\">";
 
-if ($_GET['form_action'] == "modif_bande") {
+if ($form_action == "modif_bande") {
 	echo "<form method=\"get\" action=\"savstatus.php\">\n";
 	echo "<input type=\"hidden\" name=\"action\" value=\"changebande\">\n";
 	echo "<select name =\"newbande\" ONCHANGE=\"this.form.submit();\">";
