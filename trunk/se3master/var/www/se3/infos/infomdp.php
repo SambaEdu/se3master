@@ -34,6 +34,11 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-infos',"/var/www/se3/locale");
 textdomain ('se3-infos');
 
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+
 // aide en ligne
 $_SESSION["pageaide"]="Annuaire";
 
@@ -42,10 +47,10 @@ if (is_admin("annu_is_admin",$login)!="Y")
 	die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 echo "<H1>".gettext("Test des mots de passe")."</H1>";
 
-$classe_gr=$_POST['classe_gr'];
-$equipe_gr=$_POST['equipe_gr'];
-$matiere_gr=$_POST['matiere_gr'];
-$autres_gr=$_POST['autres_gr'];
+$classe_gr=$purifier->purify($_POST['classe_gr']);
+$equipe_gr=$purifier->purify($_POST['equipe_gr']);
+$matiere_gr=$purifier->purify($_POST['matiere_gr']);
+$autres_gr=$purifier->purify($_POST['autres_gr']);
 
 // creation de smbwebopen_pwd_chg dans mysql table params si besoin
 $resultat=mysql_query("select value from params where name='smbwebopen_pwd_chg'");

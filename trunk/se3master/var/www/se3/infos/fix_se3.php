@@ -32,6 +32,13 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-infos',"/var/www/se3/locale");
 textdomain ('se3-infos');
 
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+
+$action=$purifier->purify($_GET['action']);
+
 //aide
 $_SESSION["pageaide"]="Informations_syst%C3%A8me#Correction_de_probl.C3.A8mes";
 
@@ -39,31 +46,31 @@ if (is_admin("system_is_admin",$login)!="Y")
 	die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 
 echo "<h1>".gettext("Correction de probl&#232;mes")."</h1>\n";
-if (isset($_GET['action'])) {
-    if ($_GET['action'] == "rmprofiles") {
+if (isset($action)) {
+    if ($action == "rmprofiles") {
         echo "<h2>".gettext("Nettoyage des profils Windows...")."</h2>";
         system("sudo /usr/share/se3/scripts/clean_profiles.sh");
     }
-    if ($_GET['action'] == "permse3") {
+    if ($action == "permse3") {
         echo "<h2>".gettext("Remise en place des droits syst&#232;me...")."</h2>";
         system("sudo /usr/share/se3/scripts/permse3");
         echo "Termin&#233;.";
     }
-    if ($_GET['action'] == "adminse3pass") {
+    if ($action == "adminse3pass") {
         echo "<h2>".gettext("Affichage du mot de passe adminse3...")."</h2>";
         echo "Le mot de passe adminse3 est actuellement <b>$xppass</b>";
         //echo "Termin&#233;.";
     }
-    if ($_GET['action'] == "restore_droits") {
+    if ($action == "restore_droits") {
         echo "<h2>".gettext("Remise en place des droits sur les comptes utilisateurs...")."</h2>";
         system("sudo /usr/share/se3/scripts/restore_droits.sh --home html");
     }
-    if ($_GET['action'] == "restore_droits_full") {
+    if ($action == "restore_droits_full") {
         echo "<h2>".gettext("Remise en place de tous les droits...")."</h2>";
         system("sudo /usr/share/se3/scripts/restore_droits.sh acl_default auto html");
     }
     
-    if ($_GET['action'] == "adminse3_rest") {
+    if ($action == "adminse3_rest") {
         echo "<h2>".gettext("Remise en place des droits d'int&#233;gration pour adminse3...")."</h2>";
         echo '<pre>';
         system("sudo /usr/share/se3/sbin/create_adminse3.sh");
@@ -71,14 +78,14 @@ if (isset($_GET['action'])) {
         echo "ok";
     }
     
-    if ($_GET['action'] == "force_profils_wpkg") {
+    if ($action == "force_profils_wpkg") {
         echo "<h2>".gettext("Raffraichissement des machines visibles dans wpkg...")."</h2>";
         // Lance le script pour wpkg
 	system ("/bin/bash /usr/share/se3/scripts/update_hosts_profiles_xml.sh ou=Computers ou=Parcs $ldap_base_dn");
 	system ("/bin/bash /usr/share/se3/scripts/update_droits_xml.sh");
         echo "ok";
     }
-    if ($_GET['action'] == "force_rapports_wpkg") {
+    if ($action == "force_rapports_wpkg") {
         echo "<h2>".gettext("Renouvellement des rapports wpkg...")."</h2>";
         
         system("rm -f /var/se3/unattended/install/wpkg/rapports/rapports.xml ; /var/www/se3/wpkg/bin/rapports.sh");
