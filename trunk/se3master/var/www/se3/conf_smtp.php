@@ -33,6 +33,16 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-core',"/var/www/se3/locale");
 textdomain ('se3-core');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $action=isset($_GET['action']) ? $purifier->purify($_GET['action']) : "";
+  $dc_root=isset($_GET['dc_root']) ? $purifier->purify($_GET['dc_root']) : "";
+  $dc_smarthost=isset($_GET['dc_smarthost']) ? $purifier->purify($_GET['dc_smarthost']) : "";
+  $dc_readhost=isset($_GET['dc_readhost']) ? $purifier->purify($_GET['dc_readhost']) : "";
+  
 
 /**
 * Fonction pour obtenir les valeurs deja definies dans ssmtp.conf
@@ -64,22 +74,22 @@ $_SESSION["pageaide"]="L%27interface_web_administrateur#Partie_:_Configuration_d
 if (is_admin("system_is_admin",$login)=="Y") {
 	
 	// Creation du fichier de conf de ssmtp
-	if ($_GET[action] == "exim_mod") {
+	if ($action == "exim_mod") {
 		$fichier = "/etc/ssmtp/ssmtp.conf";
   		$fp=fopen("$fichier","w+");
 $DEFAUT = "
 # Genere par l'interface de Se3
-root=$_GET[dc_root]
-mailhub=$_GET[dc_smarthost]
-rewriteDomain=$_GET[dc_readhost]
-hostname=$_GET[dc_readhost]
+root=$dc_root
+mailhub=$dc_smarthost
+rewriteDomain=$dc_readhost
+hostname=$dc_readhost
                 ";
 		fwrite($fp,$DEFAUT);
 		fclose($fp);
 
 		$subject = gettext("Test de la configuration de votre serveur Se3");
-		$message = gettext("Message envoy� par le serveur Se3");
-		mail ($_GET[dc_root], $subject, $message);
+		$message = gettext("Message envoye par le serveur Se3");
+		mail ($dc_root, $subject, $message);
 
 		unset($action);
 	}
