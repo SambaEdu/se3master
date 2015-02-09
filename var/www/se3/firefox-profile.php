@@ -4,6 +4,16 @@
 	// require ("functions.inc.php");
 	include "ldap.inc.php";
 	// include "ihm.inc.php";
+        
+        
+        // HTMLpurifier
+        include("../se3/includes/library/HTMLPurifier.auto.php");
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+  
+        $computername=isset($_GET['computername']) ? $purifier->purify($_GET['computername']) : "";
+        $username=isset($_GET['username']) ? $purifier->purify($_GET['username']) : "";
+        $userdomain=isset($_GET['userdomain']) ? $purifier->purify($_GET['userdomain']) : "";
 
 	$PathProfileJs = "/var/se3/unattended/install/packages/firefox/firefox-profile.js";
 	$PathProfileSe3Js = "/var/se3/unattended/install/packages/firefox/firefox-profile-se3.js";
@@ -22,8 +32,7 @@
 	echo "//BEGIN CE prefs\r\n";
 	echo "\r\n";
 	echo "try {\r\n";
-	if ( isset($_GET['computername']) ) {
-		$computername = $_GET['computername'];
+	if ( isset($computername) ) {
 		echo "  computername = '$computername';\r\n";
 		$parc = search_parcs ($computername);
 		$nParc = count( $parc);
@@ -33,8 +42,7 @@
 		}
 		echo "';\r\n";
 	}
-	if ( isset($_GET['username']) ) {
-		$username = $_GET['username'];
+	if ( isset($username) ) {
 		echo "  username = '$username';\r\n";
 		$filtre = "(|(memberUid=".$username.")(member=uid=".$username.",".$dn['people']."))";
 		$userGroups = search_groups ( $filtre );
@@ -45,8 +53,7 @@
 		}
 		echo "';\r\n";
 	}
-	if ( isset($_GET['userdomain']) ) {
-		$userdomain = $_GET['userdomain'];
+	if ( isset($userdomain) ) {
 		echo "  userdomain = '$userdomain';\r\n";
 	}
 	echo "} catch(e) {\r\n";
@@ -54,8 +61,8 @@
 	echo "}\r\n";
 	echo "\r\n";
 	readfile("$PathProfileJs");
-	if (file_exists($PathProfileSe3Js) && isset($_GET['computername']) && isset($_GET['username'])  && isset($_GET['userdomain']) ) {
-		// Ajout du paramétrage défini par l'interface web du se3
+	if (file_exists($PathProfileSe3Js) && isset($computername) && isset($username)  && isset($userdomain) ) {
+		// Ajout du paramï¿½trage dï¿½fini par l'interface web du se3
 		readfile("$PathProfileSe3Js");
 	}
 ?>
