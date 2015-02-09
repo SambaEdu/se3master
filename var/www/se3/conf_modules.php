@@ -22,6 +22,14 @@ include ("fonc_outils.inc.php");
 // bindtextdomain('se3-core',"/var/www/se3/locale");
 // textdomain ('se3-core');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $action=isset($_GET['action']) ? $purifier->purify($_GET['action']) : "";
+  $varb=isset($_GET['varb']) ? $purifier->purify($_GET['varb']) : "";
+  $valeur=isset($_GET['valeur']) ? $purifier->purify($_GET['valeur']) : "";
 
 //aide
 $_SESSION["pageaide"]="Les modules";
@@ -30,9 +38,9 @@ $_SESSION["pageaide"]="Les modules";
 if (ldap_get_right("se3_is_admin",$login)!="Y")
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 
-$module = "se3-".$_GET['varb'];
+$module = "se3-".$varb;
 // Mise a jour
-if ($_GET['action'] == "update") {
+if ($action == "update") {
 	echo "<h1>Gestion des modules SE3</h1>";
         if ($module == "se3-ocs") {
         system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i $module se3-ocs-clientwin");
@@ -45,21 +53,21 @@ if ($_GET['action'] == "update") {
 }
 
 // Change dans la base
-if ($_GET['action'] == "change") {
+if ($action == "change") {
 
 	echo "<H1>Gestion des modules SE3</H1>";
 	// Change dnas la table params
-	$resultat=mysql_query("UPDATE params set value='".$_GET['valeur']."' where name='$_GET[varb]'");
-	switch ($_GET['varb']) {
+	$resultat=mysql_query("UPDATE params set value='".$valeur."' where name=$varb");
+	switch ($varb) {
 		case "savbandactiv":
-			if ($_GET['valeur'] == "1") {
+			if ($valeur == "1") {
 				echo "Module $module activ&#233;.<br>\n";
 			} else{
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
 		case "inventaire":
-			if($_GET['valeur']=="1") {
+			if($valeur=="1") {
 				$ocs_actif = exec("dpkg -s se3-ocs | grep \"Status: install ok\" > /dev/null && echo 1");
 				// Si paquet pas installe
 				if($ocs_actif!="1") {
@@ -75,7 +83,7 @@ if ($_GET['action'] == "change") {
 		// Conf antivirus
 		case "antivirus":
 			$clamav_actif = exec("dpkg -s se3-clamav | grep \"Status: install ok\" > /dev/null && echo 1");
-			if(($_GET['valeur']=="1") && ($clamav_actif!="1")) { //paquet pas installe on l'installe
+			if(($valeur=="1") && ($clamav_actif!="1")) { //paquet pas installe on l'installe
 					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-clamav");
 					echo "Module $module activ&#233;.<br>\n";
 			} else {
@@ -86,21 +94,21 @@ if ($_GET['action'] == "change") {
 			break;
 		// Conf du dhcp
 		case "dhcp":
-			if($_GET['valeur']=="1") { //si on veut l'activer
+			if($valeur=="1") { //si on veut l'activer
 				$STOP_START="start";
 				$dhcp_actif = exec("dpkg -s se3-dhcp | grep \"Status: install ok\" > /dev/null && echo 1");
 				if($dhcp_actif!="1") { //paquet pas installe on l'installe
 					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-dhcp");
 				} else { //sinon on l'active
-					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='dhcp_on_boot'";
+					$update_query = "UPDATE params SET value='".$valeur."' where name='dhcp_on_boot'";
 					mysql_query($update_query);
 					echo "Module $module activ&#233;.<br>\n";
 				}
 			}
 			//	exec("/usr/bin/sudo /usr/share/se3/scripts/makedhcpdconf");
-			if($_GET['valeur']=="0") {
+			if($valeur=="0") {
 				$STOP_START="stop";
-				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='dhcp_on_boot'";
+				$update_query = "UPDATE params SET value='".$valeur."' where name='dhcp_on_boot'";
 				mysql_query($update_query);
 				exec("/usr/bin/sudo /usr/share/se3/scripts/makedhcpdconf");
 				exec("/usr/bin/sudo /usr/share/se3/scripts/makedhcpdconf $STOP_START");
@@ -109,51 +117,51 @@ if ($_GET['action'] == "change") {
 			break;
 		// Conf du clonage
 		case "clonage":
-			if($_GET['valeur']=="1") {
+			if($valeur=="1") {
 				$clonage_actif = exec("dpkg -s se3-clonage | grep \"Status: install ok\" > /dev/null && echo 1");
 				// Si paquet pas installe
 				if($clonage_actif!="1") {
 					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-clonage");
 				} else {
-					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='clonage'";
+					$update_query = "UPDATE params SET value='".$valeur."' where name='clonage'";
 					mysql_query($update_query);
 					exec("/usr/bin/sudo /usr/share/se3/scripts/se3_tftp_boot_pxe.sh start");
 					echo "Module $module activ&#233;.<br>\n";
 				}
 			}
-			if($_GET['valeur']=="0") {
+			if($valeur=="0") {
 				exec("/usr/bin/sudo /usr/share/se3/scripts/se3_tftp_boot_pxe.sh stop");
-				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='clonage'";
+				$update_query = "UPDATE params SET value='".$valeur."' where name='clonage'";
 				mysql_query($update_query);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
 		// Conf d'unattended
 		case "unattended":
-			if($_GET['valeur']=="1") {
+			if($valeur=="1") {
 				$unattended_actif = exec("dpkg -s se3-unattended | grep \"Status: install ok\" > /dev/null && echo 1");
 				// Si paquet pas installe
 				if($unattended_actif!="1") {
 					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-unattended");
 				} else {
-					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='unattended'";
+					$update_query = "UPDATE params SET value='".$valeur."' where name='unattended'";
 					mysql_query($update_query);
                                         // activer unattended, c'est activer le clonage
-					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='clonage'";
+					$update_query = "UPDATE params SET value='".$valeur."' where name='clonage'";
 					mysql_query($update_query);
 					exec("/usr/bin/sudo /usr/share/se3/scripts/se3_tftp_boot_pxe.sh start");
 					echo "Module $module et clonage activ&#233;s.<br>\n";
 				}
 			}
-			if($_GET['valeur']=="0") {
-				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='unattended'";
+			if($valeur=="0") {
+				$update_query = "UPDATE params SET value='".$valeur."' where name='unattended'";
 				mysql_query($update_query);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
 		// conf fond d'ecran
 		case "fondecran":
-			$valeur_fondecran=($_GET['valeur']==1) ? 1 : 0;
+			$valeur_fondecran=($valeur==1) ? 1 : 0;
 			$resultat=mysql_query("SELECT * FROM params WHERE name='menu_fond_ecran'");
 			if(mysql_num_rows($resultat)==0){
 				$sql = "INSERT INTO params VALUES('','menu_fond_ecran','$valeur_fondecran','','Affichage ou non du menu fond d ecran','6')";
@@ -178,10 +186,10 @@ if ($_GET['action'] == "change") {
 			break;
 		// conf internet
 		case "internet":
-			$valeur_internet=($_GET['valeur']==1) ? 1 : 0;
+			$valeur_internet=($valeur==1) ? 1 : 0;
 			$resultat=mysql_query("SELECT * FROM params WHERE name='internet'");
 			if(mysql_num_rows($resultat)==0){
-				$sql = "INSERT INTO params VALUES('','internet','1','','Activation ou désactivation module se3-internet','6')";
+				$sql = "INSERT INTO params VALUES('','internet','1','','Activation ou dï¿½sactivation module se3-internet','6')";
 			} else {
 				$sql = "UPDATE params SET value='$valeur_internet' where name='internet'";
 			}
@@ -203,19 +211,19 @@ if ($_GET['action'] == "change") {
 			break;
 		// Conf de se3-domain
 		case "backup":
-			if($_GET['valeur']=="1") {
+			if($valeur=="1") {
 				$backup_actif = exec("dpkg -s se3-backup | grep \"Status: install ok\" > /dev/null && echo 1");
 				// Si paquet pas installe
 				if($backup_actif!="1") {
 					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-backup");
 				} else {
-					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='backuppc'";
+					$update_query = "UPDATE params SET value='".$valeur."' where name='backuppc'";
 					mysql_query($update_query);
                                         echo "Module $module activ&#233;.<br>\n";
 				}
 			}
-			if($_GET['valeur']=="0") {
-				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='backuppc'";
+			if($valeur=="0") {
+				$update_query = "UPDATE params SET value='".$valeur."' where name='backuppc'";
 				mysql_query($update_query);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 				include ("fonction_backup.inc.php");
@@ -225,10 +233,10 @@ if ($_GET['action'] == "change") {
 
 		// conf synchro
 		case "synchro":
-			$valeur_synchro=($_GET['valeur']==1) ? 1 : 0;
+			$valeur_synchro=($valeur==1) ? 1 : 0;
 			$resultat=mysql_query("SELECT * FROM params WHERE name='unison'");
 			if(mysql_num_rows($resultat)==0){
-				$sql = "INSERT INTO params VALUES('','unison','1','','Activation ou désactivation module se3-synchro','6')";
+				$sql = "INSERT INTO params VALUES('','unison','1','','Activation ou desactivation module se3-synchro','6')";
 			} else {
 				$sql = "UPDATE params SET value='$valeur_synchro' where name='unison'";
 			}
@@ -252,7 +260,7 @@ if ($_GET['action'] == "change") {
 
 		// conf se3-logonpy
 		case "logonpy":
-			$valeur_logonpy=($_GET['valeur']==1) ? 1 : 0;
+			$valeur_logonpy=($valeur==1) ? 1 : 0;
 
 
 			if ($valeur_logonpy == 1) {
@@ -268,7 +276,7 @@ if ($_GET['action'] == "change") {
 			break;
 		// Conf de se3-domain
 		case "domain":
-			$valeur_domain=($_GET['valeur']==1) ? 1 : 0;
+			$valeur_domain=($valeur==1) ? 1 : 0;
 
 
 			if ($valeur_domain == 1) {
@@ -284,24 +292,24 @@ if ($_GET['action'] == "change") {
 			break;
 		// Conf de WPKG
 		case "wpkg":
-			if($_GET['valeur']=="1") { //si on veut l'activer
+			if($valeur=="1") { //si on veut l'activer
 				$wpkg_actif = exec("dpkg -s se3-wpkg | grep \"Status: install ok\" > /dev/null && echo 1");
 				if($wpkg_actif!="1") { //paquet pas installe on l'installe
 					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-wpkg");
 				} else { //sinon on l'active
-					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='wpkg'";
+					$update_query = "UPDATE params SET value='".$valeur."' where name='wpkg'";
 					mysql_query($update_query);
 					echo "Module $module activ&#233;.<br>\n";
 				}
 			}
-			if($_GET['valeur']=="0") {
-				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='wpkg'";
+			if($valeur=="0") {
+				$update_query = "UPDATE params SET value='".$valeur."' where name='wpkg'";
 				mysql_query($update_query);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
 		case "linux":
-			$valeur_linux=($_GET['valeur']==1) ? 1 : 0;
+			$valeur_linux=($valeur==1) ? 1 : 0;
 			echo $valeur_linux;
 			$resultat=mysql_query("SELECT * FROM params WHERE name='support_linux'");
 			if(mysql_num_rows($resultat)==0){
@@ -426,7 +434,7 @@ if ($domain_actif!="1") {
 	echo "<a href=conf_modules.php?action=change&varb=domain&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" \"$domain_alert\"></a>";
 	echo "</u>";
 } else {
-	echo "<u onmouseover=\"return escape".gettext("('<b>Module installé')")."\">";
+	echo "<u onmouseover=\"return escape".gettext("('<b>Module installï¿½')")."\">";
 	echo "<IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" >";
 	echo "</u>";
 }
@@ -623,7 +631,7 @@ if (($dhcp!="1") || ($dhcp_actif!="1")) {
 	echo "</u>";
 } else {
 	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer sue l\'icone verte pour d&#233;sactiver le module serveur dhcp')")."\">";
-	if($clonage=="1") { $dhcp_alert="onClick=\"alert('Le clonage des stations est actif, en désactivant le dhcp celui-ci ne pourra plus fonctionner')\""; }
+	if($clonage=="1") { $dhcp_alert="onClick=\"alert('Le clonage des stations est actif, en dï¿½sactivant le dhcp celui-ci ne pourra plus fonctionner')\""; }
 	echo "<a href=conf_modules.php?action=change&varb=dhcp&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" \"$dhcp_alert\"></a>";
 	echo "</u>";
 }
@@ -898,7 +906,7 @@ if (($unison!="1") || ($synchro_actif !="1")) {
 	echo "<a href=conf_modules.php?action=change&varb=synchro&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" \"$synchro_alert\"></a>";
 	echo "</u>";
 } else {
-	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Module de synchronisation distance de ses données des stations actif')")."\">";
+	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Module de synchronisation distance de ses donnï¿½es des stations actif')")."\">";
 	echo "<a href=conf_modules.php?action=change&varb=synchro&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" ></a>";
 	echo "</u>";
 }
