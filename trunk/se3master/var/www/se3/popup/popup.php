@@ -32,10 +32,19 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-popup',"/var/www/se3/locale");
 textdomain ('se3-popup');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $parc=$purifier->purify($_POST['parc']);
+  $message=isset($_POST['message']) ? $purifier->purify($_POST['message']) : "";
+  $destination=$purifier->purify($_POST['destination']);
 
-if($_POST['message']!="") {
+
+if($message!="") {
 	$file = fopen("/tmp/popup.txt","w+");
-	fwrite($file,($_POST['message']));
+	fwrite($file,($message));
 	fclose($file);
 } else {
 	include "entete.inc.php";
@@ -50,13 +59,12 @@ if($_POST['message']!="") {
 
 // Si le parc est deja connu
 
-if ($_POST['parc']) {
+if ($parc) {
 	include "entete.inc.php";
 	include "ldap.inc.php";
 	include "ihm.inc.php";
       	echo "<H1>".gettext("Envoi du Pop Up au parc")." $parc </H1>\n";
 	// Lecture des membres du parc
-	$parc=$_POST['parc'];
 	$mp_all=gof_members($parc,"parcs",1);  
 	// Filtrage selon critere
 	if ("$filtrecomp"=="") $mp=$mp_all;
@@ -103,18 +111,18 @@ if ($_POST['parc']) {
 exit;
 }
 
-if (empty($_POST['destination'])){
+if (empty($destination)){
 	include "entete.inc.php";
 	//aide
 	$_SESSION["pageaide"]="Gestion_des_parcs#Envoi_d.27un_popup";
    	echo "<H1>".gettext("Pop Down :-) ")."</H1><BR><BR><B>".gettext("Il faut imp&#233;rativement cocher une case !")."</B>";
-} elseif (!(($_POST['destination']=="poptous")||($_POST['destination']=="popparc")||($_POST['destination']=="popcomputer"))){
+} elseif (!(($destination=="poptous")||($destination=="popparc")||($destination=="popcomputer"))){
     	die (gettext("Valeur incorrecte"));
-} elseif ($_POST['destination']=="poptous") {
+} elseif ($destination=="poptous") {
 	include "poptous.inc.php";
-} elseif ($_POST['destination']=="popparc") {
+} elseif ($destination=="popparc") {
 	include "popparc.inc.php";
-} elseif ($_POST['destination']=="popcomputer") {
+} elseif ($destination=="popcomputer") {
 	include "popcomputer.inc.php";
 }
 
