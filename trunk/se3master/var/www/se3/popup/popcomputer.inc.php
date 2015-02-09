@@ -32,6 +32,13 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-popup',"/var/www/se3/locale");
 textdomain ('se3-popup');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $computer=$purifier->purify($_POST['computer']);
+  $filtrecomp=isset($_POST['filtrecomp']) ? $purifier->purify($_POST['filtrecomp']) : "";
 
 if (is_admin("computers_is_admin",$login)=="Y") {
 
@@ -39,7 +46,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
         $_SESSION["pageaide"]="Gestion_des_parcs#Envoi_d.27un_popup";
     	
 	// Affichage du formulaire de selection de machine
-    	if (!isset($_POST['computers'])) {
+    	if (!isset($computers)) {
 		echo "<H1>".gettext("Pop Down :-) ")."</H1>\n";
 		echo "<BR>";
         	echo "<H3>".gettext("S&#233;lection de la machine destinataire du Pop Up")."</H3>";
@@ -49,7 +56,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
                 echo "<input type=\"submit\" value=\"".gettext("Valider")."\">\n";
                 echo "<br><br></FORM>\n";
 
-		$filtrecomp=isset($_POST['filtrecomp']) ? $_POST['filtrecomp'] : "";
+		
 	 	if ($filtrecomp == '') 
 			$filtrel = '*';
 		else 
@@ -67,7 +74,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
             		echo "</FORM>\n";
                }
        } else {
-		$computers = $_POST['computers'];
+		$computers = $computers;
 		$nbrconnect=0;
 		for ($loop=0; $loop < count($computers); $loop++) {
 			$connect=`smbstatus |grep -w $computers[$loop]`;

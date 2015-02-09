@@ -34,6 +34,12 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-popup',"/var/www/se3/locale");
 textdomain ('se3-popup');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $parc=$purifier->purify($_GET['parc']);
 
 if (is_admin("se3_is_admin",$login)=="Y") {
 
@@ -41,7 +47,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
         $_SESSION["pageaide"]="Gestion_des_parcs#Envoi_d.27un_popup";
 
 	echo "<H1>".gettext("Pop Up")."</H1>";
- 	echo "<H3>".gettext("Message du Pop Up : ").$_GET['parc']."</H3><BR>\n";
+ 	echo "<H3>".gettext("Message du Pop Up : ").$parc."</H3><BR>\n";
 ?>   
 
 	<form action="popup.php" method="post">
@@ -51,7 +57,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
 
 	<?php
 	// Si pas de parc indique
-	if ($_GET['parc']=="") {
+	if ($parc =="") {
 	?>
 		<H3><?php echo gettext("Destinataires du Pop Up:"); ?></H3>
 		<input type="radio" name="destination" value="poptous"><?php echo gettext("Toutes les machines actuellement connect&#233;es"); ?>
@@ -60,7 +66,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
 		<br>
 		<input type="radio" name="destination" value="popcomputer"><?php echo gettext("Des machines"); ?>
 	<?php } else {
-		echo "<input type=\"hidden\" name=\"parc\" value=\"".$_GET['parc']."\">\n";
+		echo "<input type=\"hidden\" name=\"parc\" value=\"".$parc."\">\n";
 	}
 	?>
 		<br>

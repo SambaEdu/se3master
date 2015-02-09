@@ -32,6 +32,14 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-popup',"/var/www/se3/locale");
 textdomain ('se3-popup');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $parc=$purifier->purify($_POST['parc']);
+  
+
 
 if (is_admin("computers_is_admin",$login)=="Y") {
 
@@ -39,7 +47,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
         $_SESSION["pageaide"]="Gestion_des_parcs#Envoi_d.27un_popup";
     	
 	// Affichage du formulaire de selection de parc
-    	if (!isset($_POST['parc'])) {
+    	if (!isset($parc)) {
 		echo "<H1>".gettext("Pop Down :-) ")."</H1>\n";
 		echo "<BR>";
         	echo "<H3>".gettext("S&#233;lection du parc destinataire du Pop Up")."</H3>";
@@ -58,8 +66,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
                }
        } else {
     		// Lecture des membres du parc
-		$parc=$_POST['parc'];
-    		$mp_all=gof_members($parc,"parcs",1);  
+		$mp_all=gof_members($parc,"parcs",1);  
     		// Filtrage selon critere
     		if ("$filtrecomp"=="") $mp=$mp_all;
     		else {
