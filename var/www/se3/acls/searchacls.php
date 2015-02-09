@@ -29,9 +29,9 @@
   include "ldap.inc.php";
   include "ihm.inc.php";
 
-require_once ("lang.inc.php");
-bindtextdomain('se3-acls',"/var/www/se3/locale");
-textdomain ('se3-acls');
+  require_once ("lang.inc.php");
+  bindtextdomain('se3-acls',"/var/www/se3/locale");
+  textdomain ('se3-acls');
 
    // Aide
    $_SESSION["pageaide"]="ACL#En_utilisant_l.27interface_SambaEdu";

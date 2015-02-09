@@ -33,26 +33,30 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-acls',"/var/www/se3/locale");
 textdomain ('se3-acls');
 
-
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+  
 if (is_admin("se3_is_admin",$login)=="Y") {
 
 	// Aide
 	$_SESSION["pageaide"]="ACL#En_utilisant_l.27interface_SambaEdu";
 	
-	$repertoire=isset($_POST['repertoire']) ? $_POST['repertoire'] : (isset($_GET['repertoire']) ? $_GET['repertoire'] : "");
+	$repertoire=isset($_POST['repertoire']) ? $purifier->purify($_POST['repertoire']) : (isset($_GET['repertoire']) ? $purifier->purify($_GET['repertoire']) : "");
 	
-	$type_fich=isset($_POST['type_fich']) ? $_POST['type_fich'] : (isset($_GET['type_fich']) ? $_GET['type_fich'] : "");
+	$type_fich=isset($_POST['type_fich']) ? $purifier->purify($_POST['type_fich']) : (isset($_GET['type_fich']) ? $purifier->purify($_GET['type_fich']) : "");
 	
-	$noms=isset($_POST['noms']) ? $_POST['noms'] : "";
-	$propagation=isset($_POST['propagation']) ? $_POST['propagation'] : "";
-	$choix=isset($_POST['choix']) ? $_POST['choix'] : "";
-	$nouveau=isset($_POST['nouveau']) ? $_POST['nouveau'] : "";
-	$nomformulaire=isset($_POST['nomformulaire']) ? $_POST['nomformulaire'] : array();
-	$valide=isset($_POST['valide']) ? $_POST['valide'] : NULL;
-	$nouveaulecture=isset($_POST['nouveaulecture']) ? $_POST['nouveaulecture'] : "";
-	$nouveauecriture=isset($_POST['nouveauecriture']) ? $_POST['nouveauecriture'] : "";
-	$nouveauexecution=isset($_POST['nouveauexecution']) ? $_POST['nouveauexecution'] : "";
-	$nouveauheritage=isset($_POST['nouveauheritage']) ? $_POST['nouveauheritage'] : "";
+	$noms=isset($_POST['noms']) ? $purifier->purify($_POST['noms']) : "";
+	$propagation=isset($_POST['propagation']) ? $purifier->purify($_POST['propagation']) : "";
+	$choix=isset($_POST['choix']) ? $purifier->purify($_POST['choix']) : "";
+	$nouveau=isset($_POST['nouveau']) ? $purifier->purify($_POST['nouveau']) : "";
+	$nomformulaire=isset($_POST['nomformulaire']) ? $purifier->purify($_POST['nomformulaire']) : array();
+	$valide=isset($_POST['valide']) ? $purifier->purify($_POST['valide']) : NULL;
+	$nouveaulecture=isset($_POST['nouveaulecture']) ? $purifier->purify($_POST['nouveaulecture']) : "";
+	$nouveauecriture=isset($_POST['nouveauecriture']) ? $purifier->purify($_POST['nouveauecriture']) : "";
+	$nouveauexecution=isset($_POST['nouveauexecution']) ? $purifier->purify($_POST['nouveauexecution']) : "";
+	$nouveauheritage=isset($_POST['nouveauheritage']) ? $purifier->purify($_POST['nouveauheritage']) : "";
 	
 
 	if (isset($valide)) {
