@@ -37,6 +37,11 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-mozilla',"/var/www/se3/locale");
 textdomain ('se3-mozilla');
 
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+
 //AUTHENTIFICATION
 if (is_admin("computer_is_admin",$login)!="Y")
 	die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
@@ -45,16 +50,16 @@ if (is_admin("computer_is_admin",$login)!="Y")
 $_SESSION["pageaide"]="Gestion_Mozilla#Mozilla_Thunderbird";
 
 
-$choix=$_POST['choix'];
-$config=$_GET['config'];
-$autres_gr=$_POST['autres_gr'];
-$classe_gr=$_POST['classe_gr'];
-$equipe_gr=$_POST['equipe_gr'];
-$home=$_POST['home'];
-$page_dem=$_POST['page_dem'];
-$user=$_POST['user'];
+$choix=$purifier->purify($_POST['choix']);
+$config=$purifier->purify($_GET['config']);
+$autres_gr=$purifier->purify($_POST['autres_gr']);
+$classe_gr=$purifier->purify($_POST['classe_gr']);
+$equipe_gr=$purifier->purify($_POST['equipe_gr']);
+$home=$purifier->purify($_POST['home']);
+$page_dem=$purifier->purify($_POST['page_dem']);
+$user=$purifier->purify($_POST['user']);
 
-$option=isset($_POST['option']) ? $_POST['option'] : "";
+$option=isset($_POST['option']) ? $purifier->purify($_POST['option']) : "";
 
 
 // Titre
