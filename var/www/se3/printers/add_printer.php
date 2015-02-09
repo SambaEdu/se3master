@@ -38,17 +38,22 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-printers',"/var/www/se3/locale");
 textdomain ('se3-printers');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $parc=$purifier->purify($_POST['parc']);
+  $filtre_imp=$purifier->purify($_POST['filtre_imp']);
+  $new_printers=$purifier->purify($_POST['new_printers']);
+  $add_print=$purifier->purify($_POST['add_print']);
+  
 //aide
 $_SESSION["pageaide"]="Imprimantes";
 
 
 if (is_admin("se3_is_admin",$login)=="Y") { 
 	
-	$parc = $_POST['parc'];
-	$filtre_imp = $_POST['filtre_imp'];
-	$filtre = $_POST['filtre'];
-	$new_printers = $_POST['new_printers'];
-	$add_print = $_POST['add_print'];
 
 	// Affichage du formulaire de selection de parc
     	if (!isset($parc)) {
@@ -96,7 +101,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
 		if ( count($list_new_imprimantes)>15) $size=15; else $size=count($list_new_imprimantes);
 		if ( count($list_new_imprimantes)>0) {
 	    		echo "<FORM ACTION=\"add_printer.php\" METHOD=\"post\">\n";
-            		echo "<P>".gettext("S&#233lectionnez les nouvelles imprimantes &#224  int&#233grer au parc:")."</P>\n";
+            		echo "<P>".gettext("S&#233lectionnez les nouvelles imprimantes &#224ï¿½ int&#233grer au parc:")."</P>\n";
             		echo "<p><SELECT SIZE=\"".$size."\" NAME=\"new_printers[]\" MULTIPLE=\"multiple\">\n";
             		for ($loop=0; $loop < count($list_new_imprimantes); $loop++) {
 	        		echo "<OPTION VALUE=\"".$list_new_imprimantes[$loop]."\">".$list_new_imprimantes[$loop];
@@ -107,7 +112,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
             		echo "<INPUT TYPE=\"submit\" VALUE=\"".gettext("Valider")."\">\n";
             		echo "</FORM>\n";
 		} else {
-	    		$message =  gettext("Il n'y a pas de nouvelle imprimante &#224  ajouter !");
+	    		$message =  gettext("Il n'y a pas de nouvelle imprimante &#224ï¿½ ajouter !");
 	    		echo $message;
 		}
     	} else {
