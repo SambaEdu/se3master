@@ -5,16 +5,16 @@
    Projet SE3 : Ajout imprimante par defaut
    printers/default_printer.php
    Permet d'ajouter une imprimante par defaut
-   Patrice André <h.barca@free.fr>
+   Patrice Andre <h.barca@free.fr>
    Cedric Bellegarde <cbellegarde@ac-nantes.fr>
-   Carip-Académie de Lyon -avril-juin-2004
+   Carip-Academie de Lyon -avril-juin-2004
    CW 17/03/2013 : ne liste que les imprimantes du parc
-   Distribué selon les termes de la licence GPL
+   Distribue selon les termes de la licence GPL
    ============================================= */
    
    
    
-//Affichage de la page pour ajouter des imprimantes à des parcs
+//Affichage de la page pour ajouter des imprimantes ï¿½ des parcs
 
 include "entete.inc.php";
 include "ldap.inc.php";
@@ -25,20 +25,26 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-printers',"/var/www/se3/locale");
 textdomain ('se3-printers');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $parc=$purifier->purify($_POST['parc']);
+  $filtre_imp=$purifier->purify($_POST['filtre_imp']);
+  $filtre=$purifier->purify($_POST['filtre']);
+  $new_printers=$purifier->purify($_POST['new_printers']);
+  $add_print=$purifier->purify($_POST['add_print']);
+  $default_printer=$purifier->purify($_POST['default_printer']);
+
 //aide
 $_SESSION["pageaide"]="Imprimantes";
 
 
 if (is_admin("se3_is_admin",$login)=="Y") { 
 	
-	$parc = $_POST['parc'];
-	$filtre_imp = $_POST['filtre_imp'];
-	$filtre = $_POST['filtre'];
-	$new_printers = $_POST['new_printers'];
-	$add_print = $_POST['add_print'];
-    $default_printer = $_POST['default_printer'];
 
-	// Affichage du formulaire de sélection de parc
+	// Affichage du formulaire de sï¿½lection de parc
     	if (!isset($parc)) {
         	echo "<H1>".gettext("S&#233lection du parc")."</H1>";
         	$list_parcs=search_machines("objectclass=groupOfNames","parcs"); //Liste des parcs existants
@@ -91,7 +97,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
 	    		echo $message;
 		}
     	} else {
-        	// Ajout des imprimantes dans le parc séléctionné
+        	// Ajout des imprimantes dans le parc selectionne
         	echo "<H1>".gettext("Imprimante par defaut du parc")." <U>$parc</U></H1>";
      		exec ("/usr/share/se3/sbin/printerAddDefault.sh $default_printer $parc",$AllOutPutValue,$ReturnValue);
 		if ($ReturnValue==0) {
