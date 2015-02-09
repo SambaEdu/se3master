@@ -38,10 +38,16 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-printers',"/var/www/se3/locale");
 textdomain ('se3-printers');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $view=$purifier->purify($_POST['view']);
+
 //aide
 $_SESSION["pageaide"]="Imprimantes";
 
-$view = $_POST['view'];
 
 if ((is_admin("printers_is_admin",$login)=="Y") AND ($login != "admin")) {
 	echo "<H1>".gettext(" Liste des imprimantes")."</H1>";

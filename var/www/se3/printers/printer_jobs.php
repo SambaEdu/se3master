@@ -37,15 +37,21 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-printers',"/var/www/se3/locale");
 textdomain ('se3-printers');
 
+// HTMLpurifier
+  include("../se3/includes/library/HTMLPurifier.auto.php");
+  $config = HTMLPurifier_Config::createDefault();
+  $purifier = new HTMLPurifier($config);
+  
+  $printer=$purifier->purify($_POST['printer']);
+  $tag=$purifier->purify($_POST['tag']);
+  $list_job=$purifier->purify($_POST['list_job']);
+
 //aide
 $_SESSION["pageaide"]="Imprimantes";
 
 if (is_admin("printers_is_admin",$login)=="Y") {
 //Affichage des travaux
 
-	$printer = $_POST['printer'];
-	$tag = $_POST['tag'];
-	$list_job = $_POST['list_job'];
 
     	echo "<H1>".gettext("Travaux en cours pour l'imprimante")." <B>$printer</B></H1>\n";
 	if (!$list_job){
