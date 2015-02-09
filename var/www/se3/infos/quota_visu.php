@@ -38,6 +38,12 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-infos',"/var/www/se3/locale");
 textdomain ('se3-infos');
 
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+
+
 //aide
 $_SESSION["pageaide"]="Quotas#Gestion_des_quotas";
 
@@ -46,13 +52,13 @@ if (is_admin("system_is_admin",$login)!="Y")
    die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 
 
-$partition=$_POST['partition'];
-if($partition=="") { $partition=$_GET['partition']; }
-$classe_gr=$_POST['classe_gr'];
-$equipe_gr=$_POST['equipe_gr'];
-$matiere_gr=$_POST['matiere_gr'];
-$autres_gr=$_POST['autres_gr'];
-$user=$_POST['user'];
+$partition=$purifier->purify($_POST['partition']);
+if($partition=="") { $partition=$purifier->purify($_GET['partition']); }
+$classe_gr=$purifier->purify($_POST['classe_gr']);
+$equipe_gr=$purifier->purify($_POST['equipe_gr']);
+$matiere_gr=$purifier->purify($_POST['matiere_gr']);
+$autres_gr=$purifier->purify($_POST['autres_gr']);
+$user=$purifier->purify($_POST['user']);
 
 
 if ( file_exists("/tmp/tmp_quota_K") or file_exists("/tmp/tmp_quota_H")) {
