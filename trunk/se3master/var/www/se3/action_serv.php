@@ -31,12 +31,18 @@ require_once("lang.inc.php");
 bindtextdomain('se3-core',"/var/www/se3/locale");
 textdomain ('se3-core');
 
+// HTMLpurifier
+include("../se3/includes/library/HTMLPurifier.auto.php");
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+
+$action=$purifier->purify($_GET['action']);
 
 //aide 
 $_SESSION["pageaide"]="L\'interface_web_administrateur#Action_serveur";
 
 
-$texte_alert="Vous allez stopper ou redémarrer le serveur. Voulez vous vraiment continuer ?";
+$texte_alert="Vous allez stopper ou redemarrer le serveur. Voulez vous vraiment continuer ?";
 ?>
 
 <script type="text/javascript">
@@ -68,7 +74,7 @@ DY></HTML>");
 
 echo "<h1>".gettext("Action sur le serveur")."</H1>";
 
-if ($_GET[action] == "stop")  {
+if ($action == "stop")  {
 	echo "<center>".gettext("Arr&#234;t du serveur en cours ...!");
 	echo "<br>";
 	echo gettext("Veuillez patienter ...");
@@ -76,7 +82,7 @@ if ($_GET[action] == "stop")  {
 	exec("/usr/bin/sudo /usr/share/se3/scripts/start_stop_serv.sh stop");
 }	
 	
-if ($_GET[action] == "restart")  {
+if ($action == "restart")  {
 	echo "<center>".gettext("Red&#233;marrage du serveur en cours ...!");
 	echo "<br>";
 	echo gettext("Veuillez patienter ...");
