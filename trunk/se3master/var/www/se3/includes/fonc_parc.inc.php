@@ -455,7 +455,9 @@ function detail_parc($parc)
                         $mpenc=urlencode($mp[$loop]);
                  	$mp_en_cours=urldecode($mpenc);
    			$mp_curr=search_machines("(&(cn=$mp_en_cours)(objectClass=ipHost))","computers");
-
+                        if (isset($mp_curr[0]["ipHostNumber"])) {
+                               $iphost=$mp_curr[0]["ipHostNumber"];
+			}
        			// Test si on a une imprimante ou une machine
 			$resultat=search_imprimantes("printer-name=$mp_en_cours","printers");
 			$suisje_printer="0";
@@ -471,13 +473,10 @@ function detail_parc($parc)
 			// On ne rentre dedans que si on est pas une imprimante
 
 			if ($suisje_printer!="1") {
-				if ("$smbversion"=="samba3") $smbsess=exec ("smbstatus |gawk -F' ' '{print \" \"$5\" \"$4\" \"}' |grep ' $mp_en_cours ' |cut -d' ' -f2 |head -n1");
-        			else $smbsess=exec ("smbstatus |gawk -F' ' '{print \" \"$5\" \"$4}' |grep ' $mp_en_cours ' |cut -d' ' -f3 |head -n1");
-        			if ($smbsess=="") {
+				$login=exec ("smbstatus -b | grep $iphost |gawk -F' ' '{print $2}' |head -n1");
+        			if ($login=="") {
 					$etat_session="<img type=\"image\" src=\"../elements/images/disabled.png\">\n";
 				} else {
-        				if ("$smbversion"=="samba3") $login = exec ("smbstatus | grep -v 'root' |gawk -F' ' '{print \" \"$5\" \"$2}' |grep ' $smbsess ' |cut -d' ' -f3 |head -n1");
-        				else $login = exec ("smbstatus | grep -v 'root' |gawk -F' ' '{print \" \"$4\" \"$2}' |grep ' $smbsess ' |cut -d' ' -f3 |head -n1");
         				$etat_session="<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape('$login est actuellement connect&#233; sur ce poste')\"><img type=\"image\" src=\"../elements/images/enabled.png\"></u>\n";
         			}
        	
@@ -1011,16 +1010,28 @@ function suppr_inventaire($name)
 
 function smbstatus() {
 	static $smb_login;
-	static $timestamp = 0;
+	static $timestamp;
 	if ((time() > ($timestamp + 120)) || !(isset($smb_login))) {
 		$timestamp = time();
 		unset($smb_login);
-		exec("smbstatus -b 2>/dev/null", $resultat);
+		require_once ("ldap.inc.php");
+		exec("sudo smbstatus -b 2>/dev/null", $resultat);
 		foreach ($resultat as $ligne) {
 			$table = preg_split("/[\s]+/", $ligne);
-			if ((count($table) == 5) && ($table[1] != root) && ($table[1] != nobody)) {
-				$smb_login[$table[3]]["login"] = $table[1];
-				$smb_login[$table[3]]["ip"] = preg_replace("/[\(\)]/", "", $table[4]);
+			if ((count($table) == 5) && ($table[1] != root) && ($table[1] != nobody) && (preg_match("/(.+)\\$/", $table[1]) === 0)) {
+	                        $mp_curr=search_machines("(&(ipHostNumber=$table[3])(objectClass=ipHost))","computers");
+        	                if (isset($mp_curr[0]["cn"])) {
+                	                $hostname=$mp_curr[0]["cn"];
+					$smb_login[$hostname]["login"] = $table[1];
+					$smb_login[$hostname]["ip"] = preg_replace("/[\(\)]/", "", $table[3]);
+				} else {
+	                                $mp_curr=search_machines("(&(cn=$table[3])(objectClass=ipHost))","computers");
+		                        if (isset($mp_curr[0]["cn"])) {
+                		                $hostname=$mp_curr[0]["cn"];
+                             		        $smb_login[$hostname]["login"] = $table[1];
+            	          			$smb_login[$hostname]["ip"] = preg_replace("/\(ipv4:(.+):(.+)\)/", "\${1}", $table[4]);
+					}
+				} 
 			}
 		}
 	}
