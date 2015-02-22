@@ -400,7 +400,7 @@ function  aff_mnu_search($user_type)
          <ul>
            <li><a href=\"add_user.php\">".gettext("un utilisateur...")."</a></li>
            <li><a href=\"add_group.php\">".gettext("un groupe...")."</a></li>
-           <li><a href=\"groupetpe.php\">".gettext("un sous groupe...")."</a></li>
+           <li><a href=\"groupetpe.php\">".gettext("un regroupement...")."</a></li>
            </ul>
            <br />
 		</li>
