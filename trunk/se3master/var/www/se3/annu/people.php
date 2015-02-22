@@ -173,7 +173,7 @@ echo "<table width=\"80%\"><tr><td>";
 		  ?>
 		
 		<li><a href="del_user.php?uid=<?php echo $user["uid"] ?>" onclick= "return getconfirm();"><?php echo gettext("Supprimer le compte"); ?></a><br>
-    		<li><a href="del_nt_profile.php?uid=<?php echo $user["uid"] ?>&action=del" onclick= "return getconfirm();"><?php echo gettext("Reg&#233;n&#233;rer le profil Windows"); ?></a><br>
+    		<li><a href="del_nt_profile.php?uid=<?php echo $user["uid"] ?>&action=del" onclick= "return getconfirm();"><?php echo gettext("Reg&#233;n&#233;rer le profil errant Windows"); ?></a><br>
     		<?php exec ("/usr/share/se3/sbin/getUserProfileInfo.pl $user[uid]",$AllOutPut,$ReturnValue);
     		
 		if ($AllOutPut[0]=="lock") {
