@@ -48,7 +48,7 @@ if (is_admin("system_is_admin",$login)!="Y")
 echo "<h1>".gettext("Correction de probl&#232;mes")."</h1>\n";
 if (isset($action)) {
     if ($action == "rmprofiles") {
-        echo "<h2>".gettext("Nettoyage des profils Windows...")."</h2>";
+        echo "<h2>".gettext("Reg&#233;n&#233;rer les profils errants Windows...")."</h2>";
         system("sudo /usr/share/se3/scripts/clean_profiles.sh");
     }
     if ($action == "permse3") {
