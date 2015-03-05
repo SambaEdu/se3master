@@ -24,7 +24,7 @@
 
 require_once('entete_ajax.inc.php');
  // Controle l'installation des vbs
-$filename="/home/netlogon/domscripts/rejointSE3.cmd";
+$filename="/home/netlogon/domscripts/rejointSE3.exe";
 
 if (file_exists($filename)) { 
 	$ok="1";
