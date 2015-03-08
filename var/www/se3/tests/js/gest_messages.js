@@ -48,6 +48,11 @@ function init_default_msg() {
 			Tip(msg_vbs_info,STICKY, true, CLICKCLOSE, true,WIDTH,250,SHADOW,true,DURATION,duration);
 			
 		}
+                $('help_clonage_se3').onmouseover= function() {
+			UnTip();
+			Tip(msg_clonage_info,STICKY, true, CLICKCLOSE, true,WIDTH,250,SHADOW,true,DURATION,duration);
+			
+		}
 		$('help_gateway_se3').onmouseover= function() {
 			UnTip();
 			Tip(msg_gateway_info, WIDTH,250,SHADOW,true,DURATION,duration);
@@ -176,6 +181,11 @@ function init_default_msg() {
 		$('check_vbs').onmouseover= function() {
 			UnTip();
 			Tip(msg_vbs_nocx,WIDTH,250,SHADOW,true,DURATION,duration);
+			this.onmouseout=function() { UnTip(); }
+		}
+                $('check_clonage').onmouseover= function() {
+			UnTip();
+			Tip(msg_clonage_nocx,WIDTH,250,SHADOW,true,DURATION,duration);
 			this.onmouseout=function() { UnTip(); }
 		}
 		$('check_ftp').onmouseover= function() {

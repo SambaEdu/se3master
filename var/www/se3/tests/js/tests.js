@@ -114,7 +114,41 @@
 
 			}
 		}});
+//test clonage
+		$('check_clonage').src = '../elements/images/spinner.gif';
+		var url13 = './tests/test_clonage.php';
+		var params13 = '';
+		var method13 = 'post';
+		var ajax313 = new Ajax.Request(url13,{ method: method13, parameters: params13, onSuccess: function(requester){
+		var reponse13 = requester.responseText;	
+                
+              //  if (reponse13 != '-1') {
+		
+		//	Element.show('ligne_clonage');
+                    
+                
+		if(reponse13 == '1') {
+			$('check_clonage').src = '../elements/images/recovery.png';
+			$('check_clonage').onmouseover= function(){ return false; };
 
+		}
+		else {
+			$('check_clonage').src = '../elements/images/critical.png';
+			$('check_clonage').onmouseover= function() {
+				UnTip();
+				Tip(msg_clonage_ko,WIDTH,250,SHADOW,true,DURATION,duration);
+				this.onmouseout=function() { UnTip(); }
+				}
+
+			$('link_clonage').href = link_clonage_ko;
+
+			}
+                        
+                //} else {
+	//		Element.hide('ligne_clonage');
+		//}
+		}});
+            
 		//test client
 		$('check_client').src = '../elements/images/spinner.gif';
 		var url101 = './tests/test_client.php';
