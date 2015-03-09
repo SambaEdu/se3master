@@ -8,9 +8,9 @@
    * @auteurs Philippe Chadefaux  MrT
    * @Licence Distribue selon les termes de la licence GPL
    * @note
-   * Modifications propos�es par S�bastien Tack (MrT)
+   * Modifications proposées par Sébastien Tack (MrT)
    * Optimisation du lancement des scripts bash par la technologie asynchrone Ajax.
-   * Modification du syst�me d'infos bulles.(Nouvelle version de wz-tooltip) Ancienne version incompatible avec ajax
+   * Modification du systéme d'infos bulles.(Nouvelle version de wz-tooltip) Ancienne version incompatible avec ajax
    * Externalisation des messages contenus dans les infos-bulles
    * Fonctions Tip('msg') et UnTip();
    * Nouvelle organisation de l'arborescence.
@@ -119,7 +119,7 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 	<script type="text/javascript" src="/tests/js/gest_messages.js"></script>
 	<script type="text/javascript" src="/tests/js/tests.js"></script>
 
-	<?php
+	<?php 
 	/********** Test de la conf du serveur **********************/
 	echo "<H1>".gettext("Etat du serveur")."</H1>";
 	$phpv2=preg_replace("/[^0-9\.]+/","",phpversion());
@@ -178,10 +178,10 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 	$vers=exec("dpkg -s se3|grep Version|cut -d ' ' -f2");
 ?>
 
-	<center><TABLE border="1" width="80%"><TR><TD colspan="3" align="center" class="menuheader">
+        <center><TABLE border="1" width="80%"><TR><TD colspan="3" align="center" class="menuheader">
 	Version SambaEdu</TD></TR><TR><TD>Version OS</TD><TD align="center" colspan="2">
 <?php
-	if ($os=="3.1") { echo "Sarge"; } elseif ($os=="4.0") { echo "Etch"; } elseif ($os=="5.0") { echo "Lenny"; } elseif ($os=="6.0") { echo "Squeeze"; } else { echo "Wheezy"; } echo "<I> <img src=\"../elements/images/debian.png\">($os)</I></TD></TR>\n";
+	if ($os=="6.0") { echo "Squeeze"; } else { echo "Wheezy"; } echo "<I> <img src=\"../elements/images/debian.png\">($os)</I></TD></TR>\n";
 ?>
 	</TD>
 	</TR>
@@ -194,6 +194,25 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 			<a id="help_maj_se3"><img name="action_image2"  src="../elements/images/system-help.png"></a>
 		</TD>
 	</TR>
+        
+        <?php
+        if ($clonage == "1") {
+            echo '<TR>';
+        } else {
+            echo '<TR id="ligne_clonage" style="display: none;">';
+//            echo '<TR>';
+        }
+        ?>
+			            
+                    <TD>Contr&#244;le des mise a jour des dispositifs de Se3-clonage</TD>
+                    <TD align="center">
+                            <a id=link_clonage href="#"><IMG id="check_clonage" style="border: 0px solid ;" SRC="../elements/images/info.png" /></a>
+                    </TD>
+                    <TD align="center">
+                            <A id="help_clonage_se3"><img name="action_image2"  src="../elements/images/system-help.png"></A>
+                    </TD>
+        </TR>
+        
 	<TR>
 		<TD>Importation des cl&#233;s</TD>
 		<TD align="center">
@@ -203,7 +222,7 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 			<A id="help_keys_se3"><img name="action_image2"  src="../elements/images/system-help.png"></A>
 		</TD>
 	</TR>
-	<TR>
+        <TR>
 		<TD>Contr&#244;le la pr&#233;sence de Se3-domain</TD>
 		<TD align="center">
 			<a id=link_vbs href="#"><IMG id="check_vbs" style="border: 0px solid ;" SRC="../elements/images/info.png" /></a>
@@ -212,7 +231,8 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 			<A id="help_vbs_se3"><img name="action_image2"  src="../elements/images/system-help.png"></A>
 		</TD>
 	</TR>
-	<TR>
+	
+        <TR>
 		<TD colspan="3" align="center" class="menuheader">
 			V&#233;rification des connexions</TD></TR><TR><TD>V&#233;rifie la connexion &#224; la passerelle <I>(
 	<?php
