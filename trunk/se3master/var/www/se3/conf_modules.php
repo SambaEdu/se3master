@@ -696,7 +696,7 @@ else{
 		$support_linux=0;
 	}
 }
-echo "<tr><td>".gettext("Support des clients linux")."</TD>";
+echo "<tr><td>".gettext("Support des clients GNU/Linux")."</TD>";
 // On teste si on a bien la derniere version
 // Cas particulier fond d'ecran n'est pas un paquet
 $linux_version_install = exec("apt-cache policy se3-clients-linux | grep \"Install\" | cut -d\" \" -f4");
