@@ -1,9 +1,29 @@
 <?php
-	// ## $Id$ ##
-	// require ("config.inc.php");
-	// require ("functions.inc.php");
-	include "ldap.inc.php";
-	// include "ihm.inc.php";
+
+
+/**
+   
+   * Page du menu  
+   * @Version $Id$ 
+   
+   * @Projet LCS / SambaEdu 
+   
+   * @auteurs 
+
+   * @Licence Distribue selon les termes de la licence GPL
+   
+   * @note 
+   
+   */
+
+   /**
+
+   * @Repertoire: /
+   * file: fireox-profile.php
+   */
+
+
+include "ldap.inc.php";
         
         
         // HTMLpurifier
@@ -62,7 +82,7 @@
 	echo "\r\n";
 	readfile("$PathProfileJs");
 	if (file_exists($PathProfileSe3Js) && isset($computername) && isset($username)  && isset($userdomain) ) {
-		// Ajout du param�trage d�fini par l'interface web du se3
+		// Ajout du parametrage defini par l'interface web du se3
 		readfile("$PathProfileSe3Js");
 	}
 ?>
