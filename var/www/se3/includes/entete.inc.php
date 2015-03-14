@@ -37,6 +37,7 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-core',"/var/www/se3/locale");
 textdomain ('se3-core');
 
+require_once ("traitement.inc.php");
 
 $login=isauth();
 
