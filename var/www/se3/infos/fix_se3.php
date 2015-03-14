@@ -57,9 +57,17 @@ if (isset($action)) {
         echo "Termin&#233;.";
     }
     if ($action == "adminse3pass") {
-        echo "<h2>".gettext("Affichage du mot de passe adminse3...")."</h2>";
-        echo "Le mot de passe adminse3 est actuellement <b>$xppass</b>";
-        //echo "Termin&#233;.";
+
+	
+        if (($login==admin)||($login==assist)||($login==aieple01)) {
+
+            echo "<h2>".gettext("Affichage du mot de passe adminse3...")."</h2>";
+            echo "Le mot de passe adminse3 est actuellement <b>$xppass</b>";
+        }
+        else { 
+            echo "<h2>".gettext("Affichage du mot de passe adminse3...")."</h2>";
+            echo "Affichage non permis avec votre compte";
+        }
     }
     if ($action == "restore_droits") {
         echo "<h2>".gettext("Remise en place des droits sur les comptes utilisateurs...")."</h2>";
