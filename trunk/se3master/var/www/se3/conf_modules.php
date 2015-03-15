@@ -898,7 +898,7 @@ if (($unison!="1") || ($synchro_actif !="1")) {
 	echo "<a href=conf_modules.php?action=change&varb=synchro&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" \"$synchro_alert\"></a>";
 	echo "</u>";
 } else {
-	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Module de synchronisation distance de ses donn�es des stations actif')")."\">";
+	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Module de synchronisation distance de ses donn&#233;es des stations actif')")."\">";
 	echo "<a href=conf_modules.php?action=change&varb=synchro&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" ></a>";
 	echo "</u>";
 }
