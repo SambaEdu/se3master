@@ -34,21 +34,17 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-deploy',"/var/www/se3/locale");
 textdomain ('se3-deploy');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
 
 //aide
 $_SESSION["pageaide"]="Le_module_D%C3%A9ploiement_dans_les_r%C3%A9pertoires_des_utilisateurs";
 
 if (is_admin("se3_is_admin",$login)=="Y") {
 
-	$repertoire = $purifier->purify($_POST['repertoire']);
-	$choix = $purifier->purify($_POST['choix']);
-	$ecraser = $purifier->purify($_POST['ecraser']);
-	$files0 = $purifier->purify($_POST['files0']);
-	$filter = $purifier->purify($_POST['filter']);
+	$repertoire = $_POST['repertoire'];
+	$choix = $_POST['choix'];
+	$ecraser = $_POST['ecraser'];
+	$files0 = $_POST['files0'];
+	$filter = $_POST['filter'];
 
 	// Definition des messages d'alerte
 	$alerte_1="<div class='error_msg'>".gettext("Votre demande de d&#233ploiement n'a pas &#233t&#233 prise en

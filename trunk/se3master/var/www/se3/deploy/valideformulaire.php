@@ -31,23 +31,19 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-deploy',"/var/www/se3/locale");
 textdomain ('se3-deploy');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
 
 //aide
 $_SESSION["pageaide"]="Le_module_D%C3%A9ploiement_dans_les_r%C3%A9pertoires_des_utilisateurs";
 
 
-$ecraser = $purifier->purify($_POST['ecraser']);
-$classe_gr = $purifier->purify($_POST['classe_gr']);
-$cours_gr = $purifier->purify($_POST['cours_gr']);
-$matiere_gr = $purifier->purify($_POST['matiere_gr']);
-$equipe_gr = $purifier->purify($_POST['equipe_gr']);
-$autres_gr = $purifier->purify($_POST['autres_gr']);
-$repertoire = $purifier->purify($_POST['repertoire']);
-$fich = $purifier->purify($_POST['fich']);
+$ecraser = $_POST['ecraser'];
+$classe_gr = $_POST['classe_gr'];
+$cours_gr = $_POST['cours_gr'];
+$matiere_gr = $_POST['matiere_gr'];
+$equipe_gr = $_POST['equipe_gr'];
+$autres_gr = $_POST['autres_gr'];
+$repertoire = $_POST['repertoire'];
+$fich = $_POST['fich'];
 
 // Titre
 echo "<h1>".gettext("D&#233ploiement de fichiers")."</h1>\n";
