@@ -35,15 +35,10 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-acls',"/var/www/se3/locale");
 textdomain ('se3-acls');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
-
-$path=isset($_GET['path']) ? $purifier->purify($_GET['path']) : "";
-$repsup=isset($_GET['repsup']) ? $purifier->purify($_GET['repsup']) : "";
-$repinf=isset($_GET['repinf']) ? $purifier->purify($_GET['repinf']) : "";
-$chemin=isset($_GET['chemin']) ? $purifier->purify($_GET['chemin']) : "";
+$path=isset($_GET['path']) ? $_GET['path'] : "";
+$repsup=isset($_GET['repsup']) ? $_GET['repsup'] : "";
+$repinf=isset($_GET['repinf']) ? $_GET['repinf'] : "";
+$chemin=isset($_GET['chemin']) ? $_GET['chemin'] : "";
 
 if (is_admin("se3_is_admin",$login)=="Y") {
 	
@@ -62,7 +57,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
 		$ici=$repinf;
 		$repinf=explode("/",$repinf);
 		$repinf=end($repinf);
-		$ici=preg_replace("/$repinf/","",$ici);
+		$ici=ereg_replace($repinf,"",$ici);
 		$test=$ici;
 		$test=substr("$test",0,-1);
 	}
