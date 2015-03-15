@@ -46,7 +46,7 @@ function verif (f) {
 for(i=1;i<f.nombre.length;i++)
 if (f.nombre[i].selected)
     n=true;
-if (! n) alerte += "<?php echo gettext("Choisir un nombre de fichiers à distribuer"); ?>\n";  
+if (! n) alerte += "<?php echo gettext("Choisir un nombre de fichiers &agrave; distribuer"); ?>\n";  
 for(i=0;i<f.type.length;i++)
 if (f.type[i].checked)
    typ=true;
@@ -54,7 +54,7 @@ if (! typ) alerte += "<?php echo gettext("Choisir un type de distribution"); ?>\
 for(i=0;i<f.devoir.length;i++)  
 if (f.devoir[i].checked)
    dev=true;
-if (! dev) alerte += "<?php echo gettext("Préciser s'il s'agit d'un devoir"); ?>\n";    
+if (! dev) alerte += "<?php echo gettext("Pr&#233;ciser s'il s'agit d'un devoir"); ?>\n";    
 
 if ( n && typ && dev)
   return true;
@@ -172,7 +172,7 @@ if( f.id_devoir.value =='') {
  }
 if (reg.test(f.id_devoir.value) ) {
   result= false;
-   alerte += "<?php echo gettext("Identifiant de devoir sans espace, ni caractères spéciaux"); ?>\n";  
+   alerte += "<?php echo gettext("Identifiant de devoir sans espace, ni caract&egrave;res sp&#233;ciaux"); ?>\n";  
  }
 if( f.an_retour.value =='' || f.mois_retour.value =='' || f.jour_retour.value =='' ) {
   result= false;
