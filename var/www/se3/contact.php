@@ -36,7 +36,7 @@ $texte=gettext("<P>SambaEdu3 est distribu&#233; selon <A HREF='http://www.gnu.or
 mktable (gettext("A propos"), "<DIV ALIGN='center'>SambaEdu-3 Version $version</DIV>".$texte);
 print "<BR>";
 
-$texte = gettext("<P>Ce projet a &#233;t&#233; initi&#233; par le <A HREF='http://www.crdp.ac-caen.fr' TARGET='_new'>CRDP de Basse-Normandie</A> et est à pr&#233;sent port&#233; par des contributeurs de plusieurs acad&#233;mies : Rouen, Creteil, Versailles, Grenoble, Lyon... 
+$texte = gettext("<P>Ce projet a &#233;t&#233; initi&#233; par le <A HREF='http://www.crdp.ac-caen.fr' TARGET='_new'>CRDP de Basse-Normandie</A> et est ï¿½ pr&#233;sent port&#233; par des contributeurs de plusieurs acad&#233;mies : Rouen, Creteil, Versailles, Grenoble, Lyon... 
 <P>Pour tout renseignement, vous pouvez contacter <A HREF='mailto:olivier.lecluse@crdp.ac-caen.fr'>Olivier LECLUSE</A>, chef du projet SambaEdu3.</P>
 <P>Un grand merci &#224; tous ceux qui contribuent au d&#233;veloppement, aux tests, ou &#224; la documentation du projet, en particulier, pour l'Acad&#233;mie de Caen</P>
 <UL>
@@ -53,7 +53,7 @@ $texte = gettext("<P>Ce projet a &#233;t&#233; initi&#233; par le <A HREF='http:
 <LI>Philippe Chadefaux pour son tr&#232;s gros travail autour de la r&#233;novation de l'interface web 
 <LI>Eric Mercier pour le module DHCP
 
-<LI>Olivier LeCam à l'origine de l'installateur automatique <EM>DiGloo</EM>
+<LI>Olivier LeCam a l'origine de l'installateur automatique <EM>DiGloo</EM>
 <LI>Sandrine Dangreville pour l'interface de gestion des cles de registe windows
 <LI>Jean Gourdin pour l'interface de remise de devoirs
 <LI>Olivier Lacroix pour l'interface quotas
@@ -73,7 +73,7 @@ $texte = gettext("<P>Ce projet a &#233;t&#233; initi&#233; par le <A HREF='http:
 <P>pour l'acad&eacute;mie de Rouen
 <UL>
 <LI><A HREF='mailto:Stephane.boireau@ac-rouen.fr'>St&eacute;phane Boireau </A>pour le module clonage / TFTP et l'import des comptes depuis sconet
-<LI><A HREF='mailto:franck.molle@ac-rouen.fr'>Franck Molle </A>pour le suivi au quotidien du projet, la mise à jour de l'installeur Digloo, des scripts d'installation et de mise à jour...
+<LI><A HREF='mailto:franck.molle@ac-rouen.fr'>Franck Molle </A>pour le suivi au quotidien du projet, la mise ï¿½ jour de l'installeur Digloo, des scripts d'installation et de mise ï¿½ jour...
 haut vol ...
 </UL>
 <P>Et tous les autres contributeurs au projet, qu'ils soient d&#233;veloppeurs, testeurs ou r&#233;dacteurs sur la documentation.
