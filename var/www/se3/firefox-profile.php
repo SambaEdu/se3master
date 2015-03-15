@@ -25,7 +25,8 @@
 
 include "ldap.inc.php";
         
-        
+// Ajout traitement HTMLPurifier
+require_once ("traitement_data.inc.php");  
         
         $computername=isset($_GET['computername']) ? $_GET['computername'] : "";
         $username=isset($_GET['username']) ? $_GET['username'] : "";
