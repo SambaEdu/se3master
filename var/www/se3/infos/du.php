@@ -30,10 +30,6 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-infos',"/var/www/se3/locale");
 textdomain ('se3-infos');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
 
 //aide 
 $_SESSION["pageaide"]="Informations_syst&#232;me#Occupation_disque";
@@ -43,8 +39,8 @@ if ( is_admin("system_is_admin",$login)!="Y")
      die ("<h1>Occupation disque</h1><br>".gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 
 
-$wrep = $purifier->purify($_POST['wrep']);
-if($wrep=="") { $wrep=$purifier->purify($_GET['wrep']); }
+$wrep = $_POST['wrep'];
+if($wrep=="") { $wrep=$_GET['wrep']; }
 if (isset($wrep)) {
 	// test si l'entree est correcte
 	if((is_dir($wrep)) || (is_file($wrep))) {

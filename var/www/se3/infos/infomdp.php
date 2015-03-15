@@ -34,11 +34,6 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-infos',"/var/www/se3/locale");
 textdomain ('se3-infos');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
-
 // aide en ligne
 $_SESSION["pageaide"]="Annuaire";
 
@@ -47,10 +42,10 @@ if (is_admin("annu_is_admin",$login)!="Y")
 	die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 echo "<H1>".gettext("Test des mots de passe")."</H1>";
 
-$classe_gr=$purifier->purify($_POST['classe_gr']);
-$equipe_gr=$purifier->purify($_POST['equipe_gr']);
-$matiere_gr=$purifier->purify($_POST['matiere_gr']);
-$autres_gr=$purifier->purify($_POST['autres_gr']);
+$classe_gr=$_POST['classe_gr'];
+$equipe_gr=$_POST['equipe_gr'];
+$matiere_gr=$_POST['matiere_gr'];
+$autres_gr=$_POST['autres_gr'];
 
 // creation de smbwebopen_pwd_chg dans mysql table params si besoin
 $resultat=mysql_query("select value from params where name='smbwebopen_pwd_chg'");
@@ -141,7 +136,84 @@ if ($smbwebisopenforpasswdchanged == "on") {
 
 
 	// Etablissement des listes des groupes disponibles
-	affiche_all_groups(center, none);
+	$list_groups=search_groups("(&(cn=*) $filter )");
+	// Etablissement des sous listes de groupes :
+	$j =0; $k =0;
+	$m = 0; $n=0;
+	for ($loop=0; $loop < count ($list_groups) ; $loop++) {
+		// Classe
+		if ( preg_match ("/Classe_/", $list_groups[$loop]["cn"]) ) {
+			$classe[$j]["cn"] = $list_groups[$loop]["cn"];
+			$classe[$j]["description"] = $list_groups[$loop]["description"];
+			$j++;
+		}
+		// Equipe
+		elseif ( preg_match ("/Equipe_/", $list_groups[$loop]["cn"]) ) {
+			$equipe[$k]["cn"] = $list_groups[$loop]["cn"];
+			$equipe[$k]["description"] = $list_groups[$loop]["description"];
+			$k++;
+		}
+		// Matiere
+		elseif ( preg_match ("/Matiere_/", $list_groups[$loop]["cn"]) ) {
+			$matiere[$n]["cn"] = $list_groups[$loop]["cn"];
+			$matiere[$n]["description"] = $list_groups[$loop]["description"];
+			$n++;
+		}
+		// Autres
+		elseif (!preg_match ("/^overfill/", $list_groups[$loop]["cn"]) && !preg_match ("/^lcs-users/", $list_groups[$loop]["cn"]) &&
+		//!preg_match ("/^admins/", $list_groups[$loop]["cn"]) &&
+		!preg_match ("/Cours_/", $list_groups[$loop]["cn"]) &&
+		!preg_match ("/^system/", $list_groups[$loop]["cn"]) &&
+		!preg_match ("/^slis/", $list_groups[$loop]["cn"]) &&
+		!preg_match ("/^machines/", $list_groups[$loop]["cn"])) {
+			$autres[$m]["cn"] = $list_groups[$loop]["cn"];
+			$autres[$m]["description"] = $list_groups[$loop]["description"];
+			$m++;
+		}
+	}
+
+	// Affichage des boites de selection des groupes sur lesquels fixer les quotas + choix d'un user specifique
+?>
+<table align='center' border="0" cellspacing="10">
+<thead>
+<tr>
+<td><?php echo gettext("Classes"); ?></td>
+<td><?php echo gettext("Equipes"); ?></td>
+<td><?php echo gettext("Mati&#232;res"); ?></td>
+<td><?php echo gettext("Autres"); ?></td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td valign="top">
+<?php
+echo "<select name= \"classe_gr[]\" size=\"8\" multiple=\"multiple\">\n";
+for ($loop=0; $loop < count ($classe) ; $loop++) {
+echo "<option value=".$classe[$loop]["cn"].">".$classe[$loop]["cn"];
+}
+echo "</select>";
+echo "</td>";
+echo "<td valign=\"top\">\n";
+echo "<select name= \"equipe_gr[]\" size=\"8\" multiple=\"multiple\">\n";
+for ($loop=0; $loop < count ($equipe) ; $loop++) {
+echo "<option value=".$equipe[$loop]["cn"].">".$equipe[$loop]["cn"];
+}
+echo "</select></td>\n";
+
+echo "<td valign=\"top\">\n";
+echo "<select name= \"matiere_gr[]\"  size=\"8\" multiple=\"multiple\">\n";
+for ($loop=0; $loop < count ($matiere) ; $loop++) {
+echo "<option value=".$matiere[$loop]["cn"].">".$matiere[$loop]["cn"];
+}
+echo "</select></td>\n";
+
+echo "<td valign=\"top\">";
+echo "<select name=\"autres_gr[]\" size=\"8\" multiple=\"multiple\">";
+for ($loop=0; $loop < count ($autres) ; $loop++) {
+echo "<option value=".$autres[$loop]["cn"].">".$autres[$loop]["cn"];
+}
+echo "</select></td>\n";
+echo "</tr></table>";
 
 echo "<div id=\"attribution\" align='center'><input type=\"submit\" value=\"".gettext("Valider")."\">
 <input type=\"reset\" value=\"".gettext("R&#233;initialiser")."\"></div>";

@@ -32,20 +32,17 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-infos',"/var/www/se3/locale");
 textdomain ('se3-infos');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
 
-$action=$purifier->purify($_GET['action']);
-$newstatus=$purifier->purify($_GET['newstatus']);
-$newhome=$purifier->purify($_GET['newhome']);
-$newse3=$purifier->purify($_GET['newse3']);
-$newbande=$purifier->purify($_GET['newbande']);
-$newdevice=$purifier->purify($_GET['newdevice']);
-$newmail=$purifier->purify($_GET['newmail']);
-$newniveau=$purifier->purify($_GET['newniveau']);
-$form_action=$purifier->purify($_GET['form_action']);
+
+$action=$_GET['action'];
+$newstatus=$_GET['newstatus'];
+$newhome=$_GET['newhome'];
+$newse3=$_GET['newse3'];
+$newbande=$_GET['newbande'];
+$newdevice=$_GET['newdevice'];
+$newmail=$_GET['newmail'];
+$newniveau=$_GET['newniveau'];
+$form_action=$_GET['form_action'];
 
 if (is_admin("system_is_admin",$login)!="Y")
 	die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");

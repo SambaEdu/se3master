@@ -32,12 +32,9 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-infos',"/var/www/se3/locale");
 textdomain ('se3-infos');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
 
-$action=$purifier->purify($_GET['action']);
+
+$action=$_GET['action'];
 
 //aide
 $_SESSION["pageaide"]="Informations_syst%C3%A8me#Correction_de_probl.C3.A8mes";
