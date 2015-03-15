@@ -32,12 +32,9 @@ require ("entete.inc.php");
 $prefix = "tests";
 require_once("$prefix/messages/$lang/".$prefix."_messages.php");
         
-  // HTMLpurifier
-  include("../se3/includes/library/HTMLPurifier.auto.php");
-  $config = HTMLPurifier_Config::createDefault();
-  $purifier = new HTMLPurifier($config);
+
   
-  $action=isset($_GET['action']) ? $purifier->purify($_GET['action']) : "";
+$action=isset($_GET['action']) ? $_GET['action'] : "";
   
 
 //aide
