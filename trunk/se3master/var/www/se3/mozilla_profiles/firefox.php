@@ -40,11 +40,6 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-mozilla',"/var/www/se3/locale");
 textdomain ('se3-mozilla');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
-
 //AUTHENTIFICATION
 if (is_admin("computer_is_admin",$login)!="Y")
 	die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
@@ -55,26 +50,26 @@ $_SESSION["pageaide"]="Gestion_Mozilla#Mozilla_Firefox";
 
 //debug_var();
 
-$choix=isset($_POST['choix']) ? $purifier->purify($_POST['choix']) : (isset($_GET['choix']) ? $purifier->purify($_GET['choix']) : "");
-$config=isset($_POST['config']) ? $purifier->purify($_POST['config']) : (isset($_GET['config']) ? $purifier->purify($_GET['config']) : "");
-$action=isset($_POST['action']) ? $purifier->purify($_POST['action']) : (isset($_GET['action']) ? $purifier->purify($_GET['action']) : "");
+$choix=isset($_POST['choix']) ? $_POST['choix'] : (isset($_GET['choix']) ? $_GET['choix'] : "");
+$config=isset($_POST['config']) ? $_POST['config'] : (isset($_GET['config']) ? $_GET['config'] : "");
+$action=isset($_POST['action']) ? $_POST['action'] : (isset($_GET['action']) ? $_GET['action'] : "");
 
-$autres_gr=isset($_POST['autres_gr']) ? $purifier->purify($_POST['autres_gr']) : array();
-$classe_gr=isset($_POST['classe_gr']) ? $purifier->purify($_POST['classe_gr']) : array();
-$equipe_gr=isset($_POST['equipe_gr']) ? $purifier->purify($_POST['equipe_gr']) : array();
-$matiere_gr=isset($_POST['matiere_gr']) ? $purifier->purify($_POST['matiere_gr']) : array();
+$autres_gr=isset($_POST['autres_gr']) ? $_POST['autres_gr'] : array();
+$classe_gr=isset($_POST['classe_gr']) ? $_POST['classe_gr'] : array();
+$equipe_gr=isset($_POST['equipe_gr']) ? $_POST['equipe_gr'] : array();
+$matiere_gr=isset($_POST['matiere_gr']) ? $_POST['matiere_gr'] : array();
 
 // Je n'ai pas vu a quoi sert $home
-$home=isset($_POST['home']) ? $purifier->purify($_POST['home']) : "";
+$home=isset($_POST['home']) ? $_POST['home'] : "";
 
-$page_dem=isset($_POST['page_dem']) ? $purifier->purify($_POST['page_dem']) : "";
-$user=isset($_POST['user']) ? $purifier->purify($_POST['user']) : "";
+$page_dem=isset($_POST['page_dem']) ? $_POST['page_dem'] : "";
+$user=isset($_POST['user']) ? $_POST['user'] : "";
 
-$default_page_dem=isset($_POST['default_page_dem']) ? $purifier->purify($_POST['default_page_dem']) : "";
-$userGroups=isset($_POST['userGroups']) ? $purifier->purify($_POST['userGroups']) : "";
+$default_page_dem=isset($_POST['default_page_dem']) ? $_POST['default_page_dem'] : "";
+$userGroups=isset($_POST['userGroups']) ? $_POST['userGroups'] : "";
 
-$new_proxy_type=isset($_POST['new_proxy_type']) ? $purifier->purify($_POST['new_proxy_type']) : "";
-$new_proxy_url=isset($_POST['new_proxy_url']) ? $purifier->purify($_POST['new_proxy_url']) : "";
+$new_proxy_type=isset($_POST['new_proxy_type']) ? $_POST['new_proxy_type'] : "";
+$new_proxy_url=isset($_POST['new_proxy_url']) ? $_POST['new_proxy_url'] : "";
 
 
 
@@ -210,7 +205,7 @@ if ($config==""||$config=="init") {
             }
             if($action=="set_proxy") {
                     
-                    $firefox_use_ie=isset($_POST['firefox_ie']) ? $purifier->purify($_POST['firefox_ie']) : "";
+                    $firefox_use_ie=isset($_POST['firefox_ie']) ? $_POST['firefox_ie'] : "";
 
                     //$script="/usr/share/se3/scripts/modif_profil_mozilla_ff.sh"; 
                     //echo "<h4>".gettext("Modification de la page de d&#233;marrage de Mozilla Firefox par defaut")."</h4>";
@@ -238,61 +233,50 @@ if ($config==""||$config=="init") {
                             mysql_query("UPDATE params set value='$new_proxy_type' where name='proxy_type'");
                     }
                     
-                    $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule like 'activer le proxy%'");
-                    $row = mysql_fetch_row($result);
-                    $proxy_actif_key = $row[0];
-
-                    $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule like '%entrez les valeurs pour votre proxy%'");
-                    $row = mysql_fetch_row($result);
-                    $proxy_valeur_key = $row[0];
-
-                    $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule like '%url du script de configuration automatique du proxy%'");
-                    $row = mysql_fetch_row($result);
-                    $proxy_url_key = $row[0];
-
+                    
+                    
+                    $result=mysql_query("SELECT CleID FROM corresp WHERE sscat='configuration du proxy' AND type='config'");
+                    
+                    while ($row = mysql_fetch_row($result)) {
+                        $val_cleid[] = $row[0];
+                        mysql_query("DELETE FROM restrictions WHERE cleID='$row[0]'");
+                    }
+                    
+                    
 
                     switch ($proxy_type) {
                                               
                         case 0:
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_actif_key'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_valeur_key'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_url_key'");
-                            
-                            //mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[3]'");
-                            $query = "INSERT INTO restrictions VALUES('','$proxy_url_key','base','','')";
+                            mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[0]'");
+                            mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[1]'");
+                            mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[2]'");
+                            mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[3]'");
+                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[3]','base','','')";
                             $resultat=mysql_query($query);
-                            $query = "INSERT INTO restrictions VALUES('','$proxy_valeur_key','base','','')";
+                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[1]','base','','')";
                             $resultat=mysql_query($query);
-                            $query = "INSERT INTO restrictions VALUES('','$proxy_actif_key','base','0','')";
+                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[0]','base','0','')";
                             mysql_query($query);
                              
                             break;
                         
                         case 1:
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_actif_key'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_valeur_key'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_url_key'");
-                            $query = "INSERT INTO restrictions VALUES('','$proxy_actif_key','base','1','')";
+                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[0]','base','1','')";
                             mysql_query($query);
-                            $query = "INSERT INTO restrictions VALUES('','$proxy_valeur_key','base','$new_proxy_url','')";
+                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[1]','base','$new_proxy_url','')";
                             $resultat=mysql_query($query);
                             if ($resultat == FALSE)  { 
-                                mysql_query("UPDATE restrictions set value='$new_proxy_url' where CleID='$proxy_valeur_key'"); 
+                                mysql_query("UPDATE restrictions set value='$new_proxy_url' where CleID='$val_cleid[1]'"); 
                             }
-                            $query = "INSERT INTO restrictions VALUES('','$proxy_url_key','base','','')";
-                            $resultat=mysql_query($query);
 
                             break;
                         
                         case 2:
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_actif_key'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_valeur_key'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_url_key'");
-                            //mysql_query("UPDATE corresp set value='' WHERE cleID='$row[3]'");
-                            $query = "INSERT INTO restrictions VALUES('','$proxy_url_key','base','$new_proxy_url','')";
+                            mysql_query("UPDATE corresp set value='' WHERE cleID='$row[3]'");
+                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[3]','base','$new_proxy_url','')";
                             $resultat=mysql_query($query);
                             if ($resultat == FALSE) { 
-                                mysql_query("UPDATE restrictions set value='$new_proxy_url' where CleID='$proxy_url_key'"); 
+                                mysql_query("UPDATE restrictions set value='$new_proxy_url' where CleID='$val_cleid[3]'"); 
                                 
                                 }
 
@@ -434,7 +418,7 @@ if ($config==""||$config=="init") {
 	$nbr_user=0;
 	system ("echo \"#!/bin/bash\n\" > /tmp/$nomscript");
 
-        $option=isset($_POST['option']) ? $purifier->purify($_POST['option']) : "";
+        $option=isset($_POST['option']) ? $_POST['option'] : "";
     
 	if($choix=="modif_proxy") {
 		//system("sudo /usr/share/se3/scripts/modif_profil_mozilla_ff.sh proxy $proxy_url $proxy_type");
