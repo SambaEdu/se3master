@@ -26,14 +26,10 @@
 include "ldap.inc.php";
         
         
-        // HTMLpurifier
-        include("../se3/includes/library/HTMLPurifier.auto.php");
-        $config = HTMLPurifier_Config::createDefault();
-        $purifier = new HTMLPurifier($config);
-  
-        $computername=isset($_GET['computername']) ? $purifier->purify($_GET['computername']) : "";
-        $username=isset($_GET['username']) ? $purifier->purify($_GET['username']) : "";
-        $userdomain=isset($_GET['userdomain']) ? $purifier->purify($_GET['userdomain']) : "";
+        
+        $computername=isset($_GET['computername']) ? $_GET['computername'] : "";
+        $username=isset($_GET['username']) ? $_GET['username'] : "";
+        $userdomain=isset($_GET['userdomain']) ? $_GET['userdomain'] : "";
 
 	$PathProfileJs = "/var/se3/unattended/install/packages/firefox/firefox-profile.js";
 	$PathProfileSe3Js = "/var/se3/unattended/install/packages/firefox/firefox-profile-se3.js";
