@@ -34,14 +34,6 @@ include ("ihm.inc.php");
 
 require_once("ups.commun.php");
 
-// HTMLpurifier
-  include("../se3/includes/library/HTMLPurifier.auto.php");
-  $config = HTMLPurifier_Config::createDefault();
-  $purifier = new HTMLPurifier($config);
-  
-  $slave=$purifier->purify($_POST['slave']);
-  $ipslave=$purifier->purify($_POST['ipslave']);
-
 //list ($idpers, $login)= isauth();
 //if ($idpers == "0")    header("Location:$urlauth");
 
@@ -63,21 +55,21 @@ $lien = "ups.php";
 $xmlfile = "/var/www/se3/ups/ups.xml";
 $conffile = "/etc/nut/ups.conf";
 
-$pmarque=$purifier->purify($_POST['pmarque']);
-if ($pmarque==''){$pmarque=$purifier->purify($_GET['pmarque']);}
-$pversion=$purifier->purify($_POST['pversion']);
-if ($pversion==''){$pversion=$purifier->purify($_GET['pversion']);}
-$pdriver=$purifier->purify($_POST['pdriver']);
-if ($pdriver==''){$pdriver=$purifier->purify($_GET['pdriver']);}
-$pcable=$purifier->purify($_POST['pcable']);
-if ($pcable==''){$pcable=$purifier->purify($_GET['pcable']);}
-$pport=$purifier->purify($_POST['pport']);
-if ($pport==''){$pport=$purifier->purify($_GET['pport']);}
-$ptype=$purifier->purify($_POST['ptype']);
-if ($ptype==''){$ptype=$purifier->purify($_GET['ptype']);}
+$pmarque=$_POST['pmarque'];
+if ($pmarque==''){$pmarque=$_GET['pmarque'];}
+$pversion=$_POST['pversion'];
+if ($pversion==''){$pversion=$_GET['pversion'];}
+$pdriver=$_POST['pdriver'];
+if ($pdriver==''){$pdriver=$_GET['pdriver'];}
+$pcable=$_POST['pcable'];
+if ($pcable==''){$pcable=$_GET['pcable'];}
+$pport=$_POST['pport'];
+if ($pport==''){$pport=$_GET['pport'];}
+$ptype=$_POST['ptype'];
+if ($ptype==''){$ptype=$_GET['ptype'];}
 
-$action=$purifier->purify($_POST['action']);
-if ($action=='')($action=$purifier->purify($_GET['action']));
+$action=$_POST['action'];
+if ($action=='')($action=$_GET['action']);
 
 $filiation = array();
 $lselect = array();
@@ -96,11 +88,11 @@ if ($action=="Configurer") {
 
 //########################### IP Master #########################################//
 
-if ($slave=="yes") {
-	if ($ipslave!="") {
+if ($_POST['slave']=="yes") {
+	if ($_POST['ipslave']!="") {
     		$ok=1;$i=1;
     		// split ipslave
-    		$chaine=preg_split("/;/",$ipslave);
+    		$chaine=preg_split("/;/",$_POST['ipslave']);
     		foreach($chaine as $resultat){
      			// verifie l ip
      			if (!is_string($resultat)) {$ok = 0;}
@@ -140,11 +132,6 @@ if ($slave=="yes") {
 			fputs($fp,$upsd_var);
 			fclose($fp);
 
-                        $fp=fopen("/etc/nut/nut.conf","w+");
-                        $hosts_var = "MODE=standalone\n";
-                        fputs($fp,$hosts_var);
-                        fclose($fp);
-                        
 			exec ("/usr/bin/sudo /usr/share/se3/scripts/ups.sh");
 			echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"2; URL=ups.php\">";
   		} else {
@@ -180,11 +167,6 @@ if ($pcable!='' && $pversion!='' &&  $pmarque!='' && $pport!='' && $pcable!='' &
 
 	$fp=fopen("/etc/nut/hosts.conf","w+");
 	$hosts_var = "MONITOR myups@localhost \"Local UPS\"\n";
-	fputs($fp,$hosts_var);
-	fclose($fp);
-        
-        $fp=fopen("/etc/nut/nut.conf","w+");
-	$hosts_var = "MODE=standalone\n";
 	fputs($fp,$hosts_var);
 	fclose($fp);
 
