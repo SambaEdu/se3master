@@ -31,12 +31,9 @@ require_once("lang.inc.php");
 bindtextdomain('se3-core',"/var/www/se3/locale");
 textdomain ('se3-core');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
 
-$action=$purifier->purify($_GET['action']);
+
+$action=$_GET['action'];
 
 //aide 
 $_SESSION["pageaide"]="L\'interface_web_administrateur#Action_serveur";
