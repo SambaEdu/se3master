@@ -37,34 +37,27 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-printers',"/var/www/se3/locale");
 textdomain ('se3-printers');
 
-// HTMLpurifier
-  include("../se3/includes/library/HTMLPurifier.auto.php");
-  $config = HTMLPurifier_Config::createDefault();
-  $purifier = new HTMLPurifier($config);
-  
-  $num=$purifier->purify($_POST['num']);
-  $status=$purifier->purify($_POST['status']);
-  $queue=$purifier->purify($_POST['queue']);
-  $period=$purifier->purify($_POST['period']);
-  $pages=$purifier->purify($_POST['pages']);
-  $printer=$purifier->purify($_POST['printer']);
-  $quota=$purifier->purify($_POST['quota']);
-  $valids=$purifier->purify($_POST['valids']);
-  $validq=$purifier->purify($_POST['validq']);
-  
-
 //aide
 $_SESSION["pageaide"]="Imprimantes";
 
 if (is_admin("printers_is_admin",$login)=="Y") {
 	if ($_POST['one_printer'] != ""){
-		$one_printer= $purifier->purify($_POST['one_printer']);
+		$one_printer= $_POST['one_printer'];
 	} elseif($_GET['one_printer'] != ""){
-		$one_printer= $purifier->purify($_GET['one_printer']);
+		$one_printer= $_GET['one_printer'];
 	} else {
 		$one_printer= '*';
 	}
 	
+	$num = $_POST['num'];
+	$status = $_POST['status'];
+	$queue = $_POST['queue'];
+	$period = $_POST['period'];
+	$pages = $_POST['pages'];
+	$printer = $_POST['printer'];
+	$quota = $_POST['quota'];
+	$valids = $_POST['valids'];
+	$validq = $_POST['validq'];
 
 	$all_printers=search_printers ("printer-name=".$one_printer);
 	$nb_printers=count($all_printers);
@@ -83,7 +76,7 @@ if (is_admin("printers_is_admin",$login)=="Y") {
                 } else {
                         $able="cups".$status;
                 }
-		exec ("/usr/sbin/$able {$all_printers[$num]['printer-name']}");
+		exec ("/usr/bin/$able {$all_printers[$num]['printer-name']}");
 	} elseif (isset($validq)) {
         if(file_exists("/usr/bin/accept")){
             $able=$queue;
