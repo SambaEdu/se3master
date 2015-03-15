@@ -8,8 +8,8 @@
    * @Projet LCS / SambaEdu 
    
    * @auteurs Olivier Lecluse "wawa"
-   * @auteurs « jLCF >:> » jean-luc.chretien@tice.ac-caen.fr
-   * @auteurs  « oluve » olivier.le_monnier@crdp.ac-caen.fr
+   * @auteurs  jLCF >:>  jean-luc.chretien@tice.ac-caen.fr
+   * @auteurs   oluve  olivier.le_monnier@crdp.ac-caen.fr
    * @auteurs Equipe Tice academie de Caen
 
    * @Licence Distribue selon les termes de la licence GPL
