@@ -32,16 +32,6 @@ require_once("lang.inc.php");
 bindtextdomain('se3-core',"/var/www/se3/locale");
 textdomain ('se3-core');
 
-// HTMLpurifier
-  include("../se3/includes/library/HTMLPurifier.auto.php");
-  $config = HTMLPurifier_Config::createDefault();
-  $purifier = new HTMLPurifier($config);
-  
-  $action=isset($_GET['action']) ? $purifier->purify($_GET['action']) : "";
-  $varb=isset($_GET['varb']) ? $purifier->purify($_GET['varb']) : "";
-  $valeur=isset($_GET['valeur']) ? $purifier->purify($_GET['valeur']) : "";
-  $descr=isset($_GET['descr']) ? $purifier->purify($_GET['descr']) : "";
-  $cat=isset($_GET['cat']) ? $purifier->purify($_GET['cat']) : "";
 
 //aide 
 $_SESSION["pageaide"]="L\'interface_web_administrateur#Configuration_g.C3.A9n.C3.A9rale";
@@ -50,49 +40,51 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BO
 DY></HTML>");
 
+$action = $_GET['action'];
+
 // Change dans la base
 if ($action == "change") {
 
-	if ($varb == "proxy") {
-		system("/usr/bin/sudo /usr/share/se3/scripts/modifProxy.sh ".$valeur);
+	if ($_GET['varb'] == "proxy") {
+		system("/usr/bin/sudo /usr/share/se3/scripts/modifProxy.sh ".$_GET['valeur']);
 	} else {
                 //$resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$default_page_dem', '$name_params', 'homepage $userGroups', '1')");
                     
-		$resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('".$valeur."','".$varb."','".$descr."','".$cat."')");
+		$resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('".$_GET['valeur']."','".$_GET['varb']."','".$_GET['descr']."','".$_GET['cat']."')");
 		if ($resultat == FALSE) {
-			mysql_query("UPDATE params set value=$valeur where name='".$varb."';");
+			mysql_query("UPDATE params set value='$_GET[valeur]' where name='".$_GET['varb']."';");
 		}
 	}
-	if ($varb == "corbeille") {
+	if ($_GET['varb'] == "corbeille") {
 		system("sudo /usr/share/se3/sbin/update-smbconf.sh");
 	}
-	if ($varb == "defaultintlevel") {
-		setintlevel($valeur);
+	if ($_GET['varb'] == "defaultintlevel") {
+		setintlevel($_GET['valeur']);
 		echo "<SCRIPT LANGUAGE='JavaScript'>";
 		echo "setTimeout('top.location.href=\"index.html\"',\"10\")";
 		echo "</SCRIPT>";
 		exit;
 	}	
 
-	if ($varb == "defaultshell") {
+	if ($_GET['varb'] == "defaultshell") {
 		$shell_orig=$defaultshell;
-		$shell_mod=$valeur;
+		$shell_mod=$_GET['valeur'];
 		exec ("/usr/share/se3/sbin/changeShellAllUsers.pl $shell_orig $shell_mod",$AllOutPut,$ReturnValue);
 	
 	}
 
-	if ($varb == "autoriser_partage_public") {
+	if ($_GET['varb'] == "autoriser_partage_public") {
 		$sql="SELECT 1=1 FROM params WHERE name='autoriser_partage_public';";
 		$test=mysql_query($sql);
 		if(mysql_num_rows($test)==0) {
-			$sql="INSERT INTO params SET name='autoriser_partage_public', value='".$valeur."', descr='Autoriser l''acces au partage Docs/public', cat='1';";
+			$sql="INSERT INTO params SET name='autoriser_partage_public', value='".$_GET['valeur']."', descr='Autoriser l''acces au partage Docs/public', cat='1';";
 			$insert=mysql_query($sql);
 		}
 		else {
-			$sql="UPDATE params SET value='".$valeur."' WHERE name='autoriser_partage_public';";
+			$sql="UPDATE params SET value='".$_GET['valeur']."' WHERE name='autoriser_partage_public';";
 			$update=mysql_query($sql);
 		}
-		exec ("/usr/bin/sudo /usr/share/se3/scripts/autoriser_partage_public.sh autoriser=".$valeur,$AllOutPut,$ReturnValue);
+		exec ("/usr/bin/sudo /usr/share/se3/scripts/autoriser_partage_public.sh autoriser=".$_GET['valeur'],$AllOutPut,$ReturnValue);
 	}
 
 	exec('/usr/bin/sudo /usr/share/se3/scripts/refresh_cache_params.sh');
@@ -187,6 +179,37 @@ echo "</td></tr>\n";
 
 
 
+// Langue
+/* echo "<TR><TD>".gettext("Langue")."</TD><TD align=\"center\">";
+if ($action=="modif_langue") {
+   $dir = "/var/www/se3/locale/";
+	echo "<form method=\"get\" action=\"conf_params.php\">";
+	echo "<input type=\"hidden\" name=\"action\" value=\"change\">";
+	echo "<input type=\"hidden\" name=\"varb\" value=\"langue\">";
+	echo "<select name =\"valeur\" ONCHANGE=\"this.form.submit();\">";
+	echo "<option"; if ($langue=="auto") { echo " selected"; } echo " value=\"auto\">auto</option>";
+	echo "<option"; if ($langue=="fr") { echo " selected"; } echo " value=\"fr\">fr</option>";
+   	if($dh = opendir($dir)) { 
+     	   while (($file = readdir($dh)) != false) {
+        	if ($file == "." || $file == "..") continue;
+     		if (is_dir($dir.$file)) {
+			echo "<option"; if ($langue=="$file") { echo " selected"; } echo " value=\"$file\">$file</option>";
+		}
+     	   }
+     	   closedir($dh); 
+   	}  
+        echo "</select>\n";
+        echo "<u onmouseover=\"return escape".gettext("('Permet d\'imposer la langue.<br><br> En mode auto la langue utilis&#233;e sera la langue renvoy&#233;e par le navigateur du client.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\" alt=\"help\"></u>";
+        echo "</form>";
+} else {
+	
+	echo "<u onmouseover=\"return escape".gettext("('Permet d\'imposer la langue.<br><br>En mode Auto la langue sera la langue du navigateur')")."\">";
+	echo "<a href=conf_params.php?action=modif_langue>$langue</a>";
+	echo "</u>";
+}	
+echo "</td></tr>\n";
+*/
+
 
 // Gestion des comptes utilisateur
 echo "<TR><TD colspan=\"2\" align=\"center\" class=\"menuheader\">\n";
@@ -200,7 +223,7 @@ if ($action=="modif_uidP") {
 	echo "<input type=\"hidden\" name=\"action\" value=\"change\">";
 	echo "<input type=\"hidden\" name=\"varb\" value=\"uidPolicy\">";
 	echo "<select name =\"valeur\" ONCHANGE=\"this.form.submit();\">";
-	//echo "<option"; if ($uidPolicy=="0") { echo " selected"; } echo " value=\"0\">".gettext("prenom.nom")."</option>";
+	echo "<option"; if ($uidPolicy=="0") { echo " selected"; } echo " value=\"0\">".gettext("prenom.nom")."</option>";
 	echo "<option"; if ($uidPolicy=="1") { echo " selected"; } echo " value=\"1\">".gettext("prenom.nom (tronqu&#233; &#224; 19)")."</option>";
 	echo "<option"; if ($uidPolicy=="2") { echo " selected"; } echo " value=\"2\">".gettext("pnom (tronqu&#233; &#224; 19)")."</option>";
 	echo "<option"; if ($uidPolicy=="3") { echo " selected"; } echo " value=\"3\">".gettext("pnom (tronqu&#233; &#224; 8)")."</option>";
