@@ -30,6 +30,8 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-core',"/var/www/se3/locale");
 textdomain ('se3-core');
 
+// Ajout traitement HTMLPurifier
+require_once ("traitement_data.inc.php");
 
   $register=isset($_POST['register']) ? $_POST['register'] : "";
   $usage=isset($_POST['usage']) ? $_POST['usage'] : "";
