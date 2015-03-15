@@ -30,18 +30,14 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-core',"/var/www/se3/locale");
 textdomain ('se3-core');
 
-// HTMLpurifier
-  include("../se3/includes/library/HTMLPurifier.auto.php");
-  $config = HTMLPurifier_Config::createDefault();
-  $purifier = new HTMLPurifier($config);
 
-  $register=isset($_POST['register']) ? $purifier->purify($_POST['register']) : "";
-  $usage=isset($_POST['usage']) ? $purifier->purify($_POST['usage']) : "";
-  $srvcomm=isset($_POST['srvcomm']) ? $purifier->purify($_POST['srvcomm']) : "";
-  $typetab=isset($_POST['typetab']) ? $purifier->purify($_POST['typetab']) : "";
-  $dept=isset($_POST['dept']) ? $purifier->purify($_POST['dept']) : "";
-  $vernbr=isset($_POST['vernbr']) ? $purifier->purify($_POST['vernbr']) : "";
-  $rne=isset($_POST['rne']) ? $purifier->purify($_POST['rne']) : "";
+  $register=isset($_POST['register']) ? $_POST['register'] : "";
+  $usage=isset($_POST['usage']) ? $_POST['usage'] : "";
+  $srvcomm=isset($_POST['srvcomm']) ? $_POST['srvcomm'] : "";
+  $typetab=isset($_POST['typetab']) ? $_POST['typetab'] : "";
+  $dept=isset($_POST['dept']) ? $_POST['dept'] : "";
+  $vernbr=isset($_POST['vernbr']) ? $_POST['vernbr'] : "";
+  $rne=isset($_POST['rne']) ? $_POST['rne'] : "";
   
 // Demande de s'enregistrer
 if (isset ($register)) {
