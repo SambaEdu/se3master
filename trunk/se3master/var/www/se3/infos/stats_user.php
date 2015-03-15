@@ -34,13 +34,10 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-infos',"/var/www/se3/locale");
 textdomain ('se3-infos');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
+
     
-$partition=$purifier->purify($_GET['partition']);
-$uid=$purifier->purify($_GET['uid']);
+$partition=$_GET['partition'];
+$uid=$_GET['uid'];
 
 $login=isauth();
 if ($login == "") die (gettext("Vous n'avez pas les droits suffisants pour acc&#233der &#224 cette fonction")."</BODY></HTML>");

@@ -39,33 +39,27 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-infos',"/var/www/se3/locale");
 textdomain ('se3-infos');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
-
-
 //aide
 $_SESSION["pageaide"]="Quotas#Fixer_les_quotas";
 
 
-$partition=$purifier->purify($_POST['partition']);
-if($partition=="") { $partition=$purifier->purify($_GET['partition']); }
-$quota=$purifier->purify($_POST['quota']);
-$depassement=$purifier->purify($_POST['depassement']);
-$browser=$purifier->purify($_POST['browser']);
-$grace=$purifier->purify($_POST['grace']);
-$valider_var_se3=$purifier->purify($_GET['valider_var_se3']);
-$valider_home=$purifier->purify($_GET['valider_home']);
-$classe_gr=$purifier->purify($_POST['classe_gr']);
-$equipe_gr=$purifier->purify($_POST['equipe_gr']);
-$matiere_gr=$purifier->purify($_POST['matiere_gr']);
-$autres_gr=$purifier->purify($_POST['autres_gr']);
-$user=$purifier->purify($_POST['user']);
-$messtxt_home=$purifier->purify($_POST['messtxt_home']);
-$messtxt_var_se3=$purifier->purify($_POST['messtxt_var_se3']);
-$nom=$purifier->purify($_GET['nom']);
-$suppr=$purifier->purify($_GET['suppr']);
+$partition=$_POST['partition'];
+if($partition=="") { $partition=$_GET['partition']; }
+$quota=$_POST['quota'];
+$depassement=$_POST['depassement'];
+$browser=$_POST['browser'];
+$grace=$_POST['grace'];
+$valider_var_se3=$_GET['valider_var_se3'];
+$valider_home=$_GET['valider_home'];
+$classe_gr=$_POST['classe_gr'];
+$equipe_gr=$_POST['equipe_gr'];
+$matiere_gr=$_POST['matiere_gr'];
+$autres_gr=$_POST['autres_gr'];
+$user=$_POST['user'];
+$messtxt_home=$_POST['messtxt_home'];
+$messtxt_var_se3=$_POST['messtxt_var_se3'];
+$nom=$_GET['nom'];
+$suppr=$_GET['suppr'];
 
 
 //AUTHENTIFICATION
@@ -180,7 +174,7 @@ if (isset($quota) or isset($suppr)) {
 		 			
 					$hard_quota = (int) ($quota * ($depassement+100)/100 );
 // 					echo $hard_quota;
-					system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $user $partition $quota $hard_quota \n\" >> /tmp/$nomscript");
+					system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $grp $partition $quota $hard_quota \n\" >> /tmp/$nomscript");
 
 				}
 	 		}

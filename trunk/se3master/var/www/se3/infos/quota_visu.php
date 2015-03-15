@@ -38,12 +38,6 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-infos',"/var/www/se3/locale");
 textdomain ('se3-infos');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
-
-
 //aide
 $_SESSION["pageaide"]="Quotas#Gestion_des_quotas";
 
@@ -52,13 +46,13 @@ if (is_admin("system_is_admin",$login)!="Y")
    die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 
 
-$partition=$purifier->purify($_POST['partition']);
-if($partition=="") { $partition=$purifier->purify($_GET['partition']); }
-$classe_gr=$purifier->purify($_POST['classe_gr']);
-$equipe_gr=$purifier->purify($_POST['equipe_gr']);
-$matiere_gr=$purifier->purify($_POST['matiere_gr']);
-$autres_gr=$purifier->purify($_POST['autres_gr']);
-$user=$purifier->purify($_POST['user']);
+$partition=$_POST['partition'];
+if($partition=="") { $partition=$_GET['partition']; }
+$classe_gr=$_POST['classe_gr'];
+$equipe_gr=$_POST['equipe_gr'];
+$matiere_gr=$_POST['matiere_gr'];
+$autres_gr=$_POST['autres_gr'];
+$user=$_POST['user'];
 
 
 if ( file_exists("/tmp/tmp_quota_K") or file_exists("/tmp/tmp_quota_H")) {
@@ -114,7 +108,88 @@ echo "<h2>".gettext("Filtrer les membres des groupes suivants :")." <u onmouseov
 
 //echo "<h3>( Pour afficher tous les quotas, valider directement. )</h3>";
 // Etablissement des listes des groupes disponibles
-affiche_all_groups(center, user);
+$list_groups=search_groups("(&(cn=*) $filter )");
+// Etablissement des sous listes de groupes :
+$j =0; $k =0; $l = 0; $m = 0;
+for ($loop=0; $loop < count ($list_groups) ; $loop++) {
+	
+	// Classe
+	if ( preg_match ("/Classe_/", $list_groups[$loop]["cn"]) ) {
+		$classe[$j]["cn"] = $list_groups[$loop]["cn"];
+		$classe[$j]["description"] = $list_groups[$loop]["description"];
+		$j++;
+	}
+	
+	// Equipe
+	elseif ( preg_match ("/Equipe_/", $list_groups[$loop]["cn"]) ) {
+		$equipe[$k]["cn"] = $list_groups[$loop]["cn"];
+		$equipe[$k]["description"] = $list_groups[$loop]["description"];
+		$k++;
+	}
+	
+	//Matiere
+	elseif ( preg_match ("/Matiere_/", $list_groups[$loop]["cn"]) ) {
+		$matiere[$l]["cn"] = $list_groups[$loop]["cn"];
+		$matiere[$l]["description"] = $list_groups[$loop]["description"];
+		$l++;
+	}
+
+	// Autres
+	elseif (!preg_match ("/^overfill/", $list_groups[$loop]["cn"]) && !preg_match ("/^lcs-users/", $list_groups[$loop]["cn"]) &&
+	//!preg_match ("/^admins/", $list_groups[$loop]["cn"]) &&
+	!preg_match ("/Cours_/", $list_groups[$loop]["cn"]) &&
+	//!preg_match ("/Matiere_/", $list_groups[$loop]["cn"]) &&
+	!preg_match ("/^slis/", $list_groups[$loop]["cn"]) &&
+	!preg_match ("/^system/", $list_groups[$loop]["cn"]) &&
+	!preg_match ("/^machines/", $list_groups[$loop]["cn"])) {
+		$autres[$m]["cn"] = $list_groups[$loop]["cn"];
+		$autres[$m]["description"] = $list_groups[$loop]["description"];
+		$m++;
+	}
+}
+
+
+// Affichage des boites de slection des groupes + choix d'un user spcifique
+?>
+<table align='center' border="0" cellspacing="10">
+<thead>
+<tr>
+<td><?php echo gettext("Classes"); ?></td>
+<td><?php echo gettext("Equipes"); ?></td>
+<td><?php echo gettext("Mati&#232;res"); ?></td>
+<td><?php echo gettext("Autres"); ?></td>
+<td><?php echo gettext("Utilisateur sp&#233;cifique"); ?></td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td valign="top">
+<?php
+echo "<select name= \"classe_gr[]\" size=\"5\" multiple=\"multiple\">\n";
+for ($loop=0; $loop < count ($classe) ; $loop++) {
+	echo "<option value=".$classe[$loop]["cn"].">".$classe[$loop]["cn"];
+}
+echo "</select>";
+echo "</td>";
+echo "<td valign=\"top\">\n";
+echo "<select name= \"equipe_gr[]\"  size=\"5\" multiple=\"multiple\">\n";
+for ($loop=0; $loop < count ($equipe) ; $loop++) {
+echo "<option value=".$equipe[$loop]["cn"].">".$equipe[$loop]["cn"];
+}
+echo "</select></td>\n";
+echo "<td valign=\"top\">\n";
+echo "<select name= \"matiere_gr[]\" size=\"5\" multiple=\"multiple\">\n";
+for ($loop=0; $loop < count ($matiere) ; $loop++) {
+	echo "<option value=".$matiere[$loop]["cn"].">".$matiere[$loop]["cn"];
+}
+echo "</select></td>\n";
+echo "<td valign=\"top\">";
+echo "<select name=\"autres_gr[]\" size=\"5\" multiple=\"multiple\">";
+for ($loop=0; $loop < count ($autres) ; $loop++) {
+	echo "<option value=".$autres[$loop]["cn"].">".$autres[$loop]["cn"];
+}
+echo "</select></td>";
+echo "<td valign=\"top\"><INPUT TYPE=\"TEXT\" NAME=\"user\" size=20></td></tr></table>";
 echo "<div align='center'><input type=\"submit\" value=\"".gettext("Valider")."\">
 <input type=\"reset\" value=\"".gettext("R&#233;initialiser")."\"></div>";
 echo "</form>";
@@ -145,7 +220,7 @@ if ($partition<>"") {
 		<TD  class='menuheader'> &nbsp;&nbsp;&nbsp;".gettext("D&#233;lai de gr&#226;ce &nbsp;(Jours)")."&nbsp;&nbsp;&nbsp; </TD></TR>";
 		//filtre pour garder les lignes intressantes: suppr entte du script repquota_filtre.sh <=> les 7 1res lignes!
 		//le script lui, filtre certains utilisateurs comme : root, www-se3 et trie par ordre alpha => voir commentaires script
-		exec("sudo /usr/share/se3/scripts/repquota_filtre.sh $partition |tail -n +7 >/tmp/quota_filtre");
+		exec("sudo /usr/share/se3/scripts/repquota_filtre.sh $partition |tail +7 >/tmp/quota_filtre");
 
 		//filtre les tabulations et les remplace par les balises du tableau
 		//pour pouvoir mettre la couleur orange des qu'il y a un nombre, je la mets par defaut et la trnnsforme en rouge si delai expire, en transparent si on a un tiret: obligatoire car il y a plein de tiret dans le tableau non distingables
@@ -216,7 +291,7 @@ if ($partition<>"") {
 				//le script lui, filtre certains utilisateurs comme : root, www-se3 et trie par ordre alpha => voir commentaires script
 				//filtre les tabulations et les remplace par les balises du tableau
 
-				exec("sudo /usr/share/se3/scripts/repquota_filtre.sh $partition $grp|tail -n +7 > /tmp/quota_filtre ");
+				exec("sudo /usr/share/se3/scripts/repquota_filtre.sh $partition $grp|tail +7 > /tmp/quota_filtre ");
 
 				//filtre les tabulations et les remplace par les balises du tableau
 				//pour pouvoir mettre la couleur orange des qu'il y a un nombre, je la mets par defaut et la trnnsforme en rouge si delai expire, en transparent si on a un tiret
