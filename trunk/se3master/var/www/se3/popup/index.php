@@ -34,12 +34,9 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-popup',"/var/www/se3/locale");
 textdomain ('se3-popup');
 
-// HTMLpurifier
-  include("../se3/includes/library/HTMLPurifier.auto.php");
-  $config = HTMLPurifier_Config::createDefault();
-  $purifier = new HTMLPurifier($config);
+
   
-  $parc=$purifier->purify($_GET['parc']);
+  $parc=$_GET['parc'];
 
 if (is_admin("se3_is_admin",$login)=="Y") {
 
