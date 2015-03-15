@@ -33,23 +33,19 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-acls',"/var/www/se3/locale");
 textdomain ('se3-acls');
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
   
 if (is_admin("se3_is_admin",$login)=="Y") {
   
    	// Aide
       	$_SESSION["pageaide"]="ACL#En_utilisant_l.27interface_SambaEdu";
 
-   	$noms = $purifier->purify($_POST['noms']);
-	$propagation = $purifier->purify($_POST['propagation']);
-	$choix = $purifier->purify($_POST['choix']);
-	$nouveau = $purifier->purify($_POST['nouveau']);
-	$nomformulaire = $purifier->purify($_POST['nomformulaire']);
-	$repertoire = $purifier->purify($_POST['repertoire']);
-	$type_fich = $purifier->purify($_POST['type_fich']);
+   	$noms = $_POST['noms'];
+	$propagation = $_POST['propagation'];
+	$choix = $_POST['choix'];
+	$nouveau = $_POST['nouveau'];
+	$nomformulaire = $_POST['nomformulaire'];
+	$repertoire = $_POST['repertoire'];
+	$type_fich = $_POST['type_fich'];
 
 
 	$nom = explode (",",$noms);
@@ -109,11 +105,11 @@ if (is_admin("se3_is_admin",$login)=="Y") {
     if ($nouveau != "") {
 	$defaut = "non";
 	$effacer="-m";
-	if ($purifier->purify($_POST['nouveaulecture']) == "oui") $lecture = "r";
+	if ($_POST['nouveaulecture'] == "oui") $lecture = "r";
 	else $lecture="-";
-	if ($purifier->purify($_POST['nouveauecriture']) == "oui") $ecriture="w";
+	if ($_POST['nouveauecriture'] == "oui") $ecriture="w";
 	else $ecriture="-";
-	if ($purifier->purify($_POST['nouveauexecution']) == "oui") $execution="x";
+	if ($_POST['nouveauexecution'] == "oui") $execution="x";
 	else $execution="-";
 	$type=$choix;
 	$nom1=$nouveau;

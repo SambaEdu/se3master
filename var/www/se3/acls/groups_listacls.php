@@ -32,19 +32,14 @@
   require_once ("lang.inc.php");
   bindtextdomain('se3-acls',"/var/www/se3/locale");
   textdomain ('se3-acls');
-  
-  // HTMLpurifier
-  include("../se3/includes/library/HTMLPurifier.auto.php");
-  $config = HTMLPurifier_Config::createDefault();
-  $purifier = new HTMLPurifier($config);
 
   // Aide
   $_SESSION["pageaide"]="ACL#En_utilisant_l.27interface_SambaEdu";
 
-	$group=isset($_POST['group']) ? $purifier->purify($_POST['group']) : "";
-	$priority_group=isset($_POST['priority_group']) ? $purifier->purify($_POST['priority_group']) : "contient";
+  $group = $_POST['group'];
+  $priority_group = $_POST['priority_group'];
   
-if ($group=='') {
+if (!$group) {
 	$filter = "(cn=*)";
 } else {
 	if ($priority_group == "contient") {
@@ -66,14 +61,13 @@ if (count($groups)) {
     	} else {
       		echo "<p><STRONG>".count($groups)."</STRONG>".gettext(" groupes r&#233;pondent &#224; ces crit&#232;res de recherche")."</p>\n";
     	}
-      	echo "<blockquote>\n";
-        echo "<form><select name=\"liste\" onChange=\"Reporter(this)\">";
+      	echo "<UL>\n";
+        echo"<form><select name=\"liste\" onChange=\"Reporter(this)\">";
         echo "<option value=\"\">".gettext("Votre choix ...")."</option>";
         for ($loop=0; $loop<count($groups);$loop++) {
 		echo "<option value=\"".$groups[$loop]["cn"]."\">".$groups[$loop]["cn"]."</option>";
 	}
-        echo "</form>\n";
-		echo "</blockquote>\n";
+        echo "</form></UL>\n";
      
 } else {
 	echo "<STRONG>".gettext("Pas de r&#233;sultats")."</STRONG>".gettext(" correspondant aux crit&#232;res s&#233;lectionn&#233;s.")."<BR>";
