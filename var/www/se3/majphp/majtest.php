@@ -9,7 +9,7 @@
   
    * @Projet LCS / SambaEdu 
    
-   * @auteurs  wawa   olivier.lecluse@crdp.ac-caen.fr
+   * @auteurs wawa   olivier.lecluse@crdp.ac-caen.fr
    * @auteurs Equipe Tice academie de Caen
    
    * @Licence Distribue selon les termes de la licence GPL
@@ -28,18 +28,13 @@
 
 require("entete.inc.php");
 
-// HTMLpurifier
-include("../se3/includes/library/HTMLPurifier.auto.php");
-$config = HTMLPurifier_Config::createDefault();
-$purifier = new HTMLPurifier($config);
-
 //aide
 $_SESSION["pageaide"]="Prise_en_main#Mettre_.C3.A0_jour_le_serveur";
 
 if (ldap_get_right("se3_is_admin",$login)!="Y")
 	die ("<HTML><BODY>".gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 
-$action=$purifier->purify($_GET['action']);
+$action=$_GET['action'];
 	
 if ($action == "majse3") {
 	$info_1 = gettext("Mise &#224; jour lanc&#233;e, ne fermez pas cette fen&#234;tre avant que le script ne soit termin&#233;. vous recevrez un mail r&#233;capitulatif de tout ce qui sera effectu&#233;...");
@@ -52,8 +47,10 @@ else {
     echo "<br><br>";
     echo "<center>";
     echo "<TABLE border=\"1\" width=\"80%\">";
-
     // Modules disponibles
+//    echo "<TR><TD colspan=\"4\" align=\"center\" class=\"menuheader\" height=\"30\">\n";
+//    echo gettext("Etat des paquets");
+//    echo "</TD></TR>";
     echo "<TR><TD align=\"center\" class=\"menuheader\" height=\"30\">\n";
     echo gettext("Nom du paquet &#224; mettre  &#224; jour");
     echo "</TD><TD align=\"center\" class=\"menuheader\" height=\"30\">".gettext("Version install&#233;e")."</TD><TD align=\"center\" class=\"menuheader\" height=\"30\">".gettext("Version disponible")."</TD></TR>";
@@ -154,6 +151,34 @@ else {
         
     }
     
+    // Menu support seven
+    $resultat=mysql_query("SELECT * FROM params WHERE name='support_seven'");
+    if(mysql_num_rows($resultat)==0){
+            $support_seven=0;
+    }
+    else{
+            $ligne=mysql_fetch_object($resultat);
+            if($ligne->value=="1"){
+                    $support_seven=1;
+            }
+            else {
+                    $support_seven=0;
+            }
+    }
+    if ($support_seven=="1") {
+        $seven_version_install = exec("apt-cache policy samba | grep \"Install\" | cut -d\" \" -f4");
+        
+        $seven_version_dispo = exec("apt-cache policy samba | grep \"Candidat\" | cut -d\" \" -f4");
+        // On teste si on a bien la derniere version
+
+        if ("$seven_version_install" != "$seven_version_dispo") {
+            echo "<tr><td>".gettext("Support des clients seven")."</TD>";
+            echo "<TD align=\"center\">$seven_version_install</TD>";
+            echo "<TD align=\"center\"><b>$seven_version_dispo</b></TD>";
+            echo "</tr>\n";
+        }
+    }
+
     // Module clonage
     $clonage_actif = exec("dpkg -s se3-clonage | grep \"Status: install ok\" > /dev/null && echo 1");
     if($clonage_actif == "1") {
