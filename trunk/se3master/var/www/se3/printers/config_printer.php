@@ -38,34 +38,27 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-printers',"/var/www/se3/locale");
 textdomain ('se3-printers');
 
-// HTMLpurifier
-  include("../se3/includes/library/HTMLPurifier.auto.php");
-  $config = HTMLPurifier_Config::createDefault();
-  $purifier = new HTMLPurifier($config);
-  
-  $nom_imprimante=$purifier->purify($_POST['nom_imprimante']);
-  $nom_printer=$purifier->purify($_POST['nom_printer']);
-  $lieu_printer=$purifier->purify($_POST['lieu_printer']);
-  $info_printer=$purifier->purify($_POST['info_printer']);
-  $dev_mode=$purifier->purify($_POST['dev_mode']);
-  $driver_printer=$purifier->purify($_POST['driver_printer']);
-  $uri_printer=$purifier->purify($_POST['uri_printer']);
-
-  $config_printer=$purifier->purify($_POST['config_printer']);
-  $protocole=$purifier->purify($_POST['protocole']);
-  $driver=$purifier->purify($_POST['driver']);
-  $lieu_imprimante=$purifier->purify($_POST['lieu_imprimante']);
-  $info_imprimante=$purifier->purify($_POST['info_imprimante']);
-  $uri_imprimante=$purifier->purify($_POST['uri_imprimante']);
-  $lieu_imprimante=$purifier->purify($_POST['lieu_imprimante']);
-  $modif_imprimante=$purifier->purify($_POST['modif_imprimante']);
-  $fabriquant=$purifier->purify($_POST['fabriquant']);
-  $imp_mode=$purifier->purify($_POST['imp_mode']);
-  
 //aide
 $_SESSION["pageaide"]="Imprimantes";
 
-if (isset ($imp_mode))
+$nom_imprimante=$_POST['nom_imprimante'];
+$nom_printer=$_POST['nom_printer'];
+$lieu_printer=$_POST['lieu_printer'];
+$info_printer=$_POST['info_printer'];
+$dev_mode=$_POST['dev_mode'];
+$driver_printer=$_POST['driver_printer'];
+$uri_printer=$_POST['uri_printer'];
+
+$config_printer=$_POST['config_printer'];
+$protocole=$_POST['protocole'];
+$driver=$_POST['driver'];
+$lieu_imprimante=$_POST['lieu_imprimante'];
+$info_imprimante=$_POST['info_imprimante'];
+$uri_imprimante=$_POST['uri_imprimante'];
+$lieu_imprimante=$_POST['lieu_imprimante'];
+$modif_imprimante=$_POST['modif_imprimante'];
+$fabriquant = $_POST['fabriquant'];
+if (isset ($_POST['imp_mode']))
 	$imp_mode="on";
 else	$imp_mode="off";
 
@@ -77,48 +70,48 @@ if (is_admin("se3_is_admin",$login)=="Y") {
 		
 		// Pour une modif
 		if($nom_printer) {
-			$nom_imprimante=$nom_printer; 
+			$nom_imprimante=$_POST['nom_printer']; 
 			$modif_imprimante="1";	
 		}
-		if($lieu_printer) {$lieu_imprimante=$lieu_printer; }
-		if($info_printer) {$info_imprimante=$info_printer; }
+		if($lieu_printer) {$lieu_imprimante=$_POST['lieu_printer']; }
+		if($info_printer) {$info_imprimante=$_POST['info_printer']; }
 		if($uri_printer) {
-			if(preg_match('/^ipp/',$uri_printer)) {
+			if(preg_match('/^ipp/',$_POST['uri_printer'])) {
 				$protoc="custom";  
-				$uri_imprimante=$uri_printer;
+				$uri_imprimante=$_POST['uri_printer'];
 			}
-			if(preg_match('/^smb/',$uri_printer)) {
+			if(preg_match('/^smb/',$_POST['uri_printer'])) {
 				$protoc="smb"; 
-				list(,,,$uri_imp,$imp)=preg_split('!/!',$uri_printer);
+				list(,,,$uri_imp,$imp)=preg_split('///',$uri_printer);
 				if ($imp!="") { $uri_imprimante="$uri_imp"; } else { $uri_imprimante="$uri_imp"; }
 			}
-			if(preg_match('/^socket/',$uri_printer)) {
+			if(preg_match('/^socket/',$_POST['uri_printer'])) {
 				$protoc="socket"; 
-				list(,,$uri_imp_1)=preg_split('!/!',$uri_printer);
+				list(,,$uri_imp_1)=preg_plit('///',$uri_printer);
 				list($uri_imp,)=preg_split('/:/',$uri_imp_1);
 			        $uri_imprimante="$uri_imp";
 			}
-			if(preg_match('/^parallel/',$uri_printer)) {
+			if(preg_match('/^parallel/',$_POST['uri_printer'])) {
 				$protoc="parallel"; 
-				list(,$uri_imp,)=preg_split('!/!',$uri_printer);
+				list(,$uri_imp,)=preg_split('///',$uri_printer);
 				$uri_imprimante="$uri_imp";
 			}
-			if(preg_match('/^http/',$uri_printer)) {
-				if(preg_match('/printers/',$uri_printer)) {$protoc="ipp";} 
+			if(preg('/^http/',$_POST['uri_printer'])) {
+				if(preg_match('/printers/',$_POST['uri_printer'])) {$protoc="ipp";} 
 				else {$protoc="http";} 
-				list(,,$uri_imp_1)=preg_split('!/!',$uri_printer);
+				list(,,$uri_imp_1)=preg_split('///',$_POST['uri_printer']);
 				list($uri_imp,)=preg_split('/:/',$uri_imp_1);
 				$uri_imprimante="$uri_imp";
 			}
-			if(preg_match('/^lpd/',$uri_printer)) {
+			if(preg_match('/^lpd/',$_POST['uri_printer'])) {
 				$protoc="lpd"; 
-				list(,,$uri_imp_1)=preg_split('!/!',$uri_printer);
+				list(,,$uri_imp_1)=preg_split('///',$_POST['uri_printer']);
 				list($uri_imp,)=preg_split('/:/',$uri_imp_1);
 				$uri_imprimante="$uri_imp";
 			}
-			if(preg_match('/^usb/',$uri_printer)) {
+			if(preg_match('/^usb/',$_POST['uri_printer'])) {
 				$protoc="usb"; 
-				list(,$uri_imp,)=preg_split('!/!',$uri_printer);
+				list(,$uri_imp,)=preg_split('///',$_POST['uri_printer']);
 				$uri_imprimante="$uri_imp";
 			}
 			
@@ -289,7 +282,7 @@ if (is_admin("se3_is_admin",$login)=="Y") {
         	$info_imprimante=enleveaccents($info_imprimante);
         	$lieu_imprimante=enleveaccents($lieu_imprimante);
 		// Cas d'une modification
-		if(($modif_imprimante=="1") && (count($printer_exist))) {
+		if(($_POST["modif_imprimante"]=="1") && (count($printer_exist))) {
         		exec("/usr/share/se3/sbin/printerMod.pl $nom_imprimante $uri_imprimante $lieu_imprimante $info_imprimante $protocole $driver $imp_mode",$AllOutPut,$ReturnValue);
 			
 
