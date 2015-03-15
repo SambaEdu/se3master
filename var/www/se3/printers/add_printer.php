@@ -38,22 +38,17 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-printers',"/var/www/se3/locale");
 textdomain ('se3-printers');
 
-// HTMLpurifier
-  include("../se3/includes/library/HTMLPurifier.auto.php");
-  $config = HTMLPurifier_Config::createDefault();
-  $purifier = new HTMLPurifier($config);
-  
-  $parc=$purifier->purify($_POST['parc']);
-  $filtre_imp=$purifier->purify($_POST['filtre_imp']);
-  $new_printers=$purifier->purify($_POST['new_printers']);
-  $add_print=$purifier->purify($_POST['add_print']);
-  
 //aide
 $_SESSION["pageaide"]="Imprimantes";
 
 
 if (is_admin("se3_is_admin",$login)=="Y") { 
 	
+	$parc = $_POST['parc'];
+	$filtre_imp = $_POST['filtre_imp'];
+	$filtre = $_POST['filtre'];
+	$new_printers = $_POST['new_printers'];
+	$add_print = $_POST['add_print'];
 
 	// Affichage du formulaire de selection de parc
     	if (!isset($parc)) {
