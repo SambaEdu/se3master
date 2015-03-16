@@ -33,10 +33,7 @@ textdomain ('se3-echange');
 
 <?php
 
-// recuperer les parametres passes par POST
-foreach ($_POST as $cle=>$val) {
-  $$cle = $val;
-}
+
 
 require("entete.inc.php");
 require("ldap.inc.php");
@@ -44,7 +41,14 @@ require("fonc_outils.inc.php");
 
 //aide
 $_SESSION["pageaide"]="L%27interface_prof#Ressources_et_partages";
-	
+
+
+// recuperer les parametres passes par POST
+foreach ($_POST as $cle=>$val) {
+  $$cle = $val;
+}
+
+
 $login=isauth();
 $now =date("Y-m-d");
 $table="devoirs";
