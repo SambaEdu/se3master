@@ -30,6 +30,10 @@
 	include "functions.inc.php";
 	include "ihm.inc.php";
 	include "ldap.inc.php";
+        
+        // HTMLPurifier
+        require_once ("traitement_data.inc.php");
+        
 	$login=isauth();
 	if ($login == "") header("Location:$urlauth");
 

@@ -58,6 +58,11 @@ die();
 
 */
 
+
+// HTMLPurifier
+require_once ("traitement_data.inc.php");
+
+
 function createRandomPassword() {
 	$chars = "abcdefghijkmnopqrstuvwxyz023456789";
 	srand((double)microtime()*1000000);
@@ -568,7 +573,7 @@ function createRandomPassword() {
 										unset($tabtmp);
 										$tabtmp=explode(">",preg_replace("/</",">",$ligne[$cpt]));
 										//$matiere[$i]["libelle_court"]=$tabtmp[2];
-										$matiere[$i]["libelle_court"]=preg_replace("/[^a-zA-Z0-9ÀÄÂÉÈÊËÎÏÔÖÙÛÜÇçàäâéèêëîïôöùûü&_. -]/","",html_entity_decode($tabtmp[2]));
+										$matiere[$i]["libelle_court"]=preg_replace("/[^a-zA-Z0-9ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½&_. -]/","",html_entity_decode($tabtmp[2]));
 									}
 									if(strstr($ligne[$cpt],"<LIBELLE_LONG>")){
 										unset($tabtmp);
@@ -790,7 +795,7 @@ function createRandomPassword() {
 										unset($tabtmp);
 										$tabtmp=explode(">",preg_replace("/</",">",$ligne[$cpt]));
 										//$prof[$i]["prenom"]=$tabtmp[2];
-										$prof[$i]["prenom"]=preg_replace("/[^a-zA-Z0-9ÀÄÂÉÈÊËÎÏÔÖÙÛÜÇçàäâéèêëîïôöùûü_. -]/","",$tabtmp[2]);
+										$prof[$i]["prenom"]=preg_replace("/[^a-zA-Z0-9ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_. -]/","",$tabtmp[2]);
 									}
 									if(strstr($ligne[$cpt],"<DATE_NAISSANCE>")){
 										unset($tabtmp);
@@ -1607,7 +1612,7 @@ die();
 									if($matiere[$m]["code"]==$groupes[$i]["code_matiere"]){
 										//$matimn=$programme[$k]["code_matiere"];
 										$matimn=$matiere[$m]["code_gestion"];
-										//echo "<b>Trouv&#233;: mati&#232;re n°$m: \$matimn=$matimn</b><br />\n";
+										//echo "<b>Trouv&#233;: mati&#232;re nï¿½$m: \$matimn=$matimn</b><br />\n";
 									}
 								}
 								//$groupes[$i]["enseignant"][$m]["id"]

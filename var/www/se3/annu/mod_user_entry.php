@@ -39,6 +39,9 @@ require "jlcipher.inc.php";
 
 require "crob_ldap_functions.php";
 
+// HTMLPurifier
+require_once ("traitement_data.inc.php");
+
 $login=isauth();
 // if ($login != "") {
 

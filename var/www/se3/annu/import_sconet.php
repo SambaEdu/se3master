@@ -27,6 +27,9 @@
 
 
 	include "se3orlcs_import_sconet.php";
+        
+        // HTMLPurifier
+        require_once ("traitement_data.inc.php");
 
 	if (is_admin("Annu_is_admin",$login)=="Y") {
                 require ( $pathlcsorse3."config.inc.php");
@@ -184,7 +187,7 @@
 				echo "<tr>\n";
 				echo "<td width='45%'><input type='radio' id='type_csv' name='type_fichier_eleves' value='csv' onchange=\"document.getElementById('id_csv').style.display='';document.getElementById('id_xml').style.display='none';\" /> Export CSV de Sconet";
 				echo "&nbsp;&nbsp;";
-				echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('<b>Le cheminement pour r&#233;aliser cette extraction depuis Sconet est:</b><br />Application Sconet/Acc&#232;s Base Eleves.<br />Choisir l\'ann&#233;e \(<i>en cours ou en pr&#233;paration selon que la bascule est ou non effectu&#233;e</i>\) Exploitation-Extraction et choisir personnalis&#233;e.<br />Les champs requis sont:<ul><li>Nom</li><li>Pr&#233;nom 1</li><li>Date de naissance</li><li>N° Interne</li><li>Sexe</li><li>Division</li>')")."\"><img name=\"action_image1\"  src=\"$helpinfo\"></u>\n";
+				echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('<b>Le cheminement pour r&#233;aliser cette extraction depuis Sconet est:</b><br />Application Sconet/Acc&#232;s Base Eleves.<br />Choisir l\'ann&#233;e \(<i>en cours ou en pr&#233;paration selon que la bascule est ou non effectu&#233;e</i>\) Exploitation-Extraction et choisir personnalis&#233;e.<br />Les champs requis sont:<ul><li>Nom</li><li>Pr&#233;nom 1</li><li>Date de naissance</li><li>Nï¿½ Interne</li><li>Sexe</li><li>Division</li>')")."\"><img name=\"action_image1\"  src=\"$helpinfo\"></u>\n";
 
 				echo "</td>\n";
 				echo "<td width='10%' align='center'>ou</td>\n";
@@ -203,7 +206,7 @@
 				echo "<li>Nom</li>\n";
 				echo "<li>Pr&#233;nom 1</li>\n";
 				echo "<li>Date de naissance</li>\n";
-				echo "<li>N° Interne</li>\n";
+				echo "<li>Nï¿½ Interne</li>\n";
 				echo "<li>Sexe</li>\n";
 				echo "<li>Division</li>\n";
 				echo "</ul>\n";
@@ -244,7 +247,7 @@
 
 				$date_export_xml_precedent=crob_getParam('xml_ele_last_import');
 				if($date_export_xml_precedent!="") {
-					echo "<p>Le précédent export XML élève importé datait du <strong>$date_export_xml_precedent</strong>.</p>\n";
+					echo "<p>Le prï¿½cï¿½dent export XML ï¿½lï¿½ve importï¿½ datait du <strong>$date_export_xml_precedent</strong>.</p>\n";
 				}
 
 				echo "<h4>Fichier professeurs et emploi du temps</h4>\n";
@@ -260,7 +263,7 @@
 				/*
 				$date_export_xml_precedent=crob_getParam('xml_sts_last_import');
 				if($date_export_xml_precedent!="") {
-					echo "<p>Le précédent export XML de STS importé datait du <strong>$date_export_xml_precedent</strong>.</p>\n";
+					echo "<p>Le prï¿½cï¿½dent export XML de STS importï¿½ datait du <strong>$date_export_xml_precedent</strong>.</p>\n";
 				}
 				*/
 
@@ -535,24 +538,24 @@
 				$source_file=stripslashes("$tmp_eleves_file");
 				$res_copy=copy("$source_file" , "$dest_file");
 
-				// Si jamais un XML non dézippé a été fourni
+				// Si jamais un XML non dï¿½zippï¿½ a ï¿½tï¿½ fourni
 				$extension_fichier_emis=strtolower(strrchr($eleves_file,"."));
 				if (($extension_fichier_emis==".zip")||($_FILES['eleves_file']['type']=="application/zip")) {
 
 					//if(!file_exists($racine_www."/includes/pclzip.lib.php")) {
 					if(!file_exists($chemin_www_includes."/pclzip.lib.php")) {
-						echo "<p style='color:red;'>Erreur : Un fichier ZIP a été fourni, mais la bibliothèque de dézippage est absente.</p>\n";
+						echo "<p style='color:red;'>Erreur : Un fichier ZIP a ï¿½tï¿½ fourni, mais la bibliothï¿½que de dï¿½zippage est absente.</p>\n";
 						require($pathlcsorse3."pdp.inc.php");
 						die();
 					}
 					else {
 						//$unzipped_max_filesize=getSettingValue('unzipped_max_filesize')*1024*1024;
 
-						// On considère un XML élève de 20Mo maxi
+						// On considï¿½re un XML ï¿½lï¿½ve de 20Mo maxi
 						$unzipped_max_filesize=20*1024*1024;
 
 						// $unzipped_max_filesize = 0    pas de limite de taille pour les fichiers extraits
-						// $unzipped_max_filesize < 0    extraction zip désactivée
+						// $unzipped_max_filesize < 0    extraction zip dï¿½sactivï¿½e
 						if($unzipped_max_filesize>=0) {
 							//require_once('../lib/pclzip.lib.php');
 							require_once('pclzip.lib.php');
@@ -578,14 +581,14 @@
 							//echo "<p>\$unzipped_max_filesize=".$unzipped_max_filesize."</p>\n";
 
 							if(($list_file_zip[0]['size']>$unzipped_max_filesize)&&($unzipped_max_filesize>0)) {
-								echo "<p style='color:red;'>Erreur : La taille du fichier extrait (<i>".$list_file_zip[0]['size']." octets</i>) dépasse la limite paramétrée (<i>$unzipped_max_filesize octets</i>).</p>\n";
+								echo "<p style='color:red;'>Erreur : La taille du fichier extrait (<i>".$list_file_zip[0]['size']." octets</i>) dï¿½passe la limite paramï¿½trï¿½e (<i>$unzipped_max_filesize octets</i>).</p>\n";
 								require($pathlcsorse3."pdp.inc.php");
 								die();
 							}
 
 							$res_extract=$archive->extract(PCLZIP_OPT_PATH, "$dossier_tmp_import_comptes/");
 							if ($res_extract != 0) {
-								echo "<p>Le fichier uploadé a été dézippé.</p>\n";
+								echo "<p>Le fichier uploadï¿½ a ï¿½tï¿½ dï¿½zippï¿½.</p>\n";
 								$fichier_extrait=$res_extract[0]['filename'];
 								$res_copy=rename("$fichier_extrait" , "$dest_file");
 							}
