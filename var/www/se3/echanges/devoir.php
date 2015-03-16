@@ -32,13 +32,15 @@ textdomain ('se3-echange');
     <link href="style/style.css" type="text/css" rel="StyleSheet">
 <?php
 
+require("entete.inc.php");
+require("ldap.inc.php");
+require("fonc_outils.inc.php");
+
 foreach ($_POST as $cle=>$val) {
     $$cle = $val;
 }
 $id=$_GET['id'];
-require("entete.inc.php");
-require("ldap.inc.php");
-require("fonc_outils.inc.php");
+
 
 $login=isauth();
 $now =date("Y-m-d");

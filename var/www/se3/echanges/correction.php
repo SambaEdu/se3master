@@ -24,6 +24,11 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-echange',"/var/www/se3/locale");
 textdomain ('se3-echange');
 
+
+require("entete.inc.php");
+require("ldap.inc.php");
+require("fonc_outils.inc.php");
+
 //aide
 $_SESSION["pageaide"]="L%27interface_prof#Ressources_et_partages";
 
@@ -31,9 +36,7 @@ $_SESSION["pageaide"]="L%27interface_prof#Ressources_et_partages";
 foreach ($_POST as $cle=>$val) {
     $$cle = $val;
 }
-require("entete.inc.php");
-require("ldap.inc.php");
-require("fonc_outils.inc.php");
+
 
 $login=isauth();
 $id_prof=$login;

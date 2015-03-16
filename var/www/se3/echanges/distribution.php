@@ -21,10 +21,7 @@
 
 	*/
 
-// recuperer les parametres passes par POST
-foreach ($_POST as $cle=>$val) {
-    $$cle = $val;
-}
+
 require("entete.inc.php");
 require("ldap.inc.php");
 require("fonc_outils.inc.php");
@@ -33,6 +30,10 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-echange',"/var/www/se3/locale");
 textdomain ('se3-echange');
 
+// recuperer les parametres passes par POST
+foreach ($_POST as $cle=>$val) {
+    $$cle = $val;
+}
 
 // Aide en ligne pour un devoir
 if ($devoir) {
@@ -59,7 +60,7 @@ echo "<body >
 //Suppression des espaces dans l'identifiant
 //(utilise par la suite pour la creation du dossier):
 //$id_devoir=preg_replace("/ /","_","$id_devoir");
-$id_devoir=strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$id_devoir"))))," 'ÂÄÀÁÃÄÅÇÊËÈÉÎÏÌÍÑÔÖÒÓÕ¦ÛÜÙÚİ¾´áàâäãåçéèêëîïìíñôöğòóõ¨ûüùúıÿ¸","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz");
+$id_devoir=strtr(preg_replace("/ï¿½/","AE",preg_replace("/ï¿½/","ae",preg_replace("/ï¿½/","OE",preg_replace("/ï¿½/","oe","$id_devoir"))))," 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¦ï¿½ï¿½ï¿½ï¿½İ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz");
 
 
 // VERIFICATION
@@ -112,7 +113,7 @@ for ($i=1; $i<= $nombre; $i++) {
  	}
   }	
  else
-   echo "<li>".gettext("pas de fichier n°")." $i ".gettext("choisi (ou fichier vide ..)")."</li>";
+   echo "<li>".gettext("pas de fichier nï¿½")." $i ".gettext("choisi (ou fichier vide ..)")."</li>";
 }
 // VERIFICATION : si aucun fichier n'a ete choisi, s'arreter avec message
 $nb_fichiers=sizeof($fichiers);
@@ -142,7 +143,7 @@ echo "<h3>".gettext("Aux &#233;l&#232;ves des classes (ou groupes)")."</h3>\n";
 for ($g=0; $g <$n ; $g++) {
 
   $classe=$classes[$g];       // ATTENTION ! nom de la gieme classe OU nom GROUPE
-  $equipe="Equipe_".preg_replace("/Classe_/","",$classe); // Modif delineau (il y a surement mieux à faire)
+  $equipe="Equipe_".preg_replace("/Classe_/","",$classe); // Modif delineau (il y a surement mieux ï¿½ faire)
   $liste_eleves_classe = "";  // liste des eleves par classe/groupe
   $eleves=array();            // tableau indice des eleves de la classe/groupe
   $uids = search_uids ($filtres[$g]);
@@ -168,7 +169,7 @@ for ($g=0; $g <$n ; $g++) {
     $id_eleve = $eleves[$p]["uid"];
     $param=params_eleve($id_eleve);
 
-    // creation rep pour devoir et copies fichiers (inversion si nécessaire)
+    // creation rep pour devoir et copies fichiers (inversion si nï¿½cessaire)
     $rep= "/var/se3/Classes/".$param[classe]."/".inverse_login($id_eleve);    echo $rep."<br>";
     $cr=1;
     if (($devoir) and ("$id_devoir"!="")){
@@ -226,7 +227,7 @@ else {
  for ($g=0; $g<$n; $g++) {
  // boucle sur toutes les classes
   $classe=$classes[$g];           // nom de la gieme classe/groupe
-  $equipe="Equipe_".preg_replace("/Classe_/","",$classe); // Modif delineau (il y a surement mieux à faire)
+  $equipe="Equipe_".preg_replace("/Classe_/","",$classe); // Modif delineau (il y a surement mieux ï¿½ faire)
   $liste_eleves_classe = "";  // liste des eleves par classe/groupe
   $libelle_eleves="eleves".$g;
 

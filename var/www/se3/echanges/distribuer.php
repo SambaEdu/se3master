@@ -187,15 +187,16 @@ if( f.an_retour.value =='' || f.mois_retour.value =='' || f.jour_retour.value ==
 
 <?php
 
+require("entete.inc.php");
+require("ldap.inc.php");
+require("fonc_outils.inc.php");
 
 // recuperer les parametres passes par POST
 foreach ($_POST as $cle=>$val) {
   $$cle = $val;
 }
 
-require("entete.inc.php");
-require("ldap.inc.php");
-require("fonc_outils.inc.php");
+
 
 //aide
 $_SESSION["pageaide"]="L%27interface_prof#Ressources_et_partages";
