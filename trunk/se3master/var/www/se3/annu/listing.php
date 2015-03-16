@@ -1,4 +1,28 @@
 <?php
+
+
+   /**
+   
+   * @Version $Id$ 
+   
+  
+   * @Projet LCS / SambaEdu 
+   
+   * @auteurs  
+   
+   * @Licence Distribue selon les termes de la licence GPL
+   
+   * @note 
+   
+   */
+
+   /**
+
+   * @Repertoire: annu
+   * file: listing.php
+
+  */	
+
 session_start();
 set_time_limit (300);
 
@@ -7,6 +31,9 @@ set_time_limit (300);
 	require "ihm.inc.php";
 
 
+        // HTMLPurifier
+        require_once ("traitement_data.inc.php");
+        
 	$login=isauth();
 
 	if (!is_admin("Annu_is_admin",$login)=="Y") {

@@ -29,6 +29,8 @@
 require "config.inc.php";
 require "functions.inc.php";
 
+// HTMLPurifier
+require_once ("traitement_data.inc.php");
 
 $login=isauth();
 if ($login == "") header("Location:$urlauth");

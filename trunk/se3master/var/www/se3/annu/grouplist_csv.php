@@ -39,6 +39,8 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-core',"/var/www/se3/locale");
 textdomain ('se3-core');
 
+// HTMLPurifier
+require_once ("traitement_data.inc.php");
 
 $login=isauth();
 
