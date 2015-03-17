@@ -3,13 +3,13 @@
 
 /**
 
-* Interface de gestion des acl
+* Interface de gestion du fond d'ecran
 * @Version $Id$ 
 
 
 * @Projet LCS / SambaEdu 
 
-* @auteurs  Equipe Tice academie de Caen
+* @auteurs  Stephane Boireau
 
 * @Licence Distribue selon les termes de la licence GPL
 
@@ -19,7 +19,7 @@
 
 /**
 
-* @Repertoire: acls
+* @Repertoire: fond_ecran
 * file: searchacls.php
 
 */	
