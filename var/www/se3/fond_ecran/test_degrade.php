@@ -1,17 +1,27 @@
-<?php
-	/* $Id$ */
-	/* =============================================
-	Projet SE3
-	Equipe Tice académie de Caen
+<?php	
 
-	Module fond d'écran: Page de test d'un dégradé
-	Auteur: Stephane Boireau (AS Bernay/Pont-Audemer (27))
-	Dernière modification le 23/05/2006
+/**
 
-	Fichier: /var/www/se3/fond_ecran/test_degrade.php
+* Interface de gestion du fond d'ecran
+* @Version $Id$ 
 
-	Distribué selon les termes de la licence GPL
-	============================================= */
+
+* @Projet LCS / SambaEdu 
+
+* @auteurs  Stephane Boireau
+
+* @Licence Distribue selon les termes de la licence GPL
+
+* @note 
+
+*/
+
+/**
+
+* @Repertoire: fond_ecran
+* file: test_degrade.php
+
+*/	
 
 	include "entete.inc.php";
 	include "ldap.inc.php";
@@ -21,7 +31,7 @@
 	bindtextdomain('se3-fond',"/var/www/se3/locale");
 	textdomain ('se3-fond');
 
-	// Chemin à récupérer par la suite depuis MySQL (ou depuis un fichier texte)
+	// Chemin a recuperer par la suite depuis MySQL (ou depuis un fichier texte)
 	//$chemin_param_fond="/usr/share/se3/etc/fonds_ecran";
 	$chemin_param_fond="/etc/se3/fonds_ecran";
 	//$dossier_upload_images="/var/remote_adm";
@@ -51,7 +61,7 @@
 		exit();
 	}
 
-	// Récupération des variables:
+	// Recuperation des variables:
 	$couleur1=$_POST['couleur1'];
 	$couleur2=$_POST['couleur2'];
 	$hauteur=$_POST['hauteur'];
