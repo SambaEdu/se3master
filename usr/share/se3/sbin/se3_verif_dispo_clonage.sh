@@ -175,3 +175,36 @@ if [ -n "$VarchPxeClientLin" ]; then
 	fi
 		
 fi
+
+
+## Partie CloneZilla ##
+
+if [ -n "$clonezilla_version" ]; then
+	src_clonezilla="http://wawadeb.crdp.ac-caen.fr/iso/clonezilla"
+	
+	# Valeurs des versions en place recuperees de se3db.params:
+	version_clonezilla_en_place="$clonezilla_version"
+	version_clonezilla64_en_place="$clonezilla64_version"
+
+	rm -f versions.txt
+	wget $src_clonezilla/versions.txt > /dev/null 2>&1
+	if [ "$?" = 0 -a -e versions.txt ]; then
+
+		version_clonezilla_en_ligne=$(grep ";clonezilla.zip$" versions.txt | cut -d";" -f1)
+		version_clonezilla64_en_ligne=$(grep ";clonezilla64.zip$" versions.txt | cut -d";" -f1)
+		
+		
+		if [ "$version_clonezilla_en_ligne" = "$version_clonezilla_en_place" -a "$version_clonezilla64_en_ligne" = "$version_clonezilla64_en_place" ]; then
+			echo "Maj clonezilla ok"
+			SETMYSQL clonezilla_ajour "1" "Temoin de mise a jour clonezilla" 7
+		else
+			echo "Maj clonezilla Ko"
+			SETMYSQL clonezilla_ajour "0" "Temoin de mise a jour clonezilla" 7
+		fi
+	else
+		echo "ECHEC du telechargement du fichier des versions clonezilla ."
+		SETMYSQL clonezilla_ajour "2" "Temoin de mise a jour clonezilla" 7
+	fi
+fi
+
+

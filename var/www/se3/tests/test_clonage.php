@@ -32,6 +32,8 @@ require_once('entete_ajax.inc.php');
         $ok="0";
     } elseif ($rescd_ajour == "0") { 
          $ok="0";
+    } elseif ($clonezilla_ajour == "0") { 
+         $ok="0";
     } elseif ($clinux_ajour == "0") { 
          $ok="0";
 
