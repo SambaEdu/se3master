@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# $Id: se3_verif_dispo_clonage.sh 8494 2015-03-02 23:43:46Z keyser $
+# $Id: se3_verif_dispo_clonage.sh 8610 2015-03-18 19:34:31Z crob $
 # Auteur:Franck Molle
 # Dernière modification: 02/2014
 
-##### Permet de créer un compte d'assistance pour l'interface web pdt 1 heure #####
+##### Permet de vérifier sur les dispositifs clonage sont à jour #####
 ###
 
 . /usr/share/se3/includes/config.inc.sh -d
