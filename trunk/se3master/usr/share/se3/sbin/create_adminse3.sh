@@ -35,6 +35,8 @@ else
 fi
 smbpasswd -e root
 echo -e "$xppass\n$xppass"|(/usr/bin/smbpasswd -s root)
+smbclient -L localhost -U root%"$xppass" >/dev/null || service samba restart
+sleep 1 
 net -U root%"$xppass" rpc rights grant admin SeMachineAccountPrivilege SePrintOperatorPrivilege
 net -U root%"$xppass" rpc rights grant adminse3 SeMachineAccountPrivilege SePrintOperatorPrivilege
 smbpasswd -d root
