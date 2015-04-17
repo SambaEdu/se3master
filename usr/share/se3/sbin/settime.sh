@@ -14,33 +14,9 @@ then
 	exit
 fi	
 
-# Détection de la distrib
-if [ -e /etc/redhat-release ]; then
-        DISTRIB="RH"
-        WWWPATH="/var/www/html"
-fi
-if [ -e /etc/mandrake-release ]; then
-        DISTRIB="MDK"
-        WWWPATH="/var/www/html"
-fi
-if [ -e /etc/debian_version ]; then
-        DISTRIB="DEB"
-        WWWPATH="/var/www"
-fi
 
-# Récupération des paramètres mysql
+. /etc/se3/config_c.cache.sh
 
-if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
-        dbhost=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbname=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbuser=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbpass=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 |cut -d \" -f 2`
-else
-        echo "Fichier de conf inaccessible" >> $SE3LOG
-		echo "settime.sh: Status FAILED" >> $SE3LOG
-        exit 1
-fi
+[ -z "$ntpserv" ] && ntpserv="ntp.midway.ovh"
 
-NTPSERV=`echo "SELECT value FROM params WHERE name='ntpserv'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-
-/usr/sbin/ntpdate -s -b $NTPSERV
+/usr/sbin/ntpdate -u -s -b $ntpserv
