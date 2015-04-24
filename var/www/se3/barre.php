@@ -96,8 +96,8 @@ function auth_popup() {
 <div id="Layer1" style="position:absolute; left:0px; top:0; height:85; z-index:1">
   <table width="100%" border="0"><!-- height="86"-->
     <tr>
-      <!--td><a href="http://wawadeb.crdp.ac-caen.fr/se3doc/" TARGET="_new" onClick="MM_nbGroup('down','group1','logo','elements/images/logo-clique.gif',1)" onMouseOver="MM_nbGroup('over','logo','elements/images/logo-dessus.gif','elements/images/logo-normal.gif',1)" onMouseOut="MM_nbGroup('out')"><img name="logo" src="elements/images/logo-normal.gif" border="0" onLoad="" height="85"></a></td-->
-      <td><a href="http://wawadeb.crdp.ac-caen.fr/se3doc/" TARGET="_blank" onClick="MM_nbGroup('down','group1','logo','elements/images/logo-clique.gif',1)" onMouseOver="MM_nbGroup('over','logo','elements/images/logo-dessus.gif','elements/images/logo-normal.gif',1)" onMouseOut="MM_nbGroup('out')"><img name="logo" src="elements/images/logo-normal.gif" border="0" alt="Logo" height="85" /></a></td>
+      <!--td><a href="http://wwdeb.crdp.ac-caen.fr/mediase3/index.php/Accueil" TARGET="_new" onClick="MM_nbGroup('down','group1','logo','elements/images/logo-clique.gif',1)" onMouseOver="MM_nbGroup('over','logo','elements/images/logo-dessus.gif','elements/images/logo-normal.gif',1)" onMouseOut="MM_nbGroup('out')"><img name="logo" src="elements/images/logo-normal.gif" border="0" onLoad="" height="85"></a></td-->
+      <td><a href="http://wwdeb.crdp.ac-caen.fr/mediase3/index.php/Accueil" TARGET="_blank" onClick="MM_nbGroup('down','group1','logo','elements/images/logo-clique.gif',1)" onMouseOver="MM_nbGroup('over','logo','elements/images/logo-dessus.gif','elements/images/logo-normal.gif',1)" onMouseOut="MM_nbGroup('out')"><img name="logo" src="elements/images/logo-normal.gif" border="0" alt="Logo" height="85" /></a></td>
       <td width="420">
         <table border="0" cellpadding="0" cellspacing="0" width="420"><!-- height="85"-->
           <tr>
