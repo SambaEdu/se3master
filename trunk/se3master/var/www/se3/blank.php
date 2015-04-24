@@ -64,19 +64,20 @@ if (isset ($register)) {
 			echo "<br><br><a href=\"test.php\">".gettext("Voir l'&#233;tat de votre serveur")."</a></center>";
            	exit;
 		}
-	} else {
-	
-		require ("entete.inc.php");
-		echo "<H1>".gettext("Recensement du serveur")."</H1>\n";
-		setparam("registred",2);
-		echo gettext("Votre demande de ne pas participer au recensement des serveurs SambaEdu3 a &#233;t&#233; prise en compte. Aucune information n'a &#233;t&#233; envoy&#233;e.")."\n";
-		require ("pdp.inc.php");
-    		echo "<SCRIPT LANGUAGE=JavaScript>";
-		echo "setTimeout('top.location.href=\"index.html\"',\"2000\")";
-		echo "</SCRIPT>";
-    
-		exit;
-	}
+	} 
+//        else {
+//	
+//		require ("entete.inc.php");
+//		echo "<H1>".gettext("Recensement du serveur")."</H1>\n";
+//		setparam("registred",2);
+//		echo gettext("Votre demande de ne pas participer au recensement des serveurs SambaEdu3 a &#233;t&#233; prise en compte. Aucune information n'a &#233;t&#233; envoy&#233;e.")."\n";
+//		require ("pdp.inc.php");
+//    		echo "<SCRIPT LANGUAGE=JavaScript>";
+//		//echo "setTimeout('top.location.href=\"index.html\"',\"2000\")";
+//		echo "</SCRIPT>";
+//    
+//		//exit;
+//	}
 }
 
 
@@ -154,7 +155,7 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BO
 DY></HTML>");
 
-  if ($registred > 1) {
+if ($registred > 1) {
 
 
 	// Ajout popup d'alerte
@@ -227,4 +228,6 @@ DY></HTML>");
 	require ("pdp.inc.php");
 	
 }
+
+    
 ?>
