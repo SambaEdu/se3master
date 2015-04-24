@@ -9,9 +9,9 @@ if exist Y:\ NET USE Y: /DELETE /YES
 
 :xp 
 
-if not exist I:\ net use I: \\se3\Docs
-if not exist H:\ net use H: \\se3\Classes
-if not exist L:\ net use L: \\se3\Progs
+if not exist I:\ net use I: \\###netbios_name###\Docs
+if not exist H:\ net use H: \\###netbios_name###\Classes
+if not exist L:\ net use L: \\###netbios_name###\Progs
 echo %USERNAME
 if %USERNAME% == admin goto admin
 goto imp
@@ -20,8 +20,8 @@ goto imp
 
 :admin
 
-if not exist X:\ net use X: \\se3\admhomes
-if not exist Y:\ net use Y: \\se3\admse3
+if not exist X:\ net use X: \\###netbios_name###\admhomes
+if not exist Y:\ net use Y: \\###netbios_name###\admse3
 
 pause
 :imp
