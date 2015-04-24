@@ -131,9 +131,8 @@ fi
 
 /etc/init.d/cron reload
 
-echo "Maj sudoers..."
-cp -f /etc/sudoers.se3 /etc/sudoers
-chmod 440 /etc/sudoers
+echo "Maj droits sudoers..."
+chmod 440 /etc/sudoers.d/sudoers*
 
 
 service apache2 reload
