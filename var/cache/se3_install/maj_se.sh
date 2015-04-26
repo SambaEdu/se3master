@@ -51,8 +51,8 @@ if [ -z "$MAJNBR" ]; then
 	MAJNBR=0
 fi
 
-if [ -z $(grep "3.1" /etc/debian_version) ]; then
-	[ $MAJNBR -le 100 ] && MAJNBR=100
+if [ "$(lsb_release -sc)" = "wheezy" ]; then
+	[ $MAJNBR -le 160 ] && MAJNBR=160
 fi
 
 if [ $MAJNBR -le 119 ]; then
