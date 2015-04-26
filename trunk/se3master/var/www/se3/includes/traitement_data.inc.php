@@ -2,7 +2,8 @@
 
 // Nettoyage des variables
 
-require_once("../se3/includes/library/HTMLPurifier.auto.php");
+//require_once("../se3/includes/library/HTMLPurifier.auto.php");
+require_once("library/HTMLPurifier.auto.php");
 
 $config = HTMLPurifier_Config::createDefault();
 $config->set('Core.Encoding', 'utf-8'); // replace with your encoding
