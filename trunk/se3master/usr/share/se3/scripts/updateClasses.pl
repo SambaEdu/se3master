@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
 # $Id$
+# Encodage UTF-8
 # Met a jour l'arborescence des partages Classes
 # en definissant les acl basees sur les posixGroup Equipe_* et Classe_*
 #
@@ -26,7 +27,7 @@ use Se;
 $DOWARN = 1; # Warnings actives a nouveau
 
 # fonction qui teste le type de login et qui renvoie nom.prenom dans le cas d'un login prenom.nom, ou sinon le login
-# si la fonction est appellée avec un login, elle cherche si il y a un répertoire à inverser
+# si la fonction est appelle avec un login, elle cherche si il y a un rÃ©pertoire Ã  inverser
 # sinon renvoie le login
 
 sub Invert_Login {
@@ -105,6 +106,8 @@ sub Cree_Rep {
 	      if ( -d "$PathClasses/$cnClasse/$ELEVE") {
 	        print "Mise en place des droits sur $cnClasse/$ELEVE.<br>\n";
 	        system("/usr/bin/setfacl -R -P --set user::rwx,group::---,user:$LOGIN:rwx,group:Equipe_$Classe:rwx,group:admins:rwx,mask::rwx,other::---,default:user::rwx,default:group::---,default:group:Equipe_$Classe:rwx,default:group:admins:rwx,default:mask::rwx,default:other::---,default:user:$LOGIN:rwx $PathClasses/$cnClasse/$ELEVE") == 0 or warn "  Erreur: /usr/bin/setfacl -R -P --set user::rwx,group::---,user:$LOGIN:rwx,group:Equipe_$Classe:rwx,group:admins:rwx,mask::rwx,other::---,default:user::rwx,default:group::---,default:group:Equipe_$Classe:rwx,default:group:admins:rwx,default:mask::rwx,default:other::---,default:user:$LOGIN:rwx $PathClasses/$cnClasse/$ELEVE\n";
+	      #modif webdav
+	      
 	      # Modifie le groupe par defaut
 	      system("chgrp admins $PathClasses/$cnClasse/$ELEVE");
 	      }
@@ -198,11 +201,17 @@ if ($option eq '-c') {
             print("<b> restauration du repertoire de la classe $Classe</b><br>\n");
 	    system("/bin/mv $PathClasses/.$cnClasse $PathClasses/$cnClasse") == 0 or warn "Erreur: /bin/mv $PathClasses/.$cnClasse $PathClasses/$cnClasse\n";
           } else {
-            print("<b> Création du repertoire de la  classe $Classe</b><br>\n");
+            print("<b> Cr&#233;ation du repertoire de la  classe $Classe</b><br>\n");
             system("/bin/mkdir $PathClasses/$cnClasse") == 0 or warn "Erreur: /bin/mkdir $PathClasses/$cnClasse\n";
           }
         }
         if ( -d "$PathClasses/$cnClasse") {
+
+	  #test dossier echange
+          if ( -d "$PathClasses/$cnClasse/_echanges") {
+	    $etat = system("getfacl $PathClasses/$cnClasse/_echanges 2> /dev/null | grep \"^group:$GRP_CLASSE:rwx\$\"");
+	  }
+
           $ret = system("setfacl -R -P --set user::rwx,group::---,group:Equipe_$Classe:rwx,group:admins:rwx,mask::rwx,other::---,default:user::rwx,default:group::---,default:group:Equipe_$Classe:rwx,default:group:admins:rwx,default:mask::rwx,default:other::--- $PathClasses/$cnClasse");
           $ret == 0 or warn "Erreur: setfacl $PathClasses/$cnClasse\n";
 	  
@@ -231,7 +240,7 @@ if ($option eq '-c') {
               if ( $oldeleve =~ m!^$PathClasses/$cnClasse/_! ) {
 #                print "r&#233;pertoire '$oldeleve' ignor&#233;.<br>\n"; 
               } else {
-                # D.B. On met à jour les anciens eleves de la classe
+                # D.B. On met Ã  jour les anciens eleves de la classe
                 $oldeleve =~ s!^$PathClasses/$cnClasse/!! ;
                 $login = Invert_Login($oldeleve); 
                 Update_Eleve($login) == 0 or warn " Erreur : impossible de mettre a jour pour $login<br\n>";
@@ -264,7 +273,7 @@ if ($option eq '-c') {
     if ( $Classe =~ m/grp_/ ) {
       print "Ancien groupe '$rep' ignor&#233;e. utilisez le menu groupe<br>\n"; 
     } else{
-      # le répertoire existe, mais la classe non : on renomme en .Classe_truc, au cas où
+      # le rÃ©pertoire existe, mais la classe non : on renomme en .Classe_truc, au cas ou
       print("Le groupe n'existe plus : Renommage de la classe $Classe. en .Classe_$Classe<br>\n");  
       system("/bin/mv $PathClasses/Classe_$Classe $PathClasses/.Classe_$Classe") == 0 or warn "Erreur: /bin/mv $PathClasses/Classe_$Classe $PathClasses/.Classe$Classe\n";
     }
