@@ -105,9 +105,15 @@ sub Cree_Rep {
 	      }
 	      if ( -d "$PathClasses/$cnClasse/$ELEVE") {
 	        print "Mise en place des droits sur $cnClasse/$ELEVE.<br>\n";
-	        system("/usr/bin/setfacl -R -P --set user::rwx,group::---,user:$LOGIN:rwx,group:Equipe_$Classe:rwx,group:admins:rwx,mask::rwx,other::---,default:user::rwx,default:group::---,default:group:Equipe_$Classe:rwx,default:group:admins:rwx,default:mask::rwx,default:other::---,default:user:$LOGIN:rwx $PathClasses/$cnClasse/$ELEVE") == 0 or warn "  Erreur: /usr/bin/setfacl -R -P --set user::rwx,group::---,user:$LOGIN:rwx,group:Equipe_$Classe:rwx,group:admins:rwx,mask::rwx,other::---,default:user::rwx,default:group::---,default:group:Equipe_$Classe:rwx,default:group:admins:rwx,default:mask::rwx,default:other::---,default:user:$LOGIN:rwx $PathClasses/$cnClasse/$ELEVE\n";
-	      #modif webdav
-	      
+	        	      #modif webdav
+			if ( -e "/etc/apache2/sites-enabled/webdav") {
+				system("/usr/bin/setfacl -R -P --set user::rwx,group::---,user:$LOGIN:rwx,user:www-data:r-x,default:user:www-data:r-x,group:Equipe_$Classe:rwx,group:admins:rwx,mask::rwx,other::---,default:user::rwx,default:group::---,default:group:Equipe_$Classe:rwx,default:group:admins:rwx,default:mask::rwx,default:other::---,default:user:$LOGIN:rwx $PathClasses/$cnClasse/$ELEVE") == 0 or warn "  Erreur: /usr/bin/setfacl -R -P --set user::rwx,group::---,user:$LOGIN:rwx,group:Equipe_$Classe:rwx,group:admins:rwx,mask::rwx,other::---,default:user::rwx,default:group::---,default:group:Equipe_$Classe:rwx,default:group:admins:rwx,default:mask::rwx,default:other::---,default:user:$LOGIN:rwx $PathClasses/$cnClasse/$ELEVE\n";
+ 
+				 } 
+			else { 
+				system("/usr/bin/setfacl -R -P --set user::rwx,group::---,user:$LOGIN:rwx,group:Equipe_$Classe:rwx,group:admins:rwx,mask::rwx,other::---,default:user::rwx,default:group::---,default:group:Equipe_$Classe:rwx,default:group:admins:rwx,default:mask::rwx,default:other::---,default:user:$LOGIN:rwx $PathClasses/$cnClasse/$ELEVE") == 0 or warn "  Erreur: /usr/bin/setfacl -R -P --set user::rwx,group::---,user:$LOGIN:rwx,group:Equipe_$Classe:rwx,group:admins:rwx,mask::rwx,other::---,default:user::rwx,default:group::---,default:group:Equipe_$Classe:rwx,default:group:admins:rwx,default:mask::rwx,default:other::---,default:user:$LOGIN:rwx $PathClasses/$cnClasse/$ELEVE\n";
+
+			}	 
 	      # Modifie le groupe par defaut
 	      system("chgrp admins $PathClasses/$cnClasse/$ELEVE");
 	      }
@@ -208,12 +214,26 @@ if ($option eq '-c') {
         if ( -d "$PathClasses/$cnClasse") {
 
 	  #test dossier echange
-          if ( -d "$PathClasses/$cnClasse/_echanges") {
-	    $etat = system("getfacl $PathClasses/$cnClasse/_echanges 2> /dev/null | grep \"^group:$GRP_CLASSE:rwx\$\"");
-	  }
-
-          $ret = system("setfacl -R -P --set user::rwx,group::---,group:Equipe_$Classe:rwx,group:admins:rwx,mask::rwx,other::---,default:user::rwx,default:group::---,default:group:Equipe_$Classe:rwx,default:group:admins:rwx,default:mask::rwx,default:other::--- $PathClasses/$cnClasse");
+        if ( -d "$PathClasses/$cnClasse/_echange") {
+			#system("getfacl $PathClasses/$cnClasse/_echange 2>/dev/null  | grep \"^group:$cnClasse:rwx\$\"");
+			$etat = system("getfacl $PathClasses/$cnClasse/_echange 2>/dev/null | grep \"^group:$cnClasse:rwx\$\" >/dev/null");
+			
+			
+	  } else {
+		  $etat = 1;
+		}
+			if ( -e "/etc/apache2/sites-enabled/webdav") {
+				$ret = system("setfacl -R -P --set user::rwx,group::---,user:www-data:r-x,default:user:www-data:r-x,group:Equipe_$Classe:rwx,group:admins:rwx,mask::rwx,other::---,default:user::rwx,default:group::---,default:group:Equipe_$Classe:rwx,default:group:admins:rwx,default:mask::rwx,default:other::--- $PathClasses/$cnClasse");
+          
+			}
+			else { 
+				$ret = system("setfacl -R -P --set user::rwx,group::---,group:Equipe_$Classe:rwx,group:admins:rwx,mask::rwx,other::---,default:user::rwx,default:group::---,default:group:Equipe_$Classe:rwx,default:group:admins:rwx,default:mask::rwx,default:other::--- $PathClasses/$cnClasse");
+            } 
           $ret == 0 or warn "Erreur: setfacl $PathClasses/$cnClasse\n";
+	  if ( $etat == 0 ) {
+				exec("/usr/share/se3/scripts/echange_classes.sh $cnClasse actif >/dev/null 2>/dev/null");
+				} 
+	  
 	  
 	  # Modifie le groupe par defaut
 	  system("chgrp admins $PathClasses/$cnClasse");
@@ -223,7 +243,9 @@ if ($option eq '-c') {
             system("/bin/mkdir $PathClasses/$cnClasse/_travail") == 0 or warn "Erreur: /bin/mkdir $PathClasses/$cnClasse/_travail\n";
           }
           if ( -d "$PathClasses/$cnClasse/_travail") {
-            system("/usr/bin/setfacl -R -P -m group:Classe_$Classe:rx,default:group:$cnClasse:rx $PathClasses/$cnClasse/_travail") == 0 or warn "Erreur: /usr/bin/setfacl $PathClasses/$cnClasse/_travail<br>\n";
+			  			  
+			  system("/usr/bin/setfacl -R -P -m group:Classe_$Classe:rx,default:group:$cnClasse:rx $PathClasses/$cnClasse/_travail") == 0 or warn "Erreur: /usr/bin/setfacl $PathClasses/$cnClasse/_travail<br>\n";
+			  
             # Modifie le groupe par defaut
 	    system("chgrp admins $PathClasses/$cnClasse/_travail");
 	  }
