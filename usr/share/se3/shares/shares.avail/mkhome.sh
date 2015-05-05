@@ -94,6 +94,13 @@ if [ ! -d "/home/$user" -o ! -d "/home/$user/profil" ]; then
 	chmod -R 700 /home/$user > /dev/null 2>&1
 	setfacl -R -m d:u:$user:rwx /home/$user
 
+	
+	if [ -e "/etc/apache2/sites-enabled/webdav" ]; then
+	 setfacl -R -m u:www-data:rx,d:u:www-data:rx /home/$user/Docs
+	fi
+	
+
+	
 	# fixe homepage selon categorie adm / profs / eleves
 	if [ -n "$(ldapsearch -xLLL cn=administratifs memberuid | grep "$user")" ]; then
 		[ -n "$administratifs_hp" ] && /usr/share/se3/scripts/modif_profil_mozilla_ff.sh $user "$administratifs_hp"
