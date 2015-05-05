@@ -73,15 +73,15 @@ if ($action == "change") {
 	
 	}
 
-	if ($_GET['varb'] == "autoriser_partage_public") {
-		$sql="SELECT 1=1 FROM params WHERE name='autoriser_partage_public';";
+	if ($_GET['varb'] == "autoriser_part_pub") {
+		$sql="SELECT 1=1 FROM params WHERE name='autoriser_part_pub';";
 		$test=mysql_query($sql);
 		if(mysql_num_rows($test)==0) {
-			$sql="INSERT INTO params SET name='autoriser_partage_public', value='".$_GET['valeur']."', descr='Autoriser l''acces au partage Docs/public', cat='1';";
+			$sql="INSERT INTO params SET name='autoriser_part_pub', value='".$_GET['valeur']."', descr='Autoriser partage public', cat='1';";
 			$insert=mysql_query($sql);
 		}
 		else {
-			$sql="UPDATE params SET value='".$_GET['valeur']."' WHERE name='autoriser_partage_public';";
+			$sql="UPDATE params SET value='".$_GET['valeur']."' WHERE name='autoriser_part_pub';";
 			$update=mysql_query($sql);
 		}
 		exec ("/usr/bin/sudo /usr/share/se3/scripts/autoriser_partage_public.sh autoriser=".$_GET['valeur'],$AllOutPut,$ReturnValue);
@@ -178,39 +178,6 @@ echo "</u>";
 echo "</td></tr>\n";
 
 
-
-// Langue
-/* echo "<TR><TD>".gettext("Langue")."</TD><TD align=\"center\">";
-if ($action=="modif_langue") {
-   $dir = "/var/www/se3/locale/";
-	echo "<form method=\"get\" action=\"conf_params.php\">";
-	echo "<input type=\"hidden\" name=\"action\" value=\"change\">";
-	echo "<input type=\"hidden\" name=\"varb\" value=\"langue\">";
-	echo "<select name =\"valeur\" ONCHANGE=\"this.form.submit();\">";
-	echo "<option"; if ($langue=="auto") { echo " selected"; } echo " value=\"auto\">auto</option>";
-	echo "<option"; if ($langue=="fr") { echo " selected"; } echo " value=\"fr\">fr</option>";
-   	if($dh = opendir($dir)) { 
-     	   while (($file = readdir($dh)) != false) {
-        	if ($file == "." || $file == "..") continue;
-     		if (is_dir($dir.$file)) {
-			echo "<option"; if ($langue=="$file") { echo " selected"; } echo " value=\"$file\">$file</option>";
-		}
-     	   }
-     	   closedir($dh); 
-   	}  
-        echo "</select>\n";
-        echo "<u onmouseover=\"return escape".gettext("('Permet d\'imposer la langue.<br><br> En mode auto la langue utilis&#233;e sera la langue renvoy&#233;e par le navigateur du client.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\" alt=\"help\"></u>";
-        echo "</form>";
-} else {
-	
-	echo "<u onmouseover=\"return escape".gettext("('Permet d\'imposer la langue.<br><br>En mode Auto la langue sera la langue du navigateur')")."\">";
-	echo "<a href=conf_params.php?action=modif_langue>$langue</a>";
-	echo "</u>";
-}	
-echo "</td></tr>\n";
-*/
-
-
 // Gestion des comptes utilisateur
 echo "<TR><TD colspan=\"2\" align=\"center\" class=\"menuheader\">\n";
 echo gettext("Configuration des comptes utilisateurs");
@@ -223,7 +190,7 @@ if ($action=="modif_uidP") {
 	echo "<input type=\"hidden\" name=\"action\" value=\"change\">";
 	echo "<input type=\"hidden\" name=\"varb\" value=\"uidPolicy\">";
 	echo "<select name =\"valeur\" ONCHANGE=\"this.form.submit();\">";
-	echo "<option"; if ($uidPolicy=="0") { echo " selected"; } echo " value=\"0\">".gettext("prenom.nom")."</option>";
+	//echo "<option"; if ($uidPolicy=="0") { echo " selected"; } echo " value=\"0\">".gettext("prenom.nom")."</option>";
 	echo "<option"; if ($uidPolicy=="1") { echo " selected"; } echo " value=\"1\">".gettext("prenom.nom (tronqu&#233; &#224; 19)")."</option>";
 	echo "<option"; if ($uidPolicy=="2") { echo " selected"; } echo " value=\"2\">".gettext("pnom (tronqu&#233; &#224; 19)")."</option>";
 	echo "<option"; if ($uidPolicy=="3") { echo " selected"; } echo " value=\"3\">".gettext("pnom (tronqu&#233; &#224; 8)")."</option>";
@@ -645,12 +612,12 @@ echo "</td></tr>\n";
 
 echo "<tr><td>".gettext("Autoriser l'acc&#232;s &#224; la ressource public ")."</td><td align=\"center\">";
 
-if ($autoriser_partage_public=="y") {
+if ($autoriser_part_pub=="y") {
         echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer ici afin de d\'interdire l\'acc&#232;s au dossier /var/se3/Docs/public')")."\">";
-        echo "<a href=conf_params.php?action=change&amp;varb=autoriser_partage_public&amp;valeur=n&amp;cat=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
+        echo "<a href=conf_params.php?action=change&amp;varb=autoriser_part_pub&amp;valeur=n&amp;cat=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
 } else {
         echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Cliquer ici afin de d\'autoriser l\'acc&#232;s au dossier /var/se3/Docs/public')")."\">";
-        echo "<a href=conf_params.php?action=change&amp;varb=autoriser_partage_public&amp;valeur=y&amp;cat=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
+        echo "<a href=conf_params.php?action=change&amp;varb=autoriser_part_pub&amp;valeur=y&amp;cat=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
 }
 
 echo "</td></TR>
