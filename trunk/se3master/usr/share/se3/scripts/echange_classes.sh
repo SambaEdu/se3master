@@ -48,6 +48,11 @@ if [ ! -z "$1" -a -e "/var/se3/Classes/$1" ]; then
 				#Levée des droits pour tous les membres de la classe $1
 				setfacl -R -x g:$GRP_CLASSE /var/se3/Classes/$1/$echange
 				setfacl -R -x d:g:$GRP_CLASSE /var/se3/Classes/$1/$echange
+				
+				if [ -e "/etc/apache2/sites-enabled/webdav" ]; then
+					setfacl -R -m u:www-data:rx,d:u:www-data:rx  /var/se3/Classes/$1/$echange
+				fi
+				
 
 				if [ -e /var/www/se3/includes/config.inc.php ]; then
 					dbhost=`cat /var/www/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
@@ -81,6 +86,11 @@ if [ ! -z "$1" -a -e "/var/se3/Classes/$1" ]; then
 				setfacl -R -m g:$GRP_CLASSE:rwx /var/se3/Classes/$1/$echange
 				#echo "setfacl -R -m d:g:$GRP_CLASSE:rwx /var/se3/Classes/$1/$echange"
 				setfacl -R -m d:g:$GRP_CLASSE:rwx /var/se3/Classes/$1/$echange
+				
+				if [ -e "/etc/apache2/sites-enabled/webdav" ]; then
+					setfacl -R -m u:www-data:rx,d:u:www-data:rx  /var/se3/Classes/$1/$echange
+				fi
+				
 
 				if [ -e /var/www/se3/includes/config.inc.php ]; then
 					dbhost=`cat /var/www/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
