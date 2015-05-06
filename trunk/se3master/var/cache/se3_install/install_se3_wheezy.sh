@@ -1090,13 +1090,12 @@ touch /etc/nologin
 #Passage aux mots de pass cryptés
 /usr/sbin/pwconv
 
-# Droit sur public, certains etab desactivent public, donc on le fait la et pas dans permse3
-setfacl -m u::rwx /var/se3/Docs/public
-setfacl -m g::rwx /var/se3/Docs/public
-setfacl -m o::rwx /var/se3/Docs/public
-setfacl -m d:u::rwx /var/se3/Docs/public
-setfacl -m d:g::rwx /var/se3/Docs/public
-setfacl -m d:o::rwx /var/se3/Docs/public
+# Droit sur rw public est géré via l'interface 
+# setfacl -m u::rwx /var/se3/Docs/public
+# setfacl -m g::rwx /var/se3/Docs/public
+# setfacl -m d:u::rwx /var/se3/Docs/public
+# setfacl -m d:g::rwx /var/se3/Docs/public
+# setfacl -m d:o::rwx /var/se3/Docs/public
 setfacl -m d:o::rwx /var/se3/Progs/rw
 
 # au cas ou il existerait un ancien fichier pref.js, on le vire....
