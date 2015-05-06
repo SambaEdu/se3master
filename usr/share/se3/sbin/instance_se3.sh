@@ -1,6 +1,6 @@
 #!/bin/bash
 . /usr/share/se3/includes/config.inc.sh -cml
-#. /usr/share/se3/includes/functions.inc.sh
+. /usr/share/se3/includes/functions.inc.sh
 debian_vers=$(cat /etc/debian_version)
 [ -z "$netbios_name" ] && netbios_name=$(grep "netbios name" /etc/samba/smb.conf|cut -d '=' -f2|sed -e 's/ //g')
 [ -z "$se3ip" ] && se3ip="$(LC_ALL=C grep address /etc/network/interfaces | sort | head -n1 | cut -d" " -f2)"
@@ -147,3 +147,11 @@ rm -f /home/templates/base/Bureau/Reparer\ son\ compte.lnk
 
 # Corrige script Relance-cnx 
 sed -i "s/###netbios_name###/$netbios_name/" /home/templates/base/Bureau/Relance_connexion.bat
+
+
+# Droits sur dossier public
+if getfacl /var/se3/Docs/public/ 2>/dev/null | grep -q "^other::rwx" ;then 
+	SETMYSQL  autoriser_part_pub "y" "Autoriser partage public" 1
+else
+	SETMYSQL  autoriser_part_pub "n" "Autoriser partage public" 1
+fi
