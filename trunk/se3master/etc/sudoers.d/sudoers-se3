@@ -1,5 +1,5 @@
 # sudoers file for se3
-### $Id: sudoers.se3 8665 2015-03-28 00:07:51Z keyser $ ###
+### $Id$ ###
 
 # Cmnd alias specification
 Cmnd_Alias SE3DOMAIN=/usr/share/se3/scripts/integreDomaine.sh,/usr/share/se3/scripts/force-gpo.sh
