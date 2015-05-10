@@ -16,12 +16,12 @@ echo "Usage : aucune option"
 fi
 
 ## On relance ldap pour créer un checkpoint
-/etc/init.d/slapd stop
-sleep 3
-/etc/init.d/slapd start
-sleep 2
-/usr/bin/db4.8_archive -d -h /var/lib/ldap
- 
+# /etc/init.d/slapd stop
+# sleep 3
+# /etc/init.d/slapd start
+# sleep 2
+# /usr/bin/db4.8_archive -d -h /var/lib/ldap
+#  
 # remise en place du GM au cas ou
 net groupmap list | grep "\bProfs\b" || net groupmap add unixgroup=Profs ntgroup=Profs
 net groupmap list | grep "\bEleves\b" || net groupmap add unixgroup=Eleves ntgroup=Eleves
