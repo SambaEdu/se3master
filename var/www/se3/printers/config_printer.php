@@ -82,36 +82,36 @@ if (is_admin("se3_is_admin",$login)=="Y") {
 			}
 			if(preg_match('/^smb/',$_POST['uri_printer'])) {
 				$protoc="smb"; 
-				list(,,,$uri_imp,$imp)=preg_split('///',$uri_printer);
+				list(,,,$uri_imp,$imp)=preg_split('!/!',$uri_printer);
 				if ($imp!="") { $uri_imprimante="$uri_imp"; } else { $uri_imprimante="$uri_imp"; }
 			}
 			if(preg_match('/^socket/',$_POST['uri_printer'])) {
 				$protoc="socket"; 
-				list(,,$uri_imp_1)=preg_plit('///',$uri_printer);
+				list(,,$uri_imp_1)=preg_split('!/!',$uri_printer);
 				list($uri_imp,)=preg_split('/:/',$uri_imp_1);
 			        $uri_imprimante="$uri_imp";
 			}
 			if(preg_match('/^parallel/',$_POST['uri_printer'])) {
 				$protoc="parallel"; 
-				list(,$uri_imp,)=preg_split('///',$uri_printer);
+				list(,$uri_imp,)=preg_split('!/!',$uri_printer);
 				$uri_imprimante="$uri_imp";
 			}
-			if(preg('/^http/',$_POST['uri_printer'])) {
+			if(preg_match('/^http/',$_POST['uri_printer'])) {
 				if(preg_match('/printers/',$_POST['uri_printer'])) {$protoc="ipp";} 
 				else {$protoc="http";} 
-				list(,,$uri_imp_1)=preg_split('///',$_POST['uri_printer']);
+				list(,,$uri_imp_1)=preg_split('!/!',$_POST['uri_printer']);
 				list($uri_imp,)=preg_split('/:/',$uri_imp_1);
 				$uri_imprimante="$uri_imp";
 			}
 			if(preg_match('/^lpd/',$_POST['uri_printer'])) {
 				$protoc="lpd"; 
-				list(,,$uri_imp_1)=preg_split('///',$_POST['uri_printer']);
+				list(,,$uri_imp_1)=preg_split('!/!',$_POST['uri_printer']);
 				list($uri_imp,)=preg_split('/:/',$uri_imp_1);
 				$uri_imprimante="$uri_imp";
 			}
 			if(preg_match('/^usb/',$_POST['uri_printer'])) {
 				$protoc="usb"; 
-				list(,$uri_imp,)=preg_split('///',$_POST['uri_printer']);
+				list(,$uri_imp,)=preg_split('!/!',$_POST['uri_printer']);
 				$uri_imprimante="$uri_imp";
 			}
 			
