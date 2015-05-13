@@ -71,25 +71,18 @@ if (is_admin("printers_is_admin",$login)=="Y") {
 		exec("/usr/sbin/lpadmin -p $printer -o job-page-limit=$pages -o job-quota-period=$period_sec");
 	}
 	if (isset($valids)){
-		if(file_exists("/usr/bin/enable")){
-                        $able=$status;
-                } else {
-                        $able="cups".$status;
-                }
-		exec ("/usr/bin/$able {$all_printers[$num]['printer-name']}");
-	} elseif (isset($validq)) {
-        if(file_exists("/usr/bin/accept")){
-            $able=$queue;
-        } else {
-            $able="cups".$queue;
-        }
+		$able="cups".$status;
+        
 		exec ("/usr/sbin/$able {$all_printers[$num]['printer-name']}");
+	} elseif (isset($validq)) {
+        $able="cups".$queue;
+        exec ("/usr/sbin/$able {$all_printers[$num]['printer-name']}");
 	}
 
     // Bug Lenny
-    if (isset($_GET['disable_lenny_bug'])) {
-        system ("sudo /usr/share/se3/scripts/disable_lenny_bug.sh");
-    }
+//     if (isset($_GET['disable_lenny_bug'])) {
+//         system ("sudo /usr/share/se3/scripts/disable_lenny_bug.sh");
+//     }
 
 	//Recuperation des champs Printers,QuotaPeriod,PageLimit de /etc/cups/printers.conf
 	$result1=exec("/usr/bin/sudo /usr/share/se3/scripts/printless.sh /etc/cups/printers.conf | grep \"<*[^/ ]Printer\" | sed s/^.*Printer' '/\"\"/g",$nom_imprim);
@@ -300,10 +293,10 @@ if (is_admin("printers_is_admin",$login)=="Y") {
   		echo "&nbsp;&nbsp;";
   		echo "<INPUT TYPE=\"submit\" VALUE=\"".gettext("Aucun")."\" NAME=\"quota\">\n";
   		echo "</FORM>\n";
-        system("sudo /usr/share/se3/scripts/lenny_bug.sh $printer", $ret);
-        if ($ret == "1") {
-            echo "<h2>Cette imprimante ne semble pas partag&#233;e avec le bon nom, si c'est le cas, cliquez <a href=view_printers.php?disable_lenny_bug>ici</a> pour la r&#233;activer</h2>";
-        }
+//         system("sudo /usr/share/se3/scripts/lenny_bug.sh $printer", $ret);
+//         if ($ret == "1") {
+//             echo "<h2>Cette imprimante ne semble pas partag&#233;e avec le bon nom, si c'est le cas, cliquez <a href=view_printers.php?disable_lenny_bug>ici</a> pour la r&#233;activer</h2>";
+//         }
   		echo "<HR>\n";
 
 	}
