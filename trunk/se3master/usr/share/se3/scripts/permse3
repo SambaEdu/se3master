@@ -89,6 +89,9 @@ chmod 750 /usr/share/se3/scripts/tarCreate
 chmod 750 /usr/share/se3/includes/*
 chown www-se3.root /usr/share/se3/includes/*
 
+# droits particuliers pour smb_quota 
+chmod +x /usr/share/se3/sbin/smb_quota 
+
 # Droits sudo
 chmod 0440 /etc/sudoers
 
