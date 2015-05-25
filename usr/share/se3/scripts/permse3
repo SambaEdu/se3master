@@ -28,7 +28,10 @@ function SETNETLOGON
 {
 #droits sur /home/netlogon
 if [ -e /home/netlogon ]; then
-	find /home/netlogon/machine/ -name gpoPASSWD -delete
+
+	if [ -e /home/netlogon/machine ];then
+		find /home/netlogon/machine/ -name gpoPASSWD -delete
+  	fi
   	chmod -R 755 /home/netlogon
   	chown -R admin:admins /home/netlogon/
  	chmod g+s /home/netlogon
@@ -37,6 +40,7 @@ if [ -e /home/netlogon ]; then
 		chmod 664 /home/netlogon/domscripts/*
 	fi
 
+	
 	setfacl -R -m  u:adminse3:rx /var/se3/Progs/install
 	setfacl -R -m  d:u:adminse3:rx /var/se3/Progs/install 
 
