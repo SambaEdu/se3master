@@ -16,6 +16,15 @@ fi
 # ECARD=$(/sbin/ifconfig -a | grep eth | sort | head -n 1 | cut -d " " -f 1)
 # fi
 
+
+
+# nscd sucks !
+if [ -e /etc/init.d/nscd  ]; then
+	insserv -r nscd
+	/etc/init.d/nscd stop 2>/dev/null
+fi
+
+
 #Mise a l'heure du serveur
 if [ ! -z "$slisip" ]; then
 echo "Mise a l'heure sur le slis via ntp"
