@@ -28,7 +28,7 @@ if [ -z "$1" -o "$1" = "--help" -o "$1" = "-h" ]; then
 	echo " - de l'annuaire LDAP"
 	echo " - de /etc"
 	echo " - des bases MySQL suivantes: 'se3db' et 'mysql'"
-	echo " - de /var/lib/samba ou juste /var/lib/samba/secrets.tdb"
+	echo " - de /var/lib/samba ou juste /var/lib/samba/private/secrets.tdb"
 	echo ""
 	echo "Usage : - Passer en paramètre \$1 la durée de vie en secondes du script de"
 	echo "          sauvegarde."
@@ -45,7 +45,7 @@ if [ -z "$1" -o "$1" = "--help" -o "$1" = "-h" ]; then
 	echo "          pour ne pas sauvegarder les ACL de /home et /var/se3"
 	echo "        - Passer 'varlibsamba' en paramètre \$2 ou \$3 ou \$4 ou \$5"
 	echo "          pour sauvegarder tout /var/lib/samba et pas seulement"
-	echo "          le /var/lib/samba/secrets.tdb"
+	echo "          le /var/lib/samba/private/secrets.tdb"
 	exit
 fi
 
@@ -401,7 +401,7 @@ if echo "$*" | grep "varlibsamba" > /dev/null; then
 	
 	tar -czf "$dossier_svg/samba/var_lib_samba.$jour.tar.gz" /var/lib/samba
 else
-	echo "Sauvegarde de /var/lib/samba/secrets.tdb"
+	echo "Sauvegarde de /var/lib/samba/private/secrets.tdb"
 	echo -e "$COLCMD\c"
 	if [ -e "$dossier_svg/samba/var_lib_samba.$jour.tar.gz" ]; then
 			rm -f "$dossier_svg/samba/var_lib_samba.$jour.tar.gz"
@@ -411,7 +411,7 @@ else
 			rm -f "$dossier_svg/samba/var_lib_samba_secrets_tdb.$jour"
 			rm -f "$dossier_svg/samba/var_lib_samba_secrets_tdb..$jour"
 	fi
-	cp /var/lib/samba/secrets.tdb "$dossier_svg/samba/var_lib_samba_secrets_tdb.$jour"
+	cp /var/lib/samba/private/secrets.tdb "$dossier_svg/samba/var_lib_samba_secrets_tdb.$jour"
 fi
 echo ""
 

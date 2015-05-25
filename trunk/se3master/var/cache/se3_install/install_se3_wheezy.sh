@@ -965,7 +965,7 @@ fi
 fi
 
 # keyser ajout demandé par le ploufon - pour la sauvegarde de secret.tdb
-cp -a /var/lib/samba/secrets.tdb /etc/save/
+cp -a /var/lib/samba/private/secrets.tdb /etc/save/
 
 # keyser modif du 4/4/05 - Config en fonction des serveur LCS / SLIS
 
