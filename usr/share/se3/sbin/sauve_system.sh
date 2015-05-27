@@ -6,7 +6,7 @@
 #
 ## $Id$ ##
 #
-# Dernière modif: 09/07/2011
+# Dernière modif: 05/2015 - modif chemin secrets.tdb
 
 # Chemin des sauvegardes:
 #dossier_svg="/home/sauvegardes/fichiers_se3"
