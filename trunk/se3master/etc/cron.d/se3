@@ -4,7 +4,10 @@
 #
 # Lancement update deux fois par jour pour affichage plus rapide dans page diagnostic et module
 00 06,12 * * * root /usr/bin/apt-get update &>/dev/null
-#
+
+# Lancement verif dispo deux fois par jour pour affichage dans page diagnostic 
+01 06,12 * * * root /usr/share/se3/sbin/se3_verif_dispo_clonage.sh &>/dev/null
+
 # vidage de la table session de mysql 1 fois par mois a 22h30
 30 22 1 * * root /usr/share/se3/sbin/clean_session_mysql.sh > /dev/null
 #
