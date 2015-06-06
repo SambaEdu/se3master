@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# $Id: se3_verif_dispo_clonage.sh 8610 2015-03-18 19:34:31Z crob $
+# $Id: se3_verif_dispo_clonage.sh 8615 2015-03-20 00:19:14Z keyser $
 # Auteur:Franck Molle
 # Dernière modification: 02/2014
 
@@ -27,6 +27,13 @@ COLINFO="\033[0;36m"    # Cyan
 timestamp=$(date +%s)
 timedate=$(date "+%Y%m%d_%H%M%S")
 
+# cleanup
+rm -rf /var/se3/tmp_clonage_*
+rm -rf /var/se3/tmp_client_linux_*
+rm -rf /var/se3/tmp_clonezilla_*
+rm -rf /var/se3/tmp_slitaz_*
+rm -rf /var/se3/tmp_sysresccd_*
+rm -rf /var/se3/tmp_udpcast_*
 
 
 tmp="/var/se3/tmp_clonage_${timedate}"
