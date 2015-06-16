@@ -9,15 +9,16 @@
 
 davdir="/etc/apache2/webdav"
 davdir_sav="/etc/apache2/webdav-sav"
-davname="$domain | cut -d . -f1"
+davname="$(echo $domain | cut -d . -f1)"
 
 
 function helpscript ()
 {
 echo "script devant être lancé avec un argument :
-- install_webdav : installation initiale
-- update_webdav : mise à jour configuration pour nouveaux comptes
-- update_classes : mise à jour acls sur classes
+- install : installation initiale
+- update : mise à jour configuration pour nouveaux comptes
+- classes : mise à jour acls sur classes
+- create : creation pour un utilisateur
 "
 exit 1
 }
@@ -26,11 +27,51 @@ exit 1
 
 
 
-function install_webdav ()
+function install_conf ()
 {
+# mv /etc/apache2/sites-available/default /etc/apache2/sites-available/default-sav
+echo "<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+
+        <Location /$davname>
+                Dav On
+                DirectorySlash Off
+        </Location>
 
 
-echo "Alias $davname/classes "/var/se3/Classes"
+        DocumentRoot /var/www
+        <Directory />
+                Options FollowSymLinks
+                AllowOverride None
+        </Directory>
+        <Directory /var/www/>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride None
+                Order allow,deny
+                allow from all
+        </Directory>
+
+        ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+        <Directory \"/usr/lib/cgi-bin\">
+                AllowOverride None
+                Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+                Order allow,deny
+                Allow from all
+        </Directory>
+
+        ErrorLog \${APACHE_LOG_DIR}/error.log
+
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+
+        CustomLog \${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+"  >/etc/apache2/sites-available/default
+
+
+
+echo "Alias /$davname/classes "/var/se3/Classes"
 
 	DAVMinTimeout 600
 	DAVDepthInfinity On
@@ -59,6 +100,9 @@ include /etc/apache2/webdav/*.conf
 a2enmod dav_fs
 a2enmod authnz_ldap
 a2ensite webdav
+
+rm -f /etc/apache2/mods-enabled/deflate.* 
+
 
 rm -f "/etc/apache2/webdav/*"
 
@@ -97,14 +141,15 @@ setfacl -R -m u:www-data:rx /home/$uid/Docs
 setfacl -R -m d:u:www-data:rx /home/$uid/Docs
 }
 
-function update_webdav ()
+function update_conf ()
 {
 
 
 rm -f /etc/apache2/webdav-sav/*
-mkdir -p $davdir_sav
-
-mv $davdir/* $davdir_sav/ 
+if [ -e $davdir ];then
+	mv $davdir/* $davdir_sav/ 
+	mkdir -p $davdir_sav
+fi
 
 
 
@@ -140,11 +185,7 @@ done
 
 }
 
-
-
-
-
-function update_classes ()
+function classes_update ()
 {
 
 echo "mise en place des droits sur les classes"
@@ -159,19 +200,19 @@ PHASE="$1"
 
 case "$PHASE" in
 
-    "install_webdav")
+    "install")
     
-    install_webdav
-	update_webdav
-	update_classes
+    install_conf
+	update_conf
+	classes_update
         ;;
 
-    "update_webdav")
-        update_webdav
+    "update")
+        update_conf
         ;;
 
-     "update_classes")
-        update_classes
+     "classes")
+        classes_update
         ;;   
         
       "create")
