@@ -221,7 +221,7 @@ if [ "$?" = "0" ]; then
 	echo -e "$COLTXT"
 	echo "La commande a semble-t-il réussi."
 	# Droits sur /var/lib/ldap
-# 	[ -z $(grep "3.1" /etc/debian_version) ] && chown -R openldap.openldap /var/lib/ldap
+	chown -R openldap.openldap /var/lib/ldap
 	echo -e "$COLTXT"
 	echo -e "Redémarrage du serveur d'annuaire LDAP"
 	echo -e "$COLCMD\c"
