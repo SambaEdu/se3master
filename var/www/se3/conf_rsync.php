@@ -192,8 +192,8 @@ read only=".$_GET['dc_read']."";
 			foreach ($lignes as $num => $ligne) {
                                 if (preg_match ("/##(.*)/",$ligne,$reg)) {
 					$var = trim($reg[1]);
-					list($nom_module,$rep_module)=split(';',$var);
-					if ($nom_module != "") {	
+					list($nom_module,$rep_module)=preg_split('/;/',$var);
+                                        if ($nom_module != "") {	
 						echo "<tr>\n";
         					echo "<td> $nom_module</td>";
 						echo "<td align=\"center\">$rep_module</td>";
