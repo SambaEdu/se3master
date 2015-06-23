@@ -111,7 +111,7 @@ read only=".$_GET['dc_read']."";
 		
 		
 		// On lance le script de conf
-   		exec("sudo /usr/share/se3/scripts/mk_rsyncconf.sh start $_GET[dc_user] $_GET[dc_pass]");
+   		exec("sudo /usr/share/se3/scripts/mk_rsyncconf.sh start '$_GET[dc_user]' '$_GET[dc_pass]'");
 		unset($action);
    	}
 
