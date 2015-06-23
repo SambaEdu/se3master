@@ -32,6 +32,7 @@ Cmnd_Alias FONDS_ECRAN =/usr/share/se3/scripts/install_imagemagick_et_gsfonts.sh
 Cmnd_Alias IMPORT_COMPTES = /usr/share/se3/scripts/sauvegarde_ldap_avant_import.sh, /usr/share/se3/scripts/run_import_comptes.sh, /usr/share/se3/scripts/deleteClasses.sh
 Cmnd_Alias UNISON=/usr/share/se3/scripts/unison_links.sh, /usr/share/se3/scripts/unison_keys.sh
 
+
 # Commandes Sudo Lcs
 
 Cmnd_Alias LCS = /usr/share/lcs/scripts/mkhdir.sh, /usr/share/lcs/scripts/webperso.sh, /usr/share/lcs/scripts/chacces.sh
