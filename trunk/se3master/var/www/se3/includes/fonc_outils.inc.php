@@ -221,13 +221,13 @@ function start_poste($action, $name)
             if (search_samba($name)) {
                 // machine windows
                  $ret.=system ("/usr/bin/net rpc shutdown -t 30 -f -C 'Arret demande par le serveur sambaEdu3' -I ".$ip." -U \"".$name."\adminse3%".$xppass."\"");
-		//		 system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." halt");
+		//		 system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." poweroff");
                  echo "<br><br>";
                 //$ret.="/usr/bin/net rpc shutdown -t 2 -f -C 'Arret demande par le serveur sambaEdu3' -S ".$name." -U \"".$name."\adminse3%".$xppass."\"<br>";
                   }
                 else {
                     // poste linux : ne marchera pas, mais on verra plus tard...
-                    system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." halt");
+                    system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." poweroff");
                     echo "<br><br>";
                 }
         }
@@ -258,7 +258,7 @@ function start_poste($action, $name)
 //        }
 //        else {
 //            // poste linux : ne marchera pas, mais on verra plus tard...
-//            system ( "/usr/bin/ssh -o StrictHostKeyChecking=no ".$name." halt");
+//            system ( "/usr/bin/ssh -o StrictHostKeyChecking=no ".$name." poweroff");
 //        }
 //    }
 //    return $ret;
