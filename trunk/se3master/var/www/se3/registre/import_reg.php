@@ -4,7 +4,7 @@
    /**
    
    * Gestion des cles pour clients Windows (permet d'ajouter une cle dans la base)
-   * @Version $Id: ajout_cle.php 2949 2008-05-04 18:45:49Z plouf $ 
+   * @Version $Id$ 
    
   */	
 

@@ -3,7 +3,7 @@
 /**
 
  * Gestion des cles pour clients Windows (affichage des templates vu dans /home/templates ,lien vers choisirprotect ou vers affiche_restrictions en fonction du niveau)
- * @Version $Id: indexcle.php 4206 2009-06-22 11:31:33Z gnumdk $ 
+ * @Version $Id$ 
 
 
  * @Projet LCS / SambaEdu 
