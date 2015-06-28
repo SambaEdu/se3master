@@ -3,7 +3,7 @@
    /**
    
    * Gestion des cles pour clients Windows (effectue les actions sur la table restrictions c'est a dire sur les templates)
-   * @Version $Id: ajout_cle_groupe.php 4209 2009-06-22 13:56:08Z gnumdk $ 
+   * @Version $Id$ 
    
   
    * @Projet LCS / SambaEdu 
