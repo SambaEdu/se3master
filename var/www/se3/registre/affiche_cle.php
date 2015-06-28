@@ -3,7 +3,7 @@
 /**
 
  * Gestion des cles pour clients Windows (affiche l'ensemble des cles enregistrees dans la base)
- * @Version $Id: affiche_cle.php 2949 2008-05-04 18:45:49Z plouf $ 
+ * @Version $Id$ 
 
 
  * @Projet LCS / SambaEdu 

@@ -3,7 +3,7 @@
 /**
 
  * Gestion des cles pour clients Windows (affiche les restrictions pour un groupe donne)
- * @Version $Id: affiche_restrictions.php 4126 2009-06-10 13:53:01Z crob $ 
+ * @Version $Id$ 
 
 
  * @Projet LCS / SambaEdu 
