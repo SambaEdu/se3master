@@ -3,7 +3,7 @@
    /**
    
    * Edition des cles
-   * @Version $Id: aide_cle.php 2949 2008-05-04 18:45:49Z plouf $ 
+   * @Version $Id$ 
    
   
    * @Projet LCS / SambaEdu 

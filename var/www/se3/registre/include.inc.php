@@ -3,7 +3,7 @@
 /**
 
  * Gestion des cles pour clients Windows (Fonctions pour registre)
- * @Version $Id: include.inc.php 3034 2008-06-14 15:14:14Z plouf $
+ * @Version $Id$
 
 
  * @Projet LCS / SambaEdu

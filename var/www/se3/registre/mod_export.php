@@ -3,7 +3,7 @@
 /**
 
  * Gestion des cles pour clients Windows (exportation des modeles)
- * @Version $Id: mod_export.php 3252 2008-10-03 14:09:05Z keyser $ 
+ * @Version $Id$ 
 
 
  * @Projet LCS / SambaEdu 

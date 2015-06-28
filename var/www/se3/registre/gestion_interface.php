@@ -3,7 +3,7 @@
    /**
    
    * Gestion des cles pour clients Windows (page d'import-export)
-   * @Version $Id: gestion_interface.php 2949 2008-05-04 18:45:49Z plouf $ 
+   * @Version $Id$ 
    
   
    * @Projet LCS / SambaEdu 

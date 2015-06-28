@@ -3,7 +3,7 @@
 /**
 
  * Test les restictions sur les clients windows en fonction du nom et de la machine
- * @Version $Id: testreg.php 2949 2008-05-04 18:45:49Z plouf $ 
+ * @Version $Id$ 
 
  * @Projet LCS / SambaEdu 
 

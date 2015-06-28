@@ -3,7 +3,7 @@
    /**
    
    * Gestion des cles pour clients Windows (mise a jour des modeles)
-   * @Version $Id: mod_maj.php 3033 2008-06-14 14:32:27Z plouf $ 
+   * @Version $Id$ 
    
   
    * @Projet LCS / SambaEdu 

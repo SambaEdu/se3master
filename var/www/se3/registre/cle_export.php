@@ -3,7 +3,7 @@
    /**
    
    * Gestion des cles pour clients Windows (mise a jour des cles)
-   * @Version $Id: cle_export.php 2949 2008-05-04 18:45:49Z plouf $ 
+   * @Version $Id$ 
    
   
    * @Projet LCS / SambaEdu 
