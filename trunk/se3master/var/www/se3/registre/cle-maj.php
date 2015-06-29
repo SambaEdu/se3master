@@ -319,7 +319,13 @@ if ($ajout == 7) {
             $resultat1 = mysql_query($query1);
             $num = mysql_num_rows($resultat1);
             if (!$num) {
-				echo $query."<br>";
+                $cleok[6] = ajoutedoublebarre(($cleok[6]));
+                $cleok[1] = ajoutedoublebarre(($cleok[1]));
+                $cleok[2] = ajoutedoublebarre(($cleok[2]));
+                $cleok[0] = addslashes(($cleok[0]));
+                $cleok[7] = addslashes(($cleok[7]));
+                $cleok[9] = addslashes(($cleok[9]));
+		echo $query."<br>";
                 $query = "INSERT INTO corresp (Intitule,valeur,antidote,genre,OS,type,chemin,comment,categorie,sscat) VALUES ('$cleok[0]','$cleok[1]','$cleok[2]','$cleok[3]','$cleok[4]','$cleok[5]','$cleok[6]','$cleok[7]','$cleok[8]','$cleok[9]')";
                 $insert = mysql_query($query);
 //  echo $query;
