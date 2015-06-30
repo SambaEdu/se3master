@@ -181,8 +181,6 @@ done
 
 
 
-/etc/init.d/apache2 restart
-
 }
 
 function classes_update ()
@@ -230,6 +228,9 @@ esac
 
 
 
+
+/etc/init.d/apache2 restart
+exit 0
 
 
 
