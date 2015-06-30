@@ -231,7 +231,7 @@ if ($option eq '-c') {
             } 
           $ret == 0 or warn "Erreur: setfacl $PathClasses/$cnClasse\n";
 	  if ( $etat == 0 ) {
-				exec("/usr/share/se3/scripts/echange_classes.sh $cnClasse actif >/dev/null 2>/dev/null");
+				system("/usr/share/se3/scripts/echange_classes.sh $cnClasse actif >/dev/null 2>/dev/null");
 				} 
 	  
 	  
