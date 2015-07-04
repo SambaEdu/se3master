@@ -221,9 +221,11 @@ if (($fichier_xml) && (!$retval_rules)) {
 if ($envoi) {
     $envoi = preg_replace("#(\r\n)|(\n)|(\r)#", "", $envoi);
     echo "<br>" . gettext("Premi&#232;re analyse des cl&#233;s &#224; importer  en cours :") . " <br>";
-    if (mb_detect_encoding($envoi, "UTF-8")) {
-        $envoi = mb_convert_encoding($envoi, 'ISO-8859-1', 'UTF-8');
-    }
+    
+    //Passage en UTF-8 donc plus necessaire
+    //if (mb_detect_encoding($envoi, "UTF-8")) {
+    //    $envoi = mb_convert_encoding($envoi, 'ISO-8859-1', 'UTF-8');
+    //}
     $brutout = enleveantislash($envoi);
     $result = preg_split("/;&;/", $brutout);
     $nombre = count($result);
