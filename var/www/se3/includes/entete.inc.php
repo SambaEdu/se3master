@@ -69,7 +69,7 @@ body{
 </STYLE>
 
 <title><?php echo gettext("Interface d'administration de SambaEdu"); ?></title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="/elements/style_sheets/sambaedu.css" type="text/css">
 
   <script language = 'javascript' type = 'text/javascript'>
