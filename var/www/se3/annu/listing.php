@@ -95,7 +95,7 @@ usort($listing, "trieleve");
 
 
 	require_once(dirname(__FILE__).'/../html2pdf/html2pdf.class.php');
-	$html2pdf = new HTML2PDF('P','A4','fr', false, 'ISO-8859-15');
+	$html2pdf = new HTML2PDF('P','A4','fr', false, 'UTF-8');
 	$html2pdf->WriteHTML($content);
 	$html2pdf->Output('liste.pdf');
 
