@@ -150,9 +150,10 @@ if (($fichier_xml)&&(!$retval_mod)) {
      	connexion();
     	$ligne=preg_replace("/(\r\n)|(\n)|(\r)/","",$ligne);
 
-	if (mb_detect_encoding($ligne,"UTF-8")) {
-                $ligne=mb_convert_encoding($ligne,'ISO-8859-1','UTF-8');
-	}
+        //Passage UTF-8 donc plus necessaire
+	//if (mb_detect_encoding($ligne,"UTF-8")) {
+        //        $ligne=mb_convert_encoding($ligne,'ISO-8859-1','UTF-8');
+	//}
     	
 	$categorie=explode(";&;",$ligne);
     	for ($j;$j<count($categorie)+5;$j++) {
