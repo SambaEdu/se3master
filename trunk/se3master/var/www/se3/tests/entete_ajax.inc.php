@@ -8,7 +8,7 @@
    * @auteurs Philippe Chadefaux  MrT
    * @Licence Distribue selon les termes de la licence GPL
    * @note
-   * Modifications proposées par Sébastien Tack (MrT)
+   * Modifications proposees par Sebastien Tack (MrT)
    * Optimisation du lancement des scripts bash par la technologie asynchrone Ajax.
  
    
@@ -32,6 +32,7 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-core',"/var/www/se3/locale");
 textdomain ('se3-core');
 
+require_once ("traitement_data.inc.php");
 
 $login=isauth();
 

@@ -3,13 +3,14 @@
    
    * Page qui teste les differents services
    * @Version $Id$ 
+   * 
    * @Projet LCS / SambaEdu 
    * @auteurs Philippe Chadefaux  MrT
    * @Licence Distribue selon les termes de la licence GPL
    * @note 
-   * Modifications proposées par Sébastien Tack (MrT)
+   * Modifications proposees par Sebastien Tack (MrT)
    * Optimisation du lancement des scripts bash par la technologie asynchrone Ajax.
-   * Modification du système d'infos bulles.(Nouvelle version de wz-tooltip) Ancienne version incompatible avec ajax
+   * Modification du systeme d'infos bulles.(Nouvelle version de wz-tooltip) Ancienne version incompatible avec ajax
    * Externalisation des messages contenus dans les infos-bulles
    * Fonctions Tip('msg') et UnTip();
    * Nouvelle organisation de l'arborescence.
