@@ -1,14 +1,15 @@
    /**
    
    * Page qui teste les differents services
-   * @Version $Id: tests.js 3002 2008-05-30 12:58:43Z keyser $ 
+   * @Version $Id: tests.js 3002 2008-05-30 12:58:43Z keyser $
+   *  
    * @Projet LCS / SambaEdu 
    * @auteurs Philippe Chadefaux  MrT
    * @Licence Distribue selon les termes de la licence GPL
    * @note 
-   * Modifications proposées par Sébastien Tack (MrT)
+   * Modifications proposees par Sebastien Tack (MrT)
    * Optimisation du lancement des scripts bash par la technologie asynchrone Ajax.
-   * Modification du système d'infos bulles.(Nouvelle version de wz-tooltip Fonctions Tip('msg') TagToTip() UnTip() ) Ancienne version incompatible avec ajax
+   * Modification du systeme d'infos bulles.(Nouvelle version de wz-tooltip Fonctions Tip('msg') TagToTip() UnTip() ) Ancienne version incompatible avec ajax
    * Externalisation des messages contenus dans les infos-bulles. 
    * Nouvelle organisation de l'arborescence.
  
@@ -299,10 +300,10 @@
 		var ajax312 = new Ajax.Request(url12,{ method: method12, parameters: params12, onSuccess: function(requester){
 		var reponse12 = eval(requester.responseText);	
 		
-		$('space_disk1').innerHTML = '<I>- Espace occupé: ( '+arr_space_disks1[0]+' % )</I>';
-		$('space_disk2').innerHTML = '<I>- Espace occupé: ( '+arr_space_disks2[0]+' % )</I>';
-		$('space_disk3').innerHTML = '<I>- Espace occupé: ( '+arr_space_disks3[0]+' % )</I>';
-		$('space_disk4').innerHTML = '<I>- Espace occupé: ( '+arr_space_disks4[0]+' % )</I>';
+		$('space_disk1').innerHTML = '<I>- Espace occup&#233;: ( '+arr_space_disks1[0]+' % )</I>';
+		$('space_disk2').innerHTML = '<I>- Espace occup&#233;: ( '+arr_space_disks2[0]+' % )</I>';
+		$('space_disk3').innerHTML = '<I>- Espace occup&#233;: ( '+arr_space_disks3[0]+' % )</I>';
+		$('space_disk4').innerHTML = '<I>- Espace occup&#233;: ( '+arr_space_disks4[0]+' % )</I>';
 	
 
 		if(arr_space_disks1[0] < 96)
