@@ -4,10 +4,10 @@
 # http://phpmyadmin.sourceforge.net/ (download page)
 #
 # Serveur: localhost
-# Généré le : Lundi 22 Juillet 2002 à 15:10
+# Genere le : Lundi 22 Juillet 2002 a 15:10
 # Version du serveur: 3.23.49
 # Version de PHP: 4.1.2
-# Base de données: `se3db`
+# Base de donnees: `se3db`
 # --------------------------------------------------------
 
 #
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS connexions (
   PRIMARY KEY  (id),
   UNIQUE KEY id_2 (id),
   KEY id (id)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 #
 # Contenu de la table `connexions`
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS params (
   UNIQUE KEY id (id),
   UNIQUE KEY name (name),
   KEY id_2 (id)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 #
 # Contenu de la table `params`
@@ -73,26 +73,26 @@ INSERT INTO params VALUES (12, 'computersRdn', 'ou=Computers', 0, 'dn Relatif de
 INSERT INTO params VALUES (13, 'path_to_wwwse3', '', 0, 'Chemin d\'installation de l\'interface SambaEdu3', 3);
 INSERT INTO params VALUES (14, 'lcsIp', '', 0, 'Adresse du serveur Lcs (optionnel)', 1);
 INSERT INTO params VALUES (15, 'domain', '', 0, 'Nom du domaine DNS', 1);
-INSERT INTO params VALUES (16, 'path2UserSkel', '/etc/skel/user', 0, 'Chemin vers le modèle d\'utilisateurs', 3);
+INSERT INTO params VALUES (16, 'path2UserSkel', '/etc/skel/user', 0, 'Chemin vers le modÃ¨le d\'utilisateurs', 3);
 INSERT INTO params VALUES (17, 'path2BatFiles', '/home/netlogon', 0, 'Chemin vers les scripts de login', 3);
-INSERT INTO params VALUES (18, 'path2Templates', '/home/templates', 0, 'Chemin vers le dossier des modèles', 3);
+INSERT INTO params VALUES (18, 'path2Templates', '/home/templates', 0, 'Chemin vers le dossier des modÃ¨les', 3);
 INSERT INTO params VALUES (19, 'path2smbconf', '/etc/samba/smb.conf', 0, 'Chemin vers smb.conf', 3);
 INSERT INTO params VALUES (20, 'path2slapdconf', '', 0, 'Chemin vers slapd.conf', 3);
 INSERT INTO params VALUES (21, 'path2ldapconf', '', 0, 'Chemin vers ldap.conf', 3);
 INSERT INTO params VALUES (22, 'path2pamldapconf', '', 0, 'Chemin vers pam_ldap.conf', 3);
 INSERT INTO params VALUES (23, 'path2nssldapconf', '', 0, 'Chemin vers fichier de conf nss', 3);
 INSERT INTO params VALUES (24, 'path2ldapsecret', '/etc/ldap.secret', 0, 'Chemin vers fichier mdp ldap', 3);
-INSERT INTO params VALUES (25, 'serv_samba', '', 0, 'Script de démarrage samba', 3);
-INSERT INTO params VALUES (26, 'serv_apache', '', 0, 'Script de démarrage apache', 3);
-INSERT INTO params VALUES (27, 'serv_slapd', '', 0, 'Script de démarrage slapd', 3);
-INSERT INTO params VALUES (28, 'serv_nscd', '', 0, 'Script de démarrage nscd', 3);
+INSERT INTO params VALUES (25, 'serv_samba', '', 0, 'Script de dÃ©marrage samba', 3);
+INSERT INTO params VALUES (26, 'serv_apache', '', 0, 'Script de dÃ©marrage apache', 3);
+INSERT INTO params VALUES (27, 'serv_slapd', '', 0, 'Script de dÃ©marrage slapd', 3);
+INSERT INTO params VALUES (28, 'serv_nscd', '', 0, 'Script de dÃ©marrage nscd', 3);
 INSERT INTO params VALUES (29, 'defaultgid', '5005', 0, 'gidNumber des nouveaux users', 1);
 INSERT INTO params VALUES (30, 'majnbr', '#MAJNBR#', 0, 'Indice de mise a jour', 4);
 INSERT INTO params VALUES (31, 'version', '#VERSION#', 0, 'Numero de version', 4);
 INSERT INTO params VALUES (32, 'autologon', '1', 0, 'Login automatique sur l\'interface', 1);
 INSERT INTO params VALUES (33, 'uidPolicy', 4, 0, 'Type de login', 1);
 INSERT INTO params VALUES (34, 'yala_bind', 0, 0, 'Droits sur l\'annuaire pour YALA', 2);
-INSERT INTO params VALUES ('', 'defaultshell', '/bin/bash', 0, 'Shell par défaut', 1);
+INSERT INTO params VALUES ('', 'defaultshell', '/bin/bash', 0, 'Shell par dÃ©faut', 1);
 INSERT INTO params VALUES ('', 'pwdPolicy', '0', 0, 'Politique de mot de passe', 1);
 
 # Sauvegarde
@@ -100,7 +100,7 @@ INSERT INTO params VALUES ('', 'pwdPolicy', '0', 0, 'Politique de mot de passe',
 INSERT INTO params VALUES( '', 'melsavadmin', 'mail@serveur', '0', 'Mail Administrateur de sauvegarde', '5');
 INSERT INTO params VALUES( '', 'savlevel', '0', '0', 'Niveau de sauvegarde', '5');
 INSERT INTO params VALUES( '', 'savbandnbr', '0', '0', 'Compteur de bande', '5');
-INSERT INTO params VALUES( '', 'savdevice', '/dev/st0', '0', 'Périphérique de sauvegarde', '5');
+INSERT INTO params VALUES( '', 'savdevice', '/dev/st0', '0', 'PÃ©riphÃ©rique de sauvegarde', '5');
 INSERT INTO params VALUES( '', 'savhome', '1', '0', 'Etat de la sauvegarde de /home', '5');
 INSERT INTO params VALUES( '', 'savse3', '0', '0', 'Etat de la sauvegarde de /var/se3','5');
 INSERT INTO params VALUES( '', 'savsuspend', '1', '0', 'Mise en attente de la sauvegarde', '5');
@@ -120,13 +120,13 @@ VALUES (
 # Mise a jour
 INSERT INTO `params` ( `id` , `name` , `value` , `srv_id` , `descr` , `cat` )
 VALUES (
-'', 'urlmaj', 'http://wawadeb.crdp.ac-caen.fr/majse3', '0', 'Adresse des scripts de mise à jour', '1'
+'', 'urlmaj', 'http://wawadeb.crdp.ac-caen.fr/majse3', '0', 'Adresse des scripts de mise Ã  jour', '1'
 );
 INSERT INTO `params` ( `id` , `name` , `value` , `srv_id` , `descr` , `cat` )
 VALUES (
-'', 'ftpmaj', 'ftp://wawadeb.crdp.ac-caen.fr/pub/sambaedu', '0', 'Adresse de téléchargement des mises à jour', '1'
+'', 'ftpmaj', 'ftp://wawadeb.crdp.ac-caen.fr/pub/sambaedu', '0', 'Adresse de tÃ©lÃ©chargement des mises Ã  jour', '1'
 );
-INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ("defaultintlevel","3","Niveau d'interface par défaut","1");
+INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ("defaultintlevel","3","Niveau d'interface par dÃ©faut","1");
 INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ("majzinbr","0","Indice de Mise a jour DLL VBS","4");
 INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ("xppass","","Mot de passe Administrateur sur 2000/XP","4");
 INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ("ntpserv", "ntp.ac-creteil.fr", "Serveur de temps", "1");
@@ -135,12 +135,12 @@ INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ("trashRdn", "ou=Tras
 INSERT INTO `params` (`name`,`value`,`descr`,`cat`) VALUES ('slisip', '', 'Adresse du serveur Slis (optionnel)', '1');
 INSERT INTO `params` VALUES ('', 'slis_url', '', 0, 'Url du Slis (par defaut celle du webmail)', 1);
 INSERT INTO `params` VALUES ('', 'infobul_activ', '1', 0, 'Activation des info-bulles', 1);
-INSERT INTO `params` VALUES ('', 'inventaire', '0', 0, 'Désactive l''inventaire', 6);
-INSERT INTO `params` VALUES ('', 'antivirus', '0', 0, 'Désactive l''anti-virus', 6);
-INSERT INTO `params` VALUES ('', 'affiche_etat', '1', 0, 'Affiche la page d''état au lancement de l''interface', 6);
+INSERT INTO `params` VALUES ('', 'inventaire', '0', 0, 'DÃ©sactive l''inventaire', 6);
+INSERT INTO `params` VALUES ('', 'antivirus', '0', 0, 'DÃ©sactive l''anti-virus', 6);
+INSERT INTO `params` VALUES ('', 'affiche_etat', '1', 0, 'Affiche la page d''Ã©tat au lancement de l''interface', 6);
 INSERT INTO `params` VALUES  ('', 'type_Equipe_Matiere', 'posixGroup', 0, 'posixGroup ou groupOfNames', 4);
-INSERT INTO params VALUES ('', 'quota_warn_home', '0', '0', 'Avertissement pour dépassement de quota sur /home', '6');
-INSERT INTO params VALUES ('', 'quota_warn_varse3', '0', '0', 'Avertissement pour dépassement de quota sur /var/se3', '6');
+INSERT INTO params VALUES ('', 'quota_warn_home', '0', '0', 'Avertissement pour dÃ©passement de quota sur /home', '6');
+INSERT INTO params VALUES ('', 'quota_warn_varse3', '0', '0', 'Avertissement pour dÃ©passement de quota sur /var/se3', '6');
 INSERT INTO `params` VALUES ('', 'se3_domain', '', 0, 'Nom du domaine samba', 4);
 INSERT INTO `params` VALUES ('', 'netbios_name', '', 0, 'Nom netbios du serveur', 4);
 INSERT INTO `params` VALUES ('', 'se3ip', '', 0, 'Adresse IP du serveur', 4);
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS sessions (
   PRIMARY KEY  (id),
   UNIQUE KEY id_2 (id,sess),
   KEY id (id,sess)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 #
 # Structure de la table `categories`
@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS categories (
   CleID tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (catID,CleID),
   UNIQUE KEY `IntCat` (`IntCat`)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 #
 # Contenu de la table `categories`
@@ -194,7 +194,7 @@ INSERT INTO categories VALUES (200, 'Ordinateurs', 2);
 CREATE TABLE IF NOT EXISTS configuration (
   cheminvbsse3 varchar(50) NOT NULL default '',
   cheminreseau varchar(100) NOT NULL default ''
-) ENGINE=MyISAM;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 #
 # Structure de la table `corresp`
@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS corresp (
   type varchar(20) NOT NULL default 'restrict',
   PRIMARY KEY  (chemin),
   UNIQUE KEY CleID (CleID)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 #
@@ -228,7 +228,7 @@ CREATE TABLE IF NOT EXISTS modele (
   etat tinyint(4) default '1',
   PRIMARY KEY  (cle,`mod`),
   UNIQUE KEY modID (modID)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 #
@@ -242,7 +242,7 @@ CREATE TABLE IF NOT EXISTS restrictions (
   valeur varchar(255) NOT NULL default '',
   PRIMARY KEY  (cleID,groupe),
   UNIQUE KEY resID (resID)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 #
@@ -261,7 +261,7 @@ CREATE TABLE IF NOT EXISTS devoirs (
   liste_retard text NOT NULL,
   etat char(1) NOT NULL default 'D',
   PRIMARY KEY  (id)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE IF NOT EXISTS `alertes` (
@@ -285,7 +285,7 @@ CREATE TABLE IF NOT EXISTS `alertes` (
   PRIMARY KEY  (`ID`),
   UNIQUE KEY `ID` (`ID`),
   UNIQUE KEY `NAME` (`NAME`)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- 
@@ -293,8 +293,8 @@ CREATE TABLE IF NOT EXISTS `alertes` (
 -- 
 
 INSERT INTO `alertes` (`ID`, `NAME`, `MAIL`, `Q_ALERT`, `VALUE`, `CHOIX`, `TEXT`, `AFFICHAGE`, `VARIABLE`, `PREDEF`, `MENU`, `ACTIVE`, `SCRIPT`, `PARC`, `FREQUENCE`, `PERIODE_SCRIPT`) VALUES (51, 'Surveille apachese (909)', 'se3_is_admin', '', '', '', 'Test si l''interface d''administration marche', 1, '1', 1, '', 0, 'check_http -H localhost -p 909', '', '900', '2007-01-12 17:35:02');
-INSERT INTO `alertes` (`ID`, `NAME`, `MAIL`, `Q_ALERT`, `VALUE`, `CHOIX`, `TEXT`, `AFFICHAGE`, `VARIABLE`, `PREDEF`, `MENU`, `ACTIVE`, `SCRIPT`, `PARC`, `FREQUENCE`, `PERIODE_SCRIPT`) VALUES (52, 'Test swap', 'se3_is_admin', '', '', '', 'Test si le serveur swap à plus de 80%', 1, '', 1, '', 0, 'check_swap -w 80%', '', '3600', '2007-01-12 15:27:03');
-INSERT INTO `alertes` (`ID`, `NAME`, `MAIL`, `Q_ALERT`, `VALUE`, `CHOIX`, `TEXT`, `AFFICHAGE`, `VARIABLE`, `PREDEF`, `MENU`, `ACTIVE`, `SCRIPT`, `PARC`, `FREQUENCE`, `PERIODE_SCRIPT`) VALUES (53, 'Mises à jour', 'se3_is_admin', '', '', '', 'Test les mises à jour de sécurité disponibles', 1, '0', 1, '', 0, 'check_debian_packages --timeout=60', '', '302400', '2007-01-12 17:11:12');
+INSERT INTO `alertes` (`ID`, `NAME`, `MAIL`, `Q_ALERT`, `VALUE`, `CHOIX`, `TEXT`, `AFFICHAGE`, `VARIABLE`, `PREDEF`, `MENU`, `ACTIVE`, `SCRIPT`, `PARC`, `FREQUENCE`, `PERIODE_SCRIPT`) VALUES (52, 'Test swap', 'se3_is_admin', '', '', '', 'Test si le serveur swap ï¿½ plus de 80%', 1, '', 1, '', 0, 'check_swap -w 80%', '', '3600', '2007-01-12 15:27:03');
+INSERT INTO `alertes` (`ID`, `NAME`, `MAIL`, `Q_ALERT`, `VALUE`, `CHOIX`, `TEXT`, `AFFICHAGE`, `VARIABLE`, `PREDEF`, `MENU`, `ACTIVE`, `SCRIPT`, `PARC`, `FREQUENCE`, `PERIODE_SCRIPT`) VALUES (53, 'Mises ï¿½ jour', 'se3_is_admin', '', '', '', 'Test les mises ï¿½ jour de sï¿½curitï¿½ disponibles', 1, '0', 1, '', 0, 'check_debian_packages --timeout=60', '', '302400', '2007-01-12 17:11:12');
 INSERT INTO `alertes` (`ID`, `NAME`, `MAIL`, `Q_ALERT`, `VALUE`, `CHOIX`, `TEXT`, `AFFICHAGE`, `VARIABLE`, `PREDEF`, `MENU`, `ACTIVE`, `SCRIPT`, `PARC`, `FREQUENCE`, `PERIODE_SCRIPT`) VALUES (50, 'Etat des disques', 'se3_is_admin', '', '', '', 'Espace libre sur les disques', 1, '0', 1, '', 0, 'check_disk -w 5% -c 3% -x /dev/shm -t 10 -e', '', '900', '2007-01-12 17:30:01');
 INSERT INTO `alertes` (`ID`, `NAME`, `MAIL`, `Q_ALERT`, `VALUE`, `CHOIX`, `TEXT`, `AFFICHAGE`, `VARIABLE`, `PREDEF`, `MENU`, `ACTIVE`, `SCRIPT`, `PARC`, `FREQUENCE`, `PERIODE_SCRIPT`) VALUES ('NULL', 'UPS', 'se3_is_admin', '', '', '', 'Recevoir les alertes de l\'onduleur', 0, '', 1, '', 0, '', '', '900', 'NULL');
 
@@ -311,7 +311,7 @@ CREATE TABLE IF NOT EXISTS delegation (
   niveau varchar(20) NOT NULL default '',
   PRIMARY KEY  (login,parc),
   UNIQUE KEY ID (ID)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS actionse3 (
   action varchar(30) NOT NULL default '',
@@ -319,7 +319,7 @@ CREATE TABLE IF NOT EXISTS actionse3 (
   jour varchar(30) NOT NULL default '',
   heure time NOT NULL default '00:00:00',
   UNIQUE KEY parc (parc,jour,heure)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 
 -- Structure de la table `quotas`
@@ -331,4 +331,4 @@ CREATE TABLE IF NOT EXISTS `quotas` (
   `quotasoft` mediumint(9) default NULL,
   `quotahard` mediumint(9) default NULL,
   `partition` varchar(10) default NULL
-) ENGINE=MyISAM;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
