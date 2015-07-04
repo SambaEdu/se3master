@@ -84,7 +84,7 @@ switch ($act) {
             if (file_exists($fichier_mod_xml))
                 unlink($fichier_mod_xml);
             $get = fopen($fichier_mod_xml, "w+");
-            $ligne = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<se3mod>\n<nom>" . gettext("Groupe de cles") . "</nom>\n<version>V 0.1</version>\n<categories>\n";
+            $ligne = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<se3mod>\n<nom>" . gettext("Groupe de cles") . "</nom>\n<version>V 0.1</version>\n<categories>\n";
             fputs($get, $ligne);
             for ($i = 0; $i < $nombre + 1; $i++) {
                 $mod = $_POST['export' . $i];
