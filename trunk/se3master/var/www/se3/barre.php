@@ -8,7 +8,7 @@
    * @Projet LCS / SambaEdu 
    
    * @auteurs  jLCF >:>  jean-luc.chretien@tice.ac-caen.fr
-   * @auteurs « oluve » olivier.le_monnier@crdp.ac-caen.fr
+   * @auteurs  oluve  olivier.le_monnier@crdp.ac-caen.fr
    * @auteurs Olivier LECLUSE
 
    * @Licence Distribue selon les termes de la licence GPL
@@ -31,7 +31,7 @@
 <html>
 <head>
 <title>Barre</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link type="text/css" rel="stylesheet" href="elements/style_sheets/sambaedu.css" />
 <script type="text/javascript" language="JavaScript">
 <!--
