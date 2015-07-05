@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # $Id$
+# 
 # Bibliothèque de fonctions de calculs IP/MASQUE/...
 # Usage: source <chemin>/bibliotheque_ip_masque.sh
 #        calcule_reseau $IP $MASQUE
