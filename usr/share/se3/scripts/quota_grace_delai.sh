@@ -1,9 +1,13 @@
 #!/bin/bash
 # Auteur: Olivier Lacroix, version 0.2
 
+
+
 ## $Id$ ##
+
+
 #
-##### Script permettant le reglage du delai de grace sur les partitions où les quotas sont activés #####
+##### Script permettant le reglage du delai de grace sur les partitions oÃ¹ les quotas sont activÃ©s #####
 #
 
 grep xfs /etc/fstab >/dev/null
@@ -28,7 +32,7 @@ fi
 
 # teste pour verifier si $1 est bien un entier positif
 test "$1" -gt 0 -o "$1" -eq 0 2>/dev/null
-# Un entier positif est soit égal à 0 soit plus grand que 0.
+# Un entier positif est soit Ã©gal Ã  0 soit plus grand que 0.
 
 if [ $? -ne "0" ]; then
 echo "ERREUR DE SYNTAXE:"
@@ -49,7 +53,7 @@ fi
 
 #teste l'install du paquet quota
 if [ ! -f /usr/sbin/setquota ]; then
-ERREUR "Le paquet quota n'est pas installé.\nEffectuez:\n\tapt-get update\n\tapt-get install quota"
+ERREUR "Le paquet quota n'est pas installÃ©.\nEffectuez:\n\tapt-get update\n\tapt-get install quota"
 exit 1
 fi
 
