@@ -1,4 +1,7 @@
 #!/bin/bash
+
+## $Id$ ##
+
 # Update share preexec postexec scripts
 SHARES=/usr/share/se3/shares/shares.d
 AVAIL=/usr/share/se3/shares/shares.avail

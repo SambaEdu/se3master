@@ -1,5 +1,8 @@
 #!/bin/bash
+
 ## $Id$ ##
+
+
 # Update smb.conf based on current template version and current logon script (pl, py)
 # Keep user defined shares
 . /usr/share/se3/includes/config.inc.sh -cml

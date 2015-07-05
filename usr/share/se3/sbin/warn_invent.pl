@@ -3,12 +3,12 @@
 #
 ## $Id$ ##
 #
-##### Exp�die un mail en fonction des alertes d�finies dans l'inventaire #####
+##### Expédie un mail en fonction des alertes définies dans l'inventaire #####
 ##
 #
 
 if (($ARGV[0] eq  "--help") || ($ARGV[0] eq "-h")) {
-        print "Exp�die un mail en fonction des alertes d�finies dans l'inventaire\n";
+        print "Expédie un mail en fonction des alertes définies dans l'inventaire\n";
 	print "Usage : aucune option\n";
         exit;
 }
@@ -17,7 +17,7 @@ if (($ARGV[0] eq  "--help") || ($ARGV[0] eq "-h")) {
 use POSIX;
 use Net::LDAP;
 
-my $DEBUG="1"; # 0 d�sactiv� - 1 activ�
+my $DEBUG="1"; # 0 désactivé - 1 activé
 
 require '/etc/SeConfig.ph';
 my $se3_db = DBI->connect("DBI:mysql:$connexionDb@$mysqlServerIp", $mysqlServerUsername, $mysqlServerPw)
@@ -74,7 +74,7 @@ or die "Unable to connect to contacts Database: $inventaire_db->errstr\n";
     		my $sthcomp = $inventaire_db->prepare("SELECT DISTINCT NAME FROM hardware");
     		$sthcomp->execute or 
     		die "Unable to execute query: $inventaire_db->errstr\n";
-    		#parcours des valeurs renvoy�es par la requete
+    		#parcours des valeurs renvoyées par la requete
 		@result_comp=();
     		while (@enr = $sthcomp -> fetchrow_array) {
         		$machine_invent=@enr[0];
@@ -128,7 +128,7 @@ or die "Unable to connect to contacts Database: $inventaire_db->errstr\n";
 		$nombre_elements_parc_final=$nombre_elements_parc;
 		
 		if ($DEBUG=="1") {
-			print "elements pris en compte dans le parc".$nombre_elements_parc_final."\n";
+			print "éléments pris en compte dans le parc".$nombre_elements_parc_final."\n";
 		}
 	} else {
     		# il faut compter toutes les machines de l'inventaire
@@ -137,7 +137,7 @@ or die "Unable to connect to contacts Database: $inventaire_db->errstr\n";
 		$nombre_elements_invent_final=$nombre_elements_invent;
 		
 		if ($DEBUG=="1") {
-			print "nombre d'elements repertories dans l inventaire : ".$nombre_elements_invent_final." \n";
+			print "nombre d'éléments répertories dans l inventaire : ".$nombre_elements_invent_final." \n";
 		}
     	}
 
@@ -147,7 +147,7 @@ or die "Unable to connect to contacts Database: $inventaire_db->errstr\n";
     	die "Unable to execute query: $inventaire_db->errstr\n";
 
 
-    	# parcours des valeurs renvoy�es par la requete
+    	# parcours des valeurs renvoyées par la requete
 	@result_query = ();
     	while (@enr = $sthi -> fetchrow_array)
         {
@@ -159,12 +159,12 @@ or die "Unable to connect to contacts Database: $inventaire_db->errstr\n";
 	$sthi -> finish;
 	my $nombre_elements_reel = @result_query;
 
-	#print "$nombre_elements_reel renvoy� par la requete dans l'inventaire en tout sans parc \n";
+	#print "$nombre_elements_reel renvoyé par la requete dans l'inventaire en tout sans parc \n";
 	# il ne faut prendre que les elements du parc
 
 	if ($parc) {
 		if($DEBUG=="1") {
-    			print "Alerte definie uniquement dans le parc $parc \n";
+    			print "Alerte définie uniquement dans le parc $parc \n";
 		}	
 		@intersection_query = @difference_query = ();
     		%count = ();
@@ -178,23 +178,23 @@ or die "Unable to connect to contacts Database: $inventaire_db->errstr\n";
 
 
 	if ($DEBUG=="1") {
-		print "$nombre_elements_reel reels trouves grace a la requete  \n";
+		print "$nombre_elements_reel réels trouvés grâce a la requète  \n";
 	}
 
 
 
 	$inventaire_db -> disconnect;
-	#comptons le nombre d'elements renvoy�s par le requete enregistr�e
+	#comptons le nombre d'elements renvoyés par le requete enregistrée
 
 	#comparons le contenu du tableau parc et le contenu des machines de la requete
-	# en fonction de la valeur demand� par l'alertes
-	#si la valeur n'est pas max mais bien fix�e au d�part dans l'alerte
+	# en fonction de la valeur demandé par l'alertes
+	#si la valeur n'est pas max mais bien fixée au départ dans l'alerte
 	if ($parc) {$nombre_elements=$nombre_elements_parc_final;} else { $nombre_elements=$nombre_elements_invent_final;}
 	
 	if ("$value" eq "max") { 
-		$new_value=$nombre_elements; print "la valeur cherchee est (max) $new_value \n";
+		$new_value=$nombre_elements; print "la valeur cherchée est (max) $new_value \n";
 	} else { 
-		$new_value=$value; print "la valeur cherchee est $new_value\n";
+		$new_value=$value; print "la valeur cherchée est $new_value\n";
 	}
 
 	#declenchement de l'alerte ?
@@ -213,14 +213,14 @@ or die "Unable to connect to contacts Database: $inventaire_db->errstr\n";
 					close MAIL;
                         	}
 			} else {
-					print $retour="alerte validee (egal)";
+					print $retour="alerte validée (egal)";
 			}	
                 last SWITCH;
        		};
 
        		("$choix" eq "<")      && do {
        			if ($nombre_elements_reel < $new_value) {
-				print $retour="alerte validee pour <";
+				print $retour="alerte validée pour <";
 			} else  {
 				@mails=`/usr/share/se3/scripts/mail-ldap.sh "$rights"`;
                         	foreach $mel (@mails) {
@@ -228,7 +228,7 @@ or die "Unable to connect to contacts Database: $inventaire_db->errstr\n";
 					open(MAIL,"|/usr/sbin/sendmail -t");
 					print MAIL "To: $mel";
 					print MAIL "Subject: [SE3 Inventaire] Alerte $name\n";
-					print MAIL "Alerte a preciser";
+					print MAIL "Alerte a préciser";
 					close MAIL;						    
                          	}
 			}
@@ -248,7 +248,7 @@ or die "Unable to connect to contacts Database: $inventaire_db->errstr\n";
 					open(MAIL,"|/usr/sbin/sendmail -t");
 					print MAIL "To: $mel";
 					print MAIL "Subject: [SE3 Inventaire] Alerte $name\n";
-					print MAIL "Alerte a preciser";
+					print MAIL "Alerte a préciser";
 					close MAIL;
 				}
 			}	

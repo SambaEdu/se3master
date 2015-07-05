@@ -1,4 +1,9 @@
 #!/usr/bin/perl
+
+## $Id$ ##
+
+
+
 die("Erreur d'argument") if ($#ARGV != 1);
 
 use Net::LDAP;
@@ -11,7 +16,7 @@ $dn = 'uid=' . $uid . ',' . $peopleDn;
 $uid =~ /^(\w*)\.(\w*)$/;
 
 die if $uid eq '';
-# on  ecrit dans la base ldap l'action a effectuer à  la prochaine connexion..
+# on  ecrit dans la base ldap l'action a effectuer ï¿½  la prochaine connexion..
 
 $ldap = Net::LDAP->new(
                        "$slapdIp",
