@@ -1,4 +1,9 @@
 #!/bin/bash
+
+
+## $Id$ ##
+
+
 # Appliquer des acls version test
 
 effacer=$1
