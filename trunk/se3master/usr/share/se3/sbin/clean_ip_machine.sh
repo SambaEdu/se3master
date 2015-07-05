@@ -1,5 +1,7 @@
 #!/bin/bash
 
+## $Id$ ##
+#
 # recup parametres mysql
 . /etc/se3/config_o.cache.sh
 
