@@ -1,5 +1,11 @@
 #!/bin/bash
+
+
+## $Id$ ##
+
+
 # copier le fichier pour recuperation par le web
+
 login=$1
 fich="/home/$login/devoirs.txt"
 
