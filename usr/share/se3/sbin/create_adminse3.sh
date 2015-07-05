@@ -1,4 +1,8 @@
 #!/bin/bash
+
+
+## $Id$ ##
+
 . /usr/share/se3/includes/config.inc.sh -cm
 . /usr/share/se3/includes/functions.inc.sh
 
