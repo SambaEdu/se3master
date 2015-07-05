@@ -1,6 +1,7 @@
 #!/bin/bash
 # Script largement ébauché par Franck Molle...
 # ... poursuivi par Stéphane Boireau (03/10/2005)
+#
 ## $Id$ ##
 #
 ##### Permet de changer l'adresse IP du serveur se3 #####
