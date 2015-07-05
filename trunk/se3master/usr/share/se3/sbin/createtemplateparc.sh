@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Script de création du dossier au nom du parc dans /home/template
-# Stéphane Boireau - 18/03/2005
+# Script de crÃ©ation du dossier au nom du parc dans /home/template
+# StÃ©phane Boireau - 18/03/2005
+
+
+## $Id$ ##
 
 if [ ! -z "$1" ]; then
         verif=$(echo "$1" | sed -e "s/[A-Za-z0-9_.]//g" | wc -c | sed -e "s/ //g")
