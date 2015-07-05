@@ -11,9 +11,9 @@
 
 
 if [ "$1" = "--help" -o "$1" = "-h" -o $# -eq 0 -o $# -gt 3 ]; then
-	echo "Script permettant de mapper un groupe, lance à partir de l'interface Annuaire"
+	echo "Script permettant de mapper un groupe, lance Ã  partir de l'interface Annuaire"
 	echo ""
-	echo "Usage : Avec 3 parametres : le nom du groupe à mapper (Posix Group), le nom nt  et la description "
+	echo "Usage : Avec 3 parametres : le nom du groupe Ã  mapper (Posix Group), le nom nt  et la description "
 	echo "        Avec 1 ou 2 parametres : les autre sont recuperes dans ldap"
 	echo " /usr/share/se3/scripts/group_mapping.sh Classe_2nde1"
 	exit
@@ -56,6 +56,6 @@ else
     net groupmap add ntgroup=$ntgroup unixgroup=$1 type=domain comment="$description" 1>/dev/null
     echo "Mapping du groupe $1 effectue"
   else
-    echo "Le groupe $1 est déjà mappe dans l'annuaire"
+    echo "Le groupe $1 est dÃ©jÃ  mappe dans l'annuaire"
   fi
 fi

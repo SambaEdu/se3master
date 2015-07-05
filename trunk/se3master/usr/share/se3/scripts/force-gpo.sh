@@ -1,5 +1,9 @@
 #!/bin/bash
-# $Id:$
+
+
+## $Id$ ##
+
+
 # script sudo pour forcer les gpo
 
 machine=$1
