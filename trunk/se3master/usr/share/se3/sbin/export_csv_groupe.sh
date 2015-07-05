@@ -1,30 +1,30 @@
 #!/bin/bash
 #
-##### Script de génération d'un CSV des membres d'un groupe #####
+##### Script de gÃ©nÃ©ration d'un CSV des membres d'un groupe #####
 #
-# Auteur: Stéphane Boireau (A.S. - Relais de Bernay/Pont-Audemer (27))
+# Auteur: StÃ©phane Boireau (A.S. - Relais de Bernay/Pont-Audemer (27))
 #
 ## $Id$ ##
 #
 # /usr/share/se3/sbin/export_csv_groupe.sh
-# Dernière modification: 23/06/2007
+# DerniÃ¨re modification: 23/06/2007
 
 if [ "$1" = "--help" -o "$1" = "-h" -o -z "$1" ]; then
-	echo "Script destiné à effectuer un export CSV des membres d'un groupe"
+	echo "Script destinÃ© Ã  effectuer un export CSV des membres d'un groupe"
 	echo "en fournissant les champs suivants:"
 	echo "   Login;Nom complet;Nom;Prenom;Naissance;Sexe;Email"
 	echo ""
-	echo "Usage : Passer le nom du groupe en paramètre \$1"
-	echo "        La chaine __CLASSES__ est aussi acceptée"
-	echo "        et génère un CSV par classe."
-	echo "        Les fichiers sont générés dans un sous-dossier"
+	echo "Usage : Passer le nom du groupe en paramÃ¨tre \$1"
+	echo "        La chaine __CLASSES__ est aussi acceptÃ©e"
+	echo "        et gÃ©nÃ¨re un CSV par classe."
+	echo "        Les fichiers sont gÃ©nÃ©rÃ©s dans un sous-dossier"
 	echo "        du Home de l'utilisateur admin."
 	exit
 fi
 
 if [ ! -e "/home/admin" ]; then
 	echo "ERREUR:"
-	echo "   Le compte admin ne s'est jamais connecté."
+	echo "   Le compte admin ne s'est jamais connectÃ©."
 	echo "   Son dossier personnel n'existe pas encore."
 	echo "   Connectez-vous une fois en admin!"
 	exit
@@ -74,12 +74,12 @@ if [ "$1" = "__CLASSES__" ]; then
 else
 	test=$(ldapsearch -xLLL -b ou=Groups,$BASEDN cn=$1)
 	if [ -z "$test" ]; then
-		echo "Le groupe proposé n'existe pas dans l'annuaire."
+		echo "Le groupe proposÃ© n'existe pas dans l'annuaire."
 	else
 		EXPORT_CSV $1
 		chown -R admin "/home/admin/Docs/export_csv_groupe_${1}_${ladate}"
 	fi
 fi
 
-echo "Terminé."
+echo "TerminÃ©."
 
