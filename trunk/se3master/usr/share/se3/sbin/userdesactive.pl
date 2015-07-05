@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+
+## $Id$ ##
+
+
 use Net::LDAP;
 use Encode::compat;
 use Encode qw(encode decode);

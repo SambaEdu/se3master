@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # $Id$
+
+
 # Script destine à disposer de variable d'acces au LDAP pour simplifier l'ecriture de commandes ldpasearch, ldapadd, ldapdelete, ldapmodify
 # Auteur: Stephane Boireau
 # Derniere modification: 13/05/2009
