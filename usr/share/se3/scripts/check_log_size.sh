@@ -1,6 +1,8 @@
 #!/bin/bash
 #
-## $Id ##
+
+## $Id$ ##
+
 #
 ##### Permet de controler la taille des fichiers de logs pour prevenir un probleme de rotation #####
 
