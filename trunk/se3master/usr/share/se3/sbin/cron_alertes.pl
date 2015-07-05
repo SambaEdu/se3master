@@ -3,20 +3,20 @@
 #
 ## $Id$ ##
 #
-##### Effectue les actions programmées dans alertes #####
+##### Effectue les actions programmÃ©es dans alertes #####
 # Philippe Chadefaux
 ##
 #
 # Mode DEBUG
-my $DEBUG=0; # Mettre à 0 pour descativer le mode debug
+my $DEBUG=0; # Mettre Ã  0 pour descativer le mode debug
 $REP_SCRIPT="/usr/share/se3/scripts-alertes/";
 
 #
-# Modifier dans syslog.conf afin que local5 soit utilisé
+# Modifier dans syslog.conf afin que local5 soit utilisÃ©
 # en ajoutant la ligne suivante
 # local5.*                        /var/log/se3/alertes
 #
-# Pour éviter de mettre les logs dans messages modifier 
+# Pour Ã©viter de mettre les logs dans messages modifier 
 #
 # local5;\
 # mail,news.none          -/var/log/messages
@@ -31,7 +31,7 @@ use Time::Local;
 
 
 if (($ARGV[0] eq  "--help") || ($ARGV[0] eq "-h")) {
-        print "Effectue les actions programmées dans actionse3\n";
+        print "Effectue les actions programmÃ©es dans actionse3\n";
 	print "Usage : aucune option\n";
         exit;
 }
@@ -89,15 +89,15 @@ while (my $ref = $sth->fetchrow_hashref())
 	$epoch_now=time();
 	# Calcul de la frequence
 	#
-	# duree  entre maintenant et la derniere remontée
+	# duree  entre maintenant et la derniere remontÃ©e
 	$duree = $epoch_now - $periode_script;
 	
 	if ($DEBUG=="1") {
 		if($duree >= $frequence) { 
-			print "frequence $frequence plus petit que la dernière cron : $duree donc script lancé\n"; 
+			print "frequence $frequence plus petit que la derniÃ¨re cron : $duree donc script lancï¿½\n"; 
 		}
 		if ($duree <= $frequence) { 
-			print "duree $duree plus petit que freq $frequence, donc script non lancé\n"; 
+			print "duree $duree plus petit que freq $frequence, donc script non lancÃ©\n"; 
 		}
 	}	
 	
@@ -119,7 +119,7 @@ while (my $ref = $sth->fetchrow_hashref())
 		if ($retour_err=="0") { # Retour positif pas d'alerte
 			# Si anciennement variable = 0  alors on avait pas de probleme
 			if ($variable=="0") {
-				# On expédie le mail informant retour normal
+				# On expÃ©die le mail informant retour normal
 				@mails=`/usr/share/se3/sbin/mail-ldap.sh "$rights"`;
 				foreach $mel (@mails) {
 					if ($DEBUG=="1") {
@@ -137,7 +137,7 @@ while (my $ref = $sth->fetchrow_hashref())
 			my $sth = $se3_db->prepare($requete);
 			$sth->execute or
 			die "Unable to execute query: $se3_db->errstr\n";
-			# Requete pour mettre VARIABLE à 1 dans la table (en cas de retour à la normal)
+			# Requete pour mettre VARIABLE Ã  1 dans la table (en cas de retour Ã  la normal)
 
 			if ($DEBUG=="1") {
 				print "\nOK pour script $script\n";
@@ -149,11 +149,11 @@ while (my $ref = $sth->fetchrow_hashref())
  			}
 		
 		} else {
-			# Probleme on balance le mail sauf si VARIABLE est déja à 0
-			# cela voulant dire que le mail est déjà parti.
-			# + pour pas le renvoyer à chaque cron on passe VARIABLE à 0
+			# Probleme on balance le mail sauf si VARIABLE est dÃ©ja Ã  0
+			# cela voulant dire que le mail est dÃ©jÃ  parti.
+			# + pour pas le renvoyer Ã  chaque cron on passe VARIABLE Ã  0
 			# 
-			# # VARIABLE etant a 1 aucun message n'a encore été envoyé
+			# # VARIABLE etant a 1 aucun message n'a encore Ã©tÃ© envoyÃ©
 			if ($DEBUG=="1") {
 				print "Etat probleme\n\n"; 
 			}
@@ -165,7 +165,7 @@ while (my $ref = $sth->fetchrow_hashref())
 			die "Unable to execute query: $se3_db->errstr\n";
 		
 			if (($variable == '1') || ($frequence_mail == "1")) {
-				# On expédie le mail
+				# On expÃ©die le mail
 				@mails=`/usr/share/se3/sbin/mail-ldap.sh "$rights"`;
 				foreach $mel (@mails) {
 					if ($DEBUG=="1") {
