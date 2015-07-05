@@ -1,4 +1,9 @@
 #!/bin/bash
+
+
+## $Id$  ##
+
+
 # supprimer les 2 fichier temporaires
 
 tmp="/tmp/devoirs.txt"

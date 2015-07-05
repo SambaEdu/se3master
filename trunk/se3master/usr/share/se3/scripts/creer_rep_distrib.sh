@@ -1,9 +1,13 @@
 #!/bin/bash
 
-# $Id$ # 
 
-# créer un sous-rép du rép classe des élèves au nom du devoir pour y recueillir les devoirs
+## $Id$ ## 
+
+
+# crÃ©er un sous-rÃ©p du rÃ©p classe des Ã©lÃ¨ves au nom du devoir pour y recueillir les devoirs
 # appel :  $cr=exec("/usr/bin/sudo /usr/share/se3/scripts/creer_rep_distrib.sh $login $id_eleve \"$rep\"");
+
+
 login=$1
 uid=$2
 rep=$3

@@ -3,7 +3,9 @@
 #
 ## $Id$ ##
 #
-##### liste en HTML la taille des sous-répertoires, rangés par ordre de taille décroissante #####
+
+
+##### liste en HTML la taille des sous-rÃ©pertoires, rangÃ©s par ordre de taille dÃ©croissante #####
 #
 # Etat ement d'un utilisateur
 
@@ -11,7 +13,7 @@
 
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
-	echo "Liste en html les sous-répertoires, rangés pas ordre de taille décroissante."
+	echo "Liste en html les sous-rÃ©pertoires, rangÃ©s pas ordre de taille dÃ©croissante."
 	echo "Usage : du.sh /home/toto"
 	exit
 fi	
@@ -33,12 +35,12 @@ fi
 touch "$fich_lock"
 
 if [ ! -e $1 ]; then
-  echo "Le répertoire passé en argument n'existe pas!"
+  echo "Le rÃ©pertoire passÃ© en argument n'existe pas!"
   exit 1
 else
   WREP=$1
   echo "
-  Liste des sous-répertoires directs, rangés par ordre de taille décroissante.
+  Liste des sous-rÃ©pertoires directs, rangÃ©s par ordre de taille dÃ©croissante.
   <BR><BR>
   <TABLE ALIGN=\"CENTER\" BORDER=\"1\">
   <TR><TD><STRONG>Dossier</STRONG></TD>

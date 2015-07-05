@@ -1,5 +1,9 @@
 #!/bin/bash
-# créer un sous-rép du home du prof pour y recueillir les devoirs
+
+## $Id$ ##
+
+
+# crÃ©er un sous-rÃ©p du home du prof pour y recueillir les devoirs
 
 login=$1
 devoir=$2

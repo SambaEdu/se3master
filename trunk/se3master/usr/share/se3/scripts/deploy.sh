@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# $Id$ #
+
+## $Id$ ##
+
 
 # Deploie des fichiers dans les home
 

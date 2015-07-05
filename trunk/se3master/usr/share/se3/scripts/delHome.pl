@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+
+## $Id$ ##
+
+
 use Net::LDAP;
 use DBI;
 
@@ -26,7 +30,7 @@ foreach $entry ($res->entries) {
       system("rm -r /home/$uid");
       #print "le rep /home/$uid existe\n";
   }    
-  # Recherche du nom de la base données.
+  # Recherche du nom de la base donnÃ©es.
   $db_name = $uid;
   $db_name =~ s/-//g;
   $db_name =~ s/_//g;
