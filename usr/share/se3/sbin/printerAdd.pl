@@ -1,12 +1,12 @@
 #!/usr/bin/perl
 
 #########################################################################
-#   Projet SE3 : Ajout d'une imprimante à la branche printers de LDAP   #
+#   Projet SE3 : Ajout d'une imprimante Ã  la branche printers de LDAP   #
 #                et configuration dans CUPS                             #
 #   /usr/share/se3/sbin/printerAdd.pl                                   #
-#   Patrice André <h.barca@free.fr>                                     #
-#   Carip-Académie de Lyon -avril-juin-2004                             #
-#   Distribué selon les termes de la licence GPL                        #
+#   Patrice AndrÃ© <h.barca@free.fr>                                     #
+#   Carip-AcadÃ©mie de Lyon -avril-juin-2004                             #
+#   DistribuÃ© selon les termes de la licence GPL                        #
 #########################################################################
 
 #####Ajout de l'imprimante dans CUPS et LDAP#####
@@ -84,18 +84,18 @@ $result = $ldap->add( "printer-name=$nom_imprimante,$printersDn",
 			      ]
 		    );		
 
-die("Echec à l'entrée dans ldap.\n") if ($result->code != 0);                    
+die("Echec Ã  l'entrÃ©e dans ldap.\n") if ($result->code != 0);                    
 #$result->code && warn "failed to add entry: ", $result->error ;
 $mesg = $ldap->unbind;  # take down session
 
-# Puis on recrée pour pas de driver il faut envoyer raw a cups
+# Puis on recrÃ©e pour pas de driver il faut envoyer raw a cups
 if($pilote eq "dep") {
          $pilote="raw";
 }
          
 
-die ("Configuration CUPS échouée.\n") if (system("/usr/bin/sudo /usr/share/se3/scripts/lpadmin.sh -p $nom_imprimante -v $uri_imprimante -D \"$info_imprimante\" -L \"$lieu_imprimante\" -m $pilote -E") != 0);
+die ("Configuration CUPS Ã©chouÃ©e.\n") if (system("/usr/bin/sudo /usr/share/se3/scripts/lpadmin.sh -p $nom_imprimante -v $uri_imprimante -D \"$info_imprimante\" -L \"$lieu_imprimante\" -m $pilote -E") != 0);
 
-die ("Redémarrage de Samba échoué.\n") if (system("/usr/bin/sudo /usr/share/se3/scripts/sambareload.sh") !=0);
+die ("RedÃ©marrage de Samba Ã©chouÃ©.\n") if (system("/usr/bin/sudo /usr/share/se3/scripts/sambareload.sh") !=0);
 
 exit 0;

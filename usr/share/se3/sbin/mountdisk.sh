@@ -1,4 +1,7 @@
 #!/bin/bash
+
+## $Id$ ##
+
 #
 [ ! -e $1 ] && exit 0
 mount |grep "\/var\/lib\/backuppc" >/dev/null

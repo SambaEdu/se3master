@@ -1,16 +1,18 @@
 #!/usr/bin/perl
 
 ######################################################################
-#   Projet SE3 : Suppression intégrale d'une imprimante              #
-#              supprimée de CUPS et n'est plus membre d'aucun parc   #
+#   Projet SE3 : Suppression intÃ©grale d'une imprimante              #
+#              supprimÃ©e de CUPS et n'est plus membre d'aucun parc   #
 #   /usr/share/se3/sbin/printerDel.pl                                          #
-#   Patrice André <h.barca@free.fr>                                  #
-#   Carip-Académie de Lyon -avril-juin-2004                          #
-#   Dernière mise-à-jour:25/05/2004                                  #
-#   Distribué selon les termes de la licence GPL                     #
+#   Patrice AndrÃ© <h.barca@free.fr>                                  #
+#   Carip-AcadÃ©mie de Lyon -avril-juin-2004                          #
+#   DerniÃ¨re mise-Ã -jour:25/05/2004                                  #
+#   DistribuÃ© selon les termes de la licence GPL                     #
 ######################################################################
 
-#Suppression définitive des imprimantes
+## $Id$ ##
+
+#Suppression dÃ©finitive des imprimantes
 
 use Net::LDAP;
 use Unicode::String qw(latin1 utf8);
@@ -51,11 +53,11 @@ $recherche = $ldap->search( base => $parcDn,
                          attrs => ['member']
                          );
 
-die("Echec à l'entrée dans ldap.\n") if ($result->code != 0);
+die("Echec Ã  l'entrÃ©e dans ldap.\n") if ($result->code != 0);
 
-# Dans chaque parc, si une occurence de l'imprimante a été trouvée, on l'efface.                             
+# Dans chaque parc, si une occurence de l'imprimante a Ã©tÃ© trouvÃ©e, on l'efface.                             
 foreach $entree ($recherche->all_entries()) {
-    $member=$entree->get_value('member',asref=>1);  #renvoie une référence sur un tableau (plusieurs occurences de members)
+    $member=$entree->get_value('member',asref=>1);  #renvoie une rÃ©fÃ©rence sur un tableau (plusieurs occurences de members)
     $nb_member=scalar(@$member);
     for ($i=0; $i<$nb_member; $i++) {
         if  ($member->[$i] eq "cn=$nom_imprimante,$printersDn") {
@@ -63,16 +65,16 @@ foreach $entree ($recherche->all_entries()) {
             $result = $ldap->modify( "cn=$cn_parc,$parcDn",
 		        	         delete => {'member' => "cn=$nom_imprimante,$printersDn"}
 			 );
-            die("Echec à l'entrée dans ldap.\n") if ($result->code != 0);
+            die("Echec Ã  l'entrÃ©e dans ldap.\n") if ($result->code != 0);
         }
     }
 }
 $mesg = $ldap->unbind;  # take down session
 
-die ("Configuration CUPS échouée.\n") if (system("/usr/sbin/lpadmin -h 127.0.0.1 -x $nom_imprimante") != 0);
+die ("Configuration CUPS Ã©chouÃ©e.\n") if (system("/usr/sbin/lpadmin -h 127.0.0.1 -x $nom_imprimante") != 0);
 
-die ("Redémarrage de Samba échoué.\n") if (system("/usr/bin/sudo /usr/share/se3/scripts/sambareload.sh") !=0);
+die ("RedÃ©marrage de Samba Ã©chouÃ©.\n") if (system("/usr/bin/sudo /usr/share/se3/scripts/sambareload.sh") !=0);
 	
-die ("Script de partage d'imprimantes Samba échoué.\n") if (system("/usr/share/se3/sbin/printers_group.pl") !=0);
+die ("Script de partage d'imprimantes Samba Ã©chouÃ©.\n") if (system("/usr/share/se3/sbin/printers_group.pl") !=0);
 
 exit 0;
