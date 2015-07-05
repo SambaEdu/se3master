@@ -2,6 +2,7 @@
 
 ## $Id$ ##
 #
+
 ##### Purge le repertoire public toutes les nuits si cela est active dans l'interface #####
 #
 
