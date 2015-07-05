@@ -2,7 +2,7 @@
 #
 ### $Id$ ###
 #
-##### Compare 2 fichiers, utilisé par l'inventaire #####
+##### Compare 2 fichiers, utilisÃ© par l'inventaire #####
 #
 $fichin=$ARGV[0];
 $fichout=$ARGV[1];
@@ -20,19 +20,19 @@ while (<IN>) {
 chomp;
 s/\r// if /\r$/; 
 
-# tester le début de paragraphe
+# tester le dÃ©but de paragraphe
 if (/^(\d)/) {
  $op="a" if /a/;
  $op="d" if /d/;
  $op="c" if /c/;
- # on élimine cette ligne
+ # on Ã©limine cette ligne
  next SUIVANT;
 }
 if  (/^---/) {
- # on élimine cette ligne
+ # on Ã©limine cette ligne
  next SUIVANT;
 }
- # traitement d'une ligne à afficher
+ # traitement d'une ligne Ã  afficher
  $fin="1;" if /^>/;
  $fin="2;" if /^</;
  $fin="31;" if (/^>/ and $op eq "c") ;
