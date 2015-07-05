@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+## $Id$ ##
+
+
 use Net::LDAP;
 
 require '/etc/SeConfig.ph';
