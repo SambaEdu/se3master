@@ -2,6 +2,9 @@
 # Run and Kill share's services defined in /usr/share/se3/shares/%NAME%
 # Works like Sys V init
 
+## $Id$ ##
+
+
 RC_SHARE=/usr/share/se3/shares/shares.d
 VERBOSE=0
 LOGON=0

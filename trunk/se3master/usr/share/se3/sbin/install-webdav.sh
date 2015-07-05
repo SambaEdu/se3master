@@ -5,6 +5,10 @@
 ###
 ### Auteur Franck.molle@ac-rouen.fr
 
+
+## $Id$ ##
+
+
 . /usr/share/se3/includes/config.inc.sh -cml
 
 davdir="/etc/apache2/webdav"

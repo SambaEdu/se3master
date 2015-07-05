@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+## $Id$ ##
+
 require '/etc/SeConfig.ph';
 
 die("Erreur d'argument.\n") if ($#ARGV != 0);

@@ -4,7 +4,7 @@
 #
 # Auteur : Stephane Boireau (Bernay/Pont-Audemer (27))
 #
-## $Id ##
+## $Id$ ##
 #
 # Dernière modif: 07/04/2007
 
