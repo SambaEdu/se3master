@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+
 # $Id$
 
 use Unicode::String qw(latin1 utf8);
@@ -37,7 +38,7 @@ system("sudo /usr/share/se3/scripts/group_mapping.sh $cn $cn \"$description\"") 
 exit 0;
 
 sub getFirstFreeGid {
-my $gidNumber = shift; # n° à partir duquel la recherche est lancée
+my $gidNumber = shift; # nÂ° Ã  partir duquel la recherche est lancÃ©e
 my $increment = 1024; # doit etre une puissance de 2
 if (defined(getgrgid($gidNumber))) {	
 	do {
@@ -54,7 +55,7 @@ if (defined(getgrgid($gidNumber))) {
 			$gidNumber -= $increment;
 		}
 	} while $increment > 1;
-	# la boucle suivante est normalement exécutée au plus une fois
+	# la boucle suivante est normalement exÃ©cutÃ©e au plus une fois
 	while (defined(getgrgid($gidNumber))) {
 		$gidNumber++;
 	}

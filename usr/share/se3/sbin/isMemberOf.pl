@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+
+## $Id$ ##
+
+
 use Net::LDAP;
 use POSIX;
 
@@ -26,7 +30,7 @@ foreach $membre (@members) {
 
 $ldap->unbind();
 
-die("$valueToSearch non trouvé dans $dnToSearchIn.\n") if (!defined($found));
+die("$valueToSearch non trouvÃ© dans $dnToSearchIn.\n") if (!defined($found));
 
 exit 0;
 

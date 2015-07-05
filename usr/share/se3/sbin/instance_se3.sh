@@ -1,4 +1,9 @@
 #!/bin/bash
+
+
+## $Id$ ##
+
+
 . /usr/share/se3/includes/config.inc.sh -cml
 . /usr/share/se3/includes/functions.inc.sh
 debian_vers=$(cat /etc/debian_version)

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+## $Id$ ##
+
+
 function cleanpl
 {
 	for user in /home/*

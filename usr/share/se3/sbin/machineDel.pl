@@ -2,7 +2,7 @@
 
 # $Id$ #
 
-##### Script utilisé pour virer les machines des l'annuaire
+##### Script utilisÃ© pour virer les machines des l'annuaire
 
 use Net::Domain;
 use Unicode::String qw(latin1 utf8);
@@ -92,7 +92,7 @@ $ldap->bind(
 $adminDn,
 password => $adminPw
 );
-# Ajoût
+# Ajout
 # -----
 $res = $ldap->add(
 "cn=$machine,$computersDn",
@@ -105,9 +105,9 @@ objectClass => 'organizationalRole',
 ipHostNumber => $ipAddress,
 macAddress => $mac
 ]);
-die("Erreur lors de l'ajoût de l'entrée dans l'annuaire.\n") if ($res->code() != 0);
+die("Erreur lors de l'ajout de l'entrÃ©e dans l'annuaire.\n") if ($res->code() != 0);
 
-# Déconnexion
+# DÃ©connexion
 # -----------
 $ldap->unbind;
 

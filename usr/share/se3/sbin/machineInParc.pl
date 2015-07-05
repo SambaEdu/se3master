@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+
+## $Id$ ##
+
 use POSIX;
 
 require '/etc/SeConfig.ph';
