@@ -1,5 +1,8 @@
 #!/bin/bash
 
+## $Id$ ##
+
+
 # génère un mot de passe (semi-)aléatoire...
 # Christian Westphal - licence WTFPL
 
