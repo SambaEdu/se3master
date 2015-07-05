@@ -1,14 +1,18 @@
 #!/bin/bash
 # Auteurs: Olivier Lacroix
 #
-# Test du changement de mot de passe : Stéphane Boireau
+# Test du changement de mot de passe : StÃ©phane Boireau
 #
+
+
 ## $Id$ ##
+
+
 #
-##### script permettant de déléguer smb_web_is_open à ceux qui ont changé leur mot de passe #####
+##### script permettant de dÃ©lÃ©guer smb_web_is_open Ã  ceux qui ont changÃ© leur mot de passe #####
 
 #Remarque:
-# exécution "un peu" longue : 10 minutes pour 1100 utilisateurs
+# exÃ©cution "un peu" longue : 10 minutes pour 1100 utilisateurs
 
 
 #Couleurs
@@ -30,7 +34,7 @@ ERREUR()
 	echo -e "$COLINFO\c"
         echo "Exemples :"
 	echo -e "$COLTXT"
-        echo "smbweb_open_for_passwd_changed.sh donne le droit smbweb_is_open à tous les utilisateurs ayant changé leur mot de passe." 
+        echo "smbweb_open_for_passwd_changed.sh donne le droit smbweb_is_open Ã  tous les utilisateurs ayant changÃ© leur mot de passe." 
         echo
 	exit 1
 }
@@ -61,33 +65,33 @@ RIGHTSRDN=`echo "SELECT value FROM params WHERE name=\"rightsRdn\"" | mysql -h $
 
 # debut du script proprement dit
 
-# recupération de l'option dans mysql (1 si ce script est actif)
+# recupÃ©ration de l'option dans mysql (1 si ce script est actif)
 OPTION=`echo "select value from params where name='smbwebopen_pwd_chg'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 
-### on remplit overfill pour les partitions sur lesquelles c'est paramétré ####
+### on remplit overfill pour les partitions sur lesquelles c'est paramÃ©trÃ© ####
 if [ "$OPTION" != "1" ]; then
-  echo "Le droit smb_web_is_open n est pas lie au changement de mot de passe : a configurer dans Annuaire, Tester les mots de passe... Aucune modification effectuée."
+  echo "Le droit smb_web_is_open n est pas lie au changement de mot de passe : a configurer dans Annuaire, Tester les mots de passe... Aucune modification effectuÃ©e."
   exit
 else
   # on liste les utilisateurs ayant le droit smbweb_is_open
   USER_SMBOPEN="`ldapsearch -xLLL cn=smbweb_is_open | grep member | cut -d"," -f1 | cut -d"=" -f2`"
   
-    # on liste tous les utilisateurs, et on examine si leur mot de passe est changé
+    # on liste tous les utilisateurs, et on examine si leur mot de passe est changÃ©
   ldapsearch -xLLL uid | grep "$PEOPLERDN" | grep "uid=" | cut -d"," -f1 | cut -d"=" -f2 | while read A
     do       
             uid=$(echo "$A" | cut -d" " -f2)
             date=$(ldapsearch -xLLL uid=$uid | grep "^gecos:" | cut -d"," -f2)
             if [ "$date" == "" ]; then
               #certains utilisateurs n'ont pas de date de naissance : admin, ...
-              echo "La date de naissance de $uid n'est pas dans l'annuaire, on ne touche pas au droit smbweb_is_open déjà en place"
+              echo "La date de naissance de $uid n'est pas dans l'annuaire, on ne touche pas au droit smbweb_is_open dÃ©jÃ  en place"
             else
               TEST="$(echo "$USER_SMBOPEN" | grep "^$uid$")" # appartenance de $uid aux membres du droit smbweb_is_open..
               if smbclient -L 127.0.0.1 -U $uid%$date > /dev/null ; then
                 if [ "$TEST" == "" ]; then
-                  echo "L'utilisateur $uid n'a pas le droit smbweb_is_open, il n'a pas changé son mdp. Tout va bien."
+                  echo "L'utilisateur $uid n'a pas le droit smbweb_is_open, il n'a pas changÃ© son mdp. Tout va bien."
                 else
                   echo -e "$COLERREUR"
-                  echo "L'utilisateur $uid a le droit smb_web_is_open et n'a pas changé son mdp: on lui enlève !!!"
+                  echo "L'utilisateur $uid a le droit smb_web_is_open et n'a pas changÃ© son mdp: on lui enlÃ¨ve !!!"
                   echo -e "$COLTXT"
                   
                   RDn="cn=smbweb_is_open,$RIGHTSRDN,$BASEDN"
@@ -97,14 +101,14 @@ else
               else
                 if [ "$TEST" == "" ]; then
                   echo -e "$COLERREUR"
-                  echo "L'utilisateur $uid n'a pas le droit smbweb_is_open, il a changé son mdp: on le rajoute dans les membres de smbweb_is_open !!!"
+                  echo "L'utilisateur $uid n'a pas le droit smbweb_is_open, il a changÃ© son mdp: on le rajoute dans les membres de smbweb_is_open !!!"
                   echo -e "$COLTXT"
                   
                   RDn="cn=smbweb_is_open,$RIGHTSRDN,$BASEDN"
                   PersDn="uid=$uid,$PEOPLERDN,$BASEDN"
                   /usr/bin/perl /usr/share/se3/sbin/groupAddEntry.pl "$PersDn" "$RDn"
                 else
-                  echo "L'utilisateur $uid a le droit smbweb_is_open et a changé son mdp. Tout va bien."
+                  echo "L'utilisateur $uid a le droit smbweb_is_open et a changÃ© son mdp. Tout va bien."
                 fi
               fi
             fi

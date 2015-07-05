@@ -12,7 +12,7 @@ WWWPATH="/var/www"
 . /etc/se3/config_m.cache.sh
 . /etc/se3/config_d.cache.sh
 
-# calcule l'adresse de broadcast � partir de l'ip
+# calcule l'adresse de broadcast à partir de l'ip
 GETBROADCAST()
 {
     if [ "$dhcp" == "1" ]; then
@@ -40,21 +40,21 @@ else
 			if [ "$TYPE" = "XP" ]; then
 				echo "<br><h2>Action sur : $1</h2><br>"
 				if [ "$2" = "shutdown" ]; then
-					echo "<h3>Tentative d'arret de la machine $1</h3><br>"
+					echo "<h3>Tentative d'arrêt de la machine $1</h3><br>"
                                         ldapsearch  -xLLL -b ${computersRdn},${ldap_base_dn} cn=$1 '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g" | while read I
                                         do
- 						/usr/bin/net rpc shutdown -t 30 -f -C "Arret demande par le serveur sambaEdu3" -I $I -U "$1\adminse3%$xppass"
+ 						/usr/bin/net rpc shutdown -t 30 -f -C "Arrêt demande par le serveur sambaEdu3" -I $I -U "$1\adminse3%$xppass"
 					done
 				fi
 				if [ "$2" = "reboot" ]; then
 					echo "<h3>Tentative de reboot de la machine $1</h3><br>"
                                         ldapsearch  -xLLL -b ${computersRdn},${ldap_base_dn} cn=$1 '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g" | while read I
                                         do
-                                                /usr/bin/net rpc shutdown -t 30 -r -f -C "Arret demande par le serveur sambaEdu3" -I $I -U "$1\adminse3%$xppass"
+                                                /usr/bin/net rpc shutdown -t 30 -r -f -C "Arrêt demande par le serveur sambaEdu3" -I $I -U "$1\adminse3%$xppass"
                                         done
 				fi
 				if [ "$2" = "wol" ]; then
-					echo "Tentative d'eveil pour la machine correspondant a l'adresse mac $D<br>"
+					echo "Tentative d'éveil pour la machine correspondant à l'adresse mac $D<br>"
 				        ldapsearch  -xLLL -b ${computersRdn},${ldap_base_dn} cn=$1 '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I
 	                                do
 					       echo "Broadcast: $I<br>"
@@ -65,12 +65,12 @@ else
 			else
 				# On teste si on a un windows ou un linux
 				ldapsearch  -x -b ${computersRdn},${ldap_base_dn} uid=$B$ '(objectclass=*)' uidNumber | grep uid |grep -v requesting | grep -v base
-				# On peut penser que l'on a un linux, mais cela peut aussi �tre un win 9X
+				# On peut penser que l'on a un linux, mais cela peut aussi être un win 9X
 				# A affiner
 				if [ $? = "1" ]
 				then
 				if [ "$2" = "wol" ]; then
-					echo "Tentative d'eveil pour la machine correspondant a l'adresse mac $D<br>"
+					echo "Tentative d'éveil pour la machine correspondant à l'adresse mac $D<br>"
 				        ldapsearch  -xLLL -b ${computersRdn},${ldap_base_dn} cn=$1 '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I
 	                                do
 					       echo "broadcast: $I<br>"

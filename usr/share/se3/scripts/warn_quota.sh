@@ -126,14 +126,14 @@ PASDEHOME=`cat /etc/fstab | grep /home`
 if [ $# -eq 0 ] ; then
   
   if [ -e $FICHIERLOCK ]; then
-    echo "Script deja en cours d execution"
+    echo "Script déjà en cours d exécution"
     exit 1
   fi
   touch $FICHIERLOCK
   
   # creation si besoin d'overfill
   if [ "$(ldapsearch -xLLL "cn=overfill")" == "" ]; then
-    /usr/share/se3/sbin/groupAdd.pl 1 overfill "Personnes depassant leur quota d espace disque sur /home ou /var/se3."
+    /usr/share/se3/sbin/groupAdd.pl 1 overfill "Personnes dépassant leur quota d espace disque sur /home ou /var/se3."
     echo "Creation d'overfill (absent dans l'annuaire)."
   fi
   
@@ -155,19 +155,19 @@ if [ $# -eq 0 ] ; then
   if [ "$AVERT_HOME" == "1" -a "$PASDEHOME" != "" ]; then
     COMPL_OVERFILL /home
   else
-    echo "Les quotas sont inactifs pour la partition /home (ou elle n existe pas)... Aucune modification effectuee."
+    echo "Les quotas sont inactifs pour la partition /home (ou elle n existe pas)... Aucune modification effectuée."
   fi
   if [ "$AVERT_VARSE3" == "1" ]; then
     COMPL_OVERFILL /var/se3
   else
-    echo "Les quotas sont inactifs pour la partition /var/se3... Aucune modification effectuee."
+    echo "Les quotas sont inactifs pour la partition /var/se3... Aucune modification effectuée."
   fi
   
   # 2. ceux qui etaient dans overfill et qui ne depassent plus le quota doivent sortir
   cat $FICHIEROVERFILL | grep "^[a-z]" | while read nom 
   do
       /usr/share/se3/sbin/groupDelUser.pl $nom overfill
-      echo "$nom ne depasse plus son quota : il vient d'etre enleve d'overfill"
+      echo "$nom ne dépasse plus son quota : il vient d'être enlevé d'overfill"
   done # fin de la boucle 2.
 
   echo "Fin."
@@ -179,7 +179,7 @@ fi
 # a tous les lancements, on met a jour le template overfill : $URLINTERFACE pourrait changer (la crontab va actualiser)
 if [ "$PASDEHOME" != "" ]; then
     # si /home existe alors
-    echo "Mise a jour du navigateur pour les avertissements de depassement..."
+    echo "Mise a jour du navigateur pour les avertissements de dépassement..."
     
     BROWSERARG=$(echo $1 | sed 's!\\!/!g')
     URLINTERFACE=`echo "SELECT value FROM params WHERE name=\"urlse3\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
@@ -203,7 +203,7 @@ if [ "$PASDEHOME" != "" ]; then
         echo "UPDATE params SET value=\"$BROWSER\" WHERE name=\"quota_browser\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
       else
         #~ echo "quota_browser INEXISTANT DANS LA BASE DE QUOTAS: AJOUT DE CELUI CI"
-        echo "INSERT INTO params VALUES ('','quota_browser','$BROWSER', '0','Navigateur affichant depassements de quotas','6')" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
+        echo "INSERT INTO params VALUES ('','quota_browser','$BROWSER', '0','Navigateur affichant dépassements de quotas','6')" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N
       fi
     fi
     

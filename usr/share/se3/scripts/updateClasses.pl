@@ -1,6 +1,8 @@
 #!/usr/bin/perl -w
 
 # $Id$
+
+
 # Encodage UTF-8
 # Met a jour l'arborescence des partages Classes
 # en definissant les acl basees sur les posixGroup Equipe_* et Classe_*

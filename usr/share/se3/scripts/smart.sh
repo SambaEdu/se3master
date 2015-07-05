@@ -2,13 +2,15 @@
 # Version 0.20
 # program smartctl is using a deprecated SCSI ioctl, please convert it to SG_IO
 
-##### Test l'état des disques #####
+##### Test l'Ã©tat des disques #####
+
+
 ## $Id$ ##
 
 
 if [ ! -z "$1" ]
 then
-	echo "Script permettant tester l'état des disques de la machine"
+	echo "Script permettant tester l'Ã©tat des disques de la machine"
 	echo "Usage : Aucune option"
 	exit
 fi	
@@ -22,7 +24,7 @@ if [ $? == 1  ]
 fi
 
 # Nombre et type de disque
-# Commande à modifier
+# Commande Ã  modifier
 #NBD=`dmesg |grep  Attached |wc |cut -d" " -f3-7`
 NBD=`sfdisk -g | wc -l`
 
@@ -31,7 +33,7 @@ TYPED=`dmesg |grep -m 1 Attached |cut -d" " -f2`
 
 # Controlleur disque
 # 0=IDE   1=SCSI  2=RAID  3=Raid 3Ware
-CTRL=1  #SCSI Par défaut
+CTRL=1  #SCSI Par dÃ©faut
 SCSI=` grep -B 2 Direct-Access /proc/scsi/scsi|grep Vendor |cut -d" " -f4`
 #Test 3ware
 if [ "$SCSI" == "3ware" ] # Controlleur Raid 3Ware
@@ -56,9 +58,9 @@ for I in a b c d e f g h i j k l m n
 			PASS=`smartctl -H  /dev/hd$I |grep "SMART overall-health"|cut -d" " -f6-8`
 				if [ "$PASS" == "PASSED"  ]
 				then 
-				echo "Disque N° $I (/dev/hd$I) sur controlleur IDE : OK"
+				echo "Disque NÂ° $I (/dev/hd$I) sur controlleur IDE : OK"
 				else
-				echo "Disque N° $I (/dev/hd$I) sur controlleur IDE : Probleme"
+				echo "Disque NÂ° $I (/dev/hd$I) sur controlleur IDE : Probleme"
 				fi												
 			fi
 		fi
@@ -70,7 +72,7 @@ if [ $NBD != 0 ]
 	then
 	echo "Vous avez $NBD disque(s) $TYPED dans cette machine"
 	else
-	echo "Problème lors de la détection des disques"
+	echo "ProblÃ¨me lors de la dÃ©tection des disques"
 fi
 
 
@@ -85,9 +87,9 @@ then
 		then
 			if [ "$PASS" == "PASSED"  ]
 			then
-			echo "Disque N° $I sur controlleur Raid 3ware : OK"
+			echo "Disque NÂ° $I sur controlleur Raid 3ware : OK"
 			else
-			echo "Disque N° $I sur controlleur Raid 3ware : Probleme"
+			echo "Disque NÂ° $I sur controlleur Raid 3ware : Probleme"
 			fi
 		fi
 	done
@@ -104,9 +106,9 @@ then
 		then
 			if [ "$PASS" == "OK"  ]
 			then
-			echo "Disque N° $I (/dev/sd$I) sur controlleur SCSI : OK"
+			echo "Disque NÂ° $I (/dev/sd$I) sur controlleur SCSI : OK"
 			else
-			echo "Disque N° $I (/dev/sd$I) sur controlleur SCSI : Probleme"
+			echo "Disque NÂ° $I (/dev/sd$I) sur controlleur SCSI : Probleme"
 			fi
 		fi
 	done
@@ -121,9 +123,9 @@ then
 			then
 			RES=`smartctl -H  /dev/hd$I | grep "SMART overall-health"`
 			PASS=`smartctl -H  /dev/hd$I |grep "SMART overall-health"|cut -d" " -f6-8`
-			echo "Disque N° $I (/dev/hd$I) sur controlleur IDE : OK"
+			echo "Disque NÂ° $I (/dev/hd$I) sur controlleur IDE : OK"
 			else
-			echo "Disque N° $I (/dev/hd$I) sur controlleur IDE : Probleme"
+			echo "Disque NÂ° $I (/dev/hd$I) sur controlleur IDE : Probleme"
 		fi
 	done
 fi

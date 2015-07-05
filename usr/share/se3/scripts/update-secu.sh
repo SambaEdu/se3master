@@ -2,16 +2,16 @@
 
 ## $Id$ ##
 #
-##### Retourne si une maj de sécurité Débian est nécessaire #####
+##### Retourne si une maj de sÃ©curitÃ© DÃ©bian est nÃ©cessaire #####
 
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
-	echo "Retourne si une maj de sécurité est à faire"
+	echo "Retourne si une maj de sÃ©curitÃ© est Ã  faire"
 	echo "Usage : aucune option"
 	exit
 fi
 
-# Remplacé dans la crontab
+# RemplacÃ© dans la crontab
 # apt-get update
 
 MAJ=`apt-get -s dist-upgrade 2>/dev/null | grep 'Debian-Security'`
@@ -21,7 +21,7 @@ then
 	echo "0"
 	exit 0
 else 
-	echo "Aucune maj à faire"
+	echo "Aucune maj Ã  faire"
 	echo "1"
 	exit 1
 fi	

@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
-# $Id$
+## $Id$ ##
+
+
 #use Crypt::SmbHash;
 use Encode::compat;
 use Encode qw(encode decode);

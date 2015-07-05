@@ -2,11 +2,11 @@
 
 ## $Id$ ##
 #
-##### Retourne si une maj se3 est nécessaire #####
+##### Retourne si une maj se3 est n&cessaire #####
 
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
-	echo "Retourne si une maj de se3 est à faire"
+	echo "Retourne si une maj de se3 est Ã  faire"
 	echo "Usage : aucune option"
 	exit
 fi
