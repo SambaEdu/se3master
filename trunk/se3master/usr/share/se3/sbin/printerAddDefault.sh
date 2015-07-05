@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+## $Id$ ##
+
+
 [[ "$#" != "2" ]] && exit 1
 
 if [ -e /var/www/se3/includes/config.inc.php ]; then

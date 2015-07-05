@@ -4,10 +4,10 @@
 #   Projet SE3 : Ajout d'une imprimante comme membre d'un parc       #
 #                dans LDAP                                           #
 #   /usr/share/se3/sbin/printerAddPark.pl                                      #
-#   Patrice André <h.barca@free.fr>                                  #
-#   Carip-Académie de Lyon -avril-juin-2004                          #
-#   Dernière mise-à-jour:25/05/2004                                  #
-#   Distribué selon les termes de la licence GPL                     #
+#   Patrice AndrÃ© <h.barca@free.fr>                                  #
+#   Carip-AcadÃ©mie de Lyon -avril-juin-2004                          #
+#   DerniÃ¨re mise-Ã -jour:25/05/2004                                  #
+#   DistribuÃ© selon les termes de la licence GPL                     #
 ######################################################################
 
 use Net::LDAP;
@@ -48,10 +48,10 @@ $result = $ldap->modify( "cn=$nom_parc,$parcDn",
 			 );
 
                          
-die("Echec à l'entrée dans ldap.\n") if ($result->code != 0);
+die("Echec Ã  l'entrÃ©e dans ldap.\n") if ($result->code != 0);
 #$result->code && warn "failed to add attribute ", $result->error ;
 $mesg = $ldap->unbind;  # take down session
 
-die ("Script de partage d'imprimantes Samba échoué.\n") if (system("/usr/share/se3/sbin/printers_group.pl") !=0);
+die ("Script de partage d'imprimantes Samba Ã©chouÃ©.\n") if (system("/usr/share/se3/sbin/printers_group.pl") !=0);
 
 exit 0;

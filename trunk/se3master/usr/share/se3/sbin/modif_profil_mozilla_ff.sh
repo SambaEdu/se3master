@@ -47,7 +47,7 @@ if [ $# -ne 3 -a $# -ne 2 ]; then
 	echo "fixera la page de demarrage de mozilla firefox a google.fr pour tous les profs et creera les homes si besoin avant de le faire"
 	echo ""
 	echo "ex2 : ./modif_profil_mozilla eleves http://www.google.fr"
-	echo "fixera la page de demarrage de mozilla firefox a google.fr pour tous les élèves et ignorera les homes non encore existant"
+	echo "fixera la page de demarrage de mozilla firefox a google.fr pour tous les Ã©lÃ¨ves et ignorera les homes non encore existant"
 	exit 1
 fi
 
@@ -88,7 +88,7 @@ fi
 	if [ -z "$TST_GRP" ]; then
 	TST_UID=$(ldapsearch -xLLL uid="$1")
 		if [ -z "$TST_UID" ]; then
-			ERREUR "Impossible de trouver le groupe ou l'utilisateur passé en paramètre dans l'annuaire Ldap"
+			ERREUR "Impossible de trouver le groupe ou l'utilisateur passÃ© en paramÃ¨tre dans l'annuaire Ldap"
 		else
 			if [ "$OPTION" == "create_homes" ]; then
 			/usr/share/se3/sbin/mkhome.pl "$1"
@@ -98,7 +98,7 @@ fi
 			cat  /home/$1/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js | sed -e "/(\"browser.startup.homepage\",/d" > /home/$1/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 			echo "user_pref(\"browser.startup.homepage\", \"$2\");'" >> /home/$1/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 			else
-			echo "le home de l'utilisateur $1 n'existe pas et a été ignoré, relancer la script avec l'option create_homes en 3eme argument si vous voulez le créer"
+			echo "le home de l'utilisateur $1 n'existe pas et a Ã©tÃ© ignorÃ©, relancer la script avec l'option create_homes en 3eme argument si vous voulez le crÃ©er"
 			fi
 			exit 0	
 		fi
@@ -116,7 +116,7 @@ fi
 			cat  /home/$A/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js | sed -e "/(\"browser.startup.homepage\",/d" > /home/$A/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 			echo "user_pref(\"browser.startup.homepage\", \"$2\");'" >> /home/$A/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 			else
-			echo "le home de l'utilisateur $A n'existe pas et a été ignoré, relancer la script avec l'option create_homes en 3eme argument si vous voulez le créer"
+			echo "le home de l'utilisateur $A n'existe pas et a Ã©tÃ© ignorÃ©, relancer le script avec l'option create_homes en 3eme argument si vous voulez le crÃ©er"
 			fi
 		done
 	
@@ -133,7 +133,7 @@ fi
 			cat  /home/$A/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js | sed -e "/(\"browser.startup.homepage\",/d" > /home/$A/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 			echo "user_pref(\"browser.startup.homepage\", \"$2\");'" >> /home/$A/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 			else
-			echo "le home de l'utilisateur $A n'existe pas et a été ignoré, relancer la script avec l'option create_homes en 3eme argument si vous voulez le créer"
+			echo "le home de l'utilisateur $A n'existe pas et a Ã©tÃ© ignorÃ©, relancer la script avec l'option create_homes en 3eme argument si vous voulez le crÃ©er"
 			fi
 			
 		done

@@ -1193,7 +1193,7 @@ sub writehtml {
 TEXT
 
     print HTML 
-      '<META HTTP-EQUIV="Content-Type" CONTENT="text/html; '.&$LOC('charset=iso-8859-1')."\">\n";
+      '<META HTTP-EQUIV="Content-Type" CONTENT="text/html; '.&$LOC('charset=UTF-8')."\">\n";
 
     foreach $peri (qw(d w m y)) {
         print HTML <<"TEXT";
