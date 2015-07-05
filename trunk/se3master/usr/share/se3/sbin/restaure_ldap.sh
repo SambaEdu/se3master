@@ -4,6 +4,8 @@
 # Auteur: Stephane Boireau
 # Dernière modification: 22/01/2008
 
+## $Id$ ##
+
 #Couleurs
 COLTITRE="\033[1;35m"   # Rose
 COLPARTIE="\033[1;34m"  # Bleu

@@ -1,4 +1,7 @@
 #!/bin/bash
+
+## $Id$ ##
+
 mysql -e "alter table corresp change os os CHAR(200) DEFAULT 'TOUS' NOT NULL;" se3db;
 mysql -e "alter table corresp change antidote antidote CHAR(200) DEFAULT 'TOUS' NOT NULL;" se3db;
 
