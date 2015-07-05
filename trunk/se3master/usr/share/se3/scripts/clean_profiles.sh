@@ -1,5 +1,9 @@
 #!/bin/bash
 
+## $Id$ ##
+
+
+
 for user in $(ls /home/profiles/ 2>/dev/null)
 do
     smbstatus -b|grep $user >/dev/null

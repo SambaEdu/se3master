@@ -1,6 +1,9 @@
 #!/bin/bash
-########################################
-########################################
+
+
+## $Id$ ##
+
+
 
 SMB_CONF=/etc/samba/smb_etab.conf
 SE3_ROOT=/var/se3
@@ -19,7 +22,7 @@ DroitsGroupe="$8"
 #Sauvegarde de l'ancien fichier de conf de Samba
 cp -f "$SMB_CONF" "$SMB_CONF".share_orig
 
-#Création du répertoire de partage
+#CrÃ©ation du rÃ©pertoire de partage
 mkdir -p "$Chemin"
 chown admin:admins $Chemin
 setfacl -R -m "g:$GroupeProprio:$DroitsGroupe" "$Chemin"
@@ -27,11 +30,11 @@ setfacl -R -m "d:g:$GroupeProprio:$DroitsGroupe" "$Chemin"
 setfacl -R -m "o:$DroitsAutres" "$Chemin"
 setfacl -R -m "m::rwx" "$Chemin"
 
-#Cherche la présence d'utilsateurs dans les paramètres
+#Cherche la prÃ©sence d'utilsateurs dans les paramÃ©tres
 user_list=$(expr "$*" : '.*user_list=\(.*\)$')
-#Cherche la présence d'un parc dans les paramètres
+#Cherche la prÃ©sence d'un parc dans les paramÃ©tres
 parc=$(expr "$*" : '.*parc=\([^ ]*\).*')
-#Cherche la présence d'un admin dans les paramètres
+#Cherche la prÃ©sence d'un admin dans les paramÃ©tres
 admin=$(expr "$*" : '.*admin=\([^ ]*\).*')
 
 (
@@ -58,9 +61,9 @@ admin=$(expr "$*" : '.*admin=\([^ ]*\).*')
  echo "#</$NomPartage>"
 ) >> "$SMB_CONF"
  
-#On envoie un mail à l'admin
-echo "La création du partage $NomPartage sur le serveur $(hostname) a réussie!" | \
-mail -s "[SE3 Tâche d'administration] Création partage Samba" $MAIL 
+#On envoie un mail Ã  l'admin
+echo "La crÃ©ation du partage $NomPartage sur le serveur $(hostname) a rÃ©ussie!" | \
+mail -s "[SE3 TÃ¢che d'administration] CrÃ©ation partage Samba" $MAIL 
 
-#On affiche le même message à l'écran
-echo "La création du partage $NomPartage sur le serveur $(hostname) a réussie!"
+#On affiche le mÃªme message Ã  l'Ã©cran
+echo "La crÃ©ation du partage $NomPartage sur le serveur $(hostname) a rÃ©ussie!"

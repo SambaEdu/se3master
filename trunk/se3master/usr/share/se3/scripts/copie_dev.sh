@@ -1,6 +1,12 @@
 #!/bin/bash
-# copier un devoir d'élève dans un rép du home de son prof
-# paramètres : $login $id_dev $date_distrib $uid $classe
+
+## $Id$ ##
+
+
+# copier un devoir d'Ã©lÃ¨ve dans un rÃ©p du home de son prof
+# paramÃ©tres : $login $id_dev $date_distrib $uid $classe
+
+
 login=$1
 id_devoir=$2
 nom_devoir=$3
@@ -12,7 +18,7 @@ cd "/var/se3/Classes/$classe/$uid/$id_devoir"
 rep="/home/$login/Devoirs/$id_devoir"
 for fich in *
 do
-   # éliminer la dernière extension éventuelle des noms de fichiers $i
+   # Ã©liminer la derniÃ¨re extension Ã©ventuelle des noms de fichiers $i
    nom=${fich%.*}
 #   if [ $nom = $devoir ]
    nom_maj=$(echo $nom | tr 'a-z' 'A-Z') 
@@ -23,7 +29,7 @@ do
      ext=${fich#$nom}
      dest="$rep/$uid$ext"
      cp  $fich $dest
-   # mettre les droits de propriété
+   # mettre les droits de propriÃ©tÃ©
      chown $login $dest
      chmod 700 $dest
      [ -f $dest ] && echo 1

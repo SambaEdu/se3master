@@ -2,6 +2,8 @@
 
 #
 ## $Id$ ##
+
+
 #
 ##### Change dans l'annuaire LDAP le SID en fonction du SID existant dans la base MySQL #####
 #
@@ -16,7 +18,7 @@ function usage {
         echo "        -t teste les sid UNIQUEMENT : renvoie 0 si tout va bien, 1 en cas d'erreur (le script ne proposera pas de corriger)"
         echo "        -s importe le sid du secrets.tdb de samba"
         echo "        -m importe le sid de mysql (table params de se3db) (option par defaut)"
-	echo "        -l si l'annuaire ne comporte qu'un seul SID, corrige par rapport à l'annuaire"
+	echo "        -l si l'annuaire ne comporte qu'un seul SID, corrige par rapport √† l'annuaire"
         echo "        -q mode silencieux (corrige les erreurs)"
         echo "        --noldapsave ne sauvegarde pas l'annuaire LDAP avant de le corriger (DANGEREUX)"
         echo "        -c corrige le mot de passe AdminPw LDAP dans le secrets.tdb (cas de probleme de connexion generalise des clients)"
@@ -377,7 +379,7 @@ if [ "$CORRECTADMINPWSAMBA" == "1" ]; then
   echo "Effectue."
 fi
 
-################### partie vide les cache de samba en cas de problème d'impression généralisé ou autre #####################
+################### partie vide les cache de samba en cas de problÔøΩme d'impression gÔøΩnÔøΩralisÔøΩ ou autre #####################
 if [ "$VIDECACHE" == "1" ]; then
 	echo "On vide les fichier tdb cache de samba"
 	if [ "1" != "$QUIET" ]; then

@@ -1,13 +1,17 @@
 #!/bin/bash
 # 
 # SambaEdu3
+
+
 ### $Id$ ###
+
+
 #
-# Permet de copier les fichiers logon.bat ou logonW95.bat ..etc à partir de l'interface inventaire pour activer l'inventaire
+# Permet de copier les fichiers logon.bat ou logonW95.bat ..etc Ã  partir de l'interface inventaire pour activer l'inventaire
 
 if [ "$1" != "" ] && [ "$2" != "" ] 
 then
-	# test la présence de $2 dans /tmp
+	# test la prÃ©sence de $2 dans /tmp
 	if [ -f /tmp/$2 ]
 	then
 		cp /home/templates/$1/$2 /home/templates/$1/$2.old

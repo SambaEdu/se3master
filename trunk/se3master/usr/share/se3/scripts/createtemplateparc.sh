@@ -1,8 +1,12 @@
 #!/bin/bash
 
-# Script de création du dossier au nom du parc dans /home/template
-# Stéphane Boireau - 06/04/2005
-#Avec le précieux coup de main de 'out' pour PERL.
+
+## $Id$ ##
+
+
+# Script de crÃ©ation du dossier au nom du parc dans /home/template
+# StÃ©phane Boireau - 06/04/2005
+#Avec le prÃ©cieux coup de main de 'out' pour PERL.
 
 if [ ! -z "$1" ]; then
 	#verif=$(echo "$1" | sed -e "s/[A-Za-z0-9_.]//g" | wc -c | sed -e "s/ //g")
@@ -30,10 +34,7 @@ if [ ! -z "$1" ]; then
 			echo -e "rem Partie specifique aux clients win9x" >> /home/templates/$1/logon_Win95.bat.${ladate}
 			cat /home/templates/$1/logon_Win95.bat.${ladate} | perl -pe 's/\n/\r\n/' > /home/templates/$1/logon_Win95.bat
 			rm -f /home/templates/$1/logon_Win95.bat.${ladate}
-			#NOTE: Cela fonctionne aussi avec:
-			#cat /home/templates/$1/logon_Win95.bat | sed 's/$/µ/g' | tr 'µ' '\r' > /home/templates/$1/logon_Win95.bat
-			#vim -c "set ff=dos"  -c ":wq" /home/templates/$1/logon_Win95.bat
-
+			
 			echo "rem Script de login du $type $1" > /home/templates/$1/logon_Win2K.bat.${ladate}
 			echo "rem Partie specifique aux clients win2k" >> /home/templates/$1/logon_Win2K.bat.${ladate}
 			cat /home/templates/$1/logon_Win2K.bat.${ladate} | perl -pe 's/\n/\r\n/' > /home/templates/$1/logon_Win2K.bat

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# $Id$
+## $Id$  ##
+
+
 # Script destine a gerer les comptes orphelins globalement en remplacement  de mv_Trash_Home.sh, delHome.pl 
 # Auteur: Franck Molle
 # Derniere modification: 10/2011

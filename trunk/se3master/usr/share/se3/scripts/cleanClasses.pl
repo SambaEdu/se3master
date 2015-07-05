@@ -16,7 +16,7 @@
 # supprime les Warnings du module Se.pm
 BEGIN { $SIG{'__WARN__'} = sub { warn $_[0] if $DOWARN } }
 use Se;
-$DOWARN = 1; # Warnings activés à nouveau
+$DOWARN = 1; # Warnings activÃ©s Ã  nouveau
 
 $PathClasses = '/var/se3/Classes';
 die("Syntaxe : cleanClasses.pl ALL|Classe") if ($#ARGV != 0);
@@ -38,13 +38,13 @@ $res = $lcs_ldap->search(base => "$groupsDn",
 die $res->error if $res->code;
 
 if (($res->entries)[0]) {
-  # Au moins une classe a été trouvée
+  # Au moins une classe a Ã©tÃ© trouv&e
   foreach $objClasse ($res->entries) {
     $cnClasse = $objClasse->get_value('cn');
     $Classe = $cnClasse;
     $Classe =~ s/^Classe_// ;
     print "Nettoyage  de la classe : $Classe<br>\n";
-    #Vérification l'existence du posixGroup Equipe_$Classe
+    #VÃ©rification l'existence du posixGroup Equipe_$Classe
     $resProfs = $lcs_ldap->search(base     => "$groupsDn",
            scope    => 'one',
            filter   => "(&(cn=Equipe_$Classe)(objectClass=posixGroup))");

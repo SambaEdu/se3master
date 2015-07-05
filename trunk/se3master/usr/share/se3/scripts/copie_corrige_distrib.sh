@@ -1,8 +1,10 @@
 #!/bin/bash
 
-# $Id$ #
 
-# copier un corrigé global dans les s-rép de devoir de l'élève
+## $Id$ ##
+
+
+# copier un corrigÃ© global dans les s-rÃ©p de devoir de l'Ã©lÃ¨ve
 # appel : $cr=exec("/usr/bin/sudo /usr/share/se3/scripts/copie_corrige_distrib.sh $uid_eleve \"$rep\" \"$nom_fichier\" $login") ;  
 
 uid=$1

@@ -1,9 +1,11 @@
 #!/bin/bash
 
-# $Id$ #
 
-# copier un devoir d'élève dans un rép du home de son prof
-# paramètres : $login $id_dev $date_distrib $uid $classe
+## $Id$ ##
+
+
+# copier un devoir d'Ã©lÃ¨ve dans un rÃ©p du home de son prof
+# paramÃ¨tres : $login $id_dev $date_distrib $uid $classe
 # appel :    $ch ="/usr/bin/sudo  /usr/share/se3/scripts/copie_corrige.sh $login \"$id_devoir\" $uid_eleve $cla ";
 
 login=$1

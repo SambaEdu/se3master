@@ -1,8 +1,10 @@
 #!/bin/bash
 
-# $Id$ #
 
-# copier un fichier distribué par un prof dans un s-rép de la classe de l'élève
+## $Id$ ##
+
+
+# copier un fichier distribuÃ© par un prof dans un s-rÃ©p de la classe de l'Ã©lÃ¨ve
 # appel : $ch1 ="/usr/bin/sudo /usr/share/se3/scripts/copie_fich_distrib.sh $login $id_eleve \"$rep\" \"$fichiers[$i]\" ";
 
 login=$1
