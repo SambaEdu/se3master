@@ -22,7 +22,7 @@ if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
         dbuser=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 |cut -d \" -f 2`
         dbpass=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 |cut -d \" -f 2`
 else
-        echo "Fichier de conf inaccessible désolé !!"
+        echo "Fichier de conf inaccessible dÃ©solÃ© !!"
         echo "le script ne peut se poursuivre"
         exit 1
 fi

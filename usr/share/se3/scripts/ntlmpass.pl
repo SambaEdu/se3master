@@ -1,6 +1,9 @@
 #!/usr/bin/perl
 
-# $Id$
+
+## $Id$ ##
+
+
 use Crypt::SmbHash;
 
 $password = $ARGV[0];

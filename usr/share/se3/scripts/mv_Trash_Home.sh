@@ -1,6 +1,10 @@
 #!/bin/bash
 
+
 # $Id$
+
+
+
 # Script destine a deplacer dans un dossier /home_Trash_$date les homes de comptes orphelins
 # plutot que de les supprimer directement
 # Auteur: Stephane Boireau

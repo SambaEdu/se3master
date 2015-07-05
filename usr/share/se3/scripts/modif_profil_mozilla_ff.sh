@@ -1,9 +1,12 @@
 #!/bin/bash
 
+
+## $Id$ ##
+
+
 #script permettant de modfier la page de demarrage de mozilla FF
 # Franck.molle@ac-rouen.fr version 0.1 - juin 2005
 
-## $Id$ ##
 
 
 ERREUR()
@@ -37,14 +40,14 @@ if [ ! $# -ge 1 ]; then
 	echo ""
 	echo  "$0 a besoin d'arguments pour fonctionner."
 	echo "Passer en arguments dans l'ordre :"
-	echo "- le nom du groupe ou de l'utilisateur dont vous voulez modifier la page de démarrage de Firefox,"
-	echo "- l'url de la nouvelle page de démarrage,"
-	echo "- eventuellement ajouter create_homes en argument si vous voulez créer les homes non encore existants avant de modifier la page de démarrage."
+	echo "- le nom du groupe ou de l'utilisateur dont vous voulez modifier la page de dÃ©marrage de Firefox,"
+	echo "- l'url de la nouvelle page de dÃ©marrage,"
+	echo "- eventuellement ajouter create_homes en argument si vous voulez crÃ©er les homes non encore existants avant de modifier la page de dÃ©marrage."
 	echo "ex1 : ./modif_profil_mozilla profs http://www.google.fr create_homes"
-	echo "fixera la page de démarrage de mozilla firefox à google.fr pour tous les profs et créera les homes si besoin avant de le faire."
+	echo "fixera la page de dÃ©marrage de mozilla firefox Ã  google.fr pour tous les profs et crÃ©era les homes si besoin avant de le faire."
 	echo ""
 	echo "ex2 : ./modif_profil_mozilla eleves http://www.google.fr"
-	echo "fixera la page de démarrage de mozilla firefox à google.fr pour tous les élèves et ignorera les homes non encore existants."
+	echo "fixera la page de dÃ©marrage de mozilla firefox Ã  google.fr pour tous les Ã©lÃ¨ves et ignorera les homes non encore existants."
 	exit 1
 fi
 
@@ -85,7 +88,7 @@ fi
 	if [ -z "$TST_GRP" ]; then
 	TST_UID=$(ldapsearch -xLLL uid="$1" uid)
 		if [ -z "$TST_UID" ]; then
-			ERREUR "Impossible de trouver le groupe ou l'utilisateur passé en paramètre dans l'annuaire Ldap."
+			ERREUR "Impossible de trouver le groupe ou l'utilisateur passï¿½ en paramï¿½tre dans l'annuaire Ldap."
 		else
 			if [ -z "$NEW_PAGE_DEM" ]; then
 				if [ -e /home/$1 ]; then
@@ -102,12 +105,12 @@ fi
 			if [ "$OPTION" == "create_homes" ]; then
 				/usr/share/se3/shares/shares.avail/mkhome.sh "$1"
 			fi
-			echo "Je change la page de démarrage pour $1 en lui fixant $2"
+			echo "Je change la page de dÃ©marrage pour $1 en lui fixant $2"
 			if [ -e /home/$1 ]; then
 			    sed -e "/(\"browser.startup.homepage\",/d" -i /home/$1/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 			    echo "user_pref(\"browser.startup.homepage\", \"$2\");'" >> /home/$1/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 			else
-			    echo "Le home de l'utilisateur $1 n'existe pas et a été ignoré, relancer la script avec l'option create_homes en 3eme argument si vous voulez le créer."
+			    echo "Le home de l'utilisateur $1 n'existe pas et a ï¿½tï¿½ ignorï¿½, relancer la script avec l'option create_homes en 3eme argument si vous voulez le crï¿½er."
 			fi
 			exit 0	
 		fi
@@ -125,7 +128,7 @@ fi
 			sed -e "/(\"browser.startup.homepage\",/d" -i /home/$A/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 			echo "user_pref(\"browser.startup.homepage\", \"$2\");'" >> /home/$A/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 			else
-			echo "Le home de l'utilisateur $A n'existe pas et a été ignoré, relancer le script avec l'option create_homes en 3eme argument si vous voulez le créer."
+			echo "Le home de l'utilisateur $A n'existe pas et a Ã©tÃ© ignorÃ©, relancer le script avec l'option create_homes en 3eme argument si vous voulez le crÃ©er."
 			fi
 		done
 	
@@ -153,7 +156,7 @@ fi
 					if [ "$OPTION" == "create_homes" ]; then
 						/usr/share/se3/shares/shares.avail/mkhome.sh "$A"
 					else
-						echo "Le home de l'utilisateur $A n'existe pas et a été ignoré, relancer la script avec l'option create_homes en 3eme argument si vous voulez le créer."
+						echo "Le home de l'utilisateur $A n'existe pas et a Ã©tÃ© ignorÃ©, relancer la script avec l'option create_homes en 3eme argument si vous voulez le crÃ©er."
 					fi
 				
 				fi

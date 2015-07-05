@@ -50,13 +50,13 @@ else
 	
 fi
 
-#patch 1/6 pour application immÈdiate des quotas
+#patch 1/6 pour application immÔøΩdiate des quotas
 CREER_FICHIER()
 {
     if [ "$2" == "/home" ]; then
       #~ /usr/share/se3/sbin/mkhome.pl $1
       
-### protËge les serveurs vmware (essentiellement) contre la crÈation des homes de tous les users par crÈation d'un fichier vide sur /home
+### prot√®ge les serveurs vmware (essentiellement) contre la cr√©ation des homes de tous les users par cr√©ation d'un fichier vide sur /home
       if [ ! -e /home/$1 ] ; then
         if [ ! -e /home/quotas_tmp ]; then
           mkdir /home/quotas_tmp
@@ -89,8 +89,8 @@ if [ $# -ne 4 -o "$1" = "--help" -o "$1" = "-h" ]; then
 	echo -e "$COLINFO\c"
 	echo "Passer en arguments dans l'ordre :"
 	echo "- le nom du groupe ou de l'utilisateur dont vous voulez fixer le quota"
-	echo "- le quota soft ‡ fixer"
-	echo "- le quota hard ‡ fixer"
+	echo "- le quota soft √† fixer"
+	echo "- le quota hard √† fixer"
 	echo "- la partition sur laquelle on applique le quota"
 	echo -e "$COLTXT"
 	echo "ex1 : ./quota.sh Profs 200Mo 200Mo /home"
@@ -102,7 +102,7 @@ if [ $# -ne 4 -o "$1" = "--help" -o "$1" = "-h" ]; then
 fi
 
 if [ ! -e /home -a "$4" == "/home" ]; then
-	ERREUR "Pas de rÈpertoire /home"
+	ERREUR "Pas de r√©pertoire /home"
 fi
 
 	### recuperation des parametres actuels de l'annuaire dans la base ####
@@ -125,7 +125,7 @@ fi
 
 
 if [ -e /usr/sbin/setquota ]; then
-        #~ #patch 2/6 pour application immÈdiate des quotas
+        #~ #patch 2/6 pour application imm√©diate des quotas
         #~ if [ "$4" == "/var/se3" -a ! -e /var/se3/quotas_tmp ]; then
           #~ mkdir /var/se3/quotas_tmp
           #~ cree="yes"
@@ -137,18 +137,18 @@ if [ -e /usr/sbin/setquota ]; then
 	if [ -z "$TST_GRP" ]; then
 	TST_UID=$(ldapsearch -xLLL uid="$1")
 		if [ -z "$TST_UID" ]; then
-			ERREUR "Impossible de trouver le groupe ou l'utilisateur passÈ en paramËtre dans l'annuaire Ldap"
+			ERREUR "Impossible de trouver le groupe ou l'utilisateur pass√© en param√®tre dans l'annuaire Ldap"
 		else
 			if [ "$1" != "admin" -a "$1" != "root" -a "$1" != "www-se3" ]; then
 				echo "je fixe le quota pour l'utilisateur  $1 sur la partition $4"
-                                #patch 3/6 pour application immÈdiate des quotas
+                                #patch 3/6 pour application imm√©diate des quotas
                                 CREER_FICHIER $1 $4
 				$SET_QUOTA $1 $SOFT_QUOTA $HARD_QUOTA 0 0 $4
 				echo "quota soft : $CONV_SOFT_QUOTA"
 				echo "quota hard : $CONV_HARD_QUOTA"
 				echo
 			else
-				echo "Par securitÈ on ne peut pas fixer de quota sur $1"
+				echo "Par securitÔøΩ on ne peut pas fixer de quota sur $1"
 			fi
 		fi
 	fi
@@ -158,14 +158,14 @@ if [ -e /usr/sbin/setquota ]; then
 		do
 			if [ "$A" != "admin"  -a "$A" != "root" -a "$A" != "www-se3" ]; then
 				echo "je fixe le quota pour $A sur la partition $4"
-                                #patch 4/6 pour application immÈdiate des quotas
+                                #patch 4/6 pour application imm√©diate des quotas
                                 CREER_FICHIER $A $4
 				$SET_QUOTA $A $SOFT_QUOTA $HARD_QUOTA 0 0 $4
 				echo "quota soft : $CONV_SOFT_QUOTA"
 				echo "quota hard : $CONV_HARD_QUOTA"
 				echo
 			else
-				echo "Par securitÈ on ne peut pas fixer de quota sur $A"
+				echo "Par securit√© on ne peut pas fixer de quota sur $A"
 			fi
 		done
 	
@@ -175,24 +175,24 @@ if [ -e /usr/sbin/setquota ]; then
 		do 
 			if [ "$A" != "admin"  -a "$A" != "root" -a "$A" != "www-se3" ]; then
 				echo "je fixe le quota pour $A sur la partition $4"
-                                #patch 5/6 pour application immÈdiate des quotas
+                                #patch 5/6 pour application imm√©diate des quotas
                                 CREER_FICHIER $A $4
 				$SET_QUOTA $A $SOFT_QUOTA $HARD_QUOTA 0 0 $4
 				echo "quota soft : $CONV_SOFT_QUOTA"
 				echo "quota hard : $CONV_HARD_QUOTA"
 				echo
 			else
-				echo "Par securitÈ on ne peut pas fixer de quota sur $A"
+				echo "Par securit√© on ne peut pas fixer de quota sur $A"
 			fi
 		done
 	fi
         
-        #patch 6/6 pour application immÈdiate des quotas
+        #patch 6/6 pour application imm√©diate des quotas
         #if [ "$cree" == "yes" ]; then
           rm -R /home/quotas_tmp > /dev/null 2>&1
-          rm -R /var/se3/quotas_tmp > /dev/null 2>&1 # si plusieurs scripts quota.sh sont lancÈs en // le rÈpertoire peut avoir dÈj‡ ÈtÈ supprimÈ
+          rm -R /var/se3/quotas_tmp > /dev/null 2>&1 # si plusieurs scripts quota.sh sont lanc√©s en // le r√©pertoire peut avoir d√©j√† √©t√© supprim√©
         #fi
 else
-	ERREUR "Le paquet quota n'est pas installÈ.\nEffectuez:\n\tapt-get update\n\tapt-get install quota"
+	ERREUR "Le paquet quota n'est pas install√©.\nEffectuez:\n\tapt-get update\n\tapt-get install quota"
 fi
 exit 0

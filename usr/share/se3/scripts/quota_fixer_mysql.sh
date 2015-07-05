@@ -1,16 +1,16 @@
 #!/bin/bash
-# version 1.1
+
 # Auteur : Olivier Lacroix
 
 ## $Id$ ##
 
 
 
-##### Met à jour, ajoute, supprime les références à un groupe (user) dans la table quotas de se3db puis recalcule le quota applicable à chacun #####
-##### (le quota appliqué est le max des quotas applicables en fonction des groupes d'appartenance de user) #####
+##### Met Ã  jour, ajoute, supprime les rÃ©fÃ©rences Ã  un groupe (user) dans la table quotas de se3db puis recalcule le quota applicable Ã  chacun #####
+##### (le quota appliquÃ© est le max des quotas applicables en fonction des groupes d'appartenance de user) #####
 
 
-# Si pas de répertoire home on quitte (cas des se3 utilisés que pour la sauvegarde)
+# Si pas de rÃ©pertoire home on quitte (cas des se3 utilisÃ©s que pour la sauvegarde)
 PASDEHOME=`cat /etc/fstab | grep /home`
 if [ -z "$PASDEHOME" ]; then
     echo "Pas de dossier /home sur ce serveur"
@@ -40,7 +40,7 @@ echo "3 arguments: user_or_group , partition , suppr"
 echo ""
 echo -e "$COLSAISIE\c"
 echo "ex: ./quota_fixer_mysql.sh Profs /home suppr"
-echo "Supprime le quota fixé pour les Profs sur /home (le quota fixé dépendra alors des appartenances des users à d'autres groupes)"
+echo "Supprime le quota fixÃ© pour les Profs sur /home (le quota fixÃ© dÃ©pendra alors des appartenances des users Ã  d'autres groupes)"
 echo ""
 echo -e "$COLINFO\c"
 echo "UTILISATION 2: actualisation des quotas (utile lors de la modification des groupes d'appartenance d'un user)"
@@ -56,23 +56,23 @@ echo "ex: ./quota_fixer_mysql.sh Toutlemonde Toutespartitions actu"
 echo "Recalcule le quota effectivement applicable pour tous les utilisateurs de l annuaire sur /home et /var/se3"
 echo ""
 echo -e "$COLINFO\c"
-echo "UTILISATION 3: ajout ou mise à jour de quotas"
+echo "UTILISATION 3: ajout ou mise Ã  jour de quotas"
 echo -e "$COLTXT\c"
 echo "Passer en arguments dans l'ordre :"
 echo "- le nom du groupe ou de l'utilisateur dont vous voulez fixer le quota"
 echo "- la partition sur laquelle on applique le quota"
-echo "- le quota soft à fixer en Mo (ou 0 pour quota illimité affecté à cet user ou groupe)"
-echo "- le quota hard à fixer en Mo."
+echo "- le quota soft Ã  fixer en Mo (ou 0 pour quota illimitÃ© affectÃ© Ã  cet user ou groupe)"
+echo "- le quota hard Ã  fixer en Mo."
 echo -e "$COLSAISIE\c"
 echo "ex1: ./quota_fixer_mysql.sh Profs /home 200 200"
-echo "reglera le quota par defaut des Profs à 200Mo soft et hard sur home"
-echo "ATTENTION: le quota effectivement attribué dépend aussi des autres appartenances à divers groupes."
-echo "Si un prof appartient à un groupe ayant le droit à 300Mo soft, il aura 300Mo d'autorisation. "
+echo "reglera le quota par defaut des Profs Ã  200Mo soft et hard sur home"
+echo "ATTENTION: le quota effectivement attribuÃ© dÃ©pend aussi des autres appartenances Ã  divers groupes."
+echo "Si un prof appartient Ã  un groupe ayant le droit Ã  300Mo soft, il aura 300Mo d'autorisation. "
 echo ""
 echo "ex2: ./quota_fixer_mysql.sh hugov /home 10 10"
 echo "fixera un quota de 10Mo soft et hard sur home pour l'utilisateur hugov"
-echo "ATTENTION: tout quota fixé sur un utilisateur particulier est prépondérant par rapport à ceux appliqués en fonction de l'appartenance aux groupes."
-echo "Si hugov est un Prof et que le quota appliqué aux Profs est de 200Mo, hugov ne disposera que de 10Mo."
+echo "ATTENTION: tout quota fixÃ© sur un utilisateur particulier est prÃ©pondÃ©rant par rapport Ã  ceux appliquÃ©s en fonction de l'appartenance aux groupes."
+echo "Si hugov est un Prof et que le quota appliquÃ© aux Profs est de 200Mo, hugov ne disposera que de 10Mo."
 echo -e "$COLTXT\c"
 exit 1
 }
@@ -91,7 +91,7 @@ echo -e "$COLTXT"
 exit 1
 }
 
-#il faudrait tester plus finement les arguments passés :s
+#il faudrait tester plus finement les arguments passÃ©s :s
 if [ $# -ne 4 -a $# -ne 3 ]; then
 AIDE
 fi
@@ -120,7 +120,7 @@ quotah=$3
 for user in $liste_users
 do
 
-#lance quota.sh pour fixer les quotas sur le système de fichiers pour chaque user de $liste_users après avoir calculé le quota applicable
+#lance quota.sh pour fixer les quotas sur le systÃ¨me de fichiers pour chaque user de $liste_users aprï¿½s avoir calculï¿½ le quota applicable
 #initialise la variable $indicegrp pour chaque user
 indice_grp=0
 
@@ -129,10 +129,10 @@ if [ -n "$(echo \"$test_exist_user\"|grep $user)" ]; then
   qsoft=`echo "SELECT quotasoft FROM quotas WHERE nom=\"$user\" AND type=\"u\" AND partition=\"$part\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
   qhard=`echo "SELECT quotahard FROM quotas WHERE nom=\"$user\" AND type=\"u\" AND partition=\"$part\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 else
-#sinon, calcul du quota_max applicable à $user
+#sinon, calcul du quota_max applicable Ã  $user
 
 #filtre les groupes auxquels appartient $user
-#obtenir la liste $liste_quotas des quotas correspondants à la liste des groupes $liste_appartenance
+#obtenir la liste $liste_quotas des quotas correspondants Ã  la liste des groupes $liste_appartenance
 liste_appartenance=""
 liste_quotas=""
 for grp in $liste_groupes
@@ -151,9 +151,9 @@ fi
 done
 
 
-#déterminer le quota max applicable sur $liste_quotas
+#dÃ©terminer le quota max applicable sur $liste_quotas
 quota_max="1"
-i=1 # à la place de 0 pour corriger bug d'apparition d'un espace au debut de $liste_appartenance
+i=1 # Ã  la place de 0 pour corriger bug d'apparition d'un espace au debut de $liste_appartenance
 for quota in $liste_quotas
 do
 	i=$[$i+1]
@@ -170,11 +170,11 @@ done
 
 
 if [ $indice_grp -eq 0 ]; then
-	#user n'appartient à aucun groupe dans la base mysql
+	#user n'appartient Ã  aucun groupe dans la base mysql
 	qsoft=0
 	qhard=0
 
-else #user appartient à un grp dans la base mysql
+else #user appartient Ã  un grp dans la base mysql
   #extraire les quotas soft et hard applicables
   groupe_preponderant=$(echo "$liste_appartenance" | cut -d " " -f$indice_grp)
   qsoft=`echo "SELECT quotasoft FROM quotas WHERE nom=\"$groupe_preponderant\" AND type=\"g\" AND partition=\"$part\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
@@ -193,7 +193,7 @@ echo "je fixe le quota pour $user sur la partition $part :"
 echo "quota soft : $qsoft"
 echo "quota hard : $qhard"
 echo
-# appliquer le quota à $user
+# appliquer le quota Ã  $user
 # /usr/share/se3/scripts/quota.sh $user $[$qsoft*1000] $[$qhard*1000] $part
 # GAIN DE PERF DE 1 A 4 EN COURCUITANT quota.sh
 CREER_FICHIER $user $part
@@ -204,7 +204,7 @@ done
 CREER_FICHIER()
 {
     if [ "$2" = "/home" ]; then
-### protège les serveurs vmware (essentiellement) contre la création des homes de tous les users par création d'un fichier vide sur /home
+### protÃ©ge les serveurs vmware (essentiellement) contre la crÃ©ation des homes de tous les users par crÃ©ation d'un fichier vide sur /home
       if [ ! -e /home/$1 ] ; then
         if [ ! -e /home/quotas_tmp ]; then
           mkdir /home/quotas_tmp
@@ -230,7 +230,7 @@ CREER_FICHIER()
 }
 ################### fin des fonctions #####################
 
-################### début du script proprement dit #####################
+################### dÃ©but du script proprement dit #####################
 user_grp=$1
 partition=$2
 quotas=$3
@@ -247,17 +247,17 @@ if [ "$user_grp" = "Toutlemonde" ] ; then
   if [ "$2" = "Toutespartitions" ]; then
     partition=/home
     test_exist_user=`echo "SELECT nom FROM quotas WHERE type=\"u\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-    #liste les groupes qui ont encore un quota affecté après les changements -> on regardera si $user appartient à chacun d'eux
+    #liste les groupes qui ont encore un quota affectÃ© aprÃ¨s les changements -> on regardera si $user appartient Ã  chacun d'eux
     liste_groupes=`echo "SELECT nom FROM quotas WHERE type=\"g\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
     FIXERQUOTA /home $quotas $quotah
     partition=/var/se3
     test_exist_user=`echo "SELECT nom FROM quotas WHERE type=\"u\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-    #liste les groupes qui ont encore un quota affecté après les changements -> on regardera si $user appartient à chacun d'eux
+    #liste les groupes qui ont encore un quota affectÃ© aprÃ¨s les changements -> on regardera si $user appartient Ã  chacun d'eux
     liste_groupes=`echo "SELECT nom FROM quotas WHERE type=\"g\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
     FIXERQUOTA $partition $quotas $quotah
   else
     test_exist_user=`echo "SELECT nom FROM quotas WHERE type=\"u\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-    #liste les groupes qui ont encore un quota affecté après les changements -> on regardera si $user appartient à chacun d'eux
+    #liste les groupes qui ont encore un quota affectÃ© aprÃ¨s les changements -> on regardera si $user appartient Ã  chacun d'eux
     liste_groupes=`echo "SELECT nom FROM quotas WHERE type=\"g\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
     
     FIXERQUOTA $partition $quotas $quotah
@@ -267,7 +267,7 @@ else
   if [ -z "$TST_GRP" ]; then
           TST_UID=$(ldapsearch -xLLL uid="$1")
           if [ -z "$TST_UID" ]; then
-            echo "Impossible de trouver le groupe ou l'utilisateur passé en paramètre dans l'annuaire Ldap"
+            echo "Impossible de trouver le groupe ou l'utilisateur passÃ© en paramÃ¨tre dans l'annuaire Ldap"
 	    ERREURFLAG=1
           else
             #c'est un user
@@ -291,15 +291,15 @@ else
           fi
   fi
 
-  # efface le groupe ou user de la base si demandé (APRES AVOIR LISTE LES USERS CONCERNES)
+  # efface le groupe ou user de la base si demandÃ© (APRES AVOIR LISTE LES USERS CONCERNES)
   if [ "$3" = "suppr" ]; then
           echo "SUPPRESSION DES QUOTAS SUR $user_grp: RECALCUL DES QUOTAS EN FONCTION DES APPARTENANCES A D'AUTRES GROUPES."
 
-	# PATCH pour suppression des users-groupes ayant disparu de l'annuaire : on supprime toute référence de tout "type" dans la table.
+	# PATCH pour suppression des users-groupes ayant disparu de l'annuaire : on supprime toute rÃ©fÃ©rence de tout "type" dans la table.
 	if [ "$ERREURFLAG" = "1" ]; then
 		`echo "DELETE FROM quotas WHERE nom=\"$user_grp\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 	else
-		# dans ce cas, on sait si type=u ou g, on supprime uniquement l'entrée correspondante. (un groupe et un utilisateur peuvent avoir le meme nom)
+		# dans ce cas, on sait si type=u ou g, on supprime uniquement l'entrÃ©e correspondante. (un groupe et un utilisateur peuvent avoir le meme nom)
 		`echo "DELETE FROM quotas WHERE nom=\"$user_grp\" AND type=\"$type\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 	fi
   fi
@@ -310,7 +310,7 @@ else
   # on empeche les betises !
   liste_users="$(echo "$liste_users" | grep -v "^admin$" | grep -v "^adminse3$" | grep -v "^www-se3$" | grep -v "^root$" )"
   
-  # complete mysql ou mise à jour suivant le cas.
+  # complete mysql ou mise Ã  jour suivant le cas.
   if [ "$3" != "suppr" -a "$3" != "actu" ]; then
           test_exist=`echo "SELECT nom FROM quotas WHERE nom=\"$user_grp\" AND type=\"$type\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
           # regarde s'il s'agit d'un update ou d'une insert
@@ -323,26 +323,26 @@ else
           fi
   fi
   
-  #certaines requetes mysql et LDAP placées avant la boucle for qui suit pour éviter de les refaire inutilement
-  #liste les users qui sont dans la base: leur quota sera prépondérant sur tout quota appliqué à leurs groupes
+  #certaines requetes mysql et LDAP placÃ©es avant la boucle for qui suit pour Ã©viter de les refaire inutilement
+  #liste les users qui sont dans la base: leur quota sera prÃ©pondÃ©rant sur tout quota appliquÃ© Ã  leurs groupes
   #test_exist_user=`echo "SELECT nom FROM quotas WHERE type=\"u\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-  #liste les groupes qui ont encore un quota affecté après les changements -> on regardera si $user appartient à chacun d'eux
+  #liste les groupes qui ont encore un quota affectÃ© aprÃ¨s les changements -> on regardera si $user appartient Ã  chacun d'eux
   #liste_groupes=`echo "SELECT nom FROM quotas WHERE type=\"g\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
   
   if [ "$2" = "Toutespartitions" ]; then
     partition=/home
     test_exist_user=`echo "SELECT nom FROM quotas WHERE type=\"u\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-    #liste les groupes qui ont encore un quota affecté après les changements -> on regardera si $user appartient à chacun d'eux
+    #liste les groupes qui ont encore un quota affectÃ© aprÃ¨s les changements -> on regardera si $user appartient Ã  chacun d'eux
     liste_groupes=`echo "SELECT nom FROM quotas WHERE type=\"g\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
     FIXERQUOTA /home $quotas $quotah
     partition=/var/se3
     test_exist_user=`echo "SELECT nom FROM quotas WHERE type=\"u\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-    #liste les groupes qui ont encore un quota affecté après les changements -> on regardera si $user appartient à chacun d'eux
+    #liste les groupes qui ont encore un quota affectÃ© aprÃ¨s les changements -> on regardera si $user appartient Ã  chacun d'eux
     liste_groupes=`echo "SELECT nom FROM quotas WHERE type=\"g\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
     FIXERQUOTA $partition $quotas $quotah
   else
     test_exist_user=`echo "SELECT nom FROM quotas WHERE type=\"u\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-    #liste les groupes qui ont encore un quota affecté après les changements -> on regardera si $user appartient à chacun d'eux
+    #liste les groupes qui ont encore un quota affectÃ© aprÃ¨s les changements -> on regardera si $user appartient ï¿½ chacun d'eux
     liste_groupes=`echo "SELECT nom FROM quotas WHERE type=\"g\" AND partition=\"$partition\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
     
     FIXERQUOTA $partition $quotas $quotah

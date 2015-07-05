@@ -1,7 +1,12 @@
 #!/bin/bash
-# modifier les noms des répertoires des devoirs des élèves 
-# de rep_devoir à rep_devoir_nv
+
+
 ## $Id$ ##
+
+
+
+# modifier les noms des rÃ©pertoires des devoirs des Ã©lÃ¨ves 
+# de rep_devoir Ã  rep_devoir_nv
 
 chemin=$1
 rep_devoir=$2

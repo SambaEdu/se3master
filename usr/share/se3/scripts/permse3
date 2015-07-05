@@ -4,6 +4,8 @@
 ##### Replace les droits dans les differents repertoires importants pour le serveur #####
 #
 ### $Id$ ###
+
+
 #
 if [ "$1" == "--help" -o "$1" == "-h" ]
 then
@@ -239,7 +241,7 @@ if [ -e /var/se3/Progs/install ]; then
 	setfacl -R -m  d:u:adminse3:rx /var/se3/Progs/install
 	setfacl -R -m  g:admins:rwx /var/se3/Progs/install
 	setfacl -R -m  d:g:admins:rwx /var/se3/Progs/install
-# accès a CPAU pour installation initiale de : inventaire, wpkg...
+# accï¿½s a CPAU pour installation initiale de : inventaire, wpkg...
 	setfacl -m other:x /var/se3/Progs/install
 fi
 

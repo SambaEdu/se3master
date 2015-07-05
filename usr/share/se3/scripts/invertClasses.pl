@@ -1,17 +1,20 @@
 #!/usr/bin/perl -w
 
-# $Id$
-# Met à jour l'arborescence des partages Classes
+
+## $Id$  ##
+
+
+# Met Ã  jour l'arborescence des partages Classes
 # en en inversant le nom et le prenom dans le cas d'un login prenom.nom
 #
 #     - eleve : login d'un eleve, la Classe est lue dans l'annuaire
 #
-#       Denis Bonnenfant (denis.bonnenfant@diderot.org) 7 septembre 2007 : ajoût d'un cas possible de migration 
+#       Denis Bonnenfant (denis.bonnenfant@diderot.org) 7 septembre 2007 : ajout d'un cas possible de migration 
 
 # supprime les Warnings du module Se.pm
 BEGIN { $SIG{'__WARN__'} = sub { warn $_[0] if $DOWARN } }
 use Se;
-$DOWARN = 1; # Warnings activés à nouveau
+$DOWARN = 1; # Warnings activÃ©s Ã  nouveau
 
 $PathClasses = '/var/se3/Classes';
 die("Syntaxe : invertClasses.pl login") if ($#ARGV != 0);
@@ -33,7 +36,7 @@ if ( @NOM == 2 ) {
  @REPINV = <$PathClasses/Classe_*/$ELEVE>;
  if ( @REP > 0 ) {
   foreach $rep (@REP) {
-   # print  "inversion : " . ( 1 + $#REP ) ." répertoires trouvés pour $LOGIN !<br>\n";
+   # print  "inversion : " . ( 1 + $#REP ) ." rÃ©pertoires trouvÃ©s pour $LOGIN !<br>\n";
    # print "$rep\n"; 
    $tmpClasse = $rep;
    $tmpClasse =~ s!^$PathClasses/Classe_(.+)/$LOGIN$!$1!;

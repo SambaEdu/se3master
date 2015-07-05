@@ -1,4 +1,8 @@
 #!/bin/bash
+
+
+## $Id$ ##
+
 # ouvrir le fichier en ajout
 
 fich=$1
