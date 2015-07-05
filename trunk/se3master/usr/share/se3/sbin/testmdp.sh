@@ -6,7 +6,7 @@
 ##### Test du changement de mot de passe pour les professeurs #####
 # Stephane Boireau, Academie de Rouen
 #
-# Modification pour test sur n'importe quel groupe : Olivier Lacroix, Académie de Créteil
+# Modification pour test sur n'importe quel groupe : Olivier Lacroix, AcadÃ©mie de CrÃ©teil
 
 #Couleurs
 COLTITRE="\033[1;35m"	# Rose
@@ -77,7 +77,7 @@ do
 		echo "L'utilisateur <A HREF="/annu/people.php?uid=$uid">$uid</A> a conserve sa date de naissance pour mot de passe."
                 echo "TOUTLEMONDEILNESTPASGENTIL" > /tmp/testmdp.$HEURE
 	#else
-		#~ echo "$uid est un bon petit soldat;o), il a bien changé son mot de passe."
+		#~ echo "$uid est un bon petit soldat;o), il a bien changÃ© son mot de passe."
 	fi
 done
 
