@@ -1,8 +1,12 @@
 #!/usr/bin/perl
 
+
+## $Id$ ##
+
+
 # Version du 16/09/06
-#   - Recherche des comptes présents dans ou=People et membre d'aucun groupe.
-#   - déplacement vers ou=Trash
+#   - Recherche des comptes prÃ©sents dans ou=People et membre d'aucun groupe.
+#   - dÃ©placement vers ou=Trash
 
 use Se;
 use Crypt::SmbHash;
@@ -16,7 +20,7 @@ $lcs_ldap->bind(
 		version  => '3'
 	       );
 
-# Création de la poubelle le cas échéant
+# CrÃ©ation de la poubelle le cas Ã©chÃ©ant
 # ======================================
 $trashOuName = 'Trash';
 $trashRdn    = "ou=$trashOuName";
@@ -26,7 +30,7 @@ $trashSearch = $lcs_ldap->search(base     => "$baseDn",
 				 filter   => "$trashRdn");
 warn $trashSearch->error if $trashSearch->code;
 unless (($trashSearch->entries)[0]) {
-  # Création
+  # CrÃ©ation
   # --------
   @trashAttributes = ( 'objectClass', 'organizationalUnit',
 		       'ou',          "$trashOuName" );
@@ -35,7 +39,7 @@ unless (($trashSearch->entries)[0]) {
   warn $creationTrash->error if $creationTrash->code;
 }
 
-# Recherche des utilisateurs concernés et Action
+# Recherche des utilisateurs concernÃ©s et Action
 # ==============================================
 #
 # Recherche de tous les utilisateurs
@@ -47,7 +51,7 @@ foreach $people ($peoples->entries) {
   $dn  = $people->dn;
   $uid = $people->get_value('uid');
   next if ($uid eq 'admin' or $uid eq 'webmaster.etab' or $uid eq 'wetab' or $uid eq 'etabw' or $uid eq 'ldapadm');
-  # Vérification de l'appartenance à des groupes
+  # VÃ©rification de l'appartenance Ã  des groupes
   # --------------------------------------------
   $memberOfAGroupOfNames = $lcs_ldap->search(base     => "$groupsDn",
 					     scope    => 'one',
@@ -59,7 +63,7 @@ foreach $people ($peoples->entries) {
 					     filter   => "(&(!(cn=overfill))(memberUid=$uid))");
   warn $memberOfAPosixGroup->error if $memberOfAPosixGroup->code;
   next if ($memberOfAPosixGroup->entries)[0];
-  # Désactivation du compte SAMBA et déplacement le cas échéant
+  # DÃ©sactivation du compte SAMBA et dÃ©placement le cas Ã©chÃ©ant
   # -----------------------------------------------------------
   $sambaDesactiv = $lcs_ldap->modify(
     $dn,
