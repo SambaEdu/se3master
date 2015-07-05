@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # $Id$
+
+
 # Script de recherche des correspondances nom_machine=nom_parc
 # Auteur: Stephane Boireau
 
