@@ -2,6 +2,7 @@
 # Auteur: Olivier Lacroix
 #
 ## $Id$ ##
+
 #
 ##### script generant les fichiers necessaires au deploiement d italc par wpkg sur les clients: xml + fichiers install.bat #####
 #
@@ -136,7 +137,7 @@ do
     echo "<classroom name=\"$PARC\" >" >> $REPITALC/postesprofs/$POSTEPROF/$GLOBALCONFIG
     echo "<classroom name=\"$PARC\" >" >> $PERSOCONFIG
     
-    # la fonction sed "s/\([^0-9]\)\([0-9]*$\)/\\1\t\\2/"|sort +1 -n|tr -d "\t" permet de classer les postes par ordre de numéro : n17p1 n17p2 n17p10
+    # la fonction sed "s/\([^0-9]\)\([0-9]*$\)/\\1\t\\2/"|sort +1 -n|tr -d "\t" permet de classer les postes par ordre de numï¿½ro : n17p1 n17p2 n17p10
     ldapsearch -xLLL cn=$PARC | grep $COMPUTERDN | grep member | cut -f1 -d, | cut -f2 -d= | sed "s/\([^0-9]\)\([0-9]*$\)/\\1\t\\2/"|sort -k 1 -n|tr -d "\t" | while read A
     do
       IDUNIQ="$(cat /tmp/IDUNIQ)"
@@ -176,7 +177,7 @@ done
 echo "</body></personalconfig>" >> $PERSOCONFIG
 rm /tmp/IDUNIQ /tmp/XPOS /tmp/YPOS
 
-# compatibilité permse3 : www-se3 est proprio de la branche unattended
+# compatibilitÃ© permse3 : www-se3 est proprio de la branche unattended
 # chown -R adminse3 $REPITALC
 getent passwd adminse3 >/dev/null && setfacl -R -m u:adminse3:rwx -m d:u:adminse3:rwx $REPITALC
 

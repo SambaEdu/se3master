@@ -12,7 +12,7 @@ then
 	echo "Relance la conf dhcp pour creation wpad et se3.pac si besoin"
 	echo "Modifie les valeurs msql proxy_url et proxy_type"
 	echo "Modifie les fichiers prefs.js Firefox"
-	echo "Sans option le proxy est supprimé"
+	echo "Sans option le proxy est supprimÃ©"
 	echo "Usage : modifProxy.sh [adresse_ip:port]"
 	exit
 fi	

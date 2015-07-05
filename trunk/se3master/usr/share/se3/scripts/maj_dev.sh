@@ -1,5 +1,12 @@
 #!/bin/bash
-# mettre l'etat d'un devoir à etat = 0 (récupéré), à faire récup partielle)
+
+
+## $Id$ ##
+
+
+# mettre l'etat d'un devoir Ã  etat = 0 (rÃ©cupÃ©rÃ©), Ã  faire rÃ©cup partielle)
+
+
 login=$1
 fich=$2
 

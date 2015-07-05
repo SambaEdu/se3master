@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+## $Id$ ##
+
+
 FOUND=0
 BUG=0
 while read line

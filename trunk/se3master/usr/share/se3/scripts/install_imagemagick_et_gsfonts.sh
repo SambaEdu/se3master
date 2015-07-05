@@ -2,16 +2,16 @@
 #
 ##### Script d'installation de ImageMagick et Gsfonts #####
 #
-# Auteur: Stéphane Boireau (A.S. - Relais de Bernay/Pont-Audemer (27))
+# Auteur: StÃ©phane Boireau (A.S. - Relais de Bernay/Pont-Audemer (27))
 #
 ## $Id$ ##
 #
 # /usr/share/se3/sbin/install_imagemagick_et_gsfonts.sh
-# Dernière modification: 23/05/2006
+# DerniÃ¨re modification: 23/05/2006
 
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
-	echo "Script destiné à installer ImageMagick et gsfonts"
-	echo "(et à renseigner des fichiers témoins)."
+	echo "Script destinÃ© Ã  installer ImageMagick et gsfonts"
+	echo "(et Ã  renseigner des fichiers tÃ©moins)."
 	echo ""
 	echo "Usage : pas d'option"
 	exit
@@ -31,29 +31,29 @@ COLCMD="\033[1;37m"     # Blanc
 COLERREUR="\033[1;31m"  # Rouge
 COLINFO="\033[0;36m"    # Cyan
 
-# Paramètres:
+# ParamÃ©tres:
 chemin_param_fond="/etc/se3/fonds_ecran"
 
-# Création du dossier de paramètres:
+# CrÃ©ation du dossier de paramÃ©tres:
 mkdir -p $chemin_param_fond
 chown www-se3:root $chemin_param_fond
 
-# Dossier de log en cas de mode debug activé:
+# Dossier de log en cas de mode debug activÃ©:
 dossier_log="/var/log/se3/fonds_ecran"
 mkdir -p "$dossier_log"
 
 # Chemin des fichiers de lock (pour ne pas relancer le script
-# tant que la première instance n'est pas terminée)
+# tant que la premiÃ¨re instance n'est pas terminÃ©e)
 chemin_lock="/home/netlogon"
-# Le fichier a l'extension 'lck' si bien que le script lckclean le nettoye en cas de pépin.
+# Le fichier a l'extension 'lck' si bien que le script lckclean le nettoye en cas de pï¿½pin.
 
-# Création du fichier de LOCK:
+# CrÃ©ation du fichier de LOCK:
 touch $chemin_lock/installation_imagemagick_et_gsfonts.lck
 
 # Valeur tmp:
 ladate=$(date +"%Y.%m.%d-%H.%M.%S")
 
-# Initialisation du témoin d'erreur
+# Initialisation du tÃ©moin d'erreur
 erreur=""
 
 # Mode debug:
@@ -70,11 +70,11 @@ ladate=$(date +"%Y.%m.%d-%H.%M.%S")
 affich_debug "$ladate" >> $dossier_log/installation_${ladate}.log
 affich_debug "Lancement de $0" >> $dossier_log/installation.log
 
-# Installation si nécessaire des paquets requis:
+# Installation si nÃ©cessaire des paquets requis:
 if dpkg -l imagemagick | grep "ii  imagemagick" > /dev/null ; then
 	echo -e "$COLINFO"
-	echo "ImageMagick est bien installé."
-	affich_debug "ImageMagick est bien installé." >> $dossier_log/installation_${ladate}.log
+	echo "ImageMagick est bien installÃ©."
+	affich_debug "ImageMagick est bien installÃ©." >> $dossier_log/installation_${ladate}.log
 	if [ ! -e "$chemin_param_fond/imagemagick_present.txt" ]; then
 		touch $chemin_param_fond/imagemagick_present.txt
 	fi
@@ -88,13 +88,13 @@ else
 	echo Y | apt-get install imagemagick
 	if [ "$?" = "0" ]; then
 		echo -e "$COLTXT"
-		echo "Installation de ImageMagick réussie."
-		affich_debug "Installation de ImageMagick réussie." >> $dossier_log/installation_${ladate}.log
+		echo "Installation de ImageMagick rÃ©ussie."
+		affich_debug "Installation de ImageMagick rÃ©ussie." >> $dossier_log/installation_${ladate}.log
 		touch $chemin_param_fond/imagemagick_present.txt
 	else
 		echo -e "$COLERREUR"
-		echo "L'installation de ImageMagick a échoué."
-		affich_debug "L'installation de ImageMagick a échoué." >> $dossier_log/installation_${ladate}.log
+		echo "L'installation de ImageMagick a Ã©chouÃ©."
+		affich_debug "L'installation de ImageMagick a Ã©chouÃ©." >> $dossier_log/installation_${ladate}.log
 		affich_debug "===================================" >> $dossier_log/installation_${ladate}.log
 		rm -f $chemin_lock/installation_imagemagick_et_gsfonts.lck
 		erreur="ImageMagick"
@@ -105,8 +105,8 @@ fi
 if [ -z "$erreur" ]; then
 	if dpkg -l gsfonts | grep "ii  gsfonts" > /dev/null ; then
 		echo -e "$COLINFO"
-		echo "Gsfonts est bien installé."
-		affich_debug "Gsfonts est bien installé." >> $dossier_log/installation_${ladate}.log
+		echo "Gsfonts est bien installÃ©."
+		affich_debug "Gsfonts est bien installÃ©." >> $dossier_log/installation_${ladate}.log
 		if [ ! -e "$chemin_param_fond/gsfonts_present.txt" ]; then
 			touch $chemin_param_fond/gsfonts_present.txt
 		fi
@@ -120,13 +120,13 @@ if [ -z "$erreur" ]; then
 		echo Y | apt-get install gsfonts
 		if [ "$?" = "0" ]; then
 			echo -e "$COLTXT"
-			echo "Installation de gsfonts réussie."
-			affich_debug "Installation de gsfonts réussie." >> $dossier_log/installation_${ladate}.log
+			echo "Installation de gsfonts rÃ©ussie."
+			affich_debug "Installation de gsfonts rÃ©ussie." >> $dossier_log/installation_${ladate}.log
 			touch $chemin_param_fond/gsfonts_present.txt
 		else
 			echo -e "$COLERREUR"
-			echo "L'installation de gsfonts a échoué."
-			affich_debug "L'installation de gsfonts a échoué." >> $dossier_log/installation_${ladate}.log
+			echo "L'installation de gsfonts a Ã©chouÃ©."
+			affich_debug "L'installation de gsfonts a Ã©chouÃ©." >> $dossier_log/installation_${ladate}.log
 			affich_debug "===================================" >> $dossier_log/installation_${ladate}.log
 			rm -f $chemin_lock/installation_imagemagick_et_gsfonts.lck
 			erreur="gsfonts"
@@ -136,23 +136,23 @@ if [ -z "$erreur" ]; then
 	
 	if [ -z "$erreur" ]; then
 		if dpkg -l samba | grep 2.2.8a-se3 > /dev/null ; then
-			# Il ne faut pas de préfixe pour la génération des BMP
+			# Il ne faut pas de prÃ©fixe pour la gÃ©nÃ©ration des BMP
 			echo "2" > $chemin_param_fond/version_samba.txt
 		else
-			# Il faut un préfixe pour la génération des BMP
+			# Il faut un prÃ©fixe pour la gÃ©nÃ©ration des BMP
 			#prefixe="bmp3:"
 			echo "3" > $chemin_param_fond/version_samba.txt
 		fi
 		
-		# Fichier permettant d'activer/désactiver la génération de fonds:
+		# Fichier permettant d'activer/dÃ©sactiver la gÃ©nÃ©ration de fonds:
 		touch $chemin_param_fond/actif.txt
 		chown www-se3 $chemin_param_fond/actif.txt
 		
-		#Pour que le script soit exécutable:
+		#Pour que le script soit exÃ©cutable:
 		touch $chemin_param_fond/parametres_generation_fonds.sh
 		chown www-se3 $chemin_param_fond/parametres_generation_fonds.sh
 		chmod 750 $chemin_param_fond/parametres_generation_fonds.sh
-		#Sinon, il est généré via l'interface web, mais les chmod() ne fonctionnent pas très bien en PHP.
+		#Sinon, il est gÃ©nÃ©rÃ© via l'interface web, mais les chmod() ne fonctionnent pas trÃ¨s bien en PHP.
 	fi
 fi
 

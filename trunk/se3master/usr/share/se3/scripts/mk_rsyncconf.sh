@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 # $Id$ #
 
 ##### Configure rsync pour une sauvegarde via Backuppc depuis un autre serveur #####

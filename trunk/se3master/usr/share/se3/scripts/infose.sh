@@ -1,7 +1,9 @@
 #!/bin/bash
 
 ## $Id$ ##
-#
+
+
+
 ##### Retourne en HTML diverses informations sur SambaEdu #####
 #
 # Olivier LECLUSE 13 09 2002
@@ -11,7 +13,7 @@ grpdn="$2,$3"
 usrdn="$1,$3"
 smbpath=$4
 
-echo "<H1>Informations générales SambaEdu</H1>"
+echo "<H1>Informations gÃ©nÃ©rales SambaEdu</H1>"
 echo "<H2>Informations sur les comptes</H2>"
 nbg=`ldapsearch -x -b "$grpdn" "cn=*" "cn" |grep dn: |wc -l`
 echo "<UL><LI>Nombre de groupes : $nbg</LI>"
@@ -29,7 +31,7 @@ nbc=`ldapsearch -x -b "$usrdn" "uid=*" "uid" |grep dn: |wc -l`
 nbcu=`ls /home/|wc -l`
 #moins admin, netlogon, templates
 let nbcu=nbcu-3
-echo "<LI>Nombre de comptes inscrits : $nbc   ==> utilisés : $nbcu</LI>"
+echo "<LI>Nombre de comptes inscrits : $nbc   ==> utilisÃ©s : $nbcu</LI>"
 
 
 nbProfs=`ldapsearch -xLLL cn=Profs |grep memberUid | wc -l`
@@ -60,11 +62,11 @@ do
 	((i += 1))
 done
 let "pcelev = $nbela * 100 / $nbEleves"
-echo "<LI>Nombre d'élèves inscrits : $nbEleves ==>  actifs : $nbela ($pcelev%)</LI>"
+echo "<LI>Nombre d'ï¿½lï¿½ves inscrits : $nbEleves ==>  actifs : $nbela ($pcelev%)</LI>"
 
 
 cat <<EOF
-<H2>Utilisation de la mémoire</H2>
+<H2>Utilisation de la mÃ©moire</H2>
 <BLOCKQUOTE><PRE>
 EOF
 

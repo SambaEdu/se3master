@@ -1,6 +1,10 @@
 #!/bin/bash
 #
+
+
 ## $Id$ ##
+
+
 #
 ##### Permet d'installer un paquet module se3#####
 ### franck.molle@ac-rouen.fr
@@ -294,7 +298,7 @@ DatabaseDirectory /var/lib/clamav/
 DNSDatabaseInfo current.cvd.clamav.net" > /etc/clamav/freshclam.conf
 	chown clamav:adm /etc/clamav/freshclam.conf
 
-	## desactivation dans l'interface et scan fixés à aucun
+	## desactivation dans l'interface et scan fixï¿½s ï¿½ aucun
 	mysql mysql -h $dbhost -u $dbuser -p$dbpass -D $dbname -e "UPDATE params SET value='1' WHERE name='antivirus';"
 
 
@@ -382,7 +386,7 @@ mkdir -p "$dossier_log"
 #installation paquets si besoin
 install_module && touch $chemin_param_fond/imagemagick_present.txt && touch $chemin_param_fond/gsfonts_present.txt
 if [ -e $chemin_param_fond/gsfonts_present.txt ]; then
-#paramétrage
+#paramÃ©trage
 echo "Installation ok !, parametrage...."
 echo "3" > $chemin_param_fond/version_samba.txt
 touch $chemin_param_fond/actif.txt
