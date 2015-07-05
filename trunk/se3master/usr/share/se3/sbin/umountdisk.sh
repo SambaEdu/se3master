@@ -1,4 +1,6 @@
 #!/bin/bash
+
+## $Id$ ##
 #
 mount |grep "\/var\/lib\/backuppc" >/dev/null
 if [ "$?" == "0" ]; then
