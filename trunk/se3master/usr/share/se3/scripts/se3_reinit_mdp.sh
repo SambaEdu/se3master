@@ -19,7 +19,7 @@ then
 		echo "             sh $0 Eleves"
 		echo "        Vous pouvez aussi mettre en \$2 'alea' pour mettre des mots de passe"
 		echo "        aleatoires ou 'semi' pour mettre des mots de passe semi-aleatoires."
-		echo "        Derni�re alternative: Fournir en parametre \$1 la chaine:"
+		echo "        Dernière alternative: Fournir en parametre \$1 la chaine:"
 		echo "             sh $0 csv=CHEMIN/FICHIER.csv"
 		echo "        au format:"
 		echo "             LOGIN;MDP;"
@@ -51,7 +51,7 @@ if [ -e "/usr/share/se3/includes/config.inc.sh" ]; then
 else
 	LDAPIP=$(grep "^HOST" /etc/ldap/ldap.conf|cut -d" " -f2)
 	if [ -z "$LDAPIP" ]; then
-		echo "ABANDON: L'adresse IP du serveur LDAP n'a pas ete identifiee."
+		echo "ABANDON: L'adresse IP du serveur LDAP n'a pas été identifiée."
 		exit
 	fi
 
@@ -63,7 +63,7 @@ fi
 # Si le variables_admin_ldap.sh n'est pas assez recent
 if [ -z "$BASEDN" -o -z "$ROOTDN" -o -z "$PASSDN" ]; then
 	# On utilise les parametres locaux... en esperant que le ldap est bien local
-	echo "On utilise les parametres locaux... en esperant que le ldap est bien local"
+	echo "On utilise les paramétres locaux... en espérant que le ldap est bien local"
 	BASEDN=$(cat /etc/ldap/ldap.conf | grep "^BASE" | tr "\t" " " | sed -e "s/ \{2,\}/ /g" | cut -d" " -f2)
 	ROOTDN=$(cat /etc/ldap/slapd.conf | grep "^rootdn" | tr "\t" " " | cut -d'"' -f2)
 	PASSDN=$(cat /etc/ldap.secret)
@@ -134,7 +134,7 @@ else
 			else
 				tmp_test=$(echo "$date" | sed -e "s/[0-9]//g")
 				if [ -z "${tmp_test}" -a ! -z "$date" ]; then
-					echo -e "$uid: \tReinitialisation du mot de passe a $date:\c"
+					echo -e "$uid: \tRéinitialisation du mot de passe a $date:\c"
 					/usr/share/se3/sbin/userChangePwd.pl $uid $date
 					if [ "$?" = "0" ]; then
 						echo "OK"
@@ -143,7 +143,7 @@ else
 						echo "ERREUR"
 					fi
 				else
-					echo "ERREUR (mot de passe non identifie)"
+					echo "ERREUR (mot de passe non identifié)"
 				fi
 			fi
 		else
@@ -183,13 +183,13 @@ else
 fi
 
 if [ "$alea" = "y" ]; then
-	echo "Un fichier CSV a ete genere en"
+	echo "Un fichier CSV a été généré en"
 	echo "   ${dest}"
 	echo "Il contient aussi des adresses mail pour un publipostage mail, mais si l'adresse"
-	echo "mail renseignee correspond a une authentification sur l'annuaire LDAP pour"
+	echo "mail renseignée correspond à une authentification sur l'annuaire LDAP pour"
 	echo "lequel on vient de changer le mot de passe, cette adresse ne sera pas une bonne"
 	echo "solution de communication du changement."
 fi
 
-echo "Termine."
+echo "Terminé."
 

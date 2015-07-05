@@ -2,7 +2,10 @@
 
 ##### script permettant de creer/rafraichir les dossiers de classes #####
 # Stephane Boireau 29/12/2014
+
+
 #$Id$
+
 
 acl_group_profs_classes=$(/usr/bin/getfacl /var/se3/Classes | grep default:group:Profs)
 

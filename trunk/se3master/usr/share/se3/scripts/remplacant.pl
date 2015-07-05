@@ -1,8 +1,13 @@
 #!/usr/bin/perl 
+
+
+## $Id$ ##
+
+
 ## script d'attribution des groupes LDAP de l'absent au remplacant 
 ## pschwarz Mai 2005 
-# Sur une idée de Pierre Marin et le coup de pied/motivation qui va avec ;-)
-# Lancé par rempl.php
+# Sur une idÃ©e de Pierre Marin et le coup de pied/motivation qui va avec ;-)
+# LancÃ© par rempl.php
 # Usage : perl remplacant.pl ....................
 
 use Net::LDAP;

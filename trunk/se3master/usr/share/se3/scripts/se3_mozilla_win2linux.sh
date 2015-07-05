@@ -10,7 +10,7 @@
 
 echo_debug ()
 {
-	# Passer la variable à 1 pour afficher des messages de debug en cours de traitement
+	# Passer la variable Ã  1 pour afficher des messages de debug en cours de traitement
 	debug=0
 	if [ "$debug" = "1" ]; then
 		echo $*
@@ -146,7 +146,7 @@ Path=default" >> .thunderbird/profiles.ini
 		fi
 		echo_debug "============================"
 
-		# Decommenter pour avancer PAS à PAS
+		# Decommenter pour avancer PAS ï¿½ PAS
 		#read PAUSE < /dev/tty
 	fi
 done

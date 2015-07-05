@@ -2,13 +2,13 @@
 #
 ## $Id$ ##
 #
-##### Permet de faire la mise à jour de debian et se3 #####
+##### Permet de faire la mise Ã  jour de debian et se3 #####
 
 # Franck Molle - 05/2006...
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
-        echo "Script permettant la mise a jour du système debian et se3"
-        echo "Usage : sans option pour un mode intéractif ou avec --auto pour le mode muet"
+        echo "Script permettant la mise a jour du systÃ¨me debian et se3"
+        echo "Usage : sans option pour un mode intÃ©ractif ou avec --auto pour le mode muet"
         exit
 fi	
 
@@ -32,8 +32,8 @@ MAIL_REPORT()
 [ -e /etc/ssmtp/ssmtp.conf ] && MAIL_ADMIN=$(cat /etc/ssmtp/ssmtp.conf | grep root | cut -d= -f2)
 if [ ! -z "$MAIL_ADMIN" ]; then
         REPORT=$(cat $REPORT_FILE)
-        #On envoie un mail à l'admin
-	echo "$REPORT"  | mail -s "[SE3] Résultat de $0" $MAIL_ADMIN
+        #On envoie un mail ï¿½ l'admin
+	echo "$REPORT"  | mail -s "[SE3] RÃ©sultat de $0" $MAIL_ADMIN
 fi
 }
 
@@ -78,13 +78,13 @@ USE_SPACE=$(df -hPl | grep "/var$" | awk '{print $5}' | sed -e s/%//)
 
 
 if [ "$USE_SPACE" -le 90 ]; then
-        echo "Résultat de la demande de mise à jour système du $LADATE :" > $REPORT_FILE
+        echo "RÃ©sultat de la demande de mise Ã  jour systÃ¨me du $LADATE :" > $REPORT_FILE
         echo "" >> $REPORT_FILE
-        echo "Mise à jour de la liste des paquets disponibles ....." | tee -a $REPORT_FILE
+        echo "Mise Ã  jour de la liste des paquets disponibles ....." | tee -a $REPORT_FILE
         LINE_TEST
         apt-get update | tee -a $REPORT_FILE
         echo "" | tee -a $REPORT_FILE
-        echo "Mise a jour des paquets optionnels à se3 si necessaire" | tee -a $REPORT_FILE
+        echo "Mise a jour des paquets optionnels Ã  se3 si necessaire" | tee -a $REPORT_FILE
         dpkg -s se3-clamav | grep "Status: install" >/dev/null && apt-get install se3-clamav $option | tee -a $REPORT_FILE
         dpkg -s se3-dhcp | grep "Status: install" >/dev/null && apt-get install se3-dhcp $option | tee -a $REPORT_FILE
         dpkg -s se3-clonage | grep "Status: install" >/dev/null && apt-get install se3-clonage $option | tee -a $REPORT_FILE
@@ -99,44 +99,44 @@ if [ "$USE_SPACE" -le 90 ]; then
 	apt-get install se3 $option | tee -a $REPORT_FILE
 
         #upgrade samba et relancement si maj
-# 	TST_SMBMAJ=$(apt-get -s install samba $option | grep "la plus récente version disponible")
+# 	TST_SMBMAJ=$(apt-get -s install samba $option | grep "la plus rÃ©cente version disponible")
 	apt-get install samba $option | tee -a $REPORT_FILE
 # 	[ -z "$TST_SMBMAJ" ] && /etc/init.d/samba restart | tee -a $REPORT_FILE
 	
-#upgrade reste du système
+#upgrade reste du systÃ¨me
 	apt-get dist-upgrade $option | tee -a $REPORT_FILE
         echo "" | tee -a $REPORT_FILE
         echo "Correction de droits si besoin...." | tee -a $REPORT_FILE
         /usr/share/se3/scripts/permse3 $PERMSE3_OPTION | tee -a $REPORT_FILE
         
-        # teste si apache a besoin d'etre relancé
+        # teste si apache a besoin d'etre relancÃ©
 	if [ -z "$(ps aux | grep "apache2se" | grep -v grep)" ]; then
-                echo "Redémarrage d'Apachese" | tee -a $REPORT_FILE
+                echo "RedÃ©marrage d'Apachese" | tee -a $REPORT_FILE
                 /etc/init.d/apache2se start | tee -a $REPORT_FILE
                 
         fi
 
-### Rajout d'Eric Elter après constatation de l'arrêt des deux services en question après le lancement de ce script
+### Rajout d'Eric Elter aprÃ¨s constatation de l'arrÃªt des deux services en question aprÃ¨s le lancement de ce script
 
-	# teste si samba a besoin d'etre relancé
+	# teste si samba a besoin d'etre relancÃ©
        if [ -z "$(ps aux | grep "smbd" | grep -v grep)" ]; then
-               echo "Redémarrage de Samba" | tee -a $REPORT_FILE
+               echo "RedÃ©marrage de Samba" | tee -a $REPORT_FILE
                /etc/init.d/samba start | tee -a $REPORT_FILE
 
        fi
 
-   	# teste si mysql a besoin d'etre relancé
+   	# teste si mysql a besoin d'etre relancÃ©
        if [ -z "$(ps aux | grep "mysqld" | grep -v grep)" ]; then
-               echo "Redémarrage de MySQL" | tee -a $REPORT_FILE
+               echo "RedÃ©marrage de MySQL" | tee -a $REPORT_FILE
                /etc/init.d/mysql start | tee -a $REPORT_FILE
 
        fi 
 
 ### Fin de rajout
 
-        echo "Mise à jour terminée" | tee -a $REPORT_FILE
+        echo "Mise Ã  jour terminÃ©e" | tee -a $REPORT_FILE
 else
-        echo -e "Attention : Mise à jour système impossible :(\nEspace insuffisant sur la partition /var, il reste moins de 10% d'espace libre." | tee -a $REPORT_FILE
+        echo -e "Attention : Mise Ã  jour systÃ¨me impossible :(\nEspace insuffisant sur la partition /var, il reste moins de 10% d'espace libre." | tee -a $REPORT_FILE
 fi
 echo "</pre>"
 MAIL_REPORT

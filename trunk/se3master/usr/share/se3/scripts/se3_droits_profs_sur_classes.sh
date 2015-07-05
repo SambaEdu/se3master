@@ -26,7 +26,7 @@ else
 		setfacl -R -m g:Profs:rx /var/se3/Classes/Classe_*
 		setfacl -R -m d:g:Profs:rx /var/se3/Classes/Classe_*
 	
-		# On parcourt les dossiers de classes pour donner tous les droits a l'intérieur des dossiers eleves, _travail et _profs
+		# On parcourt les dossiers de classes pour donner tous les droits a l'intÃ©rieur des dossiers eleves, _travail et _profs
 		ls /var/se3/Classes | grep "^Classe_" | while read rep_classe
 		do
 			setfacl -R -m g:Profs:rwx /var/se3/Classes/$rep_classe/*
