@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+## $Id$ ##
+
 use Net::LDAP;
 use Net::LDAP::Entry;
 
