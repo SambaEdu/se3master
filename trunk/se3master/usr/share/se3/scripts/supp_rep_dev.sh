@@ -1,5 +1,10 @@
 #!/bin/bash
-# supprimer complètement un sous-rép du rép classe des élèves au nom du devoir 
+
+
+## $Id$ ##
+
+
+# supprimer complÃ©tement un sous-rÃ©p du rÃ©p classe des Ã©lÃ¨ves au nom du devoir 
 
 rep=$1
 

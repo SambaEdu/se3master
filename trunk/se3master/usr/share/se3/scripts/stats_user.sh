@@ -1,12 +1,12 @@
 #!/bin/bash
 #Auteur : Denis Bonnenfant
 
-#AmÈlioration et dÈbuggage: Olivier Lacroix (sur conseils de StÈphane Boireau)
+#Am√©lioration et d√©buggage: Olivier Lacroix (sur conseils de St√©phane Boireau)
 #Version du 11/11/08: corrections de bugs.
 
 ## $Id$ ##
 #
-##### script permettant d'afficher le dÈtail d'coccupation des types de fichier sur /home par user #####
+##### script permettant d'afficher le d√©tail d'coccupation des types de fichier sur /home par user #####
 #
 
 AIDE()
@@ -15,8 +15,8 @@ AIDE()
  echo
  echo "Exemple d'utilisation de stats_user.sh:"
  echo
- echo "stats_user.sh /home toto     affiche le dÈtail des fichiers (par catÈgorie) de l'utilisateur toto" 
-#Temporaire: pas de possibilitÈ sur /var/se3
+ echo "stats_user.sh /home toto     affiche le d√©tail des fichiers (par cat√©gorie) de l'utilisateur toto" 
+#Temporaire: pas de possibilit√© sur /var/se3
  echo
  exit $1
 }
@@ -34,12 +34,12 @@ FICHIERUSER=/tmp/stat_user_$A
 # empeche un meme utilisateur de demander son detail plusieurs fois : il pourrait saturer le serveur a coup de find !!
 [ -e /tmp/stat_user_$A ] && exit
 
-#total des fichiers dans Docs, Bureau (pour Èviter de comptabiliser les profiles)
+#total des fichiers dans Docs, Bureau (pour √©viter de comptabiliser les profiles)
 find $part/$A \! -name '.' -printf "%s\n" > $FICHIERUSER
 declare r=0
 while read S ; do let r+=$S/1024 ; done < $FICHIERUSER
 
-#total par catÈgorie
+#total par cat√©gorie
 if [ "$part" = "/home" ]
 then
   find $part/$A/profil \! -name '.' -printf "%s\n" > $FICHIERUSER
@@ -119,13 +119,13 @@ fi
 if [ $part = "/home" ]
 then
   if [ $[$r-$references] -lt "0" ]
-  then #cela signifie que des fichiers rÈfÈrencÈs (doc, ou autres) ont ÈtÈ comptabilisÈs deux fois car placÈs dans profil ou profile (ex: le bureau!) => je les vire du total de fichiers systËme pour rÈsultat cohÈrent ‡ l'affichage.
-  # BUG REEL: tout fichier dans /home/$A est comptabilisÈ ds les diffÈrents types, le total du profile compte donc en double des fichiers rÈfÈrencÈs, de plus, le type autre est comptabilisÈ par diffÈrence. C'est sans issue avec cette mÈthode de dÈcompte!
+  then #cela signifie que des fichiers r√©f√©renc√©s (doc, ou autres) ont √©t√© comptabilis√©s deux fois car plac√©s dans profil ou profile (ex: le bureau!) => je les vire du total de fichiers syst√®me pour r√©sultat coh√©rent √† l'affichage.
+  # BUG REEL: tout fichier dans /home/$A est comptabilis√© ds les diff√©rents types, le total du profile compte donc en double des fichiers r√©f√©renc√©s, de plus, le type autre est comptabilis√© par diff√©rence. C'est sans issue avec cette m√©thode de d√©compte!
     let c=$c+$[$r-$references]
   fi
   
   if [ ! $c = "0" ]; then
-    echo  "- Fichiers d'environnement systËme (raccourcis, profil, profile) : $c ko </br>"
+    echo  "- Fichiers d'environnement syst√®me (raccourcis, profil, profile) : $c ko </br>"
   fi
 fi
 if [ ! $[$r-$references] -lt "0" ]; then
