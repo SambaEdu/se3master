@@ -3,12 +3,12 @@
 #
 ## $Id$ ##
 #
-##### Effectue les actions programmées dans actionse3 #####
+##### Effectue les actions programmÃ©es dans actionse3 #####
 ##
 #
 
 if (($ARGV[0] eq  "--help") || ($ARGV[0] eq "-h")) {
-        print "Effectue les actions programmées dans actionse3\n";
+        print "Effectue les actions programmÃ©es dans actionse3\n";
 	print "Usage : aucune option\n";
         exit;
 }
