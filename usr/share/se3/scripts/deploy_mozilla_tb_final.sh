@@ -1,12 +1,16 @@
 #!/bin/bash
+
+
 ## $Id$ ##
+
+
 #### script permettant de ventiler le profil de thunderbird ####
 
-# Si un profil thunderbird a été crée par un utilisateur,
-# celui ci sera ignoré par le script.
+# Si un profil thunderbird a Ã©tÃ© crÃ©e par un utilisateur,
+# celui ci sera ignorÃ© par le script.
 # franck molle 03/2005
 # le script permet desormais de redeployer les profils sans pour autant ecraser s'ils ont ete modifies par l'utilisateur.
-# sauf à passer en parametre "force_delete"
+# sauf Ã  passer en parametre "force_delete"
 
 # Modifs Stephane Boireau: 11/03/2006
 chemin_html="/var/www/se3/tmp"
@@ -33,20 +37,19 @@ ERREUR()
 	echo ""
 	exit 1
 }
-#echo "Géneration des profils de Mozilla Thunderbird<br>"
+#echo "GÃ©neration des profils de Mozilla Thunderbird<br>"
 #echo "<br>"
-# echo -e "Les profils deja existants seront ignorés"
+# echo -e "Les profils deja existants seront ignorÃ©s"
 # echo -e ""
 
-## $Id$ ##
 
 AIDE()
 {
-	echo "Permet de déployer les profils Mozilla Thunderbird sans les répertoires personnels"
+	echo "Permet de dÃ©ployer les profils Mozilla Thunderbird sans les rÃ©pertoires personnels"
 	echo "Usage : deploy_mozilla_tb_final.sh option1 option2 option3 option4"
 	echo "option1 et option2 sont obligatoires alors que option3 et  option4 sont facultatives"
-	echo "option1 :  le nom du groupe des utilisateurs à générer, all pour tous les utilisateurs de l'annuaire"
-	echo "option2 : force_move afin de régénérer les profils existants en sauvegardant, no_move pour ne rien toucher"
+	echo "option1 :  le nom du groupe des utilisateurs Ã  gÃ©nÃ©rer, all pour tous les utilisateurs de l'annuaire"
+	echo "option2 : force_move afin de rÃ©gÃ©nÃ©rer les profils existants en sauvegardant, no_move pour ne rien toucher"
 	echo "option3 : nom du serveur pop "
 	echo "option4 : nom du serveur smtp"
 	echo "--help ou -h cette aide"
@@ -60,7 +63,7 @@ fi
 
 
 if [ -z "$1" ]; then
-	ERREUR "$0 prend au moins en arguments la liste des utilisateurs à générer, all pour tous les homes"
+	ERREUR "$0 prend au moins en arguments la liste des utilisateurs ï¿½ gï¿½nï¿½rer, all pour tous les homes"
 fi
 
 OPTION="$2"
@@ -94,8 +97,8 @@ if [ -z "$path2UserSkel" ]; then
 fi
 lcsIp=`echo "SELECT value FROM params WHERE name='lcsIp'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 
-#Seuls les homes deja existants seront complétés
-# Les compte crees par les utilisateurs seront ignorés
+#Seuls les homes deja existants seront complÃ©tÃ©s
+# Les compte crees par les utilisateurs seront ignorÃ©s
 CHEMIN_TB_SOURCE="${path2UserSkel}/profil/appdata/Thunderbird"
 
 if [ "$1"  "all" ]; then
@@ -111,7 +114,7 @@ else
 	if [ -z "$TST_GRP" ]; then
 	TST_UID=$(ldapsearch -xLLL uid="$1")
 		if [ -z "$TST_UID" ]; then
-			ERREUR "Impossible de trouver le groupe ou l'utilisateur passé en paramètre dans l'annuaire Ldap"
+			ERREUR "Impossible de trouver le groupe ou l'utilisateur passÃ© en paramÃ¨tre dans l'annuaire Ldap"
 		else
 			list=$1
 		fi
@@ -133,7 +136,7 @@ fi
 
 
 #======================================================
-# Nombre de dossiers à traiter:
+# Nombre de dossiers Ã  traiter:
 nbdossiers=$(echo "$list" | wc -l)
 compteur=1
 
@@ -148,7 +151,7 @@ echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://
 </head>
 <body>
 <h1 align=\"center\">Traitement des profils</h1>
-<p align=\"center\">Le traitement va démarrer...<br></p>
+<p align=\"center\">Le traitement va dÃ©marrer...<br></p>
 </body>
 </html>" > $chemin_html/recopie_profils_thunderbird.html
 chmod 755 $chemin_html/recopie_profils_thunderbird.html
@@ -200,7 +203,7 @@ do
 		#===================================================
 
 		if [ ! -e $CHEMIN_TB_CIBLE ]; then
-				echo "Le profil TB de <A HREF="/annu/people.php?uid=$user">$user</A> n'existe pas, je le crée avec les paramètres :"
+				echo "Le profil TB de <A HREF="/annu/people.php?uid=$user">$user</A> n'existe pas, je le crï¿½e avec les paramï¿½tres :"
 				echo "$MAIL"
 				cp -a $CHEMIN_TB_SOURCE $CHEMIN_TB_CIBLE
 
@@ -222,7 +225,7 @@ do
 
 
 		else
-				echo "Le profil Mozilla Thunderbird existe déjà.<br>"
+				echo "Le profil Mozilla Thunderbird existe dÃ©jÃ .<br>"
 # 				echo "<br>"
 				#echo "Traitement de <A HREF="/annu/people.php?uid=$user">$user</A> <br>"
 
@@ -233,19 +236,19 @@ do
 					NB_COMPTES_MAIL=$(ls $CHEMIN_CIBLE/Mail | grep -v "defaultbal" | grep -v "Local Folders")
 
 					if [ -z "$NB_COMPTES_MAIL" ]; then
-		# 				echo "test 1 passé pas de compte supplémentaire"
+		# 				echo "test 1 passï¿½ pas de compte supplï¿½mentaire"
 
 # 						
 						if [ ! -s $CHEMIN_CIBLE/Mail/defaultbal/Inbox ]; then
-		# 				echo "le compte est a zero, donc on peut le régénérer"
+		# 				echo "le compte est a zero, donc on peut le rï¿½gï¿½nï¿½rer"
 						PROFIL_DEL="ok"
 
 						else
-						echo "le profil Thunderbird contient des données.<br>"
+						echo "le profil Thunderbird contient des donnÃ©es.<br>"
 						fi
 
 					else
-						echo "Le profil Thunderbird a été modifié par l'utilisateur.<br>"
+						echo "Le profil Thunderbird a Ã©tÃ© modifiÃ© par l'utilisateur.<br>"
 					fi
 
 
@@ -260,12 +263,12 @@ do
 				fi
 
 				if [ "$OPTION"  "force_move" -a "$PROFIL_DEL" != "ok" ]; then
-					echo "<font color=red>On écrase le profil existant mais on sauvegarde sur ${CHEMIN_TB_CIBLE}_sauve_${LADATE} </font><br>"
+					echo "<font color=red>On Ã©crase le profil existant mais on sauvegarde sur ${CHEMIN_TB_CIBLE}_sauve_${LADATE} </font><br>"
  					mv $CHEMIN_TB_CIBLE ${CHEMIN_TB_CIBLE}_sauve_${LADATE}
 				fi
 notifier
 				if [ "$PROFIL_DEL"  "ok" -o "$OPTION"  "force_move" ]; then
-						echo "Le profil TB de <A HREF="/annu/people.php?uid=$user">$user</A> est régénéré avec les paramètres $MAIL <br>"
+						echo "Le profil TB de <A HREF="/annu/people.php?uid=$user">$user</A> est rÃ©gÃ©nÃ©rÃ© avec les paramÃ¨tres $MAIL <br>"
 						#echo ""
 
 						cp -a $CHEMIN_TB_SOURCE $CHEMIN_TB_CIBLE
@@ -284,7 +287,7 @@ notifier
 						chown -R $user:admins $CHEMIN_TB_CIBLE > /dev/null 2>&1
 						chmod -R 700 $CHEMIN_TB_CIBLE > /dev/null 2>&1
 				else
-					echo "Le profil a été conservé en l'état.<br>"
+					echo "Le profil a Ã©tÃ© conservÃ© en l'Ã©tat.<br>"
 				fi
 		echo "<br>"
 		fi
@@ -302,7 +305,7 @@ echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://
 </head>
 <body>
 <h1 align=\"center\">Traitement des profils</h1>
-<p align=\"center\">Traitement terminé!</p>
+<p align=\"center\">Traitement terminÃ© !</p>
 </body>
 </html>" > $chemin_html/recopie_profils_thunderbird.html
 #============================================

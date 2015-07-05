@@ -2,7 +2,7 @@
 
 ##$Id$##
 
-##### Supprime les répertoires Classes#####
+##### Supprime les rÃ©pertoires Classes#####
 
 if [ "$1" != "" ]
 then

@@ -1,6 +1,8 @@
 #!/bin/bash
 #
+
 ## $Id$ ##
+
 #
 # script permettant de ventiler le proxy pour firefox selon le choix de l'interface web
 # franck molle 10/2011
@@ -9,9 +11,9 @@
 if [ "$1" = "-h" -o "$1" = "--help" ]
 then
 	echo "Script permettant de ventiler les profils firefox en tenant compte de la presence d'un slis ou non"
-	echo "Si l'ip du slis est dÈclarÈe dans l'interface, le proxy sera dÈclarÈ dans le prefs.js des clients"
-	echo "Usage : sauve_book en argument permet de sauvegarder les bookmarks d'un profil dÈja existant"
-	echo "Sans argument le profil est remplacÈ mais une sauvegarde de l'ancien est effectuÈe"
+	echo "Si l'ip du slis est d√©clar√©e dans l'interface, le proxy sera d√©clar√© dans le prefs.js des clients"
+	echo "Usage : sauve_book en argument permet de sauvegarder les bookmarks d'un profil d√©j√† existant"
+	echo "Sans argument le profil est remplac√© mais une sauvegarde de l'ancien est effectu√©e"
 exit
 fi
 chemin_html="/var/www/se3/tmp"
@@ -36,11 +38,11 @@ if [ "$1" = "refparams" ]; then
 	exit 0
 fi
 
-#Seuls les homes deja existants seront complÈtÈs
+#Seuls les homes deja existants seront compl√©t√©s
 CHEMIN_FF_SOURCE="/etc/skel/user/profil/appdata/Mozilla"
 
 #======================================================
-# Nombre de dossiers ‡ traiter:
+# Nombre de dossiers √† traiter:
 nbdossiers=$(ls /home | grep -v netlogon | grep -v templates  | grep -v profiles | wc -l)
 nbdossiers=$(($nbdossiers-2))
 compteur=1
@@ -56,7 +58,7 @@ echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://
 </head>
 <body>
 <h1 align=\"center\">Traitement des profils</h1>
-<p align=\"center\">Le traitement va dÈmarrer...<br></p>
+<p align=\"center\">Le traitement va d√©marrer...<br></p>
 </body>
 </html>" > $chemin_html/recopie_profils_firefox.html
 chmod 755 $chemin_html/recopie_profils_firefox.html
@@ -131,7 +133,7 @@ do
 </body>
 </html>" > $chemin_html/recopie_profils_firefox.html
 	#===================================================
-	echo "DÈploiement du profil mozilla de $user"
+	echo "D√©ploiement du profil mozilla de $user"
 	rm -f "$PREF_JS_USER"
 	cp "$PREF_JS_BASE" "$PREF_JS_USER"
 	if [ ! -z "$HOME_PAGE" ]; then
@@ -152,7 +154,7 @@ echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://
 </head>
 <body>
 <h1 align=\"center\">Traitement des profils</h1>
-<p align=\"center\">Traitement terminÈ !</p>
+<p align=\"center\">Traitement termin√© !</p>
 </body>
 </html>" > $chemin_html/recopie_profils_firefox.html
 #============================================

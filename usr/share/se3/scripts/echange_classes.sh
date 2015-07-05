@@ -1,6 +1,10 @@
 #!/bin/bash
 
-#Nom du dossier d'échange:
+
+## $Id$ ##
+
+
+#Nom du dossier d'Ã©change:
 echange="_echange"
 statut=""
 
@@ -18,7 +22,7 @@ if [ ! -z "$1" -a -e "/var/se3/Classes/$1" ]; then
 	
 	if [ "$2" = "etat" ]; then
 		if [ ! -e "/var/se3/Classes/$1/$echange" ]; then
-			statut="Non encore initialisé"
+			statut="Non encore initialisÃ©"
 		else
 			if getfacl /var/se3/Classes/$1/$echange 2> /dev/null | grep "^group:$GRP_CLASSE:rwx$" > /dev/null; then
 				statut="actif"
@@ -37,15 +41,15 @@ if [ ! -z "$1" -a -e "/var/se3/Classes/$1" ]; then
 				fi
 
 				#Tous les droits pour tous les Profs
-				#(certains ne voient pas nécessairement le dossier var/se3/Classes/$1)
-				#c'est pourquoi je ne me suis pas embêté à trier quels profs...
+				#(certains ne voient pas nÃ©cessairement le dossier var/se3/Classes/$1)
+				#c'est pourquoi je ne me suis pas embÃ©tÃ© Ã  trier quels profs...
 
 				#setfacl -R -m g:Profs:rwx /var/se3/Classes/$1/$echange
 				#setfacl -R -m d:g:Profs:rwx /var/se3/Classes/$1/$echange
-				#Cela serait inutile... droits hérités de /var/se3/Classes/$1
-				#Quoique... ça ne passe pas par Samba.
+				#Cela serait inutile... droits hÃ©ritÃ©s de /var/se3/Classes/$1
+				#Quoique... Ã§a ne passe pas par Samba.
 
-				#Levée des droits pour tous les membres de la classe $1
+				#LevÃ©e des droits pour tous les membres de la classe $1
 				setfacl -R -x g:$GRP_CLASSE /var/se3/Classes/$1/$echange
 				setfacl -R -x d:g:$GRP_CLASSE /var/se3/Classes/$1/$echange
 				
@@ -66,7 +70,7 @@ if [ ! -z "$1" -a -e "/var/se3/Classes/$1" ]; then
 
 				acces_partage_public=$(echo "SELECT value FROM params WHERE name='autoriser_partage_public';"|mysql -N -h $dbhost -u $dbuser -p$dbpass $dbname)
 				if [ "$acces_partage_public" != "n" ]; then
-					#Interdiction d'accès à public:
+					#Interdiction d'accÃ©s Ã  public:
 					setfacl -m g:$GRP_CLASSE:r /var/se3/Docs/public
 				fi
 			;;
@@ -104,7 +108,7 @@ if [ ! -z "$1" -a -e "/var/se3/Classes/$1" ]; then
 
 				acces_partage_public=$(echo "SELECT value FROM params WHERE name='autoriser_partage_public';"|mysql -N -h $dbhost -u $dbuser -p$dbpass $dbname)
 				if [ "$acces_partage_public" != "n" ]; then
-					#Levée de l'interdiction d'accès à public:
+					#LevÃ©e de l'interdiction d'accÃ©s Ã  public:
 					#setfacl -m g:$1:rwx /var/se3/Docs/public
 					#echo "setfacl -x g:$GRP_CLASSE /var/se3/Docs/public"
 					setfacl -x g:$GRP_CLASSE /var/se3/Docs/public
@@ -114,10 +118,10 @@ if [ ! -z "$1" -a -e "/var/se3/Classes/$1" ]; then
 	fi
 else
 	#ERREUR: Pour le moment, je ne fais qu'une et une seule classe.
-	echo "USAGE: Passer en paramètre \$1 le nom du dossier de classe"
-	echo "       (correctement orthographié;o)."
-	echo "       Et en paramètre \$2 'actif' pour autoriser l'accès à $echange"
-	echo "       et n'importe quoi d'autre pour désactiver."
+	echo "USAGE: Passer en paramÃ¨tre \$1 le nom du dossier de classe"
+	echo "       (correctement orthographiÃ©;o)."
+	echo "       Et en paramÃ¨tre \$2 'actif' pour autoriser l'accÃ©s Ã  $echange"
+	echo "       et n'importe quoi d'autre pour dÃ©sactiver."
 fi
 
 echo $statut

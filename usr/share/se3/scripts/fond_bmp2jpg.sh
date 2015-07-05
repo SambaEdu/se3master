@@ -2,23 +2,27 @@
 #
 ##### Script de conversion BMP2PNG pour affichage dans interface web #####
 #
-# Auteur: Stéphane Boireau (A.S. - Relais de Bernay/Pont-Audemer (27))
+# Auteur: StÃ©phane Boireau (A.S. - Relais de Bernay/Pont-Audemer (27))
 #
+
+
 ## $Id$ ##
+
+
 #
 # /usr/share/se3/sbin/fond_bmp2jpg.sh
-# Dernière modification: 23/05/2006
+# DerniÃ¨re modification: 23/05/2006
 
 # Dossier de stockage des fonds communs:
 dossier_base_fond="/var/se3/Docs/media/fonds_ecran"
 
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
-	echo "Script permettant de convertir un fond d'écran BMP en PNG pour permettre"
-	echo "un aperçu dans l'interface web..."
-	echo "Le fond d'écran BMP doit se trouver dans $dossier_base_fond"
+	echo "Script permettant de convertir un fond d'Ã©cran BMP en PNG pour permettre"
+	echo "un aperÃ§u dans l'interface web..."
+	echo "Le fond d'Ã©cran BMP doit se trouver dans $dossier_base_fond"
 	echo "Il doit se nommer \$groupe.bmp"
 	echo ""
-	echo "Usage : Passer en paramètre le nom du groupe."
+	echo "Usage : Passer en paramÃ¨tre le nom du groupe."
 	exit
 fi	
 
@@ -46,29 +50,29 @@ if [ -z "$1" -o ! -e "/usr/bin/convert" ]; then
 	echo -e "$COLERREUR"
 	echo "ERREUR:"
 	echo -e "$COLTXT\c"
-	echo "        Ce script sert à convertir des images BMP utilisées pour des fonds"
-	echo "        d'écran en images PNG pour permettre leur affichage dans l'interface"
+	echo "        Ce script sert Ã  convertir des images BMP utilisÃ©es pour des fonds"
+	echo "        d'Ã©cran en images PNG pour permettre leur affichage dans l'interface"
 	echo "        web."
-	echo "        Pour fonctionner, ce script nécessite l'installation d'ImageMagick."
-	echo "        Usage: Passer en paramètre le nom du groupe."
+	echo "        Pour fonctionner, ce script nÃ©cessite l'installation d'ImageMagick."
+	echo "        Usage: Passer en paramÃ¨tre le nom du groupe."
 	exit
 else
 
-	# Création du groupe overfill s'il n'existe pas.
+	# CrÃ©ation du groupe overfill s'il n'existe pas.
 	if [ "$1" = "overfill" ]; then
 		if [ -z "$(ldapsearch -xLLL cn=overfill)" ]; then
-			/usr/share/se3/sbin/groupAdd.pl 1 overfill "Personnes dont le home dépasse un quota..."
+			/usr/share/se3/sbin/groupAdd.pl 1 overfill "Personnes dont le home dÃ©passe un quota..."
 		fi
 	fi
 
-	# Tests de la validité de la demande de conversion:
+	# Tests de la validitÃ© de la demande de conversion:
 	test1=$(ldapsearch -xLLL uid=$1)
 	test2=$(ldapsearch -xLLL cn=$1)
 	if [ -z "$test1" -a -z "$test2" ]; then
 		echo -e "$COLERREUR"
 		echo "ERREUR:"
 		echo -e "$COLTXT\c"
-		echo "        L'utilisateur/groupe proposé n'existe pas dans l'annuaire."
+		echo "        L'utilisateur/groupe proposÃ© n'existe pas dans l'annuaire."
 		exit
 	fi
 
@@ -76,7 +80,7 @@ else
 		echo -e "$COLERREUR"
 		echo "ERREUR:"
 		echo -e "$COLTXT\c"
-		echo "        L'image proposée n'existe pas dans $dossier_base_fond"
+		echo "        L'image proposÃ©e n'existe pas dans $dossier_base_fond"
 		exit
 	fi
 
@@ -85,7 +89,7 @@ else
 		echo -e "$COLERREUR"
 		echo "ERREUR:"
 		echo -e "$COLTXT\c"
-		echo "        L'image proposée n'est pas une image BMP."
+		echo "        L'image proposÃ©e n'est pas une image BMP."
 		exit
 	fi
 

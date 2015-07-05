@@ -1,12 +1,19 @@
 #!/bin/bash
+
+
+## $Id$ ##
+
+
 # faire un alias du template et positionner les droits dessus
 # sandrine dangreville 12 mars 2005
+
+
 if [ $# = 3 ]; then
-echo "Démarrage du script"
+echo "DÃ©marrage du script"
 else
 echo "utilisation delegate_parc.sh template utilisateur mode 
-      mode = delegate permet de deleguer le gestion du template à l'utilisateur sélectionné 
-      mode = nodelegate permet de retirer cette delegation à l'utilisateur sélectionné 
+      mode = delegate permet de deleguer le gestion du template Ã  l'utilisateur sÃ©lectionnÃ© 
+      mode = nodelegate permet de retirer cette delegation Ã  l'utilisateur sÃ©lectionnÃ© 
       exemple : delegate_parc.sh base admin delegate"
 	exit
 fi 
