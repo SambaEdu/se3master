@@ -6,7 +6,7 @@
 #
 ## $Id$ ##
 #
-# Derniere modif: 22/09/2010
+
 
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
 	echo "Script permettant de remettre des droits corrects sur /home et /var/se3"
@@ -21,7 +21,7 @@ if [ "$1" = "--help" -o "$1" = "-h" ]; then
 	exit
 fi
 
-# Dossier pouvant contenir les ACL de /var/se3
+# Dossier pouvant contenir les ACL de /var/se3
 dossier_svg="/var/se3/save"
 
 HTML=0
@@ -162,8 +162,8 @@ do
 			echo -e "$COLCMD\c "
 			chown $A:admins /home/$A -R
 			chmod 700 /home/$A -R
-			# Pour admin, les raccourcis actuellement presents dans le home ne seront pas supprimes (c'est embêtant).
-			# Je prefere tout de même qu'il fasse le menage lui-même.
+			# Pour admin, les raccourcis actuellement presents dans le home ne seront pas supprimes (c'est embï¿½tant).
+			# Je prefere tout de mÃªme qu'il fasse le menage lui-mÃªme.
 		fi
 		
 		if [ ! -z "$(echo "$A" | grep -e "_Trash_[0-9_]*")" ]; then
@@ -304,7 +304,7 @@ else
 	echo "=============================="
     [ "$HTML" == "0" ] && (
 	echo -e "$COLTXT"
-	echo "Dans un premier temps, les dossiers de Classes proprement dites vont être"
+	echo "Dans un premier temps, les dossiers de Classes proprement dites vont Ãªtre"
 	echo "traitees."
 	echo "Ensuite, il vous sera propose de retablir aussi les droits et ACL pour les"
 	echo "dossiers de Classe_grp."

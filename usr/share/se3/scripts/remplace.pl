@@ -1,7 +1,12 @@
 #!/usr/bin/perl 
+
+
+## $Id$ ##
+
+
 ## script d'attribution des groupes LDAP de l'absent au remplacant 
 ## pschwarz Mai 2005 
-# Lancé par remplacant.php
+# LancÃ© par remplacant.php
 # Usage : perl remplace.pl uid_de_l_absent uid_du_remplacant
 
 use Net::LDAP;
@@ -48,7 +53,7 @@ if (!($RPL->entries)[0]) {print "<BR>Le professeur $urlremplacant n'existe pas.<
 #foreach $parcoursABS ($ABS->entries) {$nomabsent = $parcoursABS->dn;}
 #foreach $parcoursRPL ($RPL->entries) {$nomremplacant = $parcoursRPL->dn;}
 if ( $stop)
-{if ($absent=~m/$remplacant/) {print "<BR>Le professeur $urlremplacant se remplace lui-même; Vous appliquez les décisions du ministre. C'est bien, poursuivez.<BR>"; $stop=0;}}
+{if ($absent=~m/$remplacant/) {print "<BR>Le professeur $urlremplacant se remplace lui-mÃªme; Vous appliquez les dÃ©cisions du ministre. C'est bien, poursuivez.<BR>"; $stop=0;}}
 
 if ( $stop)		    
 {$grpesABS = $ldap->search(
@@ -57,7 +62,7 @@ if ( $stop)
 		     filter   => "memberuid=$absent"
 		    );
 $nbre=$grpesABS->count();
-if ($nbre < 2) {print "<BR>Le professeur <B>$urlabsent</B> n'appartient à aucun groupe secondaire.<BR>";$stop=0;}}
+if ($nbre < 2) {print "<BR>Le professeur <B>$urlabsent</B> n'appartient Ã  aucun groupe secondaire.<BR>";$stop=0;}}
 
 if ( $stop)		    
 {$grpesRPL = $ldap->search(
@@ -65,7 +70,7 @@ if ( $stop)
 		     scope    => 'one',
 		     filter   => "memberuid=$remplacant"
 		    );
-#On créee un hachage contenant tous les groupes de l'absent??ou du remplacant???
+#On crÃ©e un hachage contenant tous les groupes de l'absent??ou du remplacant???
 %RPL=();
 foreach $people ($grpesRPL->entries) {
   $dnRPL  = $people->dn;

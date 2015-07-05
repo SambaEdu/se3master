@@ -1,6 +1,8 @@
 #!/bin/bash
 #
+
 ## $Id$ ##
+
 #
 ##### Permet de faire la mise à jour de se3 et modules #####
 

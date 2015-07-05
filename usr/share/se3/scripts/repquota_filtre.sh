@@ -1,9 +1,12 @@
 #!/bin/bash
+
+
 # AUTEUR: Lacroix Olivier
-# version 1.0
 # Fichier de filtrage du resultat de quota (initialement de repquota) pour gagner en rapidite: fortement inspire du script de Franck Molle quota.sh
 #
+
 ## $Id$ ##
+
 #
 ##### Affiche les quotas effectivement fixes sur une partition donnee pour toute ou partie des users #####
 #

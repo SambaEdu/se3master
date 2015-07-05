@@ -1,17 +1,17 @@
 #!/bin/bash
 
 # $Id$
-# Script destiné à effectuer une sauvegarde de l'annuaire LDAP avant de procéder à un nouvel import
+# Script destinÃ© Ã  effectuer une sauvegarde de l'annuaire LDAP avant de procÃ©der Ã  un nouvel import
 # Auteur: Stephane Boireau (27)
-# Dernière modification: 08/03/2007
+# DerniÃ¨re modification: 08/03/2007
 
 dossier_svg="/var/se3/save/sauvegarde_ldap_avant_import"
 #dossier_svg="/var/remote_adm/sauvegarde_ldap_avant_import"
 
 if [ "$1" = "--help" -o "$1" = "-h" ]; then
-        echo "Script destiné à effectuer une sauvegarde de l'annuaire LDAP vers"
+        echo "Script destinÃ© Ã  effectuer une sauvegarde de l'annuaire LDAP vers"
 		echo "   $dossier_svg"
-		echo "avant de procéder à un nouvel import."
+		echo "avant de procÃ©der Ã  un nouvel import."
         echo ""
         echo "Usage : pas d'option"
         exit
@@ -26,8 +26,8 @@ PASSDN=$(cat /etc/ldap.secret)
 
 #source /etc/ssmtp/ssmtp.conf
 
-echo "Erreur lors de la sauvegarde de précaution effectuée avant import.
+echo "Erreur lors de la sauvegarde de prÃ©caution effectuÃ©e avant import.
 Le $date" > /tmp/erreur_svg_prealable_ldap_${date}.txt
-# Le fichier d erreur est généré quoi qu il arrive, mais il n est expédié qu en cas de problème de sauvegarde
+# Le fichier d erreur est gÃ©nÃ©rÃ© quoi qu il arrive, mais il n est expÃ©diÃ© qu en cas de problÃ¨me de sauvegarde
 /usr/bin/ldapsearch -xLLL -D $ROOTDN -w $PASSDN > $dossier_svg/ldap_${date}.ldif || mail root -s "Erreur sauvegarde LDAP" < /tmp/erreur_svg_prealable_ldap_${date}.txt
 rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
