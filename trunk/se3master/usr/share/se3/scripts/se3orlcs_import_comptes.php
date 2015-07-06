@@ -13,27 +13,27 @@
 	//if($argc < 15 || in_array($argv[1], array('--help', '-help', '-h', '-?'))){
 	if($argc < 17 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
 	// ===========================================================
-		$chaine="USAGE: Vous devez passer en paramètres (dans l'ordre):\n";
+		$chaine="USAGE: Vous devez passer en paramÃ©tres (dans l'ordre):\n";
 		$chaine.="       . Le type du fichier 'csv' ou 'xml';\n";
-		$chaine.="       . le chemin du fichier élèves;\n";
+		$chaine.="       . le chemin du fichier Ã©lÃ¨ves;\n";
 		$chaine.="       . le chemin du fichier XML de STS EDT;";
-		$chaine.="       . le préfixe (CLG_, LYC_, LP_, LEGT_) si vous en avez besoin;\n";
+		$chaine.="       . le prÃ©fixe (CLG_, LYC_, LP_, LEGT_) si vous en avez besoin;\n";
 		$chaine.="       . 'y' ou 'n' selon que l'import est annuel ou non;\n";
 		$chaine.="       . 'y' ou 'n' selon que vous souhaitez seulement une simulation ou non;\n";
-		$chaine.="       . le suffixe pour le fichier HTML result.SUFFIXE.html généré;\n";
-		$chaine.="       . une chaine aléatoire pour le sous-dossier de stockage des CSV;\n";
-		$chaine.="       . 'y' ou 'n' selon que vous souhaitez créer les CSV ou non.\n";
-		$chaine.="       . 'y' ou 'n' selon que vous souhaitez chronométrer les opérations ou non.\n";
+		$chaine.="       . le suffixe pour le fichier HTML result.SUFFIXE.html gÃ©nÃ©rÃ©;\n";
+		$chaine.="       . une chaine alÃ©atoire pour le sous-dossier de stockage des CSV;\n";
+		$chaine.="       . 'y' ou 'n' selon que vous souhaitez crÃ©er les CSV ou non.\n";
+		$chaine.="       . 'y' ou 'n' selon que vous souhaitez chronomÃ©trer les opÃ©rations ou non.\n";
 
 		// ===========================================================
 		// AJOUTS: 20070914 boireaus
-		$chaine.="       . 'y' ou 'n' selon que vous souhaitez créer des Equipes vides ou non.\n";
-		$chaine.="                    (avec 'n' elles sont créées et peuplées)\n";
-		$chaine.="       . 'y' ou 'n' selon que vous souhaitez créer Cours ou non.\n";
-		$chaine.="       . 'y' ou 'n' selon que vous souhaitez créer Matières ou non.\n";
+		$chaine.="       . 'y' ou 'n' selon que vous souhaitez crÃ©er des Equipes vides ou non.\n";
+		$chaine.="                    (avec 'n' elles sont crÃ©Ã©es et peuplÃ©es)\n";
+		$chaine.="       . 'y' ou 'n' selon que vous souhaitez crÃ©er Cours ou non.\n";
+		$chaine.="       . 'y' ou 'n' selon que vous souhaitez crÃ©er MatiÃ¨res ou non.\n";
 		// ===========================================================
 		$chaine.="       . 'y' ou 'n' selon que vous souhaitez corriger ou non les attributs\n";
-		$chaine.="                    gecos, cn, sn et givenName si des différences sont trouvées.\n";
+		$chaine.="                    gecos, cn, sn et givenName si des diffÃ©rences sont trouvÃ©es.\n";
 		$chaine.="       . 'y' ou 'n' selon qu'il faut utiliser ou non un fichier F_UID.txt\n";
 		$chaine.="       . 'y' ou 'n' selon qu'il faut alimenter un groupe Professeurs Principaux\n";
 		// ===========================================================
@@ -51,12 +51,12 @@
 			mail("$adressedestination", "$sujet", "$message", "$entete");
 		}
 		else {
-			// Récupérer les adresses,... dans le /etc/ssmtp/ssmtp.conf
+			// RÃ©cupÃ©rer les adresses,... dans le /etc/ssmtp/ssmtp.conf
 			unset($tabssmtp);
 			#require ("/var/www/se3/import_sconet/crob_ldap_functions.php");
 			require ("/var/www/se3/includes/crob_ldap_functions.php");
 			$tabssmtp=lireSSMTP();
-			// Contrôler les champs affectés...
+			// ContrÃ´ler les champs affectÃ©s...
 			if(isset($tabssmtp["root"])) {
 				$adressedestination=$tabssmtp["root"];
 				$sujet="ERREUR: import_comptes.php ";
@@ -85,7 +85,7 @@
 		textdomain ('se3-annu');
 	}
 
-	// Récupération des variables
+	// RÃ©cupÃ©ration des variables
 	$type_fichier_eleves=$argv[1];
 	$eleves_file=$argv[2];
 	$sts_xml_file=$argv[3];
