@@ -172,6 +172,11 @@ do
 				# le fichier webdav del'utilisateur existe il faut le sauvegarder
 				echo "recup conf pour $uid"
 				
+				echo "mise en place des droits www-data sur le home de $uid"
+				setfacl -m u:www-data:x /home/$uid
+				setfacl -R -m u:www-data:rx /home/$uid/Docs
+				setfacl -R -m d:u:www-data:rx /home/$uid/Docs
+				
 				mv  $davdir_sav/$uid.conf $davdir/$uid.conf
 			  else
 				# on cree la conf
@@ -218,7 +223,13 @@ case "$PHASE" in
         ;;   
         
       "create")
-        create_user $2
+		
+		if [ -e /home/$2 ]; then
+			create_user $2
+        else
+			echo "/home/$2 inexistant"
+			exit 1
+        fi
         ;;   
           
         
