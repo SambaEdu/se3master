@@ -85,7 +85,7 @@ echo -e "$COLCMD\c"
 
 . /etc/se3/config_d.cache.sh 
 . /etc/se3/config_o.cache.sh 
-
+. /etc/se3/config_m.cache.sh
 
 #
 # Arret des services
@@ -368,12 +368,14 @@ mysql -u$dbuser -p$dbpass $dbname < /tmp/maj_chgt_ip_se3.sql
 #
 # Redémarrage de l'interface réseau
 #
+
+[ -z "$ecard" ] && ecard="eth0"
 echo -e "$COLTXT"
 echo "Redémarrage de l'interface réseau..."
 echo -e "$COLCMD\c"
 /etc/init.d/networking stop
 /etc/init.d/networking start
-
+ifup $ecard
 
 #
 # Redémarrage des services
@@ -484,6 +486,7 @@ echo \"\" >> /tmp/retablissement_chgt_ip_se3.ldif
 
 /etc/init.d/networking stop
 /etc/init.d/networking start
+ifup $ecard
 
 /etc/init.d/slapd start
 /etc/init.d/samba start
