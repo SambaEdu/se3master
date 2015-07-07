@@ -178,11 +178,11 @@ done
 # Nettoyage:
 rm -fr /tmp/raccourcis_skel_user
 
-
-
-
-
-
+if [ -e "/etc/apache2/sites-enabled/webdav" ]; then
+	echo "Remise en place de la structure Webdav"	
+	/usr/share/se3/sbin/install-webdav.sh install
+	 
+fi
 
 echo -e "$COLPARTIE"
 echo "============================="
