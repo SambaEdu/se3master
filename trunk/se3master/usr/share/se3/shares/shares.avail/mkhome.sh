@@ -96,7 +96,7 @@ if [ ! -d "/home/$user" -o ! -d "/home/$user/profil" ]; then
 
 	
 	if [ -e "/etc/apache2/sites-enabled/webdav" ]; then
-	 setfacl -R -m u:www-data:rx,d:u:www-data:rx /home/$user/Docs
+		/usr/share/se3/sbin/install-webdav.sh create $user
 	fi
 	
 
