@@ -86,7 +86,7 @@ function createRandomPassword() {
 <html>
 <head>
 	<title>Lecture du XML Emploi du temps de Sts-web et g&#233;n&#233;ration de CSV</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="author" content="Stephane Boireau, A.S. RUE de Bernay/Pont-Audemer" />
 	<!--link type="text/css" rel="stylesheet" href="../styles.css" /-->
 	<link type="text/css" rel="stylesheet" href="../style.css" />
@@ -573,7 +573,7 @@ function createRandomPassword() {
 										unset($tabtmp);
 										$tabtmp=explode(">",preg_replace("/</",">",$ligne[$cpt]));
 										//$matiere[$i]["libelle_court"]=$tabtmp[2];
-										$matiere[$i]["libelle_court"]=preg_replace("/[^a-zA-Z0-9������������������������������&_. -]/","",html_entity_decode($tabtmp[2]));
+										$matiere[$i]["libelle_court"]=preg_replace("/[^a-zA-Z0-9ÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ -]/","",html_entity_decode($tabtmp[2]));
 									}
 									if(strstr($ligne[$cpt],"<LIBELLE_LONG>")){
 										unset($tabtmp);
@@ -795,7 +795,7 @@ function createRandomPassword() {
 										unset($tabtmp);
 										$tabtmp=explode(">",preg_replace("/</",">",$ligne[$cpt]));
 										//$prof[$i]["prenom"]=$tabtmp[2];
-										$prof[$i]["prenom"]=preg_replace("/[^a-zA-Z0-9������������������������������_. -]/","",$tabtmp[2]);
+										$prof[$i]["prenom"]=preg_replace("/[^a-zA-Z0-9ÀÄÂÉÈÊËÎÏÔÖÙÛÜ½¼Ççàäâéèêëîïôöùûü_ -]/","",$tabtmp[2]);
 									}
 									if(strstr($ligne[$cpt],"<DATE_NAISSANCE>")){
 										unset($tabtmp);
