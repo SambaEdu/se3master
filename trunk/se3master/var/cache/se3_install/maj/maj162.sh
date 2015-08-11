@@ -18,8 +18,15 @@ cp  /etc/sudoers.se3 /etc/sudoers
 chmod 440 /etc/sudoers
 service sudo restart
 
+echo "
+- Remise en place conf mysql par defaut"
+cp /etc/mysql/my.cnf-se3 /etc/mysql/my.cnf
+
+
 echo "Mise a jour 162 :
-- Remise en place conf sudo par defaut">> $HISTORIQUE_MAJ
+- Remise en place conf sudo par defaut
+- Remise en place conf mysql par defaut
+">> $HISTORIQUE_MAJ
  
 
 exit 0		
