@@ -233,7 +233,10 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 
       	if (count($people_exist)) {
         	echo "<div class='error_msg'>";
-                echo gettext("Echec de cr&#233;ation : L'utilisateur")." <font color=\"black\"> $prenom $nom</font>".gettext(" est d&#233;ja pr&#233;sent dans l'annuaire.");
+                echo gettext("Echec de cr&#233;ation : L'utilisateur")." <font color=\"black\"> $prenom $nom</font>".gettext(" est d&#233;ja pr&#233;sent dans l'annuaire&nbsp;:");
+                for($loop=0;$loop<count($people_exist);$loop++) {
+                	echo " <a href='people.php?uid=".$people_exist[$loop]["uid"]."' title=\"Voir le compte.\" target='_blank'>".$people_exist[$loop]["uid"]."</a>";
+                }
               	echo "</div><BR>\n";
       	} else {
 		switch ($pwdPolicy) {

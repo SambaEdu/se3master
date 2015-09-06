@@ -107,7 +107,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
       		$groups=search_groups("(cn=$cn)");
       		
 		if (count($groups)) {
-		        echo "<div class='error_msg'>".gettext("Attention le groupe")." <font color='#0080ff'> $cn</font>".gettext(" est d&#233;ja pr&#233;sent dans la base, veuillez choisir un autre nom !")."</div><BR>\n";
+		        echo "<div class='error_msg'>".gettext("Attention le groupe")." <font color='#0080ff'> <a href='group.php?filter=$cn' style='color:#0080ff' target='_blank'>$cn</a></font>".gettext(" est d&#233;ja pr&#233;sent dans la base, veuillez choisir un autre nom !")."</div><BR>\n";
       		} else {
         		// Ajout du groupe
         		$description = stripslashes($description);
@@ -117,7 +117,13 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 			$groupType="1";
         		exec ("/usr/share/se3/sbin/groupAdd.pl $groupType $cn \"$description\"",$AllOutPut,$ReturnValue);
         		if ($ReturnValue == "0") {
-          			echo "<div class=error_msg>".gettext("Le groupe")." <a href='add_list_users_group.php?cn=$cn'> $cn </a> ".gettext(" a &#233;t&#233; ajout&#233; avec succ&#232;s.")."</div><br>\n";
+				if ($categorie=="Classe_") {
+					echo "<div class=error_msg>".gettext("Le groupe")." <a href='add_list_users_group.php?cn=$cn' title=\"Ajouter des membres au groupe\"> $cn </a> ".gettext(" a &#233;t&#233; ajout&#233; avec succ&#232;s.")."</div><br>\n";
+				}
+				else {
+					echo "<div class=error_msg>".gettext("Le groupe")." <a href='aj_ssgroup.php?cn=$cn' title=\"Ajouter des membres au groupe\"> $cn </a> ".gettext(" a &#233;t&#233; ajout&#233; avec succ&#232;s.")."</div><br>\n";
+				}
+
         		} else {
           			echo "<div class=error_msg>".gettext("Echec, le groupe")." <font color='#0080ff'>$cn</font>".gettext(" n'a pas &#233;t&#233; cr&#233;&#233; !")."\n";
           			if ($ReturnValue) echo "(type d'erreur : $ReturnValue),&nbsp;";

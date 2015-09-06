@@ -39,8 +39,11 @@ $_SESSION["pageaide"]="Annuaire";
 
 echo "<h1>".gettext("Annuaire")."</h1>";
 
+//debug_var();
+
 if (is_admin("Annu_is_admin",$login)=="Y") {
 	$cn=$_POST["cn"];
+	//$cn=isset($_POST["cn"]) ? $_POST["cn"] : (isset($_GET["cn"]) ? $_GET["cn"] : "");
 	$description=$_POST["description"];
 	$action=$_POST["action"];
 	$classe_gr=$_POST["classe_gr"];
@@ -82,25 +85,33 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
     			exit();
 		}
 	
-		// Verification de l'existance du groupe    
+		// Verification de l'existence du groupe    
 		$groups=search_groups("(cn=$cn)");
 		if (count($groups)) {
-			echo "<div class='error_msg'>".gettext("Attention le groupe <font color='#0080ff'>$cn</font> est d&#233;ja pr&#233;sent dans la base, veuillez choisir un autre nom !")."</div><BR>\n";
+			echo "<div class='error_msg'>".gettext("Attention le groupe <font color='#0080ff'><a href='group.php?filter=$cn' style='color:#0080ff' target='_blank'>$cn</a></font> est d&#233;ja pr&#233;sent dans la base, veuillez choisir un autre nom !")."</div><BR>\n";
 			exit();
 		} else {
 			// Ajout du groupe
 			$intitule = enleveaccents($intitule);
 			exec ("/usr/share/se3/sbin/groupAdd.pl \"1\" $cn \"$description\"",$AllOutPut,$ReturnValue);
 			if ($ReturnValue == "0") {
-				echo "<div class=error_msg>".gettext("Le groupe <font color='#0080ff'>$cn</font> a &#233;t&#233; ajout&#233; avec succ&#232;s.")."</div><br>\n";
-			} else {echo "<div class=error_msg>".gettext("Echec, le groupe <font color='#0080ff'>$cn</font> n'a pas &#233;t&#233; cr&#233;&#233; !")."\n";
+				echo "<div class=error_msg>".gettext("Le groupe <font color='#0080ff'><a href='group.php?filter=$cn' style='color:#0080ff' target='_blank'>$cn</a></font> a &#233;t&#233; ajout&#233; avec succ&#232;s.")."</div><br>\n";
+			} else {echo "<div class=error_msg>".gettext("Echec, le groupe <font color='#0080ff'><a href='group.php?filter=$cn' style='color:#0080ff' target='_blank'>$cn</a></font> n'a pas &#233;t&#233; cr&#233;&#233; !")."\n";
 				if ($ReturnValue) echo "(type d'erreur : $ReturnValue),&nbsp;";
 echo "&nbsp;".gettext("Veuillez contacter</div> <A HREF='mailto:$MelAdminLCS?subject=PB creation groupe'>l'administrateur du syst&#232;me</A>")."<BR>\n";
 				exit();
 			}
 		}
 	}
-	echo "<B>".gettext("S&#233;lectionner les personnes &#224; mettre dans le groupe ci-dessus :")."</B><BR>\n";
+
+	if((!isset($cn))||($cn=="")) {
+		echo "<p style='color:red'>Le groupe n'est pas choisi&nbsp;???</p>";
+		echo "<p><a href='annu.php'>Retour à l'accueil Annuaire</a></p>";
+		include ("pdp.inc.php");
+		die();
+	}
+
+	echo "<B>".gettext("S&#233;lectionner les personnes &#224; mettre dans le groupe <a href='group.php?filter=$cn' target='_blank'>$cn</a> :")."</B><BR>\n";
 	echo "<form action=\"constitutiongroupe.php\" method=\"post\">\n";
 	echo "<table border=\"0\" cellspacing=\"10\">\n";    
 	echo "<TR>\n";
