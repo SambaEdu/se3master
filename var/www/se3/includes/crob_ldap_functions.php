@@ -282,7 +282,7 @@ function traite_utf8($chaine) {
     
         // DESACTIVE POUR PASSAGE UTF-8 Voir solution plus propre
 	// $retour=recode_string("utf8..iso-8859-15", $chaine);
-	return $retour;
+	return $chaine;
 }
 
 //================================================
