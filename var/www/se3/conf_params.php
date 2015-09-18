@@ -451,16 +451,22 @@ echo gettext("Configuration de l'annuaire")." ($ldap_base_dn) ";
 echo "</TD></TR>\n";
 
 
-// YALA
-echo "<TR><TD>".gettext("Droit d'&#233;criture dans l'annuaire")." (yala)</TD><TD align=\"center\">";
-if ($yala_bind=="0") {
-	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Cliquer ici afin de pouvoir activer la possibilit&#233; d\'&#233;crire directement dans l\'annuaire.<br>Cette possibilit&#233; est &#224; utiliser avec prudence.<br>Normalement, vous ne devriez pas &#224; avoir besoin d\'&#233;crire directement dans l\'annuaire.')")."\">";
-	echo "<a href=conf_params.php?action=change&amp;varb=yala_bind&amp;valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
-	echo "</u>";
+// PHPLDAPADMIN
+$se3_pam=exec("dpkg -l|grep se3-pla|wc -l");
+
+echo "<TR><TD>".gettext("Droit d'&#233;criture dans l'annuaire")." (phpldapadmin)</TD><TD align=\"center\">";
+if ($se3_pam) {
+	if ($yala_bind=="0") {
+		echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Cliquer ici afin de pouvoir activer la possibilit&#233; d\'&#233;crire directement dans l\'annuaire.<br>Cette possibilit&#233; est &#224; utiliser avec prudence.<br>Normalement, vous ne devriez pas &#224; avoir besoin d\'&#233;crire directement dans l\'annuaire.')")."\">";
+		echo "<a href=conf_params.php?action=change&amp;varb=yala_bind&amp;valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" alt=\"Disabled\"></a>";
+		echo "</u>";
+	} else {
+		echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer ici afin de pouvoir d&#233;sactiver la possibilt&#233; d\'&#233;crire directement dans l\'annuaire LDAP.<br>Cette possibilit&#233; est &#224; utiliser avec prudence.')")."\">";
+		echo "<a href=conf_params.php?action=change&amp;varb=yala_bind&amp;valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
+		echo "</u>";
+	}
 } else {
-	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer ici afin de pouvoir d&#233;sactiver la possibilt&#233; d\'&#233;crire directement dans l\'annuaire LDAP.<br>Cette possibilit&#233; est &#224; utiliser avec prudence.')")."\">";
-	echo "<a href=conf_params.php?action=change&amp;varb=yala_bind&amp;valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" alt=\"Enabled\"></a>";
-	echo "</u>";
+	echo "le module se3-pla n'est pas install&#233;";
 }
 echo "</td></tr>\n";
 
