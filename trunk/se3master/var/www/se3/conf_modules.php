@@ -33,7 +33,7 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 $module = "se3-".$_GET['varb'];
 // Mise a jour
 if ($_GET['action'] == "update") {
-	echo "<h1>Gestion des modules SE3</h1>";
+	echo "<h1>Gestion des modules SE3-- action = update </h1>";
         if ($module == "se3-ocs") {
         system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i $module se3-ocs-clientwin");
 	}
@@ -47,7 +47,7 @@ if ($_GET['action'] == "update") {
 // Change dans la base
 if ($_GET['action'] == "change") {
 
-	echo "<H1>Gestion des modules SE3</H1>";
+	echo "<H1>Gestion des modules SE3 -- action = change</H1>";
 	// Change dnas la table params
 	$resultat=mysql_query("UPDATE params set value='".$_GET['valeur']."' where name='$_GET[varb]'");
 	switch ($_GET['varb']) {
@@ -318,6 +318,22 @@ if ($_GET['action'] == "change") {
 				}
 				else{
 				echo "Un probl&#232;me est survenu lors de l'installation du backport se3-clients-linux.<br>\n";
+				}
+
+			}
+			break;
+		// Conf de se3-pla
+		case "pla":
+			$valeur_pla=($_GET['valeur']==1) ? 1 : 0;
+
+
+			if ($valeur_pla == 1) {
+				system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-pla",$return);
+				if($return==0) {
+				echo "Module $module mis &#224; jour.<br>\n";
+				}
+				else{
+				echo "Un probl&#232;me est survenu lors de l'installation de $module.<br>\n";
 				}
 
 			}
@@ -902,6 +918,47 @@ if (($unison!="1") || ($synchro_actif !="1")) {
 	echo "<a href=conf_modules.php?action=change&varb=synchro&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" ></a>";
 	echo "</u>";
 }
+
+
+//**********************************************************************************************************************************
+// Module PLA
+$pla_actif = exec("dpkg -s se3-pla | grep \"Status: install ok\" > /dev/null && echo 1");
+echo "<TR><TD>".gettext("phpldapadmin (se3-pla)")."</TD>";
+
+// On teste si on a bien la derniere version
+
+$pla_version_install = exec("apt-cache policy se3-pla | grep \"Install\" | cut -d\":\" -f2");
+$pla_version_dispo = exec("apt-cache policy se3-pla | grep \"Candidat\" | cut -d\":\" -f2");
+echo "<TD align=\"center\">$pla_version_install</TD>";
+if ("$pla_version_install" == "$pla_version_dispo") {
+	echo "<TD align=\"center\">";
+	echo "<u onmouseover=\"return escape".gettext("('Pas de nouvelle version de ce module')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\"></u>";
+	echo "</TD>";
+} else {
+	echo "<TD align=\"center\">";
+	echo "<u onmouseover=\"return escape".gettext("('Mise &#224; jour version $pla_version_dispo disponible.<br>Cliquer ici pour lancer la mise &#224; jour de ce module.')")."\"><a href=conf_modules.php?action=update&varb=pla&valeur=1><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/warning.png\"></a></u>";
+	echo "</TD>";
+}
+
+echo "<TD align=\"center\">";
+if (($pla!="1") || ($pla_actif!="1")) {
+	if($pla_actif!="1") {
+		$pla_message=gettext("<b>Attention :</b> le paquet se3-pla n\'est pas install&#233; sur ce serveur. Cliquer sur la croix rouge pour l\'installer");
+		$pla_install_alert="onClick=\"alert('Installation du packet se3-pla. Cela peut prendre un peu de temps. Vous devez avoir une connexion internet active')\"";
+	} else {
+		$pla_message=gettext("<b>Etat : D&#233;sactiv&#233;</b><br> Cliquer sur la croix rouge pour l\'activer");
+	}
+	echo "<u onmouseover=\"return escape('".$pla_message."')\">";
+	echo "<a href=conf_modules.php?action=change&varb=pla&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" \"$pla_install_alert\"></a>";
+	echo "</u>";
+} else {
+	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer sue l\'icone verte pour d&#233;sactiver le module serveur pla')")."\">";
+	echo "<a href=conf_modules.php?action=change&varb=pla&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" \"$pla_alert\"></a>";
+	echo "</u>";
+}
+echo "</td></tr>\n";
+
+
 
 /************************* Fin modules ****************************************************/
 
