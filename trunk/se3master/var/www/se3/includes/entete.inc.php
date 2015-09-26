@@ -58,7 +58,7 @@ if ($login == "") {
 } else {
 	// Fin Prise en compte de la page demandee initialement - leb 25/6/2005
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Trasitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
 
