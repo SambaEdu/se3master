@@ -43,6 +43,7 @@ require_once ("lang.inc.php");
 bindtextdomain('se3-annu',"/var/www/se3/locale");
 textdomain ('se3-annu');
 
+require "crob_ldap_functions.php";
 
 header_crypto_html("Creation utilisateur","../");
 echo "<h1>".gettext("Annuaire")."</h1>\n";
@@ -80,6 +81,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
     if (    (!isset($_POST['add_user']))
 	|| ( !$nom || !$prenom )    // absence de nom ou de prenom
         || ( $userpwd && !verifPwd($userpwd) ) // mot de passe invalide
+        || ( $userpwd && $userpwd!=ensure_ascii($userpwd) ) // mot de passe invalide
 	|| ( $naissance && !verifDateNaissance($naissance) )  // date de naissance invalide
         || ( ($naissance && verifDateNaissance($naissance)) && ($userpwd && !verifPwd($userpwd)) )  // date de naissance mais password invalide
 //	|| ($userpwd && !verifPwd($userpwd) )  // password invalide
@@ -207,10 +209,11 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
              	echo gettext("Vous devez obligatoirement renseigner un des deux champs �mot de passe� ou �date de naissance�.");
              	echo "</div><BR>\n";
           } else {
-            	if ( ($userpwd) && !verifPwd($userpwd) ){
+            	if (( ($userpwd) && !verifPwd($userpwd) )||
+            	(($userpwd) &&($userpwd!=ensure_ascii($userpwd)))) {
               		echo "<div class='error_msg'>";
                     	echo gettext("Vous devez proposer un mot de passe d'une longueur comprise entre 4 et 8 caract&#232;res
-                    alphanum&#233;riques avec obligatoirement un des caract&#232;res sp&#233;ciaux suivants")."&nbsp;".$char_spec."&nbsp;".gettext("ou &#224; d&#233;faut laisser le champ mot de passe vide et dans ce cas un mot de passe sera cr&#233;&#233;.")."
+                    alphanum&#233;riques sans accents avec obligatoirement un des caract&#232;res sp&#233;ciaux suivants")."&nbsp;".$char_spec."&nbsp;".gettext("ou &#224; d&#233;faut laisser le champ mot de passe vide et dans ce cas un mot de passe sera cr&#233;&#233;.")."
                   </div><BR>\n";
             }
             if ( ($naissance) && !verifDateNaissance($naissance) ){
@@ -222,14 +225,19 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
         }
 
     } else {
-      	// Verification si ce nouvel utilisateur n'existe pas deja
-      	$prenom = stripslashes($prenom); $nom = stripslashes($nom);
-      	// suppression des apostrophes - tant pis pour la noblesse
-	$prenom = str_replace("'", "", $prenom);
-	$nom = str_replace("'", "", $nom);
-	
-      	$cn =utf8_encode($prenom." ".$nom);
-      	$people_exist=search_people("(cn=$cn)");
+		// Verification si ce nouvel utilisateur n'existe pas deja
+		$prenom = stripslashes($prenom); $nom = stripslashes($nom);
+		// suppression des apostrophes - tant pis pour la noblesse
+		$prenom = str_replace("'", "", $prenom);
+		$nom = str_replace("'", "", $nom);
+
+		// On vire les accents
+		$prenom=ensure_ascii($prenom);
+		$nom=ensure_ascii($nom);
+		// Du coup, l'utf8_encode qui suit est inutile...
+
+		$cn =utf8_encode($prenom." ".$nom);
+		$people_exist=search_people("(cn=$cn)");
 
       	if (count($people_exist)) {
         	echo "<div class='error_msg'>";
@@ -265,47 +273,47 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 				break;
 			}
 			
-        		// Creation du nouvel utilisateur
-        		//echo "<pre>/usr/share/se3/sbin/userAdd.pl \"$prenom\" \"$nom\" \"$userpwd\" \"$naissance\" \"$sexe\" \"$categorie\"</pre>";
-        		exec ("/usr/share/se3/sbin/userAdd.pl \"$prenom\" \"$nom\" \"$userpwd\" \"$naissance\" \"$sexe\" \"$categorie\"",$AllOutPut,$ReturnValue);
-        		// Compte rendu de creation
-        		if ($ReturnValue == "0") {
-					if($sexe=="M"){
-						echo gettext("L'utilisateur ")." $prenom $nom ".gettext(" a &#233;t&#233; cr&#233;&#233; avec succ&#232;s.")."<BR>";
-					} else {
-						echo gettext("L'utilisateur ")." $prenom $nom ".gettext(" a &#233;t&#233; cr&#233;&#233;e avec succ&#232;s.")."<BR>";
-					}
-					$users = search_people ("(cn=$cn)");
-					if ( count ($users) ) {
-						echo gettext("Son identifiant est ")."<STRONG><a href='people.php?uid=".$users[0]["uid"]."' title=\"Modifier le compte.\">".$users[0]["uid"]."</a></STRONG><BR>\n";
-						echo gettext("Son mot de passe est ")."<STRONG>".$userpwd."</STRONG><BR>\n";
-						$nouveau = array('nom'=>"$nom", 'pre'=>"$prenom", 'uid'=>$users[0]["uid"], 'pwd'=>"$userpwd");
-						$_SESSION['comptes_crees'][]=$nouveau;
-						echo "<LI><A HREF=\"add_user_group.php?uid=".$users[0]["uid"]."\">".gettext("Ajouter &#224; des groupes...")."</A>\n";
-					}
-	
-					if((isset($_POST['create_home']))&&($_POST['create_home']=='y')) {
-						echo "<p><b>Cr&#233;ation du dossier personnel de ".$users[0]["uid"]."</b><br />";
-						exec("sudo /usr/share/se3/shares/shares.avail/mkhome.sh ".$users[0]["uid"],$ReturnValue2);
-						echo "<pre style='color:red'>";
-						foreach($ReturnValue2 as $key => $value) {
-							echo "$value";
-						}
-						echo "</pre>\n";
-					}
+			// Creation du nouvel utilisateur
+			//echo "<pre>/usr/share/se3/sbin/userAdd.pl \"$prenom\" \"$nom\" \"$userpwd\" \"$naissance\" \"$sexe\" \"$categorie\"</pre>";
+			exec ("/usr/share/se3/sbin/userAdd.pl \"$prenom\" \"$nom\" \"$userpwd\" \"$naissance\" \"$sexe\" \"$categorie\"",$AllOutPut,$ReturnValue);
+			// Compte rendu de creation
+			if ($ReturnValue == "0") {
+				if($sexe=="M"){
+					echo gettext("L'utilisateur ")." $prenom $nom ".gettext(" a &#233;t&#233; cr&#233;&#233; avec succ&#232;s.")."<BR>";
+				} else {
+					echo gettext("L'utilisateur ")." $prenom $nom ".gettext(" a &#233;t&#233; cr&#233;&#233;e avec succ&#232;s.")."<BR>";
+				}
+				$users = search_people ("(cn=$cn)");
+				if ( count ($users) ) {
+					echo gettext("Son identifiant est ")."<STRONG><a href='people.php?uid=".$users[0]["uid"]."' title=\"Modifier le compte.\">".$users[0]["uid"]."</a></STRONG><BR>\n";
+					echo gettext("Son mot de passe est ")."<STRONG>".$userpwd."</STRONG><BR>\n";
+					$nouveau = array('nom'=>"$nom", 'pre'=>"$prenom", 'uid'=>$users[0]["uid"], 'pwd'=>"$userpwd");
+					$_SESSION['comptes_crees'][]=$nouveau;
+					echo "<LI><A HREF=\"add_user_group.php?uid=".$users[0]["uid"]."\">".gettext("Ajouter &#224; des groupes...")."</A>\n";
+				}
 
-        	} else {
-         	 	echo "<div class='error_msg'>".gettext("Erreur lors de la cr&#233;ation du nouvel utilisateur")." $prenom $nom
-                  	<font color='black'>(".gettext("type d'erreur :")." $ReturnValue)
-                  	</font>,".gettext(" veuillez contacter")."
-                  	<a href='mailto:$MelAdminLCS?subject=PB creation nouvel utilisateur Se3'>".gettext("l'administrateur du syst&#232;me")."</a></div><br />\n";
-            	echo "<p><br /></p>\n";
-            	echo "<p><em>NOTES&nbsp;:</em> A propos des erreurs, une erreur 255 peut appara&icirc;tre quand on tente d'ajouter un utilisateur toto (<em>qui n'existait pas dans la branche People</em>), alors qu'un toto existait dans un groupe (<em>Eleves, Profs ou Administratifs</em>).</p>\n";
-        	}
-      }
-    }
-    
-include("listing.inc.php");
+				if((isset($_POST['create_home']))&&($_POST['create_home']=='y')) {
+					echo "<p><b>Cr&#233;ation du dossier personnel de ".$users[0]["uid"]."</b><br />";
+					exec("sudo /usr/share/se3/shares/shares.avail/mkhome.sh ".$users[0]["uid"],$ReturnValue2);
+					echo "<pre style='color:red'>";
+					foreach($ReturnValue2 as $key => $value) {
+						echo "$value";
+					}
+					echo "</pre>\n";
+				}
+
+			} else {
+				echo "<div class='error_msg'>".gettext("Erreur lors de la cr&#233;ation du nouvel utilisateur")." $prenom $nom
+				<font color='black'>(".gettext("type d'erreur :")." $ReturnValue)
+				</font>,".gettext(" veuillez contacter")."
+				<a href='mailto:$MelAdminLCS?subject=PB creation nouvel utilisateur Se3'>".gettext("l'administrateur du syst&#232;me")."</a></div><br />\n";
+				echo "<p><br /></p>\n";
+				echo "<p><em>NOTES&nbsp;:</em> A propos des erreurs, une erreur 255 peut appara&icirc;tre quand on tente d'ajouter un utilisateur toto (<em>qui n'existait pas dans la branche People</em>), alors qu'un toto existait dans un groupe (<em>Eleves, Profs ou Administratifs</em>).</p>\n";
+			}
+		}
+	}
+
+	include("listing.inc.php");
 
 } else {
 	echo "<div class=error_msg>".gettext("Cette application, n&#233;cessite les droits d'administrateur du serveur SambaEdu !")."</div>";
