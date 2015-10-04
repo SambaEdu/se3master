@@ -226,7 +226,7 @@ function remplace_accents($chaine){
 */
 
 function traite_espaces($chaine) {
-	//$chaine="  Bla   ble bli  blo      blu  ";
+	//$chaine="  Bla   ble bli  blo	  blu  ";
 	/*
 	$tab=explode(" ",$chaine);
 
@@ -279,8 +279,8 @@ function traite_utf8($chaine) {
 	//$retour=recode_string("utf8..lat9", $chaine);
 	//Warning: recode_string(): Illegal recode request 'utf8..lat9' in /var/www/se3/includes/crob_ldap_functions.php on line 277
 
-    
-        // DESACTIVE POUR PASSAGE UTF-8 Voir solution plus propre
+	
+		// DESACTIVE POUR PASSAGE UTF-8 Voir solution plus propre
 	// $retour=recode_string("utf8..iso-8859-15", $chaine);
 	return $chaine;
 }
@@ -644,7 +644,7 @@ function modify_attribut ($entree, $branche, $attributs, $mode){
 function crob_init() {
 	// Recuperation de variables dans la base MySQL se3db
 	//global $domainsid,$uidPolicy;
-        global $defaultgid,$domain,$defaultshell,$domainsid;
+		global $defaultgid,$domain,$defaultshell,$domainsid;
 
 	$domainsid="";
 	$sql="select value from params where name='domainsid';";
@@ -653,14 +653,14 @@ function crob_init() {
 		$lig_tmp=mysql_fetch_object($res);
 		$domainsid=$lig_tmp->value;
 	} else {
-            // Cas d'un LCS ou sambaSID n'est pas dans la table params
-            unset($retval);
-            exec ("ldapsearch -x -LLL  objectClass=sambaDomain | grep sambaSID | cut -d ' ' -f 2",$retval);
-            $domainsid = $retval[0];
-            // Si il n'y a pas de sambaSID dans l'annuaire, on fixe une valeur factice
-            // Il faudra appliquer un correct SID lors de l'installation d'un se3
-            if (!isset($domainsid)) $domainsid ="S-0-0-00-0000000000-000000000-0000000000";
-        }
+			// Cas d'un LCS ou sambaSID n'est pas dans la table params
+			unset($retval);
+			exec ("ldapsearch -x -LLL  objectClass=sambaDomain | grep sambaSID | cut -d ' ' -f 2",$retval);
+			$domainsid = $retval[0];
+			// Si il n'y a pas de sambaSID dans l'annuaire, on fixe une valeur factice
+			// Il faudra appliquer un correct SID lors de l'installation d'un se3
+			if (!isset($domainsid)) $domainsid ="S-0-0-00-0000000000-000000000-0000000000";
+		}
 
 	$uidPolicy="";
 	$sql="select value from params where name='uidPolicy';";
@@ -677,10 +677,10 @@ function crob_init() {
 		$lig_tmp=mysql_fetch_object($res);
 		$defaultgid=$lig_tmp->value;
 	} else {
-            // Cas d'un LCS ou defaultgid n'est pas dans la table params
-            exec ("getent group lcs-users | cut -d ':' -f 3", $retval);
-            $defaultgid= $retval[0];
-        }
+			// Cas d'un LCS ou defaultgid n'est pas dans la table params
+			exec ("getent group lcs-users | cut -d ':' -f 3", $retval);
+			$defaultgid= $retval[0];
+		}
 
 	$domain="";
 	$sql="select value from params where name='domain';";
@@ -1491,11 +1491,11 @@ function add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber){
 	$attribut["gecos"]="$prenom $nom,$naissance,$sexe,N";
 
 	$attribut["sambaSID"]="$domainsid-$rid";
-        $attribut["sambaPrimaryGroupSID"]="$domainsid-$pgrid";
+		$attribut["sambaPrimaryGroupSID"]="$domainsid-$pgrid";
 
 	$attribut["sambaPwdLastSet"]="1";
 	$attribut["sambaPwdMustChange"]="2147483647";
-	$attribut["sambaAcctFlags"]="[U          ]";
+	$attribut["sambaAcctFlags"]="[U		  ]";
 	$attribut["sambaLMPassword"]="$sambaLMPassword";
 	$attribut["sambaNTPassword"]="$sambaNTPassword";
 	$attribut["userPassword"]="{crypt}$userPassword";
@@ -1597,13 +1597,13 @@ function add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber){
 	// Comment le script ntlmpass.pl prend-il le parametre sans les apostrophes?
 
 	//$ntlmpass=explode(" ",exec("$pathscripts/ntlmpass.pl '$password'"));
-    echo "Preparation du mot de passe pour $nom $prenom\n";
-    $ntlmpass=explode(" ",exec("export LC_ALL=\"fr_FR.UTF-8\";$pathscripts/ntlmpass.pl '$password'"));
+	echo "Preparation du mot de passe pour $nom $prenom\n";
+	$ntlmpass=explode(" ",exec("export LC_ALL=\"fr_FR.UTF-8\";$pathscripts/ntlmpass.pl '$password'"));
 
 	$sambaLMPassword=$ntlmpass[0];
 	$sambaNTPassword=$ntlmpass[1];
-    //$userPassword=exec("$pathscripts/unixPassword.pl '$password'");
-    $userPassword=exec("export LC_ALL=\"fr_FR.UTF-8\";$pathscripts/unixPassword.pl '$password'");
+	//$userPassword=exec("$pathscripts/unixPassword.pl '$password'");
+	$userPassword=exec("export LC_ALL=\"fr_FR.UTF-8\";$pathscripts/unixPassword.pl '$password'");
 
 	$attribut=array();
 	$attribut["uid"]="$uid";
@@ -1647,7 +1647,7 @@ function add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber){
 
 	$attribut["sambaPwdMustChange"]="2147483647";
 	$attribut["sambaPwdLastSet"]="1";
-	$attribut["sambaAcctFlags"]="[U          ]";
+	$attribut["sambaAcctFlags"]="[U		  ]";
 	$attribut["sambaLMPassword"]="$sambaLMPassword";
 	$attribut["sambaNTPassword"]="$sambaNTPassword";
 	$attribut["userPassword"]="$userPassword";
@@ -1707,8 +1707,8 @@ function add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber){
 function verif_et_corrige_gecos($uid,$nom,$prenom,$naissance,$sexe){
 	// Verification/correction du GECOS
 
-    global $simulation;
-    global $infos_corrections_gecos;
+	global $simulation;
+	global $infos_corrections_gecos;
 
 	// Correction du nom/prenom fournis
 	$nom=remplace_accents(traite_espaces($nom));
@@ -1737,18 +1737,18 @@ function verif_et_corrige_gecos($uid,$nom,$prenom,$naissance,$sexe){
 			$infos_corrections_gecos.="Correction du nom, prénom, date de naissance ou sexe de <b>$uid</b><br />\n";
 
 			if($simulation!='y') {
-                if(modify_attribut ("uid=$uid", "people", $attributs, "replace")){
-				    my_echo("<font color='green'>SUCCES</font>");
-                }
-                else{
-                    my_echo("<font color='red'>ECHEC</font>");
-                    $nb_echecs++;
-                }
-            }
-            else {
-                my_echo("<font color='blue'>SIMULATION</font>");
-            }
-            my_echo("<br />\n");
+				if(modify_attribut ("uid=$uid", "people", $attributs, "replace")){
+					my_echo("<font color='green'>SUCCES</font>");
+				}
+				else{
+					my_echo("<font color='red'>ECHEC</font>");
+					$nb_echecs++;
+				}
+			}
+			else {
+				my_echo("<font color='blue'>SIMULATION</font>");
+			}
+			my_echo("<br />\n");
 		}
 	}
 }
@@ -1765,7 +1765,7 @@ function verif_et_corrige_gecos($uid,$nom,$prenom,$naissance,$sexe){
 function verif_et_corrige_givenname($uid,$prenom) {
 	// Verification/correction du givenName
 
-    global $simulation;
+	global $simulation;
 
 	// Correction du nom/prenom fournis
 	$prenom=remplace_accents(traite_espaces($prenom));
@@ -1790,17 +1790,17 @@ function verif_et_corrige_givenname($uid,$prenom) {
 			$attributs["givenName"]=$prenom;
 			my_echo("Correction de l'attribut 'givenName': ");
 			if($simulation!='y') {
-                if(modify_attribut ("uid=$uid", "people", $attributs, "replace")) {
-                    my_echo("<font color='green'>SUCCES</font>");
-                }
-                else{
-                    my_echo("<font color='red'>ECHEC</font>");
-                    $nb_echecs++;
-                }
-            }
-            else {
-                my_echo("<font color='blue'>SIMULATION</font>");
-            }
+				if(modify_attribut ("uid=$uid", "people", $attributs, "replace")) {
+					my_echo("<font color='green'>SUCCES</font>");
+				}
+				else{
+					my_echo("<font color='red'>ECHEC</font>");
+					$nb_echecs++;
+				}
+			}
+			else {
+				my_echo("<font color='blue'>SIMULATION</font>");
+			}
 			my_echo("<br />\n");
 		}
 	}
@@ -1819,7 +1819,7 @@ function verif_et_corrige_pseudo($uid,$nom,$prenom) {
 	// Verification/correction de l'attribut choisi pour le pseudo
 	global $attribut_pseudo;
 	global $annuelle;
-    global $simulation;
+	global $simulation;
 
 	// En minuscules pour la recherche:
 	$attribut_pseudo_min=strtolower($attribut_pseudo);
@@ -1848,19 +1848,19 @@ function verif_et_corrige_pseudo($uid,$nom,$prenom) {
 				$attributs=array();
 				$attributs["$attribut_pseudo"]=$tmp_pseudo;
 				my_echo("Correction de l'attribut '$attribut_pseudo': ");
-                if($simulation!='y') {
-                    if(modify_attribut ("uid=$uid", "people", $attributs, "replace")) {
-                        my_echo("<font color='green'>SUCCES</font>");
-                    }
-                    else{
-                        my_echo("<font color='red'>ECHEC</font>");
-                        $nb_echecs++;
-                    }
-                }
-                else {
-                    my_echo("<font color='blue'>SIMULATION</font>");
-                }
-                my_echo("<br />\n");
+				if($simulation!='y') {
+					if(modify_attribut ("uid=$uid", "people", $attributs, "replace")) {
+						my_echo("<font color='green'>SUCCES</font>");
+					}
+					else{
+						my_echo("<font color='red'>ECHEC</font>");
+						$nb_echecs++;
+					}
+				}
+				else {
+					my_echo("<font color='blue'>SIMULATION</font>");
+				}
+				my_echo("<br />\n");
 			}
 		}
 	}
@@ -1871,18 +1871,18 @@ function verif_et_corrige_pseudo($uid,$nom,$prenom) {
 		//$attributs["$tmp_pseudo"]=strtolower($prenom).strtoupper(substr($nom,0,1));
 		$attributs["$attribut_pseudo"]=$tmp_pseudo;
 		my_echo("Renseignement de l'attribut '$attribut_pseudo': ");
-        if($simulation!='y') {
-            if(modify_attribut("uid=$uid", "people", $attributs, "add")) {
-                my_echo("<font color='green'>SUCCES</font>");
-            }
-            else{
-                my_echo("<font color='red'>ECHEC</font>");
-                $nb_echecs++;
-            }
-        }
-        else {
-            my_echo("<font color='blue'>SIMULATION</font>");
-        }
+		if($simulation!='y') {
+			if(modify_attribut("uid=$uid", "people", $attributs, "add")) {
+				my_echo("<font color='green'>SUCCES</font>");
+			}
+			else{
+				my_echo("<font color='red'>ECHEC</font>");
+				$nb_echecs++;
+			}
+		}
+		else {
+			my_echo("<font color='blue'>SIMULATION</font>");
+		}
 		my_echo("<br />\n");
 	}
 }
@@ -1970,44 +1970,44 @@ function search_people_trash ($filter) {
 			for ($loop=0; $loop<$info["count"];$loop++) {
 				if ( isset($info[$loop]["employeenumber"][0]) ) {
 						$ret[$loop] = array (
-						"sambaacctflags"      => $info[$loop]["sambaacctflags"][0],
+						"sambaacctflags"	  => $info[$loop]["sambaacctflags"][0],
 						"sambapwdmustchange"  => $info[$loop]["sambapwdmustchange"][0],
-						"sambantpassword"     => $info[$loop]["sambantpassword"][0],
-						"sambalmpassword"     => $info[$loop]["sambalmpassword"][0],
-						"sambasid"            => $info[$loop]["sambasid"][0],
+						"sambantpassword"	 => $info[$loop]["sambantpassword"][0],
+						"sambalmpassword"	 => $info[$loop]["sambalmpassword"][0],
+						"sambasid"			=> $info[$loop]["sambasid"][0],
 						"sambaprimarygroupsid"   => $info[$loop]["sambaprimarygroupsid"][0],
-						"userpassword"        => $info[$loop]["userpassword"][0],
-						"gecos"               => $info[$loop]["gecos"][0],
-						"employeenumber"      => $info[$loop]["employeenumber"][0],
-						"homedirectory"       => $info[$loop]["homedirectory"][0],
-						"gidnumber"           => $info[$loop]["gidnumber"][0],
-						"uidnumber"           => $info[$loop]["uidnumber"][0],
-						"loginshell"          => $info[$loop]["loginshell"][0],
-						"mail"                => $info[$loop]["mail"][0],
-						"sn"                  => $info[$loop]["sn"][0],
-						"givenname"           => $info[$loop]["givenname"][0],
-						"cn"                  => $info[$loop]["cn"][0],
-						"uid"                 => $info[$loop]["uid"][0],
+						"userpassword"		=> $info[$loop]["userpassword"][0],
+						"gecos"			   => $info[$loop]["gecos"][0],
+						"employeenumber"	  => $info[$loop]["employeenumber"][0],
+						"homedirectory"	   => $info[$loop]["homedirectory"][0],
+						"gidnumber"		   => $info[$loop]["gidnumber"][0],
+						"uidnumber"		   => $info[$loop]["uidnumber"][0],
+						"loginshell"		  => $info[$loop]["loginshell"][0],
+						"mail"				=> $info[$loop]["mail"][0],
+						"sn"				  => $info[$loop]["sn"][0],
+						"givenname"		   => $info[$loop]["givenname"][0],
+						"cn"				  => $info[$loop]["cn"][0],
+						"uid"				 => $info[$loop]["uid"][0],
 						);
 				} else {
 						$ret[$loop] = array (
-						"sambaacctflags"      => $info[$loop]["sambaacctflags"][0],
+						"sambaacctflags"	  => $info[$loop]["sambaacctflags"][0],
 						"sambapwdmustchange"  => $info[$loop]["sambapwdmustchange"][0],
-						"sambantpassword"     => $info[$loop]["sambantpassword"][0],
-						"sambalmpassword"     => $info[$loop]["sambalmpassword"][0],
-						"sambasid"            => $info[$loop]["sambasid"][0],
+						"sambantpassword"	 => $info[$loop]["sambantpassword"][0],
+						"sambalmpassword"	 => $info[$loop]["sambalmpassword"][0],
+						"sambasid"			=> $info[$loop]["sambasid"][0],
 						"sambaprimarygroupsid"   => $info[$loop]["sambaprimarygroupsid"][0],
-						"userpassword"        => $info[$loop]["userpassword"][0],
-						"gecos"               => $info[$loop]["gecos"][0],
-						"homedirectory"       => $info[$loop]["homedirectory"][0],
-						"gidnumber"           => $info[$loop]["gidnumber"][0],
-						"uidnumber"           => $info[$loop]["uidnumber"][0],
-						"loginshell"          => $info[$loop]["loginshell"][0],
-						"mail"                => $info[$loop]["mail"][0],
-						"sn"                  => $info[$loop]["sn"][0],
-						"givenname"           => $info[$loop]["givenname"][0],
-						"cn"                  => $info[$loop]["cn"][0],
-						"uid"                 => $info[$loop]["uid"][0],
+						"userpassword"		=> $info[$loop]["userpassword"][0],
+						"gecos"			   => $info[$loop]["gecos"][0],
+						"homedirectory"	   => $info[$loop]["homedirectory"][0],
+						"gidnumber"		   => $info[$loop]["gidnumber"][0],
+						"uidnumber"		   => $info[$loop]["uidnumber"][0],
+						"loginshell"		  => $info[$loop]["loginshell"][0],
+						"mail"				=> $info[$loop]["mail"][0],
+						"sn"				  => $info[$loop]["sn"][0],
+						"givenname"		   => $info[$loop]["givenname"][0],
+						"cn"				  => $info[$loop]["cn"][0],
+						"uid"				 => $info[$loop]["uid"][0],
 						);
 				}
 			}
@@ -2035,7 +2035,7 @@ function recup_from_trash($uid) {
 
 	$user = search_people_trash ("uid=$uid");
 	// Positionnement des constantes "objectclass"
-	$user[0]["sambaacctflags"]="[U         ]";
+	$user[0]["sambaacctflags"]="[U		 ]";
 	$user[0]["objectclass"][0]="top";
 	$user[0]["objectclass"][1]="posixAccount";
 	$user[0]["objectclass"][2]="shadowAccount";
@@ -2123,4 +2123,192 @@ function formate_date_aaaammjj($date) {
 	return $retour;
 }
 
+/**
+ * Cette méthode prend une chaîne de caractères et s'assure qu'elle est bien retournée en UTF-8
+ * Attention, certain encodages sont très similaire et ne peuve pas être théoriquement distingué sur une chaine de caractere.
+ * Si vous connaissez déjà l'encodage de votre chaine de départ, il est préférable de le préciser
+ * 
+ * @param string $str La chaine à encoder
+ * @param string $encoding L'encodage de départ
+ * @return string La chaine en utf8
+ * @throws Exception si la chaine n'a pas pu être encodée correctement
+ */
+function ensure_utf8($str, $from_encoding = null) {
+	if ($str === null || $str === '') {
+		return $str;
+	} else if ($from_encoding == null && detect_utf8($str)) {
+		return $str;
+	}
+	
+	if ($from_encoding != null) {
+		$encoding =  $from_encoding;
+	} else {
+		$encoding = detect_encoding($str);
+	}
+	$result = null;
+	if ($encoding !== false && $encoding != null) {
+		if (function_exists('mb_convert_encoding')) {
+			$result = mb_convert_encoding($str, 'UTF-8', $encoding);
+		}
+	}
+	if ($result === null || !detect_utf8($result)) {
+		throw new Exception('Impossible de convertir la chaine vers l\'utf8');
+	}
+	return $result;
+}
+
+
+/**
+ * Cette méthode prend une chaîne de caractères et teste si elle ne contient que 
+ * de l'ASCII 7 bits ou si elle contient au moins une suite d'octets codant un
+ * caractère en UTF8
+ * @param string $str La chaine à tester
+ * @return boolean
+ */
+function detect_utf8 ($str) {
+	// Inspiré de http://w3.org/International/questions/qa-forms-utf-8.html
+	//
+	// on s'assure de bien opérer sur une chaîne de caractère
+	$str=(string)$str;
+	// La chaîne ne comporte que des octets <= 7F ?
+	$full_ascii=true; $i=0;
+	while ($full_ascii && $i<strlen($str)) {
+		$full_ascii = $full_ascii && (ord($str[$i])<=0x7F);
+		$i++;
+	}
+	// Si oui c'est de l'utf8 sinon on cherche si la chaîne contient
+	// au moins une suite d'octets valide en UTF8
+	if ($full_ascii) return true;
+	else return preg_match('#[\xC2-\xDF][\x80-\xBF]#', $str) || // non-overlong 2-byte
+		preg_match('#\xE0[\xA0-\xBF][\x80-\xBF]#', $str) || // excluding overlongs
+		preg_match('#[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}#', $str) || // straight 3-byte
+		preg_match('#\xED[\x80-\x9F][\x80-\xBF]#', $str) | // excluding surrogates
+		preg_match('#\xF0[\x90-\xBF][\x80-\xBF]{2}#', $str) || // planes 1-3
+		preg_match('#[\xF1-\xF3][\x80-\xBF]{3}#', $str) || // planes 4-15
+		preg_match('# \xF4[\x80-\x8F][\x80-\xBF]{2}#', $str) ; // plane 16
+ }
+
+/**
+ * Cette méthode prend une chaîne de caractères et teste si elle est bien encodée en UTF-8
+ * 
+ * @param string $str La chaine à tester
+ * @return boolean
+ */
+function check_utf8 ($str) {
+	// Longueur maximale de la chaîne pour éviter un stack overflow
+	// dans le test à base d'expression régulière
+	$long_max=1000;
+	if (substr(PHP_OS,0,3) == 'WIN') $long_max=300; // dans le cas de Window$
+	if (mb_strlen($str) < $long_max) {
+	// From http://w3.org/International/questions/qa-forms-utf-8.html
+	$preg_match_result = 1 == preg_match('%^(?:
+		[\x09\x0A\x0D\x20-\x7E]				# ASCII
+		| [\xC2-\xDF][\x80-\xBF]			# non-overlong 2-byte
+		|  \xE0[\xA0-\xBF][\x80-\xBF]			# excluding overlongs
+		| [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}		# straight 3-byte
+		|  \xED[\x80-\x9F][\x80-\xBF]			# excluding surrogates
+		|  \xF0[\x90-\xBF][\x80-\xBF]{2}		# planes 1-3
+		| [\xF1-\xF3][\x80-\xBF]{3}			# planes 4-15
+		|  \xF4[\x80-\x8F][\x80-\xBF]{2}		# plane 16
+	)*$%xs', $str);
+	} else {
+		$preg_match_result = FALSE;
+	}
+	if ($preg_match_result) {
+		return true;
+	} else {
+		//le test preg renvoie faux, et on va vérifier avec d'autres fonctions
+		$result = true;
+		$test_done = false;
+		if (function_exists('mb_check_encoding')) {
+			$test_done = true;
+			$result = $result && @mb_check_encoding($str, 'UTF-8');
+		}
+
+		if (function_exists('mb_detect_encoding')) {
+			$test_done = true;
+			$result = $result && @mb_detect_encoding($str, 'UTF-8', true);
+		}
+		if (function_exists('iconv')) {
+			$test_done = true;
+			$result = $result && ($str === (@iconv('UTF-8', 'UTF-8//IGNORE', $str)));
+		}
+		if (function_exists('mb_convert_encoding') && !$test_done) {
+			$test_done = true;
+			$result = $result && ($str === @mb_convert_encoding ( @mb_convert_encoding ( $str, 'UTF-32', 'UTF-8' ), 'UTF-8', 'UTF-32' ));
+		}
+		return ($test_done && $result);
+	}
+}
+	
+	
+/**
+ * Cette méthode prend une chaîne de caractères et détecte son encodage
+ * 
+ * @param string $str La chaine à tester
+ * @return l'encodage ou false si indétectable
+ */
+function detect_encoding($str) {
+	//on commence par vérifier si c'est de l'utf8
+	if (detect_utf8($str)) {
+		return 'UTF-8';
+	}
+	
+	//on va commencer par tester ces encodages
+	static $encoding_list = array('UTF-8', 'ISO-8859-15','windows-1251');
+	foreach ($encoding_list as $item) {
+		if (function_exists('iconv')) {
+			$sample = @iconv($item, $item, $str);
+			if (md5($sample) == md5($str)) {
+				return $item;
+			}
+		} else if (function_exists('mb_detect_encoding')) {
+			if (@mb_detect_encoding($str, $item, true)) {
+				return $item;
+			}
+		}
+	}
+	
+	//la méthode précédente n'a rien donnée
+	if (function_exists('mb_detect_encoding')) {
+		return mb_detect_encoding($str);
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Cette méthode prend une chaîne de caractères et s'assure qu'elle est bien retournée en ASCII
+ * Attention, certain encodages sont très similaire et ne peuve pas être théoriquement distingué sur une chaine de caractere.
+ * Si vous connaissez déjà l'encodage de votre chaine de départ, il est préférable de le préciser
+ * 
+ * @param string $chaine La chaine à encoder
+ * @param string $encoding L'encodage de départ
+ * @return string La chaine en ascii
+ */
+function ensure_ascii($chaine, $encoding = '') {
+	if ($chaine == null || $chaine == '') {
+		return $chaine;
+	}
+
+	$chaine = ensure_utf8($chaine, $encoding);
+	$str = null;
+	if (function_exists('iconv')) {
+		//test : est-ce que iconv est bien implémenté sur ce système ?
+		$test = 'c\'est un bel ete' === iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", 'c\'est un bel été');
+		if ($test) {
+			//on utilise iconv pour la conversion
+			$str = @iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", $chaine);
+		}
+	}
+	if ($str === null) {
+		//on utilise pas iconv pour la conversion
+		$translit = array('Á'=>'A','À'=>'A','Â'=>'A','Ä'=>'A','Ã'=>'A','Å'=>'A','Ç'=>'C','É'=>'E','È'=>'E','Ê'=>'E','Ë'=>'E','Í'=>'I','Ï'=>'I','Î'=>'I','Ì'=>'I','Ñ'=>'N','Ó'=>'O','Ò'=>'O','Ô'=>'O','Ö'=>'O','Õ'=>'O','Ú'=>'U','Ù'=>'U','Û'=>'U','Ü'=>'U','Ý'=>'Y','á'=>'a','à'=>'a','â'=>'a','ä'=>'a','ã'=>'a','å'=>'a','ç'=>'c','é'=>'e','è'=>'e','ê'=>'e','ë'=>'e','í'=>'i','ì'=>'i','î'=>'i','ï'=>'i','ñ'=>'n','ó'=>'o','ò'=>'o','ô'=>'o','ö'=>'o','õ'=>'o','ú'=>'u','ù'=>'u','û'=>'u','ü'=>'u','ý'=>'y','ÿ'=>'y');
+		$str = strtr($chaine, $translit);
+	}
+	if (function_exists('mb_convert_encoding')) {
+		$str = @mb_convert_encoding($str,'ASCII','UTF-8');
+	}  
+	return $str; 
+}
 ?>
