@@ -8,7 +8,7 @@ if (count($_SESSION['comptes_crees']) >= 1) {
 	echo($lien);
 	echo("<br />Attention, les donn&#233;es ne seront pas conserv&#233;es au del&#224; de la session en cours<br />");
 
-	echo("<form id='postlisting' action='../annu/listing.php' method='post'>");
+	echo("<form id='postlisting' action='../annu/listing.php' method='post' target='_blank'>");
 	echo("<input type='hidden' name='hiddeninput' value='$serial_listing' />");
 	echo("<input type='checkbox' name='purge_session_data' value='y' /> Purger les donn&#233;es apr&#232;s t&#233;l&#233;chargement du fichier");
 	echo("</form></td></tr></table>");
