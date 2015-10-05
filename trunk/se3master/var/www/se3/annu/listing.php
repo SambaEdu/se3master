@@ -63,7 +63,7 @@ usort($listing, "trieleve");
 
 
 	
-	$content = "<page backtop='15mm' backbottom='15mm' >";
+	$content = "<page backtop='15mm' backbottom='15mm'>";
 
 
 	foreach ($listing as $nkey => $user)
@@ -71,7 +71,7 @@ usort($listing, "trieleve");
 			if (!isset($classe_preced)) { $classe_preced = $user['cla']; }
 			if ($user['cla']!=$classe_preced) {
 				$classe_preced = $user['cla'];
-				$content .="</page><page backtop='15mm' backbottom='15mm' >";
+				$content .="</page><page backtop='15mm' backbottom='15mm'>";
 			}
 
 			$content .="<div style='margin-bottom:3mm; border: solid 1px black; padding:3mm; width: 80%; margin: auto'>";
@@ -92,10 +92,10 @@ usort($listing, "trieleve");
 		}
 
 	$content .="</page>";
-
+	
 
 	require_once(dirname(__FILE__).'/../html2pdf/html2pdf.class.php');
-	$html2pdf = new HTML2PDF('P','A4','fr', false, 'UTF-8');
+	$html2pdf = new HTML2PDF('P','A4','fr', true, 'UTF-8');
 	$html2pdf->WriteHTML($content);
 	$html2pdf->Output('liste.pdf');
 
