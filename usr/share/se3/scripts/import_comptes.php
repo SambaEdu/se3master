@@ -13,7 +13,7 @@
 	include "se3orlcs_import_comptes.php";
 
 	// $debug_import_comptes peut être initialisée dans se3orlcs_import_comptes.php
-	//$debug_import_comptes="y";
+	$debug_import_comptes="y";
 
 	// Choix de destination des my_echo():
 	$dest_mode="file";
@@ -2407,8 +2407,8 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					//$nom=remplace_accents($prof[$cpt]["nom_usage"]);
 					//$prenom=remplace_accents(traite_espaces($prof[$cpt]["prenom"]));
 					//$nom=remplace_accents(traite_espaces($prof[$cpt]["nom_usage"]));
-					$prenom=traite_espaces($prof[$cpt]["prenom"]);
-					$nom=traite_espaces($prof[$cpt]["nom_usage"]);
+					$prenom=remplace_accents(traite_espaces($prof[$cpt]["prenom"]));
+					$nom=remplace_accents(traite_espaces($prof[$cpt]["nom_usage"]));
 					if($uid=verif_nom_prenom_sans_employeeNumber($nom,$prenom)) {
 						my_echo("$nom $prenom est dans l'annuaire sans employeeNumber: $uid<br />\n");
 						my_echo("Mise à jour avec l'employeeNumber $employeeNumber: \n");
@@ -2921,8 +2921,8 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			//$nom=remplace_accents($eleve[$numero]["nom"]);
 			//$prenom=remplace_accents(traite_espaces($eleve[$numero]["prenom"]));
 			//$nom=remplace_accents(traite_espaces($eleve[$numero]["nom"]));
-			$prenom=traite_espaces($eleve[$numero]["prenom"]);
-			$nom=traite_espaces($eleve[$numero]["nom"]);
+			$prenom=remplace_accents(traite_espaces($eleve[$numero]["prenom"]));
+			$nom=remplace_accents(traite_espaces($eleve[$numero]["nom"]));
 			if($uid=verif_nom_prenom_sans_employeeNumber($nom,$prenom)) {
 				my_echo("$nom $prenom est dans l'annuaire sans employeeNumber: $uid<br />\n");
 				my_echo("Mise à jour avec l'employeeNumber $employeeNumber: \n");
@@ -3096,6 +3096,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							fclose($f_tmp);
 							}
 							*/
+							
 							if(add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber)) {
 								my_echo("<font color='green'>SUCCES</font>");
 								$tab_nouveaux_comptes[]=$uid;
