@@ -211,7 +211,14 @@ function remplace_accents($chaine){
 	global $liste_caracteres_accentues, $liste_caracteres_desaccentues;
 	//$retour=strtr(ereg_replace("�","OE",ereg_replace("�","oe",$chaine)),"������������������������������","AAAEEEEIIOOUUUCcaaaeeeeiioouuu");
 	//$retour=strtr(ereg_replace("�","AE",ereg_replace("�","ae",ereg_replace("�","OE",ereg_replace("�","oe","$chaine"))))," '���������������������ئ����ݾ�������������������������������","__AAAAAACEEEEIIIINOOOOOOSUUUUYYZaaaaaaceeeeiiiinooooooosuuuuyyz");
-	$retour=strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$chaine"))))," '$liste_caracteres_accentues","__$liste_caracteres_desaccentues");
+	//$retour=strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/Œ/","OE",preg_replace("/œ/","oe","$chaine"))))," '$liste_caracteres_accentues","__$liste_caracteres_desaccentues");
+	$chaine=preg_replace("/Æ/","AE","$chaine");
+	$chaine=preg_replace("/æ/","ae","$chaine");
+	$chaine=preg_replace("/œ/","oe","$chaine");
+	$chaine=preg_replace("/Œ/","OE","$chaine");
+	
+	$retour=strtr($chaine, array('Á'=>'A','À'=>'A','Â'=>'A','Ä'=>'A','Ã'=>'A','Å'=>'A','Ç'=>'C','É'=>'E','È'=>'E','Ê'=>'E','Ë'=>'E','Í'=>'I','Ï'=>'I','Î'=>'I','Ì'=>'I','Ñ'=>'N','Ó'=>'O','Ò'=>'O','Ô'=>'O','Ö'=>'O','Õ'=>'O','Ú'=>'U','Ù'=>'U','Û'=>'U','Ü'=>'U','Ý'=>'Y','á'=>'a','à'=>'a','â'=>'a','ä'=>'a','ã'=>'a','å'=>'a','ç'=>'c','é'=>'e','è'=>'e','ê'=>'e','ë'=>'e','í'=>'i','ì'=>'i','î'=>'i','ï'=>'i','ñ'=>'n','ó'=>'o','ò'=>'o','ô'=>'o','ö'=>'o','õ'=>'o','ú'=>'u','ù'=>'u','û'=>'u','ü'=>'u','ý'=>'y','ÿ'=>'y'));
+	
 	return $retour;
 }
 
