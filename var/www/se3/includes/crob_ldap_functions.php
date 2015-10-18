@@ -209,8 +209,6 @@ function my_print_r($tab) {
 
 function remplace_accents($chaine){
 	global $liste_caracteres_accentues, $liste_caracteres_desaccentues;
-	//$retour=strtr(ereg_replace("�","OE",ereg_replace("�","oe",$chaine)),"������������������������������","AAAEEEEIIOOUUUCcaaaeeeeiioouuu");
-	//$retour=strtr(ereg_replace("�","AE",ereg_replace("�","ae",ereg_replace("�","OE",ereg_replace("�","oe","$chaine"))))," '���������������������ئ����ݾ�������������������������������","__AAAAAACEEEEIIIINOOOOOOSUUUUYYZaaaaaaceeeeiiiinooooooosuuuuyyz");
 	//$retour=strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/Œ/","OE",preg_replace("/œ/","oe","$chaine"))))," '$liste_caracteres_accentues","__$liste_caracteres_desaccentues");
 	$chaine=preg_replace("/Æ/","AE","$chaine");
 	$chaine=preg_replace("/æ/","ae","$chaine");
@@ -768,22 +766,12 @@ function creer_uid($nom,$prenom){
 	//echo "<p>\$uidPolicy=$uidPolicy</p>";
 
 	// Filtrer certains caracteres:
-	//nom=$(echo "$nom" | tr " ��������������" "-aaaeeeeiioouuu" | sed -e "s/'//g")
-	//$nom=strtolower(strtr("$nom"," '���������������������������","__aaaeeeeiioouuucCAAEEIIOOUUU"));
-	//$prenom=strtolower(strtr("$prenom"," '���������������������������","__aaaeeeeiioouuucCAAEEIIOOUUU"));
-	//$nom=strtolower(strtr(ereg_replace("�","AE",ereg_replace("�","ae",ereg_replace("�","OE",ereg_replace("�","oe","$nom"))))," '���������������������ئ����ݾ�������������������������������","__AAAAAACEEEEIIIINOOOOOOSUUUUYYZaaaaaaceeeeiiiinooooooosuuuuyyz"));
-	//$prenom=strtolower(strtr(ereg_replace("�","AE",ereg_replace("�","ae",ereg_replace("�","OE",ereg_replace("�","oe","$prenom"))))," '���������������������ئ����ݾ�������������������������������","__AAAAAACEEEEIIIINOOOOOOSUUUUYYZaaaaaaceeeeiiiinooooooosuuuuyyz"));
 	$nom=strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$nom"))))," '$liste_caracteres_accentues","__$liste_caracteres_desaccentues"));
 	$prenom=strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$prenom"))))," '$liste_caracteres_accentues","__$liste_caracteres_desaccentues"));
 
 	fich_debug("Apr&#232;s filtrage...\n");
 	fich_debug("\$nom=$nom\n");
 	fich_debug("\$prenom=$prenom\n");
-
-	//���������������������զ����ݾ�
-	//AAAAAAACEEEEIIIINOOOOOSUUUUYYZ
-	//������������������������������
-	//aaaaaaceeeeiiiinoooooosuuuuyyz
 
 	/*
 	# Valeurs de l'uidPolicy
@@ -1424,129 +1412,6 @@ function get_first_free_gidNumber($start=NULL){
 	// ldapsearch -xLLL gidNumber | grep gidNumber | sed -e "s/^gidNumber: //" | sort -n -r | uniq | tail
 }
 
-/*
-function add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber){
-	// Recuperer le gidNumber par defaut -> lcs-users (1000) ou slis (600)
-	global $defaultgid,$domain,$defaultshell,$domainsid,$uidPolicy;
-
-	fich_debug("================\n");
-	fich_debug("add_user:\n");
-	fich_debug("\$defaultgid=$defaultgid\n");
-	fich_debug("\$domain=$domain\n");
-	fich_debug("\$defaultshell=$defaultshell\n");
-	fich_debug("\$domainsid=$domainsid\n");
-	fich_debug("\$uidPolicy=$uidPolicy\n");
-
-	global $pathscripts;
-	fich_debug("\$pathscripts=$pathscripts\n");
-
-
-	// crob_init(); Ne sert a rien !!!!
-	$nom=ereg_replace("[^a-z_-]","",strtolower(strtr(ereg_replace("�","AE",ereg_replace("�","ae",ereg_replace("�","OE",ereg_replace("�","oe","$nom"))))," '���������������������զ����ݾ�������������������������������","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
-	$prenom=ereg_replace("[^a-z_-]","",strtolower(strtr(ereg_replace("�","AE",ereg_replace("�","ae",ereg_replace("�","OE",ereg_replace("�","oe","$prenom"))))," '���������������������զ����ݾ�������������������������������","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
-
-	$nom=ucfirst(strtolower($nom));
-	$prenom=ucfirst(strtolower($prenom));
-
-	fich_debug("\$nom=$nom\n");
-	fich_debug("\$prenom=$prenom\n");
-
-
-	// Recuperer un uidNumber:
-	//$uidNumber=get_first_free_uidNumber();
-	if(!get_first_free_uidNumber()){return false;exit();}
-	$uidNumber=get_first_free_uidNumber();
-	$rid=2*$uidNumber+1000;
-	$pgrid=2*$defaultgid+1001;
-
-	fich_debug("\$uidNumber=$uidNumber\n");
-
-
-	// Faut-il interdire les espaces dans le password? les apostrophes?
-	// Comment le script ntlmpass.pl prend-il le parametre sans les apostrophes?
-
-	$ntlmpass=explode(" ",exec("$pathscripts/ntlmpass.pl '$password'"));
-
-	$sambaLMPassword=$ntlmpass[0];
-	$sambaNTPassword=$ntlmpass[1];
-	$userPassword=exec("$pathscripts/unixPassword.pl '$password'");
-
-	$attribut=array();
-	$attribut["uid"]="$uid";
-	$attribut["cn"]="$prenom $nom";
-
-	$attribut["givenName"]=strtolower($prenom).strtoupper(substr($nom,0,1));
-
-	$attribut["sn"]="$nom";
-
-	$attribut["mail"]="$uid@$domain";
-	$attribut["objectClass"]="top";
-
-	// Comme la cle est toujours objectClass, cela pose un probleme: un seul attribut objectClass est ajoute (le dernier defini)
-	//$attribut["objectClass"]="posixAccount";
-	//$attribut["objectClass"]="shadowAccount";
-	//$attribut["objectClass"]="person";
-	//$attribut["objectClass"]="inetOrgPerson";
-	//$attribut["objectClass"]="sambaSamAccount";
-
-	$attribut["loginShell"]="$defaultshell";
-	$attribut["uidNumber"]="$uidNumber";
-
-	$attribut["gidNumber"]="$defaultgid";
-
-	$attribut["homeDirectory"]="/home/$uid";
-	$attribut["gecos"]="$prenom $nom,$naissance,$sexe,N";
-
-	$attribut["sambaSID"]="$domainsid-$rid";
-		$attribut["sambaPrimaryGroupSID"]="$domainsid-$pgrid";
-
-	$attribut["sambaPwdLastSet"]="1";
-	$attribut["sambaPwdMustChange"]="2147483647";
-	$attribut["sambaAcctFlags"]="[U		  ]";
-	$attribut["sambaLMPassword"]="$sambaLMPassword";
-	$attribut["sambaNTPassword"]="$sambaNTPassword";
-	$attribut["userPassword"]="{crypt}$userPassword";
-
-	// IL faut aussi l'employeeNumber
-	if("$employeeNumber"!=""){
-		$attribut["employeeNumber"]="$employeeNumber";
-	}
-
-	$result=add_entry("uid=$uid","people",$attribut);
-	if($result){
-		// Reste a ajouter les autres attributs objectClass
-		unset($attribut);
-		$attribut=array();
-		$attribut["objectClass"]="posixAccount";
-		if(modify_attribut("uid=$uid","people", $attribut, "add")){
-			unset($attribut);
-			$attribut=array();
-			$attribut["objectClass"]="shadowAccount";
-			if(modify_attribut("uid=$uid","people", $attribut, "add")){
-				unset($attribut);
-				$attribut=array();
-				$attribut["objectClass"]="person";
-				if(modify_attribut("uid=$uid","people", $attribut, "add")){
-					unset($attribut);
-					$attribut=array();
-					$attribut["objectClass"]="inetOrgPerson";
-					if(modify_attribut("uid=$uid","people", $attribut, "add")){
-						unset($attribut);
-						$attribut=array();
-						$attribut["objectClass"]="sambaSamAccount";
-						if(modify_attribut("uid=$uid","people", $attribut, "add"))  return true;
-						else return false;
-					} else return false;
-				} else return false;
-			} else return false;
-		} else return false;
-	} else return false;
-}
-*/
-
-
-//================================================
-
 /**
 
 * Ajoute un utilisateur dans l'annuaire LDAP
@@ -1575,10 +1440,6 @@ function add_user($uid,$nom,$prenom,$sexe,$naissance,$password,$employeeNumber){
 
 
 	// crob_init(); Ne sert a rien !!!!
-	//$nom=ereg_replace("[^a-z_-]","",strtolower(strtr(ereg_replace("�","AE",ereg_replace("�","ae",ereg_replace("�","OE",ereg_replace("�","oe","$nom"))))," '���������������������զ����ݾ�������������������������������","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
-	//$prenom=ereg_replace("[^a-z_-]","",strtolower(strtr(ereg_replace("�","AE",ereg_replace("�","ae",ereg_replace("�","OE",ereg_replace("�","oe","$prenom"))))," '���������������������զ����ݾ�������������������������������","__AAAAAAACEEEEIIIINOOOOOSUUUUYYZaaaaaaceeeeiiiinoooooosuuuuyyz")));
-	//$nom=ereg_replace("[^a-z_ -]","",strtolower(strtr(ereg_replace("�","AE",ereg_replace("�","ae",ereg_replace("�","OE",ereg_replace("�","oe","$nom")))),"'���������������������ئ����ݾ�������������������������������","_AAAAAACEEEEIIIINOOOOOOSUUUUYYZaaaaaaceeeeiiiinooooooosuuuuyyz")));
-	//$prenom=ereg_replace("[^a-z_ -]","",strtolower(strtr(ereg_replace("�","AE",ereg_replace("�","ae",ereg_replace("�","OE",ereg_replace("�","oe","$prenom")))),"'���������������������ئ����ݾ�������������������������������","_AAAAAACEEEEIIIINOOOOOOSUUUUYYZaaaaaaceeeeiiiinooooooosuuuuyyz")));
 	$nom=preg_replace("/[^a-z_ -]/","",strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$nom")))),"'$liste_caracteres_accentues","_$liste_caracteres_desaccentues")));
 	$prenom=preg_replace("/[^a-z_ -]/","",strtolower(strtr(preg_replace("/Æ/","AE",preg_replace("/æ/","ae",preg_replace("/¼/","OE",preg_replace("/½/","oe","$prenom")))),"'$liste_caracteres_accentues","_$liste_caracteres_desaccentues")));
 
