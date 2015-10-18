@@ -17,7 +17,7 @@
 
 	// Choix de destination des my_echo():
 	$dest_mode="file";
-	// On va écrire dans le fichier $echo_file et non dans la page courante... ce qui serait probl�matique depuis que cette page PHP n'est plus visit�e depuis un navigateur.
+	// On va écrire dans le fichier $echo_file et non dans la page courante... ce qui serait problematique depuis que cette page PHP n'est plus visitee depuis un navigateur.
 
 	// Date et heure...
 	$aujourdhui2 = getdate();
@@ -32,7 +32,7 @@
 
 /*
 	$fich=fopen("/tmp/rapport_test.txt","a+");
-	fwrite($fich,"Le $jour_aujourdhui2/$mois_aujourdhui2/$annee_aujourdhui2 � $heure_aujourdhui2:$minute_aujourdhui2:$seconde_aujourdhui2\n");
+	fwrite($fich,"Le $jour_aujourdhui2/$mois_aujourdhui2/$annee_aujourdhui2 a $heure_aujourdhui2:$minute_aujourdhui2:$seconde_aujourdhui2\n");
 	fwrite($fich,"\$type_fichier_eleves=$type_fichier_eleves\n");
 	fwrite($fich,"\$eleves_file=$eleves_file\n");
 	fwrite($fich,"\$sts_xml_file=$sts_xml_file\n");
@@ -50,7 +50,7 @@
 	//my_echo("<p style='background-color:red;'>\$servertype=$servertype</p>");
 	//my_echo("<p style='background-color:red;'>\$debug_import_comptes=$debug_import_comptes</p>");
 
-	// R�cup�ration du type des groupes Equipe_* et Matiere_*
+	// Recuperation du type des groupes Equipe_* et Matiere_*
 	$sql="SELECT value FROM params WHERE name='type_Equipe_Matiere'";
 	$res1=mysql_query($sql);
 	if(mysql_num_rows($res1)==0) {
@@ -84,7 +84,7 @@
 	$tab_comptes_avec_employeeNumber_mis_a_jour=array();
 
 	// listing pour l'impression des comptes
-	$listing = array(array());  // une ligne par compte ; le deuxi�me parametre est, dans l'ordre nom, prenom, classe (ou 'prof'), uid, password
+	$listing = array(array());  // une ligne par compte ; le deuxieme parametre est, dans l'ordre nom, prenom, classe (ou 'prof'), uid, password
 
 	if(file_exists($pathscripts."/creation_branche_Trash.sh")) {
 		exec("/bin/bash ".$pathscripts."/creation_branche_Trash.sh > /dev/null",$retour);
@@ -241,7 +241,7 @@
 
 
 			// ==========================================================
-			// On profite d'une mise a jour annuelle pour passer en mode sans accents sur les caract�res dans les noms de classes (pour eviter des blagues dans la creation de dossiers de classes,...)
+			// On profite d'une mise a jour annuelle pour passer en mode sans accents sur les caracteres dans les noms de classes (pour eviter des blagues dans la creation de dossiers de classes,...)
 			$sql="DELETE FROM params WHERE name='clean_caract_classe';";
 			$res_clean=mysql_query($sql);
 			$sql="INSERT INTO params SET name='clean_caract_classe', value='y';";
@@ -416,7 +416,7 @@
 
 
 		if($servertype!="LCS") {
-			// Vider les fonds d'�cran pour que les �l�ves ne restent pas avec les noms de classes de l'ann�e pr�c�dente
+			// Vider les fonds d'ecran pour que les eleves ne restent pas avec les noms de classes de l'annee precedente
 			my_echo("<p>On vide les fonds d'écran pour que les élèves ne restent pas avec les noms de classes de l'année précédente.</p>\n");
 			exec("/usr/bin/sudo $pathscripts/genere_fond.sh variable_bidon supprimer");
 			if($chrono=='y') {my_echo("<p>Fin de l'opération: ".date_et_heure()."</p>\n");}
@@ -442,8 +442,8 @@
 
 		$fp=fopen($eleves_file,"r");
 		if($fp) {
-			//my_echo("<h2>Section �l�ves</h2>\n");
-			//my_echo("<h3>Section �l�ves</h3>\n");
+			//my_echo("<h2>Section eleves</h2>\n");
+			//my_echo("<h3>Section eleves</h3>\n");
 			my_echo("<h3>Section élèves");
 			if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 			my_echo("</h3>\n");
@@ -468,16 +468,16 @@
 
 
 
-			// Contr�le du contenu du fichier:
+			// controle du contenu du fichier:
 			if(stristr($ligne[0],"<?xml ")) {
 				my_echo("<p style='color:red;'>ERREUR: Le fichier élèves fourni a l'air d'être de type XML et non CSV.</p>\n");
 				my_echo("<script type='text/javascript'>
 	compte_a_rebours='n';
 </script>\n");
-				my_echo("<div style='position:absolute; top: 50px; left: 300px; width: 400px; border: 1px solid black; background-color: red;'><div align='center'>ERREUR: Le fichier �l�ves fourni a l'air d'�tre de type XML et non CSV.</div></div>");
+				my_echo("<div style='position:absolute; top: 50px; left: 300px; width: 400px; border: 1px solid black; background-color: red;'><div align='center'>ERREUR: Le fichier eleves fourni a l'air d'etre de type XML et non CSV.</div></div>");
 				my_echo("</body>\n</html>\n");
 
-				// Renseignement du t�moin de mise � jour termin�e.
+				// Renseignement du temoin de mise a jour terminee.
 				$sql="SELECT value FROM params WHERE name='imprt_cmpts_en_cours'";
 				$res1=mysql_query($sql);
 				if(mysql_num_rows($res1)==0) {
@@ -522,8 +522,8 @@
 			if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 			my_echo("</h3>\n");
 			my_echo("<blockquote>\n");
-			//my_echo("<h3>Rep�rage des champs</h3>\n");
-			//my_echo("<h4>Rep�rage des champs</h4>\n");
+			//my_echo("<h3>Reperage des champs</h3>\n");
+			//my_echo("<h4>Reperage des champs</h4>\n");
 			my_echo("<h4>Repérage des champs");
 			if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 			my_echo("</h4>\n");
@@ -536,7 +536,7 @@
 			"Sexe",
 			"Division");
 			// Analyse:
-			// Rep�rage des champs souhait�s:
+			// Reperage des champs souhaites:
 			//$tabtmp=explode(";",$ligne[0]);
 			$tabtmp=explode(";",trim($ligne[0]));
 			for($j=0;$j<count($champ);$j++) {
@@ -631,7 +631,7 @@
 			my_echo("<p>Terminé.</p>\n");
 			if($chrono=='y') {my_echo("<p>Fin de l'opération: ".date_et_heure()."</p>\n");}
 			my_echo("</blockquote>\n");
-			// A CE STADE, LE TABLEAU $eleves N'EST REMPLI QUE POUR DES DIVISIONS NON VIDES (seuls les �l�ves affect� dans des classes sont retenus).
+			// A CE STADE, LE TABLEAU $eleves N'EST REMPLI QUE POUR DES DIVISIONS NON VIDES (seuls les eleves affecte dans des classes sont retenus).
 
 
 			my_echo("<a name='csv_eleves'></a>\n");
@@ -694,7 +694,7 @@
 		// C'est un fichier Eleves...XML
 		// *****************************
 
-		// Pour avoir acc�s aux erreurs XML:
+		// Pour avoir acces aux erreurs XML:
 		libxml_use_internal_errors(true);
 
 		$ele_xml=simplexml_load_file($eleves_file);
@@ -708,7 +708,7 @@
 				my_echo("<div style='position:absolute; top: 50px; left: 300px; width: 400px; border: 1px solid black; background-color: red;'><div align='center'>ERREUR: Le fichier XML fourni n'a pas l'air d'être un fichier XML Elèves.<br />Sa racine devrait être 'BEE_ELEVES'.</div></div>");
 				my_echo("</body>\n</html>\n");
 	
-				// Renseignement du t�moin de mise � jour termin�e.
+				// Renseignement du temoin de mise a jour terminee.
 				$sql="SELECT value FROM params WHERE name='imprt_cmpts_en_cours'";
 				$res1=mysql_query($sql);
 				if(mysql_num_rows($res1)==0) {
@@ -770,7 +770,7 @@
 				$indice_from_eleve_id=array();
 				$indice_from_elenoet=array();
 			
-				//Compteur �l�ve:
+				//Compteur eleve:
 				$i=-1;
 			
 				$tab_champs_eleve=array("ID_NATIONAL",
@@ -812,7 +812,7 @@
 				$objet_eleves=($ele_xml->DONNEES->ELEVES);
 				foreach ($objet_eleves->children() as $eleve) {
 					$i++;
-					//my_echo("<p><b>El�ve $i</b><br />");
+					//my_echo("<p><b>Eleve $i</b><br />");
 			
 					$eleves[$i]=array();
 			
@@ -848,7 +848,7 @@
 					}
 
 					//20130115
-					// Est-ce que l'elenoet enregistr� est bien un elenoet de l'�tablissement ou un �l�ve import� d'un autre �tablissement?
+					// Est-ce que l'elenoet enregistre est bien un elenoet de l'etablissement ou un eleve importe d'un autre etablissement?
 					if(($uaj_tronque!="")&&(isset($eleves[$i]['elenoet']))&&(isset($eleves[$i]['id_eleve_etab']))&&(!preg_match("/".$elenoet.$uaj_tronque."/", $eleves[$i]['id_eleve_etab']))) {
 						my_echo("<p style='color:red'>L'élève ".$eleves[$i]['nom']." ".$eleves[$i]['prenom']." a étè importé d'un autre établissement (<em>".$eleves[$i]['id_eleve_etab']."-&gt;".preg_replace("/[0]*".$eleves[$i]['elenoet']."/","",$eleves[$i]['id_eleve_etab'])."</em>).<br />Son elenoet (<em>".$eleves[$i]['elenoet']."</em>) est celui qu'il avait dans son ancien établissement.<br />Cet elenoet n'est pas encore valide<br />Vous devrez créer le compte à la main en attendant que Sconet/Siècle soit nettoyé/mis à jour.</p>\n");
 						$tab_eleve_autre_etab[]=$eleves[$i]['nom']."|".$eleves[$i]['prenom']."|".$eleves[$i]['code_sexe']."|".$eleves[$i]['date_naiss'];
@@ -874,7 +874,7 @@
 					// $option est un <OPTION ELEVE_ID="145778" ELENOET="2643">
 					//my_echo("<p><b>Option</b><br />");
 			
-					// $i est l'indice de l'�l�ve dans le tableau $eleves
+					// $i est l'indice de l'eleve dans le tableau $eleves
 					unset($i);
 			
 					$chaine_option="OPTION";
@@ -883,7 +883,7 @@
 			
 						$chaine_option.=" $key='$value'";
 			
-						// Recherche de la valeur de $i dans $eleves[$i] d'apr�s l'ELEVE_ID ou l'ELENOET
+						// Recherche de la valeur de $i dans $eleves[$i] d'apres l'ELEVE_ID ou l'ELENOET
 						if((strtoupper($key)=='ELEVE_ID')&&(isset($indice_from_eleve_id["$value"]))) {
 							$i=$indice_from_eleve_id["$value"];
 							break;
@@ -902,7 +902,7 @@
 						$j=0;
 						//foreach($option->OPTIONS_ELEVE->children() as $key => $value) {
 			
-						// $option fait r�f�rence � un �l�ve
+						// $option fait reference a un eleve
 						// Les enfants sont des OPTIONS_ELEVE
 						foreach($option->children() as $options_eleve) {
 							foreach($options_eleve->children() as $key => $value) {
@@ -938,7 +938,7 @@
 				foreach ($objet_structures->children() as $structures_eleve) {
 					//my_echo("<p><b>Structure</b><br />");
 			
-					// $i est l'indice de l'�l�ve dans le tableau $eleves
+					// $i est l'indice de l'eleve dans le tableau $eleves
 					unset($i);
 			
 					$chaine_structures_eleve="STRUCTURES_ELEVE";
@@ -947,7 +947,7 @@
 			
 						$chaine_structures_eleve.=" $key='$value'";
 			
-						// Recherche de la valeur de $i dans $eleves[$i] d'apr�s l'ELEVE_ID ou l'ELENOET
+						// Recherche de la valeur de $i dans $eleves[$i] d'apres l'ELEVE_ID ou l'ELENOET
 						if((strtoupper($key)=='ELEVE_ID')&&(isset($indice_from_eleve_id["$value"]))) {
 							$i=$indice_from_eleve_id["$value"];
 							break;
@@ -994,7 +994,7 @@
 			
 				//++++++++++++++++++++++++++++++++++++++
 	
-				// G�n�rer un tableau des membres des groupes:
+				// Generer un tableau des membres des groupes:
 				// $structure[$i]["nom"]		->	5LATIN-, 3 A2DEC3,...
 				// $structure[$i]["eleve"][]	->	ELENOET
 	
@@ -1056,7 +1056,7 @@
 							for($j=0;$j<count($eleves[$i]["structures"]);$j++) {
 								if($eleves[$i]["structures"][$j]["type_structure"]=="D") {
 
-									// Normalement, un �l�ve n'est que dans une classe, mais au cas o�:
+									// Normalement, un eleve n'est que dans une classe, mais au cas oe:
 									if($temoin_div_trouvee!="oui") {
 										my_echo("<td>".$eleves[$i]["structures"][$j]["code_structure"]."</td>");
 										$eleves[$i]["classe"]=$eleves[$i]["structures"][$j]["code_structure"];
@@ -1128,7 +1128,7 @@
 	
 	
 				// Avec le fichier XML, on a rempli un tableau $eleves (au pluriel)
-				// Remplissage du tableau $eleve (au singulier) calqu� sur celui du fichier CSV.
+				// Remplissage du tableau $eleve (au singulier) calque sur celui du fichier CSV.
 				if($temoin_creation_fichiers!="non") {$fich=fopen("$dossiercsv/f_ele.txt","w+");}else{$fich=FALSE;}
 				$eleve=array();
 				$tabnumero=array();
@@ -1203,7 +1203,7 @@
 								for($j=0;$j<count($eleves[$i]["options"]);$j++) {
 									$eleve[$numero]["options"][$j]=array();
 									$eleve[$numero]["options"][$j]["code_matiere"]=$eleves[$i]["options"][$j]["code_matiere"];
-									// Les autres champs ne sont pas tr�s utiles...
+									// Les autres champs ne sont pas tres utiles...
 	
 									//my_echo("Option suivie: \$eleve[$numero][\"options\"][$j][\"code_matiere\"]=".$eleve[$numero]["options"][$j]["code_matiere"]."<br />");
 	
@@ -1256,7 +1256,7 @@
 				//		for($n=0;$n<count($tab_division[$k]["option"]);$n++) {
 				//			my_echo("<p>\$tab_division[$k][\"option\"][$n][\"code_matiere\"]=".$tab_division[$k]["option"][$n]["code_matiere"]."<br />");
 				//			//my_echo("<ul>");
-				//			my_echo("El�ves: ");
+				//			my_echo("Eleves: ");
 				//			my_echo($tab_division[$k]["option"][$n]["eleve"][0]);
 				//			for($i=1;$i<count($tab_division[$k]["option"][$n]["eleve"]);$i++) {
 				//				//my_echo("<li></li>");
@@ -1316,7 +1316,7 @@
 	// Lecture du XML de STS...
 	$temoin_au_moins_un_prof_princ="";
 
-	// Pour avoir acc�s aux erreurs XML:
+	// Pour avoir acces aux erreurs XML:
 	libxml_use_internal_errors(true);
 
 	$sts_xml=simplexml_load_file($sts_xml_file);
@@ -1338,7 +1338,7 @@
 			my_echo("<div style='position:absolute; top: 50px; left: 300px; width: 400px; border: 1px solid black; background-color: red;'><div align='center'>ERREUR: Le fichier STS/Emploi-du-temps fourni n'a pas l'air d'être de type STS_EDT.</div></div>");
 			my_echo("</body>\n</html>\n");
 
-			// Renseignement du t�moin de mise � jour termin�e.
+			// Renseignement du temoin de mise a jour terminee.
 			$sql="SELECT value FROM params WHERE name='imprt_cmpts_en_cours'";
 			$res1=mysql_query($sql);
 			if(mysql_num_rows($res1)==0) {
@@ -1392,20 +1392,20 @@
 				}
 			}
 	
-			// Acad�mie
+			// Academie
 			$etablissement["academie"]=array();
 			foreach($sts_xml->PARAMETRES->UAJ->ACADEMIE->children() as $key => $value) {
 				$etablissement["academie"][strtolower($key)]=trim(traite_utf8($value));
 			}
 	
-			// Champs de l'�tablissement (sigle, denom_princ, adresse,...)
+			// Champs de l'etablissement (sigle, denom_princ, adresse,...)
 			foreach($sts_xml->PARAMETRES->UAJ->children() as $key => $value) {
 				if(in_array(strtoupper($key),$tab_champs_uaj)) {
 					$etablissement[strtolower($key)]=trim(traite_utf8($value));
 				}
 			}
 	
-			// Ann�e
+			// Annee
 			foreach($sts_xml->PARAMETRES->ANNEE_SCOLAIRE->attributes() as $key => $value) {
 				if(strtoupper($key)=='ANNEE') {
 					$etablissement["annee"]=array();
@@ -1414,7 +1414,7 @@
 				}
 			}
 	
-			// Dates de d�but et fin d'ann�e
+			// Dates de debut et fin d'annee
 			foreach($sts_xml->PARAMETRES->ANNEE_SCOLAIRE->children() as $key => $value) {
 				$etablissement["annee"][strtolower($key)]=trim(traite_utf8($value));
 			}
@@ -1504,9 +1504,9 @@
 			if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 			my_echo("</h4>\n");
 			my_echo("<blockquote>\n");
-			//my_echo("<h3>Analyse du fichier pour extraire les mati�res...</h3>\n");
-			//my_echo("<h4>Analyse du fichier pour extraire les mati�res...</h4>\n");
-			//my_echo("<h5>Analyse du fichier pour extraire les mati�res...</h5>\n");
+			//my_echo("<h3>Analyse du fichier pour extraire les matieres...</h3>\n");
+			//my_echo("<h4>Analyse du fichier pour extraire les matieres...</h4>\n");
+			//my_echo("<h5>Analyse du fichier pour extraire les matieres...</h5>\n");
 			my_echo("<h5>Analyse du fichier pour extraire les matières...");
 			if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 			my_echo("</h5>\n");
@@ -1524,7 +1524,7 @@
 					}
 				}
 	
-				// Champs de la mati�re
+				// Champs de la matiere
 				foreach($objet_matiere->children() as $key => $value) {
 					if(in_array(strtoupper($key),$tab_champs_matiere)) {
 						if(strtoupper($key)=='CODE_GESTION') {
@@ -2068,9 +2068,9 @@
 			if($chrono=='y') {my_echo("<p>Fin de l'opération: ".date_et_heure()."</p>\n");}
 			my_echo("</blockquote>\n");
 	
-			//my_echo("<a name='f_div'></a><h2>G�n�ration d'un CSV du F_DIV pour SambaEdu3</h2>\n");
-			//my_echo("<a name='f_div'></a><h3>G�n�ration d'un CSV du F_DIV pour SambaEdu3</h3>\n");
-			//my_echo("<a name='f_div'></a><h4>G�n�ration d'un CSV du F_DIV pour SambaEdu3</h4>\n");
+			//my_echo("<a name='f_div'></a><h2>Generation d'un CSV du F_DIV pour SambaEdu3</h2>\n");
+			//my_echo("<a name='f_div'></a><h3>Generation d'un CSV du F_DIV pour SambaEdu3</h3>\n");
+			//my_echo("<a name='f_div'></a><h4>Generation d'un CSV du F_DIV pour SambaEdu3</h4>\n");
 			my_echo("<a name='f_div'></a><h4>Génération d'un CSV du F_DIV");
 			if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 			my_echo("</h4>\n");
@@ -2116,9 +2116,9 @@
 	
 	
 	
-			//my_echo("<a name='f_men'></a><h2>G�n�ration d'un CSV du F_MEN pour SambaEdu3</h2>\n");
-			//my_echo("<a name='f_men'></a><h3>G�n�ration d'un CSV du F_MEN pour SambaEdu3</h3>\n");
-			//my_echo("<a name='f_men'></a><h4>G�n�ration d'un CSV du F_MEN pour SambaEdu3</h4>\n");
+			//my_echo("<a name='f_men'></a><h2>Generation d'un CSV du F_MEN pour SambaEdu3</h2>\n");
+			//my_echo("<a name='f_men'></a><h3>Generation d'un CSV du F_MEN pour SambaEdu3</h3>\n");
+			//my_echo("<a name='f_men'></a><h4>Generation d'un CSV du F_MEN pour SambaEdu3</h4>\n");
 			my_echo("<a name='f_men'></a><h4>Génération d'un CSV du F_MEN");
 			if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 			my_echo("</h4>\n");
@@ -2158,7 +2158,7 @@
 	
 	
 				//if($_POST['se3_groupes']=='yes') {
-				// PROBLEME: On cr�e des groupes avec tous les membres de la classe...
+				// PROBLEME: On cree des groupes avec tous les membres de la classe...
 					//my_echo("<hr width='200' />\n");
 					for($i=0;$i<count($groupes);$i++) {
 						unset($matimn);
@@ -2169,8 +2169,8 @@
 							//my_echo("\$matiere[$m][\"code\"]=".$matiere[$m]["code"]." et \$groupes[$i][\"service\"][0][\"code_matiere\"]=".$groupes[$i]["service"][0]["code_matiere"]."<br />\n");
 	//+++++++++++++++++++++++++
 	//+++++++++++++++++++++++++
-	// PB: si on a un m�me groupe/regroupement pour plusieurs mati�res, on ne r�cup�re que le premier
-	// A FAIRE: Revoir le dispositif pour cr�er dans ce cas des groupes <NOM_GROUPE>_<MATIERE> ou <MATIERE>_<NOM_GROUPE>
+	// PB: si on a un meme groupe/regroupement pour plusieurs matieres, on ne recupere que le premier
+	// A FAIRE: Revoir le dispositif pour creer dans ce cas des groupes <NOM_GROUPE>_<MATIERE> ou <MATIERE>_<NOM_GROUPE>
 	//+++++++++++++++++++++++++
 	//+++++++++++++++++++++++++
 							//if(isset($groupes[$i]["code_matiere"])) {
@@ -2179,7 +2179,7 @@
 								if($matiere[$m]["code"]==$groupes[$i]["service"][0]["code_matiere"]) {
 									//$matimn=$programme[$k]["code_matiere"];
 									$matimn=$matiere[$m]["code_gestion"];
-									//my_echo("<b>Trouv�: mati�re n�$m: \$matimn=$matimn</b><br />\n");
+									//my_echo("<b>Trouve: matiere ne$m: \$matimn=$matimn</b><br />\n");
 								}
 							}
 						}
@@ -2284,8 +2284,8 @@ document.getElementById('div_signalements').innerHTML=document.getElementById('d
 
 	// =========================================================
 
-	// Cr�ation d'une sauvegarde:
-	// Probl�me avec l'emplacement dans lequel www-se3 peut �crire...
+	// Creation d'une sauvegarde:
+	// Probleme avec l'emplacement dans lequel www-se3 peut ecrire...
 	//if($fich=fopen("/var/se3/save/sauvegarde_ldap.sh","w+")) {
 
 /*
@@ -2302,9 +2302,9 @@ PASSDN=$(cat /etc/ldap.secret)
 
 #source /etc/ssmtp/ssmtp.conf
 
-echo "Erreur lors de la sauvegarde de pr�caution effectu�e avant import.
+echo "Erreur lors de la sauvegarde de precaution effectuee avant import.
 Le $date" > /tmp/erreur_svg_prealable_ldap_${date}.txt
-# Le fichier d erreur est g�n�r� quoi qu il arrive, mais il n est exp�di� qu en cas de probl�me de sauvegarde
+# Le fichier d erreur est genere quoi qu il arrive, mais il n est expedie qu en cas de probleme de sauvegarde
 /usr/bin/ldapsearch -xLLL -D $ROOTDN -w $PASSDN > $dossier_svg/ldap_${date}.ldif || mail root -s "Erreur sauvegarde LDAP" < /tmp/erreur_svg_prealable_ldap_${date}.txt
 rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 ');
@@ -2347,7 +2347,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			if($prof[$cpt]["fonction"]=="ENS") {
 				// Pour chaque prof:
 				//$chaine="P".$prof[$cpt]["id"]."|".$prof[$cpt]["nom_usage"]."|".$prof[$cpt]["prenom"]."|".$date."|".$prof[$cpt]["sexe"]
-				// T�moin d'�chec de cr�ation du compte prof
+				// Temoin d'echec de creation du compte prof
 				$temoin_erreur_prof="";
 				$date=str_replace("-","",$prof[$cpt]["date_naissance"]);
 				$employeeNumber="P".$prof[$cpt]["id"];
@@ -2357,7 +2357,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 	
 					if($tab[-1]=="people") {
 						// ================================
-						// V�rification/correction du GECOS
+						// Verification/correction du GECOS
 						if($corriger_gecos_si_diff=='y') {
 							$nom=remplace_accents(traite_espaces($prof[$cpt]["nom_usage"]));
 							$prenom=remplace_accents(traite_espaces($prof[$cpt]["prenom"]));
@@ -2368,7 +2368,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						// ================================
 	
 						// ================================
-						// V�rification/correction du givenName
+						// Verification/correction du givenName
 						if($corriger_givenname_si_diff=='y') {
 							$prenom=strtolower(remplace_accents(traite_espaces($prof[$cpt]["prenom"])));
 							//my_echo("Test de la correction du givenName: verif_et_corrige_givenname($uid,$prenom)<br />\n");
@@ -2377,7 +2377,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						// ================================
 	
 						// ================================
-						// V�rification/correction du pseudo
+						// Verification/correction du pseudo
 						//if($annuelle=="y") {
 							if($controler_pseudo=='y') {
 								$nom=remplace_accents(traite_espaces($prof[$cpt]["nom_usage"]));
@@ -2388,7 +2388,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						// ================================
 					}
 					elseif($tab[-1]=="trash") {
-						// On restaure le compte de Trash puisqu'il y est avec le m�me employeeNumber
+						// On restaure le compte de Trash puisqu'il y est avec le meme employeeNumber
 						my_echo("Restauration du compte depuis la branche Trash: \n");
 						if(recup_from_trash($uid)) {
 							my_echo("<font color='green'>SUCCES</font>");
@@ -2440,7 +2440,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						//$nouveaux_comptes++;
 	
 						if($temoin_f_uid=='y') {
-							// On cherche une ligne correspondant � l'employeeNumber dans le F_UID.TXT
+							// On cherche une ligne correspondant a l'employeeNumber dans le F_UID.TXT
 							if($uid=get_uid_from_f_uid_file($employeeNumber)) {
 								// On controle si ce login est deja employe
 	
@@ -2449,12 +2449,12 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 								$verif2=get_tab_attribut("trash", "uid=$uid", $attribut);
 								//if((count($verif1)>0)||(count($verif2)>0)) {
 								if(count($verif1)>0) {
-									// Le login propos� est d�j� dans l'annuaire
+									// Le login propose est deja dans l'annuaire
 									my_echo("Le login proposé <span style='color:red;'>$uid</span> est déjà dans l'annuaire (<i>branche People</i>).<br />\n");
 									$uid="";
 								}
 								elseif(count($verif2)>0) {
-									// Le login propos� est d�j� dans l'annuaire
+									// Le login propose est deja dans l'annuaire
 									my_echo("Le login proposé <span style='color:red;'>$uid</span> est déjà dans l'annuaire (<i>branche Trash</i>).<br />\n");
 									$uid="";
 								}
@@ -2464,7 +2464,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							}
 	
 							if($uid=='') {
-								// Cr�ation d'un uid:
+								// Creation d'un uid:
 								if(!$uid=creer_uid($nom,$prenom)) {
 									$temoin_erreur_prof="o";
 									my_echo("<font color='red'>ECHEC: Problème lors de la création de l'uid...</font><br />\n");
@@ -2526,7 +2526,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						else {
 							// On n'a pas de F_UID.TXT pour imposer des logins
 	
-							// Cr�ation d'un uid:
+							// Creation d'un uid:
 							if(!$uid=creer_uid($nom,$prenom)) {
 								$temoin_erreur_prof="o";
 								my_echo("<font color='red'>ECHEC: Problème lors de la création de l'uid...</font><br />\n");
@@ -2618,32 +2618,32 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		}
 	}
 
-	//if($chrono=='y') {my_echo("<p>Fin de l'op�ration: ".date_et_heure()."</p>\n");}
+	//if($chrono=='y') {my_echo("<p>Fin de l'operation: ".date_et_heure()."</p>\n");}
 	//my_echo("</blockquote>\n");
 
 
-    // R�cup�ration des comptes de no_Trash_Profs
+    // Recuperation des comptes de no_Trash_Profs
 	/*
     $attribut=array("memberuid");
     $membre_no_Trash_Profs=get_tab_attribut("groups", "cn=no_Trash_Profs", $attribut);
     if(count($membre_no_Trash_Profs)>0) {
-        my_echo("<h3>Comptes � pr�server de la corbeille (Profs)");
+        my_echo("<h3>Comptes a preserver de la corbeille (Profs)");
         if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
         my_echo("</h3>\n");
 
         my_echo("<blockquote>\n");
         for($loop=0;$loop<count($membre_no_Trash_Profs);$loop++) {
             $uid=$membre_no_Trash_Profs[$loop];
-            my_echo("<p>Contr�le du membre $uid du groupe no_Trash_Profs: <br />");
+            my_echo("<p>Controle du membre $uid du groupe no_Trash_Profs: <br />");
 
             // Le membre de no_Trash_Profs existe-t-il encore dans People:
-            // Si oui, on contr�le s'il est dans Profs... si n�cessaire on l'y met
+            // Si oui, on controle s'il est dans Profs... si necessaire on l'y met
             // Sinon, on le supprime de no_Trash_Profs
             $attribut=array("uid");
             $compte_existe=get_tab_attribut("people", "uid=$uid", $attribut);
             if(count($compte_existe)==0) {
-                // Le compte n'existe plus... et on a oubli� de nettoyer no_Trash_Profs
-                // Normalement, cela n'arrive pas: Lors de la suppression d'un compte, le m�nage est normalement fait dans les groupes
+                // Le compte n'existe plus... et on a oublie de nettoyer no_Trash_Profs
+                // Normalement, cela n'arrive pas: Lors de la suppression d'un compte, le menage est normalement fait dans les groupes
 
                 my_echo("Le compte $uid n'existe plus.<br />Suppression de l'appartenance au groupe no_Trash_Profs: ");
                 if($simulation!="y") {
@@ -2665,11 +2665,11 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
             }
             else {
-                // On contr�le si le compte est membre du groupe Profs
+                // On controle si le compte est membre du groupe Profs
 				$attribut=array("memberuid");
 				$memberUid=get_tab_attribut("groups", "(&(cn=Profs)(memberuid=$uid))", $attribut);
 				if(count($memberUid)>0) {
-					my_echo("$uid est d�j� membre du groupe Profs.<br />\n");
+					my_echo("$uid est deja membre du groupe Profs.<br />\n");
 				}
 				else{
 					my_echo("Ajout de $uid au groupe Profs: ");
@@ -2708,12 +2708,12 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				my_echo("<p>Contrôle du membre $uid titulaire du droit no_Trash_user: <br />");
 
 				// Le membre de no_Trash_user existe-t-il encore dans People:
-				// Si oui, on contr�le s'il est dans Profs... si n�cessaire on l'y met
+				// Si oui, on controle s'il est dans Profs... si necessaire on l'y met
 				// Sinon, on le supprime de no_Trash_user
 				$attribut=array("uid");
 				$compte_existe=get_tab_attribut("people", "uid=$uid", $attribut);
 				if(count($compte_existe)==0) {
-					// Le compte n'existe plus... et on a oubli� de nettoyer no_Trash_user
+					// Le compte n'existe plus... et on a oublie de nettoyer no_Trash_user
 
 					my_echo("Le compte $uid n'existe plus.<br />Suppression de l'appartenance au droit no_Trash_user: ");
 					if($simulation!="y") {
@@ -2734,7 +2734,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					my_echo(".<br />\n");
 				}
 				else {
-					// On contr�le si le compte est membre du groupe Profs
+					// On controle si le compte est membre du groupe Profs
 					$attribut=array("memberuid");
 					$memberUid=get_tab_attribut("groups", "(&(cn=Profs)(memberuid=$uid))", $attribut);
 					if(count($memberUid)>0) {
@@ -2774,8 +2774,8 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 	my_echo("<a name='creer_eleves'></a>\n");
 	my_echo("<a name='eleves_se3'></a>\n");
-	//my_echo("<h2>Cr�ation des comptes �l�ves</h2>\n");
-	//my_echo("<h3>Cr�ation des comptes �l�ves</h3>\n");
+	//my_echo("<h2>Creation des comptes eleves</h2>\n");
+	//my_echo("<h3>Creation des comptes eleves</h3>\n");
 	my_echo("<h3>Création des comptes élèves");
 	if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 	my_echo("</h3>\n");
@@ -2832,7 +2832,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			}
 
 			if($temoin_classe!="y") {
-				// On ajoute la classe � cr��r.
+				// On ajoute la classe a creer.
 				$cpt_classe++;
 				my_echo("<p>Nouvelle classe: $div</p>\n");
 				$tab_classe[$cpt_classe]=array();
@@ -2842,7 +2842,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			}
 		}
 		else{
-			// La classe existe d�j� dans l'annuaire.
+			// La classe existe deja dans l'annuaire.
 
 			$temoin_classe="";
 			for($i=0;$i<count($tab_classe);$i++) {
@@ -2852,7 +2852,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			}
 
 			if($temoin_classe!="y") {
-				// On ajoute la classe � cr��r.
+				// On ajoute la classe a creer.
 				$cpt_classe++;
 				my_echo("<p>Classe existante: $div</p>\n");
 				$tab_classe[$cpt_classe]=array();
@@ -2863,7 +2863,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		}
 
 
-		// Pour chaque �l�ve:
+		// Pour chaque eleve:
 		$employeeNumber=$eleve[$numero]["numero"];
 		if($tab=verif_employeeNumber($employeeNumber)) {
 			my_echo("<p>Uid existant pour employeeNumber=$employeeNumber: $tab[0]<br />\n");
@@ -2871,7 +2871,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 			if($tab[-1]=="people") {
 				// ================================
-				// V�rification/correction du GECOS
+				// Verification/correction du GECOS
 				if($corriger_gecos_si_diff=='y') {
 					$nom=remplace_accents(traite_espaces($eleve[$numero]["nom"]));
 					$prenom=remplace_accents(traite_espaces($eleve[$numero]["prenom"]));
@@ -2882,7 +2882,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				// ================================
 
 				// ================================
-				// V�rification/correction du givenName
+				// Verification/correction du givenName
 				if($corriger_givenname_si_diff=='y') {
 					$prenom=strtolower(remplace_accents(traite_espaces($eleve[$numero]["prenom"])));
 					//my_echo("Test de la correction du givenName: verif_et_corrige_givenname($uid,$prenom)<br />\n");
@@ -2891,7 +2891,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				// ================================
 
 				// ================================
-				// V�rification/correction du pseudo
+				// Verification/correction du pseudo
 				//if($annuelle=="y") {
 					if($controler_pseudo=='y') {
 						$nom=remplace_accents(traite_espaces($eleve[$numero]["nom"]));
@@ -2902,7 +2902,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				// ================================
 			}
 			elseif($tab[-1]=="trash") {
-				// On restaure le compte de Trash puisqu'il y est avec le m�me employeeNumber
+				// On restaure le compte de Trash puisqu'il y est avec le meme employeeNumber
 				my_echo("Restauration du compte depuis la branche Trash: \n");
 				if(recup_from_trash($uid)) {
 					my_echo("<font color='green'>SUCCES</font>");
@@ -2955,7 +2955,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 				$uid="";
 				if($temoin_f_uid=='y') {
-					// On cherche une ligne correspondant � l'employeeNumber dans le F_UID.TXT
+					// On cherche une ligne correspondant a l'employeeNumber dans le F_UID.TXT
 					if($uid=get_uid_from_f_uid_file($employeeNumber)) {
 						// On controle si ce login est deja employe
 
@@ -2964,12 +2964,12 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						$verif2=get_tab_attribut("trash", "uid=$uid", $attribut);
 						//if((count($verif1)>0)||(count($verif2)>0)) {
 						if(count($verif1)>0) {
-							// Le login propos� est d�j� dans l'annuaire
+							// Le login propose est deja dans l'annuaire
 							my_echo("Le login proposé <span style='color:red;'>$uid</span> est déjà dans l'annuaire (<i>branche People</i>).<br />\n");
 							$uid="";
 						}
 						elseif(count($verif2)>0) {
-							// Le login propos� est d�j� dans l'annuaire
+							// Le login propose est deja dans l'annuaire
 							my_echo("Le login proposé <span style='color:red;'>$uid</span> est déjà dans l'annuaire (<i>branche Trash</i>).<br />\n");
 							$uid="";
 						}
@@ -2979,7 +2979,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					}
 
 					if($uid=='') {
-						// Cr�ation d'un uid:
+						// Creation d'un uid:
 						if(!$uid=creer_uid($nom,$prenom)) {
 							$temoin_erreur_eleve="o";
 							my_echo("<font color='red'>ECHEC: Problème lors de la création de l'uid...</font><br />\n");
@@ -3051,7 +3051,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					}
 					*/
 
-					// Cr�ation d'un uid:
+					// Creation d'un uid:
 					if(!$uid=creer_uid($nom,$prenom)) {
 						$temoin_erreur_eleve="o";
 						my_echo("<font color='red'>ECHEC: Problème lors de la création de l'uid...</font><br />\n");
@@ -3062,7 +3062,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					}
 					else{
 						/*
-						// R�cup�ration du premier uidNumber libre: C'EST FAIT DANS add_user()
+						// Recuperation du premier uidNumber libre: C'EST FAIT DANS add_user()
 						$uidNumber=get_first_free_uidNumber();
 						// AJOUTER DES TESTS SUR LE FAIT QU'IL RESTE OU NON DES uidNumber dispo...
 						*/
@@ -3151,17 +3151,17 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				my_echo(".<br />\n");
 			}
 
-			// T�moin pour rep�rer les appartenances � plusieurs classes
+			// Temoin pour reperer les appartenances a plusieurs classes
 			$temoin_plusieurs_classes="n";
 
-			// Ajout de l'�l�ve au tableau de la classe:
+			// Ajout de l'eleve au tableau de la classe:
 			$attribut=array("memberuid");
 			$memberUid=get_tab_attribut("groups", "(&(cn=Classe_".$prefix."$div)(memberuid=$uid))", $attribut);
 			if(count($memberUid)>0) {
 				my_echo("$uid est déjà membre de la classe $div.<br />\n");
 
 				// Ajout d'un test:
-				// L'�l�ve est-il membre d'autres classes.
+				// L'eleve est-il membre d'autres classes.
 				$attribut=array("memberuid");
 				$test_memberUid=get_tab_attribut("groups", "(&(cn=Classe_*)(memberuid=$uid))", $attribut);
 				if(count($test_memberUid)>1) {
@@ -3171,7 +3171,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			else{
 				my_echo("Ajout de $uid au tableau de la classe $div.<br />\n");
 				//$tab_classe[$cpt_classe]["eleves"][]=$uid;
-				// PROBLEME: Avec l'import XML, les �l�ves ne sont jamais tri�s par classes... et ce n'est le cas dans l'import CSV que si on a fait le tri dans ce sens
+				// PROBLEME: Avec l'import XML, les eleves ne sont jamais tries par classes... et ce n'est le cas dans l'import CSV que si on a fait le tri dans ce sens
 				// Recherche de l'indice dans tab_classe
 				$ind_classe=-1;
 				for($i=0;$i<count($tab_classe);$i++) {
@@ -3185,7 +3185,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 
 				// Ajout d'un test:
-				// L'�l�ve est-il membre d'autres classes.
+				// L'eleve est-il membre d'autres classes.
 				$attribut=array("memberuid");
 				$test_memberUid=get_tab_attribut("groups", "(&(cn=Classe_*)(memberuid=$uid))", $attribut);
 				if(count($test_memberUid)>0) {
@@ -3194,7 +3194,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			}
 
 			// Ajout d'un test:
-			// L'�l�ve est-il membre d'autres classes.
+			// L'eleve est-il membre d'autres classes.
 			if($temoin_plusieurs_classes=="y") {
 				$attribut=array("cn");
 				$cn_classes_de_l_eleve=get_tab_attribut("groups", "(&(cn=Classe_*)(memberuid=$uid))", $attribut);
@@ -3247,12 +3247,12 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				my_echo("<p>Contrôle du membre $uid titulaire du droit no_Trash_user: <br />");
 
 				// Le membre de no_Trash_user existe-t-il encore dans People:
-				// Si oui, on contr�le s'il est dans Eleves... si n�cessaire on l'y met
+				// Si oui, on controle s'il est dans Eleves... si necessaire on l'y met
 				// Sinon, on le supprime de no_Trash_user
 				$attribut=array("uid");
 				$compte_existe=get_tab_attribut("people", "uid=$uid", $attribut);
 				if(count($compte_existe)==0) {
-					// Le compte n'existe plus... et on a oubli� de nettoyer no_Trash_user
+					// Le compte n'existe plus... et on a oublie de nettoyer no_Trash_user
 
 					my_echo("Le compte $uid n'existe plus.<br />Suppression de l'association au droit no_Trash_user: ");
 					if($simulation!="y") {
@@ -3273,7 +3273,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					my_echo(".<br />\n");
 				}
 				else {
-					// On contr�le si le compte est membre du groupe Eleves
+					// On controle si le compte est membre du groupe Eleves
 					$attribut=array("memberuid");
 					$memberUid=get_tab_attribut("groups", "(&(cn=Eleves)(memberuid=$uid))", $attribut);
 					if(count($memberUid)>0) {
@@ -3330,20 +3330,20 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 		$chaine="";
 		if($nouveaux_comptes==0) {
-			//my_echo("<p>Aucun nouveau compte ne serait cr��.</p>\n");
+			//my_echo("<p>Aucun nouveau compte ne serait cree.</p>\n");
 			$chaine.="<p>Aucun nouveau compte ne serait créé.</p>\n";
 		}
 		elseif($nouveaux_comptes==1) {
-			//my_echo("<p>$nouveaux_comptes nouveau compte serait cr��: $tab_nouveaux_comptes[0]</p>\n");
+			//my_echo("<p>$nouveaux_comptes nouveau compte serait cree: $tab_nouveaux_comptes[0]</p>\n");
 			$chaine.="<p>$nouveaux_comptes nouveau compte serait créé: $tab_nouveaux_comptes[0]</p>\n";
 		}
 		else{
 			/*
-			my_echo("<p>$nouveaux_comptes nouveaux comptes seraient cr��s: ");
+			my_echo("<p>$nouveaux_comptes nouveaux comptes seraient crees: ");
 			my_echo($tab_nouveaux_comptes[0]);
 			for($i=1;$i<count($tab_nouveaux_comptes);$i++) {my_echo(", $tab_nouveaux_comptes[$i]");}
 			my_echo("</p>\n");
-			my_echo("<p><i>Attention:</i> Si un nom de compte est en doublon dans les nouveaux comptes, c'est un bug de la simulation.<br />Le probl�me ne se produira pas en mode cr�ation.</p>\n");
+			my_echo("<p><i>Attention:</i> Si un nom de compte est en doublon dans les nouveaux comptes, c'est un bug de la simulation.<br />Le probleme ne se produira pas en mode creation.</p>\n");
 			*/
 			$chaine.=$tab_nouveaux_comptes[0];
 			for($i=1;$i<count($tab_nouveaux_comptes);$i++) {$chaine.=", $tab_nouveaux_comptes[$i]";}
@@ -3353,16 +3353,16 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 
 		if($comptes_avec_employeeNumber_mis_a_jour==0) {
-			//my_echo("<p>Aucun compte existant sans employeeNumber n'aurait �t� r�cup�r�/corrig�.</p>\n");
+			//my_echo("<p>Aucun compte existant sans employeeNumber n'aurait ete recupere/corrige.</p>\n");
 			$chaine.="<p>Aucun compte existant sans employeeNumber n'aurait été récupéré/corrigé.</p>\n";
 		}
 		elseif($comptes_avec_employeeNumber_mis_a_jour==1) {
-			//my_echo("<p>$comptes_avec_employeeNumber_mis_a_jour compte existant sans employeeNumber aurait �t� r�cup�r�/corrig� (<i>son employeeNumber serait maintenant renseign�</i>): $tab_comptes_avec_employeeNumber_mis_a_jour[0]</p>\n");
+			//my_echo("<p>$comptes_avec_employeeNumber_mis_a_jour compte existant sans employeeNumber aurait ete recupere/corrige (<i>son employeeNumber serait maintenant renseigne</i>): $tab_comptes_avec_employeeNumber_mis_a_jour[0]</p>\n");
 			$chaine.="<p>$comptes_avec_employeeNumber_mis_a_jour compte existant sans employeeNumber aurait été récupéré/corrigé (<i>son employeeNumber serait maintenant renseigné</i>): $tab_comptes_avec_employeeNumber_mis_a_jour[0]</p>\n";
 		}
 		else{
 			/*
-			my_echo("<p>$comptes_avec_employeeNumber_mis_a_jour comptes existants sans employeeNumber auraient �t� r�cup�r�s/corrig�s (<i>leur employeeNumber serait maintenant renseign�</i>): ");
+			my_echo("<p>$comptes_avec_employeeNumber_mis_a_jour comptes existants sans employeeNumber auraient ete recuperes/corriges (<i>leur employeeNumber serait maintenant renseigne</i>): ");
 			my_echo("$tab_comptes_avec_employeeNumber_mis_a_jour[0]");
 			for($i=1;$i<count($tab_comptes_avec_employeeNumber_mis_a_jour);$i++) {my_echo(", $tab_comptes_avec_employeeNumber_mis_a_jour[$i]");}
 			my_echo("</p>\n");
@@ -3382,10 +3382,10 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 		// Envoi par mail de $chaine et $echo_http_file
 		if ( $servertype=="SE3") {
-		  // R�cup�rer les adresses,... dans le /etc/ssmtp/ssmtp.conf
+		  // Recuperer les adresses,... dans le /etc/ssmtp/ssmtp.conf
 		  unset($tabssmtp);
 		  $tabssmtp=lireSSMTP();
-		  // Contr�ler les champs affect�s...
+		  // Controler les champs affectes...
 		  if(isset($tabssmtp["root"])) {
 			$adressedestination=$tabssmtp["root"];
 			$sujet="[$domain] Rapport de ";
@@ -3443,13 +3443,13 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 
 
-	// Cr�ation des groupes
+	// Creation des groupes
 	my_echo("<p>Retour au <a href='#menu'>menu</a>.</p>\n");
 
 	my_echo("<a name='creer_classes'></a>\n");
 	my_echo("<a name='classes_se3'></a>\n");
-	//my_echo("<h2>Cr�ation des groupes Classes et Equipes</h2>\n");
-	//my_echo("<h3>Cr�ation des groupes Classes et Equipes</h3>\n");
+	//my_echo("<h2>Creation des groupes Classes et Equipes</h2>\n");
+	//my_echo("<h3>Creation des groupes Classes et Equipes</h3>\n");
 	my_echo("<h3>Création des groupes Classes et Equipes");
 	if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 	my_echo("</h3>\n");
@@ -3476,10 +3476,10 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			$gidNumber=get_first_free_gidNumber();
 			if($gidNumber!=false) {
 				$attributs["gidNumber"]="$gidNumber";
-				// Ou r�cup�rer un nom long du fichier de STS...
+				// Ou recuperer un nom long du fichier de STS...
 				$attributs["description"]="$div";
 
-				//my_echo("<p>Cr�ation du groupe classe Classe_".$prefix."$div: ");
+				//my_echo("<p>Creation du groupe classe Classe_".$prefix."$div: ");
 				my_echo("Création du groupe classe Classe_".$prefix."$div: ");
 				if(add_entry ("cn=Classe_".$prefix."$div", "groups", $attributs)) {
 					/*
@@ -3554,13 +3554,13 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		}
 		my_echo("</p>\n");
 
-		// Cr�ation de l'Equipe?
+		// Creation de l'Equipe?
 		//for($i=0;$i<count($tab_classe);$i++) {
 		//$div=$tab_classe[$i]["nom"];
 		$ind=-1;
 		$temoin_equipe="";
 
-		// L'�quipe existe-t-elle?
+		// L'equipe existe-t-elle?
 		my_echo("<p>");
 		$attribut=array("cn");
 		$tabtmp=get_tab_attribut("groups", "cn=Equipe_".$prefix."$div", $attribut);
@@ -3577,7 +3577,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			// On ne peut pas avoir un tableau associatif avec plusieurs fois objectClass
 
 			if($type_Equipe_Matiere=="groupOfNames") {
-				// Ou r�cup�rer un nom long du fichier de STS...
+				// Ou recuperer un nom long du fichier de STS...
 				$attributs["description"]="$div";
 
 				// MODIF: boireaus 20070728
@@ -3615,7 +3615,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				if($gidNumber!=false) {
 					$attributs["gidNumber"]="$gidNumber";
 
-					// Ou r�cup�rer un nom long du fichier de STS...
+					// Ou recuperer un nom long du fichier de STS...
 					$attributs["description"]="$div";
 
 					// MODIF: boireaus 20070728
@@ -3689,7 +3689,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 	
 	
 				if($type_Equipe_Matiere=="groupOfNames") {
-					// Les profs principaux ne sont plus g�r�s comme attribut owner qu'en mode groupOfNames
+					// Les profs principaux ne sont plus geres comme attribut owner qu'en mode groupOfNames
 	
 					// Prof principal
 					unset($tab_pp);
@@ -3725,7 +3725,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						}
 						for($m=0;$m<count($tab_pp);$m++) {
 							$uid=$tab_pp[$m];
-							// Est-il d�j� PP de la classe?
+							// Est-il deja PP de la classe?
 							$attribut=array("owner");
 							//$tabtmp=get_tab_attribut("people", "member=uid=$uid,".$dn["people"], $attribut);
 							$tabtmp=get_tab_attribut("groups", "(&(cn=Equipe_".$prefix."$div)(owner=uid=$uid,".$dn["people"]."))", $attribut);
@@ -3751,13 +3751,13 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					}
 				}
 	
-				// Membres de l'�quipe
+				// Membres de l'equipe
 				unset($tab_equipe);
 				$tab_equipe=array();
 				my_echo("Ajout de membres à l'équipe Equipe_".$prefix."$div: ");
 				for($j=0;$j<count($divisions[$ind]["services"]);$j++) {
 					for($k=0;$k<count($divisions[$ind]["services"][$j]["enseignants"]);$k++) {
-						// R�cup�rer le login correspondant au NUMIND
+						// Recuperer le login correspondant au NUMIND
 						$employeeNumber="P".$divisions[$ind]["services"][$j]["enseignants"][$k]["id"];
 						if(!in_array($employeeNumber,$tab_equipe)) {
 							$tab_equipe[]=$employeeNumber;
@@ -3769,7 +3769,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							if(count($tabtmp)!=0) {
 								$uid=$tabtmp[0];
 								//my_echo("\$uid=$uid<br />");
-								// Le prof est-il d�j� membre de l'�quipe?
+								// Le prof est-il deja membre de l'equipe?
 								$attribut=array("member");
 								//$tabtmp=get_tab_attribut("people", "member=uid=$uid,".$dn["people"], $attribut);
 								$tabtmp=get_tab_attribut("groups", "(&(cn=Equipe_".$prefix."$div)(member=uid=$uid,".$dn["people"]."))", $attribut);
@@ -3794,7 +3794,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 	
 	
 				if(isset($groupes)) {
-					// Rechercher les groupes associ�s � la classe pour affecter les coll�gues dans l'�quipe
+					// Rechercher les groupes associes a la classe pour affecter les collegues dans l'equipe
 					//$groupes[$i]["divisions"][$j]["code"]	-> 3 A1
 					//$groupes[$i]["code_matiere"]			-> 070800
 					//$groupes[$i]["enseignant"][$m]["id"]	-> 38101
@@ -3831,8 +3831,8 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				}
 	
 				/*
-				// On d�doublonne le tableau $tab_equipe
-				// On fait un tri sur l'employeeNumber... ce n'est pas tr�s utile.
+				// On dedoublonne le tableau $tab_equipe
+				// On fait un tri sur l'employeeNumber... ce n'est pas tres utile.
 				sort($tab_equipe);
 				$tmp_tab_equipe=$tab_equipe;
 				unset($tab_equipe);
@@ -3850,7 +3850,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					if(count($tabtmp)!=0) {
 						$uid=$tabtmp[0];
 						//my_echo("\$uid=$uid<br />");
-						// Le prof est-il d�j� membre de l'�quipe?
+						// Le prof est-il deja membre de l'equipe?
 						//$attribut=array("member");
 						//$attribut=array("memberuid");
 						//$tabtmp=get_tab_attribut("people", "member=uid=$uid,".$dn["people"], $attribut);
@@ -3915,8 +3915,8 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 	my_echo("<p>Retour au <a href='#menu'>menu</a>.</p>\n");
 
 	my_echo("<a name='creer_matieres'></a>\n");
-	//my_echo("<h2>Cr�ation des groupes Mati�res</h2>\n");
-	//my_echo("<h3>Cr�ation des groupes Mati�res</h3>\n");
+	//my_echo("<h2>Creation des groupes Matieres</h2>\n");
+	//my_echo("<h3>Creation des groupes Matieres</h3>\n");
 	my_echo("<h3>Création des groupes Matières");
 	if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 
@@ -3938,11 +3938,11 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				//$matiere[$i]["code_gestion"]
 				$id_mat=$matiere[$i]["code"];
 				//$code_gestion=$matiere[$i]["code_gestion"];
-				// En principe les caract�res sp�ciaux ont-�t� filtr�s:
+				// En principe les caracteres speciaux ont-ete filtres:
 				//$matiere[$i]["code_gestion"]=trim(ereg_replace("[^a-zA-Z0-9&_. -]","",html_entity_decode($tabtmp[2])));
 				$mat=$matiere[$i]["code_gestion"];
 				$description=remplace_accents($matiere[$i]["libelle_long"]);
-				// Faudrait-il enlever d'autres caract�res?
+				// Faudrait-il enlever d'autres caracteres?
 	
 				// Le groupe Matiere existe-t-il?
 				$attribut=array("cn");
@@ -3958,7 +3958,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					//$attributs["objectClass"]="posixGroup";
 					//$attributs["objectClass"]="groupOfNames";
 	
-					// Ou r�cup�rer un nom long du fichier de STS...
+					// Ou recuperer un nom long du fichier de STS...
 					$attributs["description"]="$description";
 	
 					if($type_Equipe_Matiere=="groupOfNames") {
@@ -3967,7 +3967,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						// MODIF: boireaus 20070728
 						$attributs["objectClass"][1]="groupOfNames";
 	
-						//my_echo("<p>Cr�ation de la mati�re Matiere_".$prefix."$mat: ");
+						//my_echo("<p>Creation de la matiere Matiere_".$prefix."$mat: ");
 						my_echo("Création de la matière Matiere_".$prefix."$mat: ");
 						if(add_entry ("cn=Matiere_".$prefix."$mat", "groups", $attributs)) {
 							/*
@@ -4004,7 +4004,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							$attributs["objectClass"][1]="posixGroup";
 							//$attributs["objectClass"][2]="sambaGroupMapping";
 	
-							//my_echo("<p>Cr�ation de la mati�re Matiere_".$prefix."$mat: ");
+							//my_echo("<p>Creation de la matiere Matiere_".$prefix."$mat: ");
 							my_echo("Création de la matière Matiere_".$prefix."$mat: ");
 							if(add_entry ("cn=Matiere_".$prefix."$mat", "groups", $attributs)) {
 								/*
@@ -4054,7 +4054,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						for($j=0;$j<count($divisions[$n]["services"]);$j++) {
 							if($divisions[$n]["services"][$j]["code_matiere"]==$id_mat) {
 								for($k=0;$k<count($divisions[$n]["services"][$j]["enseignants"]);$k++) {
-									// R�cup�rer le login correspondant au NUMIND
+									// Recuperer le login correspondant au NUMIND
 									$employeeNumber="P".$divisions[$n]["services"][$j]["enseignants"][$k]["id"];
 									//my_echo("\$employeeNumber=$employeeNumber<br />");
 									if(!in_array($employeeNumber,$tab_matiere)) {
@@ -4065,7 +4065,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 										if(count($tabtmp)!=0) {
 											$uid=$tabtmp[0];
 											//my_echo("\$uid=$uid<br />");
-											// Le prof est-il d�j� membre de l'�quipe?
+											// Le prof est-il deja membre de l'equipe?
 											$attribut=array("member");
 											//$tabtmp=get_tab_attribut("people", "member=uid=$uid,".$dn["people"], $attribut);
 											$tabtmp=get_tab_attribut("groups", "(&(cn=Matiere_".$prefix."$mat)(member=uid=$uid,".$dn["people"]."))", $attribut);
@@ -4092,7 +4092,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 	
 	
 	
-					// Rechercher les groupes associ�s � la mati�re pour affecter les coll�gues dans l'�quipe
+					// Rechercher les groupes associes a la matiere pour affecter les collegues dans l'equipe
 					//$groupes[$i]["divisions"][$j]["code"]	-> 3 A1
 					//$groupes[$i]["code_matiere"]			-> 070800
 					//$groupes[$i]["enseignant"][$m]["id"]	-> 38101
@@ -4143,7 +4143,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						if(count($tabtmp)!=0) {
 							$uid=$tabtmp[0];
 							//my_echo("\$uid=$uid<br />");
-							// Le prof est-il d�j� membre de la mati�re?
+							// Le prof est-il deja membre de la matiere?
 							if($type_Equipe_Matiere=="groupOfNames") {
 								// Les groupes Matieres sont groupOfNames
 								$attribut=array("member");
@@ -4213,8 +4213,8 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 	my_echo("<p>Retour au <a href='#menu'>menu</a>.</p>\n");
 
 	my_echo("<a name='creer_cours'></a>\n");
-	//my_echo("<h2>Cr�ation des groupes Cours</h2>\n");
-	//my_echo("<h3>Cr�ation des groupes Cours</h3>\n");
+	//my_echo("<h2>Creation des groupes Cours</h2>\n");
+	//my_echo("<h3>Creation des groupes Cours</h3>\n");
 	my_echo("<h3>Création des groupes Cours");
 	if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 
@@ -4227,7 +4227,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		document.getElementById('id_creer_cours').style.display='';
 </script>");
 		my_echo("<blockquote>\n");
-		// L�, il faudrait faire un traitement diff�rent selon que l'import �l�ve se fait par CSV ou XML
+		// Le, il faudrait faire un traitement different selon que l'import eleve se fait par CSV ou XML
 
 
 		//$divisions[$i]["code"]									3 A2
@@ -4239,7 +4239,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			//$div=ereg_replace("'","_",ereg_replace(" ","_",remplace_accents($div)));
 			$div=apostrophes_espaces_2_underscore(remplace_accents($div));
 
-			// Dans le cas de l'import XML, on r�cup�re la liste des options suivies par les �l�ves
+			// Dans le cas de l'import XML, on recupere la liste des options suivies par les eleves
 			$ind_div="";
 			if($type_fichier_eleves=="xml") {
 				// Identifier $k tel que $tab_division[$k]["nom"]==$div
@@ -4252,19 +4252,19 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			}
 
 			$temoin_cours="";
-			// On parcours toutes les mati�res...
+			// On parcours toutes les matieres...
 			for($j=0;$j<count($divisions[$i]["services"]);$j++) {
 				$id_mat=$divisions[$i]["services"][$j]["code_matiere"];
 
 
-				// Recherche du nom court de la mati�re:
+				// Recherche du nom court de la matiere:
 				for($n=0;$n<count($matiere);$n++) {
 					if($matiere[$n]["code"]==$id_mat) {
 						$mat=$matiere[$n]["code_gestion"];
 					}
 				}
 
-				// La mati�re est-elle optionnelle dans la classe?
+				// La matiere est-elle optionnelle dans la classe?
 				$temoin_matiere_optionnelle="non";
 				$ind_mat="";
 				if(($type_fichier_eleves=="xml")&&($ind_div!="")) {
@@ -4278,13 +4278,13 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					}
 				}
 
-				// R�cup�rer tous les profs de la mati�re dans la classe
+				// Recuperer tous les profs de la matiere dans la classe
 				// ... les trier
 				unset($tab_prof_uid);
 				$tab_prof_uid=array();
-				// On pourrait aussi parcourir l'annuaire... avec le filtre cn=Equipe_".$prefix."$div... peut-�tre serait-ce plus rapide...
+				// On pourrait aussi parcourir l'annuaire... avec le filtre cn=Equipe_".$prefix."$div... peut-etre serait-ce plus rapide...
 				for($k=0;$k<count($divisions[$i]["services"][$j]["enseignants"]);$k++) {
-					// R�cup�ration de l'uid correspondant � l'employeeNumber
+					// Recuperation de l'uid correspondant a l'employeeNumber
 					$employeeNumber="P".$divisions[$i]["services"][$j]["enseignants"][$k]["id"];
 					$attribut=array("uid");
 					$tabtmp=get_tab_attribut("people", "employeenumber=$employeeNumber", $attribut);
@@ -4298,7 +4298,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				sort($tab_prof_uid);
 
 
-				// R�cup�rer tous les membres de la classe si la mati�re n'a pas �t� d�tect�e comme optionnelle dans la classe
+				// Recuperer tous les membres de la classe si la matiere n'a pas ete detectee comme optionnelle dans la classe
 				// ... les trier
 				unset($tab_eleve_uid);
 				$tab_eleve_uid=array();
@@ -4311,19 +4311,19 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						//my_echo("count(\$tabtmp)=".count($tabtmp)."<br />");
 						for($k=0;$k<count($tabtmp);$k++) {
 							//my_echo("\$tabtmp[$k]=".$tabtmp[$k]."<br />");
-							// Normalement, chaque �l�ve n'est inscrit qu'une fois dans la classe, mais bon...
+							// Normalement, chaque eleve n'est inscrit qu'une fois dans la classe, mais bon...
 							if(!in_array($tabtmp[$k],$tab_eleve_uid)) {
-								//my_echo("Ajout � \$tab_eleve_uid<br />");
+								//my_echo("Ajout a \$tab_eleve_uid<br />");
 								$tab_eleve_uid[]=$tabtmp[$k];
 							}
 						}
 					}
 				}
 				else{
-					// Faire une boucle sur $eleve[$numero]["options"][$j]["code_matiere"] apr�s avoir identifi� le num�ro... en faisant une recherche sur  les memberUid de "cn=Classe_".$prefix."$div"
-					// Ou: remplir un �tage de plus de $tab_division[$k]["option"]
+					// Faire une boucle sur $eleve[$numero]["options"][$j]["code_matiere"] apres avoir identifie le numero... en faisant une recherche sur  les memberUid de "cn=Classe_".$prefix."$div"
+					// Ou: remplir un etage de plus de $tab_division[$k]["option"]
 					//$tab_division[$ind_div]["option"][$ind_mat]["eleve"][]
-					//my_echo("<p>Mati�re optionnelle pour $mat en $div:<br />");
+					//my_echo("<p>Matiere optionnelle pour $mat en $div:<br />");
 					for($k=0;$k<count($tab_division[$ind_div]["option"][$ind_mat]["eleve"]);$k++) {
 						$attribut=array("uid");
 						//my_echo("Recherche: get_tab_attribut(\"groups\", \"cn=Classe_".$prefix."$div\", $attribut)<br />");
@@ -4332,14 +4332,14 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 						if(count($tabtmp)!=0) {
 							if(!in_array($tabtmp[0],$tab_eleve_uid)) {
-								//my_echo("Ajout � \$tab_eleve_uid<br />");
+								//my_echo("Ajout a \$tab_eleve_uid<br />");
 								$tab_eleve_uid[]=$tabtmp[0];
 							}
 						}
 					}
 				}
 
-				// Cr�ation du groupe
+				// Creation du groupe
 				// Le groupe Cours existe-t-il?
 				my_echo("<p>\n");
 				$attribut=array("cn");
@@ -4362,10 +4362,10 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					$gidNumber=get_first_free_gidNumber(10000);
 					if($gidNumber!=false) {
 						$attributs["gidNumber"]="$gidNumber";
-						// Ou r�cup�rer un nom long du fichier de STS...
+						// Ou recuperer un nom long du fichier de STS...
 						$attributs["description"]="$mat / $div";
 
-						//my_echo("<p>Cr�ation du groupe Cours_".$prefix.$mat."_".$div.": ");
+						//my_echo("<p>Creation du groupe Cours_".$prefix.$mat."_".$div.": ");
 						my_echo("Création du groupe Cours_".$prefix.$mat."_".$div.": ");
 						if(add_entry ("cn=Cours_".$prefix.$mat."_".$div, "groups", $attributs)) {
 							/*
@@ -4432,7 +4432,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						}
 					}
 
-					// Ajout des �l�ves
+					// Ajout des eleves
 					for($n=0;$n<count($tab_eleve_uid);$n++) {
 						$uid=$tab_eleve_uid[$n];
 						$attribut=array("cn");
@@ -4468,7 +4468,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 
 
-		// Dans le cas de l'import XML �l�ves, on a $eleve[$numero]["options"][$j]["code_matiere"]
+		// Dans le cas de l'import XML eleves, on a $eleve[$numero]["options"][$j]["code_matiere"]
 
 		// Rechercher les groupes
 		//$groupes[$i]["code"]	-> 3 A1TEC1 ou 3AGL1-1
@@ -4499,7 +4499,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					if(isset($groupes[$i]["service"][$p]["code_matiere"])) {
 						$grp_id_mat=$groupes[$i]["service"][$p]["code_matiere"];
 						//my_echo("\$grp_id_mat=\$groupes[$i][\"code_matiere\"]=".$grp_id_mat."<br />");
-						// Recherche du nom court de mati�re
+						// Recherche du nom court de matiere
 						for($n=0;$n<count($matiere);$n++) {
 							if($matiere[$n]["code"]==$grp_id_mat) {
 								$grp_mat=$matiere[$n]["code_gestion"];
@@ -4521,7 +4521,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					//my_echo("\$grp_mat=".$grp_mat."<br />");
 
 
-					// R�cup�ration des profs associ�s � ce groupe
+					// Recuperation des profs associes a ce groupe
 					unset($tab_prof_uid);
 					$tab_prof_uid=array();
 					if(isset($groupes[$i]["service"][$p]["enseignant"])) {
@@ -4543,7 +4543,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						my_echo_double_sortie("\$groupes[$i][\"code\"]=".$groupes[$i]["code"]);
 					}
 
-					// R�cup�ration des �l�ves associ�s aux classes de ce groupe
+					// Recuperation des eleves associes aux classes de ce groupe
 					unset($tab_eleve_uid);
 					$tab_eleve_uid=array();
 					$chaine_div="";
@@ -4561,7 +4561,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 						//$tab_division[$ind_div]["option"][$k]["code_matiere"]
 
-						// Dans le cas de l'import XML, on r�cup�re la liste des options suivies par les �l�ves
+						// Dans le cas de l'import XML, on recupere la liste des options suivies par les eleves
 						$ind_div="";
 						if($type_fichier_eleves=="xml") {
 							// Identifier $k tel que $tab_division[$k]["nom"]==$div
@@ -4583,7 +4583,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 
 
-						// La mati�re est-elle optionnelle dans la classe?
+						// La matiere est-elle optionnelle dans la classe?
 						$temoin_groupe_apparaissant_dans_Eleves_xml="non";
 						$temoin_matiere_optionnelle="non";
 						$ind_mat="";
@@ -4641,7 +4641,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							$tabtmp=get_tab_attribut("groups", "cn=Classe_".$prefix."$div", $attribut);
 							if(count($tabtmp)!=0) {
 								for($k=0;$k<count($tabtmp);$k++) {
-									// Normalement, chaque �l�ve n'est inscrit qu'une fois dans la classe, mais bon...
+									// Normalement, chaque eleve n'est inscrit qu'une fois dans la classe, mais bon...
 									if(!in_array($tabtmp[$k],$tab_eleve_uid)) {
 										$tab_eleve_uid[]=$tabtmp[$k];
 									}
@@ -4654,7 +4654,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 								my_echo_double_sortie("\$temoin_groupe_apparaissant_dans_Eleves_xml=".$temoin_groupe_apparaissant_dans_Eleves_xml);
 							}
 
-							//my_echo("<p>Mati�re optionnelle pour $grp:<br />");
+							//my_echo("<p>Matiere optionnelle pour $grp:<br />");
 							if($temoin_groupe_apparaissant_dans_Eleves_xml!="oui") {
 								for($k=0;$k<count($tab_division[$ind_div]["option"][$ind_mat]["eleve"]);$k++) {
 									$attribut=array("uid");
@@ -4664,7 +4664,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 									if(count($tabtmp)!=0) {
 										if(!in_array($tabtmp[0],$tab_eleve_uid)) {
-											//my_echo("Ajout � \$tab_eleve_uid<br />");
+											//my_echo("Ajout a \$tab_eleve_uid<br />");
 											$tab_eleve_uid[]=$tabtmp[0];
 										}
 									}
@@ -4692,7 +4692,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					}
 
 
-					// Cr�ation du groupe
+					// Creation du groupe
 					// Le groupe Cours existe-t-il?
 					my_echo("<p>\n");
 					$attribut=array("cn");
@@ -4714,10 +4714,10 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						$gidNumber=get_first_free_gidNumber(10000);
 						if($gidNumber!=false) {
 							$attributs["gidNumber"]="$gidNumber";
-							// Ou r�cup�rer un nom long du fichier de STS...
+							// Ou recuperer un nom long du fichier de STS...
 							$attributs["description"]="$grp_mat / $chaine_div";
 
-							//my_echo("<p>Cr�ation du groupe Cours_".$prefix."$grp: ");
+							//my_echo("<p>Creation du groupe Cours_".$prefix."$grp: ");
 							my_echo("Création du groupe Cours_".$prefix."$grp: ");
 							//my_echo(" grp_mat=$grp_mat ");
 							if(add_entry ("cn=Cours_".$prefix."$grp", "groups", $attributs)) {
@@ -4784,7 +4784,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							}
 						}
 
-						// Ajout des �l�ves
+						// Ajout des eleves
 						for($n=0;$n<count($tab_eleve_uid);$n++) {
 							$uid=$tab_eleve_uid[$n];
 							$attribut=array("cn");
@@ -4820,8 +4820,8 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				$temoin_grp="";
 				$grp_mat="";
 
-				// Faute de section SERVICE, on ne r�cup�re pas le grp_id_mat
-				// On n'a pas de $grp_id_mat faute de section SERVICE donc pas moyen d'identifier la mati�re associ�e au groupe et de chercher si cette mati�re a �t� rep�r�e comme optionnelle
+				// Faute de section SERVICE, on ne recupere pas le grp_id_mat
+				// On n'a pas de $grp_id_mat faute de section SERVICE donc pas moyen d'identifier la matiere associee au groupe et de chercher si cette matiere a ete reperee comme optionnelle
 
 				if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
 					my_echo_double_sortie("\$groupes[$i][\"code\"]=".$groupes[$i]["code"]);
@@ -4829,12 +4829,12 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 				//my_echo("<p>\$grp=\$groupes[$i][\"code\"]=".$grp."<br />");
 
-				// R�cup�ration des profs associ�s � ce groupe
+				// Recuperation des profs associes a ce groupe
 				// Impossible faute de section SERVICE
 				unset($tab_prof_uid);
 				$tab_prof_uid=array();
 
-				// R�cup�ration des �l�ves associ�s aux classes de ce groupe
+				// Recuperation des eleves associes aux classes de ce groupe
 				unset($tab_eleve_uid);
 				$tab_eleve_uid=array();
 				$chaine_div="";
@@ -4851,7 +4851,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						my_echo_double_sortie("Classe associee ".$div);
 					}
 
-					// Dans le cas de l'import XML, on r�cup�re la liste des options suivies par les �l�ves
+					// Dans le cas de l'import XML, on recupere la liste des options suivies par les eleves
 					$ind_div="";
 					if($type_fichier_eleves=="xml") {
 						// Identifier $k tel que $tab_division[$k]["nom"]==$div
@@ -4873,7 +4873,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 
 
-					// La mati�re est-elle optionnelle dans la classe?
+					// La matiere est-elle optionnelle dans la classe?
 					$temoin_groupe_apparaissant_dans_Eleves_xml="non";
 					$temoin_matiere_optionnelle="non";
 					$ind_mat="";
@@ -4911,7 +4911,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						$tabtmp=get_tab_attribut("groups", "cn=Classe_".$prefix."$div", $attribut);
 						if(count($tabtmp)!=0) {
 							for($k=0;$k<count($tabtmp);$k++) {
-								// Normalement, chaque �l�ve n'est inscrit qu'une fois dans la classe, mais bon...
+								// Normalement, chaque eleve n'est inscrit qu'une fois dans la classe, mais bon...
 								if(!in_array($tabtmp[$k],$tab_eleve_uid)) {
 									$tab_eleve_uid[]=$tabtmp[$k];
 								}
@@ -4924,7 +4924,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							my_echo_double_sortie("\$temoin_groupe_apparaissant_dans_Eleves_xml=".$temoin_groupe_apparaissant_dans_Eleves_xml);
 						}
 
-						//my_echo("<p>Mati�re optionnelle pour $grp:<br />");
+						//my_echo("<p>Matiere optionnelle pour $grp:<br />");
 						if($temoin_groupe_apparaissant_dans_Eleves_xml!="oui") {
 							for($k=0;$k<count($tab_division[$ind_div]["option"][$ind_mat]["eleve"]);$k++) {
 								$attribut=array("uid");
@@ -4933,7 +4933,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 								if(count($tabtmp)!=0) {
 									if(!in_array($tabtmp[0],$tab_eleve_uid)) {
-										//my_echo("Ajout � \$tab_eleve_uid<br />");
+										//my_echo("Ajout a \$tab_eleve_uid<br />");
 										$tab_eleve_uid[]=$tabtmp[0];
 									}
 								}
@@ -4974,7 +4974,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				}
 
 
-				// Cr�ation du groupe
+				// Creation du groupe
 				// Le groupe Cours existe-t-il?
 				my_echo("<p>\n");
 				$attribut=array("cn");
@@ -4996,10 +4996,10 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					$gidNumber=get_first_free_gidNumber(10000);
 					if($gidNumber!=false) {
 						$attributs["gidNumber"]="$gidNumber";
-						// Ou r�cup�rer un nom long du fichier de STS...
+						// Ou recuperer un nom long du fichier de STS...
 						$attributs["description"]="$grp_mat / $chaine_div";
 
-						//my_echo("<p>Cr�ation du groupe Cours_".$prefix."$grp: ");
+						//my_echo("<p>Creation du groupe Cours_".$prefix."$grp: ");
 						my_echo("Création du groupe Cours_".$prefix."$grp: ");
 						//my_echo(" grp_mat=$grp_mat ");
 						if(add_entry ("cn=Cours_".$prefix."$grp", "groups", $attributs)) {
@@ -5066,7 +5066,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						}
 					}
 
-					// Ajout des �l�ves
+					// Ajout des eleves
 					for($n=0;$n<count($tab_eleve_uid);$n++) {
 						$uid=$tab_eleve_uid[$n];
 						$attribut=array("cn");
@@ -5110,8 +5110,8 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 
 	my_echo("<a name='creer_groupe_pp'></a>\n");
-	//my_echo("<h2>Cr�ation des groupes Cours</h2>\n");
-	//my_echo("<h3>Cr�ation des groupes Cours</h3>\n");
+	//my_echo("<h2>Creation des groupes Cours</h2>\n");
+	//my_echo("<h3>Creation des groupes Cours</h3>\n");
 	my_echo("<h3>Création d'un groupe Professeurs Principaux");
 	if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 
@@ -5136,14 +5136,14 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		}
 		sort($tab_pp);
 
-		// Vider et r�-alimenter le groupe
+		// Vider et re-alimenter le groupe
 		// Initialisation des membres du groupe Professeurs_Principaux
 		$tab_mem_pp=array();
 
 		$attribut=array("cn");
 		$tabtmp=get_tab_attribut("groups", "cn=$nom_groupe_pp", $attribut);
 		if(count($tabtmp)==0) {
-			// On cr�e le groupe
+			// On cree le groupe
 			$attributs=array();
 			$attributs["cn"]="$nom_groupe_pp";
 			$attributs["objectClass"][0]="top";
@@ -5157,7 +5157,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			$gidNumber=get_first_free_gidNumber(10000);
 			if($gidNumber!=false) {
 				$attributs["gidNumber"]="$gidNumber";
-				// Ou r�cup�rer un nom long du fichier de STS...
+				// Ou recuperer un nom long du fichier de STS...
 				$attributs["description"]="Professeurs Principaux";
 
 				my_echo("<p>Création du groupe $nom_groupe_pp: ");
@@ -5184,7 +5184,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			}
 		}
 		else {
-			// Liste des comptes pr�sents dans le Groupe_Professeurs_Principaux.
+			// Liste des comptes presents dans le Groupe_Professeurs_Principaux.
 			unset($attribut);
 			$attribut=array("memberuid");
 			$tab_mem_pp=get_tab_attribut("groups","cn=$nom_groupe_pp",$attribut);
@@ -5225,13 +5225,13 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			my_echo("Aucun professeur principal n'a été trouvé<br />\n");
 		}
 		else {
-			// Ajout de membres au groupe d'apr�s $tab_pp
+			// Ajout de membres au groupe d'apres $tab_pp
 			my_echo("Ajout de membres au groupe $nom_groupe_pp: ");
 	
 			for($n=0;$n<count($tab_pp);$n++) {
 				$uid=$tab_pp[$n];
 				if(in_array($uid,$tab_mem_pp)) {
-					// Rien � faire, d�j� pr�sent
+					// Rien a faire, deja present
 					my_echo("$uid ");
 				}
 				else {
@@ -5297,7 +5297,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 	my_echo("<p>Retour au <a href='#menu'>menu</a>.</p>\n");
 
 	my_echo("<a name='fin'></a>\n");
-	//my_echo("<h3>Rapport final de cr�ation</h3>");
+	//my_echo("<h3>Rapport final de creation</h3>");
 	my_echo("<h3>Rapport final de création");
 	if($chrono=='y') {my_echo(" (<i>".date_et_heure()."</i>)");}
 	my_echo("</h3>\n");
@@ -5310,15 +5310,15 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 	$chaine="";
 	if($nouveaux_comptes==0) {
 		$chaine.="<p>Aucun nouveau compte n'a été créé.</p>\n";
-		//my_echo("<p>Aucun nouveau compte n'a �t� cr��.</p>\n");
+		//my_echo("<p>Aucun nouveau compte n'a ete cree.</p>\n");
 	}
 	elseif($nouveaux_comptes==1) {
-		//my_echo("<p>$nouveaux_comptes nouveau compte a �t� cr��: $tab_nouveaux_comptes[0]</p>\n");
+		//my_echo("<p>$nouveaux_comptes nouveau compte a ete cree: $tab_nouveaux_comptes[0]</p>\n");
 		$chaine.="<p>$nouveaux_comptes nouveau compte a été créé: $tab_nouveaux_comptes[0]</p>\n";
 	}
 	else{
 		/*
-		my_echo("<p>$nouveaux_comptes nouveaux comptes ont �t� cr��s: \n");
+		my_echo("<p>$nouveaux_comptes nouveaux comptes ont ete crees: \n");
 		my_echo($tab_nouveaux_comptes[0]);
 		for($i=1;$i<count($tab_nouveaux_comptes);$i++) {
 			my_echo(", $tab_nouveaux_comptes[$i]");
@@ -5334,16 +5334,16 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 	}
 
 	if($comptes_avec_employeeNumber_mis_a_jour==0) {
-		//my_echo("<p>Aucun compte existant sans employeeNumber n'a �t� r�cup�r�/corrig�.</p>\n");
+		//my_echo("<p>Aucun compte existant sans employeeNumber n'a ete recupere/corrige.</p>\n");
 		$chaine.="<p>Aucun compte existant sans employeeNumber n'a été récupéré/corrigé.</p>\n";
 	}
 	elseif($comptes_avec_employeeNumber_mis_a_jour==1) {
-		//my_echo("<p>$comptes_avec_employeeNumber_mis_a_jour compte existant sans employeeNumber a �t� r�cup�r�/corrig� (<i>son employeeNumber est maintenant renseign�</i>): $tab_comptes_avec_employeeNumber_mis_a_jour[0]</p>\n");
+		//my_echo("<p>$comptes_avec_employeeNumber_mis_a_jour compte existant sans employeeNumber a ete recupere/corrige (<i>son employeeNumber est maintenant renseigne</i>): $tab_comptes_avec_employeeNumber_mis_a_jour[0]</p>\n");
 		$chaine.="<p>$comptes_avec_employeeNumber_mis_a_jour compte existant sans employeeNumber a été récupéré/corrigé (<i>son employeeNumber est maintenant renseigné</i>): $tab_comptes_avec_employeeNumber_mis_a_jour[0]</p>\n";
 	}
 	else{
 		/*
-		my_echo("<p>$comptes_avec_employeeNumber_mis_a_jour comptes existants sans employeeNumber ont �t� r�cup�r�s/corrig�s (<i>leur employeeNumber est maintenant renseign�</i>): \n");
+		my_echo("<p>$comptes_avec_employeeNumber_mis_a_jour comptes existants sans employeeNumber ont ete recuperes/corriges (<i>leur employeeNumber est maintenant renseigne</i>): \n");
 		my_echo("$tab_comptes_avec_employeeNumber_mis_a_jour[0]");
 		for($i=1;$i<count($tab_comptes_avec_employeeNumber_mis_a_jour);$i++) {my_echo(", $tab_comptes_avec_employeeNumber_mis_a_jour[$i]");}
 		my_echo("</p>\n");
@@ -5366,7 +5366,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		for($loop=0;$loop<count($tab_eleve_autre_etab);$loop++) {
 			$tmp_tab=explode("|", $tab_eleve_autre_etab[$loop]);
 			if($servertype=="SE3") {
-				$tmp_txt="<a href='../annu/add_user.php?nom=".remplace_accents($tmp_tab[0])."&amp;prenom=".remplace_accents($tmp_tab[1])."&amp;sexe=".($tmp_tab[2]!="1" ? "F" : "M")."&amp;naissance=".formate_date_aaaammjj($tmp_tab[3])."' target='_blank'>".$tmp_tab[0]." ".$tmp_tab[1]." (".($tmp_tab[2]!="1" ? "fille" : "gar�on") .") n�".($tmp_tab[2]!="1" ? "e" : "")." le ".$tmp_tab[3]."</a>";
+				$tmp_txt="<a href='../annu/add_user.php?nom=".remplace_accents($tmp_tab[0])."&amp;prenom=".remplace_accents($tmp_tab[1])."&amp;sexe=".($tmp_tab[2]!="1" ? "F" : "M")."&amp;naissance=".formate_date_aaaammjj($tmp_tab[3])."' target='_blank'>".$tmp_tab[0]." ".$tmp_tab[1]." (".($tmp_tab[2]!="1" ? "fille" : "gar&cedil;on") .") n&eacute;".($tmp_tab[2]!="1" ? "e" : "")." le ".$tmp_tab[3]."</a>";
 			}
 			else {
 				$tmp_txt=$tmp_tab[0]." ".$tmp_tab[1]." (".($tmp_tab[2]!="1" ? "fille" : "garçon") .") n°".($tmp_tab[2]!="1" ? "e" : "")." le ".$tmp_tab[3];
@@ -5382,15 +5382,15 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 	}
 
 	if($nb_echecs==0) {
-		//my_echo("<p>Aucune op�ration tent�e n'a �chou�.</p>\n");
+		//my_echo("<p>Aucune operation tentee n'a echoue.</p>\n");
 		$chaine.="<p>Aucune opération tentée n'a échoué.</p>\n";
 	}
 	elseif($nb_echecs==1) {
-		//my_echo("<p style='color:red;'>$nb_echecs op�ration tent�e a �chou�.</p>\n");
+		//my_echo("<p style='color:red;'>$nb_echecs operation tentee a echoue.</p>\n");
 		$chaine.="<p style='color:red;'>$nb_echecs opération tentée a échoué.</p>\n";
 	}
 	else{
-		//my_echo("<p style='color:red;'>$nb_echecs op�rations tent�es ont �chou�.</p>\n");
+		//my_echo("<p style='color:red;'>$nb_echecs operations tentees ont echoue.</p>\n");
 		$chaine.="<p style='color:red;'>$nb_echecs opérations tentées ont échoué.</p>\n";
 	}
 	my_echo($chaine);
@@ -5401,36 +5401,36 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 /*
 	// Envoi par mail de $chaine et $echo_http_file
 
-	// R�cup�rer les adresses,... dans le /etc/ssmtp/ssmtp.conf
+	// Recuperer les adresses,... dans le /etc/ssmtp/ssmtp.conf
 	unset($tabssmtp);
 	my_echo("<p>Avant lireSSMTP();</p>");
 	$tabssmtp=lireSSMTP();
-	my_echo("<p>Apr�s lireSSMTP();</p>");
+	my_echo("<p>Apres lireSSMTP();</p>");
 	my_echo("<p>\$tabssmtp[\"root\"]=".$tabssmtp["root"]."</p>");
-	// Contr�ler les champs affect�s...
+	// Controler les champs affectes...
 	if(isset($tabssmtp["root"])) {
 		$adressedestination=$tabssmtp["root"];
 		$sujet="[$domain] Rapport de ";
 		if($simulation=="y") {$sujet.="simulation de ";}
-		$sujet.="cr�ation de comptes";
+		$sujet.="creation de comptes";
 		$message="Import du $debut_import\n";
 		$message.="$chaine\n";
 		$message.="\n";
-		$message.="Vous pouvez consulter le rapport d�taill� � l'adresse $echo_http_file\n";
+		$message.="Vous pouvez consulter le rapport detaille a l'adresse $echo_http_file\n";
 		$entete="From: ".$tabssmtp["root"];
 		my_echo("<p>Avant mail.</p>");
 		mail("$adressedestination", "$sujet", "$message", "$entete") or my_echo("<p style='color:red;'><b>ERREUR</b> lors de l'envoi du rapport par mail.</p>\n");
-		my_echo("<p>Apr�s mail.</p>");
+		my_echo("<p>Apres mail.</p>");
 	}
 	else{
-		my_echo("<p>\$tabssmtp[\"root\"] doit �tre vide.</p>");
-		my_echo("<p style='color:red;'><b>MAIL:</b> La configuration mail ne permet pas d'exp�dier le rapport.<br />Consultez/renseignez le menu Informations syst�me/Actions sur le serveur/Configurer l'exp�dition des mails.</p>\n");
+		my_echo("<p>\$tabssmtp[\"root\"] doit etre vide.</p>");
+		my_echo("<p style='color:red;'><b>MAIL:</b> La configuration mail ne permet pas d'expedier le rapport.<br />Consultez/renseignez le menu Informations systeme/Actions sur le serveur/Configurer l'expedition des mails.</p>\n");
 	}
 */
 
-	//my_echo("<p>Avant m�j params.</p>");
+	//my_echo("<p>Avant maj params.</p>");
 
-	// Renseignement du t�moin de mise � jour termin�e.
+	// Renseignement du temoin de mise a jour terminee.
 	$sql="SELECT value FROM params WHERE name='imprt_cmpts_en_cours'";
 	$res1=mysql_query($sql);
 	if(mysql_num_rows($res1)==0) {
@@ -5442,7 +5442,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		$res0=mysql_query($sql);
 	}
 
-	//my_echo("<p>Apr�s m�j params.</p>");
+	//my_echo("<p>Apres maj params.</p>");
 
 	if($chrono=='y') {my_echo("<p>Fin de l'opération: ".date_et_heure()."</p>\n");}
 
@@ -5459,9 +5459,9 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		// Dans la version PHP4-CLI, envoyer le rapport par mail.
 		// Envoyer le contenu de la page aussi?
 
-		// Peut-�tre forcer une sauvegarde de l'annuaire avant de proc�der � une op�ration qui n'est pas une simulation.
-		// O� placer le fichier de sauvegarde?
-		// Probl�me de l'encombrement � terme.
+		// Peut-etre forcer une sauvegarde de l'annuaire avant de proceder a une operation qui n'est pas une simulation.
+		// Ou placer le fichier de sauvegarde?
+		// Probleme de l'encombrement a terme.
 //	}
 
 // SUPPRIMER LES FICHIERS CSV/XML en fin d'import.
@@ -5480,11 +5480,11 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 
 	if(file_exists("/tmp/debug_se3lcs.txt")) {
-		// Il faut pouvoir �crire dans le fichier depuis /var/www/se3/annu/import_sconet.php sans sudo... donc www-se3 doit �tre proprio ou avoir les droits...
+		// Il faut pouvoir ecrire dans le fichier depuis /var/www/se3/annu/import_sconet.php sans sudo... donc www-se3 doit etre proprio ou avoir les droits...
 		exec("chown $user_web /tmp/debug_se3lcs.txt");
 	}
 
-// Lien pour la r�cup�ration du mailing
+// Lien pour la recuperation du mailing
 	if (count($listing, COUNT_RECURSIVE) > 1) {
 		$serial_listing=rawurlencode(serialize($listing));
 	
@@ -5503,10 +5503,10 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 	// Envoi par mail de $chaine et $echo_http_file
 	if ( $servertype=="SE3" ) {
-		// R�cup�rer les adresses,... dans le /etc/ssmtp/ssmtp.conf
+		// Recuperer les adresses,... dans le /etc/ssmtp/ssmtp.conf
 		unset($tabssmtp);
 		$tabssmtp=lireSSMTP();
-		// Contr�ler les champs affect�s...
+		// Controler les champs affectes...
 		if (isset($tabssmtp["root"])) {
 		$adressedestination=$tabssmtp["root"];
 		$sujet="[$domain] Rapport de ";
