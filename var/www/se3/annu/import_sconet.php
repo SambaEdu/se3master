@@ -348,6 +348,14 @@
 				echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('Le groupe des Professeurs Principaux...')")."\"><img name=\"action_image5\"  src=\"$helpinfo\"></u>\n";
 				echo "</li>\n";
 
+				// ===========================================================
+
+				echo "<li>\n";
+				echo "<label for='rafraichir_classes' style='cursor: pointer;'>Rafraichir/créer les dossiers de classes en fin d'import ? </label><input name='rafraichir_classes' id='rafraichir_classes' type='checkbox' value='y' />\n";
+				echo "&nbsp;&nbsp;";
+				echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('Les dossiers des nouveaux &#233;l&#232;ves dans le lecteur Classes ne sont pas cr&#233;&#233;s automatiquement lors de l import. Vous pouvez forcer ici la cr&#233;ation de ces dossiers.')")."\"><img name=\"action_image5\"  src=\"$helpinfo\"></u>\n";
+				echo "</li>\n";
+
 				echo "</ul>\n";
 				// ===========================================================
 
@@ -735,6 +743,7 @@ decompte(cpt);
 			// ===========================================================
 			$corriger_gecos_si_diff=isset($_POST['corriger_gecos_si_diff']) ? $_POST['corriger_gecos_si_diff'] : 'n';
 			$alimenter_groupe_pp=isset($_POST['alimenter_groupe_pp']) ? $_POST['alimenter_groupe_pp'] : 'n';
+			$rafraichir_classes=isset($_POST['rafraichir_classes']) ? $_POST['rafraichir_classes'] : 'n';
 
 
 			// Dossier pour les CSV
@@ -807,7 +816,7 @@ decompte(cpt);
 
 			//fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff'\n");
 
-			fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff' '$temoin_f_uid' '$alimenter_groupe_pp'\n");
+			fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff' '$temoin_f_uid' '$alimenter_groupe_pp' '$rafraichir_classes'\n");
 
 			//echo "<p>#!/bin/bash<br />\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff'</p>\n";
 			// ===========================================================
