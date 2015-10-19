@@ -1418,8 +1418,7 @@
 			foreach($sts_xml->PARAMETRES->ANNEE_SCOLAIRE->children() as $key => $value) {
 				$etablissement["annee"][strtolower($key)]=trim(traite_utf8($value));
 			}
-	
-	
+
 			my_echo("Fin de la section PARAMETRES<br />\n");
 		
 			my_echo("<p>Terminé.</p>\n");
@@ -5333,6 +5332,15 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		$chaine.="</p>\n";
 	}
 
+	if($rafraichir_classes=="y") {
+		if($nouveaux_comptes==0) {
+			$chaine.="<p>On ne lance pas de rafraichissement des classes.</p>\n";
+		}
+		else {
+			$chaine.="<p>Lancement du rafraichissement des classes dans quelques instants.</p>\n";
+		}
+	}
+
 	if($comptes_avec_employeeNumber_mis_a_jour==0) {
 		//my_echo("<p>Aucun compte existant sans employeeNumber n'a ete recupere/corrige.</p>\n");
 		$chaine.="<p>Aucun compte existant sans employeeNumber n'a été récupéré/corrigé.</p>\n";
@@ -5500,6 +5508,17 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 	}
 
+	if($rafraichir_classes=="y") {
+		if($nouveaux_comptes>0) {
+			my_echo("<h2>Lancement effectif du rafraichissement des classes...</h2>\n<p>\n");
+			exec("/bin/bash ".$pathscripts."/se3_creer_tous_les_dossiers_de_classes.sh",$retour);
+			for($s=0;$s<count($retour);$s++) {
+				//my_echo(" \$retour[$s]=$retour[$s]<br />\n");
+				my_echo($retour[$s]."<br />\n");
+			}
+			my_echo("<br />Fin du rafraichissement des classes.</p>\n");
+		}
+	}
 
 	// Envoi par mail de $chaine et $echo_http_file
 	if ( $servertype=="SE3" ) {
@@ -5515,6 +5534,20 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		$message="Import du $debut_import\n";
 		$message.="$chaine\n";
 		$message.="\n";
+
+		if($rafraichir_classes=="y") {
+			if($nouveaux_comptes>0) {
+				$message.="Rafraichissement des classes lancé/effectué.\n";
+			}
+			else {
+				$message.="Pas de nouveau compte, donc pas de rafraichissement des classes lancé.\n";
+			}
+		}
+		else {
+			$message.="Pas de rafraichissement des classes demandé.\n";
+		}
+		$message.="\n";
+
 		$message.="Vous pouvez consulter le rapport détaillé à l'adresse $echo_http_file\n";
 		$entete="From: ".$tabssmtp["root"];
 		mail("$adressedestination", "$sujet", "$message", "$entete") or my_echo("<p style='color:red;'><b>ERREUR</b> lors de l'envoi du rapport par mail.</p>\n");
