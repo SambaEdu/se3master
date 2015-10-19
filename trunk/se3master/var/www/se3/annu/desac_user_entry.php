@@ -40,13 +40,18 @@
   echo "<h1>".gettext("Annuaire")."</h1>\n";
   $act=$_GET['action'];
   $uid=$_GET['uid'];
-  if ($uid) {
-	echo $uid."&nbsp;";
-  	userDesactive($uid,$act);
-    	echo "<br>";
-  } else { 
-  	echo gettext("Aucun utilisateur s&#233;lectionn&#233;"); 
-  }
+  
+  if (is_admin("Annu_is_admin",$login)=="Y") {
+	if ($uid) {
+		echo $uid."&nbsp;";
+		userDesactive($uid,$act);
+		echo "<br>";
+	} else { 
+		echo gettext("Aucun utilisateur s&#233;lectionn&#233;"); 
+	}
+} else {
+    	echo "<div class=error_msg>".gettext("Cette fonctionnalit&#233;, n&#233;cessite les droits d'administrateur du serveur SambaEdu !")."</div>";
+}
 
   include ("pdp.inc.php");
 ?>
