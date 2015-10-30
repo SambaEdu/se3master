@@ -339,6 +339,7 @@ se3-backup)
 install_module
 ;;
 
+
 se3-synchro)
 
 if [ "$install" ==  "1" ]; then
@@ -433,6 +434,10 @@ se3-clients-linux)
     install_module
     ;;
 
+
+se3-pla)
+install_module
+;;
 
 
 
