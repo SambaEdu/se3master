@@ -44,7 +44,7 @@ echo "<img src=\"../elements/images/dialog-warning.png\">\n";
 echo "</center></font><br><br>\n";
 
 //echo "<a href=\"../yala/index.html\">".gettext("Explorateur LDAP")."</a><br>\n";
-$se3_pam=exec("dpkg -l|grep se3-pla|wc -l");
+$se3_pam=exec("dpkg -l|grep 'ii  se3-pla'|wc -l");
 if ($se3_pam) {
 	echo "<a href=\"../phpldapadmin/\">".gettext("phpldapadmin : Explorateur LDAP")."</a><br>\n";
 }
