@@ -325,19 +325,33 @@ if ($_GET['action'] == "change") {
 		// Conf de se3-pla
 		case "pla":
 			$valeur_pla=($_GET['valeur']==1) ? 1 : 0;
-
+			$resultat=mysql_query("SELECT * FROM params WHERE name='pla'");
+			if(mysql_num_rows($resultat)==0){
+				$sql = "INSERT INTO params VALUES('','pla','$valeur_pla','','Installation de phpldapadmin','6')";
+			} else {
+				$sql = "UPDATE params SET value='$valeur_pla' where name='pla'";
+			}
 
 			if ($valeur_pla == 1) {
+				// on active
 				system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-pla",$return);
 				if($return==0) {
-				echo "Module $module mis &#224; jour.<br>\n";
+				mysql_query($sql);
+				echo "phpldapadmin activ&#233;.<br>\n";
 				}
 				else{
-				echo "Un probl&#232;me est survenu lors de l'installation de $module.<br>\n";
+				echo "Un probl&#232;me est survenu lors de l'installation de phpldapadmin.<br>\n";
 				}
 
+			} else{
+				// on désactive
+				system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -r se3-pla",$return);
+				mysql_query($sql);
+				echo "Module $module d&#233;sactiv&#233;.<br>\n";
+			
 			}
 			break;
+			
 		default:
 			echo "Erreur : Module '$module' inconnu !<br>\n";
 	} // \switch ($_GET[varb])
@@ -922,40 +936,50 @@ if (($unison!="1") || ($synchro_actif !="1")) {
 
 //**********************************************************************************************************************************
 // Module PLA
-$pla_actif = exec("dpkg -s se3-pla | grep \"Status: install ok\" > /dev/null && echo 1");
-echo "<TR><TD>".gettext("phpldapadmin (se3-pla)")."</TD>";
 
+$resultat=mysql_query("SELECT * FROM params WHERE name='pla'");
+if(mysql_num_rows($resultat)==0){
+	$pla=0;
+}
+else{
+	$ligne=mysql_fetch_object($resultat);
+	if($ligne->value=="1"){
+		// installé
+		$pla=1;
+	}
+	else {
+		// pas installé
+		$pla=0;
+	}
+}
+echo "<tr><td>".gettext("phpldapadmin")."</TD>";
 // On teste si on a bien la derniere version
+$pla_version_install = exec("apt-cache policy se3-pla | grep \"Install\" | cut -d\" \" -f4");
 
-$pla_version_install = exec("apt-cache policy se3-pla | grep \"Install\" | cut -d\":\" -f2");
-$pla_version_dispo = exec("apt-cache policy se3-pla | grep \"Candidat\" | cut -d\":\" -f2");
 echo "<TD align=\"center\">$pla_version_install</TD>";
+
+$pla_version_dispo = exec("apt-cache policy se3-pla | grep \"Candidat\" | cut -d\" \" -f4");
 if ("$pla_version_install" == "$pla_version_dispo") {
 	echo "<TD align=\"center\">";
-	echo "<u onmouseover=\"return escape".gettext("('Pas de nouvelle version de ce module')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\"></u>";
+	echo "<u onmouseover=\"return escape".gettext("('Pas de nouvelle version du paquet se3-pla disponible')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\"></u>";
 	echo "</TD>";
 } else {
 	echo "<TD align=\"center\">";
-	echo "<u onmouseover=\"return escape".gettext("('Mise &#224; jour version $pla_version_dispo disponible.<br>Cliquer ici pour lancer la mise &#224; jour de ce module.')")."\"><a href=conf_modules.php?action=update&varb=pla&valeur=1><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/warning.png\"></a></u>";
+	echo "<u onmouseover=\"return escape".gettext("('Cliquer ici pour lancer l\'installation ou la mise &#224; jour du paquet se3-pla')")."\"><a href=\"conf_modules.php?action=change&varb=pla&valeur=1\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/warning.png\"></a></u>";
 	echo "</TD>";
-}
 
+}
 echo "<TD align=\"center\">";
-if (($pla!="1") || ($pla_actif!="1")) {
-	if($pla_actif!="1") {
-		$pla_message=gettext("<b>Attention :</b> le paquet se3-pla n\'est pas install&#233; sur ce serveur. Cliquer sur la croix rouge pour l\'installer");
-		$pla_install_alert="onClick=\"alert('Installation du packet se3-pla. Cela peut prendre un peu de temps. Vous devez avoir une connexion internet active')\"";
-	} else {
-		$pla_message=gettext("<b>Etat : D&#233;sactiv&#233;</b><br> Cliquer sur la croix rouge pour l\'activer");
-	}
-	echo "<u onmouseover=\"return escape('".$pla_message."')\">";
-	echo "<a href=conf_modules.php?action=change&varb=pla&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" \"$pla_install_alert\"></a>";
+if ($pla=="0") {
+	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : D&#233;sactiv&#233;</b><br><br>Permet d\'installer phpldapadmin)')")."\">";
+	echo "<a href=conf_modules.php?action=change&varb=pla&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" ></a>";
 	echo "</u>";
 } else {
-	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Cliquer sue l\'icone verte pour d&#233;sactiver le module serveur pla')")."\">";
-	echo "<a href=conf_modules.php?action=change&varb=pla&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" \"$pla_alert\"></a>";
+	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>phpldapadmin est actif')")."\">";
+	echo "<a href=conf_modules.php?action=change&varb=pla&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\"></a>";
 	echo "</u>";
 }
+
 echo "</td></tr>\n";
 
 
