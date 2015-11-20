@@ -452,7 +452,7 @@ echo "</TD></TR>\n";
 
 
 // PHPLDAPADMIN
-$se3_pam=exec("dpkg -l|grep se3-pla|wc -l");
+$se3_pam=exec("dpkg -l|grep 'ii  se3-pla'|wc -l");
 
 echo "<TR><TD>".gettext("Droit d'&#233;criture dans l'annuaire")." (phpldapadmin)</TD><TD align=\"center\">";
 if ($se3_pam) {
