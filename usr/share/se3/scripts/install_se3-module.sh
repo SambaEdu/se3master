@@ -436,7 +436,15 @@ se3-clients-linux)
 
 
 se3-pla)
-install_module
+
+if [ "$install" ==  "1" ]; then
+  install_module
+fi
+
+if [ "$remove" ==  "1" ]; then
+  remove_module
+fi
+
 ;;
 
 
@@ -453,3 +461,4 @@ rm -f $fich_lock
 /usr/share/se3/scripts/refresh_cache_params.sh
 exit 0
 
+)
