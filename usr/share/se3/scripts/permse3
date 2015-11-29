@@ -180,6 +180,9 @@ if [ -e ${LOGS_DIR}/ocsinventory-NG ]; then
 	chown -R www-se3 ${LOGS_DIR}/ocsinventory-NG
 fi
 
+# Remise en place droit sur /home
+chmod 755 /home
+
 # mise en place droits sur /home/netlogon
 SETNETLOGON
 
