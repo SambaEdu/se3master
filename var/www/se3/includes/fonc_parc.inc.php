@@ -184,18 +184,24 @@ function avoir_systemid($nom_machine) { // retourne l'ID de $nom_machine ou 0 a 
 
 function fping($ip)
 {
-//	return exec("ping ".$ip." -c 1 -w 1 | grep received | awk '{print $4}'");
-//      system("ping ".$ip." -c 1 -w 1 > /dev/null", $ret);
+//	verifie si une machine est online
+// port 445 pour les win et 22 pour les linux
+// renvoit 1 si ok
 
 	exec("/usr/share/se3/sbin/tcpcheck 1 $ip:445 | grep alive",$arrval,$ret);
     if ( $ret != "1" ) {
         return 1;
     }
-    else {
-        return 0;
-    }
+    else	{
+			exec("/usr/share/se3/sbin/tcpcheck 1 $ip:22 | grep alive",$arrval,$ret);
+			if ( $ret != "1" ) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+	}
 }
-
 
 
 /**
