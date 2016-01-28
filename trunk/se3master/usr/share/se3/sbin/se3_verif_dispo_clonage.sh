@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# $Id: se3_verif_dispo_clonage.sh 8615 2015-03-20 00:19:14Z keyser $
+# $Id: se3_verif_dispo_clonage.sh 8836 2015-06-06 22:40:14Z keyser $
 # Auteur:Franck Molle
 # Dernière modification: 02/2014
 
@@ -159,6 +159,12 @@ if [ -n "$VarchPxeClientLin" ]; then
 	VarchPxeClientLin_en_place="$VarchPxeClientLin"
 	
 	src_client_linux="http://wawadeb.crdp.ac-caen.fr/iso/client_linux"
+	
+	if [ -n "$SrcPxeClientLin" ]; then
+		src_client_linux="$SrcPxeClientLin"
+	fi
+
+	
 	rm -f versions.txt
 	wget $src_client_linux/versions.txt > /dev/null 2>&1
 	
