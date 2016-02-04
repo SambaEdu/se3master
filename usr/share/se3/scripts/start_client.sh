@@ -120,17 +120,23 @@ else
 						echo "<br><h3>Action sur : $B</h3>"
 						#============================================
 						if [ "${action}" = "shutdown" -o "${action}" = "stop" ]; then
+							ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I 
+							do
 							echo "Tentative d'arret de la machine XP/2000<b> $B</b> correspondant à l'adresse mac <b>$D</b><br>"
-							/usr/bin/net rpc shutdown -C "Shutdown" -S $B -U "$B\adminse3%$PASSADM"
+							/usr/bin/net rpc shutdown -C "Shutdown" -I $I -U "$I\adminse3%$PASSADM"
+							done
 						fi
 
 						if [ "${action}" = "reboot" ]; then
-							echo "Tentative de reboot de la machine XP/2000<b> $B</b> correspondant à l'adresse mac <b>$D</b><br>"
-							/usr/bin/net rpc shutdown -r -C "Reboot" -S $B -U "$B\adminse3%$PASSADM"
+							ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I 
+							do
+								echo "Tentative de reboot de la machine XP/2000<b> $B</b> correspondant à l'adresse mac <b>$D</b><br>"
+								/usr/bin/net rpc shutdown -r -C "Reboot" -I $I -U "$I\adminse3%$PASSADM"
+							done
 						fi
 
 						if [ "${action}" = "wol" ]; then
-							ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I                                                        do
+							ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I
 							do
 								echo "Tentative d'eveil pour la machine correspondant à l'adresse mac $D et au broadcast $I<br>"
 								/usr/bin/wakeonlan -i $I $D > /dev/null
@@ -146,7 +152,7 @@ else
 						then
 							echo "<br><h3>Action sur : $B</h3>"
 							if [ "${action}" = "wol" ]; then
-								ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I                                                        do
+								ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I 						
 								do
 									echo "Tentative d'eveil pour la machine Win9x/Linux <b>$B</b> correspondant à l'adresse mac <b>$D</b><br>"
 									/usr/bin/wakeonlan -i $I $D > /dev/null
