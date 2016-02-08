@@ -34,15 +34,7 @@ ERREUR()
 
 FICHIERLOCK=/tmp/warnquota.lock
 FICHIEROVERFILL=/tmp/warnquota.overfill
-
-grep xfs /etc/fstab >/dev/null
-if [ "$?" == "0" ]
-then
-        REP_QUOTA="/usr/sbin/repquota -F xfs"
-else
-        REP_QUOTA="/usr/sbin/repquota"
-fi
-
+REP_QUOTA=/usr/share/se3/scripts/repquota_filtre.sh
 
 COMPL_OVERFILL()
 {
@@ -59,39 +51,25 @@ COMPL_OVERFILL()
   # 1.
  
     #filtre les lignes inutiles de repquota (debut), filtre le quota de root et de www-se3 non interessants pour se3 et trie par ordre alpha
-    $REP_QUOTA -v $1|grep '+-'|grep -v root|grep -v www-se3|sort -t \t -k 1 | while read ligne 
+    $REP_QUOTA  $1|grep 'yes$'|sort -t \t -k 1 |tr -s ' '| while read ligne 
     do
+#      echo $ligne >> /tmp/tmp_quota_$disque
+
       #filtre les espaces superflus de chaque ligne, isole les champs et les arrondit
-      nom=$(echo $ligne|tr -s " "|cut -d " " -f1)
-      utilise=$(($(echo $ligne|tr -s " "|cut -d " " -f3)/1000))
-      softquota=$(($(echo $ligne|tr -s " "|cut -d " " -f4)/1000))
-      hardquota=$(($(echo $ligne|tr -s " "|cut -d " " -f5)/1000))
-      grace=$(echo $ligne|tr -s " "|cut -d " " -f6)
-    
-      #on sait que grace est non vide d'apres le grep +-
-      #filtrage du cas delai < 48:00
-      if [ "$grace" == "none" -o "$grace" == "aucun" ] ; then
-        grace="Expire"
-      else
-        if [ -n "$(echo $grace|grep ":")" ] ; then
-      #il faut filtrer car la grace est au format H:min
-          nbreh=$(echo $grace|cut -d ":" -f1|sed -e "s/ //g")
-          grace="1"
-          [ "$nbreh" -lt 24 ] && grace="0"
-        else
-          grace=$(echo $grace | sed "s/days//" )
-        fi
-      fi
-      #~ echo "$nom $utilise $softquota $grace" 
+      nom=$(echo $ligne|cut -d " " -f1)
+      utilise=$(echo $ligne|cut -d " " -f2)
+      softquota=$(echo $ligne|cut -d " " -f3)
+      hardquota=$(echo $ligne|cut -d " " -f4)
+      grace=$(echo $ligne|cut  -d " " -f5)
       
       #patch 2/2 pour affichage dans la page quota_visu des users en depassement
-      echo "$nom $utilise $softquota $hardquota $grace"| sed -e "s/ /\t/g" >> /tmp/tmp_quota_$disque
+      echo "$nom $utilise $softquota $hardquota $grace" |sed "s/ /\t/g"  >> /tmp/tmp_quota_$disque
     
-      ismember_test=$(ldapsearch -xLLL "cn=overfill" | grep "^memberUid: $nom$" )
+      ismember_test=$(ldapsearch -xLLL "cn=overfill" | grep "^memberUid: ${nom}$" )
       # si l utilisateur n est pas encore dans overfill, on le rajoute, sinon, rien
       if [ -z "$ismember_test" ]; then
         /usr/share/se3/sbin/groupAddUser.pl $nom overfill
-        echo "$nom vient d'etre ajoute dans overfill"
+        echo "\"$nom\" vient d'etre ajoute dans overfill"
       fi
       # on enleve $nom de la liste $FICHIEROVERFILL a traiter pour le 2: resteront dans le fichier ceux a supprimer d'overfill
       sed -i $FICHIEROVERFILL -e "s/^$nom$//g"
@@ -107,21 +85,13 @@ fi
 
 WWWPATH="/var/www"
 ## recuperation des variables necessaires pour interroger mysql ###
-if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
-  dbhost=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f2 | cut -d \" -f2`
-  dbname=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d \" -f 2`
-  dbuser=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 | cut -d \" -f 2`
-  dbpass=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 | cut -d \" -f 2`
-else
-  echo -e "$COLERREUR"
-  echo "Fichier de configuration mysql inaccessible, le script ne peut se poursuivre."
-  exit 1
-fi
+
+. /etc/se3/config_o.cache.sh
 
 # debut du script proprement dit
 
 # la partition /home peut ne pas exister sur un backuppc ou slave
-PASDEHOME=`cat /etc/fstab | grep /home`
+PASDEHOME=`cat /etc/mtab | grep /home`
   
 if [ $# -eq 0 ] ; then
   
@@ -209,39 +179,6 @@ if [ "$PASDEHOME" != "" ]; then
     
     ##### creation et parametrage du template overfill ####
     mkdir -p /home/templates/overfill
-    #nettoyage du template (utile en cas de chgt de l'adresse urlse3)
-    if [ -e /home/templates/overfill/registre.zrn ]; then
-      sed -i /home/templates/overfill/registre.zrn -e "s!WarnQuota @@@!####delete me####!"
-      sed -i /home/templates/overfill/registre.zrn -e "/####delete me####/d"
-    else
-      echo "#overfill (ajout automatique par warnquota.sh)" > /home/templates/overfill/registre.zrn
-    fi
-    chown -R "www-se3"  /home/templates/overfill #pour pouvoir rajouter des clefs sur overfill via l'interface
-    
-    # dans mysql, le chemin est stocke avec des / (L:/ro/lynx/lynx.exe), pour windows il faut des \
-    #transforme les / stockes ds mysql en \ pour le chemin windows + correction bug \r, \f, \n, \t et \e mals pris en compte
-    BROWSERWIN=$(echo $BROWSER | sed 's!/r!\\\\r!g' | sed 's!/n!\\\\n!g' | sed 's!/f!\\\\f!g' | sed 's!/t!\\\\t!g' | sed 's!/e!\\\\e!g' | sed 's!/!\\!g' )
-    
-    # la cle n existe pas puisqu on l a supprime avant
-    #~ CLEEXIST="$(grep "WarnQuota @@@" /home/templates/overfill/registre.zrn)"
-    #~ if [ -z "$CLEEXIST" ] ; then
-    echo -e "TOUS @@@ ADD @@@  HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\WarnQuota @@@ $BROWSERWIN $URLINTERFACE @@@ REG_SZ \r" >> /home/templates/overfill/registre.zrn
-        #~ chown "www-se3" /home/templates/overfill/registre.zrn
-    #~ fi
-    
-    # il faut supprimer la cle du ntuser.dat si elle a ete rajoutee et que l utilisateur a quitte overfill
-    # si la cle n est pas supprimee dans base, on rajoute cette suppression
-    mkdir -p /home/templates/base
-    if [ ! -e /home/templates/base/registre.zrn ]; then
-      echo "#base (ajout automatique par warnquota.sh)" > /home/templates/base/registre.zrn
-    fi
-    chown -R "www-se3"  /home/templates/base #pour pouvoir rajouter des clefs sur base via l'interface
-    
-    CLEEXIST="$(grep "WarnQuota " /home/templates/base/registre.zrn)"
-    if [ -z "$CLEEXIST" ] ; then
-      echo -e "TOUS @@@ DEL @@@ HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\WarnQuota \r" >> /home/templates/base/registre.zrn
-      #~ chown "www-se3" /home/templates/base/registre.zrn
-    fi
     echo "Effectuee."
 else
     echo "Pas de partition /home sur ce serveur : pas d avertissement possible via les templates."
