@@ -10,13 +10,6 @@
 ##### Script permettant le reglage du delai de grace sur les partitions où les quotas sont activés #####
 #
 
-grep xfs /etc/fstab >/dev/null
-if [ "$?" = "0" ]; then
-        SET_QUOTA="/usr/sbin/setquota -F xfs"
-else
-        SET_QUOTA="/usr/sbin/setquota"
-fi
-
 if [ $# -ne 2 -o "$1" = "--help" -o "$1" = "-h" ]; then
 #echo "Le nombre d'arguments du script est incorrect!"
 echo 
@@ -58,8 +51,19 @@ exit 1
 fi
 
 delai=$[3600*24*$1]
+fstype=$(grep  $2 /etc/mtab)
+if $(echo $fstype | grep -q xfs); then
+        /usr/sbin/setquota -F xfs -t $delai 0 $2
+	echo "DELAI DE $1 JOURS FIXE AVEC SUCCES SUR $2."
 
-$SET_QUOTA -t $delai 0 $2 
-echo "DELAI DE $1 JOURS FIXE AVEC SUCCES SUR $2."
+elif $(echo $fstype | grep -q zfs); then
+#        zvol=$(echo $fstype | awk '{ print $1 }')
+#        newquota=$(( $2 * 1049 ))
+#        /sbin/zfs set userquota@$1=$newquota $zvol
+	echo "on ne fixe pas de delai sur $2 en ZFS!" 
+else
+        /usr/sbin/setquota -t $delai 0 $2
+	echo "DELAI DE $1 JOURS FIXE AVEC SUCCES SUR $2."
+fi
 
 

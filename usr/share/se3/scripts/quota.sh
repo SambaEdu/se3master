@@ -30,13 +30,22 @@ ERREUR()
 	exit 1
 }
 
-grep xfs /etc/fstab >/dev/null
-if [ "$?" == "0" ]
-then
-	SET_QUOTA="/usr/sbin/setquota -F xfs"
+SET_QUOTA()
+# fonction pour fixer les quotas
+# arguments :
+# user soft hard path
+{
+fstype=$(grep  $4 /etc/mtab)
+if $(echo $fstype | grep -q xfs); then
+	/usr/sbin/setquota -F xfs $1 $2 $3 0 0 $4
+elif $(echo $fstype | grep -q zfs); then
+	zvol=$(echo $fstype | awk '{ print $1 }')
+	newquota=$(( $2 * 1049 ))
+	/sbin/zfs set userquota@$1=$newquota $zvol
 else
-	SET_QUOTA="/usr/sbin/setquota"
+	/usr/sbin/setquota $1 $2 $3 0 0 $4
 fi
+}
 
 WWWPATH="/var/www"
 ## recuperation des variables necessaires pour interoger mysql ###
@@ -132,10 +141,10 @@ if [ -e /usr/sbin/setquota ]; then
           #~ chmod 700 /var/se3/quotas_tmp
         #~ fi
         
-	TST_GRP=$(ldapsearch -xLLL cn=$1 -b $BASEDN | grep member)
+	TST_GRP=$(ldapsearch -xLLL cn=$1 -b $BASEDN member | grep member)
 	
 	if [ -z "$TST_GRP" ]; then
-	TST_UID=$(ldapsearch -xLLL uid="$1")
+	TST_UID=$(ldapsearch -xLLL uid="$1" uid)
 		if [ -z "$TST_UID" ]; then
 			ERREUR "Impossible de trouver le groupe ou l'utilisateur passé en paramètre dans l'annuaire Ldap"
 		else
@@ -143,7 +152,7 @@ if [ -e /usr/sbin/setquota ]; then
 				echo "je fixe le quota pour l'utilisateur  $1 sur la partition $4"
                                 #patch 3/6 pour application immédiate des quotas
                                 CREER_FICHIER $1 $4
-				$SET_QUOTA $1 $SOFT_QUOTA $HARD_QUOTA 0 0 $4
+				SET_QUOTA $1 $SOFT_QUOTA $HARD_QUOTA $4
 				echo "quota soft : $CONV_SOFT_QUOTA"
 				echo "quota hard : $CONV_HARD_QUOTA"
 				echo
@@ -152,7 +161,7 @@ if [ -e /usr/sbin/setquota ]; then
 			fi
 		fi
 	fi
-	TST_GRP_POSIX=$(ldapsearch -xLLL "cn=$1" | grep memberUid)
+	TST_GRP_POSIX=$(ldapsearch -xLLL "cn=$1" memberUid | grep memberUid)
 	if [ -z "$TST_GRP_POSIX" ]; then
 		ldapsearch -x -LLL cn=$1 -b $BASEDN | grep uid | cut -d " " -f2 |  cut -d "=" -f2 | cut -d "," -f1 | while read A
 		do
@@ -160,7 +169,7 @@ if [ -e /usr/sbin/setquota ]; then
 				echo "je fixe le quota pour $A sur la partition $4"
                                 #patch 4/6 pour application immédiate des quotas
                                 CREER_FICHIER $A $4
-				$SET_QUOTA $A $SOFT_QUOTA $HARD_QUOTA 0 0 $4
+				SET_QUOTA $A $SOFT_QUOTA $HARD_QUOTA $4
 				echo "quota soft : $CONV_SOFT_QUOTA"
 				echo "quota hard : $CONV_HARD_QUOTA"
 				echo
@@ -171,13 +180,13 @@ if [ -e /usr/sbin/setquota ]; then
 	
 	else
 		
-		ldapsearch -x -LLL "cn=$1" | grep memberUid | cut -d " " -f2 | while read A
+		ldapsearch -x -LLL "cn=$1" memberUid | grep memberUid | cut -d " " -f2 | while read A
 		do 
 			if [ "$A" != "admin"  -a "$A" != "root" -a "$A" != "www-se3" ]; then
 				echo "je fixe le quota pour $A sur la partition $4"
                                 #patch 5/6 pour application immédiate des quotas
                                 CREER_FICHIER $A $4
-				$SET_QUOTA $A $SOFT_QUOTA $HARD_QUOTA 0 0 $4
+				SET_QUOTA $A $SOFT_QUOTA $HARD_QUOTA $4
 				echo "quota soft : $CONV_SOFT_QUOTA"
 				echo "quota hard : $CONV_HARD_QUOTA"
 				echo

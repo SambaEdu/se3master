@@ -1,11 +1,22 @@
 #!/bin/bash
-# convertit les quotas xfs au format attendu par samba4.1
+# convertit les quotas xfs ou zfs  au format attendu par samba4.1
+#set -x
 user=$3
 mnt=$(stat -c %m -- $(pwd))
-RET=$(xfs_quota -x -c "quota -bi -N -u $user"  $mnt 2>/dev/null) && \
-if [ -n "$RET" ]; then
-    echo $RET |  awk '{ gsub (/\[(([0-9]*) days)\]/,""); gsub (/\[-*\]/,""); print "2 "$2" "$3" "$4" "$6" "$7" "$8" 1024" }'
-    exit 0
+fstype=$(grep  $mnt /etc/mtab)
+if $(echo $fstype | grep -q xfs); then
+	RET=$(xfs_quota -x -c "quota -bi -N -u $user"  $mnt 2>/dev/null) && \
+	if [ -n "$RET" ]; then
+	    echo $RET |  awk '{ gsub (/\[(([0-9]*) days)\]/,""); gsub (/\[-*\]/,""); print "2 "$2" "$3" "$4" "$6" "$7" "$8" 1024" }'
+	    exit 0
+	fi
+elif $(echo $fstype | grep -q zfs); then
+	zvol=$(echo $fstype | awk '{ print $1 }')
+	quota=$(sudo /sbin/zfs get userquota@${user} -p -H $zvol  | awk '{ printf "%u", $3/1024 }')
+        used=$(sudo /sbin/zfs get userused@${user} -p -H $zvol  | awk '{ printf "%u", $3/1024 }')
+
+	echo "2 $used $quota $quota 0 0 0 1024"
+	exit 0
 fi
 echo "2 0 0 0 0 0 0 1024"
 exit 0

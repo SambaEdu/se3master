@@ -98,19 +98,28 @@ fi
 
 ## recuperation des variables necessaires pour interoger mysql ###
 WWWPATH="/var/www"
-if [ -e $WWWPATH/se3/includes/config.inc.php ]; then
-dbhost=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f2 | cut -d \" -f2`
-dbname=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d \" -f 2`
-dbuser=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 | cut -d \" -f 2`
-dbpass=`cat $WWWPATH/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 | cut -d \" -f 2`
-else
-ERREUR "Fichier de configuration inaccessible, le script ne peut se poursuivre."
-fi
-
-### recuperation des parametres actuels de l'annuaire dans la base ####
-BASEDN=`echo "SELECT value FROM params WHERE name=\"ldap_base_dn\"" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-
+. /etc/se3/config_l.cache.sh
+. /etc/se3/config_o.cache.sh
 ############# debut des fonctions ###############
+
+QUOTA()
+# fonction pour fixer les quotas
+# arguments :
+# user soft hard path
+{
+fstype=$(grep  $4 /etc/mtab)
+if $(echo $fstype | grep -q xfs); then
+        /usr/sbin/setquota -F xfs $1 $2 $3 0 0 $4
+elif $(echo $fstype | grep -q zfs); then
+        zvol=$(echo $fstype | awk '{ print $1 }')
+        newquota=$(( $2 * 1049 ))
+	/sbin/zfs set userquota@$1=$newquota $zvol
+else
+        /usr/sbin/setquota $1 $2 $3 0 0 $4
+fi
+}
+
+
 FIXERQUOTA()
 {
 part=$1
@@ -141,7 +150,7 @@ do
 # test1=$(ldapsearch -x -LLL cn=$grp -b $BASEDN | grep uid | grep $user)
 # test2=$(ldapsearch -x -LLL "cn=$grp" | grep memberUid | cut -d" " -f2 | grep $user)
 # test_appartenance="$test1$test2"
-test_appartenance=$(ldapsearch -xLLL -b ou=Groups,$BASEDN cn=$grp memberUid | grep " $user$")
+test_appartenance=$(ldapsearch -xLLL -b $groupsRdn,$ldap_base_dn cn=$grp memberUid | grep " $user$")
 
 if [ -n "$test_appartenance" ]; then
 liste_appartenance="$liste_appartenance $grp"
@@ -197,7 +206,7 @@ echo
 # /usr/share/se3/scripts/quota.sh $user $[$qsoft*1000] $[$qhard*1000] $part
 # GAIN DE PERF DE 1 A 4 EN COURCUITANT quota.sh
 CREER_FICHIER $user $part
-/usr/sbin/setquota -F xfs $user $[$qsoft*1000] $[$qhard*1000] 0 0 $part
+QUOTA $user $[$qsoft*1000] $[$qhard*1000] $part
 done
 }
 
@@ -241,8 +250,8 @@ quotah=$4
 #creation de la liste des users pour lesquels il faut refixer les quotas: $liste_users
 if [ "$user_grp" = "Toutlemonde" ] ; then
   
-  #~ liste_users=$(ldapsearch -x -b ou=People,$BASEDN uid | grep "^dn: " | cut -d, -f1 | cut -d= -f2)
-  liste_users=$(ldapsearch -x -b ou=People,$BASEDN uid | grep "^uid: " | cut -d" " -f2 | grep -v "^admin$" | grep -v "^www-se3$" | grep -v "^root$" )
+  #~ liste_users=$(ldapsearch -x -b $peopleRdn,$ldap_base_dn uid | grep "^dn: " | cut -d, -f1 | cut -d= -f2)
+  liste_users=$(ldapsearch -x -b $peopleRdn,$ldap_base_dn uid | grep "^uid: " | cut -d" " -f2 | grep -v "^admin$" | grep -v "^www-se3$" | grep -v "^root$" )
   #~ type="g"
   if [ "$2" = "Toutespartitions" ]; then
     partition=/home
@@ -263,7 +272,7 @@ if [ "$user_grp" = "Toutlemonde" ] ; then
     FIXERQUOTA $partition $quotas $quotah
   fi
 else
-  TST_GRP=$(ldapsearch -xLLL "cn=$1" -b ou=Groups,$BASEDN)
+  TST_GRP=$(ldapsearch -xLLL "cn=$1" -b $groupsRdn,$ldap_base_dn)
   if [ -z "$TST_GRP" ]; then
           TST_UID=$(ldapsearch -xLLL uid="$1")
           if [ -z "$TST_UID" ]; then
@@ -277,12 +286,12 @@ else
   else
           #c'est un groupe: on liste les users du groupe
           type="g"
-          TST_GRP_POSIX=$(ldapsearch -xLLL "cn=$1" -b ou=Groups,$BASEDN | grep memberUid)
+          TST_GRP_POSIX=$(ldapsearch -xLLL "cn=$1" -b  $groupsRdn,$ldap_base_dn | grep memberUid)
           #echo "Liste groupe: $TST_GRP_POSIX"
           if [ -z "$TST_GRP_POSIX" ]; then
-            liste_users=$(ldapsearch -x -LLL cn=$1 -b $BASEDN | grep uid | cut -d " " -f2 |  cut -d "=" -f2 | cut -d "," -f1)
+            liste_users=$(ldapsearch -x -LLL cn=$1 -b $ldap_base_dn | grep uid | cut -d " " -f2 |  cut -d "=" -f2 | cut -d "," -f1)
           else
-	    TST_GRP_VIDE=$(ldapsearch -xLLL "cn=$1" -b ou=Groups,$BASEDN | grep member)
+	    TST_GRP_VIDE=$(ldapsearch -xLLL "cn=$1" -b  $groupsRdn,$ldap_base_dn | grep member)
 	    if [ -z "$TST_GRP_VIDE" ]; then
 		echo "Le groupe passe en argument est vide."
 	    else
