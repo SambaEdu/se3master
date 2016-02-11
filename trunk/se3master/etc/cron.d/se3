@@ -63,3 +63,6 @@
 
 # Purge repertoire public toutes les nuits
 0   1   *   *   * root /usr/share/se3/sbin/purge_public.sh >/dev/null 2>&1
+
+# effacement des profils a effacer toutes les 2 minutes
+*/2 * * * * root /usr/share/se3/sbin/clean_profiles.sh
