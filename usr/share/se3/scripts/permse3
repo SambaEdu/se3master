@@ -160,6 +160,10 @@ chown -R  mysql ${LOGS_DIR}/mysql*
 chown -R  www-se3 ${LOGS_DIR}/se3
 chmod -R 750 ${LOGS_DIR}/se3
 
+if [ -e ${LOGS_DIR}/apt-cacher-ng ]; then
+	chown -R apt-cacher-ng ${LOGS_DIR}/apt-cacher-ng
+fi
+
 if [ -e ${LOGS_DIR}/clamav ]; then
 	chown -R clamav ${LOGS_DIR}/clamav
 fi
@@ -179,6 +183,8 @@ fi
 if [ -e ${LOGS_DIR}/ocsinventory-NG ]; then
 	chown -R www-se3 ${LOGS_DIR}/ocsinventory-NG
 fi
+
+
 
 # Remise en place droit sur /home
 chmod 755 /home
