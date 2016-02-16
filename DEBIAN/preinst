@@ -35,6 +35,11 @@ rm -f /usr/share/se3/sbin/permse3
 ln -s /usr/share/se3/scripts/permse3 /usr/share/se3/sbin/permse3 
 fi
 
+if [ -e /usr/share/se3/sbin/restore_droits.sh ]; then
+rm -f /usr/share/se3/sbin/restore_droits.sh
+ln -s /usr/share/se3/scripts/restore_droits /usr/share/se3/sbin/restore_droits.sh 
+fi
+
 
 
 
