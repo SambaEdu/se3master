@@ -84,7 +84,7 @@
 	comment = Partage classes
 	path = /var/se3/Classes
 	read only = No
-	vfs object = recycle:repository recycle:keeptree recycle:versions recycle:touch recycle:exclude recycle:exclude_dir recycle:noversions
+	vfs objects = shadow_copy2 recycle:repository recycle:keeptree recycle:versions recycle:touch_mtime recycle:exclude recycle:exclude_dir recycle:noversions
 	recycle:repository=/home/%u/Corbeille_Reseau
 	recycle:keeptree=no
 	recycle:versions=no
@@ -92,7 +92,11 @@
 	recycle:exclude=?~$*,~$*,*.tmp,index*.pl,index*.htm*,*.temp,*.TMP
 	recycle:exclude_dir=tmp,temp,cache,appdata,AppData,Application Data,profile,profile.V2
 	recycle:noversions=*.*
-	
+	shadow:snapdir = /var/se3/.zfs/snapshot
+	shadow:sort = desc
+	shadow:format = zfs-auto-snap_%Y-%m-%d-%H%M
+	shadow:basedir = /var/se3
+		
 [install]
 	root preexec = /usr/share/se3/sbin/logon.sh -s %S %u %m %I %a
         root preexec close = Yes
