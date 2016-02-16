@@ -8,6 +8,9 @@
 . /usr/share/se3/includes/config.inc.sh -cml
 #. /usr/share/se3/includes/functions.inc.sh
 
+# utf8 par défaut now
+CHARSET="UTF-8"
+
 [ ! -d /home/profiles ] && mkdir /home/profiles
 chown root.root /home/profiles
 chmod 777 /home/profiles
@@ -16,8 +19,8 @@ chmod 777 /home/profiles
 [ -z "$se3ip" ] && se3ip="$(expr "$(LC_ALL=C /sbin/ifconfig eth0 | grep 'inet addr')" : '.*inet addr:\([^ ]*\)')"
 
 [ -z "$se3mask" ] && se3mask=$(grep netmask  /etc/network/interfaces | head -n1 | sed -e "s/netmask//g" | tr "\t" " " | sed -e "s/ //g")
-CHARSET=$(grep "unix charset" /etc/samba/smb.conf |grep -v "#"| head -n1 | cut -d"=" -f2 | sed -e "s/ //")
-[ -z "$CHARSET" ] && CHARSET="UTF-8"
+# CHARSET=$(grep "unix charset" /etc/samba/smb.conf |grep -v "#"| head -n1 | cut -d"=" -f2 | sed -e "s/ //")
+# [ -z "$CHARSET" ] && CHARSET="UTF-8"
 
 cp -f /etc/samba/smb.conf /etc/samba/smb.conf.old
 sed -e "s/#DOMAIN#/$se3_domain/g;s/#NETBIOSNAME#/$netbios_name/g;s/#IPSERVEUR#/$se3ip/g;s/#MASK#/$se3mask/g;s/#SLAPDIP#/$ldap_server/g;s/#BASEDN#/$ldap_base_dn/g;s/#ADMINRDN#/$adminRdn/g;s/#COMPUTERS#/$computersRdn/g;s/#PEOPLE#/$peopleRdn/g;s/#GROUPS#/$groupsRdn/g;s/#CHARSET#/$CHARSET/g" /var/cache/se3_install/conf/smb_3.conf.in >/etc/samba/smb.conf
