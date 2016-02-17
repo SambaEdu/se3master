@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "deprecated à revoir pour git"
+exit 0
+
+
 # Patchage des numeros de versions
 
 VERSION=$1
@@ -17,7 +21,7 @@ fi
 
 if [ -z "$DISTRIB" ]; then
 	DISTRIB="etch"
-	echo "etch choisi par d�faut, OK ?"
+	echo "etch choisi par défaut, OK ?"
 	read dummy
 
 fi
