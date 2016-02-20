@@ -62,7 +62,7 @@ do
 	((i += 1))
 done
 let "pcelev = $nbela * 100 / $nbEleves"
-echo "<LI>Nombre d'�l�ves inscrits : $nbEleves ==>  actifs : $nbela ($pcelev%)</LI>"
+echo "<LI>Nombre d'élèves inscrits : $nbEleves ==>  actifs : $nbela ($pcelev%)</LI>"
 
 
 cat <<EOF
