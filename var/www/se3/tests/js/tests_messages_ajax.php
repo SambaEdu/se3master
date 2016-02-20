@@ -2,7 +2,7 @@
  /**
    
    * Page qui teste les differents services
-   * @Version $Id$ 
+   * @Version $Id: tests_messages_ajax.php 9181 2016-02-20 20:51:11Z keyser  - correction accents 
    * 
    * @Projet LCS / SambaEdu 
    * @auteurs Philippe Chadefaux  MrT
@@ -37,9 +37,9 @@
 	$flux .= "var $key=\"$value\";\n";
     }
 
-	$flux = str_replace('&#233;','�',$flux);
-	$flux = str_replace('&#232;','�',$flux);
-	$flux = str_replace('&#224;','�',$flux);
+	$flux = str_replace('&#233;','é',$flux);
+	$flux = str_replace('&#232;','è',$flux);
+	$flux = str_replace('&#224;','à',$flux);
 
 
 	die($flux);
