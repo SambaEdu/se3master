@@ -3,17 +3,17 @@
   /**
   * Lecture des variables dans la base MySQL
 
-  * @Version $Id$
+  * @Version $Id: config.inc.php.in 9184 2016-02-21 00:58:01Z keyser $
 
   * @Projet LCS / SambaEdu
 
-  * @Auteurs Equipe Tice académie de Caen
-  * @Auteurs « wawa »  olivier.lecluse@crdp.ac-caen.fr
+  * @Auteurs Equipe Tice acadÃ©mie de Caen
+  * @Auteurs Â« wawa Â»  olivier.lecluse@crdp.ac-caen.fr
 
-  * @Note Ce fichier de fonction doit être appelé par un include dans entete.inc.php
+  * @Note Ce fichier de fonction doit Ãªtre appelÃ© par un include dans entete.inc.php
   * @Note Ce fichier est complete a l'installation
 
-  * @Licence Distribué sous la licence GPL
+  * @Licence DistribuÃ© sous la licence GPL
   */
 
    /**
@@ -25,7 +25,7 @@
 
 
 
-# Paramètres de la base de données
+# ParamÃ¨tres de la base de donnÃ©es
 
 $dbhost="#MYSQLIP#";
 $dbname="se3db";
@@ -34,7 +34,7 @@ $dbpass="#SE3DBPASS#";
 
 $srv_id=1;
 
-# Paramètres fixes
+# ParamÃ¨tres fixes
 
 $secook=0;
 $Pool  = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -42,21 +42,21 @@ $Pool .= "abcdefghijklmnopqrstuvwxyz";
 $Pool .= "1234567890";
 $SessLen = 20;
 # Model caracteres speciaux pour les mots de passe
-$char_spec = "&_#@£%§:!?*$";
+$char_spec = "&_#@Â£%Â§:!?*$";
 
 
 $ldap_login_attr = "uid";
 
-# Récupération des paramètres depuis la base de donnée
+# RÃ©cupÃ©ration des paramÃ¨tres depuis la base de donnÃ©e
 
 $authlink = mysql_connect($dbhost,$dbuser,$dbpass);
-@mysql_select_db($dbname) or die("Impossible de se connecter à la base $dbname.");
+@mysql_select_db($dbname) or die("Impossible de se connecter Ã  la base $dbname.");
 $result=mysql_query("SELECT * from params where srv_id=0 OR srv_id=$srv_id");
 if ($result)
     while ($r=mysql_fetch_array($result))
         $$r["name"]=$r["value"];
 else
-    die ("paramètres absents de la base de donnée");
+    die ("paramÃ¨tres absents de la base de donnÃ©e");
 mysql_free_result($result);
 
 $urlauth=$urlse3."/auth.php";
@@ -66,15 +66,15 @@ $urlauth=$urlse3."/auth.php";
 chdir($path_to_wwwse3);
 putenv("LANG=$lang");
 putenv("LANGUAGE=$lang");
-setlocale(LC_ALL, "");
+setlocale(LC_ALL, "C");
 bindtextdomain("messages","./locale");
 textdomain("messages");
 
-# Paramètres LDAP
+# ParamÃ¨tres LDAP
 
 $adminDn      = "$adminRdn,$ldap_base_dn";
 
-# Declaration des «branches» de l'annuaire LCS/SE3 dans un tableau
+# Declaration des Â«branchesÂ» de l'annuaire LCS/SE3 dans un tableau
 $dn = array();
   $dn["people"] = "$peopleRdn,$ldap_base_dn";
   $dn["groups"] = "$groupsRdn,$ldap_base_dn";

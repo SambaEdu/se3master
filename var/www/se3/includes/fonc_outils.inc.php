@@ -4,7 +4,7 @@
    /**
    * Fonctions utiles
   
-   * @Version $Id$
+   * @Version $Id: fonc_outils.inc.php 9185 2016-02-21 00:59:00Z keyser $
    
    * @Projet LCS / SambaEdu 
    * Fonctions Interface Homme/Machine
@@ -131,7 +131,7 @@ function avoir_mac($mpenc) {
 
 * @Parametres
 
-* @Return tableau des caractéristiques reseau
+* @Return tableau des caractÃ©ristiques reseau
 
 */
 
@@ -793,7 +793,7 @@ function entree_table_param_exist($nom,$valeur,$cat,$comment) {
 }
 
 /**
-* a partir d'un uid d'élève fournit le nom inversé de son répertoire classe 
+* a partir d'un uid d'Ã©lÃ¨ve fournit le nom inversÃ© de son rÃ©pertoire classe 
 * en cas de login prenom.nom, renvoie nom.prenom, sinon renvoie le login
 * @Parametres $uid
 

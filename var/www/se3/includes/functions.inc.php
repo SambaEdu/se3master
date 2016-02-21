@@ -3,7 +3,7 @@
    /**
    * Librairie de fonctions utilisees dans l'interface d'administration
 
-   * @Version $Id$
+   * @Version $Id: functions.inc.php 9186 2016-02-21 01:02:50Z keyser $
 
    * @Projet LCS / SambaEdu
 
@@ -274,7 +274,7 @@ function displogin ($idpers)
     if ($idpers):
         /* Renvoie le timestamp du dernier login */
         @mysql_select_db("$DBAUTH");
-        $result=mysql_db_query("SELECT date_format(last_log,'%e %m %Y ï¿½ %T' ) FROM personne WHERE id=$idpers", $authlink);
+        $result=mysql_db_query("SELECT date_format(last_log,'%e %m %Y Ã¯Â¿Â½ %T' ) FROM personne WHERE id=$idpers", $authlink);
     if ($result && mysql_num_rows($result)):
         $der_log=mysql_result($result,0,0);
     mysql_free_result($result);
@@ -327,13 +327,13 @@ function isauth()
 * Fabrique un Numero de session aleatoire
 
 * @Parametres
-* @Return Nï¿½ de session
+* @Return Num de session
 */
 
 
 function mksessid()
 {
-    /* Fabrique un Nï¿½ de session aleatoire */
+    /* Fabrique un Num de session aleatoire */
     global $Pool, $SessLen;
 
     $count=10;
@@ -1084,7 +1084,7 @@ function debug_var() {
 
 	$debug_var_count['COOKIE']=0;
 
-	// Fonction destinée à afficher les variables transmises d'une page à l'autre: GET, POST et SESSION
+	// Fonction destinÃ©e Ã  afficher les variables transmises d'une page Ã  l'autre: GET, POST et SESSION
 	echo "<div style='border: 1px solid black; background-color: white; color: black;'>\n";
 
 	$cpt_debug=0;
@@ -1094,7 +1094,7 @@ function debug_var() {
 	echo "<div id='container_debug_var_$cpt_debug'>\n";
 	$cpt_debug++;
 
-	echo "<p>Variables envoyées en POST: ";
+	echo "<p>Variables envoyÃ©es en POST: ";
 	if(count($_POST)==0) {
 		echo "aucune";
 	}
@@ -1191,7 +1191,7 @@ function debug_var() {
 	echo "</blockquote>\n";
 
 
-	echo "<p>Variables envoyées en GET: ";
+	echo "<p>Variables envoyÃ©es en GET: ";
 	if(count($_GET)==0) {
 		echo "aucune";
 	}
@@ -1225,7 +1225,7 @@ function debug_var() {
 	echo "</blockquote>\n";
 
 
-	echo "<p>Variables envoyées en SESSION: ";
+	echo "<p>Variables envoyÃ©es en SESSION: ";
 	if(count($_SESSION)==0) {
 		echo "aucune";
 	}
@@ -1246,7 +1246,7 @@ function debug_var() {
 	echo "</blockquote>\n";
 
 
-	echo "<p>Variables envoyées en SERVER: ";
+	echo "<p>Variables envoyÃ©es en SERVER: ";
 	if(count($_SERVER)==0) {
 		echo "aucune";
 	}
@@ -1267,7 +1267,7 @@ function debug_var() {
 	echo "</blockquote>\n";
 
 
-	echo "<p>Variables envoyées en FILES: ";
+	echo "<p>Variables envoyÃ©es en FILES: ";
 	if(count($_FILES)==0) {
 		echo "aucune";
 	}
@@ -1337,7 +1337,7 @@ function debug_var() {
 		if(document.getElementById('container_debug_var_'+i)) {
 			affiche_debug_var('container_debug_var_'+i,-1);
 		}
-		// Variable destinée à alterner affichage/masquage
+		// Variable destinÃ©e Ã  alterner affichage/masquage
 		tab_etat_debug_var[i]=-1;
 	}
 </script>\n";

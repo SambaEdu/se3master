@@ -72,7 +72,7 @@ function test_et_alerte_dates(){
 	// Quelle est l'ecart minimum qui provoque les problemes de connexion?
 	// Lors de mes tests, c'etait entre 3 et 4 minutes...
 	if(test>200){
-			alert('L\'heure du client et celle du serveur ne coïncident pas.\\nCela peut empêcher la connexion:\\nServeur: '+jour_se3+'/'+mois_se3+'/'+annee_se3+' '+heure_se3+':'+minute_se3+':'+seconde_se3+'\\n'+'Client:    '+jour_client+'/'+mois_client+'/'+annee_client+' '+heure_client+':'+minute_client+':'+seconde_client)
+			alert('L\'heure du client et celle du serveur ne coÃ¯ncident pas.\\nCela peut empÃªcher la connexion:\\nServeur: '+jour_se3+'/'+mois_se3+'/'+annee_se3+' '+heure_se3+':'+minute_se3+':'+seconde_se3+'\\n'+'Client:    '+jour_client+'/'+mois_client+'/'+annee_client+' '+heure_client+':'+minute_client+':'+seconde_client)
 	}
 
 	</script>\n";
