@@ -31,6 +31,6 @@ mysqldump -c -e --default-character-set=utf8 --single-transaction --skip-set-cha
 sed -i 's/DEFAULT CHARACTER SET latin1/DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci/' "$SQL_DUMP" 
 sed -i 's/DEFAULT CHARSET=latin1/DEFAULT CHARSET=utf8/' "$SQL_DUMP" 
 
-msql se3db < "$SQL_DUMP" 
+mysql se3db < "$SQL_DUMP" 
 
 exit 0
