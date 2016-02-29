@@ -4,7 +4,7 @@
    /**
    
    * Mise a jour de SambaEdu3 
-   * @Version $Id$ 
+   * @Version $Id: majtest.php 9189 2016-02-22 00:14:30Z keyser $ 
    
   
    * @Projet LCS / SambaEdu 
@@ -40,7 +40,7 @@ if ($action == "majse3") {
 	$info_1 = gettext("Mise &#224; jour lanc&#233;e, ne fermez pas cette fen&#234;tre avant que le script ne soit termin&#233;. vous recevrez un mail r&#233;capitulatif de tout ce qui sera effectu&#233;...");
 	echo $info_1;
 
-	system('sleep 1; /usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh se3 &');
+	system('sleep 1; /usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh se3 &');
 }
 else {
     echo "<H1>Mise  &#224; jour du serveur Se3</H1>\n";
@@ -150,36 +150,38 @@ else {
         }
         
     }
+    // Module clients-linux
+    $clinux_actif = exec("dpkg -s se3-clients-linux | grep \"Status: install ok\" > /dev/null && echo 1");
     
-    // Menu support seven
-    $resultat=mysql_query("SELECT * FROM params WHERE name='support_seven'");
-    if(mysql_num_rows($resultat)==0){
-            $support_seven=0;
-    }
-    else{
-            $ligne=mysql_fetch_object($resultat);
-            if($ligne->value=="1"){
-                    $support_seven=1;
-            }
-            else {
-                    $support_seven=0;
-            }
-    }
-    if ($support_seven=="1") {
-        $seven_version_install = exec("apt-cache policy samba | grep \"Install\" | cut -d\" \" -f4");
-        
-        $seven_version_dispo = exec("apt-cache policy samba | grep \"Candidat\" | cut -d\" \" -f4");
+    if($clinux_actif == "1") {
+        $clinux_version_install = exec("apt-cache policy se3-clients-linux | grep \"Install\" | cut -d\":\" -f2");
+        $clinux_version_dispo = exec("apt-cache policy se3-clients-linux | grep \"Candidat\" | cut -d\":\" -f2");
         // On teste si on a bien la derniere version
-
-        if ("$seven_version_install" != "$seven_version_dispo") {
-            echo "<tr><td>".gettext("Support des clients seven")."</TD>";
-            echo "<TD align=\"center\">$seven_version_install</TD>";
-            echo "<TD align=\"center\"><b>$seven_version_dispo</b></TD>";
-            echo "</tr>\n";
+        if ("$clinux_version_install" != "$clinux_version_dispo") {
+            echo "<TR><TD>".gettext("Serveur DHCP (se3-clients-linux)")."</TD>";
+            echo "<TD align=\"center\">$clinux_version_install</TD>";
+            echo "<TD align=\"center\"><b>$clinux_version_dispo</b></TD>";
+           echo "</TR>";
         }
+        
     }
+    
 
-    // Module clonage
+    // Module pla
+    $pla_actif = exec("dpkg -s se3-pla | grep \"Status: install ok\" > /dev/null && echo 1");
+    if($pla_actif == "1") {
+        $pla_version_install = exec("apt-cache policy se3-pla | grep \"Install\" | cut -d\":\" -f2");
+        $pla_version_dispo = exec("apt-cache policy se3-pla | grep \"Candidat\" | cut -d\":\" -f2");
+        // On teste si on a bien la derniere version
+        if ("$pla_version_install" != "$pla_version_dispo") {
+            echo "<TR><TD>".gettext("Clonage / sauvegarde - restauration des stations (se3-pla)")."</TD>";
+            echo "<TD align=\"center\">$pla_version_install</TD>";
+            echo "<TD align=\"center\"><b>$pla_version_dispo</b></TD>";
+           echo "</TR>";
+        }
+        
+    }
+    // Module clonage 
     $clonage_actif = exec("dpkg -s se3-clonage | grep \"Status: install ok\" > /dev/null && echo 1");
     if($clonage_actif == "1") {
         $clonage_version_install = exec("apt-cache policy se3-clonage | grep \"Install\" | cut -d\":\" -f2");
@@ -193,6 +195,7 @@ else {
         }
         
     }
+    
     // Module unattended
     
     $unattended_actif = exec("dpkg -s se3-unattended | grep \"Status: install ok\" > /dev/null && echo 1");
