@@ -4,12 +4,13 @@
 #
 # Auteur: Stephane Boireau (A.S. - Relais de Bernay/Pont-Audemer (27))
 #
-## $Id$ ##
+## $Id: mkwall.sh 8019 2014-01-06 20:04:45Z crob $ ##
+## Correctif du 2016-03-05 par Laurent Joly
 #
 # /usr/share/se3/sbin/mkwall.sh
 
 
-
+	
 chemin_param_fond="/etc/se3/fonds_ecran"
 dossier_trombines="/var/se3/Docs/trombine"
 dossier_base_fond="/var/se3/Docs/media/fonds_ecran"
@@ -25,15 +26,32 @@ chemin_www_fonds_courants="Admin/fonds_ecran/courant"
 dossier_www_fonds_courants="/var/www/se3/$chemin_www_fonds_courants"
 mkdir -p ${dossier_www_fonds_courants}
 #=============================================
+image_a_inserer=""
+if [ -e "$dossier_tmp_fond/tmp_$1.jpg" ]; then
+	#echo "Le fichier image a inserer $dossier_tmp_fond/tmp_$1.jpg existe."
+	image_a_inserer="$dossier_tmp_fond/tmp_$1.jpg"
+fi
+#=============================================
 
 case $2 in 
 jpg)
     prefix="jpeg:"
     ext="jpg"
 ;;
+png)
+    prefix="jpeg:"
+    ext="jpg"
+	/usr/bin/convert png:$image_a_inserer jpeg:$image_a_inserer
+;;
+gif)
+    prefix="jpeg:"
+    ext="jpg"
+	/usr/bin/convert gif:$image_a_inserer jpeg:$image_a_inserer
+;;
 *)
-    prefix="bmp3:"
-    ext="bmp"
+    prefix="jpeg:"
+    ext="jpg"
+	/usr/bin/convert bmp3:$image_a_inserer jpeg:$image_a_inserer
 ;;
 esac
 
@@ -51,12 +69,6 @@ fi
 [ -f "/tmp/$1.fond.lck" ] && exit 0
 >"/tmp/$1.fond.lck"
 
-#=============================================
-image_a_inserer=""
-if [ -e "$dossier_tmp_fond/tmp_$1.jpg" ]; then
-	#echo "Le fichier image a inserer $dossier_tmp_fond/tmp_$1.jpg existe."
-	image_a_inserer="$dossier_tmp_fond/tmp_$1.jpg"
-fi
 #=============================================
 
 temoin=""
@@ -177,7 +189,7 @@ fi
 if [ -z "$image_a_inserer" ]; then
 	# Si le fond existe deja on quitte
 	
-	if [ -f "${dossier_base_fond}/$1_$orig.$ext" -a -f "${dossier_base_fond}/$1.$ext" ]; then
+	if [ -f "${dossier_base_fond}/$1_$orig.jpg" -a -f "${dossier_base_fond}/$1.jpg" ]; then
 		echo " fond deja cree pour $1"
 		# Suppression du fichier de lock s'il existe:
 		rm -f "/tmp/$1.fond.lck"
@@ -187,7 +199,8 @@ if [ -z "$image_a_inserer" ]; then
 fi
 
 # on efface les anciens
-rm -f ${dossier_base_fond}/$1_*.$ext
+rm -f ${dossier_base_fond}/$1_*.jpg
+rm -f ${dossier_base_fond}/$1_*.bmp
 
 #===============================================================
 # Generation de la chaine des infos a afficher:
@@ -218,24 +231,24 @@ fi
 
 # Generation de l'image:
 if [ "$(cat "$chemin_param_fond/annotations_${base}.txt" 2>/dev/null)" = "actif" ]; then
-    /usr/bin/convert -fill ${couleur_txt} -pointsize $taille_police -draw "gravity North text 0,0 '$chaine'" ${dossier_base_fond}/$orig.jpg ${prefix}${dossier_base_fond}/$1_$orig.$ext
+    /usr/bin/convert -fill ${couleur_txt} -pointsize $taille_police -draw "gravity North text 0,0 '$chaine'" ${dossier_base_fond}/$orig.jpg ${dossier_base_fond}/$1_$orig.jpg
     if [ "$(cat "$chemin_param_fond/photos_${base}.txt" 2>/dev/null)" = "actif" ]; then
         photo=$dossier_trombines/$1.jpg
-	if [ -f "$photo" ]; then
+		if [ -f "$photo" ]; then
             source $chemin_param_fond/dim_photo_$temoin.sh
             if [ "$dim_photo" -eq "0" ]; then
                 taille_photo="100%"
             else
                 taille_photo="${dim_photo}x${dim_photo}"
             fi
-            /usr/bin/convert -resize $taille_photo $photo ${prefix}/tmp/$1_tromb.$ext
-            /usr/bin/composite -gravity NorthEast -dissolve 80 /tmp/$1_tromb.$ext ${dossier_base_fond}/$1_$orig.$ext ${dossier_base_fond}/$1_$orig.$ext
-            rm -f /tmp/$1_tromb.$ext
+            /usr/bin/convert -resize $taille_photo $photo /tmp/$1_tromb.jpg
+            /usr/bin/composite -gravity NorthEast -dissolve 80 /tmp/$1_tromb.jpg ${dossier_base_fond}/$1_$orig.jpg ${dossier_base_fond}/$1_$orig.jpg
+            rm -f /tmp/$1_tromb.jpg
         fi
     fi
 else
     # on fait une copie en bmp si besoin
-    if [ ! -e "${dossier_base_fond}/$orig.$ext" ]; then
+    if [ ! -e "${dossier_base_fond}/$orig.jpg" ]; then
        /usr/bin/convert jpeg:${dossier_base_fond}/$orig.jpg bmp3:${dossier_base_fond}/$orig.bmp
     fi
 fi
@@ -245,17 +258,24 @@ if [ -n "$image_a_inserer" -a -e "$image_a_inserer" ]; then
 
 	# Si il n'y a pas d'image propre a l'utilisateur on fait une copie du modèle du groupe de l'utilisateur
 	# Et on va modifier la copie
-	[ ! -f ${dossier_base_fond}/$1_$orig.$ext ] && cp ${dossier_base_fond}/$orig.$ext ${dossier_base_fond}/$1_$orig.$ext
+	[ ! -f ${dossier_base_fond}/$1_$orig.jpg ] && cp ${dossier_base_fond}/$orig.jpg ${dossier_base_fond}/$1_$orig.jpg
 
 	# Calculer la taille et redimensionner si c'est trop grand
-	larg_max=500
-	haut_max=500
+	# Taille de l'image originale
+	taille_image_inseree_orig=$(identify ${dossier_base_fond}/$1_$orig.jpg | cut -d" " -f3)
+	larg_max=$(echo "$taille_image_inseree_orig" | cut -d"x" -f1)
+	haut_max=$(echo "$taille_image_inseree_orig" | cut -d"x" -f2)
+	echo "Largeur de l'image initiale: larg_max=$larg_max"
+	echo "Hauteur de l'image initiale: haut_max=$haut_max"
 
+	
+	# Taille de l'image actuelle
 	taille_image_inseree=$(identify $image_a_inserer | cut -d" " -f3)
 	larg_ins=$(echo "$taille_image_inseree" | cut -d"x" -f1)
 	haut_ins=$(echo "$taille_image_inseree" | cut -d"x" -f2)
 	echo "Largeur de l'image proposee: larg_ins=$larg_ins"
 	echo "Hauteur de l'image proposee: haut_ins=$haut_ins"
+
 	#if [ $larg_ins -ge $larg_max -o $haut_ins -ge $haut_max ]; then
 	#	taille_image_inseree="${larg_ins}x${haut_ins}"
 	#fi
@@ -294,42 +314,49 @@ if [ -n "$image_a_inserer" -a -e "$image_a_inserer" ]; then
 	niveau_dissolve=100
 
 	if [ "$redimensionnement" = "y" ]; then
-		echo "Redimensionnement si necessaire de l'image:"
-		echo "/usr/bin/convert -resize $taille_image_inseree $image_a_inserer ${prefix}/tmp/$1_inser.$ext"
-		/usr/bin/convert -resize $taille_image_inseree $image_a_inserer ${prefix}/tmp/$1_inser.$ext
+		echo "Redimensionnement si necessaire de l'image"
+		#echo "/usr/bin/convert -resize $taille_image_inseree $image_a_inserer /tmp/$1_inser.jpg"
+		/usr/bin/convert -resize $taille_image_inseree $image_a_inserer /tmp/$1_inser.jpg
 	else
-		echo "Copie temporaire de l'image a inserer:"
-		echo "cp $image_a_inserer ${prefix}/tmp/$1_inser.$ext"
-		cp $image_a_inserer /tmp/$1_inser.$ext
+		echo "Copie temporaire de l'image a inserer"
+		#echo "cp $image_a_inserer /tmp/$1_inser.jpg"
+		cp $image_a_inserer /tmp/$1_inser.jpg
 	fi
 
-	echo "Fusion avec le fond:"
-	echo "/usr/bin/composite -gravity center -dissolve $niveau_dissolve /tmp/$1_inser.$ext ${dossier_base_fond}/$1_$orig.$ext ${dossier_base_fond}/$1_$orig.$ext"
-	/usr/bin/composite -gravity center -dissolve $niveau_dissolve /tmp/$1_inser.$ext ${dossier_base_fond}/$1_$orig.$ext ${dossier_base_fond}/$1_$orig.$ext
-
-	rm -f /tmp/$1_inser.$ext
+	echo "Fusion avec le fond"
+	#echo "/usr/bin/composite -gravity center -dissolve $niveau_dissolve /tmp/$1_inser.jpg ${dossier_base_fond}/$1_$orig.jpg ${dossier_base_fond}/$1_$orig.jpg"
+	/usr/bin/composite -gravity center -dissolve $niveau_dissolve /tmp/$1_inser.jpg ${dossier_base_fond}/$1_$orig.jpg ${dossier_base_fond}/$1_$orig.jpg
+	# Ajout du texte en surimpression si nécessaire
+	echo "Ajout du text en surimpression si necessaire"
+	if [ "$(cat "$chemin_param_fond/annotations_${base}.txt" 2>/dev/null)" = "actif" ]; then
+	/usr/bin/convert -fill ${couleur_txt} -pointsize $taille_police -draw "gravity North text 0,0 '$chaine'" ${dossier_base_fond}/$1_$orig.jpg ${dossier_base_fond}/$1_$orig.jpg
+	fi
+	rm -f /tmp/$1_inser.jpg
 else
 	# Si il n'y a pas d'image propre a l'utilisateur on cree un lien vers le modele du groupe de l'utilisateur
-	[ ! -f ${dossier_base_fond}/$1_$orig.$ext ] && ln -s ${dossier_base_fond}/$orig.$ext ${dossier_base_fond}/$1_$orig.$ext
+	[ ! -f ${dossier_base_fond}/$1_$orig.jpg ] && ln -s ${dossier_base_fond}/$orig.jpg ${dossier_base_fond}/$1_$orig.jpg
 fi
 
-# On supprime l'ancien lien symbolique login.jpg pour le recreer
-rm -f  ${dossier_base_fond}/$1.$ext
-ln -s ${dossier_base_fond}/$1_$orig.$ext ${dossier_base_fond}/$1.$ext
+# Generation du fond d'écran en bmp pour windows xp
+echo "Generation du fond d'ecran en bmp pour windows xp"
+/usr/bin/convert ${dossier_base_fond}/$1_$orig.jpg bmp3:${dossier_base_fond}/$1_$orig.bmp
+# On supprime l'ancien lien symbolique login.jpg et login.bmp pour le recreer
+rm -f  ${dossier_base_fond}/$1.bmp
+rm -f  ${dossier_base_fond}/$1.jpg
+ln -s ${dossier_base_fond}/$1_$orig.jpg ${dossier_base_fond}/$1.jpg
+ln -s ${dossier_base_fond}/$1_$orig.bmp ${dossier_base_fond}/$1.bmp
 
 # Pour pouvoir consulter le fond courant depuis l'interface web
 # Probleme: Si ce n'est pas un jpeg, l'affichage merdoie...
-if [ -n "$image_a_inserer" -a -e "$image_a_inserer" ]; then
+if [ -n "$image_a_inserer" -a -e "$image_a_inserer" ]; then	
 	echo "Creation du lien..."
-	if [ "$ext" = "jpg" ]; then
-		ln -s ${dossier_base_fond}/$1.$ext $dossier_www_fonds_courants/$1.jpg
-	else
-		convert ${dossier_base_fond}/$1.$ext ${dossier_base_fond}/$1.jpg
-		ln -s ${dossier_base_fond}/$1.jpg $dossier_www_fonds_courants/$1.jpg
-		chown www-se3 $dossier_www_fonds_courants/$1.jpg
-	fi
+	ln -s ${dossier_base_fond}/$1.jpg $dossier_www_fonds_courants/$1.jpg
+	chown www-se3 $dossier_www_fonds_courants/$1.jpg
 	rm -f $image_a_inserer
 fi
 
-chown admin ${dossier_base_fond}/$1_$orig.$ext
+# Changement des droits des fichiers
+chown admin ${dossier_base_fond}/$1_$orig.jpg
+chown admin ${dossier_base_fond}/$1_$orig.bmp
+chown www-se3 $dossier_www_fonds_courants/$1.jpg
 rm -f "/tmp/$1.fond.lck"
