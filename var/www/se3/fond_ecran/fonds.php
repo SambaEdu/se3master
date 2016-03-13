@@ -1,28 +1,20 @@
-<?php	
+<?php
+	/* $Id: fonds.php 8002 2013-12-27 17:10:10Z crob $ */
+	/* =============================================
+	Projet SE3
+	Equipe Tice académie de Caen
 
-/**
+	Module fond d'écran: Page principale
+	Auteur: Stephane Boireau (AS Bernay/Pont-Audemer (27))
+	Dernière modification le 10/06/2006
+	
+	Correctif de Laurent Joly (compatibilité php5)
+	Modification du 09/03/2016
 
-* Module fond d'ecran: Page principale
+	Fichier: /var/www/se3/fond_ecran/fonds.php
 
-* @Version $Id$
-
-* @Projet LCS / SambaEdu 
-
-* @auteurs Stephane Boireau
-
-* @Licence Distribue selon les termes de la licence GPL
-
-* @note 
-
-*/
-
-/**
-
-* @Repertoire: fond_ecran/
-* file: fond.php
-
-*/	
-
+	Distribué selon les termes de la licence GPL
+	============================================= */
 
 	include "entete.inc.php";
 	include "ldap.inc.php";
@@ -38,7 +30,7 @@
 	//aide
 	$_SESSION["pageaide"]="Le_module_Syst%C3%A8me_fond_d\'%C3%A9cran#Param.C3.A8trage";
 	
-	// Chemin a recuperer par la suite depuis MySQL (ou depuis un fichier texte)
+	// Chemin à récupérer par la suite depuis MySQL (ou depuis un fichier texte)
 	//$chemin_param_fond="/usr/share/se3/etc/fonds_ecran";
 	$chemin_param_fond="/etc/se3/fonds_ecran";
 	//$dossier_upload_images="/var/remote_adm";
@@ -48,7 +40,7 @@
 	// Tableau des couleurs HTML:
 	$tabcouleur=Array("aliceblue","antiquewhite","aqua","aquamarine","azure","beige","bisque","black","blanchedalmond","blue","blueviolet","brown","burlywood","cadetblue","chartreuse","chocolate","coral","cornflowerblue","cornsilk","crimson","cyan","darkblue","darkcyan","darkgoldenrod","darkgray","darkgreen","darkkhaki","darkmagenta","darkolivegreen","darkorange","darkorchid","darkred","darksalmon","darkseagreen","darkslateblue","darkslategray","darkturquoise","darkviolet","deeppink","deepskyblue","dimgray","dodgerblue","firebrick","floralwhite","forestgreen","fuchsia","gainsboro","ghostwhite","gold","goldenrod","gray","green","greenyellow","honeydew","hotpink","indianred","indigo","ivory","khaki","lavender","lavenderblush","lawngreen","lemonchiffon","lightblue","lightcoral","lightcyan","lightgoldenrodyellow","lightgreen","lightgrey","lightpink","lightsalmon","lightseagreen","lightskyblue","lightslategray","lightsteelblue","lightyellow","lime","limegreen","linen","magenta","maroon","mediumaquamarine","mediumblue","mediumorchid","mediumpurple","mediumseagreen","mediumslateblue","mediumspringgreen","mediumturquoise","mediumvioletred","midnightblue","mintcream","mistyrose","moccasin","navajowhite","navy","oldlace","olive","olivedrab","orange","orangered","orchid","palegoldenrod","palegreen","paleturquoise","palevioletred","papayawhip","peachpuff","peru","pink","plum","powderblue","purple","red","rosybrown","royalblue","saddlebrown","salmon","sandybrown","seagreen","seashell","sienna","silver","skyblue","slateblue","slategray","snow","springgreen","steelblue","tan","teal","thistle","tomato","turquoise","violet","wheat","white","whitesmoke","yellow","yellowgreen");
 
-	//Connexion a la base de donnees
+	//Connexion à la base de données
 	$etablissement_connexion_mysql=connexion();
 
 	if (is_admin("se3_is_admin",$login)=="Y") {
@@ -122,14 +114,14 @@ PRIMARY KEY ( `identifiant` )
 		}
 		else{
 
-			// Le choix de consultation/parametrage a-t-il ete POSTE?
+			// Le choix de consultation/paramétrage a-t-il été POSTé?
 			$choix1=isset($_POST['choix1']) ? $_POST['choix1'] : (isset($_GET['choix1']) ? $_GET['choix1'] : NULL);
 			if(isset($choix1)){
 				//$choix1=$_POST['choix1'];
 
 				// Sinon, la variable peut:
-				// - ne pas etre encore initialisee.
-				// - etre intialisee directement sans validation de formulaire.
+				// - ne pas être encore initialisée.
+				// - être intialisée directement sans validation de formulaire.
 			}
 			else{
 				// Le dispositif est-il actif?
@@ -174,7 +166,7 @@ PRIMARY KEY ( `identifiant` )
 					echo "</blockquote>\n";
 				}
 				else{
-					// Seul le choix de parametrage peut convenir alors.
+					// Seul le choix de paramétrage peut convenir alors.
 					$choix1="parametrer";
 				}
 			
@@ -211,7 +203,15 @@ PRIMARY KEY ( `identifiant` )
 					echo "<td>".gettext("Couleur du texte")."</td>\n";
 					echo "<td>".gettext("Taille de la police")."</td>\n";
 					echo "<td>".gettext("Nom et pr&#233;nom")."</td>\n";
+					//echo "<td>Prénom</td>\n";
 					echo "<td>".gettext("Classe")."</td>\n";
+					/*
+					echo "<td>Login</td>\n";
+					echo "<td>Nom de machine</td>\n";
+					echo "<td>IP</td>\n";
+					echo "<td>Architecture</td>\n";
+					echo "<td>Date</td>\n";
+					*/
 					echo "<td>".gettext("Photo")."</td>\n";
 					echo "</tr>\n";
 
@@ -231,8 +231,9 @@ PRIMARY KEY ( `identifiant` )
 							$wallgrp="Adminse3";
 						else
 							$wallgrp=$groupe;
-					
-						// Reinitialisations:
+						//echo "<p>Récupération des infos de $groupe</p>";
+
+						// Réinitialisations:
 						$type_image="&nbsp;";
 						$largeur="&nbsp;";
 						$hauteur="&nbsp;";
@@ -257,7 +258,7 @@ PRIMARY KEY ( `identifiant` )
 						$result1=mysql_query($query);
 						if(mysql_num_rows($result1)==0){
 							$type_image="???";
-							// Il a du se passer quelque chose de travers...
+							// Il a dû se passer quelque chose de travers...
 						}
 						else{
 							$lig1=mysql_fetch_object($result1);
@@ -265,13 +266,13 @@ PRIMARY KEY ( `identifiant` )
 								$type_image="Fournie";
 							}
 							else{
-								$type_image="D&#233;grad&#233;";
+								$type_image="Dégradé";
 
 								$query="SELECT valeur FROM wallpaper WHERE nom='largeur_$groupe'";
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$largeur="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -282,7 +283,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$hauteur="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -293,7 +294,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$couleur1="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -304,7 +305,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$couleur2="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -318,7 +319,7 @@ PRIMARY KEY ( `identifiant` )
 						$result1=mysql_query($query);
 						if(mysql_num_rows($result1)==0){
 							$annotations="???";
-							// Il a du se passer quelque chose de travers...
+							// Il a dû se passer quelque chose de travers...
 						}
 						else{
 							$lig1=mysql_fetch_object($result1);
@@ -333,7 +334,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$annotation_login="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -344,7 +345,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$annotation_machine="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -355,7 +356,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$annotation_ip="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -366,7 +367,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$annotation_arch="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -377,7 +378,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$annotation_date="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -390,7 +391,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$couleur_txt="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -401,7 +402,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$taille_police="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -412,7 +413,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$annotation_nom="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -424,7 +425,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$annotation_prenom="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -436,7 +437,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$annotation_classe="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -447,7 +448,7 @@ PRIMARY KEY ( `identifiant` )
 								$result2=mysql_query($query);
 								if(mysql_num_rows($result2)==0){
 									$affiche_photo="???";
-									// Il a du se passer quelque chose de travers...
+									// Il a dû se passer quelque chose de travers...
 								}
 								else{
 									$lig2=mysql_fetch_object($result2);
@@ -545,7 +546,7 @@ PRIMARY KEY ( `identifiant` )
 						echo "<h3>".gettext("Activation/d&#233;sactivation du dispositif")."</h3>\n";
 						echo "<blockquote>\n";
 
-						// Validation de l'activation/desactivation du dispositif:
+						// Validation de l'activation/désactivation du dispositif:
 						if(isset($_POST['activation_desactivation'])){
 							// Validation des modifs:
 							$action=$_POST['action'];
@@ -556,12 +557,12 @@ PRIMARY KEY ( `identifiant` )
 							// Nettoyage:
 							$query="DELETE FROM wallpaper WHERE nom='action'";
 							$resultat = mysql_query($query);
-							// Mise a jour:
+							// Mise à jour:
 							$query="INSERT INTO wallpaper VALUES('action','$action','')";
 							$resultat = mysql_query($query);
 
-							// Activation ou desactivation du lancement du script 'genere_fond.sh' lors du login.
-							// La valeur est testee dans le lanceur.
+							// Activation ou désactivation du lancement du script 'genere_fond.sh' lors du login.
+							// La valeur est testée dans le lanceur.
 							$fichier=$fichier=fopen("$chemin_param_fond/actif.txt","w+");
 							if($action=="actif"){
 								$ecriture=fwrite($fichier,"1");
@@ -570,17 +571,17 @@ PRIMARY KEY ( `identifiant` )
 							else{
 								$ecriture=fwrite($fichier,"0");
 								echo "<p>".gettext("La g&#233;n&#233;ration de fonds est d&#233;sactiv&#233;e").".</p>\n";
-								//echo "<p><i>NOTE:</i> Si des fonds existent dans les Homes des utilisateurs, ils n'ont pas ï¿½tï¿½ supprimï¿½s par cette opï¿½ration.<br>\nEn revanche, le script de gï¿½nï¿½ration de fonds ne sera plus exï¿½cutï¿½ ï¿½ chaque login.</p>\n";
+								//echo "<p><i>NOTE:</i> Si des fonds existent dans les Homes des utilisateurs, ils n'ont pas été supprimés par cette opération.<br>\nEn revanche, le script de génération de fonds ne sera plus exécuté à chaque login.</p>\n";
 								echo gettext("<p><i>NOTE:</i> Si des fonds existent dans les Homes des utilisateurs, ils n'ont pas &#233;t&#233; supprim&#233;s par cette op&#233;ration.<br>\nEn revanche, il ne sera pas test&#233; chaque nuit, ni &#224; chaque login, si des modifications de fonds doivent &#234;tre effectu&#233;es.</p>\n");
 							}
 							$fermeture=fclose($fichier);
 						}
 						else{
-							// Formulaire d'activation/desactivation du dispositif:
+							// Formulaire d'activation/désactivation du dispositif:
 							echo "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">\n";
 							echo "<input type=\"hidden\" name=\"choix1\" value=\"parametrer\">\n";
 
-							//Connexion a la base de donnees
+							//Connexion à la base de données
 							//$etablissement_connexion_mysql=connexion();
 
 							$query="SELECT * FROM wallpaper WHERE nom='action'";
@@ -614,11 +615,11 @@ PRIMARY KEY ( `identifiant` )
 									$action="inactif";
 								}
 							}
-							//echo "<p><input type=\"radio\" name=\"action\" value=\"activer\"$checked1>Activer/Desactiver<input type=\"radio\" name=\"action\" value=\"desactiver\"$checked2> la generation de fonds.</p>\n";
+							//echo "<p><input type=\"radio\" name=\"action\" value=\"activer\"$checked1>Activer/Désactiver<input type=\"radio\" name=\"action\" value=\"desactiver\"$checked2> la génération de fonds.</p>\n";
 							echo "<p><input type=\"radio\" name=\"action\" id=\"action_actif\" value=\"actif\"$checked1><label for='action_actif' style='cursor:pointer;'>".gettext("Activer/D&#233;sactiver")."</label><input type=\"radio\" name=\"action\" id=\"action_inactif\" value=\"inactif\"$checked2><label for='action_inactif' style='cursor:pointer;'> ".gettext("la g&#233;n&#233;ration de fonds").".</label><br>\n";
 
 							// Proposer de supprimer les K:\Docs\profil\.fond\fond.jpg dans tous les Home?
-							// Ou regenerer le registre.zrn de 'base' et modifier les cles de registre pour vider Wallpaper?
+							// Ou regénérer le registre.zrn de 'base' et modifier les clés de registre pour vider Wallpaper?
 							//=========
 							// A FAIRE
 							//=========
@@ -636,7 +637,7 @@ PRIMARY KEY ( `identifiant` )
 
 					//********************************************************************************************
 					// A FAIRE AUSSI:
-					// Le nettoyage des registre.zrn avec une demarche du type:
+					// Le nettoyage des registre.zrn avec une démarche du type:
 					/*
 					SELECT CleID FROM corresp WHERE chemin='HKEY_CURRENT_USER\\Control Panel\\Desktop\\Wallpaper';
 					SELECT groupe FROM restrictions WHERE CleID='...';
@@ -644,18 +645,18 @@ PRIMARY KEY ( `identifiant` )
 					INSERT INTO restrictions VALUES('','...','base','%USERPROFILE%\\.fond\\fond.jpg');
 					UPDATE corresp SET valeur='%USERPROFILE%\\.fond\\fond.jpg' WHERE CleID='...';
 
-					Et reecrire les registre.zrn
-					... ou voir comment ils sont generes par les pages de Sandrine.
+					Et réécrire les registre.zrn
+					... ou voir comment ils sont générés par les pages de Sandrine.
 					*/
 					//********************************************************************************************
 
 
 					// On ne propose de:
 					// - choisir l'utilisateur/groupe
-					// - regenerer les registre.zrn
+					// - regénérer les registre.zrn
 					// que si le dispositif est actif:
 					if($action=="actif"){
-						// Les antislashes posent des problemes dans les tests/selections vers MySQL via PHP.
+						// Les antislashes posent des problèmes dans les tests/sélections vers MySQL via PHP.
 						// Trois antislashes doivent suffire, mais bon...
 
 						if(!isset($_POST['registre_zrn']) && !file_exists("/usr/share/se3/logonpy/logon.py")){
@@ -664,20 +665,20 @@ PRIMARY KEY ( `identifiant` )
 
 
 
-							// Verifications pour voir s'il est necessaire de:
+							// Vérifications pour voir s'il est nécessaire de:
 							// - corriger les valeurs dans les tables corresp et restrictions
-							// - regenerer les registre.zrn
+							// - regénérer les registre.zrn
 
-							// Recuperation de l'identifiant de la cle Wallpaper:
+							// Récupération de l'identifiant de la clé Wallpaper:
 							$query="SELECT * FROM corresp WHERE chemin='HKEY_CURRENT_USER\\\\Control Panel\\\\Desktop\\\\Wallpaper'";
 							$resultat=mysql_query($query);
 							$ligne=mysql_fetch_object($resultat);
 							$CleID=$ligne->CleID;
 							$valeur_cle_wallpaper=$ligne->valeur;
 
-							// Le test ci-dessous fonctionne (pas de probleme avec les antislashes):
+							// Le test ci-dessous fonctionne (pas de problème avec les antislashes):
 							if($valeur_cle_wallpaper!="%USERPROFILE%\.fond\fond.jpg"){
-								//echo "<p>La valeur est erronee: $valeur_cle_wallpaper</p>";
+								//echo "<p>La valeur est erronée: $valeur_cle_wallpaper</p>";
 								$valeur_wallpaper_dans_les_tables="a_corriger";
 							}
 							else{
@@ -690,18 +691,18 @@ PRIMARY KEY ( `identifiant` )
 								$resultat = mysql_query($query);
 								//echo mysql_num_rows($resultat)."<br>";
 								if(mysql_num_rows($resultat)!=1){
-									//echo "<p>Le nombre de references a Wallpaper dans la table 'restrictions' ne convient pas: ".mysql_num_rows($resultat)."</p>";
+									//echo "<p>Le nombre de références à Wallpaper dans la table 'restrictions' ne convient pas: ".mysql_num_rows($resultat)."</p>";
 									$valeur_wallpaper_dans_les_tables="a_corriger";
 								}
 								else{
 									$query="SELECT valeur FROM restrictions WHERE CleID='$CleID' AND groupe='base' AND valeur='%USERPROFILE%\\\\.fond\\\\fond.jpg'";
 									$resultat = mysql_query($query);
 									if(mysql_num_rows($resultat)!=1){
-										//echo "<p>La valeur de la cle Wallpaper dans la table restrictions n'est pas la bonne.</p>";
+										//echo "<p>La valeur de la clé Wallpaper dans la table restrictions n'est pas la bonne.</p>";
 										$valeur_wallpaper_dans_les_tables="a_corriger";
 									}
 									else{
-										//echo "<p>La valeur de la cle Wallpaper dans la table restrictions est correcte.</p>";
+										//echo "<p>La valeur de la clé Wallpaper dans la table restrictions est correcte.</p>";
 										$valeur_wallpaper_dans_les_tables="correcte";
 									}
 								}
@@ -728,7 +729,7 @@ PRIMARY KEY ( `identifiant` )
 							echo "</blockquote>\n";
 						}
 						else{
-							// Recuperation des variables:
+							// Récupération des variables:
 							$CleID=isset($_POST['CleID']) ? $_POST['CleID'] : "";
 
 							if(isset($_POST['regenerer_registre_zrn'])){
@@ -739,7 +740,7 @@ PRIMARY KEY ( `identifiant` )
 							}
 
 							//============================================================================
-							// Modification des cles de registre pour utiliser %USERPROFILE%\\.fond\\fond.jpg
+							// Modification des clés de registre pour utiliser %USERPROFILE%\\.fond\\fond.jpg
 							//============================================================================
 							/*
 							$query="SELECT CleID FROM corresp WHERE chemin='HKEY_CURRENT_USER\\\\Control Panel\\\\Desktop\\\\Wallpaper'";
@@ -765,32 +766,32 @@ PRIMARY KEY ( `identifiant` )
 										$query="DELETE FROM restrictions WHERE cleID='$CleID' AND groupe='$template'";
 										$result = mysql_query($query);
 
-										// Pour 'base', le fichier sera regenere apres une mise a jour des valeurs:
+										// Pour 'base', le fichier sera regénéré après une mise à jour des valeurs:
 										if(($template!="base")&&(file_exists("/home/templates/$template"))){
 											refreshzrn("$template");
 										}
 									}
 								}
 
-								// Suppression des valeurs de la cle Wallpaper:
+								// Suppression des valeurs de la clé Wallpaper:
 								//$query="DELETE FROM restrictions WHERE cleID='$CleID'";
 								//$resultat = mysql_query($query);
 
-								// Definition de la valeur de la cle pour le template 'base':
+								// Définition de la valeur de la clé pour le template 'base':
 								$query="INSERT INTO restrictions VALUES('','$CleID','base','%USERPROFILE%\\\\.fond\\\\fond.jpg')";
 								$resultat = mysql_query($query);
 
 								//echo "ID: ".mysql_insert_id()."<br>";
 
-								// Modification de la valeur par defaut de la cle:
+								// Modification de la valeur par défaut de la clé:
 								$query="UPDATE corresp SET valeur='%USERPROFILE%\\\\.fond\\\\fond.jpg' WHERE CleID='$CleID'";
 								$resultat = mysql_query($query);
 
-								// Generer le nouveau registre.zrn pour le template 'base'
+								// Générer le nouveau registre.zrn pour le template 'base'
 								refreshzrn("base");
 
 								echo "<p>".gettext("Les registre.zrn ont &#233;t&#233; reg&#233;n&#233;r&#233;s pour utiliser un chemin commun pour le fond: %USERPROFILE%\.fond\fond.jpg")."</p>\n";
-								// Seuls ceux qui avaient une entree Wallpaper dans 'restrictions' ont ete regeneres.
+								// Seuls ceux qui avaient une entrée Wallpaper dans 'restrictions' ont été regénérés.
 
 								echo "</blockquote>\n";
 							}
@@ -809,7 +810,7 @@ PRIMARY KEY ( `identifiant` )
 							echo "<input type=\"hidden\" name=\"choix1\" value=\"parametrer\">\n";
 							echo "<input type=\"hidden\" name=\"CleID\" value=\"$CleID\">\n";
 
-							// Le 'groupe' peut etre l'utilisateur admin
+							// Le 'groupe' peut être l'utilisateur admin
 							echo "<p><select name=\"groupe\" onchange=\"document.forms['choix_grp'].submit();\">\n";
 							echo "<option value=\"\">".gettext("Choisissez un utilisateur/groupe")."</option>\n";
 							echo "<option value=\"admin\">".gettext("admin (<i>l'utilisateur</i>)")."</option>\n";
@@ -861,11 +862,11 @@ PRIMARY KEY ( `identifiant` )
 
 
 					//===============================
-					// Parametres des images communes
+					// Paramètres des images communes
 					//===============================
 
 					if(!isset($_POST['type_image'])){
-						// Parametres pour le groupe choisi
+						// Paramètres pour le groupe choisi
 						echo "<h3>".gettext("Param&#232;tres pour")." $groupe</h3>\n";
 						echo "<blockquote>\n";
 						echo "<h4>".gettext("Fond d'&#233;cran actuel")."</h4>\n";
@@ -875,12 +876,12 @@ PRIMARY KEY ( `identifiant` )
 						if (file_exists("/var/se3/Docs/media/fonds_ecran/$wallgrp.jpg"))
 							echo "<img src=\"../Admin/$wallgrp.jpg?".rand(1,99999)."\" WIDTH=200 alt=\"Fond\">\n";
 
-						// Formulaire de changement des parametres:
+						// Formulaire de changement des paramètres:
 						echo "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\" enctype=\"multipart/form-data\">\n";
 						echo "<input type=\"hidden\" name=\"choix1\" value=\"parametrer\">\n";
 						echo "<input type=\"hidden\" name=\"groupe\" value=\"$groupe\">\n";
 
-						// Creer/modifier/supprimer la mise en place d'image pour le groupe choisi:
+						// Créer/modifier/supprimer la mise en place d'image pour le groupe choisi:
 						$query="SELECT * FROM wallpaper WHERE nom='fond_".$groupe."'";
 						$resultat = mysql_query($query);
 						if(mysql_num_rows($resultat)>0){
@@ -911,13 +912,13 @@ PRIMARY KEY ( `identifiant` )
 						echo "<p>".gettext("Image").": <input type=\"file\" name=\"image\" enctype=\"multipart/form-data\" onfocus=\"document.getElementById('image_fournie').checked='true'\"></p>\n";
 						echo "</blockquote>\n";
 
-						//Generer des degrades:
+						//Générer des dégradés:
 						echo "<p><input type=\"radio\" name=\"type_image\" id=\"degrade\" value=\"degrade\"><label for='degrade' style='cursor:pointer;'> ".gettext("G&#233;n&#233;rer un d&#233;grad&#233;").":</label></p>\n";
 						echo "<blockquote>\n";
 						echo "<table border=\"1\">\n";
 
 
-						// Couleurs par defaut:
+						// Couleurs par défaut:
 						switch($groupe){
 							case "admin":
 								$couleur1="red";
@@ -992,7 +993,7 @@ PRIMARY KEY ( `identifiant` )
 						echo "</form>\n";
 
 
-						// Formulaire de test du choix de couleurs effectue:
+						// Formulaire de test du choix de couleurs effectué:
 						echo "<form action=\"test_degrade.php\" name=\"test_degrade\" method=\"POST\" target=\"_blank\">\n";
 						echo "<input type=\"hidden\" name=\"couleur1\" value=\"\">\n";
 						echo "<input type=\"hidden\" name=\"couleur2\" value=\"\">\n";
@@ -1013,12 +1014,16 @@ PRIMARY KEY ( `identifiant` )
 						echo "<p><i>".gettext("NOTES").":</i></p>\n";
 						echo "<ul>\n";
 						echo "<li><p>".gettext("Ne descendez pas en dessous de 300px de large pour un bon fonctionnement des annotations").".</p></li>\n";
-						
+						/*
+						echo "<li><p>Attention au choix des couleurs dans le cas d'une génération de dégradé.<br>
+Veillez à choisir des couleurs connues (<i>liste disponible à l'adresse <a href=\"http://www.commentcamarche.net/html/htmlcouleurs.php3\" target=\"blank\">http://www.commentcamarche.net/html/htmlcouleurs.php3</a></i>).</p>
+<p>Notez également que certains dégradés ont tendance à virer à l'arc-en-ciel (<i>constaté sous Woody</i>).</p></li>\n";
+						*/
 						echo "<li><p>".gettext("Les couleurs propos&#233;es ci-dessus sont consultables &#224; l'adresse suivante").":<br>
 <a href=\"http://www.commentcamarche.net/html/htmlcouleurs.php3\" target=\"blank\">http://www.commentcamarche.net/html/htmlcouleurs.php3</a>.</p>
 <p>".gettext("Notez que certains d&#233;grad&#233;s ont tendance &#224; virer &#224; l'arc-en-ciel (<i>constat&#233; sous Woody</i>)").".</p></li>\n";
 						// ou utilisez les codes HTML comme par exemple #ff0000
-						// Choix supprime pour eviter des blagues.
+						// Choix supprimé pour éviter des blagues.
 						echo "</ul>\n";
 						echo "<p><br></p>\n";
 
@@ -1039,21 +1044,21 @@ PRIMARY KEY ( `identifiant` )
 							$couleur1=$_POST['couleur1'];
 							$couleur2=$_POST['couleur2'];
 
-							// Il faudrait controler les valeurs saisies..
-							// - numeriques et entieres pour les dimensions
+							// Il faudrait contrôler les valeurs saisies..
+							// - numériques et entières pour les dimensions
 							// - couleurs non vides et valides
 
 							if($type_image=="image_fournie"){
-								$tmp_image=$HTTP_POST_FILES['image']['tmp_name'];
-								$image=$HTTP_POST_FILES['image']['name'];
-								$size_image=$HTTP_POST_FILES['image']['size'];
+								$tmp_image=$_FILES['image']['tmp_name'];
+								$image=$_FILES['image']['name'];
+								$size_image=$_FILES['image']['size'];
 							}
 							//===========================
 
 
 							//===========================================================
-							//Controle de la version de Samba:
-							//Necessaire pour la commande convert lors de l'annotation:
+							//Contrôle de la version de Samba:
+							//Nécessaire pour la commande convert lors de l'annotation:
 							$fichier=fopen("$chemin_param_fond/version_samba.txt","r");
 							//$test_samba=fread($fichier, filesize($fichier));
 							$test_samba=fgets($fichier,4096);
@@ -1065,8 +1070,8 @@ PRIMARY KEY ( `identifiant` )
 								$prefixe="jpg:";
 							}
 							$fermeture=fclose($fichier);
-							// En fait ce n'est pas lie a la version de Samba,
-							// mais a la version d'ImageMgick qui est passee de 5 a 6 entre Woody et Sarge.
+							// En fait ce n'est pas lié à la version de Samba,
+							// mais à la version d'ImageMgick qui est passée de 5 à 6 entre Woody et Sarge.
 							//===========================================================
 
 
@@ -1076,14 +1081,16 @@ PRIMARY KEY ( `identifiant` )
 							//echo "<p>\$_POST['suppr_img']=".$_POST['suppr_img']."</p>\n";
 
 							if($_POST['suppr_img']=="$groupe"){
-								// Supprimer les entrees et fichiers pour $groupe
+								// Supprimer les entrées et fichiers pour $groupe
 								//unlink("$chemin_param_fond/parametres_$groupe.sh");
 
-								// Desactiver seulement:
+								// Désactiver seulement:
 								$fichier=fopen("$chemin_param_fond/fond_$groupe.txt","w+");
 								$ecriture=fwrite($fichier,'inactif');
 								$fermeture=fclose($fichier);
 
+								//Connexion à la base de données
+								//$etablissement_connexion_mysql=connexion();
 
 								echo "<h3>".gettext("D&#233;sactivation de l'utilisation d'image sur")." '$groupe'.</h3>\n";
 								echo "<p>".gettext("Cela ne signifie pas que les membres de")." $groupe ".gettext("ne verront pas s'afficher un fond d'&#233;cran, mais seulement que le crit&#232;re")." '$groupe' ".gettext("ne sera pas utilis&#233; pour la g&#233;n&#233;ration de fond lors des logins &#224; venir").".</p>\n";
@@ -1096,17 +1103,17 @@ PRIMARY KEY ( `identifiant` )
 
 								//$fermeture=mysql_close();
 
-								// Si on desactive l'utilisation de l'image eventuellement presente
+								// Si on désactive l'utilisation de l'image éventuellement présente
 								// dans /var/se3/Docs/media/fonds_ecran pour le groupe Profs,
-								// on ne cherche pas non plus a annoter ces images
+								// on ne cherche pas non plus à annoter ces images
 								$choix_annotations="non";
 								$suppr_annotations=$groupe;
 							}
 							else{
 								if($type_image!="pas_de_modif"){
-									// Insertion dans la base et generation des fichiers dans /etc/se3/fonds_ecran
+									// Insertion dans la base et génération des fichiers dans /etc/se3/fonds_ecran
 
-									//Connexion a la base de donnees
+									//Connexion à la base de données
 									//$etablissement_connexion_mysql=connexion();
 
 									//On commence par vider:
@@ -1147,15 +1154,15 @@ PRIMARY KEY ( `identifiant` )
 										$query="INSERT INTO wallpaper VALUES('image_$groupe','$groupe','')";
 										$resultat = mysql_query($query);
 
-										// Generation du fichier de parametres:
+										// Génération du fichier de paramètres:
 										$fichier=fopen("$chemin_param_fond/parametres_$groupe.sh","w+");
-										$ecriture=fwrite($fichier,'# L image est fournie (non g&#233;n&#233;r&#233;e)\n');
+										$ecriture=fwrite($fichier,'# L image est fournie (non générée)\n');
 										$fermeture=fclose($fichier);
 
 										// A VERIFIER:
-										// Il faudrait rendre ce script parametres_$groupe.sh executable, non?
+										// Il faudrait rendre ce script parametres_$groupe.sh exécutable, non?
 
-										// Mise en place de l'image uploadee:
+										// Mise en place de l'image uploadée:
 										if(file_exists("$dossier_upload_images/$groupe.jpg")){
 											unlink("$dossier_upload_images/$groupe.jpg");
 										}
@@ -1163,8 +1170,8 @@ PRIMARY KEY ( `identifiant` )
 										if(is_uploaded_file($tmp_image)){
 											//unlink("/var/se3/Docs/media/ImageMagick/admin.jpg");
 											//$dest_file="/var/se3/Docs/media/ImageMagick/admin.jpg";
-											//www-se3 ne va pas avoir le droit de le coller directement la.
-											//Meme avec des ACL... parce que www-se3 n'y ecrit pas a travers Samba.
+											//www-se3 ne va pas avoir le droit de le coller directement là.
+											//Même avec des ACL... parce que www-se3 n'y écrit pas à travers Samba.
 											//Placer dans un dossier temporaire et sudo pour placer l'image.
 
 											$dest_file="$dossier_upload_images/$groupe.jpg";
@@ -1196,7 +1203,7 @@ PRIMARY KEY ( `identifiant` )
 										$query="INSERT INTO wallpaper VALUES('couleur2_$groupe','$couleur2','')";
 										$resultat = mysql_query($query);
 
-										//Generation du fichier de parametres:
+										//Génération du fichier de paramètres:
 										$fichier=fopen("$chemin_param_fond/parametres_$groupe.sh","w+");
 										$ecriture=fwrite($fichier,'largeur='.$largeur.'
 hauteur='.$hauteur.'
@@ -1207,12 +1214,12 @@ couleur2="'.$couleur2.'"
 
 # Pour choisir d"autres couleurs, voir:
 # http://www.commentcamarche.net/html/htmlcouleurs.php3
-# Vï¿½rifier si toutes les couleurs sont acceptï¿½es par ImageMagick.
+# Vérifier si toutes les couleurs sont acceptées par ImageMagick.
 ');
 										$fermeture=fclose($fichier);
 
 
-										// Nettoyage prealable:
+										// Nettoyage préalable:
 										exec("/usr/bin/sudo $chemin_scripts/genere_fond.sh variable_bidon nettoyer $groupe",$tabretour);
 										if(count($tabretour)>0) {
 											echo "<p style='color:red'>Nettoyage prealable:<br />exec(\"/usr/bin/sudo $chemin_scripts/genere_fond.sh variable_bidon nettoyer $groupe\",\$tabretour);<br />";
@@ -1222,7 +1229,7 @@ couleur2="'.$couleur2.'"
 											echo "</p>\n";
 										}
 
-										// Generation du degrade:
+										// Génération du dégradé:
 										exec("/usr/bin/sudo $chemin_scripts/genere_fond.sh variable_bidon genere_base $groupe",$tabretour);
 										if(count($tabretour)>0) {
 											echo "<p style='color:red'>Generation degrade:<br />exec(\"/usr/bin/sudo $chemin_scripts/genere_fond.sh variable_bidon genere_base $groupe\",\$tabretour);<br />";
@@ -1232,8 +1239,8 @@ couleur2="'.$couleur2.'"
 											echo "</p>\n";
 										}
 
-										//La 'variable_bidon' est la pour passer le test sur $1
-										//Il faut juste eviter de creer un dossier '/home/variable_bidon'
+										//La 'variable_bidon' est là pour passer le test sur $1
+										//Il faut juste éviter de créer un dossier '/home/variable_bidon'
 										echo "<p>".gettext("Le nouveau fond a &#233;t&#233; g&#233;n&#233;r&#233; dans")." 'I:\\media\\fonds_ecran'.</p>\n";
 
 										// Mise en place d'une copie au format PNG pour l'interface web:
@@ -1274,9 +1281,9 @@ couleur2="'.$couleur2.'"
 						$groupe=$_POST['groupe'];
 						$type_image=$_POST['type_image'];
 
-						// Si $type_image a change, il faut regenerer les fonds pour les utilisateurs concernes.
-						// Idem si les annotations sont supprimees.
-						// Idem si les annotations sont modifiees (A TESTER...).
+						// Si $type_image a changé, il faut regénérer les fonds pour les utilisateurs concernés.
+						// Idem si les annotations sont supprimées.
+						// Idem si les annotations sont modifiées (A TESTER...).
 						// Supprimer le fond.txt pour chaque utilisateur suffit.
 						if(($type_image!="pas_de_modif")||($suppr_annotations==$groupe)){
 							exec("/usr/bin/sudo $chemin_scripts/genere_fond.sh variable_bidon annuler $groupe");
@@ -1286,8 +1293,8 @@ couleur2="'.$couleur2.'"
 
 						//if(!isset($choix_annotations)){
 						//if(!isset($_POST['choix_annotations'])){
-						// $choix_annotation peut-etre initialisee sans soumission de formulaire
-						// dans le cas de la desactivation du fond pour un $groupe
+						// $choix_annotation peut-être initialisée sans soumission de formulaire
+						// dans le cas de la désactivation du fond pour un $groupe
 						if((!isset($_POST['choix_annotations']))&&(!isset($choix_annotations))){
 							// Annotations pour le groupe choisi
 							echo "<h3>".gettext("Annotations pour")." $groupe</h3>\n";
@@ -1306,7 +1313,7 @@ couleur2="'.$couleur2.'"
 							echo "<table border=\"1\">\n";
 
 
-							// Couleurs par defaut:
+							// Couleurs par défaut:
 							switch($groupe){
 								case "admin":
 									$couleur_txt="yellow";
@@ -1379,7 +1386,7 @@ couleur2="'.$couleur2.'"
 
 							/*
 							$checked=recupere_actif_ou_pas('annotation_prenom_'.$groupe);
-							echo "<tr style=\"background-color: $tabcolor[$alt];\"><td>Afficher le prenom</td><td><input type=\"radio\" name=\"annotation_prenom\" value=\"1\"$checked[1]>Afficher ou non<input type=\"radio\" name=\"annotation_prenom\" value=\"0\"$checked[2]></td></tr>\n";
+							echo "<tr style=\"background-color: $tabcolor[$alt];\"><td>Afficher le prénom</td><td><input type=\"radio\" name=\"annotation_prenom\" value=\"1\"$checked[1]>Afficher ou non<input type=\"radio\" name=\"annotation_prenom\" value=\"0\"$checked[2]></td></tr>\n";
 							*/
 
 							$checked=recupere_actif_ou_pas('annotation_classe_'.$groupe);
@@ -1396,7 +1403,7 @@ couleur2="'.$couleur2.'"
 							$valeur=recupere_valeur('xtxt_'.$groupe,100);
 							echo "<tr style=\"background-color: $tabcolor[$alt];\"><td>Abscisse</td><td><input type=\"text\" name=\"xtxt\" value=\"$valeur\"></td></tr>\n";
 							$valeur=recupere_valeur('ytxt_'.$groupe,20);
-							echo "<tr style=\"background-color: $tabcolor[$alt];\"><td>Ordonnee</td><td><input type=\"text\" name=\"ytxt\" value=\"$valeur\"></td></tr>\n";
+							echo "<tr style=\"background-color: $tabcolor[$alt];\"><td>Ordonnée</td><td><input type=\"text\" name=\"ytxt\" value=\"$valeur\"></td></tr>\n";
 							echo "</table>\n";
 							echo "</blockquote>\n";
 							*/
@@ -1418,7 +1425,7 @@ couleur2="'.$couleur2.'"
 							echo "<p><i>".gettext("NOTE").":</i> ".gettext("La photo est assimil&#233;e &#224; une annotation.<br>Si vous d&#233;sactivez l'annotation, aucune photo ne sera ins&#233;r&#233;e m&#234;me si elle existe dans")." I:\\trombine</p>\n";
 						}
 						else{
-							//Connexion a la base de donnees
+							//Connexion à la base de données
 							//$etablissement_connexion_mysql=connexion();
 							//===================================
 							// DEBUG:
@@ -1427,8 +1434,8 @@ couleur2="'.$couleur2.'"
 							//}
 							//===================================
 
-							// La variable $suppr_annotations peut etre initialisee
-							//  sans validation de formulaire lorsqu'on desactive
+							// La variable $suppr_annotations peut être initialisée
+							//  sans validation de formulaire lorsqu'on désactive
 							// l'utilisation d'image pour le groupe $groupe
 							if(!isset($suppr_annotations)){
 								$suppr_annotations=isset($_POST['suppr_annotations']) ? $_POST['suppr_annotations'] : "";
@@ -1450,9 +1457,9 @@ couleur2="'.$couleur2.'"
 								$query="INSERT INTO wallpaper VALUES('annotations_$groupe','inactif','')";
 								$resultat = mysql_query($query);
 
-								// Si les annotations sont supprimees, il faut regenerer les fonds pour les utilisateurs concernes.
+								// Si les annotations sont supprimées, il faut regénérer les fonds pour les utilisateurs concernés.
 								// Supprimer le fond.txt pour chaque utilisateur suffit.
-								// On lance l'operation si cela n'a pas deja ete fait.
+								// On lance l'opération si cela n'a pas déjà été fait.
 								if($_POST['regeneration_fond_programmee']!="oui"){
 									exec("/usr/bin/sudo $chemin_scripts/genere_fond.sh variable_bidon annuler $groupe");
 									$regeneration_fond_programmee="oui";
@@ -1484,7 +1491,7 @@ couleur2="'.$couleur2.'"
 									$couleur_txt="black";
 									echo "<p>".gettext("La couleur de texte choisie n'&#233;tait pas valide.<br>\nCouleur impos&#233;e").": $couleur_txt</p>\n";
 								}
-								// Il faudrait controler les valeurs de couleur_txt d'apres le contenu de $tabcouleur
+								// Il faudrait contrôler les valeurs de couleur_txt d'après le contenu de $tabcouleur
 								$temoin_couleur_valide="non";
 								// DEBUG
 								//echo "count(\$tabcouleur)=".count($tabcouleur)."<br />";
@@ -1502,7 +1509,7 @@ couleur2="'.$couleur2.'"
 
 
 
-								// Parametres des annotations:
+								// Paramètres des annotations:
 								$fichier=fopen("$chemin_param_fond/annotations_$groupe.sh","w+");
 								//$ecriture=fwrite($fichier,'couleur_txt='.$_POST['couleur_txt']."\n");
 								$ecriture=fwrite($fichier,'couleur_txt='.$_POST['couleur_txt']."\n");
@@ -1523,7 +1530,7 @@ couleur2="'.$couleur2.'"
 								$fermeture=fclose($fichier);
 
 								// A VERIFIER:
-								// Il faudrait rendre annotations_$groupe.sh executable, non?
+								// Il faudrait rendre annotations_$groupe.sh exécutable, non?
 
 								//$query="INSERT INTO wallpaper VALUES('couleur_txt_$groupe','".$_POST['couleur_txt']."','')";
 								$query="INSERT INTO wallpaper VALUES('couleur_txt_$groupe','".$_POST['couleur_txt']."','')";
@@ -1580,7 +1587,7 @@ couleur2="'.$couleur2.'"
 
 
 
-								//echo "<p>Liste des informations affichees lorsque l'annotation est activee:</p>\n";
+								//echo "<p>Liste des informations affichées lorsque l'annotation est activée:</p>\n";
 								echo "<p>".gettext("Liste des informations affich&#233;es sera la suivante").":</p>\n";
 								echo "<ul>\n";
 								if($_POST['annotation_nom']=="1"){
@@ -1588,7 +1595,7 @@ couleur2="'.$couleur2.'"
 								}
 								/*
 								if($_POST['annotation_prenom']=="1"){
-									echo "<li><p>Le 'prenom' de l'utilisateur connecte.</p></li>\n";
+									echo "<li><p>Le 'prénom' de l'utilisateur connecté.</p></li>\n";
 								}
 								*/
 								if($_POST['annotation_classe']=="1"){
@@ -1596,7 +1603,7 @@ couleur2="'.$couleur2.'"
 								}
 								/*
 								if($_POST['afficher_login']=="1"){
-									echo "<li><p>Le 'login' de l'utilisateur connecte.</p></li>\n";
+									echo "<li><p>Le 'login' de l'utilisateur connecté.</p></li>\n";
 								}
 								if($_POST['afficher_machine']=="1"){
 									echo "<li><p>Le 'nom netbios' de la machine sur laquelle il se connecte.</p></li>\n";
@@ -1678,9 +1685,9 @@ couleur2="'.$couleur2.'"
 
 								echo "</blockquote>\n";
 
-								// Si les annotations sont modifiees, il faut regenerer les fonds pour les utilisateurs concernes.
+								// Si les annotations sont modifiées, il faut regénérer les fonds pour les utilisateurs concernés.
 								// Supprimer le fond.txt pour chaque utilisateur suffit.
-								// On lance l'operation si cela n'a pas deja ete fait.
+								// On lance l'opération si cela n'a pas déjà été fait.
 								if($_POST['regeneration_fond_programmee']!="oui"){
 									exec("/usr/bin/sudo $chemin_scripts/genere_fond.sh variable_bidon annuler $groupe");
 									$regeneration_fond_programmee="oui";
@@ -1700,7 +1707,7 @@ couleur2="'.$couleur2.'"
 		echo "<p>".gettext("Vous n'&#234;tes pas autoris&#233; &#224; acc&#233;der &#224; cette page").".</p>\n";
 	}
 
-	// Fin de la connexion a MySQL:
+	// Fin de la connexion à MySQL:
 	$fermeture=mysql_close();
 
 	//Fin de page:
