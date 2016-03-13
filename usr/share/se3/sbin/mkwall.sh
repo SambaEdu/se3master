@@ -4,7 +4,6 @@
 #
 # Auteur: Stephane Boireau (A.S. - Relais de Bernay/Pont-Audemer (27))
 #
-## $Id: mkwall.sh 8019 2014-01-06 20:04:45Z crob $ ##
 ## Correctif du 2016-03-05 par Laurent Joly
 #
 # /usr/share/se3/sbin/mkwall.sh
