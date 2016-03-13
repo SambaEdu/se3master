@@ -12,7 +12,8 @@
 
 * @Licence Distribue selon les termes de la licence GPL
 
-* @note 
+* @Correctif de Laurent Joly pour compatibilite php5 du 09-03-2016
+
 
 */
 
@@ -1044,9 +1045,9 @@ PRIMARY KEY ( `identifiant` )
 							// - couleurs non vides et valides
 
 							if($type_image=="image_fournie"){
-								$tmp_image=$HTTP_POST_FILES['image']['tmp_name'];
-								$image=$HTTP_POST_FILES['image']['name'];
-								$size_image=$HTTP_POST_FILES['image']['size'];
+								$tmp_image=$_FILES['image']['tmp_name'];
+								$image=$_FILES['image']['name'];
+								$size_image=$_FILES['image']['size'];
 							}
 							//===========================
 
