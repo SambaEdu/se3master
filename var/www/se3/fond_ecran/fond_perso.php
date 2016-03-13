@@ -4,9 +4,7 @@
 
 * Upload de fond d'ecran personnalise
 
-* @Version $Id: fond_perso.php 6262 2011-03-17 10:21:15Z crob $
-
-* @Correctif du 2016-03-05 par Laurent Joly
+* @Version $Id$
 
 * @Projet LCS / SambaEdu 
 
@@ -82,7 +80,7 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 			echo "<p>Vous avez la possibilit&#233; de choisir une image &#224; ins&#233;rer au centre de votre fond d'&#233;cran.</p>\n";
 
 			if(file_exists($dossier_www_fonds_courants."/".$login.".jpg")) {
-				echo "<p><a href='../$chemin_www_fonds_courants/$login.jpg' target='_blank'>Votre fond d'&#233;cran actuel</a></p>\n";
+				echo "<p><a href='$chemin_www_fonds_courants/$login.jpg' target='_blank'>Votre fond d'&#233;cran actuel</a></p>\n";
 			}
 		}
 
@@ -93,6 +91,12 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 		echo "<input type=\"submit\" name=\"bouton_choix\" value=\"".gettext("Valider")."\"></p>\n";
 
 		echo "</form>\n";
+
+		echo "<div id='fond_actuel'>";
+		if(is_admin("se3_is_admin",$login)!="Y") {
+			echo "<img src='../$chemin_www_fonds_courants/$login.jpg' />";
+		}
+		echo "</div>\n";
 
 		echo "<script type='text/javascript'>
 	function actualise_fond_actuel() {
@@ -118,27 +122,19 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 	}
 </script>\n";
 
-
+		echo "<p><br /></p>\n";
 		echo "<p><i>NOTES&nbsp;</i>: </p>";
 		echo "<ul>\n";
-		echo "<li><p>Vous pouvez ins&#233;rer une image de votre choix au centre du fond d'&#233;cran.</p></li>\n";
-		echo "<li><p>L'image &#224; ins&#233;rer doit &#234;tre au format jpg, bmp, gif ou png. Elle sera r&#233;duite afin de ne pas &#234;tre coup&#233;e.</p></li>\n";
-		
+		echo "<li><p>Si l'image &#224; ins&#233;rer comporte des transparences, veillez &#224; la redimensionner pour que la dimension maximale (<i>hauteur ou largeur</i>) soit de 500px pour conserver la transparence.</p></li>\n";
+		echo "<li><p><span style='color:red'>A FAIRE: Possibilit&#233; de param&#233;trer les dimensions de l'insertion d'image (<i>avec valeur max pour conserver le nom_pr&#233;nom,...</i>)</span></p></li>\n";
 		if(is_admin("se3_is_admin",$login)=="Y") {
 			echo "<li><p>Vous pouvez autoriser des utilisateurs &#224; modifier eux-m&#234;mes leur fond d'&#233;cran.<br />Pour cela, il suffit de leur d&#233;l&#233;guer le droit '<b>fond_can_change</b>'.<br />L'acc&#232;s leur est alors donn&#233; dans <b>Annuaire/Voir ma fiche/Personnaliser mon fond d'&#233;cran</b><br />Pensez cependant que certains utilisateurs pourraient mettre en place des fonds non politiquement corrects.<br />Le fait d'avoir autoris&#233; la modification du fond pourrait vous &#234;tre reproch&#233;e.<br />Choisissez donc soigneusement les utilisateurs auxquels vous d&#233;l&#233;guerez ce droit.</p></li>\n";
 		}
 		else {
-			echo "<li><p><font color='red'>Pensez que l'image que vous ins&#233;rez doit &#234;tre politiquement correcte. Elle ne doit pas choquer des &#233;lèves, des professeurs, votre principal ou proviseur. De plus, le droit qui vous a &#233;t&#233; donn&#233; peut vous &#234;tre retir&#233; en cas d'abus.</font></p></li>\n";
+			echo "<li><p>Vous pouvez ins&#233;rer une image de votre choix au centre du fond d'&#233;cran.<br />L'image ins&#233;r&#233;e sera r&#233;duite &#224; un maximum de 500px de côt&#233;.<br />&nbsp;<br />Pensez que l'image que vous ins&#233;rez doit &#234;tre politiquement correcte.<br />Elle ne doit pas choquer des &#233;lèves, des professeurs, votre principal ou proviseur.<br />De plus, le droit qui vous a &#233;t&#233; donn&#233; peut vous &#234;tre retir&#233;.</p></li>\n";
 		}
 		echo "</ul>\n";
-
-		echo "<div id='fond_actuel'>";
-		if(is_admin("se3_is_admin",$login)!="Y") {
-			echo "<img src='../$chemin_www_fonds_courants/$login.jpg' width='600' height='*' />";
-		}
-		echo "</div>\n";
-
-		}
+	}
 	else {
 		if($cible=='') {
 			echo "<p><span style='color:red'>La cible choisie n'est pas valide";
@@ -151,27 +147,9 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 			die();
 		}
 
-		$tmp_image=$_FILES['image']['tmp_name'];
-		$image=$_FILES['image']['name'];
-		$size_image=$_FILES['image']['size'];
-		
-		// détection du format de l'image
-		$ext2 = strtolower(substr($image, "-3"));
-		
-		if ($ext2=="jpg")
-			$ext="jpg";
-		elseif ($ext2=="png")
-			$ext="png";
-		elseif ($ext2=="bmp")
-			$ext="bmp";
-		elseif ($ext2=="gif")
-			$ext="gif";
-		else
-		{
-			echo "<p style='color:red'>Format non pris en charge. Veuillez utiliser un fichier .jpg .bmp .gif ou .png.</p>\n";
-			echo "<p><a href='".$_SERVER['PHP_SELF']."'>Retour</a></p>\n";
-			die();
-		}
+		$tmp_image=$HTTP_POST_FILES['image']['tmp_name'];
+		$image=$HTTP_POST_FILES['image']['name'];
+		$size_image=$HTTP_POST_FILES['image']['size'];
 
 		$cible=isset($_POST['cible']) ? $_POST['cible'] : $login;
 
@@ -182,8 +160,7 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 		echo "\$tmp_image=$tmp_image<br />";
 		echo "\$image=$image<br />";
 		echo "\$size_image=$size_image<br />";
-	
-	*/
+		*/
 
 		if(is_uploaded_file($tmp_image)){
 			$dest_file="$dossier_upload_images/tmp_$cible.jpg";
@@ -204,9 +181,8 @@ if ((is_admin("se3_is_admin",$login)=="Y") or
 		echo "<p>Le fichier a ete uploade et copie.</p>\n";
 
 		echo "<p>Lancement du traitement...<br />\n";
-		//exec("/usr/bin/sudo $chemin_scripts/mkwall_perso.sh $cible"););
-		exec("/usr/bin/sudo $chemin_scripts/mkwall.sh $cible $ext",$retour);
-
+		//exec("/usr/bin/sudo $chemin_scripts/mkwall_perso.sh $cible");
+		exec("/usr/bin/sudo $chemin_scripts/mkwall.sh $cible",$retour);
 
 		foreach($retour as $key => $value) {
 			//echo "<span style='color:green'>\$retour[$key]=$value</span><br />";
