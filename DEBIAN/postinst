@@ -36,6 +36,9 @@ case `cat /etc/debian_version` in
 	7.*)
 	    install_script="install_se3_wheezy.sh"
 	    ;;
+	8.*)
+	    install_script="install_se3_jessie.sh"
+	    ;;
 	*)
 	    echo "Version Debian inconnue"
 	    exit 1

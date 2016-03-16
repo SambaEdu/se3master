@@ -19,29 +19,29 @@ set -e
 case "$1" in
        remove|abort-install)
 	(
-	dpkg-divert --package se3 --remove --rename --divert /etc/cron.d/mrtg 
-	dpkg-divert --package se3 --remove --rename --divert /etc/mrtg.cfg
-	dpkg-divert --package se3 --remove --rename --divert /usr/share/backuppc/image/BackupPC_stnd.css 
-	dpkg-divert --package se3 --remove --rename --divert /etc/ldap/slapd.conf 
-	dpkg-divert --package se3 --remove --rename --divert /etc/backuppc/config.pl 
-	dpkg-divert --package se3 --remove --rename --divert /etc/backuppc/apache.conf
-	dpkg-divert --package se3 --remove --rename --divert /etc/backuppc/localhost.pl 
-	dpkg-divert --package se3 --remove --rename --divert /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm 
-	dpkg-divert --package se3 --remove --rename --divert  /etc/ssmtp/ssmtp.conf 
-	dpkg-divert --package se3 --remove --rename --divert /etc/php5/apache2/php.ini 
-	dpkg-divert --package se3 --remove --rename --divert /etc/php5/cli/php.ini
-	dpkg-divert --package se3 --remove --rename --divert  /etc/default/apache2 
-	dpkg-divert --package se3 --remove --rename --divert  /etc/cups/mime.convs 
-	dpkg-divert --package se3 --remove --rename --divert  /etc/cups/mime.types 
-	dpkg-divert --package se3 --remove --rename --divert  /etc/syslog.conf 
-	dpkg-divert --package se3 --remove --rename --divert  /etc/samba/smb.conf 
-	dpkg-divert --package se3 --remove --rename --divert  /usr/share/se3/scripts/start_poste.sh
+	dpkg-divert --package se3 --rename --remove /etc/cron.d/mrtg 
+	dpkg-divert --package se3 --rename --remove /etc/mrtg.cfg
+	dpkg-divert --package se3 --rename --remove /usr/share/backuppc/image/BackupPC_stnd.css 
+	dpkg-divert --package se3 --rename --remove /etc/ldap/slapd.conf 
+	dpkg-divert --package se3 --rename --remove /etc/backuppc/config.pl 
+	dpkg-divert --package se3 --rename --remove /etc/backuppc/apache.conf
+	dpkg-divert --package se3 --rename --remove /etc/backuppc/localhost.pl 
+	dpkg-divert --package se3 --rename --remove /usr/share/backuppc/lib/BackupPC/CGI/Lib.pm 
+	dpkg-divert --package se3 --rename --remove  /etc/ssmtp/ssmtp.conf 
+	dpkg-divert --package se3 --rename --remove /etc/php5/apache2/php.ini 
+	dpkg-divert --package se3 --rename --remove /etc/php5/cli/php.ini
+	dpkg-divert --package se3 --rename --remove  /etc/default/apache2 
+	dpkg-divert --package se3 --rename --remove  /etc/cups/mime.convs 
+	dpkg-divert --package se3 --rename --remove  /etc/cups/mime.types 
+	dpkg-divert --package se3 --rename --remove  /etc/syslog.conf 
+	dpkg-divert --package se3 --rename --remove  /etc/samba/smb.conf 
+	dpkg-divert --package se3 --rename --remove  /usr/share/se3/scripts/start_poste.sh
 
 
-	dpkg-divert --package se3 --remove --divert   /etc/ldap/ldap.conf 
-	dpkg-divert --package se3 --remove --divert  /etc/nsswitch.conf 
-	dpkg-divert --package se3 --remove --divert   /etc/pam_ldap.conf 
-	dpkg-divert --package se3 --remove --divert   /etc/libnss-ldap.conf 
+	dpkg-divert --package se3 --divert --remove  /etc/ldap/ldap.conf 
+	dpkg-divert --package se3 --divert --remove  /etc/nsswitch.conf 
+	dpkg-divert --package se3 --divert --remove  /etc/pam_ldap.conf 
+	dpkg-divert --package se3 --divert --remove  /etc/libnss-ldap.conf 
 	) >/dev/null
         ;;
 
