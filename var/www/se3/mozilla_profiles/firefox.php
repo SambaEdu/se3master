@@ -3,7 +3,7 @@
    /**
    
    * Deploiement et modification des profils firefox des postes clients 
-   * @Version $Id$ 
+   * @Version $Id: firefox.php 9274 2016-03-24 23:39:56Z keyser $ 
    
   
    * @Projet LCS / SambaEdu 
@@ -233,50 +233,61 @@ if ($config==""||$config=="init") {
                             mysql_query("UPDATE params set value='$new_proxy_type' where name='proxy_type'");
                     }
                     
-                    
-                    
-                    $result=mysql_query("SELECT CleID FROM corresp WHERE sscat='configuration du proxy' AND type='config'");
-                    
-                    while ($row = mysql_fetch_row($result)) {
-                        $val_cleid[] = $row[0];
-                        mysql_query("DELETE FROM restrictions WHERE cleID='$row[0]'");
-                    }
-                    
-                    
+                    $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule like 'activer le proxy%'");
+                    $row = mysql_fetch_row($result);
+                    $proxy_actif_key = $row[0];
+
+                    $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule like '%entrez les valeurs pour votre proxy%'");
+                    $row = mysql_fetch_row($result);
+                    $proxy_valeur_key = $row[0];
+
+                    $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule like '%url du script de configuration automatique du proxy%'");
+                    $row = mysql_fetch_row($result);
+                    $proxy_url_key = $row[0];
+
 
                     switch ($proxy_type) {
                                               
                         case 0:
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[0]'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[1]'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[2]'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[3]'");
-                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[3]','base','','')";
+                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_actif_key'");
+                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_valeur_key'");
+                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_url_key'");
+                            
+                            //mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[3]'");
+                            $query = "INSERT INTO restrictions VALUES('','$proxy_url_key','base','','')";
                             $resultat=mysql_query($query);
-                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[1]','base','','')";
+                            $query = "INSERT INTO restrictions VALUES('','$proxy_valeur_key','base','','')";
                             $resultat=mysql_query($query);
-                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[0]','base','0','')";
+                            $query = "INSERT INTO restrictions VALUES('','$proxy_actif_key','base','0','')";
                             mysql_query($query);
                              
                             break;
                         
                         case 1:
-                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[0]','base','1','')";
+                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_actif_key'");
+                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_valeur_key'");
+                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_url_key'");
+                            $query = "INSERT INTO restrictions VALUES('','$proxy_actif_key','base','1','')";
                             mysql_query($query);
-                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[1]','base','$new_proxy_url','')";
+                            $query = "INSERT INTO restrictions VALUES('','$proxy_valeur_key','base','$new_proxy_url','')";
                             $resultat=mysql_query($query);
                             if ($resultat == FALSE)  { 
-                                mysql_query("UPDATE restrictions set value='$new_proxy_url' where CleID='$val_cleid[1]'"); 
+                                mysql_query("UPDATE restrictions set value='$new_proxy_url' where CleID='$proxy_valeur_key'"); 
                             }
+                            $query = "INSERT INTO restrictions VALUES('','$proxy_url_key','base','','')";
+                            $resultat=mysql_query($query);
 
                             break;
                         
                         case 2:
-                            mysql_query("UPDATE corresp set value='' WHERE cleID='$row[3]'");
-                            $query = "INSERT INTO restrictions VALUES('','$val_cleid[3]','base','$new_proxy_url','')";
+                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_actif_key'");
+                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_valeur_key'");
+                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_url_key'");
+                            //mysql_query("UPDATE corresp set value='' WHERE cleID='$row[3]'");
+                            $query = "INSERT INTO restrictions VALUES('','$proxy_url_key','base','$new_proxy_url','')";
                             $resultat=mysql_query($query);
                             if ($resultat == FALSE) { 
-                                mysql_query("UPDATE restrictions set value='$new_proxy_url' where CleID='$val_cleid[3]'"); 
+                                mysql_query("UPDATE restrictions set value='$new_proxy_url' where CleID='$proxy_url_key'"); 
                                 
                                 }
 
