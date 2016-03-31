@@ -3,9 +3,13 @@
 # pas d'arguments
 # a lancer en cron 
 #
-
+temoin="/home/netlogon/delProfile.txt"
 actifs=$(smbstatus -b | awk '{ print $2}' | sort -u)
-fromdos /home/netlogon/delProfile.txt
+if [ ! -e "$temoin" ];then
+	touch $temoin
+fi 
+setfacl -m  u:www-se3:rwx $temoin
+fromdos $temoin
 
 while read nom ; do
     if [ -n "$nom" ] ; then
@@ -17,14 +21,14 @@ while read nom ; do
 	   sleep 5
         fi
         rm -fr /home/profiles/$nom > /dev/null 2>&1
-        rm -fr /home/profiles/$nom.V2 > /dev/null 2>&1
+        rm -fr /home/profiles/$nom.V* > /dev/null 2>&1
 #       sed -i  "/~$nom$/d" /home/netlogon/delProfile.txt 
         echo  "$nom supprime"
     fi
-done < /home/netlogon/delProfile.txt
+done < $temoin
 
 
-echo > /home/netlogon/delProfile.txt
+echo > $temoin
 
 
 
