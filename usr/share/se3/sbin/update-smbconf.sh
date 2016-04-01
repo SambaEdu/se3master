@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## $Id$ ##
+## $Id: update-smbconf.sh 9249 2016-03-18 13:45:31Z keyser $ ##
 
 
 # Update smb.conf based on current template version and current logon script (pl, py)
@@ -82,3 +82,15 @@ fi
 chmod 644 /etc/samba/smb_*
 
 /etc/init.d/samba reload >/dev/null 2>&1
+
+echo "Test de la compatibilité ldapsam:trusted"
+smbclient -L localhost -U adminse3%$xppass >/dev/null 
+if [ $? = 0 ];then
+	echo "Test OK"
+else
+	echo 'Test KO !!!'
+	echo "Passage à off du paramètre ldapsam:trusted"
+	sed -i 's/ldapsam:trusted = Yes/ldapsam:trusted = No/' /etc/samba/smb.conf 
+	/etc/init.d/samba reload 
+fi
+
