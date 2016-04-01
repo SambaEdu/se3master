@@ -5,7 +5,7 @@
 # Fichier de filtrage du resultat de quota (initialement de repquota) pour gagner en rapidite: fortement inspire du script de Franck Molle quota.sh
 #
 
-## $Id$ ##
+## $Id: repquota_filtre.sh 9294 2016-03-28 23:23:50Z keyser $ ##
 
 #
 ##### Affiche les quotas effectivement fixes sur une partition donnee pour toute ou partie des users #####
@@ -105,7 +105,7 @@ if [ "$zfs" == "1" ] ; then
     print $1 "\t" used "\t" quota "\t" quota "\t" status "\t" overfill
     }'	 
 else
-    repquota $partition | egrep "$motif" | tr -s " " | sort -n | gawk -F" " '
+   /usr/sbin/repquota $partition | egrep "$motif" | tr -s " " | sort -n | gawk -F" " '
     {
     $3/=1000
     $4/=1000
