@@ -98,6 +98,14 @@ if (isset($action)) {
 	system ("/bin/bash /usr/share/se3/scripts/update_droits_xml.sh");
 	echo "ok";
     }
+    
+    if ($action == "test_profiles") {
+        echo "<h2>".gettext("Recherche des profils Windows 7 corrompus...")."</h2>";
+        echo '<pre>';
+        system("sudo /usr/share/se3/sbin/test_profiles.sh");
+        echo '</pre>';
+        echo "ok";
+    }
 }
 else {
 
@@ -109,6 +117,7 @@ else {
         echo "<a href=\"fix_se3.php?action=rmprofiles\" onclick=\"return getlongconfirm();\">".gettext("Supprimer l'ensemble des profils Windows")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des lenteurs de connexions')")."\"><img name=\"action_image1\"  src=\"../elements/images/system-help.png\"></u><br>";
     echo "<a href=\"fix_se3.php?action=permse3\" onclick=\"return getlongconfirm();\">".gettext("Remise en place des droits syst&#232;me par d&#233;faut")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des dysfonctionnements dans l\'interface ou lors des connexions')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u><br>";
     echo "<a href=\"fix_se3.php?action=restore_droits\" onclick=\"return getlongconfirm();\">".gettext("Remise en place des droits sur les comptes utilisateurs")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des probl&#232;mes de droits pour les utilisateurs')")."\"><img name=\"action_image3\"  src=\"../elements/images/system-help.png\"></u><br>";
+	echo "<a href=\"fix_se3.php?action=test_profiles\">".gettext("Recherche des profils Windows 7 d&#233;faillants")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous recherchez les sessions corompues')")."\"><img name=\"action_image3\"  src=\"../elements/images/system-help.png\"></u><br>";
     echo "<a href=\"fix_se3.php?action=restore_droits_full\" onclick=\"return getlongconfirm();\">".gettext("Remise en place de tous les droits")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des probl&#232;mes de droits')")."\"><img name=\"action_image4\"  src=\"../elements/images/system-help.png\"></u><br>";
     if (file_exists("/var/se3/unattended/install/wpkg")) {
     echo "<a href=\"fix_se3.php?action=force_profils_wpkg\">".gettext("Raffraichissement des machines visibles dans wpkg")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez que certaines machines sont manquantes dans wpkg')")."\"><img name=\"action_image4\"  src=\"../elements/images/system-help.png\"></u><br>";

@@ -66,3 +66,6 @@
 
 # effacement des profils a effacer toutes les 2 minutes
 */2 * * * * root /usr/share/se3/sbin/clean_profiles.sh
+
+# recherche des profils en erreur a 12h45 et 22h45
+45 12,22 * * * root /usr/share/se3/sbin/test_profiles.sh
