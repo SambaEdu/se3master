@@ -11,7 +11,7 @@ chown -R root:root /home/netlogon/delProfile2.txt;
 chmod 755 /home/netlogon/delProfile2.txt;
 
 echo "Debut de test des profils";
-find /home/profiles -type d -iname "*.V2" -print0 | while IFS= read -r -d $'\0' line; do
+for line in /home/profiles/*.V2; do
 line2=${line:15:$((${#line}-18))};
 if [ -f "$line/NTUSER.DAT" ] && [ -f "$line/ntuser.ini" ];
 then 
