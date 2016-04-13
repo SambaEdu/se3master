@@ -3,7 +3,7 @@
 #
 ##### Replace les droits dans les differents repertoires importants pour le serveur #####
 #
-### $Id$ ###
+### $Id: permse3 9300 2016-04-11 23:23:38Z keyser $ ###
 
 
 #
@@ -58,6 +58,9 @@ if [ "$1" == "netlogon"  ]; then
 fi
 
 chmod 400 /root/.my.cnf
+
+# /etc/SeConfig.ph
+chown www-se3 /etc/SeConfig.ph
 
 # Apache
 chmod 544 /etc/default/apache2

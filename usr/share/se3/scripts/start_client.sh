@@ -1,8 +1,10 @@
 #!/bin/bash
 # SambaEdu
 #
-# $Id: mail-ldap.sh 341 2005-07-13 15:06:30Z plouf $
+# $Id: start_client.sh 8807 2015-05-24 00:01:45Z keyser $
 #
+# modif jc 20150521
+# extinction programmée des clients linux et double boot
 
 WWWPATH="/var/www"
 
@@ -26,7 +28,7 @@ if [ -z "$COMPUTERSRDN" ]; then
 	echo "Impossible d'accéder au paramètre COMPUTERSRDN"
 	exit 1
 fi
-		
+
 PARCSRDN=`echo "SELECT value FROM params WHERE name='parcsRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 if [ -z "$PARCSRDN" ]; then
 	echo "Impossible d'accéder au paramètre PARCSDN"
@@ -37,7 +39,7 @@ if [ -z "$PASSADM" ]; then
 	echo "Impossible d'accéder au paramètre PASSADM"
 	exit 1
 fi
-		
+
 if [ "$2" = "" -a "$1" != "_" ]
 then 
 	echo "USAGE: Vous devez indiquer un parc existant et une action valide parmi wol, reboot, stop:"
@@ -109,34 +111,33 @@ else
 		#echo "pour la machine $A"
 		echo "$A" | cut -d= -f2 | cut -d, -f1 | while read B
 		do
-			#echo  "ldapsearch  -x -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=*)' macAddress | grep macAddress | grep -v requesting" 
-			
+
 			ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=*)' macAddress | grep macAddress | while read C
 			do
 				echo "$C" | cut -d: -f 2-7  | while read D
 				do
+				# On recupere l'IP sans espace du client linux nommé $B
+				J=$(ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber | cut -d':' -f2- | sed 's/^[ \t]*//')
+
 					getent passwd $B$>/dev/null && TYPE="XP" 
 					if [ "$TYPE" = "XP" ]; then
 						echo "<br><h3>Action sur : $B</h3>"
+
 						#============================================
 						if [ "${action}" = "shutdown" -o "${action}" = "stop" ]; then
-							ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I 
-							do
-							echo "Tentative d'arret de la machine XP/2000<b> $B</b> correspondant à l'adresse mac <b>$D</b><br>"
-							/usr/bin/net rpc shutdown -C "Shutdown" -I $I -U "$I\adminse3%$PASSADM"
-							done
+							echo "Tentative d'arrêt de la machine XP/2000<b> $B</b> correspondant à l'adresse mac <b>$D</b><br>"
+							/usr/bin/net rpc shutdown -C "Shutdown" -S $B -U "$B\adminse3%$PASSADM"
+							/usr/bin/ssh -l root -o StrictHostKeyChecking=no $J poweroff
 						fi
 
 						if [ "${action}" = "reboot" ]; then
-							ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I 
-							do
-								echo "Tentative de reboot de la machine XP/2000<b> $B</b> correspondant à l'adresse mac <b>$D</b><br>"
-								/usr/bin/net rpc shutdown -r -C "Reboot" -I $I -U "$I\adminse3%$PASSADM"
-							done
+							echo "Tentative de reboot de la machine XP/2000<b> $B</b> correspondant à l'adresse mac <b>$D</b><br>"
+							/usr/bin/net rpc shutdown -r -C "Reboot" -S $B -U "$B\adminse3%$PASSADM"
+							/usr/bin/ssh -l root -o StrictHostKeyChecking=no $J reboot
 						fi
 
 						if [ "${action}" = "wol" ]; then
-							ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I
+							ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I                                                        do
 							do
 								echo "Tentative d'eveil pour la machine correspondant à l'adresse mac $D et au broadcast $I<br>"
 								/usr/bin/wakeonlan -i $I $D > /dev/null
@@ -151,23 +152,22 @@ else
 						if [ $? = "1" ]
 						then
 							echo "<br><h3>Action sur : $B</h3>"
+							
 							if [ "${action}" = "wol" ]; then
-								ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I 						
+								ldapsearch  -xLLL -b cn=$B,$COMPUTERSRDN,$BASEDN '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g;s/\.[0-9]*$/.255/g" | while read I                                                        do
 								do
-									echo "Tentative d'eveil pour la machine Win9x/Linux <b>$B</b> correspondant à l'adresse mac <b>$D</b><br>"
+									echo "Tentative d'eveil pour la machine Linux <b>$B</b> correspondant à l'adresse mac <b>$D</b><br>"
 									/usr/bin/wakeonlan -i $I $D > /dev/null
 									/usr/bin/wakeonlan $D > /dev/null
 								done    
 							fi
 							if [ "${action}" = "shutdown" -o "${action}" = "stop" ]; then
-								echo "Tentative d'arret de la machineWin9x/Linux <b>$B</b> correspondant à l'adresse mac <b>$D</b><br>"
-								# Prevoir de recup l'adresse IP car $B correspond au nom mais sous linux pour le moment cela est son IP :(
-								/usr/bin/ssh -o StrictHostKeyChecking=no $B halt
+								echo "Tentative d'arret du client Linux <b>$B</b> correspondant à l'adresse mac <b>$D</b> et à l'adresse IP <b>$J</b><br>"
+								/usr/bin/ssh -l root -o StrictHostKeyChecking=no $J poweroff
 							fi
 							if [ "${action}" = "reboot" ]; then
-								echo "Tentative de reboot de la machineWin9x/Linux <b>$B</b> correspondant à l'adresse mac <b>$D</b><br>"
-								# Prevoir de recup l'adresse IP car $B correspond au nom mais sous linux pour le moment cela est son IP :(
-								/usr/bin/ssh -o StrictHostKeyChecking=no $B reboot
+								echo "Tentative de reboot du client Linux <b>$B</b> correspondant à l'adresse mac <b>$D</b> et à l'adresse IP <b>$J</b><br>"
+								/usr/bin/ssh -l root -o StrictHostKeyChecking=no $J reboot
 							fi
 						fi
 					fi
