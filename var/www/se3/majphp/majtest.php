@@ -39,7 +39,8 @@ $action=$_GET['action'];
 if ($action == "majse3") {
 	$info_1 = gettext("Mise &#224; jour lanc&#233;e, ne fermez pas cette fen&#234;tre avant que le script ne soit termin&#233;. vous recevrez un mail r&#233;capitulatif de tout ce qui sera effectu&#233;...");
 	echo $info_1;
-
+	ob_implicit_flush(true); 
+	ob_end_flush();
 	system('sleep 1; /usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh se3 &');
 }
 else {
@@ -174,9 +175,23 @@ else {
         $pla_version_dispo = exec("apt-cache policy se3-pla | grep \"Candidat\" | cut -d\":\" -f2");
         // On teste si on a bien la derniere version
         if ("$pla_version_install" != "$pla_version_dispo") {
-            echo "<TR><TD>".gettext("Clonage / sauvegarde - restauration des stations (se3-pla)")."</TD>";
+            echo "<TR><TD>".gettext("Administration de ldap avec phpldapadmin (se3-pla)")."</TD>";
             echo "<TD align=\"center\">$pla_version_install</TD>";
             echo "<TD align=\"center\"><b>$pla_version_dispo</b></TD>";
+           echo "</TR>";
+        }
+        
+    }    
+    // Module radius
+    $radius_actif = exec("dpkg -s se3-radius | grep \"Status: install ok\" > /dev/null && echo 1");
+    if($radius_actif == "1") {
+        $radius_version_install = exec("apt-cache policy se3-radius | grep \"Install\" | cut -d\":\" -f2");
+        $radius_version_dispo = exec("apt-cache policy se3-radius | grep \"Candidat\" | cut -d\":\" -f2");
+        // On teste si on a bien la derniere version
+        if ("$radius_version_install" != "$radius_version_dispo") {
+            echo "<TR><TD>".gettext("Serveur free-radiuis (se3-radius)")."</TD>";
+            echo "<TD align=\"center\">$radius_version_install</TD>";
+            echo "<TD align=\"center\"><b>$radius_version_dispo</b></TD>";
            echo "</TR>";
         }
         
