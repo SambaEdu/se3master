@@ -2,7 +2,7 @@
 
 /**
    * Page qui permet de gerer les modules (installation - desactivation - mises a jour)
-   * @Version $Id$
+   * @Version $Id: conf_modules.php 9077 2015-11-20 22:29:05Z christian.westphal $
 
    * @Projet LCS-SE3
    * @auteurs Philippe Chadefaux
@@ -29,6 +29,10 @@ $_SESSION["pageaide"]="Les modules";
 
 if (ldap_get_right("se3_is_admin",$login)!="Y")
         die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
+
+
+ob_implicit_flush(true);
+ob_end_flush();
 
 $module = "se3-".$_GET['varb'];
 // Mise a jour
@@ -58,6 +62,8 @@ if ($_GET['action'] == "change") {
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
+
+        // Installation de l'inventaire
 		case "inventaire":
 			if($_GET['valeur']=="1") {
 				$ocs_actif = exec("dpkg -s se3-ocs | grep \"Status: install ok\" > /dev/null && echo 1");
@@ -72,7 +78,8 @@ if ($_GET['action'] == "change") {
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
-		// Conf antivirus
+
+		// Installation de l'antivirus (se3-clamav)
 		case "antivirus":
 			$clamav_actif = exec("dpkg -s se3-clamav | grep \"Status: install ok\" > /dev/null && echo 1");
 			if(($_GET['valeur']=="1") && ($clamav_actif!="1")) { //paquet pas installe on l'installe
@@ -84,7 +91,8 @@ if ($_GET['action'] == "change") {
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
-		// Conf du dhcp
+
+		// Installation  du dhcp
 		case "dhcp":
 			if($_GET['valeur']=="1") { //si on veut l'activer
 				$STOP_START="start";
@@ -107,7 +115,8 @@ if ($_GET['action'] == "change") {
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
-		// Conf du clonage
+
+		// Installation  du clonage
 		case "clonage":
 			if($_GET['valeur']=="1") {
 				$clonage_actif = exec("dpkg -s se3-clonage | grep \"Status: install ok\" > /dev/null && echo 1");
@@ -128,7 +137,8 @@ if ($_GET['action'] == "change") {
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
-		// Conf d'unattended
+
+		// Installation  d'unattended
 		case "unattended":
 			if($_GET['valeur']=="1") {
 				$unattended_actif = exec("dpkg -s se3-unattended | grep \"Status: install ok\" > /dev/null && echo 1");
@@ -151,7 +161,8 @@ if ($_GET['action'] == "change") {
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
-		// conf fond d'ecran
+
+		// Installation  fond d'ecran
 		case "fondecran":
 			$valeur_fondecran=($_GET['valeur']==1) ? 1 : 0;
 			$resultat=mysql_query("SELECT * FROM params WHERE name='menu_fond_ecran'");
@@ -176,7 +187,8 @@ if ($_GET['action'] == "change") {
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
-		// conf internet
+
+		// Installation d'internet (se3-internet)
 		case "internet":
 			$valeur_internet=($_GET['valeur']==1) ? 1 : 0;
 			$resultat=mysql_query("SELECT * FROM params WHERE name='internet'");
@@ -201,7 +213,8 @@ if ($_GET['action'] == "change") {
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
-		// Conf de se3-domain
+
+		// Installation de BackupPc (se3-backup)
 		case "backup":
 			if($_GET['valeur']=="1") {
 				$backup_actif = exec("dpkg -s se3-backup | grep \"Status: install ok\" > /dev/null && echo 1");
@@ -266,7 +279,8 @@ if ($_GET['action'] == "change") {
 
 			}
 			break;
-		// Conf de se3-domain
+
+		// Installation de  se3-domain
 		case "domain":
 			$valeur_domain=($_GET['valeur']==1) ? 1 : 0;
 
@@ -282,7 +296,9 @@ if ($_GET['action'] == "change") {
 
 			}
 			break;
-		// Conf de WPKG
+
+
+		// Installation de WPKG (se3-wpkg)
 		case "wpkg":
 			if($_GET['valeur']=="1") { //si on veut l'activer
 				$wpkg_actif = exec("dpkg -s se3-wpkg | grep \"Status: install ok\" > /dev/null && echo 1");
@@ -300,6 +316,8 @@ if ($_GET['action'] == "change") {
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
+
+        // Installation du client Linux
 		case "linux":
 			$valeur_linux=($_GET['valeur']==1) ? 1 : 0;
 			echo $valeur_linux;
@@ -322,7 +340,8 @@ if ($_GET['action'] == "change") {
 
 			}
 			break;
-		// Conf de se3-pla
+
+		// Installation  de PhpLdapAdmin (se3-pla)
 		case "pla":
 			$valeur_pla=($_GET['valeur']==1) ? 1 : 0;
 			$resultat=mysql_query("SELECT * FROM params WHERE name='pla'");
@@ -351,6 +370,32 @@ if ($_GET['action'] == "change") {
 			
 			}
 			break;
+
+        // Installation de Radius (se3-radius)
+        case "radius":
+            $valeur_radius=($_GET['valeur']==1) ? 1 : 0;
+            $resultat=mysql_query("SELECT * FROM params WHERE name='radius'");
+            if(mysql_num_rows($resultat)==0){
+                $sql = "INSERT INTO params VALUES('','radius','1','','Activation ou d&#233sactivation module se3-radius','6')";
+            } else {
+                $sql = "UPDATE params SET value='$valeur_radius' where name='radius'";
+            }
+
+            if ($valeur_radius == 1) {
+                system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-radius",$return);
+                if($return==0) {
+                mysql_query($sql);
+                echo "Module $module activ&#233;.<br>\n";
+                }
+                else{
+                echo "Un probl&#232;me est survenu lors de l'installation de $module.<br>\n";
+                }
+
+            } else{
+                mysql_query($sql);
+                echo "Module $module d&#233;sactiv&#233;.<br>\n";
+            }
+            break;
 			
 		default:
 			echo "Erreur : Module '$module' inconnu !<br>\n";
@@ -393,14 +438,17 @@ for ($i=0; $i< count($files); $i++) {
 		$internet_lock="yes";
 		echo "<br><center>".gettext("Attention : installation du paquet se3-internet en cours.")."</center>";
 	} elseif ($files[$i] == "/var/lock/se3-backup.lck") {
-		$internet_lock="yes";
+		$backup_lock="yes";
 		echo "<br><center>".gettext("Attention : installation du paquet se3-backup en cours.")."</center>";
 	} elseif ($files[$i] == "/var/lock/se3-clients-linux.lck") {
-		$internet_lock="yes";
+		$clients_linux_lock="yes";
 		echo "<br><center>".gettext("Attention : installation du paquet se3-clients-linux en cours.")."</center>";
 	} elseif ($files[$i] == "/var/lock/se3-synchro.lck") {
-		$internet_lock="yes";
+		$synchro_lock="yes";
 		echo "<br><center>".gettext("Attention : installation du paquet se3-synchro en cours.")."</center>";
+    } elseif ($files[$i] == "/var/lock/se3-radius.lck") {
+        $radius_lock="yes";
+        echo "<br><center>".gettext("Attention : installation du paquet se3-synchro en cours.")."</center>";
 	}
 
 }
@@ -979,6 +1027,62 @@ if ($pla=="0") {
 	echo "<a href=conf_modules.php?action=change&varb=pla&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\"></a>";
 	echo "</u>";
 }
+
+
+// Module Radius
+
+$resultat=mysql_query("SELECT * FROM params WHERE name='radius'");
+if(mysql_num_rows($resultat)==0){
+    $radius=0;
+}
+else{
+    $ligne=mysql_fetch_object($resultat);
+    if($ligne->value=="1"){
+        // installé
+        $radius=1;
+    }
+    else {
+        // pas installé
+        $radius=0;
+    }
+}
+
+$radius_actif = exec("dpkg -s se3-radius | grep \"Status: install ok\"> /dev/null && echo 1");
+echo "<TR><TD>".gettext("Installation de Radius (se3-radius)")."</TD>";
+
+// On teste si on a bien la derniere version
+$radius_version_install = exec("apt-cache policy se3-radius | grep \"Install\" | cut -d\":\" -f2");
+$radius_version_dispo = exec("apt-cache policy se3-radius | grep \"Candidat\" | cut -d\":\" -f2");
+echo "<TD align=\"center\">$radius_version_install</TD>";
+if ("$radius_version_install" == "$radius_version_dispo") {
+    echo "<TD align=\"center\">";
+    echo "<u onmouseover=\"return escape".gettext("('Pas de nouvelle version de ce module')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\"></u>";
+    echo "</TD>";
+} else {
+    echo "<TD align=\"center\">";
+    echo "<u onmouseover=\"return escape".gettext("('Mise &#224; jour version $radius_version_dispo disponible.<br>Cliquer ici pour lancer la mise &#224; jour de ce module.')")."\"><a href=conf_modules.php?action=update&varb=radius&valeur=1><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/warning.png\"></a></u>";
+    echo "</TD>";
+}
+
+echo "<TD align=\"center\">";
+if (($radius!="1") || ($radius_actif !="1")) {
+    if($radius_actif!="1") {
+        $radius_message=gettext("<b>Attention : </b>Le paquet n\'est pas install&#233; sur ce serveur. Cliquer sur la croix rouge pour l\'installer.");
+        $radius_alert="onClick=\"alert('Installation du packet se3-radius. Cela peut prendre un peu de temps. Vous devez avoir une connexion internet active')\"";
+    } else {
+        $synchro_message=gettext("<b>Etat : D&#233;sactiv&#233;</b><br>Cliquer sur la croix rouge pour activer ce module. <br>Pour en savoir plus sur ce module voir la documentation en ligne.");
+    }
+    echo "<u onmouseover=\"return escape('".$radius_message."')\">";
+    echo "<a href=conf_modules.php?action=change&varb=radius&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" \"$radius_alert\"></a>";
+    echo "</u>";
+} else {
+    echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Module radius pour la prise en charge du Wifi')")."\">";
+    echo "<a href=conf_modules.php?action=change&varb=radius&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" ></a>";
+    echo "</u>";
+}
+
+
+
 
 echo "</td></tr>\n";
 
