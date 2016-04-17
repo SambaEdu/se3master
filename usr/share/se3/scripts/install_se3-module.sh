@@ -2,7 +2,7 @@
 #
 
 
-## $Id$ ##
+## $Id: install_se3-module.sh 9245 2016-03-18 12:17:30Z keyser $ ##
 
 
 #
@@ -67,6 +67,7 @@ opt="--allow-unauthenticated"
 
 [ -z "$LC_ALL" ] && LC_ALL=C && export LC_ALL=C 
 
+exec 2>&1
 
 #debug="-s"
   echo "<pre>"
@@ -351,6 +352,11 @@ if [ "$remove" ==  "1" ]; then
 fi
 
 ;;
+
+se3-radius)
+install_module
+;;
+
 # 
 # se3-seven) inutile sous squeeze !
 # echo "Installation ou MAJ du support seven (samba backport)" | tee -a $REPORT_FILE
