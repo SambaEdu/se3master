@@ -186,6 +186,7 @@ function start_poste($action, $name)
                 system ( "/usr/bin/wakeonlan -i ".$reseau['broadcast']." ".$mac );
                 echo "<br>";
             }
+            flush();
             ob_flush();
         break;
 
@@ -235,6 +236,7 @@ function start_poste($action, $name)
                echo "On &#233;teint avec l'action <b>".$action."</b> le poste <b>".$name."</b> : <br>\n";
                echo "<b>Attention, arr&#234;t impossible</b>, la machine est injoignable ! <br><br>"; 
             }
+            flush();
             ob_flush();
             return $ret;
         break;
