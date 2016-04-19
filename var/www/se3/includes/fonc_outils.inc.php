@@ -172,10 +172,7 @@ function start_poste($action, $name)
             if ($return_value != "1") {
 			    
 			   echo "$name est d&#233;j&#224; en fonctionnement <br>";
-                        }
-            
-            
-             
+            }
             elseif ($dhcp == 1 ) {
                 require_once ("dhcp/dhcpd.inc.php");
                 $reseau=get_vlan($ip);
@@ -189,7 +186,8 @@ function start_poste($action, $name)
                 system ( "/usr/bin/wakeonlan -i ".$reseau['broadcast']." ".$mac );
                 echo "<br>";
             }
-            break;
+            ob_flush();
+        break;
 
         case "reboot":
             if(fping($ip)) { 
@@ -213,31 +211,32 @@ function start_poste($action, $name)
                 echo "On reboote avec l'action <b>".$action."</b> le poste <b>".$name."</b> :<br>\n";
                 echo "<b>Attention, reboot impossible</b>, la machine est injoignable ! <br><br>";
             }
-        
+            flush();
+            ob_flush();
         break;
 
         case "shutdown":
-        if(fping($ip)) {     
-            echo "On &#233;teint avec l'action <b>".$action."</b> le poste <b>".$name."</b> : <br>\n";
-            if (search_samba($name)) {
-                // machine windows
-                 $ret.=system ("/usr/bin/net rpc shutdown -t 30 -f -C 'Arret demande par le serveur sambaEdu3' -I ".$ip." -U \"".$name."\adminse3%".$xppass."\"");
-		 system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." poweroff");
-                 echo "<br><br>";
-                
-                  }
-                else {
-                    // poste linux : ssh...
-                    system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." poweroff");
-                    echo "<br><br>";
+            if(fping($ip)) {     
+                echo "On &#233;teint avec l'action <b>".$action."</b> le poste <b>".$name."</b> : <br>\n";
+                if (search_samba($name)) {
+                    // machine windows
+                     $ret.=system ("/usr/bin/net rpc shutdown -t 30 -f -C 'Arret demande par le serveur sambaEdu3' -I ".$ip." -U \"".$name."\adminse3%".$xppass."\"");
+		             system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." poweroff");
+                     echo "<br><br>";
                 }
-        }
-        else
-        {
-           echo "On &#233;teint avec l'action <b>".$action."</b> le poste <b>".$name."</b> : <br>\n";
-           echo "<b>Attention, arr&#234;t impossible</b>, la machine est injoignable ! <br><br>"; 
-        }
-        return $ret;
+                else {
+                     // poste linux : ssh...
+                     system ( "/usr/bin/ssh -o StrictHostKeyChecking=no root@".$ip." poweroff");
+                     echo "<br><br>";
+                }
+            }
+            else
+            {
+               echo "On &#233;teint avec l'action <b>".$action."</b> le poste <b>".$name."</b> : <br>\n";
+               echo "<b>Attention, arr&#234;t impossible</b>, la machine est injoignable ! <br><br>"; 
+            }
+            ob_flush();
+            return $ret;
         break;
         }
     }
