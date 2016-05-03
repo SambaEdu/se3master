@@ -46,7 +46,7 @@ echo "<h1>".gettext("Correction de probl&#232;mes")."</h1>\n";
 if (isset($action)) {
     if ($action == "rmprofiles") {
         echo "<h2>".gettext("Reg&#233;n&#233;rer les profils errants Windows...")."</h2>";
-        system("sudo /usr/share/se3/scripts/clean_profiles.sh");
+        system("sudo /usr/share/se3/sbin/clean_profiles.sh");
     }
     if ($action == "permse3") {
         echo "<h2>".gettext("Remise en place des droits syst&#232;me...")."</h2>";
