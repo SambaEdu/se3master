@@ -174,7 +174,7 @@ if (isset($quota) or isset($suppr)) {
 		 			
 					$hard_quota = (int) ($quota * ($depassement+100)/100 );
 // 					echo $hard_quota;
-					system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $grp $partition $quota $hard_quota \n\" >> /tmp/$nomscript");
+					system("echo \"sudo /usr/share/se3/scripts/quota_fixer_mysql.sh $user $partition $quota $hard_quota \n\" >> /tmp/$nomscript");
 
 				}
 	 		}
