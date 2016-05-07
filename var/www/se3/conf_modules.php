@@ -2,7 +2,7 @@
 
 /**
    * Page qui permet de gerer les modules (installation - desactivation - mises a jour)
-   * @Version $Id: conf_modules.php 9077 2015-11-20 22:29:05Z christian.westphal $
+   * @Version $Id: conf_modules.php 9320 2016-04-28 22:23:34Z keyser $
 
    * @Projet LCS-SE3
    * @auteurs Philippe Chadefaux
@@ -139,28 +139,28 @@ if ($_GET['action'] == "change") {
 			break;
 
 		// Installation  d'unattended
-		case "unattended":
-			if($_GET['valeur']=="1") {
-				$unattended_actif = exec("dpkg -s se3-unattended | grep \"Status: install ok\" > /dev/null && echo 1");
-				// Si paquet pas installe
-				if($unattended_actif!="1") {
-					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-unattended");
-				} else {
-					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='unattended'";
-					mysql_query($update_query);
-                                        // activer unattended, c'est activer le clonage
-					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='clonage'";
-					mysql_query($update_query);
-					exec("/usr/bin/sudo /usr/share/se3/scripts/se3_tftp_boot_pxe.sh start");
-					echo "Module $module et clonage activ&#233;s.<br>\n";
-				}
-			}
-			if($_GET['valeur']=="0") {
-				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='unattended'";
-				mysql_query($update_query);
-				echo "Module $module d&#233;sactiv&#233;.<br>\n";
-			}
-			break;
+// 		case "unattended":
+// 			if($_GET['valeur']=="1") {
+// 				$unattended_actif = exec("dpkg -s se3-unattended | grep \"Status: install ok\" > /dev/null && echo 1");
+// 				// Si paquet pas installe
+// 				if($unattended_actif!="1") {
+// 					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-unattended");
+// 				} else {
+// 					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='unattended'";
+// 					mysql_query($update_query);
+//                                         // activer unattended, c'est activer le clonage
+// 					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='clonage'";
+// 					mysql_query($update_query);
+// 					exec("/usr/bin/sudo /usr/share/se3/scripts/se3_tftp_boot_pxe.sh start");
+// 					echo "Module $module et clonage activ&#233;s.<br>\n";
+// 				}
+// 			}
+// 			if($_GET['valeur']=="0") {
+// 				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='unattended'";
+// 				mysql_query($update_query);
+// 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
+// 			}
+// 			break;
 
 		// Installation  fond d'ecran
 		case "fondecran":
@@ -836,41 +836,41 @@ echo "</td></tr>\n";
 // }
 
 // Module unattended
-$unattended_actif = exec("dpkg -s se3-unattended | grep \"Status: install ok\"> /dev/null && echo 1");
-echo "<TR><TD>".gettext("Installation de stations (se3-unattended)")."</TD>";
-
-// On teste si on a bien la derniere version
-$unattended_version_install = exec("apt-cache policy se3-unattended | grep \"Install\" | cut -d\":\" -f2");
-$unattended_version_dispo = exec("apt-cache policy se3-unattended | grep \"Candidat\" | cut -d\":\" -f2");
-echo "<TD align=\"center\">$unattended_version_install</TD>";
-if ("$unattended_version_install" == "$unattended_version_dispo") {
-	echo "<TD align=\"center\">";
-	echo "<u onmouseover=\"return escape".gettext("('Pas de nouvelle version de ce module')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\"></u>";
-	echo "</TD>";
-} else {
-	echo "<TD align=\"center\">";
-	echo "<u onmouseover=\"return escape".gettext("('Mise &#224; jour version $unattended_version_dispo disponible.<br>Cliquer ici pour lancer la mise &#224; jour de ce module.')")."\"><a href=conf_modules.php?action=update&varb=unattended&valeur=1><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/warning.png\"></a></u>";
-	echo "</TD>";
-}
-
-echo "<TD align=\"center\">";
-if (($unattended!="1") || ($unattended_actif !="1")) {
-	if($clonage!="1") { $unattended_alert="onClick=\"alert('L'installation ne peut fonctionner qu\'avec un serveur tftp actif. Vous devrez donc activer celui de Se3 en activant le module Clonage.')\""; }
-	if($unattended_actif!="1") {
-		$unattended_message=gettext("<b>Attention : </b>Le paquet n\'est pas install&#233; sur ce serveur. Cliquer sur la croix rouge pour l\'installer.");
-		$unattended_alert="onClick=\"alert('Installation du packet se3-unattended. Cela peut prendre un peu de temps. Vous devez avoir une connexion internet active')\"";
-	} else {
-		$unattended_message=gettext("<b>Etat : D&#233;sactiv&#233;</b><br>Cliquer sur la croix rouge pour activer ce module. <br>Pour en savoir plus sur ce module voir la documentation en ligne.");
-	}
-	echo "<u onmouseover=\"return escape('".$unattended_message."')\">";
-	echo "<a href=conf_modules.php?action=change&varb=unattended&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" \"$unattended_alert\"></a>";
-	echo "</u>";
-} else {
-	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Module d\'installation de stations actif')")."\">";
-	echo "<a href=conf_modules.php?action=change&varb=unattended&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" ></a>";
-	echo "</u>";
-}
-echo "</td></tr>\n";
+// $unattended_actif = exec("dpkg -s se3-unattended | grep \"Status: install ok\"> /dev/null && echo 1");
+// echo "<TR><TD>".gettext("Installation de stations (se3-unattended)")."</TD>";
+// 
+// // On teste si on a bien la derniere version
+// $unattended_version_install = exec("apt-cache policy se3-unattended | grep \"Install\" | cut -d\":\" -f2");
+// $unattended_version_dispo = exec("apt-cache policy se3-unattended | grep \"Candidat\" | cut -d\":\" -f2");
+// echo "<TD align=\"center\">$unattended_version_install</TD>";
+// if ("$unattended_version_install" == "$unattended_version_dispo") {
+// 	echo "<TD align=\"center\">";
+// 	echo "<u onmouseover=\"return escape".gettext("('Pas de nouvelle version de ce module')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\"></u>";
+// 	echo "</TD>";
+// } else {
+// 	echo "<TD align=\"center\">";
+// 	echo "<u onmouseover=\"return escape".gettext("('Mise &#224; jour version $unattended_version_dispo disponible.<br>Cliquer ici pour lancer la mise &#224; jour de ce module.')")."\"><a href=conf_modules.php?action=update&varb=unattended&valeur=1><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/warning.png\"></a></u>";
+// 	echo "</TD>";
+// }
+// 
+// echo "<TD align=\"center\">";
+// if (($unattended!="1") || ($unattended_actif !="1")) {
+// 	if($clonage!="1") { $unattended_alert="onClick=\"alert('L'installation ne peut fonctionner qu\'avec un serveur tftp actif. Vous devrez donc activer celui de Se3 en activant le module Clonage.')\""; }
+// 	if($unattended_actif!="1") {
+// 		$unattended_message=gettext("<b>Attention : </b>Le paquet n\'est pas install&#233; sur ce serveur. Cliquer sur la croix rouge pour l\'installer.");
+// 		$unattended_alert="onClick=\"alert('Installation du packet se3-unattended. Cela peut prendre un peu de temps. Vous devez avoir une connexion internet active')\"";
+// 	} else {
+// 		$unattended_message=gettext("<b>Etat : D&#233;sactiv&#233;</b><br>Cliquer sur la croix rouge pour activer ce module. <br>Pour en savoir plus sur ce module voir la documentation en ligne.");
+// 	}
+// 	echo "<u onmouseover=\"return escape('".$unattended_message."')\">";
+// 	echo "<a href=conf_modules.php?action=change&varb=unattended&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" \"$unattended_alert\"></a>";
+// 	echo "</u>";
+// } else {
+// 	echo "<u onmouseover=\"return escape".gettext("('<b>Etat : Activ&#233;</b><br><br>Module d\'installation de stations actif')")."\">";
+// 	echo "<a href=conf_modules.php?action=change&varb=unattended&valeur=0><IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" ></a>";
+// 	echo "</u>";
+// }
+// echo "</td></tr>\n";
 
 // Module wpkg
 $wpkg_actif = exec("dpkg -s se3-wpkg | grep \"Status: install ok\" > /dev/null && echo 1");
