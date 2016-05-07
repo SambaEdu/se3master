@@ -46,7 +46,7 @@ echo "<h1>".gettext("Correction de probl&#232;mes")."</h1>\n";
 if (isset($action)) {
     if ($action == "rmprofiles") {
         echo "<h2>".gettext("Reg&#233;n&#233;rer les profils errants Windows...")."</h2>";
-        system("sudo /usr/share/se3/sbin/clean_profiles.sh");
+        system("sudo /usr/share/se3/sbin/clean_profiles.sh all");
     }
     if ($action == "permse3") {
         echo "<h2>".gettext("Remise en place des droits syst&#232;me...")."</h2>";
@@ -114,7 +114,7 @@ else {
 	echo "<a href=\"fix_se3.php?action=adminse3pass\" onClick=\"alert('Vous allez afficher un mot de passe important, attention aux regards indiscrets !!');\">".gettext("Afficher le mot de passe adminse3")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des lenteurs de connexions')")."\"><img name=\"action_image1\"  src=\"../elements/images/system-help.png\"></u><br>";
     }
     echo "<a href=\"fix_se3.php?action=adminse3_rest\">".gettext("Remise en place des droits d'int&#233;gration pour adminse3")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des probl&#232;mes d\'int&#233;gration des postes Windows')")."\"><img name=\"action_image4\"  src=\"../elements/images/system-help.png\"></u><br>";
-        echo "<a href=\"fix_se3.php?action=rmprofiles\" onclick=\"return getlongconfirm();\">".gettext("Supprimer l'ensemble des profils Windows")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des lenteurs de connexions')")."\"><img name=\"action_image1\"  src=\"../elements/images/system-help.png\"></u><br>";
+        echo "<a href=\"fix_se3.php?action=rmprofiles\" onclick=\"return getlongconfirm();\">".gettext("Reg&#233;n&#233;rer l'ensemble des profils errants Windows")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des lenteurs de connexions')")."\"><img name=\"action_image1\"  src=\"../elements/images/system-help.png\"></u><br>";
     echo "<a href=\"fix_se3.php?action=permse3\" onclick=\"return getlongconfirm();\">".gettext("Remise en place des droits syst&#232;me par d&#233;faut")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des dysfonctionnements dans l\'interface ou lors des connexions')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u><br>";
     echo "<a href=\"fix_se3.php?action=restore_droits\" onclick=\"return getlongconfirm();\">".gettext("Remise en place des droits sur les comptes utilisateurs")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des probl&#232;mes de droits pour les utilisateurs')")."\"><img name=\"action_image3\"  src=\"../elements/images/system-help.png\"></u><br>";
 	echo "<a href=\"fix_se3.php?action=test_profiles\">".gettext("Recherche des profils Windows 7 d&#233;faillants")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous recherchez les sessions corompues')")."\"><img name=\"action_image3\"  src=\"../elements/images/system-help.png\"></u><br>";
