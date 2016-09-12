@@ -1,7 +1,7 @@
 #!/usr/bin/php
 
 <?php
-	/* $Id$ */
+	/* $Id: import_comptes.php 9509 2016-08-31 21:50:56Z keyser $ */
 	/*
 		Page d'import des comptes depuis les fichiers CSV/XML de Sconet
 		Auteur: Stéphane Boireau (ex-Animateur de Secteur pour les TICE sur Bernay/Pont-Audemer (27))
@@ -13,7 +13,7 @@
 	include "se3orlcs_import_comptes.php";
 
 	// $debug_import_comptes peut être initialisée dans se3orlcs_import_comptes.php
-	$debug_import_comptes="y";
+	//$debug_import_comptes="y";
 
 	// Choix de destination des my_echo():
 	$dest_mode="file";
@@ -777,6 +777,8 @@
 				"ELENOET",
 				"ID_ELEVE_ETAB",
 				"NOM",
+				"NOM_USAGE",
+				"NOM_DE_FAMILLE",
 				"PRENOM",
 				"DATE_NAISS",
 				"DOUBLEMENT",
@@ -1026,6 +1028,14 @@
 				my_echo("</tr>\n");
 				$i=0;
 				while($i<count($eleves)) {
+					// Pour tenir compte de la modif Sconet de l'été 2016
+					if(isset($eleves[$i]['nom_usage'])) {
+						$eleves[$i]['nom']=$eleves[$i]['nom_usage'];
+					}
+					elseif(isset($eleves[$i]['nom_de_famille'])) {
+						$eleves[$i]['nom']=$eleves[$i]['nom_de_famille'];
+					}
+
 					my_echo("<tr>\n");
 					//my_echo("<td style='color: blue;'>$cpt</td>\n");
 					//my_echo("<td style='color: blue;'>&nbsp;</td>\n");
