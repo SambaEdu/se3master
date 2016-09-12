@@ -35,8 +35,8 @@ do
     UPDATENB=$((UPDATENB + 1))
 done
 
-sed -i -e "s/#VERSION#/${VERSION}/g"    \
-       -e "s/#UPDATENBR#/${UPDATENB}/g" \
+sed -i -e "s/#VERSION#/${VERSION}/g" \
+       -e "s/#MAJNBR#/${UPDATENB}/g" \
        "${PKGDIR}/var/cache/se3_install/se3db.sql"
 
 echo "Version ${VERSION} du $(date)" > "${PKGDIR}/var/cache/se3_install/version"
