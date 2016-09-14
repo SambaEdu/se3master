@@ -39,7 +39,7 @@ else
 			getent passwd $1$>/dev/null && TYPE="XP"
 			if [ "$TYPE" = "XP" ]; then
 				echo "<br><h2>Action sur : $1</h2><br>"
-				if [ "$2" = "shutdown" ]; then
+				if [ "$2" = "shutdown" -o "$2" = "stop"  ]; then
 					echo "<h3>Tentative d'arrêt de la machine $1</h3><br>"
                                         ldapsearch  -xLLL -b ${computersRdn},${ldap_base_dn} cn=$1 '(objectclass=ipHost)' ipHostNumber | grep ipHostNumber: | sed "s/ipHostNumber: //g" | while read I
                                         do
@@ -79,7 +79,7 @@ else
 					done
 				fi
 
-					if [ "$2" = "shutdown" ]; then
+					if [ "$2" = "shutdown" -o "$2" = "stop" ]; then
 						echo "<h3>Tentative d'arret de la machine $1</h3><br>"
 						/usr/bin/ssh -o StrictHostKeyChecking=no $1 halt
 					fi
