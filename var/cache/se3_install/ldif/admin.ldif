@@ -2,6 +2,7 @@ dn: uid=admin,ou=#PEOPLE#,#BASEDN#
 uid: admin
 cn: Administrateur SE3
 sn: SE3
+gecos: Administrateur  Se3,00000000,M,N
 mail: admin@#DOMAIN#
 objectClass: top
 objectClass: posixAccount
