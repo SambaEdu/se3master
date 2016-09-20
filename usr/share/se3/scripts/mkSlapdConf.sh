@@ -1,9 +1,7 @@
 #!/bin/bash
 
 #
-## $Id$ ##
-
-
+## $Id: mkSlapdConf.sh 9246 2016-03-18 12:19:06Z keyser $ ##
 #
 ##### Met en place la replication LDAP avec syncrepl #####
 
@@ -32,7 +30,7 @@ fi
 # Permettre un retour sur l'annuaire local
 if [ "$1" = "-r" ]
 then
-        CHANGEMYSQL replica_ip ""
+    CHANGEMYSQL replica_ip ""
 	CHANGEMYSQL replica_status "0"
 	CHANGEMYSQL ldap_server "127.0.0.1"
 # 
@@ -43,6 +41,16 @@ then
 	echo "Annuaire replace en mode annuaire local"
 fi
 
+# Conf meta annuaire Rouen
+if [ "$1" = "metarouen" ]
+then
+	replica_ip="172.30.192.87"
+	replica_status="3"
+	echo "mise en place de la replication meta annuaire rouennaise"
+    CHANGEMYSQL replica_ip "$replica_ip"
+	CHANGEMYSQL replica_status "$replica_status"
+fi
+	
 #
 ## Version Debian
 if [ -e /etc/debian_version ]
