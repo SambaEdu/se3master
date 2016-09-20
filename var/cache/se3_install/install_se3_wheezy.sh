@@ -6,14 +6,7 @@
 # Ce script est diftribué selon les termes de la licence GPL
 # **********************************************************
 
-# Adaptation pour lenny keyser - Mars 2010
-# Activation mode debug
-# Ajout test carte rezo != eth0
-# modif PHPINI="/etc/php5/apache2/php.ini"
-# modif conf ldap pour utiliser script mkSlapdCfonf.sh
-# LDAPGRP="root" averifier
-# modif mrtg
-# modif $INITDAPACHE
+
 
 #$Id: install_se3_.sh 3911 2009-05-15 07:28:41Z gnumdk $
 
@@ -889,20 +882,54 @@ fi
 	echo "Démarrage du serveur Samba..."
 	echo -e "$COLCMD\c "
 	$INITDSAMBA start
+	sleep 2
 	# Renseignement du SID du domaine
 	# Et Renseignement des comptes root et admin samba
 	echo -e "$COLTXT"
 	echo "Renseignement du SID du domaine, des comptes root et admin Samba..."
 	echo -e "$COLCMD\c "
 	let gid1=2*$defaultgid+1001
-	DOMAINSID=`net getlocalsid 2>/dev/null | cut -d: -f2 | sed -e "s/ //g"`
+# 	DOMAINSID=`net getlocalsid 2>/dev/null | cut -d: -f2 | sed -e "s/ //g"`
+	DOMAINSID=$(net getlocalsid | cut -d: -f2 | tr -d "[:space:]")
+	sleep 1
+
 	if [ ! "$rep_1T" = "n" ]; then
-		cat ldif/root.ldif | sed -e "s/#BASEDN#/$BASEDN/g" > ldif/root.ldif.2
-		cat ldif/admin.ldif | sed -e "s/#BASEDN#/$BASEDN/g" | sed -e "s/#PEOPLE#/$PEOPLER/g" | sed -e "s/#DOMAIN#/$DOMNAME/g" | sed -e "s/#DEFAULTGID#/$defaultgid/g" | sed -e "s/#GID1#/$gid1/g" >>ldif/root.ldif.2
-		/usr/share/se3/sbin/convertSambaAccount --sid $DOMAINSID --input ldif/root.ldif.2 --output /root/root.ldif.3
-		ldapadd -x -c -D "$ADMINRDN,$BASEDN" -w $ADMINPW -f /root/root.ldif.3
-		sed -e "s/#BASEDN#/$BASEDN/g;s/#DOMAINSID#/$DOMAINSID/g;s/#GROUPS#/$GROUPSR/g;s/#PEOPLE#/$PEOPLERDN/g" ldif/Samba.ldif > /root/Samba.ldif
-		ldapadd -x -c -D "$ADMINRDN,$BASEDN" -w $ADMINPW -f /root/Samba.ldif
+# 		DOMAINSID=""
+		if [ -z "$DOMAINSID" ]; then 
+			echo "Attention la variable DOMAINSID est vide !!!"
+			echo "voici le résultat de la commande net getlocalsid"
+			net getlocalsid
+			echo "coller un ancien sid valide dans la console ou bien laisser vide pour appliquer le sid valide suivant :"
+			echo "S-1-5-21-3271951266-3673128075-3782327119"
+			read DOMAINSID
+			[ -z "$DOMAINSID" ] && DOMAINSID="S-1-5-21-3271951266-3673128075-3782327119"
+			$INITDSAMBA stop
+			net setlocalsid $DOMAINSID
+			sleep 1
+			/usr/share/se3/scripts/correctSID.sh -sq
+			$INITDSAMBA start
+	
+		fi	
+	
+		if [ ! -e ldif/root-smb.ldif ]; then
+			sed -e "s/#BASEDN#/$BASEDN/g" ldif/root.ldif > ldif/root.ldif.2
+			sed -e "s/#BASEDN#/$BASEDN/g" \
+				-e "s/#PEOPLE#/$PEOPLER/g" \
+				-e "s/#DOMAIN#/$DOMNAME/g" \
+				-e "s/#DEFAULTGID#/$defaultgid/g" \
+				-e "s/#GID1#/$gid1/g" ldif/admin.ldif  >>ldif/root.ldif.2
+			/usr/share/se3/sbin/convertSambaAccount --sid $DOMAINSID --input ldif/root.ldif.2 --output ldif/install.ldif
+		else
+			sed -e "s/#BASEDN#/$BASEDN/g" \
+				-e "s/#PEOPLE#/$PEOPLER/g" \
+				-e "s/#DOMAIN#/$DOMNAME/g" \
+				-e "s/#DEFAULTGID#/$defaultgid/g" \
+				-e "s/#SID#/$DOMAINSID/g" \
+				-e "s/#GID1#/$gid1/g" ldif/root-smb.ldif >ldif/install.ldif
+		fi
+		ldapadd -x -c -D "$ADMINRDN,$BASEDN" -w $ADMINPW -f ldif/install.ldif
+		sed -e "s/#BASEDN#/$BASEDN/g;s/#DOMAINSID#/$DOMAINSID/g;s/#GROUPS#/$GROUPSR/g;s/#PEOPLE#/$PEOPLERDN/g" ldif/Samba.ldif > ldif/Samba.ldif.2
+		ldapadd -x -c -D "$ADMINRDN,$BASEDN" -w $ADMINPW -f ldif/Samba.ldif.2
 		
 		echo -e "$COLTXT"
 		echo "Mappage des groupes..."
@@ -1103,6 +1130,7 @@ rm  -f /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.js
 
 # Instanciation
 echo "Instanciation en cours..."
+/usr/share/se3/includes/config.inc.sh -clpbmsdf 
 /usr/share/se3/sbin/instance_se3.sh 
 
 # Relance apache2se
