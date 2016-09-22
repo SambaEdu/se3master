@@ -1024,7 +1024,7 @@ function smbstatus() {
 		exec("sudo smbstatus -b 2>/dev/null", $resultat);
 		foreach ($resultat as $ligne) {
 			$table = preg_split("/[\s]+/", $ligne);
-			if ((count($table) == 5) && ($table[1] != root) && ($table[1] != nobody) && (preg_match("/(.+)\\$/", $table[1]) === 0)) {
+			if ((count($table) == 8) && ($table[1] != root) && ($table[1] != nobody) && (preg_match("/(.+)\\$/", $table[1]) === 0)) {
 	                        $mp_curr=search_machines("(&(ipHostNumber=$table[3])(objectClass=ipHost))","computers");
         	                if (isset($mp_curr[0]["cn"])) {
                 	                $hostname=$mp_curr[0]["cn"];
