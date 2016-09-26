@@ -443,23 +443,6 @@
 
 					}
 				}});
-				
-
-				$('check_ftp').src = '../elements/images/spinner.gif';
-					//FTP
-					var url5 = './tests/test_ftp.php';
-					var params5 = '';
-					var method5 = 'post';
-					var ajax33 = new Ajax.Request(url5,{ method: method5, parameters: params5, onSuccess: function(requester){
-					var reponse5 = requester.responseText;	
-					if(reponse5 == '1') {
-						$('check_ftp').src = '../elements/images/recovery.png';
-						$('check_ftp').onmouseover= function(){ return false; };
-
-					}
-					else
-						$('check_ftp').src = '../elements/images/critical.png';
-					}});
 
 
 					//WEB
