@@ -188,12 +188,12 @@ function fping($ip)
 // port 445 pour les win et 22 pour les linux
 // renvoit 1 si ok
 
-	exec("/usr/share/se3/sbin/tcpcheck 0.5 $ip:445 | grep alive",$arrval,$ret);
+	exec("/usr/share/se3/sbin/tcpcheck 1 $ip:445 | grep alive",$arrval,$ret);
     if ( $ret != "1" ) {
         return 1;
     }
     else	{
-			exec("/usr/share/se3/sbin/tcpcheck 0.5 $ip:22 | grep alive",$arrval,$ret);
+			exec("/usr/share/se3/sbin/tcpcheck 1 $ip:22 | grep alive",$arrval,$ret);
 			if ( $ret != "1" ) {
 				return 1;
 			}
@@ -1014,7 +1014,11 @@ function suppr_inventaire($name)
  */
 
 function smbstatus() {
+       	while (apc_fetch('smb_lock')) {
+                sleep(1);
+       	}
 	if (!($data=apc_fetch('smb_login'))) {
+		apc_add('smb_lock',1,60);
 		unset($data);
 		require_once ("ldap.inc.php");
 		exec("sudo smbstatus -b 2>/dev/null", $resultat);
@@ -1030,6 +1034,7 @@ function smbstatus() {
 			}
 		}
 		apc_add('smb_login', $data, 120);
+		apc_delete('smb_lock');
 	}
 	return($data);
 }
