@@ -78,12 +78,6 @@ function init_default_msg() {
 			
 		}
 
-		$('help_ftp_se3').onmouseover= function() {
-			UnTip();
-			Tip(msg_ftp_info,WIDTH,250,SHADOW,true,DURATION,duration);
-			this.onmouseout=function() { UnTip(); }
-
-		}
 
 		$('help_web_se3').onmouseover= function() {
 			UnTip();
@@ -187,11 +181,6 @@ function init_default_msg() {
                 $('check_clonage').onmouseover= function() {
 			UnTip();
 			Tip(msg_clonage_nocx,WIDTH,250,SHADOW,true,DURATION,duration);
-			this.onmouseout=function() { UnTip(); }
-		}
-		$('check_ftp').onmouseover= function() {
-			UnTip();
-			Tip(msg_ftp_nocx,WIDTH,250,SHADOW,true,DURATION,duration);
 			this.onmouseout=function() { UnTip(); }
 		}
 		$('check_web').onmouseover= function() {

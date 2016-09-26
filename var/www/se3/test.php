@@ -173,6 +173,7 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 
 	$os=exec("cat /etc/debian_version | cut -d. -f1-2");
 	$vers=exec("dpkg -s se3|grep Version|cut -d ' ' -f2");
+	$samba_version=exec("dpkg -s samba|grep Version|cut -d ':' -f3|cut -d '+' -f1");
 ?>
 
         <center><TABLE border="1" width="80%"><TR><TD colspan="3" align="center" class="menuheader">
@@ -181,6 +182,12 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 	if ($os=="6.0") { echo "Squeeze"; } else { echo "Wheezy"; } echo "<I> <img src=\"../elements/images/debian.png\">($os)</I></TD></TR>\n";
 ?>
 	</TD>
+	</TR>
+	<TR>
+		<TD>Version de Samba</TD>
+		<TD align="center" colspan="2">
+			<?php echo $samba_version; ?>
+		</TD>
 	</TR>
 	<TR>
 		<TD>Mise &#224; jour de votre serveur Se3 <I>(Version actuelle <?php echo $vers; ?>)</I></TD>
@@ -269,13 +276,6 @@ if (ldap_get_right("se3_is_admin",$login)!="Y")
 		<TD align="center"><IMG id="check_dns_se3" style="border: 0px solid ;" SRC="../elements/images/info.png"></TD>
 		<TD align="center">
 			<a id="help_dns2_se3"><img name="action_image2"  src="../elements/images/system-help.png"></a>
-		</TD>
-	</TR>
-	<TR>
-		<TD>Connexion au serveur FTP de mises &#224; jour <I>(<?php echo $ftpmaj ?>)</I></TD>
-		<TD align="center"><IMG id="check_ftp" style="border: 0px solid ;" SRC="../elements/images/info.png"></TD>
-		<TD align="center">
-			<a id="help_ftp_se3"><img name="action_image2"  src="../elements/images/system-help.png"></a>
 		</TD>
 	</TR>
 
