@@ -26,9 +26,9 @@ textdomain ('se3-core');
 
     $liens1=array(array(
 
-        gettext("Liste des parcs"),"parcs/show_parc.php","computers_is_admin",1,
-		gettext("Gestion des parcs"),"computers_is_admin|parc_can_manage|parc_can_view",1,
-      	gettext("Action"),"parcs/action_parc.php","computers_is_admin|parc_can_manage|parc_can_view",1,
+        gettext("Gestion des parcs"),"computers_is_admin|parc_can_manage|parc_can_view",1,
+		gettext("Liste des parcs"),"parcs/show_parc.php","computers_is_admin",1,
+		gettext("Action"),"parcs/action_parc.php","computers_is_admin|parc_can_manage|parc_can_view",1,
 		gettext("Programmer"),"parcs/wolstop_station.php?action=timing","computers_is_admin",1,
       	gettext("Recherche"),"parcs/cherche_machine.php","computers_is_admin",1,
         gettext("Ajout et cr&#233;ation"),"parcs/create_parc.php","computers_is_admin",1,
