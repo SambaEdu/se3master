@@ -374,10 +374,9 @@ function open_session($login, $passwd,$al)
     $auth_ldap=0;
 
     if (($al!=1)&&("$autologon"=="1")){
-
-		$logintstsecu=exec("smbstatus -p | grep \"(".$_SERVER['REMOTE_ADDR'].")\" | grep -v root | grep -v nobody | grep -v adminse3  | grep -v unattend | wc -l");
+		$logintstsecu=exec("sudo smbstatus -p | grep \"".$_SERVER['REMOTE_ADDR']."\" | grep -v root | grep -v nobody | grep -v adminse3  | grep -v unattend | wc -l");
 		if ("$logintstsecu" == "1") {
-			$loginauto=exec("smbstatus -p |gawk '{if ($5==\"(".$_SERVER['REMOTE_ADDR'].")\") if ( ! index(\" root nobody unattend adminse3 \", \" \" $2 \" \")) {print $2;exit}}'");
+			$loginauto=exec("sudo smbstatus -p |gawk '{if ($5==\"(".$_SERVER['REMOTE_ADDR'].")\") if ( ! index(\" root nobody unattend adminse3 \", \" \" $2 \" \")) {print $2;exit}}'");
 		}
 
         # echo $loginauto . " __ smbstatus | grep $REMOTE_ADDR | grep home\  | head -n 1 | gawk -F' ' '{print $2}'";
