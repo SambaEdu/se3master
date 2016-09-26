@@ -132,7 +132,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 
 	$parc=$_POST['parc'];
 	if (!$parc) { $parc=$_GET['parc'];}
-	if (!$parc && action!='timing') { echo "<div id=main>choisir un parc</div>"; exit; }
+	if (!$parc && $action!='timing') { echo "<div id=main>choisir un parc</div>"; exit; }
 	if ($acces_restreint)  {  if ((!this_parc_delegate($login,$parc,"manage")) and (!this_parc_delegate($login,$parc,"view"))) { exit; } }
 
 	//$force=$_POST['force'];
