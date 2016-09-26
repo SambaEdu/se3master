@@ -311,26 +311,6 @@ function testMaintenance($mpenc) { // Retourne si une machine a une demande de m
 	}
 }	
 
-
-
-   /**
-
-   * Fonctions qui retourne le login de la connexion en cours ou 0 
-	
-   * @Parametres  Nom de la machine 
-
-   * @Return Le login de la connexion en cours sur la machine ou 0 si pas de connexion
-	
-  */
-  
-function connexion_smb($mpenc) { //Retourne le login de la connexion en cours ou 0
-	$ip=avoir_ip($mpenc);
-	$connect_smb = exec("smbstatus | grep '($ip)' | cut -d' ' -f5");
-	if ($connect_smb!="") { return $connect_smb; } 
-}
-
-
-
    /**
 
    Fonctions qui retourne la date du dernier inventaire 
