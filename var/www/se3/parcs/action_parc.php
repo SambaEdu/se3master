@@ -257,7 +257,9 @@ if ((is_admin("computers_is_admin", $login) == "Y") or (is_admin("parc_can_view"
                                     if($retourOs == "0") { $icone="computer_disable.png"; }
                                     elseif($retourOs == "Linux") { $icone="linux.png"; }
                                     elseif($retourOs == "XP") { $icone="winxp.png"; }
-                                     elseif($retourOs == "7") { $icone="win7.png"; }
+                                    elseif($retourOs == "7") { $icone="win7.png"; }
+                                    elseif($retourOs == "10") { $icone="win10.png"; }
+                                    elseif($retourOs == "vista") { $icone="winvista.png"; }
                                     elseif($retourOs == "98") { $icone="win.png"; }
                                     else { $icone="computer_disable.png"; }
                                     $ip=avoir_ip($mpenc);

@@ -70,7 +70,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 	$list_parcs=search_machines("objectclass=groupOfNames","parcs");
 	if ( count($list_parcs)>0) {
 		sort($list_parcs);
-		echo "<FORM method=\"post\" action=\"show_parc.php\">\n";
+		echo "<center><FORM method=\"post\" action=\"show_parc.php\">\n";
 		echo "<SELECT NAME=\"parc\" SIZE=\"1\" onchange=submit()>";
 		echo "<option value=\"\">S&#233;lectionner</option>";
 		for ($loop=0; $loop < count($list_parcs); $loop++) {
@@ -81,7 +81,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		}
 		echo "</SELECT>&nbsp;&nbsp;\n";
 
-		echo "</FORM>\n";
+		echo "</FORM></center>\n";
 	} else {
 		echo "<center>";
 		echo "Il n'existe encore aucun parc";
@@ -343,13 +343,15 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		                        elseif($retourOs == "Linux") { $icone="linux.png"; }
 		                        elseif($retourOs == "XP") { $icone="winxp.png"; }
 		                        elseif($retourOs == "7") { $icone="win7.png"; }
+		                        elseif($retourOs == "10") { $icone="win10.png"; }
+		                        elseif($retourOs == "vista") { $icone="winvista.png"; }
 		                        elseif($retourOs == "98") { $icone="win.png"; }
 		                        else { $icone="computer_disable.png"; }
 					$ip=avoir_ip($mpenc);
-					echo "<td><img style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"".$retourOs." - ".$ip."\" alt=\"$retourOs\" WIDTH=20 HEIGHT=20 onclick=\"popuprecherche('../ocsreports/machine.php?sessid=$sessid&systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=500');\">";
+					echo "<td align='center'><img style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"".$retourOs." - ".$ip."\" alt=\"$retourOs\" WIDTH=20 HEIGHT=20 onclick=\"popuprecherche('../ocsreports/machine.php?sessid=$sessid&systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=500');\">";
 				}
 				else
-					echo "<td><img style=\"border: 0px solid ;\" src=\"../elements/images/computer.png\" alt=\"Ordinateur\" WIDTH=20 HEIGHT=20 >";
+					echo "<td align='center'><img style=\"border: 0px solid ;\" src=\"../elements/images/computer.png\" alt=\"Ordinateur\" WIDTH=20 HEIGHT=20 >";
 				
 				
 				// On selectionne la machine prof

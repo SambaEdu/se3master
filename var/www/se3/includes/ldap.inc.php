@@ -690,6 +690,7 @@ function search_machines($filter, $branch) {
         $r = @ldap_bind($ds); // Bind anonyme
         if ($r) {
             $result = @ldap_list($ds, $dn[$branch], $filter, $ldap_computer_attr);
+			@ldap_sort($ds, $result, "cn");
             if ($result) {
                 $info = @ldap_get_entries($ds, $result);
                 if ($info["count"]) {

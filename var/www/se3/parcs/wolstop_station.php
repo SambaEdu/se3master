@@ -116,9 +116,6 @@ $_SESSION["pageaide"]="Gestion_des_parcs#Action_sur_parcs";
 if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$login)=="Y") or (is_admin("parc_can_manage",$login)=="Y") or (is_admin("inventaire_can_read",$login)=="Y")) {
 
 
-	echo "<h1>".gettext("Action sur parc")."</h1>";
-
-
 	//affichage de la suite
 	// echo "<div id=main>";
 
@@ -135,7 +132,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 
 	$parc=$_POST['parc'];
 	if (!$parc) { $parc=$_GET['parc'];}
-	if (!$parc) { echo "<div id=main>choisir un parc</div>"; exit; }
+	if (!$parc && action!='timing') { echo "<div id=main>choisir un parc</div>"; exit; }
 	if ($acces_restreint)  {  if ((!this_parc_delegate($login,$parc,"manage")) and (!this_parc_delegate($login,$parc,"view"))) { exit; } }
 
 	//$force=$_POST['force'];
@@ -147,6 +144,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 	case "stop":
 		if (($parc)  and ($parc<>"SELECTIONNER")) {
 			if ($acces_restreint)  {  if ((!this_parc_delegate($login,$parc,"manage")) and (!this_parc_delegate($login,$parc,"view"))) { continue; } }
+			echo "<h1>".gettext("Extinction des machines")."</h1>";
 			echo "<HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"15; URL=action_parc.php?parc=$parc&action=detail\">";
 			echo "</HEAD>".gettext("Commandes prises en compte pour le parc")." <b>$parc</b><br>";
 //        		echo gettext("! <br>");
@@ -163,6 +161,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 	case "reboot":
 		if (($parc)  and ($parc<>"SELECTIONNER")) {
 			if ($acces_restreint)  {  if ((!this_parc_delegate($login,$parc,"manage")) and (!this_parc_delegate($login,$parc,"view"))) { continue; } }
+			echo "<h1>".gettext("Redémarrage des machines")."</h1>";
 			echo "<HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"15; URL=action_parc.php?parc=$parc&action=detail\">";
 			echo "</HEAD>".gettext("Commandes prises en compte pour le parc")." <b>$parc</b><br>";
 //        		echo gettext(" Commandes prises en compte ! <br>");
@@ -179,6 +178,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 	case "start":
 		if (($parc)  and ($parc<>"SELECTIONNER")) {
 			if ($acces_restreint)  {  if ((!this_parc_delegate($login,$parc,"manage")) and (!this_parc_delegate($login,$parc,"view"))) { continue; } }
+			echo "<h1>".gettext("Démarrage des machines")."</h1>";
   			echo "<HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"15; URL=action_parc.php?parc=$parc&action=detail\">";
 			echo "</HEAD>".gettext("Commandes prises en compte pour le parc")." <b>$parc</b><br>";
 //			echo "Commandes prises en compte ! ";
@@ -232,7 +232,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 // et demarrages des stations
 case "timing" :
 
-
+		echo "<h1>".gettext("Programmation de l'allumage et de l'extinction des machines")."</h1>";
 		$list_parcs=search_machines("objectclass=groupOfNames","parcs");
         	if ( count($list_parcs)>0) {
 	                sort($list_parcs);
@@ -295,9 +295,10 @@ case "timing" :
 	echo "<table align=center width=\"60%\">\n";
 	echo "<tr><TD height=\"30\" align=\"center\" class=\"menuheader\" >\n";
       	echo gettext("Allumer les postes ( uniquement avec l'option wake on lan )")."</TD></tr>\n";
-        echo "<TR><TD height=\"30\" align=\"center\" class=\"menuheader\" >".gettext("Eteindre les postes ( uniquement postes XP/2000 )")."</TD></TR>\n";
+        echo "<TR><TD height=\"30\" align=\"center\" class=\"menuheader\" >".gettext("Eteindre les postes")."</TD></TR>\n";
 	echo "</table>\n";
 
+	if (($parc!="") && ($parc!="SELECTIONNER")) {
 	$type_action="wol";
 	$type_action2="stop";
 
@@ -426,7 +427,7 @@ case "timing" :
 	echo "<input type=\"submit\" value=\"".gettext("Enregistrer mes modifications")."\" />";
 	echo "</form><br><br></td></tr>\n";
 	echo "</table>\n";
-
+	}
 break;
 
 

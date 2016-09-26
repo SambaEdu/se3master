@@ -60,7 +60,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 	if ((!isset($parc))&&(!isset($newparc))) {
 		// Ajout de nouvelles machines dans les parcs
 		echo "<H3>".gettext("S&#233;lection du parc &#224; alimenter")."</H3>";
-		$list_parcs=search_machines("objectclass=groupOfNames","parcs");
+		$list_parcs=("objectclass=groupOfNames","parcs");
 		if ( count($list_parcs)>0) {
 			echo "<FORM method=\"post\" action=\"create_parc.php\">\n";
 			echo "<SELECT NAME=\"parc\" SIZE=\"1\">";

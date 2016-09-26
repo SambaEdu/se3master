@@ -108,6 +108,9 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 						elseif($retourOs == "Linux") { $icone="linux.png"; }
 						elseif($retourOs == "XP") { $icone="winxp.png"; }
 						elseif($retourOs == "98") { $icone="win.png"; }
+						elseif($retourOs == "10") { $icone="win10.png"; }
+						elseif($retourOs == "vista") { $icone="winvista.png"; }
+						elseif($retourOs == "7") { $icone="win7.png"; }
 						else { $icone="computer.png"; }
 					}
 
