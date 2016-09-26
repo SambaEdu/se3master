@@ -70,7 +70,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 	$list_parcs=search_machines("objectclass=groupOfNames","parcs");
 	if ( count($list_parcs)>0) {
 		sort($list_parcs);
-		echo "<center><FORM method=\"post\" action=\"show_parc.php\">\n";
+		echo "<FORM method=\"post\" action=\"show_parc.php\">\n";
 		echo "<SELECT NAME=\"parc\" SIZE=\"1\" onchange=submit()>";
 		echo "<option value=\"\">S&#233;lectionner</option>";
 		for ($loop=0; $loop < count($list_parcs); $loop++) {
@@ -81,7 +81,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		}
 		echo "</SELECT>&nbsp;&nbsp;\n";
 
-		echo "</FORM></center>\n";
+		echo "</FORM>\n";
 	} else {
 		echo "<center>";
 		echo "Il n'existe encore aucun parc";
