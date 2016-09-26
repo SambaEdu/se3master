@@ -4,7 +4,7 @@
    /**
    
    * Librairie de fonctions utilisees dans l'interface d'administration parcs
-   * @Version $Id$ 
+   * @Version $Id: fonc_parc.inc.php 9137 2016-01-28 00:17:06Z keyser $ 
    
    * @Projet LCS / SambaEdu 
    
@@ -188,12 +188,12 @@ function fping($ip)
 // port 445 pour les win et 22 pour les linux
 // renvoit 1 si ok
 
-	exec("/usr/share/se3/sbin/tcpcheck 1 $ip:445 | grep alive",$arrval,$ret);
+	exec("/usr/share/se3/sbin/tcpcheck 0.5 $ip:445 | grep alive",$arrval,$ret);
     if ( $ret != "1" ) {
         return 1;
     }
     else	{
-			exec("/usr/share/se3/sbin/tcpcheck 1 $ip:22 | grep alive",$arrval,$ret);
+			exec("/usr/share/se3/sbin/tcpcheck 0.5 $ip:22 | grep alive",$arrval,$ret);
 			if ( $ret != "1" ) {
 				return 1;
 			}
@@ -479,13 +479,9 @@ function detail_parc($parc)
 			// On ne rentre dedans que si on est pas une imprimante
 
 			if ($suisje_printer!="1") {
-				$login=exec ("smbstatus -b | grep $iphost |gawk -F' ' '{print $2}' |head -n1");
-        			if ($login=="") {
-					$etat_session="<img type=\"image\" src=\"../elements/images/disabled.png\">\n";
-				} else {
-        				$etat_session="<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape('$login est actuellement connect&#233; sur ce poste')\"><img type=\"image\" src=\"../elements/images/enabled.png\"></u>\n";
-        			}
-       	
+				$smb_sess=get_smbsess($mp_en_cours);
+				$etat_session=$smb_sess['html'];
+
 				if (isset($mp_curr[0]["ipHostNumber"])) {
                   			$iphost=$mp_curr[0]["ipHostNumber"];
                   			$ping=fping($iphost);
@@ -514,6 +510,9 @@ function detail_parc($parc)
 					elseif($retourOs == "Linux") { $icone="linux.png"; }
 					elseif($retourOs == "XP") { $icone="winxp.png"; }
 					elseif($retourOs == "98") { $icone="win.png"; }
+                                        elseif($retourOs == "7") { $icone="win7.png"; }
+                                        elseif($retourOs == "10") { $icone="win10.png"; }
+                                        elseif($retourOs == "vista") { $icone="winvista.png"; }
 				
 					echo "<td align=\"center\">\n";
 					echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" onclick=\"popuprecherche('../ocsreports/machine.php?sessid=$sessid&amp;systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=500');\"  title=\"Station\" alt=\"Station\"></TD>";
@@ -1008,40 +1007,31 @@ function suppr_inventaire($name)
 
 /*
  * fonction generant un tableau global a partir de smbstatus
- * on cache le resultat 2 minutes afin de reduire la charge
+ * on cache le resultat avec apc 2 minutes afin de reduire la charge
  * @Parametres : aucun
- * @ smb_status["machine"]["login"]
- *                        ["ip"]
+ * @ smbstatus["machine"]["login"=>]
+ *                        ["ip"=>]
  */
 
 function smbstatus() {
-	static $smb_login;
-	static $timestamp;
-	if ((time() > ($timestamp + 120)) || !(isset($smb_login))) {
-		$timestamp = time();
-		unset($smb_login);
+	if (!($data=apc_fetch('smb_login'))) {
+		unset($data);
 		require_once ("ldap.inc.php");
 		exec("sudo smbstatus -b 2>/dev/null", $resultat);
 		foreach ($resultat as $ligne) {
 			$table = preg_split("/[\s]+/", $ligne);
 			if ((count($table) == 8) && ($table[1] != root) && ($table[1] != nobody) && (preg_match("/(.+)\\$/", $table[1]) === 0)) {
-	                        $mp_curr=search_machines("(&(ipHostNumber=$table[3])(objectClass=ipHost))","computers");
+	                        $mp_curr=search_machines("(&(|(ipHostNumber=$table[3])(cn=$table[3]))(objectClass=ipHost))","computers");
         	                if (isset($mp_curr[0]["cn"])) {
                 	                $hostname=$mp_curr[0]["cn"];
-					$smb_login[$hostname]["login"] = $table[1];
-					$smb_login[$hostname]["ip"] = preg_replace("/[\(\)]/", "", $table[3]);
-				} else {
-	                                $mp_curr=search_machines("(&(cn=$table[3])(objectClass=ipHost))","computers");
-		                        if (isset($mp_curr[0]["cn"])) {
-                		                $hostname=$mp_curr[0]["cn"];
-                             		        $smb_login[$hostname]["login"] = $table[1];
-            	          			$smb_login[$hostname]["ip"] = preg_replace("/\(ipv4:(.+):(.+)\)/", "\${1}", $table[4]);
-					}
-				} 
+					$data[$hostname]["login"] = $table[1];
+					$data[$hostname]["ip"] = preg_replace("/\(ipv4:(.+):(.+)\)/", "\${1}", $table[4]);
+				}
 			}
 		}
+		apc_add('smb_login', $data, 120);
 	}
-	return($smb_login);
+	return($data);
 }
 
 /*
@@ -1168,7 +1158,7 @@ function wake_shutdown_or_reboot($ip, $nom, $wake, $shutdown_reboot) {
 	if($restriction_parcs=='y') {
 		$temoin_erreur="y";
 		for($loop=0;$loop<count($tab_delegated_parcs);$loop++) {
-			// La machine est-elle dans un des parcs d�l�gu�s?
+			// La machine est-elle dans un des parcs délégués?
 			if(is_machine_in_parc($nom,$tab_delegated_parcs[$loop])) {
 				$temoin_erreur='n';
 				break;
