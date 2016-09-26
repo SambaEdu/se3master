@@ -188,12 +188,12 @@ function fping($ip)
 // port 445 pour les win et 22 pour les linux
 // renvoit 1 si ok
 
-	exec("/usr/share/se3/sbin/tcpcheck 0.5 $ip:445 | grep alive",$arrval,$ret);
+	exec("/usr/share/se3/sbin/tcpcheck 1 $ip:445 | grep alive",$arrval,$ret);
     if ( $ret != "1" ) {
         return 1;
     }
     else	{
-			exec("/usr/share/se3/sbin/tcpcheck 0.5 $ip:22 | grep alive",$arrval,$ret);
+			exec("/usr/share/se3/sbin/tcpcheck 1 $ip:22 | grep alive",$arrval,$ret);
 			if ( $ret != "1" ) {
 				return 1;
 			}
