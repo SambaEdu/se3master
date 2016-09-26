@@ -4,7 +4,7 @@
    /**
    
    * affiche l'historique des connexions 
-   * @Version $Id$ 
+   * @Version $Id: show_histo.php 8559 2015-03-15 13:08:23Z plouf $ 
    
    * @Projet LCS / SambaEdu 
    
@@ -33,6 +33,7 @@
 include "entete.inc.php";
 include "ldap.inc.php";
 include "ihm.inc.php";
+include "fonc_parc.inc.php";
 
 require_once ("lang.inc.php");
 bindtextdomain('se3-parcs',"/var/www/se3/locale");
@@ -102,12 +103,14 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 		// Affichage des renseignements sur la machine depuis la table connexions
 		echo "<BR>";
 		echo gettext("Table des connexions sur l'adresse IP")." <STRONG><FONT color='red'>$ipaddr</FONT></STRONG>\n";
-		if ("$smbversion"=="samba3") $smbsess=exec ("smbstatus |gawk -F' ' '{print \" \"$5\" \"$4}' |grep '($ipaddr)' |cut -d' ' -f3 |head -n1");
-		else $smbsess=exec ("smbstatus |gawk -F' ' '{print \" \"$6\" \"$4}' |grep '($ipaddr)' |cut -d' ' -f3 |head -n1");
-		
-		if ($smbsess=="") echo "<P>".gettext("Aucune connexion en cours sur cette machine")."</P>\n";
+		$smb_sess=smbstatus();
+                foreach($smb_sess as $key=>$value){
+                        $ips[$key]=$value['ip'];
+                }
+		$machine=array_search($ip_adrr, $ips);
+		if (!$machine) echo "<P>".gettext("Aucune connexion en cours sur cette machine")."</P>\n";
 		else {
-			$login = exec ("smbstatus | grep -v 'root' |gawk -F' ' '{print \" \"$4\" \"$2}' |grep ' $smbsess ' |cut -d' ' -f3 |head -n1");
+			$login=$smb_sess[$machine]['login'];
 			echo "<P><STRONG><FONT color='red'>$login</FONT></STRONG> ".gettext("est actuellement connect&#233; sur cette machine")."</P>\n";
 		}
 
@@ -150,23 +153,18 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 	// Affichage des renseignements sur l'utilisateur
 	
     	if (($selectionne=="3") && (isset($user))) {
-		if ("$smbversion" == "samba3") exec ("smbstatus -b -u $user |awk 'NF>4 {print $1}'",$arr_pid);
-		else exec ("smbstatus -b -u $user |gawk -F' ' '{print $1}'",$arr_pid);
-		$nbmach=count($arr_pid);
-		if ("$smbversion" == "samba3") $nbmach+=5;
-		if ($nbmach>5) {
+                $smb_sess=smbstatus();
+		foreach($smb_sess as $key=>$value){
+			$logins[$key]=$value['login'];
+		}
+                $machines=array_keys($logins, $user);
+		$nbmach=count($machines);
+		if ($nbmach>0) {
 			echo "<P><STRONG><FONT color='red'>";
-			echo $nbmach-5;
+			echo $nbmach;
 			// echo "</FONT></STRONG> connexion(s) en cours sous le login <STRONG><FONT color='red'>$user</FONT></STRONG> sur ";
 			echo "</FONT></STRONG>".gettext(" connexion(s) en cours sous le login")." <A HREF='../annu/people.php?uid=$user'><STRONG><FONT color='red'><U>$user</U></FONT></STRONG></A>".gettext(" sur ");
- 			for ($i=4; $i<=$nbmach; $i++) {
-				if ("$smbversion" == "samba3") {
-					$pid=$arr_pid[$i-4];
-					$machine=exec ("smbstatus |gawk -F' ' '{print \" \"$1\" \"$4}' |grep ' $pid ' |cut -d' ' -f3 |head -n1"); 
-    				} else {
-					$pid=$arr_pid[$i];
-					$machine=exec ("smbstatus |gawk -F' ' '{print \" \"$4\" \"$5}' |grep ' $pid ' |cut -d' ' -f3 |head -n1");
-				}
+ 			foreach($machines as $machine) {
 				if (is_admin("computers_is_admin",$login)=="Y")  echo "<A HREF='show_histo.php?selectionne=2&mpenc=".urlencode($machine)."'><U>$machine</U></A> ";
 				else echo "<STRONG>$machine</STRONG> ";
 			}
@@ -229,13 +227,11 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 		$mp=urldecode($mpenc);
 		$mp_curr=search_machines("(&(cn=$mp)(objectClass=ipHost))","computers");
 		echo "<P><STRONG>".gettext("Adresse IP inscrite dans l'annuaire:")." </STRONG><FONT color='red'>".$mp_curr[0]["ipHostNumber"]."</FONT></P>\n";
-		if ("$smbversion"=="samba3") $smbsess=exec ("smbstatus |gawk -F' ' '{print \" \"$5\" \"$4\" \"}' |grep ' $mp ' |cut -d' ' -f2 |head -n1");
-		else $smbsess=exec ("smbstatus |gawk -F' ' '{print \" \"$5\" \"$4}' |grep ' $mp ' |cut -d' ' -f3 |head -n1");
-		if ($smbsess=="") echo "<P>".gettext("Aucune connexion en cours sur cette machine")."</P>\n";
+                $smb_sess=smbstatus();
+                $login=$smb_sess[$mp]['login'];
+
+		if ($login=="") echo "<P>".gettext("Aucune connexion en cours sur cette machine")."</P>\n";
 		else {
-		if ("$smbversion"=="samba3") $login = exec ("smbstatus | grep -v 'root' |gawk -F' ' '{print \" \"$5\" \"$2}' |grep ' $smbsess ' |cut -d' ' -f3 |head -n1");
-		else $login = exec ("smbstatus | grep -v 'root' |gawk -F' ' '{print \" \"$4\" \"$2}' |grep ' $smbsess ' |cut -d' ' -f3 |head -n1");
-			// echo "<P><STRONG><FONT color='red'>$login</FONT></STRONG> est actuellement connect&#233; sur cette machine</P>\n";
 			echo "<P><STRONG><FONT color='red'><A HREF='show_histo.php?selectionne=3&user=$login'>$login</A></FONT></STRONG>".gettext(" est actuellement connect&#233; sur cette machine")."</P>\n";
 		}
 
