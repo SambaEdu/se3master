@@ -126,13 +126,15 @@ else
 						#============================================
 						if [ "${action}" = "shutdown" -o "${action}" = "stop" ]; then
 							echo "Tentative d'arrêt de la machine XP/2000<b> $B</b> correspondant à l'adresse mac <b>$D</b><br>"
-							/usr/bin/net rpc shutdown -C "Shutdown" -I $J -U "$B\adminse3%$PASSADM"
+							/usr/share/se3/sbin/tcpcheck 1 $J:445 | grep -q failed || \
+							/usr/bin/net rpc shutdown -C "Shutdown" -I $J -U "$B\adminse3%$PASSADM" || \
 							/usr/bin/ssh -l root -o StrictHostKeyChecking=no $J poweroff
 						fi
 
 						if [ "${action}" = "reboot" ]; then
 							echo "Tentative de reboot de la machine XP/2000<b> $B</b> correspondant à l'adresse mac <b>$D</b><br>"
-							/usr/bin/net rpc shutdown -r -C "Reboot" -I $J -U "$B\adminse3%$PASSADM"
+							/usr/share/se3/sbin/tcpcheck 1 $J:445 | grep -q failed || \
+							/usr/bin/net rpc shutdown -r -C "Reboot" -I $J -U "$B\adminse3%$PASSADM" || \
 							/usr/bin/ssh -l root -o StrictHostKeyChecking=no $J reboot
 						fi
 
