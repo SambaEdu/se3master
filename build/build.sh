@@ -63,6 +63,7 @@ cd "$BUILDDIR" || {
     echo "End of the script."                                        >&2
     exit 1
 }
+find "$PKGDIR" -name ".empty" -delete
 
 dpkg --build "$PKGDIR"
 
