@@ -4,6 +4,10 @@ set -e
 
 export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 
+if [ ! -e "/usr/bin/fakeroot" ]; then
+	apt-get install fakeroot
+fi
+
 SCRIPTDIR="${0%/*}"
 BUILDDIR=$(cd "$SCRIPTDIR"; pwd) # Same as SCRIPTDIR but with a full path.
 PKGDIR="${BUILDDIR}/se3master"
@@ -46,16 +50,10 @@ chmod -R 750 "${PKGDIR}/var/cache/se3_install"
 chmod 644    "${PKGDIR}/var/cache/se3_install/conf/"*
 chmod 600    "${PKGDIR}/var/cache/se3_install/conf/SeConfig.ph.in"
 chmod 600    "${PKGDIR}/var/cache/se3_install/conf/slapd_"*.in
-# chmod 644    "${PKGDIR}/var/cache/se3_install/reg/"*                  <= not present in the repository?!
-# chmod 755    "${PKGDIR}/var/cache/se3_install/conf/apachese"          <= not present in the repository?!
-# chmod 600    "${PKGDIR}/var/cache/se3_install/conf/config.inc.php.in" <= not present in the repository?!
-# chmod 640    "${PKGDIR}/var/cache/se3_install/conf/mrtg.cfg"          <= not present in the repository?!
-# chmod 440    "${PKGDIR}/var/cache/se3_install/conf/sudoers"           <= not present in the repository?!
+chmod +x  "${PKGDIR}/usr/share/se3/sbin/*"
+chmod +x "${PKGDIR}/usr/share/se3/scripts/*"
+chmod +x "${PKGDIR}/usr/share/se3/shares/shares.avail/*"
 
-# dos2unix "${PKGDIR}/var/cache/se3_install/scripts/"*.sh               <= not present in the repository?!
-# dos2unix "${PKGDIR}/var/cache/se3_install/scripts/"*.pl               <= not present in the repository?!
-# dos2unix "${PKGDIR}/var/cache/se3_install/sudoscripts/"*.sh           <= not present in the repository?!
-# dos2unix "${PKGDIR}/var/cache/se3_install/sudoscripts/"*.pl           <= not present in the repository?!
 
 # Now, it's possible to build the package.
 cd "$BUILDDIR" || {
@@ -65,7 +63,11 @@ cd "$BUILDDIR" || {
 }
 find "$PKGDIR" -name ".empty" -delete
 
-dpkg --build "$PKGDIR"
+# dpkg --build "$PKGDIR"
+# mv $PKGDIR.deb se3_$version.deb
+
+fakeroot dpkg-deb -b "$PKGDIR" "se3_$version.deb"
+
 
 echo "OK, building succesfully..."
 
