@@ -3,9 +3,10 @@
 # Script destiné à remettre d'aplomb les comptes admin et root au niveau attributs ldap.
 # Auteur: Franck molle 
 # Dernière modification: /09/2016
-
-
+. /etc/se3/config_c.cache.sh
+. /etc/se3/config_m.cache.sh
 . /etc/se3/config_l.cache.sh
+
 
 # /usr/share/se3/includes/config.inc.sh -lm
 
@@ -32,13 +33,51 @@ gecos: Administrateur  Se3,,,
 EOF
 fi
 
-testgecos_root=$(ldapsearch -xLLL uid=root gecos | grep -v "dn:")
-if [ -z "$testgecos_root" ]; then
-ldapmodify -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
-dn: cn=root,$BASEDN
-changetype: modify
-add: gecos
-gecos: Root samba Se3,,,
+ldapdelete -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" "cn=root,$BASEDN"
+
+ldapadd -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+dn: uid=root,ou=People,ou=demo,ou=homenet,ou=education,o=gouv,c=fr
+uid: root
+sn: Se3
+cn: root Se3
+gecos: root Se3,,,
+mail: root@$domain
+loginShell: /bin/true
+objectClass: top
+objectClass: posixAccount
+objectClass: shadowAccount
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: sambaSamAccount
+uidNumber: 0
+sambaPwdMustChange: 2147483647
+gidNumber: 0
+shadowLastChange: 1468229295
+homeDirectory: /root
+sambaSID: $domainsid-0
+sambaPrimaryGroupSID: $domainsid-0
+sambaLMPassword: FFB67A52AC531164AAD3B435B51404EE
+sambaNTPassword: 538388DFE2BF2556833682EABF77CB10
+sambaPasswordHistory: 00000000000000000000000000000000000000000000000000000000
+ 00000000
+userPassword:: e1NTSEF9UjYrYVpLZGU2RmVnak5uZGRENll4SWxualBIcDcxVis=
+sambaPwdLastSet: 1
+sambaAcctFlags: [DU         ]
 EOF
-fi
+
+
+
+
+ldapsearch -xLLL -D $adminRdn,$ldap_base_dn -b $PEOPLERDN,$BASEDN -w $adminPw objectClass=person uid| grep uid:| cut -d ' ' -f2| while read uid
+do
+# cat > /tmp/t.ldif <<EOF
+ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF  >/dev/null
+dn: uid=$uid,$peopleRdn,$ldap_base_dn
+changetype: modify
+replace: sambaPwdLastSet
+sambaPwdLastSet: 1
+EOF
+done
+
+
 exit 0
