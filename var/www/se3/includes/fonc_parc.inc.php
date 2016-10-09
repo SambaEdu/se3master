@@ -1145,7 +1145,7 @@ function get_smbsess($mp_en_cours) {
         $etat_session = "<img type=\"image\" src=\"../elements/images/disabled.png\">\n";
     } elseif ($login == 'adminse3') {
         $texte = $login . $action_parc['msgUserLogged'];
-        $etat_session.="<img onmouseout=\"UnTip();\" onmouseover=\"Tip('" . $texte . "',WIDTH,250,SHADOW,true,DURATION,5000);\" src=\"../elements/images/travaux.png\" border=\"0\" />";
+        $etat_session.="<img onmouseout=\"UnTip();\" onmouseover=\"Tip('" . $texte . "',WIDTH,250,SHADOW,true,DURATION,5000);\" src=\"../elements/images/travaux2.png\" border=\"0\" />";
     } else {
         $texte = $login . $action_parc['msgUserLogged'];
         $etat_session.="<img onmouseout=\"UnTip();\" onmouseover=\"Tip('" . $texte . "',WIDTH,250,SHADOW,true,DURATION,5000);\" src=\"../elements/images/enabled.png\" border=\"0\" />";
