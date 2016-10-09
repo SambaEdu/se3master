@@ -73,12 +73,24 @@ root=$_GET[dc_root]
 mailhub=$_GET[dc_smarthost]
 rewriteDomain=$_GET[dc_readhost]
 hostname=$_GET[dc_readhost]
-                ";
+";
+if (@$_GET[dc_AuthUser])
+	$DEFAUT .= "AuthUser=$_GET[dc_AuthUser]
+";
+if (@$_GET[dc_AuthPass])
+	$DEFAUT .= "AuthPass=$_GET[dc_AuthPass]
+";
+if (@$_GET[dc_UseTLS]=="YES")
+	$DEFAUT .= "UseTLS=$_GET[dc_UseTLS]
+";
+if (@$_GET[dc_UseSTARTTLS]=="YES")
+	$DEFAUT .= "UseSTARTTLS=$_GET[dc_UseSTARTTLS]
+";
 		fwrite($fp,$DEFAUT);
 		fclose($fp);
 
 		$subject = gettext("Test de la configuration de votre serveur Se3");
-		$message = gettext("Message envoy&#233; par le serveur Se3");
+		$message = gettext("Message envoye par le serveur Se3");
 		mail ($_GET[dc_root], $subject, $message);
 
 		unset($action);
@@ -98,25 +110,65 @@ hostname=$_GET[dc_readhost]
 		echo "<tr>";
      		echo "<td>".gettext("Domaine :")."</td>";
       		echo "<td><input name=\"dc_readhost\" type=\"text\" size=\"40\" value=\"$dc_readhost\"  ></td>\n";
-		echo "<td align=\"center\"><u onmouseover=\"return escape".gettext("('Indiquer ici le domaine de votre &#233;tablissement. Par exemple lyc&#233;e.ac-acad&#233;mie.fr<br>Si vous n\'avez pas d\'IP fixe vous ne poss&#233;dez pas de domaine, vous risquez alors de ne pas pouvoir envoyer de messages<br>')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td>";
-      		echo "</tr>\n";
+			echo "<td align=\"center\"><u onmouseover=\"return escape".gettext("('Indiquer ici le domaine de votre &#233;tablissement. Par exemple lyc&#233;e.ac-acad&#233;mie.fr<br>Si vous n\'avez pas d\'IP fixe vous ne poss&#233;dez pas de domaine, vous risquez alors de ne pas pouvoir envoyer de messages<br>')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td>";
+      	echo "</tr>\n";
 		      
 		echo "<tr>\n";
         	echo "<td>".gettext("Serveur SMTP")." :</td>";
         	$dc_smarthost = variable ("mailhub");
         	if ($dc_smarthost == "") { $dc_smarthost = "$slisip"; }
         	echo "<td><input name=\"dc_smarthost\" type=\"text\" size=\"40\" value=\"$dc_smarthost\"  ></td>\n";
-		echo "<td align=\"center\"><u onmouseover=\"return escape".gettext("('Indiquer ici le serveur qui vous permet d\'exp&#233;dier les messages.<br><br> - Si vous avez un Slis ou un Lcs, indiquer son adresse IP.<br> - Si vous n\'avez pas un serveur de ce type indiquer le smtp de votre provider. (smtp.free.fr par exemple). ')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td>";
-        	echo "</tr>\n";
-		      
+			echo "<td align=\"center\"><u onmouseover=\"return escape".gettext("('Indiquer ici le serveur qui vous permet d\'exp&#233;dier les messages.<br><br> Pour un port particulier, le rajouter apr&#232;s l\'adresse du serveur smtp (Ex. messagerie.ac-versailles.fr:465).<br><br> - Si vous avez un Slis ou un Lcs, indiquer son adresse IP.<br> - Si vous n\'avez pas un serveur de ce type indiquer le smtp de votre provider. (smtp.free.fr par exemple). ')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td>";
+        echo "</tr>\n";
+			
+		echo "<tr>\n";
+        	echo "<td>".gettext("Identifiant de connexion au smtp (si n&#233;cessaire)")." :</td>";
+        	$dc_AuthUser = variable ("AuthUser");
+        	echo "<td><input name=\"dc_AuthUser\" type=\"text\" size=\"40\" value=\"$dc_AuthUser\"  ></td>\n";
+			echo "<td align=\"center\"><u onmouseover=\"return escape".gettext("('Indiquer ici l\'identifiant de connexion au smtp.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td>";
+        echo "</tr>\n";
+			
+		echo "<tr>\n";
+        	echo "<td>".gettext("Mot de passe de connexion au smtp (si n&#233;cessaire)")." :</td>";
+        	$dc_AuthPass = variable ("AuthPass");
+        	echo "<td><input name=\"dc_AuthPass\" type=\"password\" size=\"40\" value=\"$dc_AuthPass\"  ></td>\n";
+			echo "<td align=\"center\"><u onmouseover=\"return escape".gettext("('Indiquer ici le mot de passe de connexion au smtp.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td>";
+        echo "</tr>\n";
+			
+		echo "<tr>\n";
+        	echo "<td>".gettext("Utiliser le mode sécurisé TLS")." :</td>";
+        	$dc_UseTLS = variable ("UseTLS");
+        	echo "<td><select name=\"dc_UseTLS\">";
+			echo "<option value=\"NO\">Non</option>";
+			echo "<option value=\"YES\"";
+			if ($dc_UseTLS=="YES")
+				echo " selected";
+			echo ">Oui</option>";
+			echo "</select></td>\n";			
+			echo "<td align=\"center\"><u onmouseover=\"return escape".gettext("('A utiliser en cas de mode s&#233curis&#233;')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td>";
+        echo "</tr>\n";
+			
+		echo "<tr>\n";
+        	echo "<td>".gettext("Utiliser le mode sécurisé STARTTLS")." :</td>";
+        	$dc_UseSTARTTLS = variable ("UseSTARTTLS");
+        	echo "<td><select name=\"dc_UseSTARTTLS\">";
+			echo "<option value=\"NO\">Non</option>";
+			echo "<option value=\"YES\"";
+			if ($dc_UseSTARTTLS=="YES")
+				echo " selected";
+			echo ">Oui</option>";
+			echo "</select></td>\n";			
+			echo "<td align=\"center\"><u onmouseover=\"return escape".gettext("('A utiliser en cas de mode s&#233curis&#233;')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td>";
+        echo "</tr>\n";
+		
 		echo "<tr>\n";
         	echo "<td>".gettext("Boite de r&#233;ception")." :</td>";
-
-       		$dc_root = variable ("root");
+			$dc_root = variable ("root");
        		echo "<td><input name=\"dc_root\" type=\"text\" size=\"40\" value=\"$dc_root\" ></td>";
-		echo "<td align=\"center\"><u onmouseover=\"return escape".gettext("('Indiquer l\'adresse qui va recevoir les mails g&#233;n&#233;r&#233;s par le syst&#232;me.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td>";
-      		echo "</tr>\n";
-		      
+			echo "<td align=\"center\"><u onmouseover=\"return escape".gettext("('Indiquer l\'adresse qui va recevoir les mails g&#233;n&#233;r&#233;s par le syst&#232;me.')")."\"><img name=\"action_image2\"  src=\"../elements/images/system-help.png\"></u>&nbsp;</td>";
+      	echo "</tr>\n";
+		
+
 		echo "</table>\n";
 		echo "<br><br>";
 		echo "<center><input type=\"submit\"  value=\"".gettext("Valider")."\"></center>";
