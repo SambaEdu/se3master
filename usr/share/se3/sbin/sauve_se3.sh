@@ -5,7 +5,7 @@
 ##### Script permettant de sauvegarder les données importantes
 ##### pour une restauration du serveur SE3
 ##### version du 16/04/2014
-##### modifiée le 15/02/2016
+##### modifiée le 29/06/2016
 #
 # Auteurs :      Louis-Maurice De Sousa louis.de.sousa@crdp.ac-versailles.fr
 #                François-Xavier Vial Francois.Xavier.Vial@crdp.ac-versailles.fr
@@ -44,24 +44,38 @@
 #MAIL="votre_adresse_mel"       # Adresse mel d'envoi du compte-rendu
 # cette variable MAIL est récupérée directement sur le se3
 # voir la fonction recuperer_mail ci-dessous
-COURRIEL="CR_sauvegarde.txt"    # compte-rendu de la sauvegarde
+COURRIEL="CR_sauvegarde.txt"            # compte-rendu de la sauvegarde
 ##### #####
-# à la place de /sauveserveur, on peut utiliser le répertoire /var/lib/backuppc
-# sur ce répertoire devra être monté le disque dur externe
-MONTAGE="/sauveserveur"     # Chemin vers les répertoires de sauvegarde
-SAV="SauveGarde"            # Nom du répertoire de sauvegarde de /var/se3/save
-SAVHOME="SauveGardeHome"    # Nom du répertoire de sauvegarde de /home et de /var/se3
+# à la place de /sauvese3, on peut utiliser le répertoire /var/lib/backuppc (voir la doc)
+# sur ce répertoire devra être monté le disque dur externe avant de lancer le script
+MONTAGE="/sauvese3"                 # Chemin vers les répertoires de sauvegarde
+SAV="SauveGarde"                        # Nom du répertoire de sauvegarde de /var/se3/save
+SAVHOME="SauveGardeHome"                # Nom du répertoire de sauvegarde de /home et de /var/se3
 ##### #####
-DESTINATION=$MONTAGE/$SAV                # Destination de sauvegarde de /var/se3/save
-DESTINATIONHOME=$MONTAGE/$SAVHOME        # Destination de sauvegarde de /home et de /var/se3
-DATESAUVEGARDE=$(date +%F+%0kh%0Mmin)    # Date et heure de la sauvegarde
-DATEDEBUT=$(date +%s)                    # Début de la sauvegarde en secondes
-DATEJOUR=$(date +%A)                     # Jour de la sauvegarde
-TEXTE="texte.txt"                        # texte temporaire
+script_nom="$(basename ${0})"           # nom du script, sans le chemin
+nom_attendu="sauve_se3.sh"
+verrou="/run/lock/${script_nom}.pid"
+DESTINATION=$MONTAGE/$SAV               # Destination de sauvegarde de /var/se3/save
+DESTINATIONHOME=$MONTAGE/$SAVHOME       # Destination de sauvegarde de /home et de /var/se3
+DATESAUVEGARDE=$(date +%F+%0kh%0Mmin)   # Date et heure de la sauvegarde
+DATEDEBUT=$(date +%s)                   # Début de la sauvegarde en secondes
+DATEJOUR=$(date +%A)                    # Jour de la sauvegarde
+TEXTE="texte.txt"                       # texte temporaire
 
 #----- -----
 # les fonctions
 #----- -----
+
+verifier_script_nom()
+{
+    if [ ${script_nom} != "$nom_attendu" ]
+    then
+        echo "commande incorrecte !"
+        echo "utilisez, par exemple, la commande suivante :"
+        echo "/usr/share/se3/sbin/$nom_attendu"
+        exit 4
+    fi
+}
 
 mode_texte()
 {
@@ -83,6 +97,7 @@ mode_script()
             -v)
                 # mode verbeux
                 # le canal 4 est dirigé vers l'affichage écran
+                mode="verbeux"
                 test="0"
                 exec 4>&1
             ;;
@@ -90,41 +105,153 @@ mode_script()
                 # mode verbeux et de test
                 # le canal 4 est dirigé vers l'affichage écran
                 # on ne lance pas la sauvegarde : tester uniquement la mise en place
+                mode="test"
                 test="1"
                 exec 4>&1
             ;;
             -s)
-                # mode silencieux
+                # mode silencieux pour une utilisation via la crontab
                 # le canal 4 est dirigé vers le canal 3
+                mode="silence"
                 test="0"
                 exec 4>&3
             ;;
             -h)
                 # on affiche l'aide
                 mode_texte
+                # on supprime le verrou
+                supprimer_verrou
                 exit 0
             ;;
             *)
                 echo "paramètre $1 incorrect"
                 # on affiche l'aide
                 mode_texte
+                # on supprime le verrou
+                supprimer_verrou
                 exit 2
             ;;
         esac
     else
         echo "la commande doit avoir un paramètre"
         mode_texte
+        # on supprime le verrou
+        supprimer_verrou
         exit 3
     fi
+}
+
+creer_verrou()
+{
+    # Si un fichier verrou existe…
+    if [ -e ${verrou} ]
+    then
+        echo "Fichier de verrou antérieur trouvé…"
+        # Vérifions si le processus est en cours
+        if [ -d /proc/$(cat ${verrou}) ]
+        then
+            # Si oui, fin de script
+            echo "Une sauvegarde est déjà en cours !"
+            return 1
+        else
+            # Si non le fichier n'a pas été supprimé, ce qui est anormal
+            echo "Processus terminé mais verrou encore présent !"
+            return 2
+        fi
+    else
+        # pas de fichier verrou donc pas de sauvegarde en cours
+        # Création du fichier verrou
+        echo ${$} > ${verrou}
+        return 0
+    fi
+}
+
+supprimer_verrou()
+{
+    # Nettoyage du verrou :
+    [ -e ${verrou} ] && rm ${verrou} || echo "tiens, le verrou n'est plus là ? C'est anormal !"
+}
+
+tester_script_actif()
+{
+    # fonction inutilisée
+    # on teste si une sauvegarde est en cours
+    # pour cela, on a besoin de la disponibilité de la commande pgrep
+    # qui devrait être disponible sur les versions squeeze, wheezy et jessie de debian.
+    
+    n=$(pgrep -c "^${script_nom}$")
+    if [ "$n" != "1" ]
+    then
+        echo "Une sauvegarde est déjà en cours."
+        return 1
+    else
+        # pas de sauvegarde en cours
+        return 0
+    fi
+}
+
+gestion_texte()
+{
+    # on envoie le texte sur le canal 4,
+    # le canal 4 est redirigé, selon les modes, vers :
+    #    le canal 1 (sortie standard, affichage écran)
+    # ou le canal 3 (courriel)
+    cat "$TEXTE" >&4
+    # en mode test, il faut aussi utiliser la messagerie
+    [ "$mode" = "test" ] && cat "$TEXTE" >&3
+}
+
+tester_tree()
+{
+    # bien que non indispensable,
+    # tree est nécessaire pour une partie du compte-rendu
+    # on l'installe si besoin
+    if ! which tree >/dev/null
+    then
+        echo "La commande tree n'est pas disponible" > $TEXTE
+        echo "on installe tree" >> $TEXTE
+        echo "" >> $TEXTE
+        gestion_texte
+        aptitude update >/dev/null
+        aptitude -y install tree >/dev/null
+        return 0
+    else
+        # tree est présent
+        return 0
+    fi
+}
+
+tester_pgrep()
+{
+    # tester si la commande pgrep est disponible
+    # ce qui est normalement le cas car elle fait partie du paquet procps
+    # cette commande est indispensable pour vérifier si une sauvegarde est encore en cours
+    if ! which pgrep >/dev/null
+    then
+        echo "La commande pgrep n'est pas disponible :"
+        echo "le paquet procps est-il installé ?"
+        echo "Situation à rétablir avant de relancer le script"
+        # il faut arrêter le script : situation anormale
+        return 1
+    else
+        # pgrep est présent
+        return 0
+    fi
+}
+
+message_debut()
+{
+    # message de début de la sauvegarde
+    echo "Début de la sauvegarde du $DATESAUVEGARDE" > $TEXTE
+    echo "" >> $TEXTE
+    gestion_texte
 }
 
 recuperer_mail()
 {
     # on récupère l'adresse mel de l'administrateur
+    # que se passe-t-il si l'administrateur ne l'a pas paramétré ? [TODO]
     MAIL=$(cat /etc/ssmtp/ssmtp.conf | grep ^root | cut -d "=" -f 2)
-    echo "Début de la sauvegarde du $DATESAUVEGARDE" > $TEXTE
-    cat "$TEXTE" >&4  && echo "" >&4
-    [ "$test" = "1" ] && cat "$TEXTE" >&3 && echo "" >&3
 }
 
 presence_repertoire_se3()
@@ -134,15 +261,13 @@ presence_repertoire_se3()
     then
         # le répertoire $MONTAGE existe, on peut continuer
         echo "Le répertoire $MONTAGE est présent" > $TEXTE
-        cat "$TEXTE" >&4
-        [ "$test" = "1" ] && cat "$TEXTE" >&3
+        gestion_texte
         return 0
     else
         # le répertoire $MONTAGE n'existe pas, on envoie un courriel
         OBJET="Sauvegarde Se3 : pas de répertoire $MONTAGE"
         echo "La sauvegarde a échoué car il n'y a pas de répertoire $MONTAGE" > $TEXTE
-        cat "$TEXTE" >&4
-        [ "$test" = "1" ] && cat "$TEXTE" >&3
+        gestion_texte
         # et on ne lance pas la sauvegarde
         return 1
     fi
@@ -156,16 +281,16 @@ trouver_disque()
     then
         # le disque n'étant pas monté correctement, on envoie un courriel
         OBJET="Sauvegarde Se3 : disque non monté dans $MONTAGE"
-        echo "La sauvegarde a échoué car aucun disque n'est monté sur $MONTAGE" > $TEXTE
-        cat "$TEXTE" >&4
-        [ "$test" = "1" ] && cat "$TEXTE" >&3
+        echo "mais la sauvegarde a échoué car aucun disque n'est monté sur $MONTAGE" > $TEXTE
+        gestion_texte
         # et on ne lance pas la sauvegarde
         return 1
     else
         # le disque étant monté, infos à garder et on peut continuer
         echo "Le disque est $DISQUE, monté sur $MONTAGE" > $TEXTE
-        cat "$TEXTE" >&4
-        [ "$test" = "1" ] && cat "$TEXTE" >&3
+        # doit-on tester le format ? Que se passe-t-il si on a un NAS ? [TODO]
+        test_format=$(echo "$disque" | gawk -F" " '{print $4}')
+        gestion_texte
         return 0
     fi
 }
@@ -178,13 +303,11 @@ test_repertoire()
     if [ -z "$REP" ]
     then
         echo "Création du répertoire $MONTAGE/$1" > $TEXTE
-        cat "$TEXTE" >&4
-        [ "$test" = "1" ] && cat "$TEXTE" >&3
+        gestion_texte
         mkdir $MONTAGE/$1
     else
         echo "Le répertoire $MONTAGE/$1 est présent" > $TEXTE
-        cat "$TEXTE" >&4
-        [ "$test" = "1" ] && cat "$TEXTE" >&3
+        gestion_texte
     fi
 }
 
@@ -199,21 +322,22 @@ deux_repertoires()
 
 gestion_temps()
 {
-    DATEFIN=$(date +%s)                # Fin de la sauvegarde en secondes
-    TEMPS=$(($DATEFIN-$DATEDEBUT))    # durée de la sauvegarde, en secondes
+    # calcul du temps passé
+    DATEFIN=$(date +%s)                 # Fin de la sauvegarde en secondes
+    TEMPS=$(($DATEFIN-$DATEDEBUT))      # durée de la sauvegarde, en secondes
+    # conversion en heure-minute
     HEURES=$(( TEMPS/3600 ))
     MINUTES=$(( (TEMPS-HEURES*3600)/60 ))
-    echo "" >&3
     # gestion de l'accord pour les heures ; pour les minutes, elles seront souvent plusieurs ;-)
     case $HEURES in
         0)
-            echo "Sauvegarde terminée en $MINUTES minutes" >&3
+            echo "Sauvegarde exécutée en $MINUTES minutes" >&3
         ;;
         1)
-            echo "Sauvegarde terminée en $HEURES heure et $MINUTES minutes" >&3
+            echo "Sauvegarde exécutée en $HEURES heure et $MINUTES minutes" >&3
         ;;
         *)
-            echo "Sauvegarde terminée en $HEURES heures et $MINUTES minutes" >&3
+            echo "Sauvegarde exécutée en $HEURES heures et $MINUTES minutes" >&3
         ;;
     esac
     echo "" >&3
@@ -245,14 +369,17 @@ rediger_compte_rendu()
     cat /root/logrsyncprinters.txt >&3
     echo "--------------------" >&3
     tree -a $DESTINATION >&3
+    echo "--------------------" >&3
+    echo "Fin de la sauvegarde" >&3
     OBJET="Sauvegarde Se3 : compte-rendu"
 }
 
 envoi_courriel()
 {
     # on envoie le compte-rendu
-    echo "Fin de la sauvegarde : envoi du compte-rendu vers $MAIL" > $TEXTE
-    echo "" >&4 && cat "$TEXTE" >&4
+    echo "" >&4
+    echo "Sauvegarde du $DATESAUVEGARDE : envoi du compte-rendu vers $MAIL" > $TEXTE
+    cat "$TEXTE" >&4
     cat $COURRIEL | mail $MAIL -s "$OBJET" -a "Content-type: text/plain; charset=UTF-8"
 }
 
@@ -327,16 +454,20 @@ efface_log()
 #####
 # Début du programme
 #
-
-mode_script $1                # déterminer mode silencieux, verbeux ou test
-recuperer_mail                # récupération de l'adresse mel de l'admnistrateur
-
+verifier_script_nom
+creer_verrou                                # pose d'un verrou avec détection d'un verrou antérieur
+[ "$?" != "0" ] && exit 5
+recuperer_mail                              # récupération de l'adresse mel de l'admnistrateur
+[ "$?" != "0" ] && supprimer_verrou && exit 1
+mode_script $1                              # déterminer mode silencieux, verbeux ou test
+message_debut
 # on vérifie si tout est en place pour lancer la sauvegarde
-presence_repertoire_se3                 # présence d'un répertoire de sauvegarde
+tester_tree                                 # commande nécessaire pour le compte-rendu
+presence_repertoire_se3                     # présence d'un répertoire de sauvegarde
 [ "$?" != "0" ] && test="2"
-[ "$test" != "2" ] && trouver_disque      # présence d'un disque externe monté dans le répertoire de sauvegarde
+[ "$test" != "2" ] && trouver_disque        # présence d'un disque externe monté dans le répertoire de sauvegarde
 [ "$?" != "0" ] && test="2"
-[ "$test" != "2" ] && deux_repertoires    # présence des sous-répertoires de sauvegarde (création si nécessaire)
+[ "$test" != "2" ] && deux_repertoires      # présence des sous-répertoires de sauvegarde (création si nécessaire)
 
 case $test in
     0)
@@ -348,21 +479,30 @@ case $test in
     ;;
     1)
         # on ne lance pas la sauvegarde (mode test)
-        echo "Pas de sauvegarde effectuée : test de la mise en place du système" > $TEXTE
-        echo "" >&4 && cat "$TEXTE" >&4
-        echo "" >&3 && cat "$TEXTE" >&3
+        echo "" > $TEXTE
+        echo "Test de la mise en place du système : pas de sauvegarde effectuée" >> $TEXTE
+        echo "Tout semble en place." >> $TEXTE
+        gestion_texte
         OBJET="Test pour la sauvegarde"
     ;;
-    *)
+    2)
         # on ne lance pas la sauvegarde : système non en place pour la sauvegarde
-        echo "Système non en place : on ne lance pas la sauvegarde" > $TEXTE
-        echo "" >&4 && cat "$TEXTE" >&4
+        echo "" > $TEXTE
+        echo "Système non en place : on ne lance pas la sauvegarde du $DATESAUVEGARDE" >> $TEXTE
+        echo "Tenez-compte des indications données ci-dessus" >> $TEXTE
+        echo "puis effectuez un test avant de relancer la sauvegarde" >> $TEXTE
+        gestion_texte
+        OBJET="Sauvegarde non en place"
+    ;;
+    *)
+        # autres cas à prévoir ?
+        OBJET="Cas inattendu"
     ;;
 esac
-gestion_temps                # calculer la durée de la sauvegarde
-envoi_courriel               # envoi du compte-rendu par la messagerie à l'aide de la variable $MAIL
-#efface_log                  # possibilité de garder ou de supprimer le fichier de log (on garde si ligne commentée)
-
+gestion_temps       # calculer la durée de la sauvegarde
+envoi_courriel      # envoi du compte-rendu par la messagerie à l'aide de la variable $MAIL
+#efface_log         # possibilité de garder ou de supprimer le fichier de log (on garde si ligne commentée)
+supprimer_verrou
 #####
 # Fin du programme
 exit 0
