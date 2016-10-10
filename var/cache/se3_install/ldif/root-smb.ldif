@@ -1,30 +1,40 @@
-
-dn: cn=root,#BASEDN#
-objectClass: posixAccount
-objectClass: posixGroup
-objectClass: sambaSamAccount
-gidNumber: 0
-homeDirectory: /root
-uidNumber: 0
+dn: uid=root,ou=#PEOPLE#,#BASEDN#
 uid: root
-displayName: root
-cn: root
+sn: Se3
+cn: root Se3
+givenName:
+initials:
+gecos: root Se3,,,
+mail: root@#DOMAIN#
+loginShell: /bin/true
+objectClass: top
+objectClass: posixAccount
+objectClass: shadowAccount
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: sambaSamAccount
+uidNumber: 0
+sambaPwdMustChange: 2147483647
+gidNumber: 0
+shadowLastChange: 1468229295
+homeDirectory: /root
 sambaSID: #SID#-0
 sambaPrimaryGroupSID: #SID#-0
-sambaPwdMustChange: 2147483647
-sambaAcctFlags: [U          ]
-sambaPwdCanChange: 2147483647
-sambaLogonTime: 0
-sambaNTPassword: 6CEEFA84BE115E51BEF3007E39FFBA37
-sambaPwdLastSet: 2147483647
-sambaLogoffTime: 0
-sambaLMPassword: 5C8CFE88DAAC33C9AAD3B435B51404EE
-sambaKickoffTime: 0
+sambaLMPassword: FFB67A52AC531164AAD3B435B51404EE
+sambaNTPassword: 538388DFE2BF2556833682EABF77CB10
+sambaPasswordHistory: 00000000000000000000000000000000000000000000000000000000
+ 00000000
+userPassword:: e1NTSEF9UjYrYVpLZGU2RmVnak5uZGRENll4SWxualBIcDcxVis=
+sambaPwdLastSet: 1
+sambaAcctFlags: [DU         ]
+EOF
 
 dn: uid=admin,ou=#PEOPLE#,#BASEDN#
 uid: admin
 cn: Administrateur SE3
 sn: SE3
+givenName:
+initials:
 gecos: Administrateur  Se3,00000000,M,N
 mail: admin@#DOMAIN#
 objectClass: top
