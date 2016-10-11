@@ -55,3 +55,23 @@ sambaAcctFlags: [U          ]
 sambaNTPassword: 66FE68F5B1006745A5895E42A24B24AC
 sambaPwdLastSet: 1
 sambaLMPassword: 94F92844CDB823F709752A3293831D17
+
+dn: sambaDomainName=#NTDOM#,#BASEDN
+sambaAlgorithmicRidBase: 1000
+gidNumber: 1000
+uidNumber: 1000
+objectClass: sambaDomain
+objectClass: sambaUnixIdPool
+sambaSID: #SID#
+sambaDomainName: #NTDOM#
+sambaLockoutThreshold: 0
+sambaMinPwdAge: 0
+sambaRefuseMachinePwdChange: 0
+sambaMinPwdLength: 5
+sambaLogonToChgPwd: 0
+sambaForceLogoff: -1
+sambaLockoutDuration: 30
+sambaLockoutObservationWindow: 30
+sambaMaxPwdAge: -1
+sambaPwdHistoryLength: 0
+sambaNextRid: 6752
