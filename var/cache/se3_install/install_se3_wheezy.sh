@@ -910,23 +910,35 @@ fi
 			$INITDSAMBA start
 	
 		fi	
-	
-		if [ ! -e ldif/root-smb.ldif ]; then
-			sed -e "s/#BASEDN#/$BASEDN/g" ldif/root.ldif > ldif/root.ldif.2
-			sed -e "s/#BASEDN#/$BASEDN/g" \
-				-e "s/#PEOPLE#/$PEOPLER/g" \
-				-e "s/#DOMAIN#/$DOMNAME/g" \
-				-e "s/#DEFAULTGID#/$defaultgid/g" \
-				-e "s/#GID1#/$gid1/g" ldif/admin.ldif  >>ldif/root.ldif.2
-			/usr/share/se3/sbin/convertSambaAccount --sid $DOMAINSID --input ldif/root.ldif.2 --output ldif/install.ldif
-		else
-			sed -e "s/#BASEDN#/$BASEDN/g" \
+		
+		
+		### convertSambaAccount deprecated now and root.ldif doesnt exist anymore###
+# 		if [ ! -e ldif/root-smb.ldif ]; then
+# 			sed -e "s/#BASEDN#/$BASEDN/g" ldif/root.ldif > ldif/root.ldif.2
+# 			sed -e "s/#BASEDN#/$BASEDN/g" \
+# 				-e "s/#PEOPLE#/$PEOPLER/g" \
+# 				-e "s/#DOMAIN#/$DOMNAME/g" \
+# 				-e "s/#DEFAULTGID#/$defaultgid/g" \
+# 				-e "s/#GID1#/$gid1/g" ldif/admin.ldif  >>ldif/root.ldif.2
+# 			/usr/share/se3/sbin/convertSambaAccount --sid $DOMAINSID --input ldif/root.ldif.2 --output ldif/install.ldif
+# 		else
+# 			sed -e "s/#BASEDN#/$BASEDN/g" \
+# 				-e "s/#PEOPLE#/$PEOPLER/g" \
+# 				-e "s/#DOMAIN#/$DOMNAME/g" \
+# 				-e "s/#DEFAULTGID#/$defaultgid/g" \
+# 				-e "s/#SID#/$DOMAINSID/g" \
+# 				-e "s/#GID1#/$gid1/g" ldif/root-smb.ldif >ldif/install.ldif
+# 		fi
+		
+		sed -e "s/#BASEDN#/$BASEDN/g" \
 				-e "s/#PEOPLE#/$PEOPLER/g" \
 				-e "s/#DOMAIN#/$DOMNAME/g" \
 				-e "s/#DEFAULTGID#/$defaultgid/g" \
 				-e "s/#SID#/$DOMAINSID/g" \
+				-e "s/#NTDOM#/$NTDOM/g" \
 				-e "s/#GID1#/$gid1/g" ldif/root-smb.ldif >ldif/install.ldif
-		fi
+		
+		
 		ldapadd -x -c -D "$ADMINRDN,$BASEDN" -w $ADMINPW -f ldif/install.ldif
 		sed -e "s/#BASEDN#/$BASEDN/g;s/#DOMAINSID#/$DOMAINSID/g;s/#GROUPS#/$GROUPSR/g;s/#PEOPLE#/$PEOPLERDN/g" ldif/Samba.ldif > ldif/Samba.ldif.2
 		ldapadd -x -c -D "$ADMINRDN,$BASEDN" -w $ADMINPW -f ldif/Samba.ldif.2
