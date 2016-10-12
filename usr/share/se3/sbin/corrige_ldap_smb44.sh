@@ -66,8 +66,29 @@ sambaAcctFlags: [DU         ]
 EOF
 
 
+ldapadd -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+dn: sambaDomainName=$se3_domain,$BASEDN
+sambaAlgorithmicRidBase: 1000
+gidNumber: 1000
+uidNumber: 1000
+objectClass: sambaDomain
+objectClass: sambaUnixIdPool
+sambaSID: $domainsid
+sambaDomainName: $se3_domain
+sambaLockoutThreshold: 0
+sambaMinPwdAge: 0
+sambaRefuseMachinePwdChange: 0
+sambaMinPwdLength: 5
+sambaLogonToChgPwd: 0
+sambaForceLogoff: -1
+sambaLockoutDuration: 30
+sambaLockoutObservationWindow: 30
+sambaMaxPwdAge: -1
+sambaPwdHistoryLength: 0
+sambaNextRid: 6752
+EOF
 
-
+echo "Modification de l'attribut sambaPwdLastSet pour tous les utilisateurs"
 ldapsearch -xLLL -D $adminRdn,$ldap_base_dn -b $PEOPLERDN,$BASEDN -w $adminPw objectClass=person uid| grep uid:| cut -d ' ' -f2| while read uid
 do
 # cat > /tmp/t.ldif <<EOF
