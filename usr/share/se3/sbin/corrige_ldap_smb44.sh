@@ -36,7 +36,7 @@ fi
 ldapdelete -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" "cn=root,$BASEDN"
 
 ldapadd -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
-dn: uid=root,ou=People,ou=demo,ou=homenet,ou=education,o=gouv,c=fr
+dn: uid=root,$PEOPLERDN,$BASEDN
 uid: root
 sn: Se3
 cn: root Se3
