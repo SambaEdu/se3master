@@ -10,7 +10,7 @@ delta=0;
 chown -R root:root /home/netlogon/delProfile2.txt;
 chmod 755 /home/netlogon/delProfile2.txt;
 
-//echo "Debut de test des profils";
+#echo "Debut de test des profils";
 for se3_root_username in /home/profiles/*.V2;
 do
     [ "$se3_root_username" = '/home/profiles/*.V2' ] && continue;
@@ -44,5 +44,5 @@ do
 done
 cat /home/netlogon/delProfile2.txt>>/home/netlogon/delProfile.txt;
 rm /home/netlogon/delProfile2.txt;
-//echo "Fin de tests des profils";
-//echo "Regeneration programmee";
+#echo "Fin de tests des profils";
+#echo "Regeneration programmee";
