@@ -50,9 +50,9 @@ chmod -R 750 "${PKGDIR}/var/cache/se3_install"
 chmod 644    "${PKGDIR}/var/cache/se3_install/conf/"*
 chmod 600    "${PKGDIR}/var/cache/se3_install/conf/SeConfig.ph.in"
 chmod 600    "${PKGDIR}/var/cache/se3_install/conf/slapd_"*.in
-chmod +x  "${PKGDIR}/usr/share/se3/sbin/*"
-chmod +x "${PKGDIR}/usr/share/se3/scripts/*"
-chmod +x "${PKGDIR}/usr/share/se3/shares/shares.avail/*"
+chmod +x  ${PKGDIR}/usr/share/se3/sbin/*
+chmod +x ${PKGDIR}/usr/share/se3/scripts/*
+chmod +x ${PKGDIR}/usr/share/se3/shares/shares.avail/*
 
 
 # Now, it's possible to build the package.
