@@ -11,7 +11,7 @@
 	interfaces = #IPSERVEUR#/#MASK#, 127.0.0.1
 	passdb backend = ldapsam:ldap://#SLAPDIP#
 	log file = /var/log/samba/%m.log
-	socket options = socket options = SO_KEEPALIVE TCP_KEEPIDLE=300 TCP_KEEPINTVL=10 TCP_KEEPCNT=5
+	socket options = SO_KEEPALIVE TCP_KEEPIDLE=300 TCP_KEEPINTVL=10 TCP_KEEPCNT=5
 	domain logons = Yes
 	os level = 66
 	domain master = Yes
