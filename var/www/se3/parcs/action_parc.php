@@ -11,7 +11,7 @@
  * @Licence Distribue selon les termes de la licence GPL
 
  * @note
- * Ajaxification des pings - script parc_ajax_lib.php sur une proposition de St�phane Boireau
+ * Ajaxification des pings - script parc_ajax_lib.php sur une proposition de Stephane Boireau
  * Gestion des infobulles nouvelle mouture Tip et UnTip
  * Modification des fonctions ts et vnc
  * Externalisation des messages dans messages/fr/action_parc_messages.php dans un hash global
@@ -72,7 +72,7 @@ if ((is_admin("computers_is_admin", $login) == "Y") or (is_admin("parc_can_view"
     if (!$action) {
         $action = $_GET['action'];
     }
-    $parc = $_POST['parc'];
+    $parc = isset($_POST['parc']) ? $_POST['parc'] : (isset($_GET['parc']) ? $_GET['parc'] : NULL);
     if (!$parc) {
         $parc = $_GET['parc'];
     }

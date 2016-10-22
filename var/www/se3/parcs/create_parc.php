@@ -178,7 +178,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 					}
 				}
 
-                $filtrecomp=isset($_POST['filtrecomp']) ? $_POST['filtrecomp'] : "";
+				$filtrecomp=isset($_POST['filtrecomp']) ? $_POST['filtrecomp'] : "";
 
 				echo "<H3>".gettext("Alimentation du parc")." <U>$parc</U></H3>";
 				// Filtrage des noms
@@ -222,7 +222,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 					echo $form;
 					for ($loop=0; $loop < count($list_new_machines); $loop++) {
 						if ("$list_new_machines[$loop]" != "$netbios_name") echo "<option value=\"".$list_new_machines[$loop]."\">".$list_new_machines[$loop];
-                                        }
+					}
 					$form="</select></p>\n";
 
 					$form.="<input type=\"hidden\" name=\"createtemplateparc\" value=\"$createtemplateparc\">\n";
@@ -261,7 +261,8 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 						exec ("/bin/bash /usr/share/se3/scripts/createtemplateparc.sh \"$newparc\"");
 					}
 
-					echo gettext("Ajout de l'ordinateur")." $computer ".gettext("au parc")." <U>$parc</U><BR>";
+					//echo gettext("Ajout de l'ordinateur")." $computer ".gettext("au parc")." <U>$parc</U><BR>";
+					echo gettext("Ajout de l'ordinateur")."<a href='show_histo.php?selectionne=2&mpenc=$computer' title='Voir les connexions'> $computer </a>".gettext("au parc")." <U><a href='show_parc.php?parc=$parc' title='Voir les machines du parc.'>$parc</a></U> <a href='action_parc.php?parc=$parc' title='Action sur les stations du parc'><img src='../elements/images/magic.png' width='22' height='24' /></a><br />";
 
 					// Si on est en train de cr&#233;er un nouveau parc
 					if ($newparc!="") {
