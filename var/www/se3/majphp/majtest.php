@@ -159,7 +159,7 @@ else {
         $clinux_version_dispo = exec("apt-cache policy se3-clients-linux | grep \"Candidat\" | cut -d\":\" -f2");
         // On teste si on a bien la derniere version
         if ("$clinux_version_install" != "$clinux_version_dispo") {
-            echo "<TR><TD>".gettext("Serveur DHCP (se3-clients-linux)")."</TD>";
+            echo "<TR><TD>".gettext("Support des clients linux (se3-clients-linux)")."</TD>";
             echo "<TD align=\"center\">$clinux_version_install</TD>";
             echo "<TD align=\"center\"><b>$clinux_version_dispo</b></TD>";
            echo "</TR>";
