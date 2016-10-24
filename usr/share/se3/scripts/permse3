@@ -209,8 +209,16 @@ fi
 #droits pour nut
 mkdir -p /etc/nut
 chown -R  www-se3 /etc/nut
-chgrp nut /var/run/nut
-chgrp nut /var/lib/nut
+
+
+if [ -e /var/run/nut ]; then
+	chgrp nut /var/run/nut
+fi
+
+if [ -e /var/lib/nut ]; then
+	chgrp nut /var/lib/nut
+fi
+
 
 
 #droits de base sur var/se3 (sauf public enleve volontairement)
@@ -352,7 +360,7 @@ chown www-se3:root /var/www/se3/tmp
 
 if [ -e /etc/se3/fonds_ecran ]; then
 	chmod 755 /etc/se3/fonds_ecran
-	chmod 644 /etc/se3/fonds_ecran/*
+	chmod 644 /etc/se3/fonds_ecran/* 2>/dev/null
 	chown -R www-se3:root /etc/se3/fonds_ecran
 fi
 exit 0

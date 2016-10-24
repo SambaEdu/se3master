@@ -38,51 +38,21 @@ echo en cours > /tmp/italcgenerate
 
 #initialisation des variables #
 # Recuperation des parametres mysql
-if [ -e /var/www/se3/includes/config.inc.php ]; then
-        dbhost=`cat /var/www/se3/includes/config.inc.php | grep "dbhost=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbname=`cat /var/www/se3/includes/config.inc.php | grep "dbname=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbuser=`cat /var/www/se3/includes/config.inc.php | grep "dbuser=" | cut -d = -f 2 |cut -d \" -f 2`
-        dbpass=`cat /var/www/se3/includes/config.inc.php | grep "dbpass=" | cut -d = -f 2 |cut -d \" -f 2`
-else
-        echo "Fichier de conf inaccessible"
-        exit 1
-fi
 
-# Recuperation des params LDAP
-BASEDN=`echo "SELECT value FROM params WHERE name='ldap_base_dn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-if [ -z "$BASEDN" ]; then
-        echo "Impossible d'acceder au parametre BASEDN"
-        exit 1
-fi
-ADMINRDN=`echo "SELECT value FROM params WHERE name='adminRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-if [ -z "$ADMINRDN" ]; then
-        echo "Impossible d'acceder au parametre ADMINRDN"
-        exit 1
-fi
-ADMINPW=`echo "SELECT value FROM params WHERE name='adminPw'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-if [ -z "$ADMINPW" ]; then
-        echo "Impossible d'acceder au parametre ADMINPW"
-        exit 1
-fi
-COMPUTERDN=`echo "SELECT value FROM params WHERE name='computersRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-if [ -z "$COMPUTERDN" ]; then
-        echo "Impossible d'acceder au parametre COMPUTERDN"
-        exit 1
-fi
-PARCDN=`echo "SELECT value FROM params WHERE name='parcsRdn'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-if [ -z "$PARCDN" ]; then
-        echo "Impossible d'acceder au parametre PARCDN"
-        exit 1
-fi
-SMBVERSION=`echo "SELECT value FROM params WHERE name='smbversion'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
-if [ -z "$SMBVERSION" ]; then
-        echo "Impossible d'acceder au parametre smbversion"
-        exit 1
-fi
-if [ ! "$SMBVERSION" = "samba3" ]; then
-        echo "Version de samba incorrecte."
-        exit 1
-fi
+#. /etc/se3/config_c.cache.sh
+#. /etc/se3/config_m.cache.sh
+. /etc/se3/config_l.cache.sh
+
+
+# /usr/share/se3/includes/config.inc.sh -lm
+
+BASEDN="$ldap_base_dn"
+ADMINRDN="$adminRdn"
+ADMINPW="$adminPw"
+PEOPLERDN="$peopleRdn"
+GROUPSRDN="$groupsRdn"
+RIGHTSRDN="$rightsRdn"
+
 
 REPITALC=/var/se3/unattended/install/italc_keys
 mkdir -p $REPITALC
@@ -111,7 +81,7 @@ MENUSCACHES="`cat $REPWPKG/config_italc.txt | grep ^MENUSCACHES | cut -d= -f2 | 
 
 echo "<?xml version=\"1.0\"?><!DOCTYPE italc-config-file><personalconfig version=\"1.0.9\" >  <head>    <globalsettings opened-tab=\"-1\" demoquality=\"$QUALITE\" icononlymode=\"0\" defaultdomain=\"$DOMAINSE3\" role=\"1\" client-update-interval=\"$UPDATEINTERVAL\" wincfg=\"AAAA/wAAAAD9AAAAAAAABAAAAAJ0AAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAWAG0AYQBpAG4AdABvAG8AbABiAGEAcgEAAAAAAAAEAAAAAAAAAAAA\" notooltips=\"0\" win-height=\"682\" win-x=\"-4\" ismaximized=\"1\" win-y=\"-4\" clientdoubleclickaction=\"60\" win-width=\"1024\" showUserColumn=\"0\" toolbarcfg=\"$MENUSCACHES\" />  </head>  <body>" > $PERSOCONFIG
 
-ldapsearch -xLLL -b $PARCDN,$BASEDN | grep "dn: cn=" | cut -d, -f1 | cut -d= -f2 | while read B
+ldapsearch -xLLL -b $parcsRdn,$BASEDN | grep "dn: cn=" | cut -d, -f1 | cut -d= -f2 | while read B
 do 
   IDUNIQ="$(cat /tmp/IDUNIQ)"
   PARC="$B"
@@ -138,13 +108,13 @@ do
     echo "<classroom name=\"$PARC\" >" >> $PERSOCONFIG
     
     # la fonction sed "s/\([^0-9]\)\([0-9]*$\)/\\1\t\\2/"|sort +1 -n|tr -d "\t" permet de classer les postes par ordre de num�ro : n17p1 n17p2 n17p10
-    ldapsearch -xLLL cn=$PARC | grep $COMPUTERDN | grep member | cut -f1 -d, | cut -f2 -d= | sed "s/\([^0-9]\)\([0-9]*$\)/\\1\t\\2/"|sort -k 1 -n|tr -d "\t" | while read A
+    ldapsearch -xLLL cn=$PARC | grep $computersRdn | grep member | cut -f1 -d, | cut -f2 -d= | sed "s/\([^0-9]\)\([0-9]*$\)/\\1\t\\2/"|sort -k 1 -n|tr -d "\t" | while read A
     do
       IDUNIQ="$(cat /tmp/IDUNIQ)"
       XPOS="$(cat /tmp/XPOS)"
       YPOS="$(cat /tmp/YPOS)"
       POSTESPARC="$A"
-      MACADD="$(ldapsearch -xLLL -b cn=$POSTESPARC,$COMPUTERDN,$BASEDN | grep macAddress | cut -d" " -f2)"
+      MACADD="$(ldapsearch -xLLL -b cn=$POSTESPARC,$computersRdn,$BASEDN | grep macAddress | cut -d" " -f2)"
       echo "$POSTEPROF" > $REPWPKG/posteseleves/$POSTESPARC.txt
       if [ "$POSTESPARC" != "$POSTEPROF" ]; then
 
