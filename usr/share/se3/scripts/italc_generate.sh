@@ -87,7 +87,7 @@ do
   PARC="$B"
   
   # on cherche le poste maitre de la salle
-  POSTEPROF="$(ldapsearch -xLLL cn=$PARC | grep description | cut -f2 -d" ")"
+  POSTEPROF="$(ldapsearch -xLLL cn=$PARC -b $parcsRdn,$BASEDN | grep description | cut -f2 -d" ")"
   
   if [ "$POSTEPROF" != "" -a "$POSTEPROF" != "0" ] ; then
     echo "$POSTEPROF" >> $REPWPKG/postesprofs.txt
