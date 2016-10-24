@@ -38,13 +38,10 @@ $module = "se3-".$_GET['varb'];
 // Mise a jour
 if ($_GET['action'] == "update") {
 	echo "<h1>Gestion des modules SE3-- action = update </h1>";
-        if ($module == "se3-ocs") {
-        system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i $module se3-ocs-clientwin");
-	}
-        else {
-        system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i $module");
-	}
-	echo "<br><a href=\"conf_modules.php\">Retour &#224; l'interface de gestion des modules.</a>";
+	//same command as majtest.php - keyser 10-2016
+	//system('sleep 1; /usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh se3 &');
+	system('sleep 1; /usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh -i $module &');
+    echo "<br><a href=\"conf_modules.php\">Retour &#224; l'interface de gestion des modules.</a>";
 	exit;
 }
 
@@ -69,7 +66,7 @@ if ($_GET['action'] == "change") {
 				$ocs_actif = exec("dpkg -s se3-ocs | grep \"Status: install ok\" > /dev/null && echo 1");
 				// Si paquet pas installe
 				if($ocs_actif!="1") {
-					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-ocs se3-ocs-clientwin");
+					system("/usr/bin/sudo /usr/share/se3/scripts/install_se3-module.sh -i se3-ocs");
                                     }
 
 
