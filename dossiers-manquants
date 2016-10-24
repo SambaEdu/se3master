@@ -1,0 +1,88 @@
+./var/www/se3/setup/csv
+./var/www/se3/tmp
+./var/www/se3/nbproject
+./var/www/se3/nbproject/project.properties
+./var/www/se3/nbproject/private
+./var/www/se3/nbproject/private/private.properties
+./var/www/se3/nbproject/private/config.properties
+./var/www/se3/nbproject/private/private.xml
+./var/www/se3/nbproject/project.xml
+./var/www/se3/annu/trombine
+./var/se3/Docs
+./var/se3/Docs/public
+./var/se3/Docs/deploy
+./var/se3/Docs/media
+./var/se3/Docs/media/fonds_ecran
+./var/se3/Docs/trombine
+./var/se3/drivers
+./var/se3/save
+./var/se3/prof
+./var/se3/Progs/rw
+./var/se3/Classes
+./var/cache/se3_install/scripts-alertes
+./var/cache/se3_install/wwwse3
+./var/cache/se3_install/scripts
+./var/spool
+./var/spool/samba
+./var/log/apache2se
+./var/lib
+./var/lib/se3
+./var/lib/se3/import_comptes
+./var/remote_adm
+./var/remote_adm/.ssh
+./usr/share/se3/sbin/rateup
+./etc/apache2se/mods-enabled
+./etc/apache2se/conf.d
+./etc/apache2se/ssl
+./etc/apache2se/mods-available
+./etc/save
+./etc/se3
+./etc/se3/www-tools
+./etc/samba/printers_se3
+./etc/skel/user/Bureau
+./etc/skel/user/profil/Bureau
+./etc/skel/user/profil/Favoris
+./etc/skel/user/profil/Demarrer/Programmes/Démarrage
+./etc/skel/user/profil/Demarrer/Programmes/Accessoires/Divertissement
+./etc/skel/user/profil/Recent
+./etc/skel/user/profil/appdata/Thunderbird/Profiles/default/chrome
+./etc/skel/user/Demarrer
+./etc/skel/user/Corbeille_Reseau
+./etc/skel/user.linux/Bureau
+./etc/skel/user.linux/.kde/share/fonts/Type1
+./etc/skel/user.linux/.kde/share/fonts/TrueType
+./etc/skel/user.linux/.kde/share/applnk/Multimedia/Sound
+./etc/skel/user.linux/.kde/share/applnk/Internet/Connect
+./etc/skel/user.linux/.kde/share/apps/RecentDocuments
+./etc/skel/user.linux/.kde/share/apps/kcookiejar
+./etc/skel/user.linux/.kde/share/apps/kfile
+./etc/skel/user.linux/.kde/share/apps/kdeprint
+./etc/skel/user.linux/GNUstep/.AppInfo
+./etc/skel/user.linux/GNUstep/.AppInfo/WPrefs
+./etc/skel/user.linux/GNUstep/Library/Icons
+./etc/skel/user.linux/GNUstep/Library/WindowMaker/Themes
+./etc/skel/user.linux/GNUstep/Library/WindowMaker/Sounds
+./etc/skel/user.linux/GNUstep/Library/WindowMaker/Styles
+./etc/skel/user.linux/GNUstep/Library/WindowMaker/IconSets
+./etc/skel/user.linux/GNUstep/Library/WindowMaker/Pixmaps
+./etc/skel/user.linux/GNUstep/Library/WindowMaker/Backgrounds
+./etc/skel/user.linux/GNUstep/Library/WindowMaker/SoundSets
+./etc/skel/user.linux/.nautilus/metafiles
+./etc/skel/user.linux/Mail
+./etc/skel/user.linux/.netscape6
+./etc/skel/user.linux/.netscape6/plugins
+./etc/skel/user.linux/.gimp-1.2
+./etc/skel/user.linux/Demarrer
+./home/netlogon/Default User/Application Data/Identities
+./home/netlogon/Default User/Application Data/Identities/{8D740A3F-0B38-4E6A-8F47-2CF5DB187FE4}
+./home/netlogon/Default User/Application Data/Identities/{DF3A97FE-A0A1-4AF4-8985-546DE5AD9BF7}
+./home/netlogon/Default User/Application Data/Identities/{5019DD63-5881-4731-94B4-1FD009E2248C}
+./home/netlogon/Default User/Application Data/Microsoft/SystemCertificates
+./home/netlogon/Default User/Application Data/Microsoft/SystemCertificates/My
+./home/netlogon/Default User/Application Data/Microsoft/SystemCertificates/My/CRLs
+./home/netlogon/Default User/Application Data/Microsoft/SystemCertificates/My/CTLs
+./home/netlogon/Default User/Application Data/Microsoft/SystemCertificates/My/Certificates
+./home/netlogon/Default User/Application Data/Microsoft/Windows
+./home/templates/profs/Bureau
+./home/templates/eleves/Bureau
+./home/templates/admin/Bureau
