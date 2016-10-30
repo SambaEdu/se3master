@@ -7,15 +7,18 @@
 . /etc/se3/config_m.cache.sh
 . /etc/se3/config_l.cache.sh
 
-
-# /usr/share/se3/includes/config.inc.sh -lm
-
 BASEDN="$ldap_base_dn"
 ADMINRDN="$adminRdn"
 ADMINPW="$adminPw"
 PEOPLERDN="$peopleRdn"
 GROUPSRDN="$groupsRdn"
 RIGHTSRDN="$rightsRdn"
+
+net groupmap add sid=$domainsid-512 ntgroup=Admins unixgroup=admins type=domain comment="Administrateurs du domaine"
+net groupmap add ntgroup=Eleves unixgroup=Eleves type=domain comment="Eleves du domaine"
+net groupmap add ntgroup=Profs unixgroup=Profs type=domain comment="Profs du domaine"
+net groupmap add ntgroup="Utilisateurs du domaine" rid="513" unixgroup="lcs-users" type="domain"
+net groupmap add ntgroup="machines" rid="515" unixgroup="machines" type="domain"
 
 testgecos_adm=$(ldapsearch -xLLL uid=admin gecos | grep -v "dn:")
 if [ -z "$testgecos_adm" ]; then
