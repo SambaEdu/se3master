@@ -73,9 +73,6 @@ if ((is_admin("computers_is_admin", $login) == "Y") or (is_admin("parc_can_view"
         $action = $_GET['action'];
     }
     $parc = isset($_POST['parc']) ? $_POST['parc'] : (isset($_GET['parc']) ? $_GET['parc'] : NULL);
-    if (!$parc) {
-        $parc = $_GET['parc'];
-    }
 
     if ($action == "") {
         $action = "detail";
@@ -263,9 +260,9 @@ if ((is_admin("computers_is_admin", $login) == "Y") or (is_admin("parc_can_view"
                                     elseif($retourOs == "98") { $icone="win.png"; }
                                     else { $icone="computer_disable.png"; }
                                     $ip=avoir_ip($mpenc);
-                                    echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"".$retourOs." - ".$ip."\" alt=\"$retourOs\" WIDTH=20 HEIGHT=20 onclick=\"popuprecherche('../ocsreports/machine.php?sessid=$sessid&systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=500');\">";
+                                    echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"".$retourOs." - ".$ip."\" alt=\"$retourOs\" WIDTH=20 HEIGHT=20 onclick=\"popuprecherche('../ocsreports/machine.php?systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=550');\">";
 
-                                //echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/computer.png\" onclick=\"popuprecherche('../ocsreports/machine.php?sessid=$sessid&amp;systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=500');\"  title=\"Station\" alt=\"Station\"></td>\n";
+                                //echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/computer.png\" onclick=\"popuprecherche('../ocsreports/machine.php?systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=550');\"  title=\"Station\" alt=\"Station\"></td>\n";
                             } else {
                                 echo "<img style=\"border: 0px solid ;\" src=\"../elements/images/computer_disable.png\" alt=\"Ordinateur\" WIDTH=20 HEIGHT=20 >";
 

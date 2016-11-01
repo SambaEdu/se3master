@@ -348,7 +348,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		                        elseif($retourOs == "98") { $icone="win.png"; }
 		                        else { $icone="computer_disable.png"; }
 					$ip=avoir_ip($mpenc);
-					echo "<td align='center'><img style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"".$retourOs." - ".$ip."\" alt=\"$retourOs\" WIDTH=20 HEIGHT=20 onclick=\"popuprecherche('../ocsreports/machine.php?sessid=$sessid&systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=500');\">";
+					echo "<td align='center'><img style=\"border: 0px solid ;\" src=\"../elements/images/$icone\" title=\"".$retourOs." - ".$ip."\" alt=\"$retourOs\" WIDTH=20 HEIGHT=20 onclick=\"popuprecherche('../ocsreports/machine.php?systemid=$systemid','popuprecherche','scrollbars=yes,width=500,height=550');\">";
 				}
 				else
 					echo "<td align='center'><img style=\"border: 0px solid ;\" src=\"../elements/images/computer.png\" alt=\"Ordinateur\" WIDTH=20 HEIGHT=20 >";
