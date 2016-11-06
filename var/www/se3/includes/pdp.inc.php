@@ -21,7 +21,8 @@
    * @Repertoire: includes/ 
    */  
   
-
+	mysql_close($authlink);
+  
 ?>
 
 
