@@ -51,6 +51,7 @@ $ldap_login_attr = "uid";
 
 $authlink = mysql_connect($dbhost,$dbuser,$dbpass);
 @mysql_select_db($dbname) or die("Impossible de se connecter à la base $dbname.");
+@mysql_set_charset('utf8');
 $result=mysql_query("SELECT * from params where srv_id=0 OR srv_id=$srv_id");
 if ($result)
     while ($r=mysql_fetch_array($result))
