@@ -27,7 +27,6 @@ sambaPasswordHistory: 00000000000000000000000000000000000000000000000000000000
 userPassword:: e1NTSEF9UjYrYVpLZGU2RmVnak5uZGRENll4SWxualBIcDcxVis=
 sambaPwdLastSet: 1
 sambaAcctFlags: [DU         ]
-EOF
 
 dn: uid=admin,ou=#PEOPLE#,#BASEDN#
 uid: admin
