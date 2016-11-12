@@ -166,7 +166,8 @@ if [ -e /etc/se3/setup_se3.data ]; then
 	chmod 700 /etc/se3/setup_se3.data
 	. /etc/se3/setup_se3.data # le "." permet d'inclure le script et ses variables
 	# correction pass mysql
-	MYSQLPW=$(echo "$MYSQLPW" | sed -e 's/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g')
+# 	MYSQLPW=$(echo "$MYSQLPW" | sed -e 's/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g')
+	MYSQLPW=$(printf '%s' "$MYSQLPW" | LC_ALL=C sed -r 's/[^a-zA-Z0-9]//g')
 else
 	[ ! -d /etc/se3 ] && mkdir /etc/se3
 fi
@@ -309,25 +310,25 @@ if [ ! "$rep" = "n" ]; then
 
 		echo -e "$COLTXT"
 		echo -e "Entrez le mot de passe root MySQL ou appuyez simplement sur entrée pour en générer un aléatoirement"
-		echo -e 'Attention les caractères "#", "~", "-", "&" et "$" sont interdits et seront supprimés le cas échéant.'
+		echo -e 'Attention les caractères spéciaux sont interdits et seront supprimés le cas échéant.'
 		echo -e "$COLSAISIE\c "
 		read MYSQLPW
-		MYSQLPW=$(echo "$MYSQLPW" | sed -e 's/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g')
+		MYSQLPW=$(printf '%s' "$MYSQLPW" | LC_ALL=C sed -r 's/[^a-zA-Z0-9]//g')
 
 		SE3PW=""
 		while [ -z "$SE3PW" ]
 		do
 			echo -e "$COLTXT"
 			echo -e "Entrez le mot de passe Administrateur SambaEdu3 (Non trivial SVP)" 
-			echo -e 'Attention les caractères "#", "~", "-", "&" et "$" sont interdits et seront supprimés le cas échéant'
+			echo -e 'Attention les caractères spéciaux sont interdits et seront supprimés le cas échéant.'
 			echo -e "$COLSAISIE\c "
 			read SE3PW
-			SE3PW=$(echo "$SE3PW" | sed -e 's/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g')
+			SE3PW=$(printf '%s' "$SE3PW" | LC_ALL=C sed -r 's/[^a-zA-Z0-9]//g')
 		done
 	fi
 	if [ -z "$MYSQLPW" ]; then
 		echo -e "vous n'avez pas saisi de mot de passe root MySQL, celui-ci va être généré aléatoirement"
-		MYSQLPW=`date | md5sum | cut -c 1-6 | sed -e s'/\-//g' | sed -e s'/\$//g' | sed -e 's/\#//g'| sed -e 's/\~//g'| sed -e 's/\&//g'`
+		MYSQLPW=$(mkpasswd | LC_ALL=C sed -r 's/[^a-zA-Z0-9]//g')
 	fi
 	echo -e "$COLCMD\c "
 	mysqladmin password $MYSQLPW 2>/dev/null && echo -e "${COLINFO}Le mot de passe root MySQL a été initialisé à $MYSQLPW"
@@ -1162,10 +1163,21 @@ echo -e "$COLTXT"
 XPPASS=`echo "SELECT value FROM params WHERE name='xppass'" | mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW -N`
 #saisir pass si necessaire
 # a Faire
-if [  -z "$XPPASS" ]; then
-	XPPASS_RDM="$(makepasswd)"
+if [ -z "$XPPASS" ]; then
+	XPPASS_RDM="$(makepasswd| LC_ALL=C sed -r 's/[^a-zA-Z0-9]//g')"
 	echo -e "${COLTXT}Lors de la jonction au domaine des machines Win 2000/XP, un compte local adminse3 sera créé.\nVeuillez saisir un mot de passe pour ce compte  [${COLDEFAUT}${XPPASS_RDM}${COLTXT}]  ${COLSAISIE}"
+	echo -e 'Attention les caractères spéciaux sont interdits et seront supprimés le cas échéant'
 	read XPPASS
+	XPPASS_COR=$(printf '%s' "$XPPASS" | LC_ALL=C sed -r 's/[^a-zA-Z0-9]//g')
+	if [ "$XPPASS" != "$XPPASS_COR" ]; then
+		rep=""
+		echo -e "Attention vous avez saisi $XPPASS, votre mot de passe semple contenir des caractères interdit :"
+		echo -e "Corriger ? o/n"
+		read rep
+		if [ "$rep" != "n" ]; then
+			XPPASS=$(printf '%s' "$XPPASS_COR")
+		fi
+	fi
 	echo -e "${COLTXT}"
 	[  -z "$XPPASS" ] && XPPASS="$XPPASS_RDM"
 	echo "UPDATE params SET value=\"$XPPASS\" WHERE name=\"xppass\""|mysql -h $MYSQLIP se3db -u se3db_admin -p$SE3PW
