@@ -56,7 +56,7 @@ sambaNTPassword: 66FE68F5B1006745A5895E42A24B24AC
 sambaPwdLastSet: 1
 sambaLMPassword: 94F92844CDB823F709752A3293831D17
 
-dn: sambaDomainName=#NTDOM#,#BASEDN
+dn: sambaDomainName=#NTDOM#,#BASEDN#
 sambaAlgorithmicRidBase: 1000
 gidNumber: 1000
 uidNumber: 1000
