@@ -20,7 +20,7 @@ net groupmap add ntgroup=Profs unixgroup=Profs type=domain comment="Profs du dom
 net groupmap add ntgroup="Utilisateurs du domaine" rid="513" unixgroup="lcs-users" type="domain"
 net groupmap add ntgroup="machines" rid="515" unixgroup="machines" type="domain"
 
-testgecos_adm=$(ldapsearch -xLLL uid=admin gecos | grep -v "dn:")
+testgecos_adm=$(ldapsearch -xLLL uid=admin gecos | grep gecos)
 if [ -z "$testgecos_adm" ]; then
 ldapmodify -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
 dn: uid=admin,$PEOPLERDN,$BASEDN
