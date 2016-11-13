@@ -2,8 +2,8 @@ dn: uid=root,ou=#PEOPLE#,#BASEDN#
 uid: root
 sn: Se3
 cn: root Se3
-givenName:
-initials:
+givenName: root
+initials: root
 gecos: root Se3,,,
 mail: root@#DOMAIN#
 loginShell: /bin/true
@@ -32,8 +32,8 @@ dn: uid=admin,ou=#PEOPLE#,#BASEDN#
 uid: admin
 cn: Administrateur SE3
 sn: SE3
-givenName:
-initials:
+givenName: Admin
+initials: Admin
 gecos: Administrateur  Se3,00000000,M,N
 mail: admin@#DOMAIN#
 objectClass: top
