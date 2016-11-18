@@ -1,7 +1,7 @@
 #!/bin/bash
 # script test de reparation des profils
 # lance en cron
-# version 2 par Laurent Joly
+# version 3 par Laurent Joly
 
 m1=0;
 m2=0;
@@ -16,30 +16,28 @@ do
     [ "$se3_root_username" = '/home/profiles/*.V2' ] && continue;
     se3_username="${se3_root_username##*/}";
     se3_username="${se3_username%.V2}";
-    if [ -f "$se3_root_username/NTUSER.DAT" ] && [ -f "$se3_root_username/ntuser.ini" ];
-    then 
+    m1=0;
+    m2=0;
+    delta=0;
+    if [ -f "$se3_root_username/NTUSER.DAT" ];
+    then
         m1=$(stat -c %Y $se3_root_username/NTUSER.DAT);
+    fi
+    if [ -f "$se3_root_username/ntuser.dat" ];
+    then
+        m1=$(stat -c %Y $se3_root_username/ntuser.dat);
+    fi
+    if [ -f "$se3_root_username/ntuser.ini" ];
+    then
         m2=$(stat -c %Y $se3_root_username/ntuser.ini);
-        delta=$(echo $((m1-m2)) | tr -d '-');
+    fi
 
-        if [ "$delta" -gt "60" ];
-        then
-            echo $se3_username>>/home/netlogon/delProfile2.txt;
-            echo "$se3_username : Profil corrompu";
-        fi
-        else
-        m1=0;
-        m2=0;
-        if [ -f "$se3_root_username/NTUSER.DAT" ];
-        then
-            echo $se3_username>>/home/netlogon/delProfile2.txt;
-            echo "$se3_username : Profil corrompu (1)";
-        fi
-        if [ -f "$se3_root_username/ntuser.ini" ];
-        then
-            echo $se3_username>>/home/netlogon/delProfile2.txt;
-            echo "$se3_username : Profil corrompu (2)";
-        fi
+    delta=$(echo $((m1-m2)) | tr -d '-');
+
+    if [ "$delta" -gt "60" ];
+    then
+  #      echo $se3_username>>/home/netlogon/delProfile2.txt;
+        echo "$se3_username : Profil corrompu ($delta s)";
     fi
 done
 cat /home/netlogon/delProfile2.txt>>/home/netlogon/delProfile.txt;
