@@ -34,9 +34,9 @@ do
 
     delta=$(echo $((m1-m2)) | tr -d '-');
 
-    if [ "$delta" -gt "60" ];
+    if [ "$delta" -gt "600" ];
     then
-  #      echo $se3_username>>/home/netlogon/delProfile2.txt;
+        echo $se3_username>>/home/netlogon/delProfile2.txt;
         echo "$se3_username : Profil corrompu ($delta s)";
     fi
 done
