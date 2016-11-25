@@ -22,6 +22,10 @@ fi
 # fi
 
 
+# noroot noway 
+touch /etc/nologon
+
+
 
 # nscd sucks !
 if [ -e /etc/init.d/nscd  ]; then
