@@ -37,7 +37,12 @@ if [ ! -d "/home/$user" -o ! -d "/home/$user/profil" ]; then
     . /etc/se3/config_c.cache.sh
  	. /etc/se3/config_o.cache.sh
 	. /etc/se3/config_p.cache.sh
-	
+		if [ -z "$path2UserSkel" ];then
+			echo "Alerte la variable path2UserSkel de la table params est vide !!!"
+			echo "Il y a manifestement un pb avec la base sql - ABANDON"
+			exit 1
+			
+		fi
     [ -d "/home/$user" ] || mkdir /home/$user
     cp -a $path2UserSkel/* /home/$user > /dev/null # 2>&1
 	
