@@ -1,7 +1,7 @@
 #!/bin/bash
 # script test de reparation des profils
 # lance en cron
-# version 3 par Laurent Joly
+# version 4 par Laurent Joly
 
 m1=0;
 m2=0;
