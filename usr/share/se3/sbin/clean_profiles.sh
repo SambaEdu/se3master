@@ -8,7 +8,7 @@ actifs=$(smbstatus -b | awk '{ print $2}' | sort -u)
 if [ ! -e "$temoin" ];then
 	touch $temoin
 fi 
-setfacl -m  u:www-se3:rwx $temoin
+
 fromdos $temoin
 
 if [ "$1" = "all" ];then
@@ -41,6 +41,6 @@ done < $temoin
 
 
 echo > $temoin
-
-
+setfacl -m  u:www-se3:rwx $temoin
+exit 0
 
