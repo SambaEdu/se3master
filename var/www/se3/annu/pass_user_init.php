@@ -57,22 +57,24 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
 
 	$ds = @ldap_connect ( $ldap_server, $ldap_port );
 	if ( $ds ) {
-    		$r = @ldap_bind ( $ds ); // Bind anonyme
-    		if ($r) {
-      			// Recherche dans la branche people
-      			$result = @ldap_search ( $ds, $dn["people"], $filter, $ldap_search_people_attr );
-      			if ($result) {
-        			$info = @ldap_get_entries ( $ds, $result );
-        			if ( $info["count"]) {
-          				for ($loop=0; $loop<$info["count"];$loop++) {
-         					$gecos = $info[0]["gecos"][0];
-         					
-         					$prenom = $info[0]["givenname"][0];
-         					$nom = $info[0]["sn"][0];
-         					$tmp = preg_split ("/,/",$info[0]["gecos"][0],4);
-         					$date_naiss=$tmp[1];
-         					
-         					switch ($pwdPolicy) {
+		$r = @ldap_bind ( $ds ); // Bind anonyme
+		if ($r) {
+			// Recherche dans la branche people
+			$result = @ldap_search ( $ds, $dn["people"], $filter, $ldap_search_people_attr );
+			if ($result) {
+				$info = @ldap_get_entries ( $ds, $result );
+				if ( $info["count"]) {
+					for ($loop=0; $loop<$info["count"];$loop++) {
+						$gecos = $info[0]["gecos"][0];
+
+						$prenom = $info[0]["givenname"][0];
+						$nom = $info[0]["sn"][0];
+						$tmp = preg_split ("/,/",$info[0]["gecos"][0],4);
+						$date_naiss=$tmp[1];
+
+						echo "<a href='people.php?uid=$uid_init' title=\"Retour à la fiche de l'utilisateur $nom $prenom.\">$nom $prenom</a>&nbsp;: ";
+
+						switch ($pwdPolicy) {
 							case 0:		// date de naissance
 								$userpwd=$date_naiss;
 								echo gettext("Mot de passe r&#233;initialis&#233; &#224; la date de naissance : ");
@@ -87,14 +89,14 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
 								$userpwd=$out[0];
 								break;
 								echo gettext("Mot de passe r&#233;initialis&#233; &#224; : ");
-							}
+						}
 
-	       					echo $userpwd."<br><br>";
-        		 			userChangedPwd($uid_init, $userpwd);
-        		 			
-        		 			// ajouter vérification de doublon en cas de modifs successives pour un même uid.
-        		 			$doublon = false;
-        		 			foreach($_SESSION['comptes_crees'] as &$key) {
+						echo $userpwd."<br><br>";
+						userChangedPwd($uid_init, $userpwd);
+
+						// ajouter vérification de doublon en cas de modifs successives pour un même uid.
+						$doublon = false;
+						foreach($_SESSION['comptes_crees'] as &$key) {
 							if ($key['uid'] == $uid_init){  // doublon : mise à jour pwd
 								$doublon = true;
 								$key['pwd'] = $userpwd;
@@ -107,23 +109,23 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
 						}
 						$doublon = false;
 
-           				}
-        			}
-        			
-				@ldap_free_result ( $result );
-      			} else {
-        			$error = gettext("Erreur de lecture dans l'annuaire LDAP");
-      			}
+					}
+				}
 
-    		} else {
-      			$error = gettext("Echec du bind anonyme");
-    		}
-    		@ldap_close ( $ds );
-  	} else {
-    		$error = gettext("Erreur de connection au serveur LDAP");
-  	}
-  	
-include("listing.inc.php");
+				@ldap_free_result ( $result );
+			} else {
+				$error = gettext("Erreur de lecture dans l'annuaire LDAP");
+			}
+
+		} else {
+			$error = gettext("Echec du bind anonyme");
+		}
+		@ldap_close ( $ds );
+	} else {
+		$error = gettext("Erreur de connection au serveur LDAP");
+	}
+
+	include("listing.inc.php");
 
 }
 
