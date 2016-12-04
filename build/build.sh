@@ -66,7 +66,7 @@ find "$PKGDIR" -name ".empty" -delete
 # dpkg --build "$PKGDIR"
 # mv $PKGDIR.deb se3_$version.deb
 
-fakeroot dpkg-deb -b "$PKGDIR" "se3_$version.deb"
+fakeroot dpkg-deb -b "$PKGDIR" "se3_$VERSION.deb"
 
 
 echo "OK, building succesfully..."
