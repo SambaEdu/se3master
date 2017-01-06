@@ -142,52 +142,62 @@ echo "<table width=\"80%\"><tr><td>";
 	echo gettext("Adresse m&#233;l")." : <a href=\"mailto:".$user["email"]."\"><tt>".$user["email"]."</a></tt><br>\n";
 
 	// Affichage Menu people_admin
-  	if (is_admin("Annu_is_admin",$login) == "Y" ) {
-	  ?>
-		<br>
-  		<u><?php echo gettext("Autres actions possibles"); ?></u> :<br>
-  		<ul style="color: red;">
-    		<li><a href="mod_user_entry.php?uid=<?php echo $user["uid"] ?>"><?php echo gettext("Modifier le compte") ?></a><br>
-    		<li><a href="pass_user_init.php?uid=<?php echo $user["uid"] ?>"><?php echo gettext("R&#233;initialiser le mot de passe") ?></a><br>
- 
-  		<?php
-  		//si compte actif
-  		if ("$smbversion" == "samba3") {
-  			$test_desac=search_people("(&(uid=".$user["uid"].") (sambaAcctFlags=[U ]))");
-  		} else {
-  			$test_desac=search_people("(&(uid=".$user["uid"].") (acctFlags=[U ]))");
-  		}
-  		if (count($test_desac)==1) {
-  			echo "<li><a href=\"desac_user_entry.php?uid=".$user["uid"]."\" onclick= return getconfirm()>".gettext("D&#233;sactiver ce compte")." </a><br>\n";
-            if(file_exists('/home/'.$user["uid"])) {
-                echo "<li><span style='color:black'>Le dossier personnel existe.</span></li>";
-            }
-            else {
-                echo "<li>Le dossier personnel n'existe pas.<br /><a href='people.php?uid=".$user["uid"]."&amp;create_home=y'>Cr&#233;er le dossier personnel maintenant</a><br />(<em>sinon, il sera cr&#233;&#233; lors de la premiere connexion de l'utilisateur</em>)</li>";
-            }
+	if (is_admin("Annu_is_admin",$login) == "Y" ) {
+		echo "
+	<br>
+	<u>".gettext("Autres actions possibles")."</u>&nbsp;: <br />
+	<ul style=\"color: red;\">
+		<li><a href=\"mod_user_entry.php?uid=".$user["uid"].">".gettext("Modifier le compte")."</a><br />
+		<li><a href=\"pass_user_init.php?uid=".$user["uid"].">".gettext("R&#233;initialiser le mot de passe")."</a><br />";
 
-  		} else {
-  			//si compte desactive
-   			echo "<li><a href=\"desac_user_entry.php?uid=".$user["uid"]."&action=activ\" >".gettext("Activer ce compte")." </a><br>\n";
-  		}
-		  ?>
-		
+		//si compte actif
+		if ("$smbversion" == "samba3") {
+			$test_desac=search_people("(&(uid=".$user["uid"].") (sambaAcctFlags=[U ]))");
+		} else {
+			$test_desac=search_people("(&(uid=".$user["uid"].") (acctFlags=[U ]))");
+		}
+
+		if (count($test_desac)==1) {
+			echo "
+		<li><a href=\"desac_user_entry.php?uid=".$user["uid"]."\" onclick= return getconfirm()>".gettext("D&#233;sactiver ce compte")." </a><br />";
+			if(file_exists('/home/'.$user["uid"])) {
+				echo "
+		<li><span style='color:black'>Le dossier personnel existe.</span></li>";
+			}
+			else {
+				echo "
+		<li>Le dossier personnel n'existe pas.<br /><a href='people.php?uid=".$user["uid"]."&amp;create_home=y'>Cr&#233;er le dossier personnel maintenant</a><br />(<em>sinon, il sera cr&#233;&#233; lors de la premiere connexion de l'utilisateur</em>)</li>";
+			}
+
+		} else {
+			//si compte desactive
+			echo "
+		<li><a href=\"desac_user_entry.php?uid=".$user["uid"]."&action=activ\" >".gettext("Activer ce compte")." </a><br>\n";
+			if(!file_exists('/home/'.$user["uid"])) {
+				echo "
+		<li>Le dossier personnel n'existe pas.<br /><a href='people.php?uid=".$user["uid"]."&amp;create_home=y'>Cr&#233;er le dossier personnel maintenant</a><br />(<em>sinon, il sera cr&#233;&#233; lors de la premiere connexion de l'utilisateur</em>)</li>";
+			}
+		}
+		?>
+
 		<li><a href="del_user.php?uid=<?php echo $user["uid"] ?>" onclick= "return getconfirm();"><?php echo gettext("Supprimer le compte"); ?></a><br>
-    		<li><a href="del_nt_profile.php?uid=<?php echo $user["uid"] ?>&action=del" onclick= "return getconfirm();"><?php echo gettext("Reg&#233;n&#233;rer le profil errant Windows"); ?></a><br>
-    		<?php exec ("/usr/share/se3/sbin/getUserProfileInfo.pl $user[uid]",$AllOutPut,$ReturnValue);
-    		
-		if ($AllOutPut[0]=="lock") {
-			echo "<li><a href=\"del_nt_profile.php?uid=".$user["uid"]."&action=unlock\">".gettext("D&#233;verrouiller le profil Windows...")."</a><br>\n";
-    		} else {
-         		echo "<li><a href=\"del_nt_profile.php?uid=".$user["uid"]."&action=lock\">".gettext("Verrouiller le profil Windows...")."</a><br>\n";
-    		}?>
-    
-    		<li><a href="pop_user.php?uid=<?php echo $user["uid"] ?>"><?php echo gettext("Envoyer un Pop Up"); ?></a><br>
+		<li><a href="del_nt_profile.php?uid=<?php echo $user["uid"] ?>&action=del" onclick= "return getconfirm();"><?php echo gettext("Reg&#233;n&#233;rer le profil errant Windows"); ?></a><br>
+		<?php exec ("/usr/share/se3/sbin/getUserProfileInfo.pl $user[uid]",$AllOutPut,$ReturnValue);
 
-    		<!--li><a href="html/AdminUserBdd.html">Ouvrir la base de donne&eacute;es</a><br-->
-    		<!--<li><a href="html/AdminUserWeb.html">Activer l'espace <em>Web</em></a>-->
-  		<?php       
-  	} // Fin affichage menu people_admin
+		if ($AllOutPut[0]=="lock") {
+			echo "
+		<li><a href=\"del_nt_profile.php?uid=".$user["uid"]."&action=unlock\">".gettext("D&#233;verrouiller le profil Windows...")."</a><br>\n";
+		} else {
+			echo "
+		<li><a href=\"del_nt_profile.php?uid=".$user["uid"]."&action=lock\">".gettext("Verrouiller le profil Windows...")."</a><br>\n";
+		}?>
+
+		<li><a href="pop_user.php?uid=<?php echo $user["uid"] ?>"><?php echo gettext("Envoyer un Pop Up"); ?></a><br>
+
+		<!--li><a href="html/AdminUserBdd.html">Ouvrir la base de donne&eacute;es</a><br-->
+		<!--<li><a href="html/AdminUserWeb.html">Activer l'espace <em>Web</em></a>-->
+		<?php       
+	} // Fin affichage menu people_admin
   
   	if (ldap_get_right("se3_is_admin",$login)=="Y") {
     		echo "<li><a href=\"add_user_right.php?uid=" . $user["uid"] ."\">".gettext("G&#233;rer les droits")."</a><br>"; 
