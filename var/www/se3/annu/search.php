@@ -44,7 +44,7 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
 	aff_trailer ("2");
 
 	$titre=gettext("Rechercher un utilisateur");
-   	$texte ="<form action=\"peoples_list.php\" method = post>\n";
+   	$texte ="<form action=\"peoples_list.php\" method='post' id='form1'>\n";
     	$texte .= "<table>\n";
 	$texte .= "<tbody>\n";
 	$texte .= "<tr>\n";
@@ -67,7 +67,7 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
 	$texte .= "<option value=\"finit\">".gettext("finit par")."</option>\n";
 	$texte .= "</select>\n";
 	$texte .= "</td>\n";
-	$texte .= "<td><input type=\"text\" name=\"nom\"></td>\n";
+	$texte .= "<td><input type=\"text\" name=\"nom\" id=\"nom\"></td>\n";
 	$texte .= "</tr>\n";
 	$texte .= "<tr>\n";
 	$texte .= "<td>".gettext("Classe :")."</td>\n";
@@ -78,17 +78,20 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
 	$texte .= "<option value=\"finit\">".gettext("finit par")."</option>\n";
 	$texte .= "</select>\n";
 	$texte .= "</td>\n";
-	$texte .= "<td><input type=\"text\" name=\"classe\"></td>\n";
+	$texte .= "<td><input type=\"text\" name=\"classe\" id=\"classe\"></td>\n";
 	$texte .= "</tr>\n";
 	$texte .= "</tbody>\n";
  	$texte .= "</table>\n";
-	$texte .= "<div align=center><input type=\"submit\" Value=\"".gettext("Lancer la requ&#234;te")."\"></div>";
+	$texte .= "<div align=center>
+	<input type=\"submit\" id='input_submit_1' value=\"".gettext("Lancer la requ&#234;te")."\" />
+	<input type=\"button\" id='input_submit_2' value=\"".gettext("Lancer la requ&#234;te")."\" style='display:none' onclick='test_form1()' />
+</div>";
 	$texte .= "</form>\n";
 	mktable($titre,$texte);
 
     // Recherche d'un groupe (classe, Equipe, Cours ...)
  	$titre = gettext("Rechercher un groupe (classe, &#233;quipe, cours ...)")."</h2>\n";
-    	$texte = "<form action=\"groups_list.php\" method = post>\n";
+    	$texte = "<form action=\"groups_list.php\" method='post' id='form2'>\n";
     	$texte .= "<table>\n";
 	$texte .= "<tbody>\n";
 	$texte .= "<tr>\n";
@@ -100,18 +103,45 @@ if ((is_admin("annu_can_read",$login)=="Y") || (is_admin("Annu_is_admin",$login)
 	$texte .= "<option value=\"finit\">".gettext("finit par")."</option>\n";
 	$texte .= "</select>\n";
 	$texte .= "</td>\n";
-	$texte .= "<td><input type=\"text\" name=\"group\"></td>\n";
+	$texte .= "<td><input type=\"text\" name=\"group\" id=\"group\"></td>\n";
 	$texte .= "</tr>\n";
 	$texte .= "</tbody>\n";
  	$texte .= "</table>\n";
-	$texte .= "<div align=center><input type=\"submit\" Value=\"".gettext("Lancer la requ&#234;te")."\"></div>\n";
+	$texte .= "<div align=center>
+	<input type=\"submit\" id='input_submit_3' value=\"".gettext("Lancer la requ&#234;te")."\" />
+	<input type=\"button\" id='input_submit_4' value=\"".gettext("Lancer la requ&#234;te")."\" style='display:none' onclick='test_form2()' />
+</div>";
     	$texte .= "</form>\n";
 	echo "<BR>";
 
 	$texte.="<script type='text/javascript'>
+	document.getElementById('input_submit_1').style.display='none';
+	document.getElementById('input_submit_2').style.display='';
+	document.getElementById('input_submit_3').style.display='none';
+	document.getElementById('input_submit_4').style.display='';
+
 	if(document.getElementById('fullname')) {
 		document.getElementById('fullname').focus();
 	}
+
+	function test_form1() {
+		if((document.getElementById('fullname').value=='')&&(document.getElementById('nom').value=='')&&(document.getElementById('classe').value=='')) {
+			alert('Tous les champs du formulaire sont vides.');
+		}
+		else {
+			document.getElementById('form1').submit();
+		}
+	}
+
+	function test_form2() {
+		if(document.getElementById('group').value=='') {
+			alert('Le champ groupe ne peut pas etre vide.');
+		}
+		else {
+			document.getElementById('form2').submit();
+		}
+	}
+
 </script>";
 
 	mktable($titre,$texte);
