@@ -49,6 +49,8 @@ if ((is_admin("Annu_is_admin",$login)=="Y") || (is_admin("Annu_can_read",$login)
 
 	echo "<h1>".gettext("Annuaire")."</h1>\n";
 
+	echo "<div style='float:right; width:16px; '><a href='add_user.php' title='Ajouter un utilisateur'><img src='/elements/images/add.png' width='16px' height='16px'  alt='Ajouter un utilisateur' /></a></div>\n";
+
 	// Convertion en utf_8
 	$nom = utf8_encode($nom);
 	$fullname = utf8_encode($fullname);
