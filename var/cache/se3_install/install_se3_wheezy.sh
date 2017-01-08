@@ -1116,9 +1116,9 @@ fi
 
 [ ! -z `getent group | grep "lcs-users:x:108"` ] && /usr/share/se3/sbin/se3_modif_gidNumber.sh
 
-if [ ! -e ${MIGFOLDER} ]; then
-	/usr/share/se3/sbin/install_quotas.sh
-fi
+
+/usr/share/se3/sbin/install_quotas.sh
+
 ### ajout keyser  version 1.0 ###
 
 # ajout des chemins de se3 ds le path de root
