@@ -44,12 +44,16 @@ fi
 # Conf meta annuaire Rouen
 if [ "$1" = "metarouen" ]
 then
+	ldap_base_dn_suffix="ou=ac-rouen,ou=education,o=gouv,c=fr"
 	replica_ip="172.30.192.87"
 	replica_status="3"
 	echo "mise en place de la replication meta annuaire rouennaise"
     CHANGEMYSQL replica_ip "$replica_ip"
 	CHANGEMYSQL replica_status "$replica_status"
+else
+	ldap_base_dn_suffix="$ldap_base_dn"
 fi
+
 	
 #
 ## Version Debian
@@ -229,7 +233,7 @@ backend		bdb
 database        bdb
 
 # The base of your directory
-suffix		\"$ldap_base_dn\"
+suffix		\"$ldap_base_dn_suffix\"
 rootdn		\"$adminRdn,$ldap_base_dn\"
 rootpw		$crypted_ldap_passwd
 # Where the database file are physically stored
@@ -464,3 +468,29 @@ sleep 1
 
 # Supprime le lock
 rm -f /var/lock/syncrepl.lock
+
+if [ "$1" = "metarouen" ]
+then
+	cd /root
+	echo "Reconstruction de l'annuaire"
+	service slapd stop
+	slapcat > annu-actuel.ldif
+	rm -rf /var/lib/ldap.old
+	mv /var/lib/ldap /var/lib/ldap.old
+    install -d -o openldap -g openldap /var/lib/ldap
+    cp /var/lib/ldap.old/DB_CONFIG /var/lib/ldap
+	echo "dn: ou=ac-rouen,ou=education,o=gouv,c=fr
+objectClass: top
+objectClass: organizationalUnit
+ou: ou=ac-rouen"  > base-rouen.ldif 
+	mv /etc/ldap/slapd.d* /root/
+	echo "integration base"
+	slapadd -l base-rouen.ldif
+	echo "integration sauvegarde"
+	slapadd -c -l annu-actuel.ldif
+	chown -R openldap:openldap /var/lib/ldap
+	service slapd start
+fi
+
+
+
