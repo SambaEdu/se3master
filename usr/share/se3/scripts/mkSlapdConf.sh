@@ -44,6 +44,8 @@ fi
 # Conf meta annuaire Rouen
 if [ "$1" = "metarouen" ]
 then
+	echo "sauvegarde annuaire avant modif"
+	slapcat > /root/annu-actuel.ldif
 	ldap_base_dn_suffix="ou=ac-rouen,ou=education,o=gouv,c=fr"
 	replica_ip="172.30.192.87"
 	replica_status="3"
@@ -474,7 +476,6 @@ then
 	cd /root
 	echo "Reconstruction de l'annuaire"
 	service slapd stop
-	slapcat > annu-actuel.ldif
 	rm -rf /var/lib/ldap.old
 	mv /var/lib/ldap /var/lib/ldap.old
     install -d -o openldap -g openldap /var/lib/ldap
