@@ -207,19 +207,19 @@ setfacl -m u:www-se3:rwx /home/templates
 setfacl -m d:u:www-se3:rwx /home/templates
 ls /home/templates/ | while read A
 do
-	if [ ! -h /home/templates/$A -a -d /home/templates/$A ]; then
+	if [ ! -h "/home/templates/$A" -a -d "/home/templates/$A" ]; then
 		chown admin:admins /home/templates/$A
 		chown admin:admins /home/templates/$A/*
 
 		# Pour les dossiers 775 et pour les fichiers 674???
-		chmod 775 /home/templates/$A/*
+		chmod -R 775 /home/templates/$A/*
 
 		
 	fi
 
 	# Il ne faut pas appliquer les modifs suivantes sur skeluser
 	# Le lien ne pointe pas sur un dossier d'une partition XFS
-	if [ ! -h /home/templates/$A ]; then
+	if [ ! -h "/home/templates/$A" ]; then
 		setfacl -R -m u:www-se3:rwx /home/templates/$A
 		setfacl -R -m d:u:www-se3:rwx /home/templates/$A
 	fi
