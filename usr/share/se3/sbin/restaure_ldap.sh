@@ -2,7 +2,7 @@
 
 # Script destiné à restaurer une sauvegarde de l'annuaire LDAP.
 # Auteur: Stephane Boireau
-# Dernière modification: 22/01/2008
+# Dernière modification: 02/2017 keyser - Ajout correction annuaire post restauration
 
 ## $Id$ ##
 
@@ -296,22 +296,9 @@ else
 
 fi
 
-DOMAINSID=`net getlocalsid | cut -d: -f2 | sed -e "s/ //g"`
-#Change le SambaPrimaryGroupe
-echo "Modification du SambaPrimaryGroupe en arriere plan dans 2mn"
-AT_SCRIPT=/root/modif_SambaPrimaryGroupe.sh
-echo "#!/bin/bash
-ldapsearch -x -b $PEOPLERDN,$BASEDN '(objectclass=*)' uid | grep -v People | grep -v \# | grep uid: | cut -d\" \" -f2 | while read ID
-do
-ldapmodify -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
-dn: uid=\$ID,$PEOPLERDN,$BASEDN
-changetype: modify
-replace: sambaPrimaryGroupSID
-sambaPrimaryGroupSID: $DOMAINSID-513
-EOF
-done
-" >$AT_SCRIPT
-chmod 700 $AT_SCRIPT
-at now +2 minutes -f $AT_SCRIPT >/dev/null
+if [ -e "/usr/share/se3/sbin/corrige_ldap_smb44.sh" ]; then
+	echo "Lancement du script de correction de l'annuaire pour samba 4.4"
+	sleep 1
+	/usr/share/se3/sbin/corrige_ldap_smb44.sh
+fi
 
-#rm -rf /var/lib/ldap
