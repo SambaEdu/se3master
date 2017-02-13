@@ -14,15 +14,18 @@ PEOPLERDN="$peopleRdn"
 GROUPSRDN="$groupsRdn"
 RIGHTSRDN="$rightsRdn"
 
+echo "Remise en place di besoin des mapping de groupes"
 net groupmap add sid=$domainsid-512 ntgroup=Admins unixgroup=admins type=domain comment="Administrateurs du domaine"
 net groupmap add ntgroup=Eleves unixgroup=Eleves type=domain comment="Eleves du domaine"
 net groupmap add ntgroup=Profs unixgroup=Profs type=domain comment="Profs du domaine"
 net groupmap add ntgroup="Utilisateurs du domaine" rid="513" unixgroup="lcs-users" type="domain"
 net groupmap add ntgroup="machines" rid="515" unixgroup="machines" type="domain"
 
+echo "Correction de la structure"
+
 testgecos_adm=$(ldapsearch -xLLL uid=admin gecos | grep '^gecos: ')
 if [ -z "$testgecos_adm" ]; then
-ldapmodify -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
 dn: uid=admin,$PEOPLERDN,$BASEDN
 changetype: modify
 add: givenName
@@ -36,9 +39,9 @@ gecos: Administrateur  Se3,,,
 EOF
 fi
 
-ldapdelete -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" "cn=root,$BASEDN"
+ldapdelete -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" "cn=root,$BASEDN"
 
-ldapadd -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+ldapadd -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
 dn: uid=root,$PEOPLERDN,$BASEDN
 uid: root
 sn: Se3
@@ -69,7 +72,7 @@ sambaAcctFlags: [DU         ]
 EOF
 
 
-ldapadd -x -v -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+ldapadd -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
 dn: sambaDomainName=$se3_domain,$BASEDN
 sambaAlgorithmicRidBase: 1000
 gidNumber: 1000
@@ -91,17 +94,19 @@ sambaPwdHistoryLength: 0
 sambaNextRid: 6752
 EOF
 
-echo "Modification de l'attribut sambaPwdLastSet pour tous les utilisateurs"
-ldapsearch -xLLL -D $adminRdn,$ldap_base_dn -b $PEOPLERDN,$BASEDN -w $adminPw objectClass=person uid| grep uid:| cut -d ' ' -f2| while read uid
+echo "Modification si besoin des attributs samba pour les utilisateurs"
+ldapsearch -xLLL -D $adminRdn,$ldap_base_dn -b $PEOPLERDN,$BASEDN -w $adminPw objectClass=person uid| grep uid:| cut -d ' ' -f2| grep -v "^root$\|^nobody$" | while read uid
 do
 # cat > /tmp/t.ldif <<EOF
 ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF  >/dev/null
 dn: uid=$uid,$peopleRdn,$ldap_base_dn
 changetype: modify
+replace: sambaPrimaryGroupSID
+sambaPrimaryGroupSID: $domainsid-513
+-
 replace: sambaPwdLastSet
 sambaPwdLastSet: 1
 EOF
 done
-
 
 exit 0
