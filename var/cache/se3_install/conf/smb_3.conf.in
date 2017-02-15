@@ -25,8 +25,8 @@
 	ldap ssl = off
 	ldapsam:trusted = Yes
 	ldap passwd sync = yes 
-	create mask = 0700
-	directory mask = 0700
+	create mask = 0777
+	directory mask = 0777
 	inherit acls = Yes
 	printing = cups
 	printcap = cups
