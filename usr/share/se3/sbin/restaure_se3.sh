@@ -250,6 +250,15 @@ restaure_ldap()
     chown -R openldap:openldap /var/lib/ldap
 }
 
+corrige_ldap()
+{
+	
+	if [ -e "/usr/share/se3/sbin/corrige_ldap_smb44.sh" ]; then
+		echo -e "${jaune}`date +%R` ${neutre}Lancement du script de correction de l'annuaire pour samba 4.4" 2>&1 | tee -a $COURRIEL
+		sleep 1
+		/usr/share/se3/sbin/corrige_ldap_smb44.sh
+	fi
+}
 restaure_mysql()
 {
     echo -e "${jaune}`date +%R` ${neutre}Nettoyage mysql" 2>&1 | tee -a $COURRIEL
@@ -634,6 +643,7 @@ restaurer_serveur()
     restaure_varse3home
     restaure_imprimantes
     lancement_des_serveurs
+    corrige_ldap
     restaure_mysql
     restaure_adminse3
     restaure_dhcp
