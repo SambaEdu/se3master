@@ -285,22 +285,20 @@ mysql -h $dbhost -u $dbuser -p$dbpass -D $dbname -e "UPDATE params SET value='1'
 
 se3-clamav)
 install_module
-
-	echo "Recuperation du paquet se3-clamav si necessaire (activation possible via l'interface)"
-	mv /etc/clamav/freshclam.conf /etc/clamav/freshclam.conf_se3sauv_$LADATE
-echo "DatabaseOwner clamav
-UpdateLogFile /var/log/clamav/freshclam.log
-LogFileMaxSize 0
-MaxAttempts 5
-DatabaseMirror db.fr.clamav.net
-DatabaseMirror db.local.clamav.net
-DatabaseMirror database.clamav.net
-DatabaseDirectory /var/lib/clamav/
-DNSDatabaseInfo current.cvd.clamav.net" > /etc/clamav/freshclam.conf
-	chown clamav:adm /etc/clamav/freshclam.conf
-
-	## desactivation dans l'interface et scan fix�s � aucun
-	mysql mysql -h $dbhost -u $dbuser -p$dbpass -D $dbname -e "UPDATE params SET value='1' WHERE name='antivirus';"
+### transfert au niveau du paquet plus propre ainsi....###
+# 	echo "Recuperation du paquet se3-clamav si necessaire (activation possible via l'interface)"
+# 	mv /etc/clamav/freshclam.conf /etc/clamav/freshclam.conf_se3sauv_$LADATE
+# echo "DatabaseOwner clamav
+# UpdateLogFile /var/log/clamav/freshclam.log
+# LogFileMaxSize 0
+# MaxAttempts 5
+# DatabaseMirror db.fr.clamav.net
+# DatabaseMirror db.local.clamav.net
+# DatabaseMirror database.clamav.net
+# DatabaseDirectory /var/lib/clamav/
+# DNSDatabaseInfo current.cvd.clamav.net" > /etc/clamav/freshclam.conf
+# 	chown clamav:adm /etc/clamav/freshclam.conf
+mysql -h $dbhost -u $dbuser -p$dbpass -D $dbname -e "UPDATE params SET value='1' WHERE name='antivirus';"
 
 
 
