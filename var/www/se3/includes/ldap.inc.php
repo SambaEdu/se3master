@@ -1460,6 +1460,7 @@ function search_doublons_mac($generer_csv='n') {
             echo ": Aucun doublon trouv&#233;.</p>\n";
         }
 
+		/*
         if ($generer_csv == 'y') {
             if (count($tab_machine) > 0) {
                 echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='post'>\n";
@@ -1474,6 +1475,17 @@ function search_doublons_mac($generer_csv='n') {
                 echo "</form>\n";
             }
         }
+		*/
+		if ($generer_csv == 'y')
+		{
+			if (count($tab_machine) > 0)
+			{
+                for ($j = 0; $j < count($tab_machine); $j++)
+				{
+                    echo $tab_machine[$j]['cn'].";".$tab_machine[$j]['ip'].";".strtolower($tab_machine[$j]['mac'])."\n";
+                }
+            }
+		}
     } else {
         echo "<p>ERREUR: La connexion au LDAP a &#233;chou&#233;.<p/>\n";
     }
