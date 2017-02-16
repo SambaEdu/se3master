@@ -21,11 +21,11 @@ net groupmap add ntgroup=Profs unixgroup=Profs type=domain comment="Profs du dom
 net groupmap add ntgroup="Utilisateurs du domaine" rid="513" unixgroup="lcs-users" type="domain"
 net groupmap add ntgroup="machines" rid="515" unixgroup="machines" type="domain"
 
-echo "Correction de la structure"
 
 testgecos_adm=$(ldapsearch -xLLL uid=admin gecos | grep '^gecos: ')
 if [ -z "$testgecos_adm" ]; then
-ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+	echo "Correction des attributs du compte admin"
+	ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
 dn: uid=admin,$PEOPLERDN,$BASEDN
 changetype: modify
 add: givenName
@@ -39,9 +39,17 @@ gecos: Administrateur  Se3,,,
 EOF
 fi
 
-ldapdelete -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" "cn=root,$BASEDN"
+testoldroot=$(ldapsearch -xLLL -b cn=root,$BASEDN uid | grep 'uid: root')
+if [ -n "$testoldroot" ]; then
+	echo "Suppression compte root samba obsolete"
+	ldapdelete -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" "cn=root,$BASEDN"
+fi
 
-ldapadd -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+
+testnewroot=$(ldapsearch -xLLL uid=root -b $PEOPLERDN,$BASEDN uid | grep 'uid: root')
+if [ -z "$testnewroot" ]; then
+	echo "Mise à jour compte root samba"
+	ldapadd -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
 dn: uid=root,$PEOPLERDN,$BASEDN
 uid: root
 sn: Se3
@@ -70,8 +78,11 @@ userPassword:: e1NTSEF9UjYrYVpLZGU2RmVnak5uZGRENll4SWxualBIcDcxVis=
 sambaPwdLastSet: 1
 sambaAcctFlags: [DU         ]
 EOF
+fi
 
-
+testsambadomain=$(ldapsearch -xLLL objectClass=sambaDomain sambaDomainName | grep '^sambaDomainName: ')
+if [ -z "$testsambadomain" ]; then
+	echo "Ajout de l'entrée sambaDomainName dans l'annuaire"
 ldapadd -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
 dn: sambaDomainName=$se3_domain,$BASEDN
 sambaAlgorithmicRidBase: 1000
@@ -93,9 +104,10 @@ sambaMaxPwdAge: -1
 sambaPwdHistoryLength: 0
 sambaNextRid: 6752
 EOF
+fi
 
 echo "Modification si besoin des attributs samba pour les utilisateurs"
-ldapsearch -xLLL -D $adminRdn,$ldap_base_dn -b $PEOPLERDN,$BASEDN -w $adminPw objectClass=person uid| grep uid:| cut -d ' ' -f2| grep -v "^root$\|^nobody$" | while read uid
+ldapsearch -xLLL -D $adminRdn,$ldap_base_dn -b $PEOPLERDN,$BASEDN -w $adminPw objectClass=person uid| grep uid:| cut -d ' ' -f2| grep -v "^root$\|^nobody$\|^admin$" | while read uid
 do
 # cat > /tmp/t.ldif <<EOF
 ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF  >/dev/null
@@ -109,4 +121,17 @@ sambaPwdLastSet: 1
 EOF
 done
 
+echo "Modification si besoin des attributs samba pour admin"
+ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+dn: uid=admin,$PEOPLERDN,$BASEDN
+changetype: modify
+replace: sambaPrimaryGroupSID
+sambaPrimaryGroupSID: $domainsid-512
+-
+replace: sambaSID
+sambaSID: $domainsid-500
+-
+EOF
+
+# 
 exit 0
