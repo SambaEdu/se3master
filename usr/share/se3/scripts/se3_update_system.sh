@@ -4,7 +4,7 @@
 #
 ##### Permet de faire la mise à jour de debian et se3 #####
 
-# Franck Molle - 05/2006...
+# last update 02-2017
 if [ "$1" = "--help" -o "$1" = "-h" ]
 then
         echo "Script permettant la mise a jour du système debian et se3"
@@ -63,12 +63,15 @@ then
         PERMSE3_OPTION="--light"
         DEBIAN_PRIORITY="critical"
         DEBIAN_FRONTEND="noninteractive"
-        export  DEBIAN_FRONTEND
+        export  DEBIAN_FRONTEND DEBIAN_PRIORITY
 else
         ### mode interactif debconf est moins bavard mais pas muet permse3 sera plus precis mais plus long aussi ###
-
-        DEBIAN_PRIORITY="critical"
+		option="--allow-unauthenticated"
         PERMSE3_OPTION="--full"
+        DEBIAN_PRIORITY="critical"
+        DEBIAN_FRONTEND="noninteractive"
+        export  DEBIAN_FRONTEND DEBIAN_PRIORITY
+        
 fi
 
 export  DEBIAN_PRIORITY
@@ -80,23 +83,24 @@ USE_SPACE=$(df -hPl | grep "/var$" | awk '{print $5}' | sed -e s/%//)
 if [ "$USE_SPACE" -le 90 ]; then
         echo "Résultat de la demande de mise à jour système du $LADATE :" > $REPORT_FILE
         echo "" >> $REPORT_FILE
-        echo "Mise à jour de la liste des paquets disponibles ....." | tee -a $REPORT_FILE
-        LINE_TEST
-        apt-get update | tee -a $REPORT_FILE
-        echo "" | tee -a $REPORT_FILE
-        echo "Mise a jour des paquets optionnels à se3 si necessaire" | tee -a $REPORT_FILE
-        dpkg -s se3-clamav | grep "Status: install" >/dev/null && apt-get install se3-clamav $option | tee -a $REPORT_FILE
-        dpkg -s se3-dhcp | grep "Status: install" >/dev/null && apt-get install se3-dhcp $option | tee -a $REPORT_FILE
-        dpkg -s se3-clonage | grep "Status: install" >/dev/null && apt-get install se3-clonage $option | tee -a $REPORT_FILE
-        
-# 	if [ -e /etc/clamav/freshclam.conf ]; then
-# 		mv /etc/clamav/freshclam.conf /etc/clamav/freshclam.conf_sav_se3_$LADATE
-# 		apt-get install clamav-freshclam $option
-# 		mv /etc/clamav/freshclam.conf_sav_se3_$LADATE /etc/clamav/freshclam.conf 
-# 	fi	
-# 
-	#upgrade se3
-	apt-get install se3 $option | tee -a $REPORT_FILE
+        /usr/share/se3/scripts/install_se3-module.sh se3  | tee -a $REPORT_FILE
+#         echo "Mise à jour de la liste des paquets disponibles ....." | tee -a $REPORT_FILE
+#         LINE_TEST
+#         apt-get update | tee -a $REPORT_FILE
+#         echo "" | tee -a $REPORT_FILE
+#         echo "Mise a jour des paquets optionnels à se3 si necessaire" | tee -a $REPORT_FILE
+#         dpkg -s se3-clamav | grep "Status: install" >/dev/null && apt-get install se3-clamav $option | tee -a $REPORT_FILE
+#         dpkg -s se3-dhcp | grep "Status: install" >/dev/null && apt-get install se3-dhcp $option | tee -a $REPORT_FILE
+#         dpkg -s se3-clonage | grep "Status: install" >/dev/null && apt-get install se3-clonage $option | tee -a $REPORT_FILE
+#         
+# # 	if [ -e /etc/clamav/freshclam.conf ]; then
+# # 		mv /etc/clamav/freshclam.conf /etc/clamav/freshclam.conf_sav_se3_$LADATE
+# # 		apt-get install clamav-freshclam $option
+# # 		mv /etc/clamav/freshclam.conf_sav_se3_$LADATE /etc/clamav/freshclam.conf 
+# # 	fi	
+# # 
+# 	#upgrade se3
+# 	apt-get install se3 $option | tee -a $REPORT_FILE
 
         #upgrade samba et relancement si maj
 # 	TST_SMBMAJ=$(apt-get -s install samba $option | grep "la plus récente version disponible")
