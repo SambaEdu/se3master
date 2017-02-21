@@ -26,6 +26,11 @@
 
 require ("entete.inc.php");
 require ("ihm.inc.php");
+require ("ldap.inc.php");
+require ("crob_ldap_functions.php");
+require ("printers.inc.php");
+require ("fonc_parc.inc.php");
+
 
 require_once ("lang.inc.php");
 
@@ -106,9 +111,55 @@ if (isset($action)) {
         echo '</pre>';
         echo "ok";
     }
+    if ($action == "search_doublons") {
+        echo "<h2>".gettext("Recherche de doublons dans l'annuaire")."</h2>";
+        search_doublons_sambasid();
+        search_doublons_mac('n');
+    }
 }
-else {
+elseif (isset($_POST['suppr_doublons_sid'])) {
+	$suppr = isset ( $_POST ['suppr'] ) ? $_POST ['suppr'] : NULL;
+	echo '<pre>';
+	for($i = 0; $i < count ( $suppr ); $i ++) {
+		if (preg_match("/^.*\\$$/",$suppr[$i])) {
+			echo suppression_computer(preg_replace("/\\$/", "", $suppr[$i]));
+		} else {
+			exec ( "/usr/share/se3/sbin/userDel.pl $suppr[$i],$AllOutPut,$ReturnValue" );
+			if ($ReturnValue == "0") {
+				echo gettext ( "Le compte" ) . " <strong>$suppr[$i]</strong> " . gettext ( " a &#233;t&#233; effac&#233; avec succ&#232;s !" ) . "<BR>\n";
+			} else {
+				echo "<div class=error_msg>" . gettext ( "Echec, l'utilisateur $suppr[$i] n'a pas &#233;t&#233; effac&#233; !" );
+				echo gettext ( "(type d'erreur : " ) . "$ReturnValue), " . gettext ( " veuillez contacter" );
+				echo "<A HREF='mailto:$MelAdminLCS?subject=" . gettext ( "Effacement utilisateur" ) . " $suppr[$i]'>" . gettext ( "l'administrateur du syst&#232;me" ) . "</A></div><BR>\n";
+			}
+		}
+	}
+	$mod = isset ( $_POST ['mod'] ) ? $_POST ['mod'] : NULL;
+	$sid = isset ( $_POST ['sid'] ) ? $_POST ['sid'] : NULL;
+	
+	echo '<pre>';
+	for($i = 0; $i < count ( $mod ); $i ++) {
+		if (preg_match("/^.*\\$$/",$mod[$i])) {
+			echo "pas de modif du sid pour les machines !";
+		} else {
+			$attrs = array ("sambasid" => $sid[$i]);
+			modify_attribut("uid=$mod[$i]", "people", $attrs, "replace");
+			echo "nouveau sid pour uid=$mod[$i] :" . $sid[$i];
+		}
+	}
+	
+	echo '</pre>';
+} elseif (isset($_POST ['suppr_doublons_ldap'])) {
+	$suppr=isset($_POST['suppr']) ? $_POST['suppr'] : NULL;
+	echo '<pre>';
+	for($i=0;$i<count($suppr);$i++) {
+		echo suppression_computer($suppr[$i]);
+	}
+	echo '</pre>';
+}
 
+
+else {
 
     if (($login==admin)||($login==assist)||($login==aieple01)) {
 	echo "<a href=\"fix_se3.php?action=adminse3pass\" onClick=\"alert('Vous allez afficher un mot de passe important, attention aux regards indiscrets !!');\">".gettext("Afficher le mot de passe adminse3")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des lenteurs de connexions')")."\"><img name=\"action_image1\"  src=\"../elements/images/system-help.png\"></u><br>";
@@ -122,6 +173,7 @@ else {
     if (file_exists("/var/se3/unattended/install/wpkg")) {
     echo "<a href=\"fix_se3.php?action=force_profils_wpkg\">".gettext("Raffraichissement des machines visibles dans wpkg")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez que certaines machines sont manquantes dans wpkg')")."\"><img name=\"action_image4\"  src=\"../elements/images/system-help.png\"></u><br>";
     echo "<a href=\"fix_se3.php?action=force_rapports_wpkg\">".gettext("Renouvellement des rapports wpkg")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action si vous constatez des probl&#232;mes de remont&#233;&#233;s des rapport wpkg')")."\"><img name=\"action_image4\"  src=\"../elements/images/system-help.png\"></u><br>";
+    echo "<a href=\"fix_se3.php?action=search_doublons\">".gettext("recherche des doublons ldap")."</a>&nbsp;<u onmouseover=\"return escape".gettext("('Effectuez cette action avant une migration annuelle ou une mise a jour importante ')")."\"><img name=\"action_image4\"  src=\"../elements/images/system-help.png\"></u><br>";
     }
 }
 require ("pdp.inc.php");

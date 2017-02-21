@@ -1442,7 +1442,7 @@ function search_doublons_mac($generer_csv='n')
         }
 		else
 		{
-            $return_echo .=  "Aucun doublon trouv&#233;.</p>\n";
+            $return_echo .=  "Aucun doublon MAC trouv&#233;.</p>\n";
         }
 
 		/*
@@ -1475,6 +1475,131 @@ function search_doublons_mac($generer_csv='n')
 		{
 			echo $return_echo;
 		}
+    }
+	else
+	{
+        echo "<p>ERREUR: La connexion au LDAP a &#233;chou&#233;.<p/>\n";
+    }
+}
+function search_doublons_sambasid()
+{
+
+    /**
+     * Recherche des doublons de sambasid
+
+     * @Parametres: aucun
+
+     * @Return 	Retourne un formulaire avec tableau des entrées en doublons (le code correspondant au traitement du formulaire doit exister dans la page cible)
+     */
+    global $ldap_server, $ldap_port, $dn;
+    global $error;
+
+    $ldap_entry_attr = array("cn", "uid", "sambasid");
+    // Connexion au LDAP
+    $idconnexionldap = @ldap_connect($ldap_server, $ldap_port);
+
+	$return_echo="";
+	
+    if ($idconnexionldap)
+	{
+        $idliaisonldap = ldap_bind($idconnexionldap);
+
+        $return_echo .= "<p>";
+        $return_echo .= "Recherche des entrees sambaSID : \n";
+
+        $rechercheldap = ldap_search($idconnexionldap, $dn['base'], "(sambasid=*)");
+        $return_echo .= ldap_count_entries($idconnexionldap, $rechercheldap) . " entr&#233;es trouv&#233;es\n";
+        $return_echo .= "</p>\n";
+        $return_echo .= "<p>Parcours des entr&#233;es \n";
+		
+        $info = ldap_get_entries($idconnexionldap, $rechercheldap);
+        //==================================================
+        // Recherche des doublons
+        //==================================================
+        $tab_entry = array();
+        $tab_sid = array();
+        $tab_doublons_sid = array();
+        $max_sid = 0;
+        $cpt = 0;
+        for ($i = 0; $i < $info["count"]; $i++)
+		{
+            if ((isset($info[$i]["cn"][0])) || (isset($info[$i]["uid"][0])))
+			{
+                $tab_entry[$cpt] = array();
+                $tab_entry[$cpt]['uid'] = $info[$i]["uid"][0];
+                $tab_entry[$cpt]['cn'] = $info[$i]["cn"][0];
+                $tab_entry[$cpt]['sambasid'] = preg_replace("/^S.*-([0-9]+)$/", "\${1}", $info[$i]["sambasid"][0]);
+                if ($tab_entry[$cpt]['sambasid'] > $max_sid) $max_sid =  $tab_entry[$cpt]['sambasid'];
+                if (in_array($tab_entry[$cpt]['sambasid'], $tab_sid))
+				{
+                    if (!in_array($tab_entry[$cpt]['sambasid'], $tab_doublons_sid))
+					{
+                        $tab_doublons_sid[] = $tab_entry[$cpt]['sambasid'];
+                    }
+                }
+				else
+				{
+                    $tab_sid[] = $tab_entry[$cpt]['sambasid'];
+                }
+                $cpt++;
+            }
+        }
+        $domainsid = preg_replace("/^(S.*)-([0-9]+)$/", "\${1}", $info[$i-1]["sambasid"][0]);
+
+		//======================================================
+        // Tableau des doublons pour permettre la suppression
+		//======================================================
+        
+        if (count($tab_doublons_sid) > 0)
+		{
+            $return_echo .=  "</p>\n";
+            $return_echo .=  "<form action='" . $_SERVER['PHP_SELF'] . "' method='post'>\n";
+            $return_echo .=  "<table border='1'>\n";
+            $return_echo .=  "<tr class=\"menuheader\" height=\"30\">\n";
+            $return_echo .=  "<th style='text-align:center;'>UID</th>\n";
+            $return_echo .=  "<th style='text-align:center;'>cn</th>\n";
+            $return_echo .=  "<th style='text-align:center;'>sambasid</th>\n";
+            $return_echo .=  "<th style='text-align:center;'>Modifier</th>\n";
+            $return_echo .=  "<th style='text-align:center;'>Supprimer</th>\n";
+            $return_echo .=  "</tr>\n";
+            $alt = 1;
+            for ($i = 0; $i < count($tab_doublons_sid); $i++)
+			{
+                $alt = $alt * (-1);
+
+                for ($j = 0; $j < count($tab_entry); $j++)
+				{
+                    if ($tab_entry[$j]['sambasid'] == $tab_doublons_sid[$i])
+					{
+                        $return_echo .=  "<tr";
+                        if ($alt == -1)
+						{
+                            $return_echo .=  " style='background-color:silver;'";
+                        }
+                        $return_echo .=  ">\n";
+                        $return_echo .=  "<td style='text-align:center;'>" . $tab_entry[$j]['uid'] . "</td>\n";
+                        $return_echo .=  "<td style='text-align:center;'>" . $tab_entry[$j]['cn'] . "</td>\n";
+                        $return_echo .=  "<td style='text-align:center;'>" . $tab_entry[$j]['sambasid'] . "</td>\n";
+                        $return_echo .=  "<td style='text-align:center;'><input type='checkbox' name='mod[]' value='" . $tab_entry[$j]['uid'] . "' /><input type='hidden' name='sid[]' value='" . $domainsid. "-" . ++$max_sid . "' /></td>\n";
+                        $return_echo .=  "<td style='text-align:center;'><input type='checkbox' name='suppr[]' value='" . $tab_entry[$j]['uid'] . "'/></td>\n";
+                        $return_echo .=  "</tr>\n";
+                    }
+                }
+            }
+            $return_echo .=  "<tr><td style='text-align:center;' colspan='5'>";
+            $return_echo .=  "<input type='submit' name='suppr_doublons_sid' value=\"Appliquer\" />\n";
+            $return_echo .=  "<br />\n";
+            $return_echo .=  "<b>ATTENTION:</b> Si l'objet pr&#233;sent, conservez une entr&#233;e pour chaque n-uplet.<br />Ne cochez pas toutes les entr&#233;es sans discernement.\n";
+            $return_echo .=  "</td></tr>\n";
+            $return_echo .=  "</table>\n";
+            $return_echo .=  "</form>\n";
+       }
+		else
+		{
+            $return_echo .=  "Aucun doublon SID trouv&#233;.</p>\n";
+        }
+
+		echo $return_echo;
     }
 	else
 	{
