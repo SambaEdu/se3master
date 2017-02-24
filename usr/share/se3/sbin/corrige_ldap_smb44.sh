@@ -46,6 +46,25 @@ if [ -n "$testoldroot" ]; then
 fi
 
 
+
+testgrouproot=$(ldapsearch -xLLL -b cn=root,$GROUPSRDN,$BASEDN cn | grep 'cn: root')
+if [ -n "$testgrouproot" ]; then
+	ldapdelete -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" "cn=root,$GROUPSRDN,$BASEDN"
+fi	
+echo "Modification du groupe root samba "
+ldapadd -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+dn: cn=root,$GROUPSRDN,$BASEDN
+objectClass: posixGroup
+gidNumber: 0
+cn: root
+memberUid: root
+EOF
+
+net groupmap add ntgroup=Roots unixgroup=root type=domain comment="Roots"
+
+
+
+
 testnewroot=$(ldapsearch -xLLL uid=root -b $PEOPLERDN,$BASEDN uid | grep 'uid: root')
 if [ -z "$testnewroot" ]; then
 	echo "Mise à jour compte root samba"
