@@ -32,8 +32,8 @@ textdomain ('se3-parcs');
 
 
 //*****************connexion bdd*******************
-  $authlink = @mysql_connect($dbhost,$dbuser,$dbpass);
-        @mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
+  $authlink = @($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+        @((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
      
 
 
@@ -152,15 +152,15 @@ function avoir_systemid($nom_machine) { // retourne l'ID de $nom_machine ou 0 a 
 	include "dbconfig.inc.php";
 	$dbnameinvent="ocsweb";
 
-	$authlink_invent=@mysql_connect($_SESSION["SERVEUR_SQL"],$_SESSION["COMPTE_BASE"],$_SESSION["PSWD_BASE"]);
-	@mysql_select_db($dbnameinvent) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
+	$authlink_invent=@($GLOBALS["___mysqli_ston"] = mysqli_connect($_SESSION["SERVEUR_SQL"], $_SESSION["COMPTE_BASE"], $_SESSION["PSWD_BASE"]));
+	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbnameinvent)) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
 	
 	$query="select ID from hardware where NAME='$nom_machine'";
-	$result = mysql_query($query,$authlink_invent);
+	$result = mysqli_query($authlink_invent, $query);
 	if ($result) {
-        	$ligne=mysql_num_rows($result);
+        	$ligne=mysqli_num_rows($result);
 		if ($ligne > 0) {
-                	while ($res = mysql_fetch_array($result)) {
+                	while ($res = mysqli_fetch_array($result)) {
 				$retour=$res["ID"];
 			}
 		} else {
@@ -381,10 +381,10 @@ function heure_deroulante($parcf,$jourf,$type_actionf)
 {
 	global $authlink;
 	if ($parcf) {
-		$resultf=mysql_query("select heure from actionse3 where action='$type_actionf' and parc='$parcf' and jour='$jourf';", $authlink) or die("Impossible d'effectuer la requete");
+		$resultf=mysqli_query( $authlink, "select heure from actionse3 where action='$type_actionf' and parc='$parcf' and jour='$jourf';") or die("Impossible d'effectuer la requete");
 
 		if ($resultf) {
-			$rowf=mysql_fetch_row($resultf);
+			$rowf=mysqli_fetch_row($resultf);
 			$heuref=$rowf[0];
 		}           
 	}
@@ -411,9 +411,9 @@ function jour_check($parcf,$jourf,$type_actionf)
 {
 	global $authlink;
 	if ($parcf) {
-		$resultf=mysql_query("select heure from actionse3 where parc='$parcf' and jour='$jourf' and action='$type_actionf';", $authlink) or die("Impossible d'effectuer la requete");
+		$resultf=mysqli_query( $authlink, "select heure from actionse3 where parc='$parcf' and jour='$jourf' and action='$type_actionf';") or die("Impossible d'effectuer la requete");
 		if ($resultf) {
-			if (mysql_num_rows($resultf)>0) { return "checked"; }
+			if (mysqli_num_rows($resultf)>0) { return "checked"; }
 		}
 	}
 }
@@ -740,14 +740,14 @@ function list_alpha()
 global $authlink;
 
 $query="Select nom,script,valide from appli_se3 order by nom asc;";
-$resultat = mysql_query($query) or die ( "Probleme d'acc&#232;s &#224; la base" );
+$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query) or die ( "Probleme d'acc&#232;s &#224; la base" );
 $query_nom="Select nom from appli_se3 order by nom asc;";
-$resultat_nom = mysql_query($query_nom) or die ( "Probleme d'acc&#232;s &#224; la base" );
+$resultat_nom = mysqli_query($GLOBALS["___mysqli_ston"], $query_nom) or die ( "Probleme d'acc&#232;s &#224; la base" );
 
 //echo "<div align=center><a href=appli_client.php?action=list_cat><img src=\"../elements/images/left.gif\" alt=\"\" title=\"left\" width=\"15\" height=\"15\" border=\"0\" />&nbsp;Retour vers liste par cat&#233;gories</a></div>";
 echo "<table align=center width=\"60%\">\n<tr><td class=menuheader height=\"30\" align=\"center\">".gettext("NOM")."</td>\n<td class=menuheader height=\"30\" align=\"center\">".gettext("SCRIPT")."</td>\n<td class=menuheader height=\"30\" align=\"center\" width=\"25\">".gettext("ETAT")."</td>\n<td class=menuheader height=\"30\" width=\"25\" align=\"center\">\n<img src=\"../elements/images/edit.png\" alt=\"\" title=\"edit\" width=\"16\" height=\"16\" border=\"0\" /></td>\n</tr>\n</table>\n";
 echo "<table align=center width=\"60%\">\n<tr>\n";
-while ($row_nom=mysql_fetch_row($resultat_nom))
+while ($row_nom=mysqli_fetch_row($resultat_nom))
 {
 $chaine = strtoupper(substr("$row_nom[0]", 0,1));
 if ($test_alpha<>$chaine)
@@ -757,7 +757,7 @@ $test_alpha=$chaine;
 }
 }
 echo "</table>\n<table align=center width=\"60%\">\n";
-while ($row=mysql_fetch_row($resultat))
+while ($row=mysqli_fetch_row($resultat))
 {
 $chaine = strtoupper(substr("$row[0]", 0,1));
 if ($test_alpha<>$chaine)
@@ -937,15 +937,15 @@ function parc_exist($parc) {
 function nettoie_delegation() {
 	include "config.inc.php";
 	$query="select parc from delegation GROUP BY parc";
-		$result= mysql_query($query);
+		$result= mysqli_query($GLOBALS["___mysqli_ston"], $query);
 	if ($result) {
-		$ligne= mysql_num_rows($result);
+		$ligne= mysqli_num_rows($result);
 		if ($ligne>0) {
-			while ($row = mysql_fetch_row($result)) {
+			while ($row = mysqli_fetch_row($result)) {
 				$exist_parc=parc_exist($row[0]);
 				if ($exist_parc=="no") {
 					$query_del="delete from delegation where parc='$row[0]'";
-					mysql_query($query_del);
+					mysqli_query($GLOBALS["___mysqli_ston"], $query_del);
 					echo "<BR> Suppression de la d&#233;l&#233;gation pour le parc $row[0]";
 					echo "<BR>";
 				} else { continue; }
@@ -990,16 +990,16 @@ function suppr_inventaire($name)
 {
 	$id=avoir_systemid($name);
 	if($id!=0) {
-		$exec = mysql_query("SHOW TABLES FROM `ocsweb`");
+		$exec = mysqli_query($GLOBALS["___mysqli_ston"], "SHOW TABLES FROM `ocsweb`");
                 include "dbconfig.inc.php";
                 $dbnameinvent="ocsweb";
-                $authlink_invent=@mysql_connect($_SESSION["SERVEUR_SQL"],$_SESSION["COMPTE_BASE"],$_SESSION["PSWD_BASE"]);
-                @mysql_select_db($dbnameinvent) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
-                while($row = mysql_fetch_row($exec)) {
+                $authlink_invent=@($GLOBALS["___mysqli_ston"] = mysqli_connect($_SESSION["SERVEUR_SQL"], $_SESSION["COMPTE_BASE"], $_SESSION["PSWD_BASE"]));
+                @((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbnameinvent)) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
+                while($row = mysqli_fetch_row($exec)) {
                         if($row[0]=="hardware") {
-                               mysql_query("DELETE from `hardware` where `ID`='$id'",$authlink_invent);
+                               mysqli_query($authlink_invent, "DELETE from `hardware` where `ID`='$id'");
                         } else {
-                                mysql_query("DELETE from `$row[0]` where `HARDWARE_ID`='$id'",$authlink_invent);
+                                mysqli_query($authlink_invent, "DELETE from `$row[0]` where `HARDWARE_ID`='$id'");
                         }
                 }
         }
@@ -1095,7 +1095,7 @@ function suppression_computer($computer) {
 
 		// Entree DHCP:
 		$suppr_query = "DELETE FROM se3_dhcp where name='$computer';";
-		if(mysql_query($suppr_query)) {$retour.="Suppression de la reservation DHCP.<br />";} else {$retour.="<span style='color:red'>ERREUR</span> lors de la suppression de la reservation DHCP.<br />";}
+		if(mysqli_query($GLOBALS["___mysqli_ston"], $suppr_query)) {$retour.="Suppression de la reservation DHCP.<br />";} else {$retour.="<span style='color:red'>ERREUR</span> lors de la suppression de la reservation DHCP.<br />";}
 		// On relance dhcp si celui-ci est active... A TESTER QUELQUE PART
 		exec("sudo /usr/share/se3/scripts/makedhcpdconf",$ret);
 

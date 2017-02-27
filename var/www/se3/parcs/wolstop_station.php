@@ -201,8 +201,8 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 		//si la personne n'a pas le droit d'effectuer cette action
 		if ($acces_restreint)  {  if ((!this_parc_delegate($login,$parc,"manage")) and (!this_parc_delegate($login,$parc,"view"))) { continue; } }
 
-		$result_delete=mysql_query("DELETE FROM `actionse3` WHERE action='wol' and parc='$parc';", $authlink) or die(gettext("Impossible d'effectuer la requete 1"));
-		$result_delete=mysql_query("DELETE FROM `actionse3` WHERE action='stop' and parc='$parc';", $authlink) or die(gettext("Impossible d'effectuer la requete 2"));
+		$result_delete=mysqli_query( $authlink, "DELETE FROM `actionse3` WHERE action='wol' and parc='$parc';") or die(gettext("Impossible d'effectuer la requete 1"));
+		$result_delete=mysqli_query( $authlink, "DELETE FROM `actionse3` WHERE action='stop' and parc='$parc';") or die(gettext("Impossible d'effectuer la requete 2"));
 
 		$wol=$_POST['wol'];
 		$stop=$_POST['stop'];
@@ -215,13 +215,13 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 			if ($wol[$jour]) {
 				//echo "<br>3 $jour:INSERT INTO actionse3 values ('wol','$parc','$jour','$heure_jour_wol[$jour]');<br>";
 
-				$result_insert=mysql_query("INSERT INTO actionse3 values ('wol','$parc','$jour','$heure_jour_wol[$jour]');", $authlink) or die(gettext("Impossible d'effectuer la requete 3 pour le jour")." $jour ");
+				$result_insert=mysqli_query( $authlink, "INSERT INTO actionse3 values ('wol','$parc','$jour','$heure_jour_wol[$jour]');") or die(gettext("Impossible d'effectuer la requete 3 pour le jour")." $jour ");
 			}
 
 		if ($stop[$jour]) {
 			//echo "4: $jour INSERT INTO actionse3 values ('stop','$parc','$jour','$heure_jour_stop[$jour]');<br>";
 
-			$result_insert=mysql_query("INSERT INTO actionse3 values ('stop','$parc','$jour','$heure_jour_stop[$jour]');", $authlink) or die(gettext("Impossible d'effectuer la requete 4 pour le jour")." $jour");
+			$result_insert=mysqli_query( $authlink, "INSERT INTO actionse3 values ('stop','$parc','$jour','$heure_jour_stop[$jour]');") or die(gettext("Impossible d'effectuer la requete 4 pour le jour")." $jour");
 		}
 	}
 

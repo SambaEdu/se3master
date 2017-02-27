@@ -55,8 +55,8 @@ $table="devoirs";
 
 // requete pour avoir le detail de ce devoir $id
 $req = "SELECT * FROM $table WHERE id = '$id'";
-$resultat = mysql_query($req);
-$ligne= mysql_fetch_array($resultat);
+$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $req);
+$ligne= mysqli_fetch_array($resultat);
 list($id,$id_prof,$id_devoir,$nom_devoir,$date_distrib,$date_retour,$description,$liste_distrib, $liste_retard) = $ligne; 
 
 // liste complete des eleves beneficiaires du devoir 
@@ -206,7 +206,7 @@ else {
 $liste_retard=tab_liste($tab_retard);          // transformation du tableau (classe, eleves en retard) en liste a enregistrer  
 // Dans tous les cas, mettre a jour le champ liste_retard et les indicateurs de recup
 $req_maj = "UPDATE $table SET liste_retard='$liste_retard', etat='$etat' WHERE id='$id' ";
-@mysql_query($req_maj);
+@mysqli_query($GLOBALS["___mysqli_ston"], $req_maj);
 
 include("pdp.inc.php");
 ?>

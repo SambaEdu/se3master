@@ -45,9 +45,9 @@ connexion();
 
 echo "<h1>".gettext("Gestion des groupes de cl&#233s")."</h1>\n";
 $query="SELECT `mod` FROM modele GROUP BY `mod`;";
-$resultat = mysql_query($query);
-if (mysql_num_rows($resultat) != 0) {
-	while ($row = mysql_fetch_array($resultat)) {
+$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+if (mysqli_num_rows($resultat) != 0) {
+	while ($row = mysqli_fetch_array($resultat)) {
 		echo "<a href=\"affiche_modele.php?modele=$row[0]\">".$row[0]."</a><br/>";
 	}
 }

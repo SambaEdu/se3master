@@ -48,21 +48,21 @@ $matiere_gr=$_POST['matiere_gr'];
 $autres_gr=$_POST['autres_gr'];
 
 // creation de smbwebopen_pwd_chg dans mysql table params si besoin
-$resultat=mysql_query("select value from params where name='smbwebopen_pwd_chg'");
-$line = mysql_fetch_assoc($resultat);
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "select value from params where name='smbwebopen_pwd_chg'");
+$line = mysqli_fetch_assoc($resultat);
 if ( $line == "" )
-  {mysql_query("INSERT INTO params VALUES ('', 'smbwebopen_pwd_chg', '0', '0', 'Droit smbweb_is_open si mot de passe chang&#233;', '5')");}
+  {mysqli_query($GLOBALS["___mysqli_ston"], "INSERT INTO params VALUES ('', 'smbwebopen_pwd_chg', '0', '0', 'Droit smbweb_is_open si mot de passe chang&#233;', '5')");}
 
 // actualisation mysql pour l'option smbweb_open_for_passwd_changed en fonction du choix utilisateur
 $validation=$_GET['validation'];
 $smbwebisopenforpasswdchanged=$_POST['smbwebisopenforpasswdchanged'];
 if ($smbwebisopenforpasswdchanged == "on") {
 	        $query="UPDATE params SET value=\"1\" WHERE name=\"smbwebopen_pwd_chg\";";
-	        mysql_query($query);
+	        mysqli_query($GLOBALS["___mysqli_ston"], $query);
   	} else {
             if (isset($validation)) {
         	$query="UPDATE params SET value=\"0\" WHERE name=\"smbwebopen_pwd_chg\";";
-        	mysql_query($query);
+        	mysqli_query($GLOBALS["___mysqli_ston"], $query);
             }
   	}
 
@@ -123,8 +123,8 @@ if ($smbwebisopenforpasswdchanged == "on") {
         echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('L attribution de ce droit est actualis&#233;e tous les soirs vers 18H30. Un d&#233;lai de 24H maximum est donc n&#233;cessaire pour acc&#233;der aux documents depuis internet. Remarque: ce droit est retir&#233; en cas de r&#233;initialisation du mot de passe !')")."\"><img name=\"action_image5\"  src=\"../elements/images/system-help.png\"></u>";
         
  	$objet_var="<input type=\"checkbox\"";
-        $resultat=mysql_query("select value from params where name='smbwebopen_pwd_chg'");
-        $line = mysql_fetch_assoc($resultat);
+        $resultat=mysqli_query($GLOBALS["___mysqli_ston"], "select value from params where name='smbwebopen_pwd_chg'");
+        $line = mysqli_fetch_assoc($resultat);
 	foreach ($line as $col_value) {
 		if ( "$col_value" == "1" )
                 $objet_var="$objet_var checked ";

@@ -21,7 +21,7 @@
    * @Repertoire: includes/ 
    */  
   
-	mysql_close($authlink);
+	((is_null($___mysqli_res = mysqli_close($authlink))) ? false : $___mysqli_res);
   
 ?>
 

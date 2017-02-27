@@ -69,8 +69,8 @@ $parc_alert=$_GET["parc_alert"];
 
 $dbnameinvent="ocsweb";
 
-$authlink_invent=@mysql_connect($_SESSION["SERVEUR_SQL"],$_SESSION["COMPTE_BASE"],$_SESSION["PSWD_BASE"]);
-@mysql_select_db($dbnameinvent) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
+$authlink_invent=@($GLOBALS["___mysqli_ston"] = mysqli_connect($_SESSION["SERVEUR_SQL"], $_SESSION["COMPTE_BASE"], $_SESSION["PSWD_BASE"]));
+@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbnameinvent)) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
 
 
 $base=array('softwares','bios','controllers','drivers','hardware','inputs','memories','modem','monitors','networks','ports','printers','registry','slots','sounds','storages','videos');
@@ -135,16 +135,16 @@ if ($action=="new") {
     	echo "</TD><TD>\n";
 //     	$affiche=affiche($table_aff);
     	$query="SELECT * FROM `$table_aff` ORDER BY NAME LIMIT 1;";
-    	$result=mysql_query($query);
+    	$result=mysqli_query($GLOBALS["___mysqli_ston"], $query);
     	if ($result) {
-        	$fields=mysql_num_fields($result);
+        	$fields=(($___mysqli_tmp = mysqli_num_fields($result)) ? $___mysqli_tmp : false);
         	echo "<form action=\"config_alert.php\" method=\"get\">\n
             	<input type=\"hidden\" name=\"table_aff\" value=\"$table_aff\" />
             	<input type=\"hidden\" name=\"parc\" value=\"$parc\" />\n
             	<select name=\"champs\" size=\"1\" >" ;
                 $i=0;
                 while ($i<$fields){
-                	$nomcolonne=mysql_field_name($result,$i);
+                	$nomcolonne=((($___mysqli_tmp = mysqli_fetch_field_direct($result, $i)->name) && (!is_null($___mysqli_tmp))) ? $___mysqli_tmp : false);
 			// Ajoute apres
 	//		$affiche=$nomcolonne;
         //            	if (in_array($nomcolonne,$affiche)) echo"<option>$nomcolonne</option>";
@@ -238,10 +238,10 @@ if ($action=="new_suite") {
     }
  //   echo $query;
 $query_number="SELECT COUNT(NAME) FROM hardware;";
-$result_number=mysql_query($query_number);
-$count_total=mysql_fetch_row($result_number);
+$result_number=mysqli_query($GLOBALS["___mysqli_ston"], $query_number);
+$count_total=mysqli_fetch_row($result_number);
 echo "<table>";
-$result=mysql_query($query);
+$result=mysqli_query($GLOBALS["___mysqli_ston"], $query);
        if ($result) {
 
           //construction du tableau des machines du parc $parc
@@ -261,9 +261,9 @@ $result=mysql_query($query);
                     }
                 
                     }
-         $fields=mysql_num_rows($result);
+         $fields=mysqli_num_rows($result);
          if ($fields>1) { echo "<h2>L'alerte sera pos&#233;e pour la valeur \" $type \" dans la table $table_aff</h2>"; }
-         while ($row=mysql_fetch_row($result))
+         while ($row=mysqli_fetch_row($result))
          {
            $affiche_new_li="";
            if ($old<>$row[0]) {
@@ -338,12 +338,12 @@ if ($action=="fin_alert") {
 	//une alerte doit etre ajout�
 	$texte=gettext("L'alerte")." $name_alert ".gettext("est d&#233;finie pour")." $type. ".gettext("Cette valeur doit &#234;tre")." $choix_compar $count_alert.";
 	if ($parc) $texte="$texte ".gettext("Elle est restreinte aux machines du parc")." $parc.";
-	mysql_close();
-	$authlink = mysql_connect($dbhost,$dbuser,$dbpass);
-	@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
+	((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
+	$authlink = ($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
 	$query_insert="INSERT INTO alertes (ID,NAME,MAIL,Q_ALERT,VALUE,CHOIX,TEXT,PARC,MENU,ACTIVE) VALUES ('','$name_alert','$mail','$query','$count_alert','$choix_compar','$text_alert','$parc','inventaire','1');";
 	//echo $query_insert;
-	$result=mysql_query($query_insert,$authlink);
+	$result=mysqli_query($authlink, $query_insert);
 
 	//envoi de mail
 	if ((file_exists($fichier)) ||  (file_exists($fichier_sarge))) {
@@ -362,16 +362,16 @@ if ($action=="fin_alert") {
 
 //**************cas ou l'on veut voir les alertes******************************
 if ($action=="view") {
-	mysql_close();
-	$authlink = mysql_connect($dbhost,$dbuser,$dbpass);
-	@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
+	((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
+	$authlink = ($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
 
 	$query_info="SELECT * FROM alertes where PREDEF='0' and MENU='inventaire';";
-	$result_info=mysql_query($query_info,$authlink);
+	$result_info=mysqli_query($authlink, $query_info);
     	echo "<CENTER><TABLE border=1 >";
     	echo "<TR><TD class=\"menuheader\" height=\"30\" align=center colspan=\"4\">ALERTES</TD></TR>";
     
-        while ($row = mysql_fetch_array($result_info)) {
+        while ($row = mysqli_fetch_array($result_info)) {
        		if ($row["ACTIVE"]=="1") {
        			$statut="<IMG style=\"border: 0px solid ;\" SRC=\"../elements/temp/recovery.png\" ALT=\"Alerte active\">";
        		} else {
@@ -391,15 +391,15 @@ if ($action=="view") {
 
 if ($action=="suppr") {
 	//$ID=$_GET['ID'];
-	mysql_close();
-	$authlink = mysql_connect($dbhost,$dbuser,$dbpass);
-	@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
+	((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
+	$authlink = ($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
 	$query_info="SELECT * FROM alertes WHERE ID='$id';";
-	$result_info=mysql_query($query_info,$authlink);
-	$row = mysql_fetch_array($result_info);
+	$result_info=mysqli_query($authlink, $query_info);
+	$row = mysqli_fetch_array($result_info);
 
 	$query_suppr="DELETE FROM alertes WHERE ID='$id'";
-	$result_suppr=mysql_query($query_suppr,$authlink) or die("Erreur lors de la suppression de l'alerte");
+	$result_suppr=mysqli_query($authlink, $query_suppr) or die("Erreur lors de la suppression de l'alerte");
 	if ($result_suppr) { $texte="L'alerte ".$row['NAME']." a &#233;t&#233; supprim&#233;e.";
    	if ((file_exists($fichier)) ||  (file_exists($fichier_sarge))) {
    		echo alerte_mail($row['MAIL'],"[SE3] : Suppression de l'alerte ".$row['NAME'],$texte);
@@ -410,7 +410,7 @@ if ($action=="suppr") {
   	}
 	echo "<br>".gettext("Suppression de l'alerte "). $row['NAME'] .gettext(" effectu&#233;e.");
 	$query_log = "INSERT INTO logocs (ID,NAME,ETAT,LOGDATE,REP) VALUES ('NULL','$name_alert','suppr','$jour','TOUS')";
-	$result_log = mysql_query($query_log);
+	$result_log = mysqli_query($GLOBALS["___mysqli_ston"], $query_log);
 	echo "<p><a href=\"alertes.php?action_hidden=config\">".gettext("Retour")."</a>";
 } else {
 	echo gettext("La suppression de l'alerte a &#233;hou&#233;e");
@@ -421,13 +421,13 @@ if ($action=="suppr") {
 
 if ($action=="mod") {
 
-	mysql_close();
-	$authlink = mysql_connect($dbhost,$dbuser,$dbpass);
+	((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
+	$authlink = ($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
 
-	@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
+	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
 	$query_info="SELECT * FROM alertes WHERE ID='$id';";
-	$result_info=mysql_query($query_info,$authlink);
-	$row = mysql_fetch_array($result_info);
+	$result_info=mysqli_query($authlink, $query_info);
+	$row = mysqli_fetch_array($result_info);
 	
 	$list_parcs=search_machines("objectclass=groupOfNames","parcs");
         if ( count($list_parcs)>0) {
@@ -485,12 +485,12 @@ if ($action=="mod") {
 
 
 if ($action=="mod2") {
-	mysql_close();
-	$authlink = mysql_connect($dbhost,$dbuser,$dbpass);
-	@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
+	((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
+	$authlink = ($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
 
 	$query_update="UPDATE alertes SET NAME='$name_alert', TEXT='$text_alert', MAIL='$mail_alert' ,PARC='$parc_alert' ,ACTIVE='$activ_alert' WHERE ID='$id';";
-	$result_update=mysql_query($query_update,$authlink) or die("Erreur lors de la modification de l'alerte");
+	$result_update=mysqli_query($authlink, $query_update) or die("Erreur lors de la modification de l'alerte");
 	
 	echo "<H1>".gettext("Gestion des alertes")."</H1>";
 	echo "<CENTER>";

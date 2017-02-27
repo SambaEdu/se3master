@@ -68,7 +68,7 @@ echo "<body >
 
 if (isset($action) and $action=='f') {
 $req_archiv = "UPDATE $table SET etat='F' WHERE id='$id' ";
-@mysql_query($req_archiv);
+@mysqli_query($GLOBALS["___mysqli_ston"], $req_archiv);
 
 echo "<h4>".gettext("La r&#233;cup&#233;ration du devoir")." <em>$id_devoir</em> ".gettext("est maintenant termin&#233;e")."</h4>
  <font size='-1'>".gettext("Il est possible :")."<br>".gettext("
@@ -88,12 +88,12 @@ if (! $cr) {
 
 // recherche des devoirs du prof
 $req =" SELECT * FROM $table WHERE id_prof='$login' AND etat IN ('D','R') order by date_distrib,date_recup ";
-$resultat=mysql_query($req);
-$nb_devoirs=mysql_num_rows($resultat);
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], $req);
+$nb_devoirs=mysqli_num_rows($resultat);
 
 $req_arch =" SELECT * FROM $table WHERE id_prof='$login' AND (etat = 'A' OR etat= 'F') order by date_distrib,date_recup ";
-$resultat_arch=mysql_query($req_arch);
-$nb_devoirs_arch=mysql_num_rows($resultat_arch);
+$resultat_arch=mysqli_query($GLOBALS["___mysqli_ston"], $req_arch);
+$nb_devoirs_arch=mysqli_num_rows($resultat_arch);
 
 if ($nb_devoirs +$nb_devoirs_arch ==0) {
  echo "$login ".gettext("n'a pas distribu&#233; de devoirs !");
@@ -109,7 +109,7 @@ echo "<table width='100%' border=2>
 
 for ($i=0;$i<$nb_devoirs;$i++) {
 
-  $ligne=mysql_fetch_array($resultat);
+  $ligne=mysqli_fetch_array($resultat);
   list($id,$id_prof,$id_devoir,$nom_devoir,$date_distrib,$date_retour,$description,$liste_dev,$liste_retard, $etat) = $ligne; 
 
   // afficher les listes des eleves a la demande dans une fenetre

@@ -50,7 +50,7 @@ if ($_GET['action'] == "change") {
 
 	echo "<H1>Modification de l'&#233;tat du module $module</H1>";
 	// Change dnas la table params
-	$resultat=mysql_query("UPDATE params set value='".$_GET['valeur']."' where name='$_GET[varb]'");
+	$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='".$_GET['valeur']."' where name='$_GET[varb]'");
 	switch ($_GET['varb']) {
 		case "savbandactiv":
 			if ($_GET['valeur'] == "1") {
@@ -84,7 +84,7 @@ if ($_GET['action'] == "change") {
 					echo "Module $module activ&#233;.<br>\n";
 			} else {
 				$update_query = "UPDATE clamav_dirs SET frequency='none'";
-				mysql_query($update_query);
+				mysqli_query($GLOBALS["___mysqli_ston"], $update_query);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
@@ -98,7 +98,7 @@ if ($_GET['action'] == "change") {
 					system("/usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh -i se3-dhcp");
 				} else { //sinon on l'active
 					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='dhcp_on_boot'";
-					mysql_query($update_query);
+					mysqli_query($GLOBALS["___mysqli_ston"], $update_query);
 					echo "Module $module activ&#233;.<br>\n";
 				}
 			}
@@ -106,7 +106,7 @@ if ($_GET['action'] == "change") {
 			if($_GET['valeur']=="0") {
 				$STOP_START="stop";
 				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='dhcp_on_boot'";
-				mysql_query($update_query);
+				mysqli_query($GLOBALS["___mysqli_ston"], $update_query);
 				exec("/usr/bin/sudo -H /usr/share/se3/scripts/makedhcpdconf");
 				exec("/usr/bin/sudo -H /usr/share/se3/scripts/makedhcpdconf $STOP_START");
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
@@ -122,7 +122,7 @@ if ($_GET['action'] == "change") {
 					system("/usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh -i se3-clonage");
 				} else {
 					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='clonage'";
-					mysql_query($update_query);
+					mysqli_query($GLOBALS["___mysqli_ston"], $update_query);
 					exec("/usr/bin/sudo -H /usr/share/se3/scripts/se3_tftp_boot_pxe.sh start");
 					echo "Module $module activ&#233;.<br>\n";
 				}
@@ -130,7 +130,7 @@ if ($_GET['action'] == "change") {
 			if($_GET['valeur']=="0") {
 				exec("/usr/bin/sudo -H /usr/share/se3/scripts/se3_tftp_boot_pxe.sh stop");
 				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='clonage'";
-				mysql_query($update_query);
+				mysqli_query($GLOBALS["___mysqli_ston"], $update_query);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
@@ -162,8 +162,8 @@ if ($_GET['action'] == "change") {
 		// Installation  fond d'ecran
 		case "fondecran":
 			$valeur_fondecran=($_GET['valeur']==1) ? 1 : 0;
-			$resultat=mysql_query("SELECT * FROM params WHERE name='menu_fond_ecran'");
-			if(mysql_num_rows($resultat)==0){
+			$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * FROM params WHERE name='menu_fond_ecran'");
+			if(mysqli_num_rows($resultat)==0){
 				$sql = "INSERT INTO params VALUES('','menu_fond_ecran','$valeur_fondecran','','Affichage ou non du menu fond d ecran','6')";
 			} else {
 				$sql = "UPDATE params SET value='$valeur_fondecran' where name='menu_fond_ecran'";
@@ -172,7 +172,7 @@ if ($_GET['action'] == "change") {
 			if ($valeur_fondecran == 1) {
 				system("/usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh -i se3-fondecran",$return);
 				if($return==0) {
-				mysql_query($sql);
+				mysqli_query($GLOBALS["___mysqli_ston"], $sql);
 				echo "Module $module activ&#233;.<br>\n";
 				}
 				else{
@@ -180,7 +180,7 @@ if ($_GET['action'] == "change") {
 				}
 
 			} else{
-				mysql_query($sql);
+				mysqli_query($GLOBALS["___mysqli_ston"], $sql);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
@@ -188,8 +188,8 @@ if ($_GET['action'] == "change") {
 		// Installation d'internet (se3-internet)
 		case "internet":
 			$valeur_internet=($_GET['valeur']==1) ? 1 : 0;
-			$resultat=mysql_query("SELECT * FROM params WHERE name='internet'");
-			if(mysql_num_rows($resultat)==0){
+			$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * FROM params WHERE name='internet'");
+			if(mysqli_num_rows($resultat)==0){
 				$sql = "INSERT INTO params VALUES('','internet','1','','Activation ou d�sactivation module se3-internet','6')";
 			} else {
 				$sql = "UPDATE params SET value='$valeur_internet' where name='internet'";
@@ -198,7 +198,7 @@ if ($_GET['action'] == "change") {
 			if ($valeur_internet == 1) {
 				system("/usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh -i se3-internet",$return);
 				if($return==0) {
-				mysql_query($sql);
+				mysqli_query($GLOBALS["___mysqli_ston"], $sql);
 				echo "Module $module activ&#233;.<br>\n";
 				}
 				else{
@@ -206,7 +206,7 @@ if ($_GET['action'] == "change") {
 				}
 
 			} else{
-				mysql_query($sql);
+				mysqli_query($GLOBALS["___mysqli_ston"], $sql);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
@@ -220,13 +220,13 @@ if ($_GET['action'] == "change") {
 					system("/usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh -i se3-backup");
 				} else {
 					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='backuppc'";
-					mysql_query($update_query);
+					mysqli_query($GLOBALS["___mysqli_ston"], $update_query);
                                         echo "Module $module activ&#233;.<br>\n";
 				}
 			}
 			if($_GET['valeur']=="0") {
 				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='backuppc'";
-				mysql_query($update_query);
+				mysqli_query($GLOBALS["___mysqli_ston"], $update_query);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 				include ("fonction_backup.inc.php");
                                 stopBackupPc();
@@ -236,8 +236,8 @@ if ($_GET['action'] == "change") {
 		// conf synchro
 		case "synchro":
 			$valeur_synchro=($_GET['valeur']==1) ? 1 : 0;
-			$resultat=mysql_query("SELECT * FROM params WHERE name='unison'");
-			if(mysql_num_rows($resultat)==0){
+			$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * FROM params WHERE name='unison'");
+			if(mysqli_num_rows($resultat)==0){
 				$sql = "INSERT INTO params VALUES('','unison','1','','Activation ou d�sactivation module se3-synchro','6')";
 			} else {
 				$sql = "UPDATE params SET value='$valeur_synchro' where name='unison'";
@@ -246,7 +246,7 @@ if ($_GET['action'] == "change") {
 			if ($valeur_synchro == 1) {
 				system("/usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh -i se3-synchro",$return);
 				if($return==0) {
-				mysql_query($sql);
+				mysqli_query($GLOBALS["___mysqli_ston"], $sql);
 				echo "Module $module activ&#233;.<br>\n";
 				}
 				else{
@@ -255,7 +255,7 @@ if ($_GET['action'] == "change") {
 
 			} else{
 				system("/usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh -r se3-synchro",$return);
-				mysql_query($sql);
+				mysqli_query($GLOBALS["___mysqli_ston"], $sql);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
@@ -303,13 +303,13 @@ if ($_GET['action'] == "change") {
 					system("/usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh -i se3-wpkg");
 				} else { //sinon on l'active
 					$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='wpkg'";
-					mysql_query($update_query);
+					mysqli_query($GLOBALS["___mysqli_ston"], $update_query);
 					echo "Module $module activ&#233;.<br>\n";
 				}
 			}
 			if($_GET['valeur']=="0") {
 				$update_query = "UPDATE params SET value='".$_GET['valeur']."' where name='wpkg'";
-				mysql_query($update_query);
+				mysqli_query($GLOBALS["___mysqli_ston"], $update_query);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			}
 			break;
@@ -318,8 +318,8 @@ if ($_GET['action'] == "change") {
 		case "linux":
 			$valeur_linux=($_GET['valeur']==1) ? 1 : 0;
 			echo $valeur_linux;
-			$resultat=mysql_query("SELECT * FROM params WHERE name='support_linux'");
-			if(mysql_num_rows($resultat)==0){
+			$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * FROM params WHERE name='support_linux'");
+			if(mysqli_num_rows($resultat)==0){
 				$sql = "INSERT INTO params VALUES('','support_linux','$valeur_linux','','Installation du backport se3-clients-linux pour linux','6')";
 			} else {
 				$sql = "UPDATE params SET value='$valeur_linux' where name='support_linux'";
@@ -328,7 +328,7 @@ if ($_GET['action'] == "change") {
 			if ($valeur_linux == 1) {
 				system("/usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh -i se3-clients-linux",$return);
 				if($return==0) {
-				mysql_query($sql);
+				mysqli_query($GLOBALS["___mysqli_ston"], $sql);
 				echo "Support linux activ&#233;.<br>\n";
 				}
 				else{
@@ -341,8 +341,8 @@ if ($_GET['action'] == "change") {
 		// Installation  de PhpLdapAdmin (se3-pla)
 		case "pla":
 			$valeur_pla=($_GET['valeur']==1) ? 1 : 0;
-			$resultat=mysql_query("SELECT * FROM params WHERE name='pla'");
-			if(mysql_num_rows($resultat)==0){
+			$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * FROM params WHERE name='pla'");
+			if(mysqli_num_rows($resultat)==0){
 				$sql = "INSERT INTO params VALUES('','pla','$valeur_pla','','Installation de phpldapadmin','6')";
 			} else {
 				$sql = "UPDATE params SET value='$valeur_pla' where name='pla'";
@@ -352,7 +352,7 @@ if ($_GET['action'] == "change") {
 				// on active
 				system("/usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh -i se3-pla",$return);
 				if($return==0) {
-				mysql_query($sql);
+				mysqli_query($GLOBALS["___mysqli_ston"], $sql);
 				echo "phpldapadmin activ&#233;.<br>\n";
 				}
 				else{
@@ -362,7 +362,7 @@ if ($_GET['action'] == "change") {
 			} else{
 				// on désactive
 				system("/usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh -r se3-pla",$return);
-				mysql_query($sql);
+				mysqli_query($GLOBALS["___mysqli_ston"], $sql);
 				echo "Module $module d&#233;sactiv&#233;.<br>\n";
 			
 			}
@@ -371,8 +371,8 @@ if ($_GET['action'] == "change") {
         // Installation de Radius (se3-radius)
         case "radius":
             $valeur_radius=($_GET['valeur']==1) ? 1 : 0;
-            $resultat=mysql_query("SELECT * FROM params WHERE name='radius'");
-            if(mysql_num_rows($resultat)==0){
+            $resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * FROM params WHERE name='radius'");
+            if(mysqli_num_rows($resultat)==0){
                 $sql = "INSERT INTO params VALUES('','radius','1','','Activation ou d&#233sactivation module se3-radius','6')";
             } else {
                 $sql = "UPDATE params SET value='$valeur_radius' where name='radius'";
@@ -381,7 +381,7 @@ if ($_GET['action'] == "change") {
             if ($valeur_radius == 1) {
                 system("/usr/bin/sudo -H /usr/share/se3/scripts/install_se3-module.sh -i se3-radius",$return);
                 if($return==0) {
-                mysql_query($sql);
+                mysqli_query($GLOBALS["___mysqli_ston"], $sql);
                 echo "Module $module activ&#233;.<br>\n";
                 }
                 else{
@@ -389,7 +389,7 @@ if ($_GET['action'] == "change") {
                 }
 
             } else{
-                mysql_query($sql);
+                mysqli_query($GLOBALS["___mysqli_ston"], $sql);
                 echo "Module $module d&#233;sactiv&#233;.<br>\n";
             }
             break;
@@ -706,12 +706,12 @@ echo "</td></tr>\n";
 
 
 // Menu fond d'ecran
-$resultat=mysql_query("SELECT * FROM params WHERE name='menu_fond_ecran'");
-if(mysql_num_rows($resultat)==0){
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * FROM params WHERE name='menu_fond_ecran'");
+if(mysqli_num_rows($resultat)==0){
 	$menu_fond_ecran=0;
 }
 else{
-	$ligne=mysql_fetch_object($resultat);
+	$ligne=mysqli_fetch_object($resultat);
 	if($ligne->value=="1"){
 		$menu_fond_ecran=1;
 	}
@@ -750,12 +750,12 @@ echo "</td></tr>\n";
 
 
 //Menu support clients linux
-$resultat=mysql_query("SELECT * FROM params WHERE name='support_linux'");
-if(mysql_num_rows($resultat)==0){
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * FROM params WHERE name='support_linux'");
+if(mysqli_num_rows($resultat)==0){
 	$support_linux=0;
 }
 else{
-	$ligne=mysql_fetch_object($resultat);
+	$ligne=mysqli_fetch_object($resultat);
 	if($ligne->value=="1"){
 		$support_linux=1;
 	}
@@ -982,12 +982,12 @@ if (($unison!="1") || ($synchro_actif !="1")) {
 //**********************************************************************************************************************************
 // Module PLA
 
-$resultat=mysql_query("SELECT * FROM params WHERE name='pla'");
-if(mysql_num_rows($resultat)==0){
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * FROM params WHERE name='pla'");
+if(mysqli_num_rows($resultat)==0){
 	$pla=0;
 }
 else{
-	$ligne=mysql_fetch_object($resultat);
+	$ligne=mysqli_fetch_object($resultat);
 	if($ligne->value=="1"){
 		// installé
 		$pla=1;
@@ -1028,12 +1028,12 @@ if ($pla=="0") {
 
 // Module Radius
 
-$resultat=mysql_query("SELECT * FROM params WHERE name='radius'");
-if(mysql_num_rows($resultat)==0){
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * FROM params WHERE name='radius'");
+if(mysqli_num_rows($resultat)==0){
     $radius=0;
 }
 else{
-    $ligne=mysql_fetch_object($resultat);
+    $ligne=mysqli_fetch_object($resultat);
     if($ligne->value=="1"){
         // installé
         $radius=1;

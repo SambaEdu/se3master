@@ -141,8 +141,8 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			// echo $query;
 		}
 
-		$result=mysql_query($query) or die("Impossible d'acc&#233;der &#224; la table");
-		$ligne=mysql_num_rows($result);
+		$result=mysqli_query($GLOBALS["___mysqli_ston"], $query) or die("Impossible d'acc&#233;der &#224; la table");
+		$ligne=mysqli_num_rows($result);
 
 		if ($ligne==0) {
 			echo gettext("Aucune d&#233;l&#233;gation en cours");
@@ -156,7 +156,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			$liste_delegate = array();;
 
 			//$last_user="";
-			while ($row=mysql_fetch_row($result)) {
+			while ($row=mysqli_fetch_row($result)) {
 				if ((isset($last_user)) and ($last_user) and ($last_user<>$row[1])) { echo "<tr><td class=menuheader colspan=\"6\"></td></tr>\n";}
 				array_push($liste_delegate,$row[1]);
 				echo "<tr><td align=center>".$row[1]."</td>\n";
@@ -333,10 +333,10 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 
 		//ajout dans la table delegation si necessaire
 		$query="select parc from delegation where login='$user' and parc='$salles';";
-		$result= mysql_query($query);
+		$result= mysqli_query($GLOBALS["___mysqli_ston"], $query);
 	
 		if ($result) { 
-			$ligne= mysql_num_rows($result);
+			$ligne= mysqli_num_rows($result);
 			if ($ligne>0) {
 				if (is_template($salles)) { 
 				exec ("/usr/bin/sudo /usr/share/se3/scripts/delegate_parc.sh \"$salles\" \"$user\" \"nodelegate\""); 
@@ -344,14 +344,14 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 
 				echo "<p><font color=#FF0000>".gettext("L'utilisateur")." <b>$user</b> ".gettext("avait d&#233;j&#224; une d&#233;l&#233;gation sur ce")." $mot</font></p>\n";
 				$query_suppr="delete from delegation where login='$user' and parc='$salles';";
-				$resul_suppr=mysql_query($query_suppr);
+				$resul_suppr=mysqli_query($GLOBALS["___mysqli_ston"], $query_suppr);
 			}
 	
 			$query_verif="select parc from delegation where login='$user' and niveau='view';";
-			$result_verif= mysql_query($query_verif);
+			$result_verif= mysqli_query($GLOBALS["___mysqli_ston"], $query_verif);
 	
 			if ($result_verif) {
-				$ligne_verif= mysql_num_rows($result_verif);
+				$ligne_verif= mysqli_num_rows($result_verif);
 				if ($ligne_verif==0) {
 					$right="parc_can_view";
 					$cDn = "uid=$user,$peopleRdn,$ldap_base_dn";
@@ -361,7 +361,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			}
 		}
 		$query_insert="Insert into delegation (ID,login,parc,niveau) VALUES ('','$user','$salles','manage');";
-		$result_insert=mysql_query($query_insert) or die ("Erreur d'&#233;criture dans la table");
+		$result_insert=mysqli_query($GLOBALS["___mysqli_ston"], $query_insert) or die ("Erreur d'&#233;criture dans la table");
 
 		if ($template) {
 			//echo "/usr/bin/sudo /usr/share/se3/scripts/delegate_parc.sh \"$salles\" \"$user\" \"delegate\"";
@@ -391,14 +391,14 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 
 		//retirer le champ dans la table
 		$query="select parc from delegation where login='$user' and parc='$salles';";
-		$result= mysql_query($query);
+		$result= mysqli_query($GLOBALS["___mysqli_ston"], $query);
 	
 		if ($result) { 
-			$ligne= mysql_num_rows($result);
+			$ligne= mysqli_num_rows($result);
 			if ($ligne==1) {
 				//suppression pour ce parc
 				$query_suppr="delete from delegation where login='$user' and parc='$salles';";
-				$resul_suppr=mysql_query($query_suppr);
+				$resul_suppr=mysqli_query($GLOBALS["___mysqli_ston"], $query_suppr);
 				echo "<p>".gettext("La d&#233;l&#233;gation est supprim&#233; pour")." <b> $user </b> ".gettext("sur le")." $mot <b> $salles</b></p>\n";
 			}
 		}
@@ -406,17 +406,17 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		//verification qu'il n'y a pas d'autres delegations en cours
 
 		$query="select parc,niveau from delegation where login='$user';";
-		$result= mysql_query($query);
+		$result= mysqli_query($GLOBALS["___mysqli_ston"], $query);
 		
 		if ($result) { 
-			$ligne= mysql_num_rows($result);
+			$ligne= mysqli_num_rows($result);
 			if ($ligne>0) {
 				//une autre delegation est en cours, on laisse les droits tel quel
 				echo "<br><table border=1>\n";
 				echo "<tr><td class=menuheader height=\"30\" colspan=\"2\" align=center width=25%>".gettext("Droits restants")."</td></tr>\n";
 				echo "<tr><td class=menuheader height=\"30\" align=center>Parc</td><td class=menuheader align=center>".gettext("Droit")."</td></tr>\n";
 					
-				while ($row=mysql_fetch_row($result)) {
+				while ($row=mysqli_fetch_row($result)) {
 						echo "<tr><td align=center>$row[0]</td>\n";
 					echo "<td align=center>\n";
 						
@@ -495,20 +495,20 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		
 		//ajout dans la table delegation si necessaire
 		$query="select parc from delegation where login='$user' and parc='$salles';";
-		$result= mysql_query($query);
+		$result= mysqli_query($GLOBALS["___mysqli_ston"], $query);
 			
 		if ($result) { 
-			$ligne= mysql_num_rows($result);
+			$ligne= mysqli_num_rows($result);
 			if ($ligne>0) {
 				echo "<p><font color=#FF0000>".gettext("L'utilisateur")." <B> $user</B> ".gettext("avait d&#233j&#224 une d&#233l&#233gation sur le")." $mot <b>$salles</b></font></p>\n";
 				$query_suppr="delete from delegation where login='$user' and parc='$salles';";
-				$resul_suppr=mysql_query($query_suppr);
+				$resul_suppr=mysqli_query($GLOBALS["___mysqli_ston"], $query_suppr);
 			}
 			$query_verif="select parc from delegation where login='$user' and niveau='manage';";
-			$result_verif= mysql_query($query_verif);
+			$result_verif= mysqli_query($GLOBALS["___mysqli_ston"], $query_verif);
 			
 			if ($result_verif) {
-				$ligne_verif= mysql_num_rows($result_verif);
+				$ligne_verif= mysqli_num_rows($result_verif);
 				if ($ligne_verif==0){
 					$right="parc_can_manage";
 					$cDn = "uid=$user,$peopleRdn,$ldap_base_dn";
@@ -519,7 +519,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 		}
 
 		$query_insert="Insert into delegation (ID,login,parc,niveau) VALUES ('','$user','$salles','view');";
-		$result_insert=mysql_query($query_insert) or die ("Erreur d'&#233;criture dans la table");
+		$result_insert=mysqli_query($GLOBALS["___mysqli_ston"], $query_insert) or die ("Erreur d'&#233;criture dans la table");
 		
 		update_wpkg();
 		retour_delegate();

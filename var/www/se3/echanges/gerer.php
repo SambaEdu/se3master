@@ -72,8 +72,8 @@ echo "<body >
 if (isset($action) and $action=='s') {
 // supprimer d'adord tout les dossiers du devoir 
  $req =" SELECT * FROM $table WHERE id='$id'";
- $res=mysql_query($req);
- $ligne=mysql_fetch_array($res);
+ $res=mysqli_query($GLOBALS["___mysqli_ston"], $req);
+ $ligne=mysqli_fetch_array($res);
  list($id,$id_prof,$id_devoir,$nom_devoir,$date_distrib_dev,$date_retour_dev,$description_dev,$liste_distrib,$liste_retard, $etat) = $ligne; 
 
  $liste_distrib=preg_replace("/#$/","",$liste_distrib);
@@ -101,30 +101,30 @@ echo gettext("Suppression du dossier du devoir")." <em>$id_devoir</em> ".gettext
            
 // enfin supprimer l'enregistrement
 $req_sup="delete from $table where id='$id'";
-mysql_query($req_sup);
+mysqli_query($GLOBALS["___mysqli_ston"], $req_sup);
 echo "<h4>".gettext("Le devoir")." <em>$id_devoir</em> ".gettext("a &#233;t&#233; d&#233;finitivement supprim&#233;")." </h4>";
 
 }
 if (isset($action) and $action=='r') {
 $req = "UPDATE $table SET etat='R' WHERE id='$id' ";
-@mysql_query($req);
+@mysqli_query($GLOBALS["___mysqli_ston"], $req);
 echo "<h4>".gettext("Le devoir")." <em>$id_devoir</em> ".gettext("est remis en &#233;tat de \"r&#233;cup&#233;ration\"")." </h4>";
 }
 if (isset($action) and $action=='a') {
 $req_archiv = "UPDATE $table SET etat='A' WHERE id='$id' ";
-@mysql_query($req_archiv);
+@mysqli_query($GLOBALS["___mysqli_ston"], $req_archiv);
 echo "<strong>".gettext("Le devoir")." <em>$id_devoir</em> ".gettext("a bien &#233;t&#233; archiv&#233;")."<br>
  <font size='-1'>".gettext("Il est possible toutefois en cas de n&#233;cessit&#233; de reprendre une phase de \"r&#233;cup&#233;ration\"")."</font></strong>";
 }
 
 // recherche de tous les devoirs du prof
 $req =" SELECT * FROM $table WHERE id_prof='$login' AND etat <> 'A' order by etat, date_distrib ";
-$resultat=mysql_query($req);
-$nb_devoirs=mysql_num_rows($resultat);
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], $req);
+$nb_devoirs=mysqli_num_rows($resultat);
 
 $req_arch =" SELECT * FROM $table WHERE id_prof='$login' AND etat = 'A' order by date_distrib,date_recup ";
-$resultat_arch=mysql_query($req_arch);
-$nb_devoirs_arch=mysql_num_rows($resultat_arch);
+$resultat_arch=mysqli_query($GLOBALS["___mysqli_ston"], $req_arch);
+$nb_devoirs_arch=mysqli_num_rows($resultat_arch);
 
 if ($nb_devoirs +$nb_devoirs_arch ==0) {
  die ("$login ".gettext(" n'a distribu&#233; aucun devoir"));
@@ -136,7 +136,7 @@ echo "<table width='100%' border=2>
   <tr><th>".gettext("identifi&#233; par")."</th><th>".gettext("distribu&#233; le")."</th><th>".gettext("&#224; rendre le")."</th><th>".gettext("sous le nom")."</th><th>".gettext("Etat actuel")."</th><th align='center' width='25%' colspan=2>".gettext("actions")."</th></tr>";
   
 for ($i=0;$i<$nb_devoirs;$i++) {
-  $ligne=mysql_fetch_array($resultat);
+  $ligne=mysqli_fetch_array($resultat);
   list($id,$id_prof,$id_devoir,$nom_devoir,$date_distrib_dev,$date_retour_dev,$description_dev,$liste_dev,$liste_retard, $etat) = $ligne; 
 
   // afficher les listes des eleves a la demande dans une fenetre
@@ -211,7 +211,7 @@ echo "<table width='100%' border=2>
 // <th>description</th><th>liste</th>
 
 for ($i=0;$i<$nb_devoirs_arch;$i++) {
-  $ligne_arch=mysql_fetch_array($resultat_arch);
+  $ligne_arch=mysqli_fetch_array($resultat_arch);
   list($id,$id_prof,$id_devoir,$nom_devoir,$date_distrib_dev,$date_retour_dev,$description_dev,$liste_dev,$liste_retard, $etat) = $ligne_arch; 
   // afficher les listes des eleves a la demande dans une fenetre
   echo "<tr><td><a href='devoir.php?id=$id' onClick=\"ouvrirFenetre(this.href); return false\">$id_devoir</a></td>";

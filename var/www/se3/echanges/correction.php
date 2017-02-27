@@ -47,8 +47,8 @@ $fichiers= array();
 
 // requete pour avoir le detail de ce devoir $id
 $req = "SELECT * FROM $table WHERE id = '$id'";
-$resultat = mysql_query($req);
-$ligne= mysql_fetch_array($resultat);
+$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $req);
+$ligne= mysqli_fetch_array($resultat);
 list($id,$id_prof,$id_devoir,$nom_devoir,$date_distrib,$date_retour,$description,$liste_distrib, $liste_retard) = $ligne; 
 
 // liste complete des eleves beneficiaires du devoir 

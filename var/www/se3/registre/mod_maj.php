@@ -175,18 +175,18 @@ if (($fichier_xml)&&(!$retval_mod)) {
 		if ($cle) {
     			$cle=ajoutedoublebarre(trim($cle));
     			$query="SELECT `CleID` FROM `corresp` WHERE `chemin`='$cle'";
-    			$resultat=mysql_query($query);
-    			if (mysql_num_rows($resultat)) {
-    				$row=mysql_fetch_row($resultat);
+    			$resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+    			if (mysqli_num_rows($resultat)) {
+    				$row=mysqli_fetch_row($resultat);
     				$query2="SELECT `cle` FROM `modele` WHERE `mod`= '$nom' and `cle` = '$row[0]' ;";
-    				$resultat2 = mysql_query($query2);
-    				if (mysql_num_rows($resultat2) and ($nom)) {
+    				$resultat2 = mysqli_query($GLOBALS["___mysqli_ston"], $query2);
+    				if (mysqli_num_rows($resultat2) and ($nom)) {
        					$query1 = "UPDATE `modele` SET `etat` = '$valeur' WHERE `cle` = '$row[0]' AND `mod` = '$nom';";
-      		 			$resultat1=mysql_query($query1);
+      		 			$resultat1=mysqli_query($GLOBALS["___mysqli_ston"], $query1);
        					$modif++;
      				} else {
         				$query="INSERT INTO modele( `etat`, `cle`, `mod` ) VALUES ('$valeur','$row[0]','$nom');";
-        				$insert = mysql_query($query);
+        				$insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         				$cree++;
      				}
     			} else {

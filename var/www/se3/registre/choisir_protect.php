@@ -52,7 +52,7 @@ if (!$template) { $template=$_GET['salles'];}
 if ($template) { 
 
 	$query4="DELETE FROM restrictions WHERE groupe='$template';";
-	mysql_query($query4);
+	mysqli_query($GLOBALS["___mysqli_ston"], $query4);
 
 	applique_modele($mod,$template,"oui");
  		

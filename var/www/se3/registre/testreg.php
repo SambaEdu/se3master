@@ -62,8 +62,8 @@ if (is_admin("computers_is_admin", $login) == "Y") {
                 if ($groups[$loop]["cn"]) {
                     $test = $groups[$loop]["cn"];
                     $query = "select groupe from restrictions where groupe='$test' group by groupe ;";
-                    $resultat = mysql_query($query);
-                    if (mysql_num_rows($resultat)) {
+                    $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+                    if (mysqli_num_rows($resultat)) {
                         echo $groups[$loop]["cn"] . "<BR>\n";
                         array_push($templates, $test);
                     } else {
@@ -79,8 +79,8 @@ if (is_admin("computers_is_admin", $login) == "Y") {
             echo "<U>" . gettext("La machine est dans les Parcs") . "</U> :<BR><UL>\n";
             foreach ($parcs as $test) {
                     $query = "select groupe from restrictions where groupe=\"".$test['cn']."\" group by groupe ;";
-                    $resultat = mysql_query($query);
-                    if (mysql_num_rows($resultat)) {
+                    $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+                    if (mysqli_num_rows($resultat)) {
                         echo $test['cn'] . "<BR>\n";
                         array_push($templates, $test['cn']);
                     } else {
@@ -135,8 +135,8 @@ if ($test) {
         }
     }
     $query.=") GROUP BY CleID,restrictions.valeur ORDER BY priorite,groupe,genre,restrictions.valeur DESC,Intitule ASC";
-    $resultat = mysql_query($query);
-    if (mysql_num_rows($resultat)) {
+    $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+    if (mysqli_num_rows($resultat)) {
         echo "<table border=\"1\"><tr>
            	<td><img src=\"/elements/images/system-help.png\" alt=\"" . gettext("Aide") . "\" title=\"" . gettext("Aide") . "\" width=\"16\" height=\"18\" border=\"0\" /></td>
            	<td>" . gettext("Template") . "</td>
@@ -145,7 +145,7 @@ if ($test) {
            	<td>" . gettext("Etat") . "</td>
            	<td><img src=\"/elements/images/edittrash.png\" alt=\"Supprimer\" title=\"" . gettext("Supprimer") . "\" width=\"15\" height=\"15\" border=\"0\"></td>
            	</tr>";
-        while ($row = mysql_fetch_array($resultat)) {
+        while ($row = mysqli_fetch_array($resultat)) {
             //bouton aide
             echo "<tr><td><a href=\"#\" onClick=\"window.open('aide_cle.php?cle=$row[1]','aide','scrollbars=yes,width=600,height=620')\">\n";
             echo "<img src=\"/elements/images/system-help.png\" alt=\"aide\" title=\"$row[7]\" width=\"15\" height=\"15\" border=\"0\"></a></td>\n";

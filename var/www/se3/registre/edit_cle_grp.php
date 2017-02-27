@@ -57,16 +57,16 @@ if ($choix != "") {
 	$deleteSQL = "delete from modele where `cle`='$cle' and `mod`='$modele'";
 	if ($choix == "Active") {
 		$addSQL = "Insert into modele values ('', '$cle', '$modele', '1')";
-		mysql_query($deleteSQL);
-		mysql_query($addSQL);
+		mysqli_query($GLOBALS["___mysqli_ston"], $deleteSQL);
+		mysqli_query($GLOBALS["___mysqli_ston"], $addSQL);
 	}
 	else if ($choix == "Inactive") {
 		$addSQL = "Insert into modele values ('', '$cle', '$modele', '0')";
-		mysql_query($deleteSQL);
-		mysql_query($addSQL);
+		mysqli_query($GLOBALS["___mysqli_ston"], $deleteSQL);
+		mysqli_query($GLOBALS["___mysqli_ston"], $addSQL);
 	}
 	else {
-		mysql_query($deleteSQL);
+		mysqli_query($GLOBALS["___mysqli_ston"], $deleteSQL);
 	}
 	?>
 		<script language="JavaScript" type="text/javascript">
@@ -81,8 +81,8 @@ else {
 	if ($state == "-1") $checkedD="checked";
 
 	$query="Select valeur, type, Intitule, antidote from corresp where CleID='$cle'";
-	$result = mysql_query($query);
-	$row = mysql_fetch_row($result);
+	$result = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+	$row = mysqli_fetch_row($result);
 	echo "$row[2] :\n";
 	echo "<form method=get action=\"edit_cle_grp.php\">\n";
 	echo "<br/>\n";
@@ -95,7 +95,7 @@ else {
 	echo "<br/><input type=\"submit\" value=\"Valider\">";
 	echo "</form>\n";
 }
-mysql_close();
+((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 
 include("pdp.inc.php");
 

@@ -41,12 +41,12 @@ include "ldap.inc.php";
     }
     // Fin Recherche de la nature mono ou multi serveur de la plateforme SE3
 //=============================================
-$resultat=mysql_query("SELECT * FROM params WHERE name='menu_fond_ecran'");
-if(mysql_num_rows($resultat)==0){
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * FROM params WHERE name='menu_fond_ecran'");
+if(mysqli_num_rows($resultat)==0){
 	$menu_fond_ecran=0;
 }
 else{
-	$ligne=mysql_fetch_object($resultat);
+	$ligne=mysqli_fetch_object($resultat);
 	if($ligne->value=="1"){
 		$menu_fond_ecran=1;
 	}
@@ -57,12 +57,12 @@ else{
 // La valeur de $menu_fond_ecran est utilisee dans la page 70windowz.inc
 //=============================================
 
-$resultat=mysql_query("SELECT * FROM params WHERE name='unattended'");
-if(mysql_num_rows($resultat)==0){
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * FROM params WHERE name='unattended'");
+if(mysqli_num_rows($resultat)==0){
 	$menu_unattended=0;
 }
 else{
-	$ligne=mysql_fetch_object($resultat);
+	$ligne=mysqli_fetch_object($resultat);
 	if($ligne->value=="1"){
 		$menu_unattended=1;
 	}

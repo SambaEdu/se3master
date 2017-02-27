@@ -181,10 +181,10 @@ switch ($action) {
     default:
         echo "<h2>" . gettext("Choisir un groupe de cl&#233;s") . "</h2>";
         $query = "SELECT `mod` FROM modele GROUP BY `mod`;";
-        $resultat = mysql_query($query);
+        $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         echo"<FORM METHOD=POST ACTION=\"affiche_modele.php\" >";
 
-        while ($row = mysql_fetch_array($resultat)) {
+        while ($row = mysqli_fetch_array($resultat)) {
             echo"<a href=\"affiche_modele.php?modact=yes&mod=$row[0] \">$row[0]</a><br>";
         }
 
@@ -200,13 +200,13 @@ switch ($action) {
     //ajout d'un modele
     case "new":
         $query = "SELECT `mod` FROM modele GROUP BY `mod`;";
-        $resultat = mysql_query($query);
+        $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         echo gettext("Choisir le groupe de cl&#233; support de votre nouveau groupe ");
 
         echo "<br><br>";
         echo " <FORM METHOD=POST ACTION=\"affiche_modele.php\" >";
         echo "<select name=\"modele\" size=\"1\"><option></option> ";
-        while ($row = mysql_fetch_array($resultat)) {
+        while ($row = mysqli_fetch_array($resultat)) {
             echo"<option>$row[0]</option>";
             $choix[$i] = $row[0];
             $i++;
@@ -233,11 +233,11 @@ switch ($action) {
         //un modele support est defini
         if ($choix) {
             $query = "SELECT `cle`,`etat` FROM `modele` WHERE `mod` = '$mod' ";
-            $resultat = mysql_query($query);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
             echo "<br>" . gettext("Inscription de") . " $nommod<br>";
-            while ($row = mysql_fetch_array($resultat)) {
+            while ($row = mysqli_fetch_array($resultat)) {
                 $query4 = "INSERT  INTO modele( `modID`, `cle`, `mod`, `etat` )  VALUES ('','$row[0]','$nommod','$row[1]');";
-                $resultat4 = mysql_query($query4);
+                $resultat4 = mysqli_query($GLOBALS["___mysqli_ston"], $query4);
             }
             echo "<br>" . gettext("Le nouveau groupe de cl&#233; s'appelle") . " $nommod. " . gettext("Il est bas&#233; sur le groupe de cl&#233;") . " $choix<br>";
         } else {  //aucun modele support de defini
@@ -276,9 +276,9 @@ switch ($action) {
         }
         connexion();
         $query = "SELECT `cle`,`etat` FROM `modele` WHERE `mod` = '$mod' ";
-        $resultat2 = mysql_query($query);
-        if (!mysql_num_rows($resultat2)) {
-            $row4 = mysql_fetch_array($resultat2);
+        $resultat2 = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+        if (!mysqli_num_rows($resultat2)) {
+            $row4 = mysqli_fetch_array($resultat2);
             if (!$row4[0]) {
                 echo gettext("Ce groupe n'a pas encore de cl&#233; <br><br> Si vous n'en ajouter pas tout de suite, le groupe de cl&#233; sera supprim&#233;");
                 echo "<br><FORM METHOD=POST ACTION=\"affiche_modele.php\" name=\"mod\">";
@@ -295,15 +295,15 @@ switch ($action) {
         where modele.mod  = '" . $mod . "' " . $ajout . $ajoutpasaffiche . $ajoutsscat . "
         order by type,modele.etat desc,OS,genre,valeur desc";
 
-            $resultat = mysql_query($query);
-            if (mysql_num_rows($resultat)) {
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+            if (mysqli_num_rows($resultat)) {
                 //affichage de l'en-tete du tableau en fonction des cas
                 echo "<table border=\"1\" ><tr BGCOLOR=#fff9d3><td><img src=\"/elements/images/system-help.png\" alt=\"" . gettext("Aide") . "\" title=\"Aide\" width=\"16\" height=\"18\" border=\"0\" />\n";
                 echo "</td>$affichetout <td><DIV ALIGN=CENTER>" . gettext("Intitul&#233") . "</DIV></td>\n";
                 echo "<td><DIV ALIGN=CENTER>" . gettext("OS") . "</DIV></td><td><DIV ALIGN=CENTER>" . gettext("Etat") . "</DIV></td><td><DIV ALIGN=CENTER>" . gettext("Editer") . "</DIV></td>\n";
             }
             unset($liste);
-            while ($row = mysql_fetch_array($resultat)) {
+            while ($row = mysqli_fetch_array($resultat)) {
                 //bouton aide
                 $liste.= "-" . $row[0];
 
@@ -476,11 +476,11 @@ switch ($action) {
             }
         }
         $query = "SELECT `cle` FROM `modele` WHERE `mod` = '$mod' ";
-        $resultat = mysql_query($query);
-        $rowserv = mysql_fetch_array($resultat);
+        $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+        $rowserv = mysqli_fetch_array($resultat);
         if ($rowserv[0]) {
             $values = "($rowserv[0]";
-            while ($rowserv = mysql_fetch_array($resultat)) {
+            while ($rowserv = mysqli_fetch_array($resultat)) {
                 $values = $values . ",$rowserv[0]";
             }
 
@@ -503,8 +503,8 @@ switch ($action) {
         }
 
         echo "<td>" . gettext("Intitul&#233;") . "</td><td>" . gettext("OS") . "</td><td>" . gettext("Choisir") . "</td><td>" . gettext("Rendre la restriction active") . "</td></tr>";
-        $resultat = mysql_query($query);
-        while (($resultat) && ( $row = mysql_fetch_array($resultat))) {
+        $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+        while (($resultat) && ( $row = mysqli_fetch_array($resultat))) {
             $j++;
             echo "<tr><td><a href=\"#\" onClick=\"window.open('aide_cle.php?cle=$row[0]','aide','scrollbars=yes,width=600,height=620')\"><img src=\"/elements/images/help.png\" alt=\"" . gettext("Aide") . "\" title=\"$row[3]\" width=\"16\" height=\"18\" border=\"0\" /></a></td>";
             if ($cat == "tout") {
@@ -563,7 +563,7 @@ switch ($action) {
                 }
                 $n++;
                 $query = "INSERT INTO `modele` ( `etat`, `cle`, `mod` ) VALUES ('$etat','$cle','$mod');";
-                $insert = mysql_query($query);
+                $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
             }
         }
         $ssact = $_POST['sscat'];
@@ -580,14 +580,14 @@ switch ($action) {
             if ($cle[$i]) {
                 if ($suppr) {
                     $query = "DELETE FROM `modele` WHERE `mod`='$mod' and cle='$cle[$i]'";
-                    $resultat = mysql_query($query);
+                    $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
                     $test++;
                 }
 
                 if (($cle[$i]) and (!$suppr)) {
                     $query2 = "SELECT `etat` FROM `modele` WHERE `cle` = '$cle[$i]' AND `mod` = '$mod' ";
-                    $resultat2 = mysql_query($query2);
-                    $row2 = mysql_fetch_row($resultat2);
+                    $resultat2 = mysqli_query($GLOBALS["___mysqli_ston"], $query2);
+                    $row2 = mysqli_fetch_row($resultat2);
                     if ($row2[0] == 1) {
                         $etat = 0;
                     }
@@ -597,7 +597,7 @@ switch ($action) {
                     }
 
                     $query1 = "UPDATE `modele` SET `etat` = '$etat' WHERE `cle` = '$cle[$i]' AND `mod` = '$mod' ";
-                    $resultat1 = mysql_query($query1);
+                    $resultat1 = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
                 }
             }
         }
@@ -616,12 +616,12 @@ switch ($action) {
         if ($cle) { //suppression du modele
             if ($suppr) {
                 $query = "DELETE FROM `modele` WHERE `cle`=$cle AND `mod`='$mod';";
-                $resultat = mysql_query($query);
+                $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
                 $test++;
             } else {
                 $query = "SELECT `etat` FROM `modele` WHERE `cle` = '$cle' AND `mod` = '$mod'";
-                $resultat = mysql_query($query);
-                $row = mysql_fetch_row($resultat);
+                $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+                $row = mysqli_fetch_row($resultat);
 
                 if ($row[0] == 1) {
                     $etat = 0;
@@ -631,7 +631,7 @@ switch ($action) {
                 }
 
                 $query1 = "UPDATE `modele` SET `etat` = '$etat' WHERE `cle` = '$cle' AND `mod` = '$mod';";
-                $resultat1 = mysql_query($query1);
+                $resultat1 = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
                 $test++;
             }
         } else {
@@ -664,7 +664,7 @@ switch ($action) {
         echo gettext("Commandes prises en compte !");
         break;
 }
-mysql_close();
+((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 
 include("pdp.inc.php");
 ?>

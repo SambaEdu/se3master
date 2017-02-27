@@ -68,13 +68,13 @@ if (isset($submit)) {
 	// Traitement du Form
 	$query="SELECT * from params";
 	if ($submit != 0) $query .= " WHERE cat=$submit";
-	$result=mysql_query($query);
+	$result=mysqli_query($GLOBALS["___mysqli_ston"], $query);
 	if ($result) {
 		$i=0;
 		$modif=0;
 		$ldap_modify="";
 
-		while ($r=mysql_fetch_array($result)) {
+		while ($r=mysqli_fetch_array($result)) {
 			// Exclusion de deux valeurs particulieres de la table params
 			if(($r["name"]!='dernier_import')&&($r["name"]!='imprt_cmpts_en_cours')){
 				$formname="form_".$r["name"];
@@ -84,7 +84,7 @@ if (isset($submit)) {
 				if ($formname != $r["value"]) {
 				// Mise a jour de la base de donnees
 					$queri="UPDATE params SET value=\"".$formname."\" WHERE name=\"".$r["name"]."\"";
-					$result1=mysql_query($queri);
+					$result1=mysqli_query($GLOBALS["___mysqli_ston"], $queri);
 
 					if ($result1) {
 						print gettext("Modification du param&#232;tre ")."<em><font color=\"red\">".$r["name"]."</font></em> ". gettext("de ")."<strong>".$r["value"]."</strong>".gettext(" en ")."<strong>".$formname."</strong>"."<br />\n";
@@ -134,7 +134,7 @@ if (isset($submit)) {
 			}
 		}
 		echo "<br /><br /><center><a href=\"./\">".gettext("Retour")."</a></center>";
-		mysql_free_result($result);
+		((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
 		if ($modif == "1") {
 				exec('/usr/bin/sudo /usr/share/se3/scripts/refresh_cache_params.sh');
 		}

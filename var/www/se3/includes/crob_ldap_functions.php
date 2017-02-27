@@ -309,16 +309,16 @@ function get_infos_admin_ldap(){
 	// Etablir la connexion au serveur et la selection de la base?
 
 	$sql="SELECT value FROM params WHERE name='adminRdn'";
-	$res1=mysql_query($sql);
-	if(mysql_num_rows($res1)==1){
-		$lig_tmp=mysql_fetch_object($res1);
+	$res1=mysqli_query($GLOBALS["___mysqli_ston"], $sql);
+	if(mysqli_num_rows($res1)==1){
+		$lig_tmp=mysqli_fetch_object($res1);
 		$adminLdap["adminDn"]=$lig_tmp->value.",".$ldap_base_dn;
 	}
 
 	$sql="SELECT value FROM params WHERE name='adminPw'";
-	$res2=mysql_query($sql);
-	if(mysql_num_rows($res2)==1){
-		$lig_tmp=mysql_fetch_object($res2);
+	$res2=mysqli_query($GLOBALS["___mysqli_ston"], $sql);
+	if(mysqli_num_rows($res2)==1){
+		$lig_tmp=mysqli_fetch_object($res2);
 		$adminLdap["adminPw"]=$lig_tmp->value;
 	}
 
@@ -1956,10 +1956,10 @@ function recup_from_trash($uid) {
 
 //====================================================
 function crob_getParam($name) {
-	$sql="SELECT value FROM params WHERE name='".mysql_real_escape_string($name)."';";
-	$res=mysql_query($sql);
-	if(mysql_num_rows($res)>0) {
-		$lig=mysql_fetch_object($res);
+	$sql="SELECT value FROM params WHERE name='".((isset($GLOBALS["___mysqli_ston"]) && is_object($GLOBALS["___mysqli_ston"])) ? mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $name) : ((trigger_error("[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.", E_USER_ERROR)) ? "" : ""))."';";
+	$res=mysqli_query($GLOBALS["___mysqli_ston"], $sql);
+	if(mysqli_num_rows($res)>0) {
+		$lig=mysqli_fetch_object($res);
 		return $lig->value;
 	}
 	else {
@@ -1968,11 +1968,11 @@ function crob_getParam($name) {
 }
 //====================================================
 function crob_setParam($name,$value,$descr) {
-	$sql="DELETE FROM params WHERE name='".mysql_real_escape_string($name)."';";
-	$del=mysql_query($sql);
+	$sql="DELETE FROM params WHERE name='".((isset($GLOBALS["___mysqli_ston"]) && is_object($GLOBALS["___mysqli_ston"])) ? mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $name) : ((trigger_error("[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.", E_USER_ERROR)) ? "" : ""))."';";
+	$del=mysqli_query($GLOBALS["___mysqli_ston"], $sql);
 
-	$sql="INSERT INTO params SET name='$name', descr='$descr', cat='0', value='".mysql_real_escape_string($value)."';";
-	$insert=mysql_query($sql);
+	$sql="INSERT INTO params SET name='$name', descr='$descr', cat='0', value='".((isset($GLOBALS["___mysqli_ston"]) && is_object($GLOBALS["___mysqli_ston"])) ? mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $value) : ((trigger_error("[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.", E_USER_ERROR)) ? "" : ""))."';";
+	$insert=mysqli_query($GLOBALS["___mysqli_ston"], $sql);
 	if($insert) {return true;} else  {return false;}
 }
 //====================================================

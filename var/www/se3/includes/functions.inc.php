@@ -26,6 +26,29 @@
 
 
 //=================================================
+/**
+* fonction pour mysqli
+*/
+function mysqli_result($result,$row,$field=0) {
+    if ($result===false) return false;
+    if ($row>=mysqli_num_rows($result)) return false;
+    if (is_string($field) && !(strpos($field,".")===false)) {
+        $t_field=explode(".",$field);
+        $field=-1;
+        $t_fields=mysqli_fetch_fields($result);
+        for ($id=0;$id<mysqli_num_fields($result);$id++) {
+            if ($t_fields[$id]->table==$t_field[0] && $t_fields[$id]->name==$t_field[1]) {
+                $field=$id;
+                break;
+            }
+        }
+        if ($field==-1) return false;
+    }
+    mysqli_data_seek($result,$row);
+    $line=mysqli_fetch_array($result);
+    return isset($line[$field])?$line[$field]:false;
+}
+
 
 /**
 * Affichage du menu lateral (OBSOLETE)
@@ -191,10 +214,10 @@ function dispfield($id, $table, $field)
 {
     if ($id):
     /* Renvoie le nom de id */
-        $result=mysql_query("SELECT $field FROM $table WHERE id=$id");
-        if ($result && mysql_num_rows($result)):
-            $nom=mysql_result($result,0,0);
-            mysql_free_result($result);
+        $result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT $field FROM $table WHERE id=$id");
+        if ($result && mysqli_num_rows($result)):
+            $nom=mysqli_result($result,0,0);
+            ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
         else:
             $nom="";
         endif;
@@ -215,16 +238,16 @@ function dispfield($id, $table, $field)
 function listoptions($table,$sel)
 {
     $res = "";
-    $result=mysql_query("SELECT id, nom FROM $table");
-    if ($result && mysql_num_rows($result)):
-        while ($r=mysql_fetch_row($result))
+    $result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT id, nom FROM $table");
+    if ($result && mysqli_num_rows($result)):
+        while ($r=mysqli_fetch_row($result))
             {
                 $res .= "<OPTION VALUE=\"$r[0]\"";
                 if ($r[0]==$sel)
                     $res .= " SELECTED";
                 $res .= ">$r[1]</OPTION>\n";
             }
-        mysql_free_result($result);
+        ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
     endif;
     return $res;
 }
@@ -245,11 +268,11 @@ function dispstats($idpers)
 
     if ($idpers):
         /* Renvoie le nombre de connexions */
-        @mysql_select_db("$DBAUTH");
-        $result=mysql_query("SELECT stat FROM personne WHERE id=$idpers", $authlink);
-    if ($result && mysql_num_rows($result)):
-        $stat=mysql_result($result,0,0);
-    mysql_free_result($result);
+        @((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $DBAUTH));
+        $result=mysqli_query( $authlink, "SELECT stat FROM personne WHERE id=$idpers");
+    if ($result && mysqli_num_rows($result)):
+        $stat=mysqli_result($result,0,0);
+    ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
     else:
     $stat="0";
     endif;
@@ -273,11 +296,11 @@ function displogin ($idpers)
 
     if ($idpers):
         /* Renvoie le timestamp du dernier login */
-        @mysql_select_db("$DBAUTH");
-        $result=mysql_db_query("SELECT date_format(last_log,'%e %m %Y ï¿½ %T' ) FROM personne WHERE id=$idpers", $authlink);
-    if ($result && mysql_num_rows($result)):
-        $der_log=mysql_result($result,0,0);
-    mysql_free_result($result);
+        @((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $DBAUTH));
+        $result=((mysqli_query($GLOBALS["___mysqli_ston"], "USE SELECT date_format(last_log,'%e %m %Y ï¿½ %T' ) FROM personne WHERE id=$idpers")) ? mysqli_query($GLOBALS["___mysqli_ston"],  $authlink) : false);
+    if ($result && mysqli_num_rows($result)):
+        $der_log=mysqli_result($result,0,0);
+    ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
     else:
     $der_log="";
     endif;
@@ -311,10 +334,10 @@ function isauth()
     global $authlink;
     if ( ! empty($_COOKIE["SambaEdu3"])):
         $sess=$_COOKIE["SambaEdu3"];
-        $result=mysql_query("SELECT login FROM sessions WHERE sess='$sess'", $authlink);
-        if ($result && mysql_num_rows($result)):
-               $login=mysql_result($result,0,0);
-            mysql_free_result($result);
+        $result=mysqli_query( $authlink, "SELECT login FROM sessions WHERE sess='$sess'");
+        if ($result && mysqli_num_rows($result)):
+               $login=mysqli_result($result,0,0);
+            ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
         endif;
     endif;
     return $login;
@@ -344,8 +367,8 @@ function mksessid()
         for ($i = 0; $i < $SessLen ; $i++)
             $sid .= substr($Pool, (mt_rand()%(strlen($Pool))),1);
         $query="SELECT id FROM sessions WHERE sess='$sid'";
-        $result=mysql_query($query);
-        $res=mysql_num_rows($result);
+        $result=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+        $res=mysqli_num_rows($result);
     }
     while ($res>0 && $count);
     return $sid;
@@ -409,7 +432,7 @@ function open_session($login, $passwd,$al)
     $sessid=mksessid();
     setcookie("SambaEdu3", "$sessid", 0,"/","",$secook);
     $encode_pass = "secret";
-    $result=mysql_query("INSERT INTO sessions  VALUES ('', '$sessid', '$encode_pass', '$login',0,$defaultintlevel)", $authlink);
+    $result=mysqli_query( $authlink, "INSERT INTO sessions  VALUES ('', '$sessid', '$encode_pass', '$login',0,$defaultintlevel)");
     $res=1;
     endif;
     return $res;
@@ -433,7 +456,7 @@ function close_session()
         $login="";
     else:
         $sess=$_COOKIE["SambaEdu3"];
-        $result=mysql_query("DELETE FROM sessions WHERE sess='$sess'", $authlink);
+        $result=mysqli_query( $authlink, "DELETE FROM sessions WHERE sess='$sess'");
         setcookie ("SambaEdu3", "", 0,"/","",$secook);
     endif;
 }
@@ -459,7 +482,7 @@ function readhelp()
         $sess=$_COOKIE["SambaEdu3"];
         $result = mysql_query("SELECT help FROM sessions WHERE sess='$sess'",$authlink);
         if ($result && mysql_num_rows($result)):
-            $ret=mysql_result($result,0,0);
+            $ret=mysqli_result($result,0,0);
             mysql_free_result($result);
         endif;
     endif;
@@ -489,7 +512,7 @@ function changehelp()
         $query="SELECT help FROM sessions WHERE sess='$sess'";
         $result = mysql_query($query,$authlink);
         if ($result):
-            $ret=mysql_result($result,0,0);
+            $ret=mysqli_result($result,0,0);
             mysql_free_result($result);
             if ($ret==0) $ret=1; else $ret=0;
             $result = mysql_query("UPDATE sessions SET help=$ret WHERE sess='$sess'",$authlink);
@@ -516,10 +539,10 @@ function getintlevel()
     $ret=0;
     if (! empty($_COOKIE["SambaEdu3"])):
         $sess=$_COOKIE["SambaEdu3"];
-        $result = mysql_query("SELECT intlevel FROM sessions WHERE sess='$sess'",$authlink);
-        if ($result && mysql_num_rows($result)):
-            $ret=mysql_result($result,0,0);
-            mysql_free_result($result);
+        $result = mysqli_query($authlink, "SELECT intlevel FROM sessions WHERE sess='$sess'");
+        if ($result && mysqli_num_rows($result)):
+            $ret=mysqli_result($result,0,0);
+            ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
         endif;
     endif;
     return $ret;
@@ -541,7 +564,7 @@ function setintlevel($new_level)
 
     if (! empty($_COOKIE["SambaEdu3"])):
         $sess=$_COOKIE["SambaEdu3"];
-        $result = mysql_query("UPDATE sessions SET intlevel=$new_level WHERE sess='$sess'",$authlink);
+        $result = mysqli_query($authlink, "UPDATE sessions SET intlevel=$new_level WHERE sess='$sess'");
     if (!$result) echo "Erreur d'ecriture dans la table sessions\n";
     endif;
 }
@@ -657,9 +680,9 @@ function encode ( $instr ) {
 function aff_param_form($cat)
 {
     $texte_form="<TABLE BORDER=\"1\">";
-    $result=mysql_query("SELECT * from params WHERE cat=$cat");
+    $result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params WHERE cat=$cat");
     if ($result) {
-        while ($r=mysql_fetch_array($result)) {
+        while ($r=mysqli_fetch_array($result)) {
             $texte_form .= "<TR><TD COLSPAN=\"2\">".$r["descr"]." (<EM><FONT color=\"red\">".$r["name"]."</FONT></EM>)</TD>";
             $texte_form .= "<TD><INPUT TYPE=\"text\" SIZE=\"25\" VALUE=\"".$r["value"]."\" NAME=\"form_".$r["name"]."\"></TD></TR>\n";
         }
@@ -823,7 +846,7 @@ function ldap_get_right_search ($type,$search_filter,$ldap)
 function setparam($name,$value)
 {
         $query="UPDATE params SET value=\"$value\" WHERE name=\"$name\"";
-        $result=mysql_query($query);
+        $result=mysqli_query($GLOBALS["___mysqli_ston"], $query);
         if (!$result) print gettext("oops: la requete "). "<STRONG>$query</STRONG>" . gettext(" a provoqu&#233; une erreur");
 }
 
@@ -965,15 +988,15 @@ function aide($texte_aide,$caption="?") { //Affiche les info-bulles si le champ 
 function this_parc_delegate($login,$parc,$niveau)
 {
 	require "config.inc.php";
-	$authlink_delegate = @mysql_connect($dbhost,$dbuser,$dbpass);
-	@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
+	$authlink_delegate = @($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
 	$query_delegate="SELECT `parc` FROM `delegation` WHERE `login`='$login' and `parc`='$parc' and `niveau`='$niveau';";
-	$result_delegate=mysql_query($query_delegate);
+	$result_delegate=mysqli_query($GLOBALS["___mysqli_ston"], $query_delegate);
 	if ($result_delegate) {
-		$ligne_delegate=mysql_num_rows($result_delegate);
+		$ligne_delegate=mysqli_num_rows($result_delegate);
 		if ($ligne_delegate>0) { return true; } else { return false;}
 	} else { return false;}
-	mysql_close($authlink_delegate);
+	((is_null($___mysqli_res = mysqli_close($authlink_delegate))) ? false : $___mysqli_res);
 }
 
 
@@ -990,17 +1013,17 @@ function list_parc_delegate($login)
 {
 require "config.inc.php";
 
-$authlink_delegate = @mysql_connect($dbhost,$dbuser,$dbpass);
-@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
+$authlink_delegate = @($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
 
    $query="select parc from delegation where login='$login';";
    $list_delegate=array();
-    $result= mysql_query($query);
+    $result= mysqli_query($GLOBALS["___mysqli_ston"], $query);
     if ($result)
-    { $ligne= mysql_num_rows($result);
+    { $ligne= mysqli_num_rows($result);
       if ($ligne>0)
          {
-            while ($row=mysql_fetch_row($result))
+            while ($row=mysqli_fetch_row($result))
           {
           array_push($list_delegate,$row[0]);
          // echo $row[0];
@@ -1009,7 +1032,7 @@ $authlink_delegate = @mysql_connect($dbhost,$dbuser,$dbpass);
      }
      sort($list_delegate);
 return $list_delegate;
-mysql_close($authlink_delegate);
+((is_null($___mysqli_res = mysqli_close($authlink_delegate))) ? false : $___mysqli_res);
 
 }
 
@@ -1048,15 +1071,15 @@ function niveau_parc_delegate($login,$parc)
 {
 	require "config.inc.php";
 
-	$authlink_delegate = @mysql_connect($dbhost,$dbuser,$dbpass);
-	@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
+	$authlink_delegate = @($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
 
    	$query="select niveau  from delegation where login='$login' and parc='$parc';";
-    	$result= mysql_query($query);
+    	$result= mysqli_query($GLOBALS["___mysqli_ston"], $query);
     	if ($result) {
-		$ligne= mysql_num_rows($result);
+		$ligne= mysqli_num_rows($result);
       		if ($ligne>0) {
-            		while ($row=mysql_fetch_row($result)) {
+            		while ($row=mysqli_fetch_row($result)) {
           			$niveau_delegate = $row[0];
          			// echo $row[0];
           		}
@@ -1064,7 +1087,7 @@ function niveau_parc_delegate($login,$parc)
      	}
 
 	return $niveau_delegate;
-	mysql_close($authlink_delegate);
+	((is_null($___mysqli_res = mysqli_close($authlink_delegate))) ? false : $___mysqli_res);
 
 }
 

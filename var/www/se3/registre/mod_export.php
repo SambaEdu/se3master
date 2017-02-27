@@ -59,18 +59,18 @@ switch ($act) {
 
         connexion();
         $query = "SELECT `mod` FROM modele GROUP BY `mod`;";
-        $resultat = mysql_query($query);
+        $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         $j = 0;
         echo gettext("Exporter les groupes suivants :") . " <br><FORM METHOD=POST ACTION=\"mod_export.php\">";
 
-        while ($row = mysql_fetch_array($resultat)) {
+        while ($row = mysqli_fetch_array($resultat)) {
             echo"<input type=\"checkbox\" name=\"export$j\" value=\"$row[0]\" checked />$row[0]<br>";
             $j++;
         }
         echo "<br><br>";
         echo "<input type=\"hidden\" name=\"nombre\" value=\"$j\" /> <input type=\"hidden\" name=\"action\" value=\"exportfin\" />";
         echo "<input type=\"submit\" name=\"export\" value=\"" . gettext("Exporter ces groupes") . "\" /></form>";
-        mysql_close();
+        ((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
         break;
 
     case "exportfin":
@@ -91,12 +91,12 @@ switch ($act) {
                 if ($mod) {
                     $ligne = "<categorie nom=\"$mod\">\n";
                     $query1 = "SELECT `cle`,`etat` FROM `modele` WHERE `mod` = '$mod' ";
-                    $resultat1 = mysql_query($query1);
-                    while ($row1 = mysql_fetch_array($resultat1)) {
+                    $resultat1 = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
+                    while ($row1 = mysqli_fetch_array($resultat1)) {
                         $ligne = $ligne . "<regle>\n";
                         $query2 = "SELECT `chemin` FROM `corresp` WHERE `CleID` = '$row1[0]' ";
-                        $resultat2 = mysql_query($query2);
-                        while ($row2 = mysql_fetch_array($resultat2)) {
+                        $resultat2 = mysqli_query($GLOBALS["___mysqli_ston"], $query2);
+                        while ($row2 = mysqli_fetch_array($resultat2)) {
                             $ligne = $ligne . "<clef>$row2[0]</clef>\n";
                         }
                         $ligne = $ligne . "<value>$row1[1]</value>\n</regle>\n";
@@ -116,7 +116,7 @@ switch ($act) {
 		    exit;
                     unlink($fichier_mod_xml);
             }
-	    mysql_close();
+	    ((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 
             include "entete.inc.php";
             include "ldap.inc.php";

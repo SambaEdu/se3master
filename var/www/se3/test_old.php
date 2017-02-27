@@ -241,11 +241,11 @@ echo "</TD></TR>\n";
 echo "<TR><TD>";
 echo gettext("Importation des cl&#233;s");
 echo "</TD><TD align=\"center\">";
-$authlink = @mysql_connect($dbhost,$dbuser,$dbpass);
-@mysql_select_db($dbname) or die(gettext("Impossible de se connecter &#224; la base")." $dbname.");
+$authlink = @($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die(gettext("Impossible de se connecter &#224; la base")." $dbname.");
 $query="select * from corresp";
-$resultat=mysql_query($query);
-$ligne=mysql_num_rows($resultat);
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+$ligne=mysqli_num_rows($resultat);
 
 if($ligne == "0") { // si aucune cle dans la base SQL
 	if ($ligne_internet == "0%") { // si connection a internet on peut proposer l'import
@@ -347,12 +347,12 @@ echo "<u onmouseover=\"return escape".gettext("('V&#233;rifie si la r&#233;solut
 echo "</TD></TR>\n";
 
 // Verification de la conf dns
-$authlink = @mysql_connect($dbhost,$dbuser,$dbpass);
-@mysql_select_db($dbname) or die(gettext("Impossible de se connecter &#224; la base")." $dbname.");
+$authlink = @($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die(gettext("Impossible de se connecter &#224; la base")." $dbname.");
 $query="select urlse3 from params where name='urlse3'";
-$resultat=mysql_query($query);
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
 if ($resultat) {
-	while ($r=mysql_fetch_array($resultat)) {
+	while ($r=mysqli_fetch_array($resultat)) {
 		$urlse3=$r[0];
 	}
 }
@@ -416,12 +416,12 @@ echo "<TR><TD>";
 echo gettext("V&#233;rifie la connexion au serveur de temps")." <I>($ntpserv)</I>";
 echo "</TD><TD align=\"center\">";
 if ($ligne_internet=="0%") {
-   $authlink = @mysql_connect($dbhost,$dbuser,$dbpass);
-   @mysql_select_db($dbname) or die(gettext("Impossible de se connecter &#224; la base")." $dbname.");
+   $authlink = @($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+   @((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die(gettext("Impossible de se connecter &#224; la base")." $dbname.");
    $query="select ntpserv  from params";
-   $resultat=mysql_query($query);
+   $resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
    if ($resultat) {
-	while ($r=mysql_fetch_array($resultat)) {
+	while ($r=mysqli_fetch_array($resultat)) {
 		$ntpserv=$r[0];
 	}
    }

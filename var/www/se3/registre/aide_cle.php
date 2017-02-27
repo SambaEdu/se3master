@@ -52,8 +52,8 @@ switch ($case) {
 	//faire ecrire le nouveau commentaire
 	case "2":
     		$query="SELECT comment,Intitule FROM corresp WHERE cleID='$num'";
-    		$resultat = mysql_query($query);
-    		$row = mysql_fetch_array($resultat);
+    		$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+    		$row = mysqli_fetch_array($resultat);
     		echo" <FORM METHOD=GET ACTION=\"aide_cle.php\">";
     		echo "<TEXTAREA NAME=\"newcom\" ROWS=\"30\" COLS=\"30\">$row[0]</TEXTAREA>";
     		echo "<INPUT TYPE=\"hidden\" name=\"act\" value=\"3\">";
@@ -67,19 +67,19 @@ switch ($case) {
     		$newcomok=$_GET['newcom'];
     		$clef=$_GET['clef'];
     		$query="UPDATE corresp SET comment='$newcomok' where cleID='$num';";
-    		$resultat = mysql_query($query);
+    		$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
     		echo gettext("Commentaire mis &#224 jour")."<br>";
     		$query="SELECT comment FROM corresp WHERE cleID='$num'";
-    		$resultat = mysql_query($query);
-    		$row = mysql_fetch_array($resultat);
+    		$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+    		$row = mysqli_fetch_array($resultat);
     		echo $row[0];
 		//attention pas de break car affichage des cles a la suite
 
 	//par default affichage du commentaires sur la cle
 	default :
     		$query="SELECT comment,Intitule,chemin,OS,categorie,sscat,type FROM corresp WHERE CleID='$num'";
-    		$resultat = mysql_query($query);
-    		$row = mysql_fetch_array($resultat);
+    		$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+    		$row = mysqli_fetch_array($resultat);
     		echo "<br><H3>".gettext(" Cle :").$row[1]." </H3><br> Type : ".$row[6];
     		if ($row[4]) {
     			echo"<h2>".gettext("Cat&#233gorie :")." $row[4]</h2>"; 
@@ -95,27 +95,27 @@ switch ($case) {
 	
 echo gettext("Liste des templates concern&#233s par cette cl&#233");
 $query1="SELECT restrictions.groupe,restrictions.valeur FROM restrictions WHERE restrictions.cleID = '$num'";
-$chercher = mysql_query($query1);
+$chercher = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
 $i=0;
 echo "<table border=\"1\"><tr><td>".gettext("Templates concern&#233s</td><td>Valeur actuelle dans le template")."</td></tr>";
-while ($liste=mysql_fetch_row($chercher)) {
+while ($liste=mysqli_fetch_row($chercher)) {
 	echo "<tr><td><a href=affiche_restrictions.php?salles=$liste[0]&poser=yes\" ><div align=\"center\">$liste[0]</div></a></td><td><div align=\"center\">$liste[1]</div></td></tr>";
 }
 
 echo "</table>";
 echo gettext("Liste des groupes de cl&#233s concern&#233s par cette cl&#233");
 $query1="SELECT `mod` , `etat` FROM `modele` WHERE `cle` = '$num'";
-$chercher = mysql_query($query1);
+$chercher = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
 $i=0;
 echo "<table border=\"1\"><tr><td>".gettext("Groupes concern&#233s")."</td><td>".gettext("Etat dans le groupe de cl&#233")."</td></tr>";
 
-while ($liste=mysql_fetch_row($chercher)) {
+while ($liste=mysqli_fetch_row($chercher)) {
 	echo "<tr><td><a href=affiche_modele.php?mod=$liste[0]&modact=yes \" ><div align=\"center\">$liste[0]</div></a></td><td><div align=\"center\">$liste[1]</div></td></tr>";
 }
 
 echo "</table>";
 retour();
-mysql_close();
+((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 
 
 include("pdp.inc.php");

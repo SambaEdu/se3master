@@ -196,36 +196,36 @@ Function enlevediese($string)
 function applique_modele($mod, $salle, $affiche) {
     connexion();
     $query = "SELECT `cle`,`etat` FROM `modele` WHERE `mod`= '$mod' ;";
-    $resultat = mysql_query($query);
-    while ($row = mysql_fetch_row($resultat)) {
+    $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+    while ($row = mysqli_fetch_row($resultat)) {
         $cle = $row[0];
         $query = "SELECT cleID,Intitule,valeur,antidote,type FROM corresp WHERE cleID='$cle';";
-        $insert = mysql_query($query);
-        $row1 = mysql_fetch_row($insert);
+        $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+        $row1 = mysqli_fetch_row($insert);
         $query = "SELECT cleID,valeur FROM restrictions WHERE cleID='$cle' AND groupe='$salle';";
-        $verif = mysql_query($query);
-        $row2 = mysql_fetch_row($verif);
+        $verif = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+        $row2 = mysqli_fetch_row($verif);
 
         if ($row[1] == "1") {
             $row1[2] = ajoutedoublebarre($row1[2]);
             if ($row2[0]) {
                 $query = "UPDATE `restrictions` SET `valeur` = '$row1[2]' WHERE `cleID` = '$cle' AND `groupe` = '$salle';";
-                $insert = mysql_query($query);
+                $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
             } else {
                 $query = "INSERT INTO restrictions (resID,valeur,cleID,groupe,priorite) VALUES ('','$row1[2]','$row[0]','$salle','priorite($salle)');";
-                $insert = mysql_query($query);
+                $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
             }
         } else {
             if ($row1[4] == "config") {
                 $query = "DELETE FROM restrictions where cleID='$cle' and `groupe` = '$salle';";
-                $insert = mysql_query($query);
+                $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
             } else {
                 if ($row2[0]) {
                     $query = "UPDATE `restrictions` SET `valeur` = '$row1[3]' WHERE `cleID` = '$cle' AND `groupe` = '$salle';";
-                    $insert = mysql_query($query);
+                    $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
                 } else {
                     $query = "INSERT INTO restrictions (resID,valeur,cleID,groupe,priorite) VALUES ('','$row1[3]','$row[0]','$salle','priorite($salle)');";
-                    $insert = mysql_query($query);
+                    $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
                 }
             }
         }
@@ -329,10 +329,10 @@ function affichelistecat($cible, $testniveau, $cat) {
     connexion();
     echo "<table><tr>";
     $query = "Select DISTINCT categorie from corresp group by categorie;";
-    $resultat = mysql_query($query);
+    $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
     $i = 1;
 
-    while ($row = mysql_fetch_row($resultat)) {
+    while ($row = mysqli_fetch_row($resultat)) {
         if ($row[0]) {
             if ($row[0] == $cat)
                 echo "<td class=\"enabledheader\" width=\"130\" height=\"30\" align=\"center\">";
@@ -355,10 +355,10 @@ function affichelistecat($cible, $testniveau, $cat) {
     //affichage des sous-categories (si la categorie est choisie)
     if ($cat) {
         $query = "Select distinct sscat from corresp where '$cat'=categorie group by sscat;";
-        $resultat = mysql_query($query);
+        $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         $i = 1;
         echo "<table><tr>";
-        while ($row = mysql_fetch_row($resultat)) {
+        while ($row = mysqli_fetch_row($resultat)) {
             if ($row[0]) {
                 echo "<td class=\"menucell\" width=\"130\" height=\"30\" align=\"center\">";
                 echo "<a href=\"$cible&cat=$cat&sscat=$row[0]\" >" . htmlentities($row[0]) . "</a></td>";
@@ -384,10 +384,10 @@ function affichelisteget($cible, $getcible1, $getcible2, $query, $affichetitle, 
     connexion();
     //$query="Select Intitule,cleID,valeur,genre,OS,antidote,type,chemin,categorie,sscat from corresp ".$ajout.$ajoutsscat;
     //echo "$query";
-    $resultat = mysql_query($query);
-    if (mysql_num_rows($resultat)) {
+    $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+    if (mysqli_num_rows($resultat)) {
         echo $affichetitle;
-        while ($row = mysql_fetch_array($resultat)) {
+        while ($row = mysqli_fetch_array($resultat)) {
             echo "<tr><td><DIV ALIGN=CENTER>";
             echo "<a href=\"#\" onClick=\"window.open('aide_cle.php?cle=$row[1]','aide','scrollbars=yes,width=600,height=620')\">";
             echo "<img src=\"/elements/images/system-help.png\" alt=\"" . gettext("Aide") . "\" title=\"$row[7]\" width=\"16\" height=\"18\" border=\"0\" /></a></td>";
@@ -432,8 +432,8 @@ function test_bdd_registre() {
 // Controle l'installation des cles
     connexion();
     $query = "select * from corresp";
-    $resultat = mysql_query($query);
-    $ligne = mysql_num_rows($resultat);
+    $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+    $ligne = mysqli_num_rows($resultat);
     if ($ligne == "0") {
         echo "<a href=\"cle-maj.php?action=maj\">" . gettext("Effectuer la mise a jour de la base de cl&#233s ?") . "</a><br>";
         include ("pdp.inc.php");
@@ -455,19 +455,19 @@ Function refreshtemplates($string) {
     connexion();
     $query = "Select corresp.CleID,restrictions.valeur,corresp.chemin,corresp.OS,corresp.genre,corresp.type,corresp.valeur,corresp.antidote
         from restrictions,corresp where restrictions.groupe='$string' and restrictions.cleID=corresp.cleID order by corresp.OS;";
-    $resultat = mysql_query($query);
+    $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
     $prio = priorite($string);
     //au moins un template associe on continue
-    if (mysql_num_rows($resultat)) {
+    if (mysqli_num_rows($resultat)) {
         // template vide
         if (!isset($string)) {
             echo gettext("groupe non inscrit");
         } else {
-            while ($row = mysql_fetch_array($resultat)) {
+            while ($row = mysqli_fetch_array($resultat)) {
                 $deleteSQL = "delete from restrictions where cleID='row[0]' and groupe='$string'";
                 $addSQL = "Insert into restrictions values ('', '$row[0]', '$row[1]', '$value', '$prio')";
-                mysql_query($deleteSQL);
-                mysql_query($addSQL);
+                mysqli_query($GLOBALS["___mysqli_ston"], $deleteSQL);
+                mysqli_query($GLOBALS["___mysqli_ston"], $addSQL);
             }
         }
     }
@@ -537,12 +537,12 @@ Function is_template($template) {
     connexion();
     // initialisation de la table si besoin
     $query = "select priorite from restrictions limit 1";
-    if (!mysql_query($query)) {
+    if (!mysqli_query($GLOBALS["___mysqli_ston"], $query)) {
         $query = "alter table restrictions add priorite INTEGER";
-        mysql_query($query);
+        mysqli_query($GLOBALS["___mysqli_ston"], $query);
     }
     $query = "select groupe from restrictions where groupe = '" . $template . "' group by groupe";
-    if (!mysql_num_rows(mysql_query($query))) {
+    if (!mysqli_num_rows(mysqli_query($GLOBALS["___mysqli_ston"], $query))) {
         return;
     } else {
         return(priorite($template));
@@ -552,9 +552,9 @@ Function is_template($template) {
 Function update_priorite($template, $priorite) {
             connexion();
             $query = "select groupe from restrictions where groupe = '" . $template . "' group by groupe";
-            if (mysql_num_rows(mysql_query($query))) {
+            if (mysqli_num_rows(mysqli_query($GLOBALS["___mysqli_ston"], $query))) {
                 $query = "update restrictions set priorite='" . $priorite . "' where groupe = '" . $template . "'";
-                mysql_query($query);
+                mysqli_query($GLOBALS["___mysqli_ston"], $query);
             }
             echo "mise a jour de la priorite pour le template : ".$template." priorite : ".$priorite."<br>";
             return $priorite;
@@ -617,9 +617,9 @@ Function priorite() {
         } elseif (isset($type)) {
             // type de groupe connu : on verifie que la priorite est dans la bonne plage, et on la retourne si oui
             $query = "SELECT priorite from restrictions where groupe = '" . $template . "' GROUP BY priorite,groupe";
-            $resultat = mysql_query($query);
-            if (mysql_num_rows($resultat)) {
-                $row = mysql_fetch_array($resultat);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+            if (mysqli_num_rows($resultat)) {
+                $row = mysqli_fetch_array($resultat);
                 if ($row[0] && (($row[0] % $priorite[$type]) == 0)) {
                     return $row[0];
                 }
@@ -627,12 +627,12 @@ Function priorite() {
             if (isset($grppriorite[$type])) {
                 // si groupes ou parcs on calcule la premiere valeur libre
                 $query = "SELECT priorite from restrictions  GROUP BY priorite,groupe ORDER BY priorite ASC ";
-                $resultat = mysql_query($query);
-                if (mysql_num_rows($resultat)) {
+                $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+                if (mysqli_num_rows($resultat)) {
                     $p = 20;
                     $test = 0;
                     $newprio = $p * $grppriorite[$type];
-                    foreach(mysql_fetch_array($resultat) as $row) {
+                    foreach(mysqli_fetch_array($resultat) as $row) {
                         if ($row[0] == $newprio) {
                             $newprio = $p++ * $grppriorite[$type];
                             $test = 1;
@@ -652,9 +652,9 @@ Function priorite() {
         $newprio = $oldprio + $dec * $priorite[$type];
         connexion();
         $query = "update restrictions set priorite='" . $newprio . "' where groupe = '" . $template . "'";
-        mysql_query($query);
+        mysqli_query($GLOBALS["___mysqli_ston"], $query);
         $query = "update restrictions set priorite='" . $oldprio . "' where groupe <> '" . $template . "' and priorite = '" . $newprio . "'";
-        mysql_query($query);
+        mysqli_query($GLOBALS["___mysqli_ston"], $query);
         return $newprio;
     }
 }

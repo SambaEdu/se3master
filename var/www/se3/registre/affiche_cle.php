@@ -100,8 +100,8 @@ switch ($modif) {
         //modification d'une cle mais pas suppression
         if (($clemodif) and (!$suppr)) {
             $query = "Select Intitule,cleID,valeur,genre,OS,type,antidote,chemin,categorie,sscat from corresp where cleID='$clemodif'";
-            $resultat = mysql_query($query);
-            $row = mysql_fetch_array($resultat);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+            $row = mysqli_fetch_array($resultat);
             echo"<FORM METHOD=POST ACTION=\"affiche_cle.php\" name=\"modifcle\" >";
             echo"<H3>";
             echo "<a href=\"#\" onClick=\"window.open('aide_cle.php?cle=$row[1]','aide','scrollbars=yes,width=600,height=620')\"><img src=\"/elements/images/system-help.png\" alt=\"aide\" title=\"$row[7]\" width=\"15\" height=\"15\" border=\"0\">$row[0]</a></H3>";
@@ -114,8 +114,8 @@ switch ($modif) {
             //la cle est dans une categorie : on positionne le menu deroulant dessus
 
             $query1 = "Select DISTINCT categorie from corresp group by categorie;";
-            $resultat1 = mysql_query($query1);
-            while ($row1 = mysql_fetch_row($resultat1)) {
+            $resultat1 = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
+            while ($row1 = mysqli_fetch_row($resultat1)) {
                 if ($row1[0]) {
                     echo"<option value=\"$row1[0]\" ";
                     if ($row1[0] == $row[8]) {
@@ -127,10 +127,10 @@ switch ($modif) {
 
             //la cle est dans une sous-categorie : on positionne le menu deroulant dessus
             $query2 = "Select DISTINCT sscat from corresp where '$row[8]'=categorie group by sscat;";
-            $resultat2 = mysql_query($query2);
+            $resultat2 = mysqli_query($GLOBALS["___mysqli_ston"], $query2);
             echo "</select></td></tr><tr><td>" . gettext("Sous-Categorie") . "</td><td>$row[9]&nbsp;</td><td>";
             echo "<INPUT TYPE=\"text\" NAME=\"newsscatm\"><select name=\"newsscat\" size=\"1\"><option ></option> ";
-            while ($row2 = mysql_fetch_row($resultat2)) {
+            while ($row2 = mysqli_fetch_row($resultat2)) {
                 if ($row2[0]) {
                     echo"<option value=\"$row2[0]\" ";
                     if ($row2[0] == $row[9]) {
@@ -217,15 +217,15 @@ switch ($modif) {
 
             //dois-t-on mettre a jour cette cle dans les templates ?
             $query1 = "SELECT restrictions.groupe,restrictions.valeur FROM restrictions WHERE restrictions.cleID = '$clemodif';";
-            $chercher = mysql_query($query1);
+            $chercher = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
             $i = 0;
-            if (mysql_num_rows($chercher)) {
+            if (mysqli_num_rows($chercher)) {
                 echo "<br>" . gettext("De plus cette cl&#233 est utilis&#233e dans les groupes suivants, vous pouvez r&#233actualiser les valeurs modifi&#233es dans les groupes que vous choississez ci-dessous .<br> Si la valeur affich&#233e correspond &#224 l'antidote, il sera remis &#224 la place la nouvelle valeur de l'antidote.<br> Dans le cas contraire, c'est la valeur par d&#233faut qui sera appliqu&#233e.") . "<br><br><br>";
                 //affichage des templates
                 echo "<table border=\"1\"><tr><td>" . gettext("Choix") . "</td><td>" . gettext("Templates concern&#233s") . "</td><td>" . gettext("Valeur actuelle dans le template") . "</td></tr>";
                 $i++;
 
-                while ($liste = mysql_fetch_row($chercher)) {
+                while ($liste = mysqli_fetch_row($chercher)) {
                     if ($liste[0]) {
                         echo "<tr><td><input type=\"checkbox\" name=\"refreshtemplate$i\" value=\"$liste[0]\" /></td>";
                         echo "<a href=affiche_restrictions.php?salles=$liste[0]&poser=yes\" target=_blank >";
@@ -247,8 +247,8 @@ switch ($modif) {
             //la cle est presente dans les groupes : d'abord la supprimer des groupes
 
             $query = "SELECT restrictions.groupe, restrictions.cleID, restrictions.valeur FROM restrictions, corresp  WHERE restrictions.cleID = '$suppr' AND restrictions.cleID = corresp.CleID AND restrictions.valeur <> corresp.antidote";
-            $resultat = mysql_query($query);
-            while ($row = mysql_fetch_array($resultat)) {
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+            while ($row = mysqli_fetch_array($resultat)) {
                 $liste[$n] = $row[0];
                 $n++;
             }
@@ -257,15 +257,15 @@ switch ($modif) {
             // la cle  peut etre supprimee pour l'instant si elle n'est presente dans aucun groupe
             if ((!$testpresencecle) AND (!$n)) {
                 $query = "Select Intitule,cleID,valeur,genre,OS from corresp where cleID='$suppr'";
-                $resultat = mysql_query($query);
-                $row = mysql_fetch_array($resultat);
+                $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+                $row = mysqli_fetch_array($resultat);
                 $query = "DELETE FROM corresp WHERE cleID='$suppr';";
-                $resultat = mysql_query($query);
+                $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
                 echo gettext("Cle supprim&#233e");
                 $query = "DELETE FROM restrictions WHERE cleID='$suppr';";
-                $resultat = mysql_query($query);
+                $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
                 $query = "DELETE FROM `modele` WHERE `cle` = '$suppr';";
-                $resultat = mysql_query($query);
+                $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
                 echo"<HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"1; URL=affiche_cle.php\"></HEAD>";
                 echo gettext("Commandes prises en compte !");
             } else {
@@ -319,57 +319,57 @@ switch ($modif) {
 
         if ($newtype == "restrict") {
             $query5 = "UPDATE corresp SET antidote='$valmodifanti' WHERE cleID='$nummodif';";
-            $resultat = mysql_query($query5);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query5);
         }
         if ($valmodif <> "") {
             $query = "UPDATE corresp SET valeur='$valmodif' WHERE cleID='$nummodif';";
-            $resultat = mysql_query($query);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         } else {
             $query = "UPDATE corresp SET valeur='' WHERE cleID='$nummodif';";
-            $resultat = mysql_query($query);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         }
         if ($intitule) {
             $query = "UPDATE corresp SET Intitule='$intitule' WHERE cleID='$nummodif';";
-            $resultat = mysql_query($query);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         }
         if ($genre) {
             $query = "UPDATE corresp SET genre='$genre' WHERE cleID='$nummodif';";
-            $resultat = mysql_query($query);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         }
         if ($newtype) {
             $query = "UPDATE corresp SET type='$newtype' WHERE cleID='$nummodif';";
-            $resultat = mysql_query($query);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         }
         if ($newcat) {
             $query = "UPDATE corresp SET categorie='$newcat' WHERE cleID='$nummodif';";
-            $resultat = mysql_query($query);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         } else {
             $query = "UPDATE corresp SET categorie='' WHERE cleID='$nummodif';";
-            $resultat = mysql_query($query);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         }
 
         if ($newsscat) {
             $query = "UPDATE corresp SET sscat='$newsscat' WHERE cleID='$nummodif';";
-            $resultat = mysql_query($query);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         }
         if (!$newsscat) {
             $query = "UPDATE corresp SET sscat='' WHERE cleID='$nummodif';";
-            $resultat = mysql_query($query);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         }
 
         if ($os) {
             $query = "UPDATE corresp SET OS='$os' WHERE cleID='$nummodif';";
-            $resultat = mysql_query($query);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
         }
         for ($i = 0; $i < $nombre + 1; $i++) {
             $template = $_POST['refreshtemplate' . $i];
             if ($template) {
                 $query1 = "SELECT restrictions.groupe,restrictions.valeur,corresp.valeur,corresp.antidote,corresp.categorie,corresp.sscat,corresp.type FROM restrictions,corresp WHERE restrictions.cleID = '$nummodif' and restrictions.cleID=corresp.CleID and restrictions.groupe='$template' ;";
-                $chercher = mysql_query($query1);
-                $row = mysql_fetch_row($chercher);
+                $chercher = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
+                $row = mysqli_fetch_row($chercher);
                 if ($row[6] == "config") {
                     $query3 = "UPDATE restrictions SET valeur='$valmodif' WHERE cleID='$nummodif' and groupe='$template';";
-                    $resultat = mysql_query($query3);
+                    $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query3);
                 }
 
                 //dans le template base, on met a jour la cle de restriction (active)
@@ -378,13 +378,13 @@ switch ($modif) {
                         echo gettext("Template") . " $template " . gettext("mis &#224 jour");
                         $query3 = "UPDATE restrictions SET valeur='$valmodif' WHERE cleID='$nummodif' and groupe='$template';";
                         //echo $query3;
-                        $resultat = mysql_query($query3);
+                        $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query3);
                     }
                 } else {
                     //dans un autre template , on mets a jour l'antidote
                     if ($row[6] == "restrict") {
                         $query3 = "UPDATE restrictions SET valeur='$valmodifanti' WHERE cleID='$nummodif' and groupe='$template';";
-                        $resultat = mysql_query($query3);
+                        $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query3);
                     }
                 }
                 echo gettext("Template") . " $template " . gettext("mis &#224 jour") . " <br>";
@@ -455,7 +455,7 @@ switch ($modif) {
         }
         break;
 }
-mysql_close();
+((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 
 include("pdp.inc.php");
 ?>

@@ -243,9 +243,9 @@ if ($envoi) {
         if ($cle[6]) {
             $cletrim = ajoutedoublebarre(($cle[6]));
             $query = "SELECT Intitule,valeur,antidote,genre,OS,type,chemin,comment,categorie,sscat FROM corresp WHERE chemin='$cletrim';";
-            $resultat = mysql_query($query);
-            if (mysql_num_rows($resultat)) {
-                $row = mysql_fetch_array($resultat);
+            $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+            if (mysqli_num_rows($resultat)) {
+                $row = mysqli_fetch_array($resultat);
                 if ($row[6]) {
                     if (($row[0] <> $cle[0]) or ($row[1] <> $cle[1]) or ($row[2] <> $cle[2]) or ($row[3] <> $cle[3]) or ($row[4] <> $cle[4]) or ($row[5] <> $cle[5]) or ($row[6] <> $cle[6]) or ($row[7] <> $cle[7]) or ($row[8] <> $cle[8]) or ($row[9] <> $cle[9])) {
                         echo "<tr><td><INPUT TYPE=\"checkbox\" NAME=\"test$j\" value=\"".str_replace("\"","&#34;",$export[$j])."\" CHECKED ></td><td bgcolor=\"#FF3300\">" . gettext("A Modifier ?") . "</td>";
@@ -289,7 +289,7 @@ if ($envoi) {
         }
     }
 
-    mysql_close();
+    ((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 }
 
 if ($ajout == 7) {
@@ -318,8 +318,8 @@ if ($ajout == 7) {
             $cleok[9] = trim($cleok[9]);
             $cletrim = ($cleok[6]);
             $query1 = "SELECT chemin,CleID FROM corresp WHERE '".$cletrim."'=chemin";
-            $resultat1 = mysql_query($query1);
-            $num = mysql_num_rows($resultat1);
+            $resultat1 = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
+            $num = mysqli_num_rows($resultat1);
             if (!$num) {
                 $cleok[6] = ajoutedoublebarre(($cleok[6]));
                 $cleok[1] = ajoutedoublebarre(($cleok[1]));
@@ -329,18 +329,18 @@ if ($ajout == 7) {
                 $cleok[9] = addslashes(($cleok[9]));
 		echo $query."<br>";
                 $query = "INSERT INTO corresp (Intitule,valeur,antidote,genre,OS,type,chemin,comment,categorie,sscat) VALUES ('$cleok[0]','$cleok[1]','$cleok[2]','$cleok[3]','$cleok[4]','$cleok[5]','$cleok[6]','$cleok[7]','$cleok[8]','$cleok[9]')";
-                $insert = mysql_query($query);
+                $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 //  echo $query;
 //  if ($cleok[5]=="restrict")
 //  {
                 $query = "SELECT cleID FROM corresp WHERE '$cleok[6]'=chemin;";
-                $resultat = mysql_query($query);
-                $row = mysql_fetch_array($resultat);
+                $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+                $row = mysqli_fetch_array($resultat);
                 $querymod = "SELECT `cle` FROM modele WHERE `mod`='norestrict'";
-                $resultmod = mysql_query($querymod);
-                if (!mysql_num_rows($resultmod)) {
+                $resultmod = mysqli_query($GLOBALS["___mysqli_ston"], $querymod);
+                if (!mysqli_num_rows($resultmod)) {
                     $query2 = "INSERT INTO modele( `etat`, `cle`, `mod` ) VALUES ('0','$row[0]','norestrict');";
-                    $insert2 = mysql_query($query2);
+                    $insert2 = mysqli_query($GLOBALS["___mysqli_ston"], $query2);
                 }
 
 //   }
@@ -354,28 +354,28 @@ if ($ajout == 7) {
                 echo "</tr>";
             } else {
                 $query1 = "SELECT chemin,cleID FROM corresp WHERE chemin='$cletrim';";
-                $resultat1 = mysql_query($query1);
-                if (mysql_num_rows($resultat1)) {
-                    $row = mysql_fetch_array($resultat1);
+                $resultat1 = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
+                if (mysqli_num_rows($resultat1)) {
+                    $row = mysqli_fetch_array($resultat1);
 
                     $query = "UPDATE corresp SET intitule='$cleok[0]' where cleID='$row[1]'";
-                    $insert = mysql_query($query);
+                    $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
                     $query = "UPDATE corresp SET valeur='$cleok[1]' where cleID='$row[1]'";
-                    $insert = mysql_query($query);
+                    $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
                     $query1 = "UPDATE corresp SET antidote='$cleok[2]' where cleID='$row[1]'";
-                    $insert = mysql_query($query1);
+                    $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
                     $query1 = "UPDATE corresp SET genre='$cleok[3]' where cleID='$row[1]'";
-                    $insert = mysql_query($query1);
+                    $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
                     $query1 = "UPDATE corresp SET OS='$cleok[4]' where cleID='$row[1]'";
-                    $insert = mysql_query($query1);
+                    $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
                     $query1 = "UPDATE corresp SET type='$cleok[5]' where cleID='$row[1]'";
-                    $insert = mysql_query($query1);
+                    $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
                     $query1 = "UPDATE corresp SET comment='$cleok[7]' where cleID='$row[1]'";
-                    $insert = mysql_query($query1);
+                    $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
                     $query1 = "UPDATE corresp SET categorie='$cleok[8]' where cleID='$row[1]'";
-                    $insert = mysql_query($query1);
+                    $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
                     $query1 = "UPDATE corresp SET sscat='$cleok[9]' where cleID='$row[1]'";
-                    $insert = mysql_query($query1);
+                    $insert = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
                     echo "<tr><td>" . gettext("Modifi&#233") . "</td>";
 
                     for ($i = 0; $i < 9; $i++) {

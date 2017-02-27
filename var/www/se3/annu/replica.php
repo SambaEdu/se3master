@@ -76,12 +76,12 @@ $syncrepl = $_POST['syncrepl'];
 // ######################################################################
 // ################### Creation du champ manquant #########################
 
-$result=mysql_query("SELECT name from params where name='replica_status'");
-$num = mysql_numrows( $result);
+$result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT name from params where name='replica_status'");
+$num = mysqli_num_rows( $result);
 if ($num == "0" ) {
-	$resultat=mysql_query("INSERT into params set id='NULL', name='replica_status', value='0', srv_id='0',descr='Etat du serveur de r&#233;plication',cat='4'");
-	$resultat=mysql_query("UPDATE params set descr='Adresse du serveur Lcs ou Slis (optionnel)' where name='lcsIp'");
-	$resultat=mysql_query("INSERT into params set id='NULL', name='replica_ip', value='', srv_id='0',descr='Adresse IP du serveur de r&#233;plication',cat='4'");
+	$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "INSERT into params set id='NULL', name='replica_status', value='0', srv_id='0',descr='Etat du serveur de r&#233;plication',cat='4'");
+	$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set descr='Adresse du serveur Lcs ou Slis (optionnel)' where name='lcsIp'");
+	$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "INSERT into params set id='NULL', name='replica_ip', value='', srv_id='0',descr='Adresse IP du serveur de r&#233;plication',cat='4'");
 
 }
 
@@ -90,9 +90,9 @@ if ($num == "0" ) {
 // Si replica est vide
 if ($action != "") {
 	if ($replica == "") {
-		$result=mysql_query("SELECT * from params where name='replica_status'");
+		$result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params where name='replica_status'");
 		if ($result)
-	    		while ($r=mysql_fetch_array($result)) {
+	    		while ($r=mysqli_fetch_array($result)) {
 	       			$replica=$r[2];
 			}
 	}
@@ -108,21 +108,21 @@ if ($action == "Ok" || $replica=="0") {
 		$ip_revers = long2ip($ip_long);
 		if ($ip != $ip_revers) { $ok = 0; }
 	
-		$result=mysql_query("SELECT * from params where name='adminRdn'");
+		$result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params where name='adminRdn'");
 		if ($result)
-    			while ($r=mysql_fetch_array($result)) {
+    			while ($r=mysqli_fetch_array($result)) {
         			$adminRdn=$r[2];
 			}
 	
-		$result=mysql_query("SELECT * from params where name='adminPw'");
+		$result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params where name='adminPw'");
 		if ($result)
- 	   		while ($r=mysql_fetch_array($result)) {
+ 	   		while ($r=mysqli_fetch_array($result)) {
         			$adminPw=$r[2];
 			}
 
-		$result=mysql_query("SELECT * from params where name='ldap_base_dn'");
+		$result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params where name='ldap_base_dn'");
 		if ($result)
-    			while ($r=mysql_fetch_array($result)) {
+    			while ($r=mysqli_fetch_array($result)) {
         			$basedn=$r[2];
 			}
 		
@@ -145,27 +145,27 @@ if ($action == "Ok" || $replica=="0") {
 	if ($ok != "0" && $ldap_ok != "0") {
 		
 		//Lance le script mkslapd
-		$resultat=mysql_query("SELECT * from params where name='ldap_server'");
+		$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params where name='ldap_server'");
 		if ($resultat)
-  	  		while ($r=mysql_fetch_array($resultat)) {
+  	  		while ($r=mysqli_fetch_array($resultat)) {
         			$IP_ldap=$r[2];
 			}
 		//On verifie l'etat anterieur avant de modifier		
-		$result=mysql_query("SELECT * from params where name='replica_status'");
+		$result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params where name='replica_status'");
 		if ($result)
-	    		while ($r=mysql_fetch_array($result)) {
+	    		while ($r=mysqli_fetch_array($result)) {
 	       			$maitre=$r[2];
 			}
 		if ($maitre=="2" || $maitre=="4") { // etait en esclave avant on recupere l'adresse ip du maitre	
-			$result=mysql_query("SELECT * from params where name='replica_ip'");
+			$result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params where name='replica_ip'");
 		   	if ($result)
-	    	   		while ($r=mysql_fetch_array($result)) {
+	    	   		while ($r=mysqli_fetch_array($result)) {
 	       				$ip_maitre=$r[2];
 				}
 		} else { // sinon son adresse IP 
-			$result=mysql_query("SELECT * from params where name='ldap_server'");
+			$result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params where name='ldap_server'");
 		   	if ($result)
-				while ($r=mysql_fetch_array($result)) {
+				while ($r=mysqli_fetch_array($result)) {
 	        			$ip_maitre=$r[2];
 				}
 		}
@@ -173,52 +173,52 @@ if ($action == "Ok" || $replica=="0") {
 		if ($replica == "0") {
 			$ip = "";
 			$options = "-e";
-			$resultat=mysql_query("UPDATE params set cat='2' where name='ldap_server'");
+			$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set cat='2' where name='ldap_server'");
 			//Si on etait esclave avant on doit changer l'IP
 
 			if ($maitre == $replica) {
-				$resultat=mysql_query("UPDATE params set value='' where name='replica_ip'");
+				$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='' where name='replica_ip'");
 //			}
 //			elseif ($maitre=="1" || $maitre=="3") {
 //		       		$resultat=mysql_query("UPDATE params set value='$ip_maitre' where name='ldap_server'");
 //		       		$resultat=mysql_query("UPDATE params set value='$ip' where name='replica_ip'");
 				
 			} else {	
-				$resultat=mysql_query("UPDATE params set value='$ip_maitre' where name='ldap_server'");
-				$resultat=mysql_query("UPDATE params set value='$ip' where name='replica_ip'");
+				$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$ip_maitre' where name='ldap_server'");
+				$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$ip' where name='replica_ip'");
 			}
 		}
 
 		if ($replica == "1" || $replica == "3") {
 			//si pas de compte indique on utilise le compte AdmRdn et le MdP AdmPw
 			$options = "-c -m";  
-			$resultat=mysql_query("UPDATE params set cat='4' where name='ldap_server'");
+			$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set cat='4' where name='ldap_server'");
 	 		if ($maitre == $replica) {
-				$resultat=mysql_query("UPDATE params set value='$ip' where name='replica_ip'");
+				$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$ip' where name='replica_ip'");
 			}
 			elseif ($maitre=="2") {
-		       		$resultat=mysql_query("UPDATE params set value='$ip_maitre' where name='ldap_server'");
-   				$resultat=mysql_query("UPDATE params set value='$ip' where name='replica_ip'");
+		       		$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$ip_maitre' where name='ldap_server'");
+   				$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$ip' where name='replica_ip'");
 			} else {
-				$resultat=mysql_query("UPDATE params set value='$ip' where name='replica_ip'");
-		   		$resultat=mysql_query("UPDATE params set value='$ip_maitre' where name='ldap_server'");
+				$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$ip' where name='replica_ip'");
+		   		$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$ip_maitre' where name='ldap_server'");
 			}
 		}
 			
 		if ($replica == "2" || $replica == "4") {	
 			//si pas de compte indique on utilise le compte AdmRdn et le MdP AdmPw
 			$options = "-c -s";  
-			$resultat=mysql_query("UPDATE params set cat='4' where name='ldap_server'");
+			$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set cat='4' where name='ldap_server'");
 			if ($maitre == $replica) {
-				$resultat=mysql_query("UPDATE params set value='$ip' where name='ldap_server'");
+				$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$ip' where name='ldap_server'");
 			} else {
-				$resultat=mysql_query("UPDATE params set value='$ip_maitre' where name='replica_ip'");
-				$resultat=mysql_query("UPDATE params set value='$ip' where name='ldap_server'");
+				$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$ip_maitre' where name='replica_ip'");
+				$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$ip' where name='ldap_server'");
 			}
 		}
 
 
-		$resultat=mysql_query("UPDATE params set value='$replica' where name='replica_status'");
+		$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$replica' where name='replica_status'");
 			
 		// Lancement des scripts
 		exec ("/usr/bin/sudo /usr/share/se3/scripts/mkSlapdConf.sh");	
@@ -235,9 +235,9 @@ if ($action == "Ok" || $replica=="0") {
 // Interface
 $replica_status="$replica";
 if ($replica == "") {	
-	$result=mysql_query("SELECT * from params where name='replica_status'");
+	$result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params where name='replica_status'");
 	if ($result)
-    		while ($r=mysql_fetch_array($result)) {
+    		while ($r=mysqli_fetch_array($result)) {
         		$replica_status=$r[2];
 		}
 }
@@ -312,10 +312,10 @@ echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gette
 
 // Affichage si on a un esclave ou un maitre
 if ($replica == "1" || $replica == "2" || $replica_status=="1" || $replica_status=="2" || $replica == "3" || $replica == "4" || $replica_status == "3" || $replica_status == "4") {
-	$resultat=mysql_query("SELECT * from params where name='replica_ip'");
+	$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params where name='replica_ip'");
 	
 	if ($resultat)
-  		while ($r=mysql_fetch_array($resultat)) {
+  		while ($r=mysqli_fetch_array($resultat)) {
         		$replica_ip=$r[2];
 		}   
 	
@@ -324,9 +324,9 @@ if ($replica == "1" || $replica == "2" || $replica_status=="1" || $replica_statu
 	// recup l'adresse IP de l'esclave dans la base sql
 	if($replica== "1" || $replica_status=="1" || $replica == "3" || $replica_status=="3") {
 		echo"<td>".gettext("Adresse IP du serveur esclave")." :&nbsp;</td>";
-		$resultat=mysql_query("SELECT * from params where name='replica_ip'");
+		$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params where name='replica_ip'");
 		if ($resultat)
-  			while ($r=mysql_fetch_array($resultat)) {
+  			while ($r=mysqli_fetch_array($resultat)) {
        		 		$replica_ip=$r[2];
 			}
 	}
@@ -334,9 +334,9 @@ if ($replica == "1" || $replica == "2" || $replica_status=="1" || $replica_statu
 	// recup l'adresse IP du maitre dans la base sql	      
 	if($replica== "2" || $replica_status=="2" || $replica == "4" || $replica_status == "4") {
 		echo"<td>".gettext("Adresse IP du serveur ma&#238;tre")."  :&nbsp;</td>";
-		$resultat=mysql_query("SELECT * from params where name='ldap_server'");
+		$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params where name='ldap_server'");
 		if ($resultat)
-  			while ($r=mysql_fetch_array($resultat)) {
+  			while ($r=mysqli_fetch_array($resultat)) {
        		 		$replica_ip=$r[2];
 			}
 
@@ -379,9 +379,9 @@ if ($replica == "1" || $replica == "2" || $replica_status=="1" || $replica_statu
 
 //log l'etat de la replication
 
-$result=mysql_query("SELECT * from params where name='replica_status'");
+$result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT * from params where name='replica_status'");
 if ($result)
-    	while ($r=mysql_fetch_array($result))
+    	while ($r=mysqli_fetch_array($result))
     		{
         	$status=$r[2];
 		}

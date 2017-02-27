@@ -58,8 +58,8 @@ if ($action == "delall")
 {
 	connexion ();
 	$deleteSQL = "delete from corresp;";
-	mysql_query($deleteSQL);
-	mysql_close();
+	mysqli_query($GLOBALS["___mysqli_ston"], $deleteSQL);
+	((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 	echo "Suppression cl&#233s ok!\n";
 }
 
@@ -67,8 +67,8 @@ if ($action == "delallmod" or $action == "delall")
 {
 	connexion ();
 	$deleteSQL = "delete from modele;";
-	mysql_query($deleteSQL);
-	mysql_close();
+	mysqli_query($GLOBALS["___mysqli_ston"], $deleteSQL);
+	((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 	if ($action != "delall")
 		echo "Suppression groupes de cl&#233s ok!\n";
 }

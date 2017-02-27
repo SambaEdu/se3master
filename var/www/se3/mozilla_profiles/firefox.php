@@ -114,9 +114,9 @@ if ($config==""||$config=="init") {
                     //break;
                     $name_params="$userGroups"."_hp";
                     //echo $name_params;
-                    $resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$default_page_dem', '$name_params', 'homepage $userGroups', '1')");
+                    $resultat=mysqli_query($GLOBALS["___mysqli_ston"], "INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$default_page_dem', '$name_params', 'homepage $userGroups', '1')");
                     if ($resultat == FALSE) {
-                            mysql_query("UPDATE params set value='$default_page_dem' where name='$name_params'");
+                            mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$default_page_dem' where name='$name_params'");
                     }
                     
                                   
@@ -125,14 +125,14 @@ if ($config==""||$config=="init") {
                     if ($userGroups == "profs") $profs_hp="$default_page_dem" ; 
                     if ($userGroups == "eleves") $eleves_hp="$default_page_dem" ; 
                     
-                    $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule like '%url de la page%'");
+                    $result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT CleID FROM corresp WHERE Intitule like '%url de la page%'");
 
-                    $row = mysql_fetch_row($result);
-                    mysql_query("DELETE FROM restrictions WHERE cleID='$row[0]' AND groupe='$userGroups'");
+                    $row = mysqli_fetch_row($result);
+                    mysqli_query($GLOBALS["___mysqli_ston"], "DELETE FROM restrictions WHERE cleID='$row[0]' AND groupe='$userGroups'");
                     
                     if ($default_page_dem != "") { 
                         $query = "INSERT INTO restrictions VALUES('','$row[0]','$userGroups','$default_page_dem','')";
-                        $resultat=mysql_query($query);
+                        $resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
                     }
                     
                     
@@ -194,9 +194,9 @@ if ($config==""||$config=="init") {
 
 	}
 	elseif($choix=="modif_proxy") {
-            $result=mysql_query("SELECT CleID FROM corresp WHERE sscat='configuration du proxy' AND type='config'");
+            $result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT CleID FROM corresp WHERE sscat='configuration du proxy' AND type='config'");
                   
-            if(mysql_num_rows($result)==0) {
+            if(mysqli_num_rows($result)==0) {
                 echo "<font color=red>
                 Pour le bon fonctionnement de cette page,<br>
                 veuillez au pr&#233;alable mettre a jour la base des cl&#233;s de registre SVP</font><br><br>";
@@ -220,74 +220,74 @@ if ($config==""||$config=="init") {
                     $proxy_url = $new_proxy_url;
                     $proxy_type = $new_proxy_type;
                 
-                    $resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$new_proxy_url', 'proxy_url', 'url du proxy pour le navigateur', '1')");
+                    $resultat=mysqli_query($GLOBALS["___mysqli_ston"], "INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$new_proxy_url', 'proxy_url', 'url du proxy pour le navigateur', '1')");
                     if ($resultat == FALSE) {
-                            mysql_query("UPDATE params set value='$new_proxy_url' where name='proxy_url'");
+                            mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$new_proxy_url' where name='proxy_url'");
                     }
-                    $resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$firefox_use_ie', 'firefox_use_ie', 'Firefox utilise ou non les param proxy de IE', '1')");
+                    $resultat=mysqli_query($GLOBALS["___mysqli_ston"], "INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$firefox_use_ie', 'firefox_use_ie', 'Firefox utilise ou non les param proxy de IE', '1')");
                     if ($resultat == FALSE) {
-                            mysql_query("UPDATE params set value='$firefox_use_ie' where name='firefox_use_ie'");
+                            mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$firefox_use_ie' where name='firefox_use_ie'");
                     }
-                    $resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$new_proxy_type', 'proxy_type', 'type du proxy (param IE / aucun / manuel / url auto', '1')");
+                    $resultat=mysqli_query($GLOBALS["___mysqli_ston"], "INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$new_proxy_type', 'proxy_type', 'type du proxy (param IE / aucun / manuel / url auto', '1')");
                     if ($resultat == FALSE) {
-                            mysql_query("UPDATE params set value='$new_proxy_type' where name='proxy_type'");
+                            mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$new_proxy_type' where name='proxy_type'");
                     }
                     
-                    $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule like 'activer le proxy%'");
-                    $row = mysql_fetch_row($result);
+                    $result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT CleID FROM corresp WHERE Intitule like 'activer le proxy%'");
+                    $row = mysqli_fetch_row($result);
                     $proxy_actif_key = $row[0];
 
-                    $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule like '%entrez les valeurs pour votre proxy%'");
-                    $row = mysql_fetch_row($result);
+                    $result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT CleID FROM corresp WHERE Intitule like '%entrez les valeurs pour votre proxy%'");
+                    $row = mysqli_fetch_row($result);
                     $proxy_valeur_key = $row[0];
 
-                    $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule like '%url du script de configuration automatique du proxy%'");
-                    $row = mysql_fetch_row($result);
+                    $result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT CleID FROM corresp WHERE Intitule like '%url du script de configuration automatique du proxy%'");
+                    $row = mysqli_fetch_row($result);
                     $proxy_url_key = $row[0];
 
 
                     switch ($proxy_type) {
                                               
                         case 0:
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_actif_key'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_valeur_key'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_url_key'");
+                            mysqli_query($GLOBALS["___mysqli_ston"], "DELETE FROM restrictions WHERE cleID='$proxy_actif_key'");
+                            mysqli_query($GLOBALS["___mysqli_ston"], "DELETE FROM restrictions WHERE cleID='$proxy_valeur_key'");
+                            mysqli_query($GLOBALS["___mysqli_ston"], "DELETE FROM restrictions WHERE cleID='$proxy_url_key'");
                             
                             //mysql_query("DELETE FROM restrictions WHERE cleID='$val_cleid[3]'");
                             $query = "INSERT INTO restrictions VALUES('','$proxy_url_key','base','','')";
-                            $resultat=mysql_query($query);
+                            $resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
                             $query = "INSERT INTO restrictions VALUES('','$proxy_valeur_key','base','','')";
-                            $resultat=mysql_query($query);
+                            $resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
                             $query = "INSERT INTO restrictions VALUES('','$proxy_actif_key','base','0','')";
-                            mysql_query($query);
+                            mysqli_query($GLOBALS["___mysqli_ston"], $query);
                              
                             break;
                         
                         case 1:
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_actif_key'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_valeur_key'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_url_key'");
+                            mysqli_query($GLOBALS["___mysqli_ston"], "DELETE FROM restrictions WHERE cleID='$proxy_actif_key'");
+                            mysqli_query($GLOBALS["___mysqli_ston"], "DELETE FROM restrictions WHERE cleID='$proxy_valeur_key'");
+                            mysqli_query($GLOBALS["___mysqli_ston"], "DELETE FROM restrictions WHERE cleID='$proxy_url_key'");
                             $query = "INSERT INTO restrictions VALUES('','$proxy_actif_key','base','1','')";
-                            mysql_query($query);
+                            mysqli_query($GLOBALS["___mysqli_ston"], $query);
                             $query = "INSERT INTO restrictions VALUES('','$proxy_valeur_key','base','$new_proxy_url','')";
-                            $resultat=mysql_query($query);
+                            $resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
                             if ($resultat == FALSE)  { 
-                                mysql_query("UPDATE restrictions set value='$new_proxy_url' where CleID='$proxy_valeur_key'"); 
+                                mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE restrictions set value='$new_proxy_url' where CleID='$proxy_valeur_key'"); 
                             }
                             $query = "INSERT INTO restrictions VALUES('','$proxy_url_key','base','','')";
-                            $resultat=mysql_query($query);
+                            $resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
                             break;
                         
                         case 2:
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_actif_key'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_valeur_key'");
-                            mysql_query("DELETE FROM restrictions WHERE cleID='$proxy_url_key'");
+                            mysqli_query($GLOBALS["___mysqli_ston"], "DELETE FROM restrictions WHERE cleID='$proxy_actif_key'");
+                            mysqli_query($GLOBALS["___mysqli_ston"], "DELETE FROM restrictions WHERE cleID='$proxy_valeur_key'");
+                            mysqli_query($GLOBALS["___mysqli_ston"], "DELETE FROM restrictions WHERE cleID='$proxy_url_key'");
                             //mysql_query("UPDATE corresp set value='' WHERE cleID='$row[3]'");
                             $query = "INSERT INTO restrictions VALUES('','$proxy_url_key','base','$new_proxy_url','')";
-                            $resultat=mysql_query($query);
+                            $resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
                             if ($resultat == FALSE) { 
-                                mysql_query("UPDATE restrictions set value='$new_proxy_url' where CleID='$proxy_url_key'"); 
+                                mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE restrictions set value='$new_proxy_url' where CleID='$proxy_url_key'"); 
                                 
                                 }
 

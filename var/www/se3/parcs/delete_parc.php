@@ -353,7 +353,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 									echo "Suppression du dhcp";
 									echo "<br>";
 									$suppr_query = "DELETE FROM `se3_dhcp` where `name` = '$computer'";
-									mysql_query($suppr_query);
+									mysqli_query($GLOBALS["___mysqli_ston"], $suppr_query);
 									// On relance dhcp si celui-ci est active.
 									exec("sudo /usr/share/se3/scripts/makedhcpdconf",$ret);
 								}

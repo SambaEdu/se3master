@@ -50,9 +50,9 @@ if ($action == "change") {
 	} else {
                 //$resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$default_page_dem', '$name_params', 'homepage $userGroups', '1')");
                     
-		$resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('".$_GET['valeur']."','".$_GET['varb']."','".$_GET['descr']."','".$_GET['cat']."')");
+		$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('".$_GET['valeur']."','".$_GET['varb']."','".$_GET['descr']."','".$_GET['cat']."')");
 		if ($resultat == FALSE) {
-			mysql_query("UPDATE params set value='$_GET[valeur]' where name='".$_GET['varb']."';");
+			mysqli_query($GLOBALS["___mysqli_ston"], "UPDATE params set value='$_GET[valeur]' where name='".$_GET['varb']."';");
 		}
 	}
 	if ($_GET['varb'] == "corbeille") {
@@ -75,14 +75,14 @@ if ($action == "change") {
 
 	if ($_GET['varb'] == "autoriser_part_pub") {
 		$sql="SELECT 1=1 FROM params WHERE name='autoriser_part_pub';";
-		$test=mysql_query($sql);
-		if(mysql_num_rows($test)==0) {
+		$test=mysqli_query($GLOBALS["___mysqli_ston"], $sql);
+		if(mysqli_num_rows($test)==0) {
 			$sql="INSERT INTO params SET name='autoriser_part_pub', value='".$_GET['valeur']."', descr='Autoriser partage public', cat='1';";
-			$insert=mysql_query($sql);
+			$insert=mysqli_query($GLOBALS["___mysqli_ston"], $sql);
 		}
 		else {
 			$sql="UPDATE params SET value='".$_GET['valeur']."' WHERE name='autoriser_part_pub';";
-			$update=mysql_query($sql);
+			$update=mysqli_query($GLOBALS["___mysqli_ston"], $sql);
 		}
 		exec ("/usr/bin/sudo /usr/share/se3/scripts/autoriser_partage_public.sh autoriser=".$_GET['valeur'],$AllOutPut,$ReturnValue);
 	}

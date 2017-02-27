@@ -54,8 +54,8 @@ $_SESSION["pageaide"]="L%27interface_prof#Ressources_et_partages";
 
 // requete pour avoir le detail de ce devoir
 $req = "SELECT * FROM $table WHERE id = '$id'";
-$resultat = mysql_query($req);
-$ligne= mysql_fetch_array($resultat);
+$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $req);
+$ligne= mysqli_fetch_array($resultat);
 list($id,$id_prof,$id_devoir,$nom_devoir,$date_distrib,$date_retour,$description,$liste_distrib, $liste_retard,$etat) = $ligne; 
 
 $liste_distrib=preg_replace("/\|$/","",$liste_distrib);

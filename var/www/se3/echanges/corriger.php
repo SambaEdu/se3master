@@ -103,8 +103,8 @@ echo "<body >
 
 // recherche des devoirs du prof, A CORRIGER
 $req =" SELECT * FROM $table WHERE id_prof='$login' AND etat ='F' order by date_distrib,date_recup ";
-$resultat=mysql_query($req);
-$nb_devoirs=mysql_num_rows($resultat);
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], $req);
+$nb_devoirs=mysqli_num_rows($resultat);
 // $nb_devoirs=2;
 if ($nb_devoirs ==0) {
  echo "$login ".gettext("n'a pas de corrig&#233;s de devoirs &#224; envoyer en ce moment");
@@ -119,7 +119,7 @@ echo "<table width='100%' border=2>
 
 for ($i=0;$i<$nb_devoirs;$i++) {
   echo "<form name='formu1' action='correction.php' method='post' enctype=\"multipart/form-data\">";
-  $ligne=mysql_fetch_array($resultat);
+  $ligne=mysqli_fetch_array($resultat);
   list($id,$id_prof,$id_devoir,$nom_devoir,$date_distrib,$date_retour,$description,$liste_dev,$liste_retard, $etat) = $ligne; 
   echo "<tr><td>$id_devoir</td>";
   echo "<td>".affiche_date($date_retour)."</td>";

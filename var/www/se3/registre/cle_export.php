@@ -60,15 +60,15 @@ switch($act) {
 	$ligne="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<se3mod>\n<nom>SE3</nom>\n<version>V 0.1</version>\n<categories>\n";
 	fputs($get,$ligne);
  	$query1="SELECT categorie from corresp group by categorie";
- 	$resultat1 = mysql_query($query1);
+ 	$resultat1 = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
  	
-	while ($row = mysql_fetch_array($resultat1)) {
+	while ($row = mysqli_fetch_array($resultat1)) {
 		$ligne="<categorie nom=\"$row[0]\">\n<regles>\n<Regle ClasseObjet=\"INFO\">\n<OS>252</OS>\n<Intitule>g&#233;n&#233;ral</Intitule>\n<Composant>LIGNE</Composant>\n<ValeurSiCoche/>\n<ValeurSiDecoche/>\n<Commentaire/>\n </Regle>\n";
     	fputs($get,$ligne);
 		$query2="SELECT sscat from corresp where categorie='$row[0]' group by sscat";
-		$resultat2 = mysql_query($query2);
+		$resultat2 = mysqli_query($GLOBALS["___mysqli_ston"], $query2);
 		
-		while ($row2 = mysql_fetch_array($resultat2)) {
+		while ($row2 = mysqli_fetch_array($resultat2)) {
  			if ($row2[0]) {
 				$ligne="<Regle ClasseObjet=\"INFO\">\n<OS>252</OS>\n<Intitule>\"$row2[0]\"</Intitule>\n<Composant>LIGNE</Composant>\n <ValeurSiCoche/>\n <ValeurSiDecoche/>\n<Commentaire/>\n</Regle>\n";
 				fputs($get,$ligne);
@@ -76,8 +76,8 @@ switch($act) {
  			} else  { $ajoutquery= " and sscat=\"\" "; }
 		
 			$query3="SELECT Intitule,chemin,OS,type,genre,valeur,antidote,comment from corresp where categorie='$row[0]' ".$ajoutquery." order by type,genre,OS,valeur";
-			$resultat3 = mysql_query($query3);
-			while ($row3=mysql_fetch_array($resultat3)) {
+			$resultat3 = mysqli_query($GLOBALS["___mysqli_ston"], $query3);
+			while ($row3=mysqli_fetch_array($resultat3)) {
  				$cheminpascomp=$row3['chemin'];
  				$chemin=explode("\\",$row3['chemin']);
  				$j=count($chemin)-1;
@@ -116,7 +116,7 @@ switch($act) {
 	header("Content-Disposition: attachment; filename=rules.xml");
 	readfile($fichier_mod_xml);
 	if (file_exists($fichier_mod_xml)) unlink($fichier_mod_xml);
-	mysql_close();
+	((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 
 	include "entete.inc.php";
 	include "ldap.inc.php";

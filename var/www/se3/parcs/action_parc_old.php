@@ -209,10 +209,10 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 		break;
 	} 
    	
-	$resultf=mysql_query("select heure,action from actionse3 where parc='$parc' and jour='$nomjour' ;", $authlink) or die("Impossible d'effectuer la requete");
+	$resultf=mysqli_query( $authlink, "select heure,action from actionse3 where parc='$parc' and jour='$nomjour' ;") or die("Impossible d'effectuer la requete");
 	if ($resultf) {
-		if (mysql_num_rows($resultf)>0) {
-			while ($row=mysql_fetch_row($resultf)) {
+		if (mysqli_num_rows($resultf)>0) {
+			while ($row=mysqli_fetch_row($resultf)) {
 				if ($row[1]=="wol") { 
 					echo "<h3>".gettext("Allumage des stations pr&eacute;vu &agrave;")." $row[0] ".gettext("ce jour")."</h3>"; 
 				}

@@ -58,16 +58,16 @@ if ($choix != "") {
 	$deleteSQL = "delete from restrictions where cleID='$cle' and groupe='$template'";
 	if ($choix == "Active") {
 		$addSQL = "Insert into restrictions values ('', '$cle', '$template', '$value', '0')";
-		mysql_query($deleteSQL);
-		mysql_query($addSQL);
+		mysqli_query($GLOBALS["___mysqli_ston"], $deleteSQL);
+		mysqli_query($GLOBALS["___mysqli_ston"], $addSQL);
 	}
 	else if ($choix == "Inactive") {
 		$addSQL = "Insert into restrictions values ('', '$cle', '$template', '$antidote')";
-		mysql_query($deleteSQL);
-		mysql_query($addSQL);
+		mysqli_query($GLOBALS["___mysqli_ston"], $deleteSQL);
+		mysqli_query($GLOBALS["___mysqli_ston"], $addSQL);
 	}
 	else {
-		mysql_query($deleteSQL);
+		mysqli_query($GLOBALS["___mysqli_ston"], $deleteSQL);
 	}
 	?>
 		<script language="JavaScript" type="text/javascript">
@@ -82,8 +82,8 @@ else {
 //	if ($state == "-1") $checkedD="checked";
 
 	$query="Select valeur, type, Intitule, antidote from corresp where cleID='$cle'";
-	$result = mysql_query($query);
-	$row = mysql_fetch_row($result);
+	$result = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+	$row = mysqli_fetch_row($result);
 	if ($value == "") $value = $row[0];
 	echo "$row[2]:\n";
 	echo "<form method=get action=\"edit_cle.php\">\n";
@@ -102,7 +102,7 @@ else {
 	echo "<input type=\"hidden\" name=\"antidote\" value=\"$row[3]\">";
 
 }
-mysql_close();
+((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 
 include("pdp.inc.php");
 

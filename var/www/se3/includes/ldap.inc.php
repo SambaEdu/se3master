@@ -1192,19 +1192,19 @@ function get_infos_admin_ldap2() {
 
     // Etablir la connexion au serveur et la selection de la base?
     global $dbhost,$dbname,$dbuser,$dbpass;
-    $authlink = mysql_connect($dbhost,$dbuser,$dbpass);
-    @mysql_select_db($dbname); 
+    $authlink = ($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+    @((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)); 
     $sql = "SELECT value FROM params WHERE name='adminRdn'";
-    $res1 = mysql_query($sql);
-    if (mysql_num_rows($res1) == 1) {
-        $lig_tmp = mysql_fetch_object($res1);
+    $res1 = mysqli_query($GLOBALS["___mysqli_ston"], $sql);
+    if (mysqli_num_rows($res1) == 1) {
+        $lig_tmp = mysqli_fetch_object($res1);
         $adminLdap["adminDn"] = $lig_tmp->value . "," . $ldap_base_dn;
     }
 
     $sql = "SELECT value FROM params WHERE name='adminPw'";
-    $res2 = mysql_query($sql);
-    if (mysql_num_rows($res2) == 1) {
-        $lig_tmp = mysql_fetch_object($res2);
+    $res2 = mysqli_query($GLOBALS["___mysqli_ston"], $sql);
+    if (mysqli_num_rows($res2) == 1) {
+        $lig_tmp = mysqli_fetch_object($res2);
         $adminLdap["adminPw"] = $lig_tmp->value;
     }
 
@@ -1414,14 +1414,14 @@ function search_doublons_mac($generer_csv='n')
                         $return_echo .=  "<td style='text-align:center;'>" . $tab_machine[$j]['mac'] . "</td>\n";
 
                         $sql = "SELECT * FROM connexions WHERE netbios_name='" . $tab_machine[$j]['cn'] . "' ORDER BY logintime DESC LIMIT 1;";
-                        $res_connexion = mysql_query($sql);
-                        if (mysql_num_rows($res_connexion) == 0)
+                        $res_connexion = mysqli_query($GLOBALS["___mysqli_ston"], $sql);
+                        if (mysqli_num_rows($res_connexion) == 0)
 						{
                             $return_echo .=  "<td style='text-align:center;color:red;'>X</td>\n";
                         }
 						else
 						{
-                            $lig_connexion = mysql_fetch_object($res_connexion);
+                            $lig_connexion = mysqli_fetch_object($res_connexion);
                             $return_echo .=  "<td style='text-align:center;'>" . $lig_connexion->logintime . "</td>\n";
                         }
 

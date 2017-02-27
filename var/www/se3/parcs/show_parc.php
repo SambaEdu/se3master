@@ -218,8 +218,8 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 
 		$module_clonage_actif="n";
 		$sql="select 1=1 from params where name='clonage' AND value='1';";
-		$test_clonage=mysql_query($sql);
-		if(mysql_num_rows($test_clonage)>0) {
+		$test_clonage=mysqli_query($GLOBALS["___mysqli_ston"], $sql);
+		if(mysqli_num_rows($test_clonage)>0) {
 			$module_clonage_actif="y";
 		}
 
@@ -371,15 +371,15 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 				echo "<td align=\"center\"><A href='show_histo.php?selectionne=2&amp;mpenc=$mpenc'>$mp[$loop]</A></td>\n";
 				$ip = avoir_ip($mpenc);
 				//mysql_close();
-				$authlink = mysql_connect($dbhost,$dbuser,$dbpass);
-				mysql_select_db($dbname,$authlink) or die("Impossible de se connecter &#224; la base $dbname.");
+				$authlink = ($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+				((bool)mysqli_query($authlink, "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
 				$query=" select logintime from connexions where netbios_name='$mpenc' order by id desc limit 1";
 				//$query .= $cnx_start;
 				//$query .= ",10";
                                 $last_cnx[0]="none";
-				$result = mysql_query($query) or die ('ERREUR '.$requete.' '.mysql_error());
+				$result = mysqli_query($GLOBALS["___mysqli_ston"], $query) or die ('ERREUR '.$requete.' '.((is_object($GLOBALS["___mysqli_ston"])) ? mysqli_error($GLOBALS["___mysqli_ston"]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)));
 				if (($result)) {
-				  while ($r=mysql_fetch_array($result)) {
+				  while ($r=mysqli_fetch_array($result)) {
 				    $last_cnx_long=$r["logintime"];
 				    $last_cnx = explode(" ", $last_cnx_long);
 				    $time_old = mktime(0,0,0,date("m")-1,date("d"),date("Y"));
@@ -407,9 +407,9 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 
 				if($module_clonage_actif=='y') {
 					$sql="SELECT * FROM se3_tftp_rapports WHERE name='".$mp[$loop]."' ORDER BY date DESC LIMIT 1;";
-					$res_rapport_tftp=mysql_query($sql);
-					if(mysql_num_rows($res_rapport_tftp)>0) {
-						$lig=mysql_fetch_object($res_rapport_tftp);
+					$res_rapport_tftp=mysqli_query($GLOBALS["___mysqli_ston"], $sql);
+					if(mysqli_num_rows($res_rapport_tftp)>0) {
+						$lig=mysqli_fetch_object($res_rapport_tftp);
 						echo "<td align=\"center\">";
 						echo "<span style='font-size: x-small;' title='Dernier rapport: $lig->tache ($lig->statut)'><a href=\"../tftp/visu_rapport.php?id_machine=$lig->id\" target='_blank'>".$lig->date."</a></span>\n";
 						$st="$lig->statut";

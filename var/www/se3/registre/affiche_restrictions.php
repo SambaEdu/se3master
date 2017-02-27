@@ -72,8 +72,8 @@ if (!$salle) {
 if (isset($_GET['clean'])) {
     connexion ();
     $deleteSQL = "delete from restrictions where groupe='$salle';";
-    mysql_query($deleteSQL);
-    mysql_close();
+    mysqli_query($GLOBALS["___mysqli_ston"], $deleteSQL);
+    ((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 }
 connexion();
 
@@ -85,9 +85,9 @@ if ($salle) {
     echo "<select name=\"mod\" size=\"1\"><option value=\"norestrict\">" . gettext("Aucune protection") . "</option>\n";
 
     $query = "SELECT `mod` FROM modele GROUP BY `mod`;";
-    $resultat = mysql_query($query);
+    $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
-    while ($row = mysql_fetch_array($resultat, MYSQL_BOTH)) {
+    while ($row = mysqli_fetch_array($resultat,  MYSQLI_BOTH)) {
         if ($salle == "base" or $row[0] <> "norestrict") {
             echo "<option value=\"$row[0]\">$row[0]</option>\n";
         }
@@ -135,16 +135,16 @@ if ($salle) {
         on corresp.CleID = restrictions.cleID  
         where restrictions.groupe  = '" . $salle . "' " . $ajout . $ajoutsscatvide . $ajoutsscat . "
         order by ISNULL(restrictions.valeur) desc,type,OS,corresp.valeur,antidote,genre asc";
-    $resultat = mysql_query($query);
+    $resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
-    if (mysql_num_rows($resultat)) {
+    if (mysqli_num_rows($resultat)) {
         //affichage de l'en-tete du tableau en fonction des cas
         echo "<table border=\"1\" ><tr BGCOLOR=#fff9d3><td><img src=\"/elements/images/system-help.png\" alt=\"" . gettext("Aide") . "\" title=\"Aide\" width=\"16\" height=\"18\" border=\"0\" />\n";
         echo "</td>$affichetout <td><DIV ALIGN=CENTER>" . gettext("Intitul&#233") . "</DIV></td>\n";
         echo "<td><DIV ALIGN=CENTER>" . gettext("OS") . "</DIV></td><td><DIV ALIGN=CENTER>" . gettext("Etat") . "</DIV></td><td><DIV ALIGN=CENTER>" . gettext("Supprimer") . "</DIV></td>\n";
     }
 
-    while ($row = mysql_fetch_array($resultat, MYSQL_BOTH)) {
+    while ($row = mysqli_fetch_array($resultat,  MYSQLI_BOTH)) {
         //bouton aide
         echo "<tr><td><a href=\"#\" onClick=\"window.open('aide_cle.php?cle=$row[1]','aide','scrollbars=yes,width=600,height=620')\">\n";
         echo "<img src=\"/elements/images/system-help.png\" alt=\"aide\" title=\"$row[7]\" width=\"15\" height=\"15\" border=\"0\"></a></td>\n";
@@ -174,7 +174,7 @@ if ($salle) {
 }
 echo"</table> ";
 
-mysql_close();
+((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 echo "<br/><a href=\"affiche_restrictions.php?clean=1&salles=$salle\" onclick=\"return getconfirm();\"> Remise &agrave; z&eacute;ro</a><br/><br/>\n";
 echo "</center>\n";
 

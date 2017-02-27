@@ -63,8 +63,8 @@ foreach ($_POST as $cle=>$val) {
 
 // recuperer l'enregistrement
 $req =" SELECT * FROM $table WHERE id_prof='$login' AND id='$id'";
-$resultat=mysql_query($req);
-$ligne=mysql_fetch_array($resultat);
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], $req);
+$ligne=mysqli_fetch_array($resultat);
 list($id,$id_prof,$id_devoir,$nom_devoir,$date_distrib,$date_retour,$description,$liste_distrib,$liste_retard, $etat) = $ligne; 
 
 // traitement de la modification
@@ -84,8 +84,8 @@ if (isset($modif)) {
 // verifier d'abord que le nouvel identifiant n'a pas deja ete utilise
 // ATTENTION : tenir compte de la casse avec BINARY
   $req_verif =" SELECT id FROM $table WHERE BINARY id_devoir='$id_devoir_nv' ";
-  $res_verif=mysql_query($req_verif);
-  $nb= mysql_num_rows($res_verif); 
+  $res_verif=mysqli_query($GLOBALS["___mysqli_ston"], $req_verif);
+  $nb= mysqli_num_rows($res_verif); 
   if ($nb != 0) {
     echo gettext("Modification du devoir")." <em>$id_devoir</em> ".gettext("en")." <em>$id_devoir_nv</em> :";
     echo "<h4><em>\"$id_devoir_nv\"</em> ".gettext("a d&#224;j&#224; &#224;t&#224; utilis&#224; !")."<br>".gettext("Veuillez choisir un autre identifant")."</h4>";
@@ -129,7 +129,7 @@ if (isset($modif)) {
 // Mise a jour dans la table 
   $req_devoir="UPDATE $table ";  
   $req_devoir .=" SET id_devoir='$id_devoir',date_distrib='$date_distrib',date_recup='$date_retour', description='$description' WHERE id='$id' ";  
-  $ok = mysql_query($req_devoir);
+  $ok = mysqli_query($GLOBALS["___mysqli_ston"], $req_devoir);
  }
 
 echo "<body >

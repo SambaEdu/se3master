@@ -120,11 +120,11 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 		$query .= $cnx_start;
 		$query .= ",10";
 
-		$result = mysql_query($query);
+		$result = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 		if (($result)) {
 			// Affichage des liens de navigation
 			if ($cnx_start < 10) { $cnx_start1=0; $cnx_start2=$cnx_start+10; }
-			else if (mysql_num_rows($result)==0) { $cnx_start2=$cnx_start; $cnx_start1=$cnx_start-10; }
+			else if (mysqli_num_rows($result)==0) { $cnx_start2=$cnx_start; $cnx_start1=$cnx_start-10; }
 			else { $cnx_start1=$cnx_start-10; $cnx_start2=$cnx_start+10; }
 			echo "<TABLE width='100%'><TR><TD WIDTH='50%'>";
 			if ($cnx_start >= 10) echo "<A HREF='show_histo.php?ipaddr=$ipaddr&cnx_start=$cnx_start1&selectionne=1'><-- ".gettext("Voir les 10 connexions pr&#233;c&#233;dentes")."</A>&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -134,7 +134,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 			// affichage de la table connexions
 			echo "<TABLE  align='center' border='1'>\n";
 			echo "<TR><TD  class='menuheader'>".gettext("Utilisateur connect&#233;")."</TD><TD  class='menuheader'>".gettext("Nom machine")."</TD><TD  class='menuheader'>".gettext("Date/Heure de connexion")."</TD><TD  class='menuheader'>".gettext("Date/Heure de d&#233;connexion")."</TD></TR>";
-			while ($r=mysql_fetch_array($result)) {
+			while ($r=mysqli_fetch_array($result)) {
 				//echo "<TR align='center'><TD>".$r["username"]."</TD>\n";
 				echo "<TR align='center'><TD><A HREF='show_histo.php?selectionne=3&user=".$r["username"]."'>".$r["username"]."</A></TD>\n";
 				//echo "<TD>".$r["netbios_name"]."</TD>\n";
@@ -182,11 +182,11 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 		$query .= $cnx_start;
 		$query .= ",10";
 
-		$result = mysql_query($query);
+		$result = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 		if (($result)) {
 			// Affichage des liens de navigation
 			if ($cnx_start < 10) { $cnx_start1=0; $cnx_start2=$cnx_start+10; }
-			else if (mysql_num_rows($result)==0) { $cnx_start2=$cnx_start; $cnx_start1=$cnx_start-10; }
+			else if (mysqli_num_rows($result)==0) { $cnx_start2=$cnx_start; $cnx_start1=$cnx_start-10; }
 			else { $cnx_start1=$cnx_start-10; $cnx_start2=$cnx_start+10; }
 			echo "<TABLE width='100%'><TR><TD WIDTH='50%'>";
 			if ($cnx_start >= 10) echo "<A HREF='show_histo.php?user=$user&cnx_start=$cnx_start1&selectionne=3'><-- ".gettext("Voir les 10 connexions pr&#233;c&#233;dentes")."</A>&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -197,7 +197,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 			echo "<TABLE  align='center' border='1'>\n";
 			echo "<TR><TD class='menuheader'>".gettext("Nom machine")."</TH><TD class='menuheader'>".gettext("Adresse IP")."</TH>";
 			echo "<TD class='menuheader'>".gettext("Date/Heure de connexion")."</TH><TD class='menuheader'>".gettext("Date/Heure de d&#233;connexion")."</TH></TR>";
-			while ($r=mysql_fetch_array($result)) {
+			while ($r=mysqli_fetch_array($result)) {
 				// echo "<TR align='center'><TD>".$r["netbios_name"]."</TD>\n";
 				echo "<TR align='center'><TD>";
 				if (is_admin("computers_is_admin",$login)=="Y") { echo "<A HREF='show_histo.php?selectionne=2&mpenc=".$r["netbios_name"]."'>"; }
@@ -241,11 +241,11 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 		$query .= $cnx_start;
 		$query .= ",10";
 		
-		$result = mysql_query($query);
+		$result = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 		if (($result)) {
 			// Affichage des liens de navigation
 			if ($cnx_start < 10) { $cnx_start1=0; $cnx_start2=$cnx_start+10; }
-			else if (mysql_num_rows($result)==0) { $cnx_start2=$cnx_start; $cnx_start1=$cnx_start-10; }
+			else if (mysqli_num_rows($result)==0) { $cnx_start2=$cnx_start; $cnx_start1=$cnx_start-10; }
 			else { $cnx_start1=$cnx_start-10; $cnx_start2=$cnx_start+10; }
 			echo "<TABLE width='100%'><TR><TD WIDTH='50%'>";
 			if ($cnx_start >= 10) echo "<A HREF='show_histo.php?mpenc=$mpenc&cnx_start=$cnx_start1&selectionne=2'><-- ".gettext("Voir les 10 connexions pr&#233;c&#233;dentes")."</A>&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -255,7 +255,7 @@ if ((is_admin("computers_is_admin",$login)=="Y") or (is_admin("parc_can_view",$l
 			// affichage de la table connexions
 			echo "<TABLE  align='center' border='1'>\n";
 			echo "<TR><TD class='menuheader'>".gettext("Utilisateur connect&#233")."</TD><TD class='menuheader'>".gettext("Adresse IP")."</TD><TD class='menuheader'>".gettext("Date/Heure de connexion")."</TD><TD class='menuheader'>".gettext("Date/Heure de d&#233;connexion")."</TD></TR>";
-			while ($r=mysql_fetch_array($result)) {
+			while ($r=mysqli_fetch_array($result)) {
 				// echo "<TR align='center'><TD>".$r["username"]."</TD>\n";
 				echo "<TR align='center'><TD><A HREF='show_histo.php?selectionne=3&user=".$r["username"]."'>".$r["username"]."</A></TD>\n";
 				//echo "<TD>".$r["ip_address"]."</TD>\n";

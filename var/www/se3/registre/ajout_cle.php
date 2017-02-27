@@ -114,17 +114,17 @@ switch ($ajout) {
     	echo gettext("Exporter des cl&#233s");
     	connexion();
     	$query="Select Intitule,cleID,valeur,genre,OS,chemin,categorie,sscat from corresp order by cleID desc";
-    	$resultat = mysql_query($query);
-    	$nombre1 = mysql_num_rows($resultat);
+    	$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+    	$nombre1 = mysqli_num_rows($resultat);
     	//pour selectionner tout d'un coup necessite de connaitre le nombre de cles existantes
     	echo "<title>".gettext("Liste des cl&#233s enregistr&#233es")."</title><br><br>";
     	echo "<FORM METHOD=POST ACTION=\"ajout_cle.php\" name=ajoutcle >";
     	echo "<table border=\"1\" ><tr><td><img src=\"/elements/images/system-help.png\" alt=\"Aide\" title=\"$row[5]\" width=\"16\" height=\"18\" border=\"0\" /></td><td><DIV ALIGN=CENTER>".gettext("Intitul&#233")."</DIV></td><td>OS</td><td><DIV ALIGN=CENTER>".gettext("Valeur (defaut)")."</DIV></td><td>".gettext("Exporter")."</td></tr>";
-    	$row = mysql_fetch_array($resultat);
+    	$row = mysqli_fetch_array($resultat);
     	$n=1;
     	echo"<tr><td><DIV ALIGN=CENTER><a href=\"#\' onClick=\"window.open('aide_cle.php?cle=$row[1]','aide','scrollbars=yes,width=600,height=620')\">?</a></td><td>$row[6]</td><td>$row[7]</td><td>$row[0]</DIV></td><td><DIV ALIGN=CENTER>&nbsp;$row[4]</DIV></td><td><DIV ALIGN=CENTER>$row[2]</DIV> </td><td><DIV ALIGN=CENTER><INPUT TYPE=\"checkbox\" NAME=\"cle1\" value=\"$row[1]\"></DIV></td></tr>";
     	//$nombre=$row[1]+1;
-    	while ($row = mysql_fetch_array($resultat)) {
+    	while ($row = mysqli_fetch_array($resultat)) {
         	$n++;
         	echo"<tr><td><DIV ALIGN=CENTER><a href=\"#\' onClick=\"window.open('aide_cle.php?cle=$row[1]','aide','scrollbars=yes,width=600,height=620')\" ><img src=\"/elements/images/system-help.png\" alt=\"Aide\" title=\"$row[5]\" width=\"16\" height=\"18\" border=\"0\" /></a></td><td>$row[6]</td><td>$row[7]</td><td>$row[0]</DIV></td><td><DIV ALIGN=CENTER>&nbsp;$row[4]</DIV></td><td><DIV ALIGN=CENTER>$row[2]</DIV> </td><td><DIV ALIGN=CENTER><INPUT TYPE=\"checkbox\" NAME=\"cle$n\" value=\"$row[1]\" ></DIV></td></tr>";
         }
@@ -143,8 +143,8 @@ switch ($ajout) {
         	$cle[$j]=$_POST['cle'.$j];
             	if ($cle[$j]) {
                 	$query="SELECT Intitule,valeur,antidote,genre,OS,type,chemin,comment,categorie,sscat FROM corresp WHERE cleID='$cle[$j]'";
-                	$resultat = mysql_query($query);
-                	$row = mysql_fetch_row($resultat);
+                	$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+                	$row = mysqli_fetch_row($resultat);
                 	echo "$row[0]--$row[1]--$row[2]--$row[3]--$row[4]--$row[5]--$row[6]--$row[7]--$row[8]--$row[9];&;";
 		}
 	}
@@ -180,8 +180,8 @@ switch ($ajout) {
 		if ($cle[6]) {
                 	$cletrim=ajoutedoublebarre(($cle[6]));
                 	$query="SELECT chemin FROM corresp WHERE chemin='$cletrim';";
-                	$resultat = mysql_query($query);
-                	$row = mysql_fetch_row($resultat);
+                	$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+                	$row = mysqli_fetch_row($resultat);
                 	if ($row[0]){ 
 				$exist++; 
 			}  else { 
@@ -228,19 +228,19 @@ switch ($ajout) {
                      	$cleok[9]=trim($cleok[9]);
                      	$cletrim=ajoutedoublebarre(($cle[6]));
                      	$query="SELECT cleID FROM corresp WHERE '$cletrim'=chemin;";
-                     	$resultat = mysql_query($query);
-                      	$row=mysql_fetch_array($resultat);
+                     	$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+                      	$row=mysqli_fetch_array($resultat);
                       	if (!$row[0]) {
                      		//$insert = mysql_query($query);
                     		$query="INSERT INTO corresp (Intitule,valeur,antidote,genre,OS,type,chemin,comment,categorie,sscat) VALUES ('$cleok[0]','$cleok[1]','$cleok[2]','$cleok[3]','$cleok[4]','$cleok[5]','$cleok[6]','$cleok[7]','$cleok[8]','$cleok[9]');";
-                    		$insert = mysql_query($query);
+                    		$insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
                     		//echo "<tr><td>$query  Fait</td></tr>";
                     		if ($cleok[5]=="restrict") {
                      			$query="SELECT cleID FROM corresp WHERE '$cleok[6]'=chemin;";
-                     			$resultat = mysql_query($query);
-                     			$row=mysql_fetch_array($resultat);
+                     			$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+                     			$row=mysqli_fetch_array($resultat);
                     			$query2="INSERT INTO modele( `etat`, `cle`, `mod` ) VALUES ('0','$row[0]','norestrict');";
-                     			$insert2 = mysql_query($query2);
+                     			$insert2 = mysqli_query($GLOBALS["___mysqli_ston"], $query2);
                      		}
         			
 				//insertion dans le modele  norestrict
@@ -293,8 +293,8 @@ switch ($ajout) {
 
 	//on verifie que la cle n'est pas deja dans la base
 	$query="SELECT chemin FROM corresp WHERE chemin='$chemin';";
-	$resultat = mysql_query($query);
-	$row = mysql_fetch_row($resultat);
+	$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+	$row = mysqli_fetch_row($resultat);
     	if ($row[0]) { echo "cette cle existe d&#233;j&#224;<br>";} else {
     		//cle de configuration
     		if ($type=="config") {$antidote=$valeur;}
@@ -304,15 +304,15 @@ switch ($ajout) {
 
     		//insertion dans la table corresp
       		$query="INSERT INTO corresp (Intitule,valeur,genre,OS,chemin,comment,type,antidote,categorie,sscat) VALUES ('$intitule','$valeur','$genre','$OS','$chemin','$comment','$type','$anti','$categorie','$sscat');";
-      		$insert = mysql_query($query);
+      		$insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
       		echo "<HEAD><META HTTP-EQUIV=\"refresh\" CONTENT=\"0; URL=affiche_cle.php\"></HEAD>".gettext("Commandes prises en compte !");
       		echo gettext("Insertion effectu&#233e");
                 if ($type="restrict") {   //insertion dans le modele generique  norestrict
                 	$query="SELECT cleID FROM corresp WHERE '$chemin'=chemin;";
-                     	$resultat = mysql_query($query);
-                     	$row=mysql_fetch_array($resultat);
+                     	$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+                     	$row=mysqli_fetch_array($resultat);
                      	$query2="INSERT INTO modele( `etat`, `cle`, `mod` ) VALUES ('0','$row[0]','norestrict');";
-                     	$insert2 = mysql_query($query2);
+                     	$insert2 = mysqli_query($GLOBALS["___mysqli_ston"], $query2);
                }
 
     	}
@@ -354,9 +354,9 @@ switch ($ajout) {
     	$branche= enlevecrochets($branche);
     	$branchefin= $branche."\\".$cle;
     	$query="Select chemin from corresp where chemin='$branchefin'";
-    	$resultat=mysql_query($query);
+    	$resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
     	//la requete ne retourne pas des resultats : on peut creer la cle
-    	$num=mysql_num_rows($resultat);
+    	$num=mysqli_num_rows($resultat);
     	if (!$num) {
     		echo "<table border = 1 ><tr><td>".gettext("Intitul&#233 de la cl&#233 ? A compl&#233ter si n&#233c&#233ssaire:")."</td><td><input type=\"text\" name=\"Intitule\" value=\"$Intitule\" size=\"100\" /> </td></tr>";
     		echo "<tr><td>".gettext("OS d&#233tect&#233")." :</td><td><select name=\"OS[]\" multiple size=\"1\">";
@@ -414,17 +414,17 @@ switch ($ajout) {
       		//definition de la categorie  (affichage des categories existantes)
       		echo "<tr><td>".gettext("Cat&#233gorie")."</td><td><select name=\"categorie\" size=\"1\">";
       		$query1="Select DISTINCT categorie from corresp group by categorie;";
-      		$resultat1 = mysql_query($query1);
+      		$resultat1 = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
       		
-		while ($row1=mysql_fetch_row($resultat1)) { 
+		while ($row1=mysqli_fetch_row($resultat1)) { 
 			if ($row1[0]){echo"<option value=\"$row1[0]\">$row1[0]</option>";} }
 
      			//affichage des sous-categories
      			$query2="Select DISTINCT sscat from corresp group by sscat;";
-     			$resultat2 = mysql_query($query2);
+     			$resultat2 = mysqli_query($GLOBALS["___mysqli_ston"], $query2);
      			echo "</select></td></tr><tr><td>".gettext("Sous-Categorie")."</td><td><select name=\"sscat\" size=\"1\"><option ></option> ";
 			
-     			while ($row2=mysql_fetch_row($resultat2)) {
+     			while ($row2=mysqli_fetch_row($resultat2)) {
 				if ($row2[0]){echo"<option value=\"$row2[0]\" >$row2[0]</option>"; } 
 			}
 
@@ -454,8 +454,8 @@ switch ($ajout) {
 	echo "<input name=\"newcategorie\" type=\"text\" size=\"50\" > ".gettext("ou")." <select name=\"categorie\" size=\"1\" >";
     	//affichage des categories
     	$query1="Select DISTINCT categorie from corresp group by categorie;";
-    	$resultat1 = mysql_query($query1);
-    	while ($row1=mysql_fetch_row($resultat1)) {if ($row1[0]){ echo"<option value=\"$row1[0]\"  >$row1[0]</option>";}}
+    	$resultat1 = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
+    	while ($row1=mysqli_fetch_row($resultat1)) {if ($row1[0]){ echo"<option value=\"$row1[0]\"  >$row1[0]</option>";}}
     	echo "</select></td></tr>";
 
 	//affichage des autres infos
@@ -478,7 +478,7 @@ switch ($ajout) {
 	echo gettext("Attention : Une cl&#233 de restriction sera automatiquement ajout&#233e au groupe de cl&#233 no restrict")."<br>";
 }
 
-mysql_close();
+((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 retour();
 
 include("pdp.inc.php");

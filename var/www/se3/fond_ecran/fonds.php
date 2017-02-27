@@ -72,15 +72,15 @@
 		mkhelp($titre,$texte);
 
 		$query="SHOW TABLES;";
-		$resultat = mysql_query($query);
-		if(mysql_num_rows($resultat)==0){
+		$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+		if(mysqli_num_rows($resultat)==0){
 			echo "<p><b>".gettext("ERREUR").":</b> ".gettext("Il semble que la base de donn&#233;es choisie ne comporte aucune table").".</p>";
 			include("pdp.inc.php");
 			exit();
 		}
 		else{
 			$table_wallpaper_existe="non";
-			while($ligne=mysql_fetch_array($resultat)){
+			while($ligne=mysqli_fetch_array($resultat)){
 				if($ligne[0]=="wallpaper"){
 					$table_wallpaper_existe="oui";
 				}
@@ -92,7 +92,7 @@
 `identifiant` INT NOT NULL AUTO_INCREMENT ,
 PRIMARY KEY ( `identifiant` )
 );";
-				$resultat = mysql_query($query);
+				$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 			}
 		}
 
@@ -135,13 +135,13 @@ PRIMARY KEY ( `identifiant` )
 			else{
 				// Le dispositif est-il actif?
 				$query="SELECT * FROM wallpaper WHERE nom='action'";
-				$resultat = mysql_query($query);
-				if(mysql_num_rows($resultat)==0){
+				$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+				if(mysqli_num_rows($resultat)==0){
 					$dispositif_actif="non";
 					//echo "<p>1</p>\n";
 				}
 				else{
-					$ligne=mysql_fetch_object($resultat);
+					$ligne=mysqli_fetch_object($resultat);
 					$valeur=$ligne->valeur;
 					if($valeur=="actif"){
 						$dispositif_actif="oui";
@@ -186,8 +186,8 @@ PRIMARY KEY ( `identifiant` )
 				//echo "<blockquote>\n";
 
 				$query="SELECT * FROM wallpaper WHERE nom LIKE 'fond_%' AND valeur='actif'";
-				$resultat = mysql_query($query);
-				if(mysql_num_rows($resultat)==0){
+				$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+				if(mysqli_num_rows($resultat)==0){
 					echo "<p>".gettext("Le dispositif est actif, mais aucun param&#233;trage de fond n'est effectu&#233;").".</p>\n";
 				echo "<br>"."<a href=\"../fond_ecran/fonds.php\">Retour</a> ";
 				}
@@ -226,7 +226,7 @@ PRIMARY KEY ( `identifiant` )
 						return $vartmp;
 					}
 
-					while($ligne=mysql_fetch_object($resultat)){
+					while($ligne=mysqli_fetch_object($resultat)){
 						$groupe=substr($ligne->nom,5);
 						if($groupe == "admin")
 							$wallgrp="Adminse3";
@@ -255,13 +255,13 @@ PRIMARY KEY ( `identifiant` )
 						$affiche_photo="&nbsp;";
 
 						$query="SELECT valeur FROM wallpaper WHERE nom='type_image_$groupe'";
-						$result1=mysql_query($query);
-						if(mysql_num_rows($result1)==0){
+						$result1=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+						if(mysqli_num_rows($result1)==0){
 							$type_image="???";
 							// Il a du se passer quelque chose de travers...
 						}
 						else{
-							$lig1=mysql_fetch_object($result1);
+							$lig1=mysqli_fetch_object($result1);
 							if($lig1->valeur=="image_fournie"){
 								$type_image="Fournie";
 							}
@@ -269,46 +269,46 @@ PRIMARY KEY ( `identifiant` )
 								$type_image="D&#233;grad&#233;";
 
 								$query="SELECT valeur FROM wallpaper WHERE nom='largeur_$groupe'";
-								$result2=mysql_query($query);
-								if(mysql_num_rows($result2)==0){
+								$result2=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+								if(mysqli_num_rows($result2)==0){
 									$largeur="???";
 									// Il a du se passer quelque chose de travers...
 								}
 								else{
-									$lig2=mysql_fetch_object($result2);
+									$lig2=mysqli_fetch_object($result2);
 									$largeur=$lig2->valeur;
 								}
 
 								$query="SELECT valeur FROM wallpaper WHERE nom='hauteur_$groupe'";
-								$result2=mysql_query($query);
-								if(mysql_num_rows($result2)==0){
+								$result2=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+								if(mysqli_num_rows($result2)==0){
 									$hauteur="???";
 									// Il a du se passer quelque chose de travers...
 								}
 								else{
-									$lig2=mysql_fetch_object($result2);
+									$lig2=mysqli_fetch_object($result2);
 									$hauteur=$lig2->valeur;
 								}
 
 								$query="SELECT valeur FROM wallpaper WHERE nom='couleur1_$groupe'";
-								$result2=mysql_query($query);
-								if(mysql_num_rows($result2)==0){
+								$result2=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+								if(mysqli_num_rows($result2)==0){
 									$couleur1="???";
 									// Il a du se passer quelque chose de travers...
 								}
 								else{
-									$lig2=mysql_fetch_object($result2);
+									$lig2=mysqli_fetch_object($result2);
 									$couleur1=$lig2->valeur;
 								}
 
 								$query="SELECT valeur FROM wallpaper WHERE nom='couleur2_$groupe'";
-								$result2=mysql_query($query);
-								if(mysql_num_rows($result2)==0){
+								$result2=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+								if(mysqli_num_rows($result2)==0){
 									$couleur2="???";
 									// Il a du se passer quelque chose de travers...
 								}
 								else{
-									$lig2=mysql_fetch_object($result2);
+									$lig2=mysqli_fetch_object($result2);
 									$couleur2=$lig2->valeur;
 								}
 
@@ -316,13 +316,13 @@ PRIMARY KEY ( `identifiant` )
 						}
 
 						$query="SELECT valeur FROM wallpaper WHERE nom='annotations_$groupe'";
-						$result1=mysql_query($query);
-						if(mysql_num_rows($result1)==0){
+						$result1=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+						if(mysqli_num_rows($result1)==0){
 							$annotations="???";
 							// Il a du se passer quelque chose de travers...
 						}
 						else{
-							$lig1=mysql_fetch_object($result1);
+							$lig1=mysqli_fetch_object($result1);
 							if($lig1->valeur=="inactif"){
 								$annotations="Non";
 							}
@@ -388,35 +388,35 @@ PRIMARY KEY ( `identifiant` )
 								*/
 
 								$query="SELECT valeur FROM wallpaper WHERE nom='couleur_txt_$groupe'";
-								$result2=mysql_query($query);
-								if(mysql_num_rows($result2)==0){
+								$result2=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+								if(mysqli_num_rows($result2)==0){
 									$couleur_txt="???";
 									// Il a du se passer quelque chose de travers...
 								}
 								else{
-									$lig2=mysql_fetch_object($result2);
+									$lig2=mysqli_fetch_object($result2);
 									$couleur_txt=$lig2->valeur;
 								}
 
 								$query="SELECT valeur FROM wallpaper WHERE nom='taille_police_$groupe'";
-								$result2=mysql_query($query);
-								if(mysql_num_rows($result2)==0){
+								$result2=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+								if(mysqli_num_rows($result2)==0){
 									$taille_police="???";
 									// Il a du se passer quelque chose de travers...
 								}
 								else{
-									$lig2=mysql_fetch_object($result2);
+									$lig2=mysqli_fetch_object($result2);
 									$taille_police=$lig2->valeur;
 								}
 
 								$query="SELECT valeur FROM wallpaper WHERE nom='annotation_nom_$groupe'";
-								$result2=mysql_query($query);
-								if(mysql_num_rows($result2)==0){
+								$result2=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+								if(mysqli_num_rows($result2)==0){
 									$annotation_nom="???";
 									// Il a du se passer quelque chose de travers...
 								}
 								else{
-									$lig2=mysql_fetch_object($result2);
+									$lig2=mysqli_fetch_object($result2);
 									$annotation_nom=$lig2->valeur;
 								}
 
@@ -434,24 +434,24 @@ PRIMARY KEY ( `identifiant` )
 								*/
 
 								$query="SELECT valeur FROM wallpaper WHERE nom='annotation_classe_$groupe'";
-								$result2=mysql_query($query);
-								if(mysql_num_rows($result2)==0){
+								$result2=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+								if(mysqli_num_rows($result2)==0){
 									$annotation_classe="???";
 									// Il a du se passer quelque chose de travers...
 								}
 								else{
-									$lig2=mysql_fetch_object($result2);
+									$lig2=mysqli_fetch_object($result2);
 									$annotation_classe=$lig2->valeur;
 								}
 
 								$query="SELECT valeur FROM wallpaper WHERE nom='affiche_photo_$groupe'";
-								$result2=mysql_query($query);
-								if(mysql_num_rows($result2)==0){
+								$result2=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+								if(mysqli_num_rows($result2)==0){
 									$affiche_photo="???";
 									// Il a du se passer quelque chose de travers...
 								}
 								else{
-									$lig2=mysql_fetch_object($result2);
+									$lig2=mysqli_fetch_object($result2);
 									$affiche_photo=$lig2->valeur;
 								}
 
@@ -506,12 +506,12 @@ PRIMARY KEY ( `identifiant` )
 
 				function recupere_valeur($nom,$valeur_defaut){
 					$query="SELECT * FROM wallpaper WHERE nom='$nom'";
-					$resultat = mysql_query($query);
-					if(mysql_num_rows($resultat)==0){
+					$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+					if(mysqli_num_rows($resultat)==0){
 						$valeur=$valeur_defaut;
 					}
 					else{
-						$ligne=mysql_fetch_object($resultat);
+						$ligne=mysqli_fetch_object($resultat);
 						$valeur=$ligne->valeur;
 					}
 					return $valeur;
@@ -519,13 +519,13 @@ PRIMARY KEY ( `identifiant` )
 
 				function recupere_actif_ou_pas($nom){
 					$query="SELECT * FROM wallpaper WHERE nom='$nom'";
-					$resultat = mysql_query($query);
-					if(mysql_num_rows($resultat)==0){
+					$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+					if(mysqli_num_rows($resultat)==0){
 						$checked[1]=" checked=\"true\"";
 						$checked[2]="";
 					}
 					else{
-						$ligne=mysql_fetch_object($resultat);
+						$ligne=mysqli_fetch_object($resultat);
 						$valeur=$ligne->valeur;
 						if($valeur=="1"){
 							$checked[1]=" checked=\"true\"";
@@ -556,10 +556,10 @@ PRIMARY KEY ( `identifiant` )
 
 							// Nettoyage:
 							$query="DELETE FROM wallpaper WHERE nom='action'";
-							$resultat = mysql_query($query);
+							$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 							// Mise a jour:
 							$query="INSERT INTO wallpaper VALUES('action','$action','')";
-							$resultat = mysql_query($query);
+							$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 							// Activation ou desactivation du lancement du script 'genere_fond.sh' lors du login.
 							// La valeur est testee dans le lanceur.
@@ -585,8 +585,8 @@ PRIMARY KEY ( `identifiant` )
 							//$etablissement_connexion_mysql=connexion();
 
 							$query="SELECT * FROM wallpaper WHERE nom='action'";
-							$resultat = mysql_query($query);
-							if(mysql_num_rows($resultat)==0){
+							$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+							if(mysqli_num_rows($resultat)==0){
 									echo "<p>".gettext("La g&#233;n&#233;ration de fond n'est actuellement pas active").".</p>\n";
 									$checked1=" checked=\"true\"";
 									$checked2="";
@@ -595,7 +595,7 @@ PRIMARY KEY ( `identifiant` )
 									$action="inactif";
 							}
 							else{
-								$ligne=mysql_fetch_object($resultat);
+								$ligne=mysqli_fetch_object($resultat);
 								$valeur=$ligne->valeur;
 								//if($valeur=="activer"){
 								if($valeur=="actif"){
@@ -671,8 +671,8 @@ PRIMARY KEY ( `identifiant` )
 
 							// Recuperation de l'identifiant de la cle Wallpaper:
 							$query="SELECT * FROM corresp WHERE chemin='HKEY_CURRENT_USER\\\\Control Panel\\\\Desktop\\\\Wallpaper'";
-							$resultat=mysql_query($query);
-							$ligne=mysql_fetch_object($resultat);
+							$resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+							$ligne=mysqli_fetch_object($resultat);
 							$CleID=$ligne->CleID;
 							$valeur_cle_wallpaper=$ligne->valeur;
 
@@ -688,16 +688,16 @@ PRIMARY KEY ( `identifiant` )
 
 							if($valeur_wallpaper_dans_les_tables!="a_corriger"){
 								$query="SELECT groupe FROM restrictions WHERE CleID='$CleID'";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 								//echo mysql_num_rows($resultat)."<br>";
-								if(mysql_num_rows($resultat)!=1){
+								if(mysqli_num_rows($resultat)!=1){
 									//echo "<p>Le nombre de references a Wallpaper dans la table 'restrictions' ne convient pas: ".mysql_num_rows($resultat)."</p>";
 									$valeur_wallpaper_dans_les_tables="a_corriger";
 								}
 								else{
 									$query="SELECT valeur FROM restrictions WHERE CleID='$CleID' AND groupe='base' AND valeur='%USERPROFILE%\\\\.fond\\\\fond.jpg'";
-									$resultat = mysql_query($query);
-									if(mysql_num_rows($resultat)!=1){
+									$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+									if(mysqli_num_rows($resultat)!=1){
 										//echo "<p>La valeur de la cle Wallpaper dans la table restrictions n'est pas la bonne.</p>";
 										$valeur_wallpaper_dans_les_tables="a_corriger";
 									}
@@ -756,15 +756,15 @@ PRIMARY KEY ( `identifiant` )
 								echo "<blockquote>\n";
 
 								$query="SELECT groupe FROM restrictions WHERE CleID='$CleID'";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 								//echo mysql_num_rows($resultat)."<br>";
-								if(mysql_num_rows($resultat)>0){
-									while($ligne=mysql_fetch_object($resultat)){
+								if(mysqli_num_rows($resultat)>0){
+									while($ligne=mysqli_fetch_object($resultat)){
 										// Nettoyer les registre.zrn correspondants
 										$template=$ligne->groupe;
 
 										$query="DELETE FROM restrictions WHERE cleID='$CleID' AND groupe='$template'";
-										$result = mysql_query($query);
+										$result = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 										// Pour 'base', le fichier sera regenere apres une mise a jour des valeurs:
 										if(($template!="base")&&(file_exists("/home/templates/$template"))){
@@ -779,13 +779,13 @@ PRIMARY KEY ( `identifiant` )
 
 								// Definition de la valeur de la cle pour le template 'base':
 								$query="INSERT INTO restrictions VALUES('','$CleID','base','%USERPROFILE%\\\\.fond\\\\fond.jpg')";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 								//echo "ID: ".mysql_insert_id()."<br>";
 
 								// Modification de la valeur par defaut de la cle:
 								$query="UPDATE corresp SET valeur='%USERPROFILE%\\\\.fond\\\\fond.jpg' WHERE CleID='$CleID'";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 								// Generer le nouveau registre.zrn pour le template 'base'
 								refreshzrn("base");
@@ -883,9 +883,9 @@ PRIMARY KEY ( `identifiant` )
 
 						// Creer/modifier/supprimer la mise en place d'image pour le groupe choisi:
 						$query="SELECT * FROM wallpaper WHERE nom='fond_".$groupe."'";
-						$resultat = mysql_query($query);
-						if(mysql_num_rows($resultat)>0){
-							$ligne=mysql_fetch_object($resultat);
+						$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+						if(mysqli_num_rows($resultat)>0){
+							$ligne=mysqli_fetch_object($resultat);
 							switch($ligne->valeur){
 								case "actif":
 									echo "<h4>".gettext("D&#233;sactivation")."</h4>\n";
@@ -1090,10 +1090,10 @@ PRIMARY KEY ( `identifiant` )
 								echo "<p>".gettext("Cela ne signifie pas que les membres de")." $groupe ".gettext("ne verront pas s'afficher un fond d'&#233;cran, mais seulement que le crit&#232;re")." '$groupe' ".gettext("ne sera pas utilis&#233; pour la g&#233;n&#233;ration de fond lors des logins &#224; venir").".</p>\n";
 
 								$query="DELETE FROM wallpaper WHERE nom='fond_$groupe'";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 								$query="INSERT INTO wallpaper VALUES('fond_$groupe','inactif','')";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 								//$fermeture=mysql_close();
 
@@ -1121,13 +1121,13 @@ PRIMARY KEY ( `identifiant` )
 									$liste_nettoye=Array('fond_','type_image_');
 									for($i=0;$i<count($liste_nettoye);$i++){
 										$query="DELETE FROM wallpaper WHERE nom='".$liste_nettoye[$i].$groupe."'";
-										$resultat = mysql_query($query);
+										$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 									}
 
 
 
 									$query="INSERT INTO wallpaper VALUES('fond_$groupe','actif','')";
-									$resultat = mysql_query($query);
+									$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 									$fichier=fopen("$chemin_param_fond/fond_$groupe.txt","w+");
 									$ecriture=fwrite($fichier,'actif');
@@ -1136,17 +1136,17 @@ PRIMARY KEY ( `identifiant` )
 
 
 									$query="INSERT INTO wallpaper VALUES('type_image_$groupe','$type_image','')";
-									$resultat = mysql_query($query);
+									$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 
 
 									if($type_image=="image_fournie"){
 										$query="DELETE FROM wallpaper WHERE nom='image_$groupe'";
-										$resultat = mysql_query($query);
+										$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 										//$query="INSERT INTO wallpaper VALUES('image_$groupe','$image','')";
 										$query="INSERT INTO wallpaper VALUES('image_$groupe','$groupe','')";
-										$resultat = mysql_query($query);
+										$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 										// Generation du fichier de parametres:
 										$fichier=fopen("$chemin_param_fond/parametres_$groupe.sh","w+");
@@ -1185,17 +1185,17 @@ PRIMARY KEY ( `identifiant` )
 										$liste_nettoye=Array('largeur_','hauteur_','couleur1_','couleur2_');
 										for($i=0;$i<count($liste_nettoye);$i++){
 											$query="DELETE FROM wallpaper WHERE nom='".$liste_nettoye[$i].$groupe."'";
-											$resultat = mysql_query($query);
+											$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 										}
 
 										$query="INSERT INTO wallpaper VALUES('largeur_$groupe','$largeur','')";
-										$resultat = mysql_query($query);
+										$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 										$query="INSERT INTO wallpaper VALUES('hauteur_$groupe','$hauteur','')";
-										$resultat = mysql_query($query);
+										$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 										$query="INSERT INTO wallpaper VALUES('couleur1_$groupe','$couleur1','')";
-										$resultat = mysql_query($query);
+										$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 										$query="INSERT INTO wallpaper VALUES('couleur2_$groupe','$couleur2','')";
-										$resultat = mysql_query($query);
+										$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 										//Generation du fichier de parametres:
 										$fichier=fopen("$chemin_param_fond/parametres_$groupe.sh","w+");
@@ -1446,10 +1446,10 @@ couleur2="'.$couleur2.'"
 
 								// Nettoyage:
 								$query="DELETE FROM wallpaper WHERE nom='annotations_".$groupe."'";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 								$query="INSERT INTO wallpaper VALUES('annotations_$groupe','inactif','')";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 								// Si les annotations sont supprimees, il faut regenerer les fonds pour les utilisateurs concernes.
 								// Supprimer le fond.txt pour chaque utilisateur suffit.
@@ -1470,12 +1470,12 @@ couleur2="'.$couleur2.'"
 
 								// Nettoyage:
 								$query="DELETE FROM wallpaper WHERE nom LIKE 'annotation%_%_".$groupe."'";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 								$query="DELETE FROM wallpaper WHERE nom LIKE 'couleur_txt_".$groupe."'";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 								$query="INSERT INTO wallpaper VALUES('annotations_$groupe','actif','')";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 								// DEBUG
 								//echo "\$_POST['couleur_txt']=".$_POST['couleur_txt']."<br />";
@@ -1528,17 +1528,17 @@ couleur2="'.$couleur2.'"
 
 								//$query="INSERT INTO wallpaper VALUES('couleur_txt_$groupe','".$_POST['couleur_txt']."','')";
 								$query="INSERT INTO wallpaper VALUES('couleur_txt_$groupe','".$_POST['couleur_txt']."','')";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 								$query="INSERT INTO wallpaper VALUES('taille_police_$groupe','".$_POST['taille_police']."','')";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 								$query="INSERT INTO wallpaper VALUES('annotation_nom_$groupe','".$_POST['annotation_nom']."','')";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 								//$query="INSERT INTO wallpaper VALUES('annotation_prenom_$groupe','".$_POST['annotation_prenom']."','')";
 								//$resultat = mysql_query($query);
 								$query="INSERT INTO wallpaper VALUES('annotation_classe_$groupe','".$_POST['annotation_classe']."','')";
-								$resultat = mysql_query($query);
+								$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 								/*
 								$query="INSERT INTO wallpaper VALUES('annotation_login_$groupe','".$_POST['afficher_login']."','')";
@@ -1626,11 +1626,11 @@ couleur2="'.$couleur2.'"
 								// Photo:
 								if(isset($_POST['affiche_photo'])){
 									$query="DELETE FROM wallpaper WHERE nom='affiche_photo_$groupe'";
-									$resultat = mysql_query($query);
+									$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 									//$query="INSERT INTO wallpaper VALUES('affiche_photo_$groupe','".$_POST['affiche_photo']."','')";
 									$query="INSERT INTO wallpaper VALUES('affiche_photo_$groupe','1','')";
-									$resultat = mysql_query($query);
+									$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 									if($_POST['affiche_photo']==$groupe){
 										$fichier=fopen("$chemin_param_fond/photos_$groupe.txt","w+");
@@ -1640,10 +1640,10 @@ couleur2="'.$couleur2.'"
 
 										if(strlen(preg_replace("/[0-9]/","",$_POST['dim_photo']))==0){
 											$query="DELETE FROM wallpaper WHERE nom='dim_photo_$groupe'";
-											$resultat = mysql_query($query);
+											$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 											$query="INSERT INTO wallpaper VALUES('dim_photo_$groupe','".$_POST['dim_photo']."','')";
-											$resultat = mysql_query($query);
+											$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 											$fichier=fopen("$chemin_param_fond/dim_photo_$groupe.sh","a+");
 											$ecriture=fwrite($fichier,"dim_photo=".$_POST['dim_photo']."\n");
@@ -1664,10 +1664,10 @@ couleur2="'.$couleur2.'"
 								}
 								else{
 									$query="DELETE FROM wallpaper WHERE nom='affiche_photo_$groupe'";
-									$resultat = mysql_query($query);
+									$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 									$query="INSERT INTO wallpaper VALUES('affiche_photo_$groupe','0','')";
-									$resultat = mysql_query($query);
+									$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 									$fichier=fopen("$chemin_param_fond/photos_$groupe.txt","w+");
 									//$ecriture=fwrite($fichier,'couleur_txt='.$_POST['couleur_txt']."\n");
@@ -1702,7 +1702,7 @@ couleur2="'.$couleur2.'"
 	}
 
 	// Fin de la connexion a MySQL:
-	$fermeture=mysql_close();
+	$fermeture=((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 
 	//Fin de page:
 	include ("pdp.inc.php");

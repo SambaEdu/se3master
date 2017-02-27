@@ -70,10 +70,10 @@ connexion();
 if (! isset($_POST['groups'])) {
 	//incorporation d'un modele
 	$query="SELECT `mod` FROM modele GROUP BY `mod`;";
-	$resultat = mysql_query($query);
+	$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 	echo gettext("Choisir le modele &#224 incorporer au groupe")." $salle <br><FORM METHOD=POST ACTION=\"ajout_cle_groupe.php\" >";
 	$i=0;
-	while ($row = mysql_fetch_array($resultat)) {    
+	while ($row = mysqli_fetch_array($resultat)) {    
 		echo " <input type=\"checkbox\" name=\"modele$i\" id=\"modele$i\" value=\"$row[0]\"/><label for='modele$i'> $row[0]</label><br/>\n";
 		$choix[$i]=$row[0];
 		$i++;
@@ -92,38 +92,38 @@ else {
 	for ($n=0;$n<$nombre;$n++) {
 		$mod=$_POST['modele'.$n];
 		$query="SELECT `cle`,`etat` FROM `modele` WHERE `mod`= '$mod' ;";
-		$resultat = mysql_query($query);
-		while ($row=mysql_fetch_row($resultat)) {
+		$resultat = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+		while ($row=mysqli_fetch_row($resultat)) {
 			$cle=$row[0];
 			$query = "SELECT cleID,Intitule,valeur,antidote,type FROM corresp WHERE cleID='$cle';";
-			$insert = mysql_query($query);
-			$row1 = mysql_fetch_row($insert);
+			$insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+			$row1 = mysqli_fetch_row($insert);
 			$query = "SELECT cleID,valeur FROM restrictions WHERE cleID='$cle' AND groupe='$salle';";
-			$verif = mysql_query($query);
-			$row2=mysql_fetch_row($verif);
+			$verif = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+			$row2=mysqli_fetch_row($verif);
 			
 			if ($row[1] == "1") {
 				$row1[2]=ajoutedoublebarre($row1[2]);
 				if ($row2[0]) {
 					$query = "UPDATE `restrictions` SET `valeur` = '$row1[2]',priorite='$priorite' WHERE `cleID` = '$cle' AND `groupe` = '$salle';";
-					$insert = mysql_query($query);
+					$insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 				} else {
 					$query="INSERT INTO restrictions (resID,valeur,cleID,groupe,priorite) VALUES ('','$row1[2]','$row[0]','$salle','$priorite');";
-					$insert = mysql_query($query);
+					$insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 				}
 			}
 			else{
 				if ($row1[4] == "config") {
 					$query="DELETE FROM restrictions where cleID='$cle';";
-					$insert = mysql_query($query);
+					$insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 				}
 				else {
 					if ($row2[0]) {
 						$query = "UPDATE `restrictions` SET `valeur` = '$row1[3]',priorite='$priorite' WHERE `cleID` = '$cle' AND `groupe` = '$salle';";
-						$insert = mysql_query($query);
+						$insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 					} else {
 						$query="INSERT INTO restrictions (resID,valeur,cleID,groupe,priorite) VALUES ('','$row1[3]','$row[0]','$salle','$priorite');";
-						$insert = mysql_query($query);
+						$insert = mysqli_query($GLOBALS["___mysqli_ston"], $query);
 					}
 				}
 			}

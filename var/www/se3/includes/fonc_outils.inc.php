@@ -299,13 +299,13 @@ function start_parc($action, $parc)
 function testMaintenance($mpenc) { // Retourne si une machine a une demande de maintenance et le type
 	$dbnameinvent="ocsweb";
         include("dbconfig.inc.php");
-	$authlink_invent=@mysql_connect($_SESSION["SERVEUR_SQL"],$_SESSION["COMPTE_BASE"],$_SESSION["PSWD_BASE"]);
-	@mysql_select_db($dbnameinvent) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
+	$authlink_invent=@($GLOBALS["___mysqli_ston"] = mysqli_connect($_SESSION["SERVEUR_SQL"], $_SESSION["COMPTE_BASE"], $_SESSION["PSWD_BASE"]));
+	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbnameinvent)) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
         $query="select * from repairs where (STATUT='2' or STATUT='0') and NAME='$mpenc'";
-        $result = mysql_query($query,$authlink_invent);
-        $ligne=mysql_num_rows($result);
+        $result = mysqli_query($authlink_invent, $query);
+        $ligne=mysqli_num_rows($result);
 	if ($ligne > 0) {
-                while ($row = mysql_fetch_array($result)) {
+                while ($row = mysqli_fetch_array($result)) {
                         return $row["PRIORITE"];
 		}
 	}
@@ -325,15 +325,15 @@ function der_inventaire($nom_machine) { // retourne la date du dernier inventair
         include "dbconfig.inc.php";
 	$dbnameinvent="ocsweb";
 
-	$authlink_invent=@mysql_connect($_SESSION["SERVEUR_SQL"],$_SESSION["COMPTE_BASE"],$_SESSION["PSWD_BASE"]);
-	@mysql_select_db($dbnameinvent) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
+	$authlink_invent=@($GLOBALS["___mysqli_ston"] = mysqli_connect($_SESSION["SERVEUR_SQL"], $_SESSION["COMPTE_BASE"], $_SESSION["PSWD_BASE"]));
+	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbnameinvent)) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
 	
 	$query="select OSNAME,WORKGROUP,PROCESSORS,MEMORY,IPADDR,LASTDATE from hardware where NAME='$nom_machine'";
-	$result = mysql_query($query,$authlink_invent);
+	$result = mysqli_query($authlink_invent, $query);
 	if ($result) {
-        	$ligne=mysql_num_rows($result);
+        	$ligne=mysqli_num_rows($result);
 		if ($ligne > 0) {
-                	while ($res = mysql_fetch_array($result)) {
+                	while ($res = mysqli_fetch_array($result)) {
 				$retour = $res["OSNAME"]." WG : ".$res["WORKGROUP"]." P : ".$res["PROCESSORS"]." Mem : ".$res["MEMORY"]." DI : ";
 	        		if ($res["LASTDATE"]) {
 		        		$retour .= date('d M Y',strtotime($res["LOGDATE"]));
@@ -406,15 +406,15 @@ function type_os($nom_machine) { // retourne l'os de la machine
     include "dbconfig.inc.php";
 	$dbnameinvent="ocsweb";
 
-	$authlink_invent=@mysql_connect($_SESSION["SERVEUR_SQL"],$_SESSION["COMPTE_BASE"],$_SESSION["PSWD_BASE"]);
-	@mysql_select_db($dbnameinvent) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
+	$authlink_invent=@($GLOBALS["___mysqli_ston"] = mysqli_connect($_SESSION["SERVEUR_SQL"], $_SESSION["COMPTE_BASE"], $_SESSION["PSWD_BASE"]));
+	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbnameinvent)) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
 	
 	$query="select OSNAME from hardware where NAME='$nom_machine' order by LASTDATE DESC limit 0,1";
-	$result = mysql_query($query,$authlink_invent);
+	$result = mysqli_query($authlink_invent, $query);
 	if ($result) {
-        	$ligne=mysql_num_rows($result);
+        	$ligne=mysqli_num_rows($result);
 		if ($ligne > 0) {
-                	while ($res = mysql_fetch_array($result)) {
+                	while ($res = mysqli_fetch_array($result)) {
 				$retour = $res["OSNAME"];
 				if (preg_match('/XP/i',$retour)) { // 6 types d'icones 98 / XP / 7 / Linux / Vista / 10
 					$retour="XP";
@@ -775,7 +775,7 @@ function entree_table_param_exist($nom,$valeur,$cat,$comment) {
 	// include ("config.inc.php");
 	// si la variable $nom n'est pas definie on cree l'entree dans la base sql
 	if ($$nom == "") {
-	        $resultat=mysql_query("INSERT into params set id='NULL', name='$nom', value='$valeur', srv_id='0',descr='$comment',cat='$cat'");
+	        $resultat=mysqli_query($GLOBALS["___mysqli_ston"], "INSERT into params set id='NULL', name='$nom', value='$valeur', srv_id='0',descr='$comment',cat='$cat'");
 		return 0;
 	}	
 }

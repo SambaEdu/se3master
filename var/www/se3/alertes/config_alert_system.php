@@ -57,14 +57,14 @@ $frequence_mail_=$_GET['frequence_mail'];
 // Cree ou modifier une alerte de type systeme
 if ($action=="new") {
 
-	$authlink = mysql_connect($dbhost,$dbuser,$dbpass);
-	@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
+	$authlink = ($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
 
 	// SI ID n'est pas vide alors on est en modification
 	if($ID != "") {
 		$query_info="SELECT * FROM alertes WHERE ID='$ID';";
-		$result_info=mysql_query($query_info,$authlink);
-		$row = mysql_fetch_array($result_info);
+		$result_info=mysqli_query($authlink, $query_info);
+		$row = mysqli_fetch_array($result_info);
 	}
 	
 	echo "<H1>".gettext("Gestion des alertes ")."</H1>\n";

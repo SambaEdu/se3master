@@ -69,8 +69,8 @@ if ($devoir) {
  // verification de l'id_devoir
   $req =" SELECT id_devoir FROM $table WHERE BINARY id_devoir='$id_devoir' ";
   // echo $req;
-  $res=mysql_query($req);
-  $nb=mysql_num_rows($res);
+  $res=mysqli_query($GLOBALS["___mysqli_ston"], $req);
+  $nb=mysqli_num_rows($res);
   if ($nb >0) {
      die ("<h4>".gettext("L'identifiant du devoir a d&#233;j&#224; &#233;t&#233; utilis&#233; !")."<br>".gettext("Veuillez en choisir un autre.")."</h4>\n");
   }
@@ -308,7 +308,7 @@ if ($devoir) {
   $req_devoir="INSERT INTO $table ";
   $req_devoir .=" (id_prof,id_devoir,nom_devoir,date_distrib,date_recup,description,liste_distrib) ";
   $req_devoir .=" VALUES ('$id_prof','$id_devoir','$nom_devoir','$now','$date_retour','$description','$liste_eleves') ";
-  $ok = mysql_query($req_devoir);
+  $ok = mysqli_query($GLOBALS["___mysqli_ston"], $req_devoir);
  }
 // else
 // echo "Echec de distribution du devoir $devoir";

@@ -23,8 +23,8 @@
 
 require_once('entete_ajax.inc.php');
 $query="select * from corresp";
-$resultat=mysql_query($query);
-$ligne=mysql_num_rows($resultat);
+$resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+$ligne=mysqli_num_rows($resultat);
 
 if($ligne == "0") { // si aucune cle dans la base SQL
 	$ok="0";

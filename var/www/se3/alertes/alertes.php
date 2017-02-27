@@ -47,14 +47,14 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 
   // Supprime une alerte perso
   if ($action=="suppr") {
-	$authlink = mysql_connect($dbhost,$dbuser,$dbpass);
-	@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
+	$authlink = ($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
 	$query_info="SELECT * FROM alertes WHERE ID='$ID';";
-	$result_info=mysql_query($query_info,$authlink);
-	$row = mysql_fetch_array($result_info);
+	$result_info=mysqli_query($authlink, $query_info);
+	$row = mysqli_fetch_array($result_info);
 
 	$query_suppr="DELETE FROM alertes WHERE ID='$ID'";
-	$result_suppr=mysql_query($query_suppr,$authlink) or die("Erreur lors de la suppression de l'alerte");
+	$result_suppr=mysqli_query($authlink, $query_suppr) or die("Erreur lors de la suppression de l'alerte");
 	if ($result_suppr) {
 		echo "<center>";
 		echo gettext("L'alerte ").$row['NAME'].gettext(" a &#233;t&#233; supprim&#233;e.");
@@ -123,8 +123,8 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 			echo "</center>";
 		} else {
 			//tout est ok on peut accepter
-			$authlink = mysql_connect($dbhost,$dbuser,$dbpass);
-			@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
+			$authlink = ($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+			@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
 	
 	
 			if ($ID !="") {
@@ -133,7 +133,7 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 				$query="INSERT INTO alertes (`ID`,`NAME`,`MAIL`,`Q_ALERT`,`VALUE`,`CHOIX`,`TEXT`,`AFFICHAGE`,`VARIABLE`,`PREDEF`,`MENU`,`ACTIVE`,`SCRIPT`,`PARC`,`FREQUENCE`,`PERIODE_SCRIPT`,`MAIL_FREQUENCE`) VALUES ('NULL','$name_alert','$mail_alert','$q_alert_alert','$value_alert','$choix_alert','$text_alert','1','$variable_alert','0','','$active_alert','$script_alert','','$frequence_alert','',$frequence_mail)";
 
 			}
-			$result=mysql_query($query,$authlink) or die("Erreur lors de la modification de l'alerte");
+			$result=mysqli_query($authlink, $query) or die("Erreur lors de la modification de l'alerte");
 
 			if ($result) {
 				echo "<center>";
@@ -152,18 +152,18 @@ if (is_admin("computers_is_admin",$login)=="Y") {
   if ($action == "conf_mail") {
 	// connexion a la base
     	include "config.inc.php";
-    	$auth = @mysql_connect($dbhost,$dbuser,$dbpass);
-    	@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
+    	$auth = @($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+    	@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbname.");
     	$query="select NAME,ID from alertes where PREDEF='1'";
-    	$resultat=mysql_query($query,$auth);
-    	$ligne=mysql_num_rows($resultat);
+    	$resultat=mysqli_query($auth, $query);
+    	$ligne=mysqli_num_rows($resultat);
     	if ($ligne > "0") {
-		while($row = mysql_fetch_array($resultat)) {
+		while($row = mysqli_fetch_array($resultat)) {
             		$test = $$row[1];
             		if ($test == "on")   { $active="1"; } 
             		if ($test == "")  { $active="0"; }
             		$query1="UPDATE alertes SET ACTIVE='$active' WHERE ID='$row[1]' AND PREDEF='1'";
-			$result=mysql_query($query1);
+			$result=mysqli_query($GLOBALS["___mysqli_ston"], $query1);
         	}
     	}
   }
@@ -186,8 +186,8 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 
 // Affichage sous forme de 2 tableaux (alertes predef et alertes perso 
 include "config.inc.php";
-$auth = @mysql_connect($dbhost,$dbuser,$dbpass);
-@mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
+$auth = @($GLOBALS["___mysqli_ston"] = mysqli_connect($dbhost, $dbuser, $dbpass));
+@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $dbname)) or die("Impossible de se connecter &#224; la base $dbnameinvent.");
 echo "<BR><BR>";
 
 echo "<FORM ACTION=\"alertes.php\" method=\"get\" >";
@@ -196,10 +196,10 @@ echo "<CENTER><TABLE border=1 width=\"60%\">";
 
 echo "<TR><TD class=\"menuheader\" height=\"30\" align=center colspan=\"4\">".gettext("Alertes pr&#233;d&#233;finies")."</TD></TR>\n";
 $query="select ID,TEXT,VARIABLE,ACTIVE,NAME  from alertes where PREDEF='1'";
-$resultat=mysql_query($query,$auth);
-$ligne=mysql_num_rows($resultat);
+$resultat=mysqli_query($auth, $query);
+$ligne=mysqli_num_rows($resultat);
 if ($ligne > "0") {
-	while($row = mysql_fetch_array($resultat)) {
+	while($row = mysqli_fetch_array($resultat)) {
 	        $ajout=""; $statut=""; 
         	if ($row['ACTIVE'] == "1") {   
 			$ajout=" CHECKED"; 
@@ -231,8 +231,8 @@ echo "</TD></TR>\n";
 // $authlink = mysql_connect($dbhost,$dbuser,$dbpass);
 // @mysql_select_db($dbname) or die("Impossible de se connecter &#224; la base $dbname.");
 $query_info="SELECT * FROM alertes where PREDEF='0';";
-$result_info=mysql_query($query_info,$authlink);
-while ($row = mysql_fetch_array($result_info)) {
+$result_info=mysqli_query($authlink, $query_info);
+while ($row = mysqli_fetch_array($result_info)) {
        // Si l'alete est active ou non
        if ($row["ACTIVE"]=="1") {
                $statut=aide('L\&#039;alerte est actuellement activ&#233;e.Pour d&#233;activer cette alerte, cliquer sur l\&#039;icone Modifier <IMG  style=\&#034;border: 0px solid ;\&#034; SRC=\&#034;../elements/images/zoom.png\&#034; ALT=\&#034;Modifier\&#034;> et choisissez Alerte active, Non',"<IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\" ALT=\"Alerte active\"></a>");

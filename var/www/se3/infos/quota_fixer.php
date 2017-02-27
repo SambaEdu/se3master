@@ -72,7 +72,7 @@ if (isset($browser)) {
         $browser = preg_replace('/\\\++/','/', $browser); //gestion de \ qui passe mal (suppression des \\ en les rempla&#231;ant par un /)
         exec("sudo /usr/share/se3/scripts/warn_quota.sh $browser");
         $query="UPDATE params SET value=\"$browser\" WHERE name=\"quota_browser\";";
-	mysql_query($query);
+	mysqli_query($GLOBALS["___mysqli_ston"], $query);
 }
 
 if (isset($quota) or isset($suppr)) {
@@ -206,10 +206,10 @@ if($nbr_user>100000){
 if ($valider_home == "yes") {
 	if ($messtxt_home == "on" and $partition == "/home") {
 	        $query="UPDATE params SET value=\"1\" WHERE name=\"quota_warn_home\";";
-	        mysql_query($query);
+	        mysqli_query($GLOBALS["___mysqli_ston"], $query);
   	} else {
         	$query="UPDATE params SET value=\"0\" WHERE name=\"quota_warn_home\";";
-        	mysql_query($query);
+        	mysqli_query($GLOBALS["___mysqli_ston"], $query);
   	}
         //effet immediat
         exec("sudo /usr/share/se3/scripts/warn_quota.sh");
@@ -219,10 +219,10 @@ if ($valider_home == "yes") {
 if ($valider_var_se3 == "yes") {
 	if ($messtxt_var_se3 == "on" and $partition == "/var/se3") {
 		$query="UPDATE params SET value=\"1\" WHERE name=\"quota_warn_varse3\";";
-	        mysql_query($query);
+	        mysqli_query($GLOBALS["___mysqli_ston"], $query);
         } else {
 		$query="UPDATE params SET value=\"0\" WHERE name=\"quota_warn_varse3\";";
-        	mysql_query($query);
+        	mysqli_query($GLOBALS["___mysqli_ston"], $query);
   	}
         //effet immediat
         exec("sudo /usr/share/se3/scripts/warn_quota.sh");
@@ -245,7 +245,7 @@ $arr = array("/home", "/var/se3");
 echo "<center>\n";
 foreach ($arr as $partit) {
 	$query="SELECT type,nom,quotasoft,quotahard FROM quotas WHERE partition='$partit' ORDER BY type DESC, nom";
-	$resultat=mysql_query($query);
+	$resultat=mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
 	echo "<FORM ACTION=\"quota_fixer.php\" method=\"post\">\n";
 	echo "<table border=1 width=\"80%\">\n";
@@ -253,7 +253,7 @@ foreach ($arr as $partit) {
 	echo gettext("Quotas actuels sur")." $partit</TD></TR>\n";
 
 	$i=0;
-	while ($line = mysql_fetch_assoc($resultat)) {
+	while ($line = mysqli_fetch_assoc($resultat)) {
  		if ($i==0){
  			// ligne d'entetes
   			echo "<tr><td align=center width=\"40%\">".gettext("Nom (utilisateur ou groupe)")."</td><td align=center  width=\"30%\">".gettext("Quota")."</td><td align=center width=\"30%\">".gettext("D&#233;passement temporaire autoris&#233;")."</td>\n";
@@ -314,10 +314,10 @@ foreach ($arr as $partit) {
 
 	//echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape('P&#233;riode durant laquelle l\'utilisateur est autoris&#233; &#224; d&#233;passer son quota. Au del&#224;, il devra redescendre en dessous de son quota pour r&#233;initialiser (instantan&#233;ment) sa p&#233;riode de gr&#226;ce. Dans le cas contraire, il ne pourra plus rien &#233;crire sur $partit";
 
-	if ( "$partit" == "/home" ) {$resultat=mysql_query("select value from params where name='quota_warn_home'");}
+	if ( "$partit" == "/home" ) {$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "select value from params where name='quota_warn_home'");}
 	else
-  	{$resultat=mysql_query("select value from params where name='quota_warn_varse3'");}
-	$line = mysql_fetch_assoc($resultat);
+  	{$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "select value from params where name='quota_warn_varse3'");}
+	$line = mysqli_fetch_assoc($resultat);
 
 	//$test_exist=exec("cat /etc/cron.d/se3 | grep \"$(echo \"warn_quota.sh $partit\")\"");
 
@@ -337,34 +337,34 @@ foreach ($arr as $partit) {
 
             } else $browser="$quota_browser";
         // 
-            $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule='warnquotas'");
-            if(mysql_num_rows($result)==0){
+            $result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT CleID FROM corresp WHERE Intitule='warnquotas'");
+            if(mysqli_num_rows($result)==0){
                     $query = "INSERT INTO corresp VALUES('','warnquotas','$browser $urlse3','','REG_SZ','systeme','','2000,XP,Vista,Seven','HKEY_CURRENT_USER\\\Software\\\Microsoft\\\Windows\\\CurrentVersion\\\Run\\\WarnQuota','Avertissement quota','config')";
-                    mysql_query($query);
-                    $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule='warnquotas'");
+                    mysqli_query($GLOBALS["___mysqli_ston"], $query);
+                    $result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT CleID FROM corresp WHERE Intitule='warnquotas'");
             } 
     //			
-            $row = mysql_fetch_row($result);
-            $result=mysql_query("SELECT CleID FROM restrictions WHERE CleID='$row[0]'");
+            $row = mysqli_fetch_row($result);
+            $result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT CleID FROM restrictions WHERE CleID='$row[0]'");
             //echo $row[0];
-            if(mysql_num_rows($result)==0){
+            if(mysqli_num_rows($result)==0){
                     $query = "INSERT INTO restrictions VALUES('','$row[0]','overfill','$browser $urlse3','')";
 
             } 
             else {
                     $query = "UPDATE restrictions SET valeur='$browser $urlse3' where CleID='$row[0]'";
             }
-            $result=mysql_query($query);
+            $result=mysqli_query($GLOBALS["___mysqli_ston"], $query);
             //echo $result;
         } 
         else  {
-                $result=mysql_query("SELECT CleID FROM corresp WHERE Intitule='warnquotas'");
-                if(mysql_num_rows($result)!=0){
-                    $row = mysql_fetch_row($result);
-                    $result=mysql_query("SELECT CleID FROM restrictions WHERE CleID='$row[0]'");
-                    if(mysql_num_rows($result)!=0){
+                $result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT CleID FROM corresp WHERE Intitule='warnquotas'");
+                if(mysqli_num_rows($result)!=0){
+                    $row = mysqli_fetch_row($result);
+                    $result=mysqli_query($GLOBALS["___mysqli_ston"], "SELECT CleID FROM restrictions WHERE CleID='$row[0]'");
+                    if(mysqli_num_rows($result)!=0){
                         $query="DELETE FROM restrictions WHERE cleID='$row[0]'";
-                        $result=mysql_query($query);
+                        $result=mysqli_query($GLOBALS["___mysqli_ston"], $query);
                     }
                 }
             
@@ -427,11 +427,11 @@ if (!isset($partition)) {$partition ="/home";}
  
  	//$test_exist=exec("cat /etc/cron.d/se3 | grep \"$(echo \"warn_quota.sh $partition\")\"");
 	// PERMET L'AFFICHAGE DE CE QU'IL Y A DEJA DE REGLE DANS MYSQL POUR LA PARTITION CONSIDEREE
-	if ( "$partition" == "/home" ) {$resultat=mysql_query("select value from params where name='quota_warn_home'");}
+	if ( "$partition" == "/home" ) {$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "select value from params where name='quota_warn_home'");}
 	else
-  	{$resultat=mysql_query("select value from params where name='quota_warn_varse3'");}
+  	{$resultat=mysqli_query($GLOBALS["___mysqli_ston"], "select value from params where name='quota_warn_varse3'");}
 	
-	$line = mysql_fetch_assoc($resultat);
+	$line = mysqli_fetch_assoc($resultat);
 //	foreach ($line as $col_value) {
 //		if ( "$col_value" == "1" ) {$objet_var="$objet_var checked ";}
 //	}
