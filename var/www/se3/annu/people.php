@@ -143,12 +143,13 @@ echo "<table width=\"80%\"><tr><td>";
 
 	// Affichage Menu people_admin
 	if (is_admin("Annu_is_admin",$login) == "Y" ) {
+		
 		echo "
 	<br>
 	<u>".gettext("Autres actions possibles")."</u>&nbsp;: <br />
 	<ul style=\"color: red;\">
-		<li><a href=\"mod_user_entry.php?uid=".$user["uid"].">".gettext("Modifier le compte")."</a><br />
-		<li><a href=\"pass_user_init.php?uid=".$user["uid"].">".gettext("R&#233;initialiser le mot de passe")."</a><br />";
+		<li><a href=\"mod_user_entry.php?uid=".$user["uid"]."\">".gettext("Modifier le compte")."</a><br />
+		<li><a href=\"pass_user_init.php?uid=".$user["uid"]."\">".gettext("R&#233;initialiser le mot de passe")."</a><br />";
 
 		//si compte actif
 		if ("$smbversion" == "samba3") {

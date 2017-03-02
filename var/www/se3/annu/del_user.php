@@ -46,7 +46,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 	
 	$uid=$_GET['uid'];
 	// suppression d'un d'utilisateur
-    	if ($uid == "admin" )  {
+    	if ($uid == "admin" || $uid == "root" )  {
       		echo "<div class=error_msg>".gettext("Vous ne pouvez pas effacer le compte administrateur !")."</div>";
     	} elseif (!$uid)  {
       		echo "<div class=error_msg>".gettext("Vous devez pr&#233;ciser le login du compte a effacer ! !")."</div>";
