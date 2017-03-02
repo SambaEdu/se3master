@@ -50,7 +50,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 
 	$filter="8_".$cn;
 	aff_trailer ("$filter");
-    	if ( $cn !="Eleves" && $cn !="Profs" && $cn !="Administratifs" ) {
+    	if ( $cn !="Eleves" && $cn !="root" && $cn !="Profs" && $cn !="Administratifs" ) {
       		$uids = search_uids ("(cn=".$cn.")");
       		$people = search_people_groups ($uids,"(sn=*)","cat");
       		echo "<h4>".gettext("Modification des membres du groupe")." $cn</h4>\n";

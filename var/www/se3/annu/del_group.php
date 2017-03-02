@@ -43,7 +43,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
 
 	aff_trailer ("6");
 	$group=search_groups ("(cn=".$cn.")");
-    	if ( $cn !="Eleves" && $cn !="Profs" && $cn !="Administratifs" && $group[0]["gidnumber"]!=$defaultgid) {
+    	if ( $cn !="Eleves" && $cn !="root" && $cn !="Profs" && $cn !="Administratifs" && $group[0]["gidnumber"]!=$defaultgid) {
       		exec ("/usr/share/se3/sbin/groupDel.pl $cn",$AllOutPut,$ReturnValue);
       		if ($ReturnValue == "0") {
         		echo "<strong>".gettext("Le groupe")." $cn ".gettext(" a &#233;t&#233; supprim&#233; avec succ&#232;s.")."</strong><br>\n";
@@ -51,7 +51,7 @@ if (is_admin("Annu_is_admin",$login)=="Y") {
         		echo "<div class='error_msg'>".gettext("Echec de la suppression ")."<font color='black'>".gettext(" (type d'erreur :")." $ReturnValue)</font>, ".gettext(" Veuillez contacter ")."<A HREF='mailto:$MelAdminLCS?subject=PB changement mot de passe'>".gettext("l'administrateur du syst&#232;me")."</A></div><BR>\n";
        		}
     	} else {
-      		echo "<div class=error_msg>".gettext("La suppression des groups principaux (Eleves, Profs, Administratifs) ou du groupe par d&#233;faut n'est pas autoris&#233;e !")."</div>";
+      		echo "<div class=error_msg>".gettext("La suppression des groups principaux (Eleves, Profs, Administratifs, root) ou du groupe par d&#233;faut n'est pas autoris&#233;e !")."</div>";
     	}
 } else {
     echo "<div class=error_msg>".gettext("Cette fonctionnalit&#233;, n&#233;cessite les droits d'administrateur du serveur SambaEdu !")."</div>";
