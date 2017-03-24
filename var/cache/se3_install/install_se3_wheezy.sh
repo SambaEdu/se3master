@@ -328,7 +328,7 @@ if [ ! "$rep" = "n" ]; then
 	fi
 	if [ -z "$MYSQLPW" ]; then
 		echo -e "vous n'avez pas saisi de mot de passe root MySQL, celui-ci va être généré aléatoirement"
-		MYSQLPW=$(mkpasswd | LC_ALL=C sed -r 's/[^a-zA-Z0-9]//g')
+		MYSQLPW=$(makepasswd | LC_ALL=C sed -r 's/[^a-zA-Z0-9]//g')
 	fi
 	echo -e "$COLCMD\c "
 	mysqladmin password $MYSQLPW 2>/dev/null && echo -e "${COLINFO}Le mot de passe root MySQL a été initialisé à $MYSQLPW"
