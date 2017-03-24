@@ -1,7 +1,7 @@
 #!/bin/bash
 # Script largement ébauché par Franck Molle...
-# ... poursuivi par Stéphane Boireau (03/10/2005)
-#
+# ... poursuivi par Stéphane Boireau 
+# last update 03/2017 - prise en compte proxy
 ## $Id$ ##
 #
 ##### Permet de changer l'adresse IP du serveur se3 #####
@@ -111,6 +111,7 @@ OLD_NETWORK=$(cat $FICHIER_TEMP | grep network | sed -e "s/network//g" | tr "\t"
 OLD_BROADCAST=$(cat $FICHIER_TEMP | grep broadcast | sed -e "s/broadcast//g" | tr "\t" " " | sed -e "s/ //g")
 OLD_GATEWAY=$(cat $FICHIER_TEMP | grep gateway | sed -e "s/gateway//g" | tr "\t" " " | sed -e "s/ //g")
 OLD_DNS=$(grep "nameserver" /etc/resolv.conf |  awk '{print $2}' | head -n1)
+OLD_PROXY=$(grep http_proxy= /etc/profile | tr -d "\"" | cut -d "/" -f3)
 
 echo -e "$COLINFO"
 echo "Configuration IP actuelle:"
@@ -121,6 +122,7 @@ echo "Réseau :     $OLD_NETWORK"
 echo "Broadcast :  $OLD_BROADCAST"
 echo "Passerelle : $OLD_GATEWAY"
 echo "DNS :        $OLD_DNS"
+echo "PROXY :	   $OLD_PROXY"
 
 echo -e "$COLTXT"
 echo -e "Nouvelle IP: $COLSAISIE\c"
@@ -185,6 +187,16 @@ if [ -z "$NEW_DNS" ]; then
 fi
 
 
+echo -e "$COLTXT"
+echo -e "Nouveau Proxy : [${COLDEFAUT}$AUCUN${COLTXT}] $COLSAISIE\c"
+echo "Laisser vide si pas de proxy sinon saisir ip-proxy:port"
+
+read NEW_PROXY
+
+
+
+
+
 echo -e "$COLINFO"
 echo "Vous vous apprêtez à modifier les paramètres suivants:"
 echo -e "               AVANT                   APRES"
@@ -194,6 +206,7 @@ echo -e "Réseau:		$OLD_NETWORK		$NEW_NETWORK"
 echo -e "Broadcast:	$OLD_BROADCAST		$NEW_BROADCAST"
 echo -e "Passerelle:	$OLD_GATEWAY		$NEW_GATEWAY"
 echo -e "DNS:		$OLD_DNS		$NEW_DNS"
+echo -e "PROXY:		$OLD_PROXY		$NEW_PROXY"
 
 POURSUIVRE
 
@@ -414,6 +427,11 @@ ldapmodify -x -D "$ADMIN_DN" -w $(cat /etc/ldap.secret) -f /tmp/maj_chgt_ip_se3.
 [ -n "$dhcp_wins" ] && /usr/share/se3/scripts/makedhcpdconf 
 
 
+if [ "$OLD_PROXY" != "$NEW_PROXY" ]; then
+	echo "Prise en compte du nouveau proxy"
+	/usr/share/se3/scripts/modifProxy.sh "$NEW_PROXY"
+fi
+
 
 
 # domscripts
@@ -502,6 +520,7 @@ ldapmodify -x -D \"$ADMIN_DN\" -w $(cat /etc/ldap.secret) -f /tmp/retablissement
 # Nettoyage /home/netlogon/machine/
 rm -rf /home/netlogon/machine/*
 
+/usr/share/se3/scripts/modifProxy.sh \"$OLD_PROXY\"
 
 # logonpy
 /usr/share/se3/sbin/update-logonpy.sh
