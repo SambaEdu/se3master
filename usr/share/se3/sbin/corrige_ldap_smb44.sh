@@ -21,23 +21,36 @@ net groupmap add ntgroup=Profs unixgroup=Profs type=domain comment="Profs du dom
 net groupmap add ntgroup="Utilisateurs du domaine" rid="513" unixgroup="lcs-users" type="domain"
 net groupmap add ntgroup="machines" rid="515" unixgroup="machines" type="domain"
 
-
+echo "Correction des attributs du compte admin si besoin"
 testgecos_adm=$(ldapsearch -xLLL uid=admin gecos | grep '^gecos: ')
 if [ -z "$testgecos_adm" ]; then
-	echo "Correction des attributs du compte admin"
+	echo "Ajout champs Gecos"
 	ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
 dn: uid=admin,$PEOPLERDN,$BASEDN
 changetype: modify
-add: givenName
-givenName: Admin
--
-add: initials
-initials: Admin
--
 add: gecos
 gecos: Administrateur  Se3,,,
 EOF
 fi
+
+testgn_adm=$(ldapsearch -xLLL uid=admin givenName | grep '^givenName: ')
+if [ -z "$testgn_adm" ]; then
+	echo "Ajout champs givenName"
+	ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+add: givenName
+givenName: Admin
+EOF
+fi
+
+testinit_adm=$(ldapsearch -xLLL uid=admin initials | grep '^initials: ')
+if [ -z "$testinit_adm" ]; then
+	echo "Ajout champs Initials"
+	ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+add: initials
+initials: Admin
+EOF
+fi
+
 
 testoldroot=$(ldapsearch -xLLL -b cn=root,$BASEDN uid | grep 'uid: root')
 if [ -n "$testoldroot" ]; then
