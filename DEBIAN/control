@@ -1,5 +1,5 @@
-Package: se4
-Version: 4.0.0~0
+Package: se3
+Version: 3.1.0~3
 Section: contrib
 Priority: optional
 Architecture: all
