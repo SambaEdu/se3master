@@ -1,0 +1,21 @@
+#!/bin/sh
+# Wrapper for PHP-fcgi
+# This wrapper can be used to define settings before launching the PHP-fcgi binary.
+# Define the path to php.ini. This defaults to /etc/phpX/cgi.
+
+#PHP_INI_SCAN_DIR=/var/www/se3
+#export PHP_INI_SCAN_DIR
+
+#export PHPRC=/home/user/domain/conf
+
+# Define the number of PHP child processes that will be launched.
+# This is low to control memory usage on a server that might launch
+# these processes for lots of domains.
+# Leave undefined to let PHP decide.
+# export PHP_FCGI_CHILDREN=1
+
+# Maximum requests before a process is stopped and a new one is launched
+export PHP_FCGI_MAX_REQUESTS=5000
+# Launch the PHP CGI binary
+# This can be any other version of PHP which is compiled with FCGI support.
+exec /usr/bin/php5-cgi
