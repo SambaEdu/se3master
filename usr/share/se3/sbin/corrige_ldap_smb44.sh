@@ -113,7 +113,21 @@ EOF
 fi
 
 testsambadomain=$(ldapsearch -xLLL objectClass=sambaDomain sambaDomainName | grep '^sambaDomainName: ')
+
+
+
 if [ -z "$testsambadomain" ]; then
+	add_sambadom="yes"
+else
+	testalgo=$(ldapsearch -xLLL sambaDomainName=$se3_domain sambaAlgorithmicRidBase | grep 5005)
+	if [ -n "$testalgo" ]; then
+		add_sambadom="yes"
+		echo "Suppression sambaDomainName deffectueux"
+		ldapdelete -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" sambaDomainName=$se3_domain,$BASEDN
+	fi
+fi
+
+if [ "$add_sambadom" = "yes" ]; then
 	echo "Ajout de l'entrée sambaDomainName dans l'annuaire"
 ldapadd -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
 dn: sambaDomainName=$se3_domain,$BASEDN
@@ -137,6 +151,8 @@ sambaPwdHistoryLength: 0
 sambaNextRid: 6752
 EOF
 fi
+
+
 
 echo "Modification si besoin des attributs samba pour les utilisateurs"
 ldapsearch -xLLL -D $adminRdn,$ldap_base_dn -b $PEOPLERDN,$BASEDN -w $adminPw objectClass=person uid| grep uid:| cut -d ' ' -f2| grep -v "^root$\|^nobody$\|^admin$" | while read uid
