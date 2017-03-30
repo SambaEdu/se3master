@@ -482,7 +482,7 @@ cp -f /etc/ldap/config.se3.ori /etc/ldap/config.se3
 echo \"UPDATE params SET value='http://$OLD_IP:909' WHERE name='urlse3';\" > /tmp/retablissement_ip_se3.sql
 echo \"UPDATE params SET value='$OLD_IP' WHERE name='ldap_server';\" >> /tmp/retablissement_ip_se3.sql
 echo \"UPDATE params SET value='$OLD_IP' WHERE name='se3ip';\" >> /tmp/retablissement_ip_se3.sql
-echo \"UPDATE params SET value='$NEW_NETMASK' WHERE name='se3mask';\" >> /tmp/maj_chgt_ip_se3.sql
+echo \"UPDATE params SET value='$OLD_NETMASK' WHERE name='se3mask';\" >> /tmp/maj_chgt_ip_se3.sql
 
 
 "> retablissement_config_initiale.sh
