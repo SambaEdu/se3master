@@ -15,7 +15,7 @@ if [ "$1" = "all" ];then
 
 	for dossier in $(ls /home/profiles/ 2>/dev/null)
 		do
-			user=$(echo "$dossier" | cut -d "." -f1)
+			user=$(echo "$dossier" | sed -re 's/\.V([0-9]*)$//g')
 			if [ -z "$(grep "$user" $temoin)" ]; then
 				echo "$user" >> $temoin
 				echo "Suppression profil Utilisateur $user <br/>"
