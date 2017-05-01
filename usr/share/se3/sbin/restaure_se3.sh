@@ -273,8 +273,8 @@ restaure_mysql()
 restaure_samba()
 {
     cd /
-    echo -e "${jaune}`date +%R` ${neutre}Restauration de Samba" 2>&1 | tee -a $COURRIEL
-    cp -ar $SAUVEGARDEHOME/samba/* /etc/samba
+    #echo -e "${jaune}`date +%R` ${neutre}Restauration de Samba" 2>&1 | tee -a $COURRIEL
+    #cp -ar $SAUVEGARDEHOME/samba/* /etc/samba
     echo -e "${jaune}`date +%R` ${neutre}Restauration du secrets.tdb" 2>&1 | tee -a $COURRIEL
     # le fichier secrets.tdb a été sauvegardé à partir du répertoire /var/se3/save
     # si la version du se3 est inférieure à wheezy (7 → wheezy)
@@ -644,7 +644,7 @@ restaurer_serveur()
     restaure_imprimantes
     lancement_des_serveurs
     corrige_ldap
-    restaure_mysql
+    #restaure_mysql
     restaure_adminse3
     restaure_dhcp
     DATE_FIN=$(date +%s)            # Fin de la restauration en secondes
