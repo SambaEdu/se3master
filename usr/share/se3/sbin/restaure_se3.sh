@@ -206,10 +206,10 @@ restaure_varse3home()
                 cd /home
                 echo -e "${jaune}`date +%R` ${neutre}Restauration des droits" 2>&1 | tee -a $COURRIEL
                 /usr/share/se3/scripts/restore_droits.sh
-                ;;
+            ;;
             *)
                 echo -e "${jaune}`date +%R` ${neutre}Pas de restauration des homes et de /var/se3" 2>&1 | tee -a $COURRIEL
-                ;;
+            ;;
         esac
     else
         echo -e ""
@@ -383,18 +383,18 @@ choix_archive_sauvegarde()
                     echo -e "${orange}Il n'y a pas d'archive pour le jour choisi : $JOUR" 2>&1 | tee -a $COURRIEL
                     echo -e "${neutre}"
                 fi
-                ;;
+            ;;
             q)
                 # abandon en cours possible
                 abandonner
                 return 1
-                ;;
+            ;;
             *)
                 echo -e "${rouge}Le choix saisi ${vert}$JOUR${rouge} est incorrect${neutre}"
                 echo -e "Exemples de choix corrects : lun, mar, mer, jeu, ven, sam, dim ou Sun, Mon,…"
                 echo -e "${orange}Si vous voulez abandonner la restauration, choisir q${neutre}"
                 echo -e ""
-                ;;
+            ;;
         esac
     done
 }
@@ -484,10 +484,10 @@ collecter_candidats()
                     # le candidat contient au moins une archive
                     candidat[${#candidat[*]}]="$part"
                 fi
-                ;;
+            ;;
             *)
                 # ne convient pas pour la restauration
-                ;;
+            ;;
         esac
     done
 }
@@ -511,7 +511,7 @@ examiner_liste_candidats()
             1)
                 # un seul disque possède une sauvegarde : normal
                 PART=$candidat
-                ;;
+            ;;
             *)
                 # plusieurs disques possèdent des sauvegardes : bizarre
                 echo -e ""
@@ -521,7 +521,7 @@ examiner_liste_candidats()
                 abandonner
                 # arrêt du script
                 exit 1
-                ;;
+            ;;
         esac
         # il n'y a qu'un seul candidat,
         # on choisit une archive
@@ -703,12 +703,12 @@ case $REPONSE1 in
         recuperer_mail      # on récupére l'adresse de messagerie pour l'envoi du compte-rendu
         courriel            # on envoie le compte-rendu de la restauration
         redemarrer          # demande de redémarrage du serveur
-        ;;
+    ;;
     *)
         # si un montage existe, on ne doit pas y toucher lors de l'abandon
         rechercher_montage
         abandonner
-        ;;
+    ;;
 esac
 exit 0
 #
