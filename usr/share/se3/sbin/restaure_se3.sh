@@ -252,7 +252,6 @@ restaure_ldap()
 
 corrige_ldap()
 {
-    
     if [ -e "/usr/share/se3/sbin/corrige_ldap_smb44.sh" ]
     then
         echo -e "${jaune}`date +%R` ${neutre}Lancement du script de correction de l'annuaire pour samba 4.4" 2>&1 | tee -a $COURRIEL
