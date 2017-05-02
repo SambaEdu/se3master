@@ -7,14 +7,14 @@
 # ou pour une migration d'un ancien serveur à un nouveau serveur se3
 #
 # version du 16/04/2014
-# modifiée le 11/09/2016
+# modifiée le 01/05/2017
 #
 # Auteurs :     Louis-Maurice De Sousa louis.de.sousa@crdp.ac-versailles.fr
 #               François-Xavier Vial Francois.Xavier.Vial@crdp.ac-versailles.fr
 #               Rémy Barroso remy.barroso@crdp.ac-versailles.fr
 #
 # Modifié par : Michel Suquet Michel-Emi.Suquet@ac-versailles.fr
-#               
+#               Franck Molle franck.molle@ac-rouen.fr
 #
 # Ce programme est un logiciel libre : vous pouvez le redistribuer ou
 #    le modifier selon les termes de la GNU General Public Licence tels
