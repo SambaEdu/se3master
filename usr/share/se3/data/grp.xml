@@ -645,7 +645,7 @@
 <value>0</value>
 </regle>
 <regle>
-<clef>HKEY_CURRENT_USER \SOFTWARE \Microsoft \Windows \CurrentVersion \InternetSettings\DisablePasswordCaching</clef>
+<clef>HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\DisablePasswordCaching</clef>
 <value>0</value>
 </regle>
 <regle>
@@ -726,10 +726,6 @@
 </regle>
 <regle>
 <clef>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\HLS_IPADDR</clef>
-<value>0</value>
-</regle>
-<regle>
-<clef>System\toto</clef>
 <value>0</value>
 </regle>
 </categorie>
@@ -883,7 +879,7 @@
 <value>0</value>
 </regle>
 <regle>
-<clef>HKEY_CURRENT_USER \SOFTWARE \Microsoft \Windows \CurrentVersion \InternetSettings\DisablePasswordCaching</clef>
+<clef>HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\DisablePasswordCaching</clef>
 <value>0</value>
 </regle>
 </categorie>
@@ -1507,19 +1503,19 @@
 <value>1</value>
 </regle>
 <regle>
-<clef>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{60B49E34-C7CC-11D0-8953-00A0C90347FF}MICROS\StubPath</clef>
+<clef>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\{60B49E34-C7CC-11D0-8953-00A0C90347FF}\StubPath</clef>
 <value>1</value>
 </regle>
 <regle>
-<clef>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{26923b43-4d38-484f-9b9e-de460746276c}\StubPath</clef>
+<clef>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\{26923b43-4d38-484f-9b9e-de460746276c}\StubPath</clef>
 <value>1</value>
 </regle>
 <regle>
-<clef>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{60B49E34-C7CC-11D0-8953-00A0C90347FF}\StubPath</clef>
+<clef>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\{60B49E34-C7CC-11D0-8953-00A0C90347FF}\StubPath</clef>
 <value>1</value>
 </regle>
 <regle>
-<clef>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{22d6f312-b0f6-11d0-94ab-0080c74c7e95}\StubPath</clef>
+<clef>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\{22d6f312-b0f6-11d0-94ab-0080c74c7e95}\StubPath</clef>
 <value>1</value>
 </regle>
 <regle>
@@ -1653,7 +1649,7 @@
 <value>1</value>
 </regle>
 <regle>
-<clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\InternetExplorer\Toolbars\Restrictions\NoToolbarOptions</clef>
+<clef>HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions\NoToolbarOptions</clef>
 <value>1</value>
 </regle>
 <regle>
