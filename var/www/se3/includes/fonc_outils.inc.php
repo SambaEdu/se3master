@@ -281,6 +281,7 @@ function start_parc($action, $parc)
     require_once ("ldap.inc.php");
     require_once ("ihm.inc.php");
     $liste=liste_parc($parc);
+	sort($liste['computers']);
     foreach( $liste['computers'] as $key=>$value ) {
         start_poste($action, $value);
     }
