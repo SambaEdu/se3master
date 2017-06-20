@@ -370,7 +370,9 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 								echo "Suppression d'italc";
 								exec ("/usr/bin/sudo /usr/share/se3/scripts/italc_generate.sh");
 
-							
+								// On supprime la machine du netlogon
+								exec ("sudo rm -rf /home/netlogon/machine/$computer");
+								
 								exec ("/usr/share/se3/sbin/entryDel.pl cn=$computer,".$dn["computers"],$output,$returnval);
 								exec ("/usr/share/se3/sbin/entryDel.pl uid=$computer$,".$dn["computers"]);
 								exec("/usr/bin/touch /tmp/csvtodo",$ret);
