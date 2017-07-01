@@ -384,9 +384,9 @@ if (is_admin("computers_is_admin",$login)=="Y") {
 								if(file_exists($rapport_computer)) { @unlink($rapport_computer); }
 								if(file_exists($log_computer)) { @unlink($log_computer);}
 								$rapport_xml=simplexml_load_file("/var/se3/unattended/install/wpkg/rapports/rapports.xml");
-                                                                list($element) = $rapport_xml->xpath('/*/rapport[@id="'.$computer.'"]');
-                                                                unset($element[0]);
-                                                                $rapport_xml->asXML("/var/se3/unattended/install/wpkg/rapports/rapports.xml");
+								list($element) = $rapport_xml->xpath('/*/rapport[@id="'.$computer.'"]');
+								unset($element[0]);
+								$rapport_xml->asXML("/var/se3/unattended/install/wpkg/rapports/rapports.xml");
 
 								// On relance le script pour italc
 								echo "Suppression d'italc";
