@@ -1164,10 +1164,15 @@ XPPASS=`echo "SELECT value FROM params WHERE name='xppass'" | mysql -h $MYSQLIP 
 #saisir pass si necessaire
 # a Faire
 if [ -z "$XPPASS" ]; then
-	XPPASS_RDM="$(makepasswd| LC_ALL=C sed -r 's/[^a-zA-Z0-9]//g')"
-	echo -e "${COLTXT}Lors de la jonction au domaine des machines Win 2000/XP, un compte local adminse3 sera créé.\nVeuillez saisir un mot de passe pour ce compte  [${COLDEFAUT}${XPPASS_RDM}${COLTXT}]  ${COLSAISIE}"
-	echo -e 'Attention les caractères spéciaux sont interdits et seront supprimés le cas échéant'
-	read XPPASS
+	if [ -z "$ADMINSE3PW" ]; then
+		XPPASS_RDM="$(makepasswd| LC_ALL=C sed -r 's/[^a-zA-Z0-9]//g')"
+		echo -e "${COLTXT}Lors de la jonction au domaine des machines Win 2000/XP, un compte local adminse3 sera créé.\nVeuillez saisir un mot de passe pour ce compte  [${COLDEFAUT}${XPPASS_RDM}${COLTXT}]  ${COLSAISIE}"
+		echo -e 'Attention les caractères spéciaux sont interdits et seront supprimés le cas échéant'
+		read XPPASS
+	else
+		XPPASS="$ADMINSE3PW"
+	fi
+	
 	XPPASS_COR=$(printf '%s' "$XPPASS" | LC_ALL=C sed -r 's/[^a-zA-Z0-9]//g')
 	if [ "$XPPASS" != "$XPPASS_COR" ]; then
 		rep=""

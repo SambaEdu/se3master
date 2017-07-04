@@ -7,14 +7,14 @@
 # ou pour une migration d'un ancien serveur à un nouveau serveur se3
 #
 # version du 16/04/2014
-# modifiée le 11/09/2016
+# modifiée le 01/05/2017
 #
 # Auteurs :     Louis-Maurice De Sousa louis.de.sousa@crdp.ac-versailles.fr
 #               François-Xavier Vial Francois.Xavier.Vial@crdp.ac-versailles.fr
 #               Rémy Barroso remy.barroso@crdp.ac-versailles.fr
 #
 # Modifié par : Michel Suquet Michel-Emi.Suquet@ac-versailles.fr
-#               
+#               Franck Molle franck.molle@ac-rouen.fr
 #
 # Ce programme est un logiciel libre : vous pouvez le redistribuer ou
 #    le modifier selon les termes de la GNU General Public Licence tels
@@ -206,10 +206,10 @@ restaure_varse3home()
                 cd /home
                 echo -e "${jaune}`date +%R` ${neutre}Restauration des droits" 2>&1 | tee -a $COURRIEL
                 /usr/share/se3/scripts/restore_droits.sh
-                ;;
+            ;;
             *)
                 echo -e "${jaune}`date +%R` ${neutre}Pas de restauration des homes et de /var/se3" 2>&1 | tee -a $COURRIEL
-                ;;
+            ;;
         esac
     else
         echo -e ""
@@ -252,13 +252,14 @@ restaure_ldap()
 
 corrige_ldap()
 {
-	
-	if [ -e "/usr/share/se3/sbin/corrige_ldap_smb44.sh" ]; then
-		echo -e "${jaune}`date +%R` ${neutre}Lancement du script de correction de l'annuaire pour samba 4.4" 2>&1 | tee -a $COURRIEL
-		sleep 1
-		/usr/share/se3/sbin/corrige_ldap_smb44.sh
-	fi
+    if [ -e "/usr/share/se3/sbin/corrige_ldap_smb44.sh" ]
+    then
+        echo -e "${jaune}`date +%R` ${neutre}Lancement du script de correction de l'annuaire pour samba 4.4" 2>&1 | tee -a $COURRIEL
+        sleep 1
+        /usr/share/se3/sbin/corrige_ldap_smb44.sh
+    fi
 }
+
 restaure_mysql()
 {
     echo -e "${jaune}`date +%R` ${neutre}Nettoyage mysql" 2>&1 | tee -a $COURRIEL
@@ -382,18 +383,18 @@ choix_archive_sauvegarde()
                     echo -e "${orange}Il n'y a pas d'archive pour le jour choisi : $JOUR" 2>&1 | tee -a $COURRIEL
                     echo -e "${neutre}"
                 fi
-                ;;
+            ;;
             q)
                 # abandon en cours possible
                 abandonner
                 return 1
-                ;;
+            ;;
             *)
                 echo -e "${rouge}Le choix saisi ${vert}$JOUR${rouge} est incorrect${neutre}"
                 echo -e "Exemples de choix corrects : lun, mar, mer, jeu, ven, sam, dim ou Sun, Mon,…"
                 echo -e "${orange}Si vous voulez abandonner la restauration, choisir q${neutre}"
                 echo -e ""
-                ;;
+            ;;
         esac
     done
 }
@@ -483,10 +484,10 @@ collecter_candidats()
                     # le candidat contient au moins une archive
                     candidat[${#candidat[*]}]="$part"
                 fi
-                ;;
+            ;;
             *)
                 # ne convient pas pour la restauration
-                ;;
+            ;;
         esac
     done
 }
@@ -510,7 +511,7 @@ examiner_liste_candidats()
             1)
                 # un seul disque possède une sauvegarde : normal
                 PART=$candidat
-                ;;
+            ;;
             *)
                 # plusieurs disques possèdent des sauvegardes : bizarre
                 echo -e ""
@@ -520,7 +521,7 @@ examiner_liste_candidats()
                 abandonner
                 # arrêt du script
                 exit 1
-                ;;
+            ;;
         esac
         # il n'y a qu'un seul candidat,
         # on choisit une archive
@@ -702,12 +703,12 @@ case $REPONSE1 in
         recuperer_mail      # on récupére l'adresse de messagerie pour l'envoi du compte-rendu
         courriel            # on envoie le compte-rendu de la restauration
         redemarrer          # demande de redémarrage du serveur
-        ;;
+    ;;
     *)
         # si un montage existe, on ne doit pas y toucher lors de l'abandon
         rechercher_montage
         abandonner
-        ;;
+    ;;
 esac
 exit 0
 #
