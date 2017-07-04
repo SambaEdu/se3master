@@ -45,9 +45,12 @@ $cn=$_GET["cn"];
 aff_trailer ("3");
 if (is_admin("Annu_is_admin",$login)=="Y") {
         // suppression des utilisateurs selectionnes
+        if ( $cn !="root" || $uid !="root" ) {
           exec ("/usr/share/se3/sbin/groupDelUser.pl $uid $cn",$AllOutPut,$ReturnValue);
           $ReturnCode =  $ReturnCode + $ReturnValue;
-
+		} else {
+			$ReturnCode = "1";
+		}
         // Compte rendu de suppression
         if ($ReturnCode == "0") {
            	echo "<div class=error_msg>

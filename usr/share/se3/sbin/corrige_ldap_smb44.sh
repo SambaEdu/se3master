@@ -21,23 +21,36 @@ net groupmap add ntgroup=Profs unixgroup=Profs type=domain comment="Profs du dom
 net groupmap add ntgroup="Utilisateurs du domaine" rid="513" unixgroup="lcs-users" type="domain"
 net groupmap add ntgroup="machines" rid="515" unixgroup="machines" type="domain"
 
-
+echo "Correction des attributs du compte admin si besoin"
 testgecos_adm=$(ldapsearch -xLLL uid=admin gecos | grep '^gecos: ')
 if [ -z "$testgecos_adm" ]; then
-	echo "Correction des attributs du compte admin"
+	echo "Ajout champs Gecos"
 	ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
 dn: uid=admin,$PEOPLERDN,$BASEDN
 changetype: modify
-add: givenName
-givenName: Admin
--
-add: initials
-initials: Admin
--
 add: gecos
 gecos: Administrateur  Se3,,,
 EOF
 fi
+
+testgn_adm=$(ldapsearch -xLLL uid=admin givenName | grep '^givenName: ')
+if [ -z "$testgn_adm" ]; then
+	echo "Ajout champs givenName"
+	ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+add: givenName
+givenName: Admin
+EOF
+fi
+
+testinit_adm=$(ldapsearch -xLLL uid=admin initials | grep '^initials: ')
+if [ -z "$testinit_adm" ]; then
+	echo "Ajout champs Initials"
+	ldapmodify -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
+add: initials
+initials: Admin
+EOF
+fi
+
 
 testoldroot=$(ldapsearch -xLLL -b cn=root,$BASEDN uid | grep 'uid: root')
 if [ -n "$testoldroot" ]; then
@@ -100,7 +113,21 @@ EOF
 fi
 
 testsambadomain=$(ldapsearch -xLLL objectClass=sambaDomain sambaDomainName | grep '^sambaDomainName: ')
+
+
+
 if [ -z "$testsambadomain" ]; then
+	add_sambadom="yes"
+else
+	testalgo=$(ldapsearch -xLLL sambaDomainName=$se3_domain sambaAlgorithmicRidBase | grep 5005)
+	if [ -n "$testalgo" ]; then
+		add_sambadom="yes"
+		echo "Suppression sambaDomainName deffectueux"
+		ldapdelete -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" sambaDomainName=$se3_domain,$BASEDN
+	fi
+fi
+
+if [ "$add_sambadom" = "yes" ]; then
 	echo "Ajout de l'entrée sambaDomainName dans l'annuaire"
 ldapadd -x -D "$ADMINRDN,$BASEDN" -w "$ADMINPW" <<EOF
 dn: sambaDomainName=$se3_domain,$BASEDN
@@ -124,6 +151,8 @@ sambaPwdHistoryLength: 0
 sambaNextRid: 6752
 EOF
 fi
+
+
 
 echo "Modification si besoin des attributs samba pour les utilisateurs"
 ldapsearch -xLLL -D $adminRdn,$ldap_base_dn -b $PEOPLERDN,$BASEDN -w $adminPw objectClass=person uid| grep uid:| cut -d ' ' -f2| grep -v "^root$\|^nobody$\|^admin$" | while read uid
