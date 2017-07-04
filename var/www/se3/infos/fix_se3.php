@@ -98,7 +98,7 @@ if (isset($action)) {
     if ($action == "force_rapports_wpkg") {
         echo "<h2>".gettext("Renouvellement des rapports wpkg...")."</h2>";
         
-        system("rm -f /var/se3/unattended/install/wpkg/rapports/rapports.xml ; /var/www/se3/wpkg/bin/rapports.sh");
+        system("rm -f /var/se3/unattended/install/wpkg/rapports/rapports.xml ; rm -f /var/se3/unattended/install/wpkg/rapports/rapports_md5.xml ; /var/www/se3/wpkg/bin/rapports.sh");
         system ("/bin/bash /usr/share/se3/scripts/update_hosts_profiles_xml.sh ou=Computers ou=Parcs $ldap_base_dn");
 	system ("/bin/bash /usr/share/se3/scripts/update_droits_xml.sh");
 	echo "ok";
