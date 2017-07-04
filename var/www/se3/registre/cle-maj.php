@@ -316,13 +316,13 @@ if ($ajout == 7) {
             $cleok[9] = preg_replace("/([\r\n])/", "", $cleok[9]);
             $cleok[8] = trim($cleok[8]);
             $cleok[9] = trim($cleok[9]);
-            $cletrim = ($cleok[6]);
+			$cleok[1] = ajoutedoublebarre(($cleok[1]));								  
+            $cletrim = ajoutedoublebarre(($cleok[6]));
             $query1 = "SELECT chemin,CleID FROM corresp WHERE '".$cletrim."'=chemin";
             $resultat1 = mysqli_query($GLOBALS["___mysqli_ston"], $query1);
             $num = mysqli_num_rows($resultat1);
             if (!$num) {
                 $cleok[6] = ajoutedoublebarre(($cleok[6]));
-                $cleok[1] = ajoutedoublebarre(($cleok[1]));
                 $cleok[2] = ajoutedoublebarre(($cleok[2]));
                 $cleok[0] = addslashes(($cleok[0]));
                 $cleok[7] = addslashes(($cleok[7]));

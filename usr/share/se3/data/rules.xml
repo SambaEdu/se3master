@@ -85,16 +85,6 @@
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
                     <OS>2000,XP,Vista,Seven</OS>
-                    <Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{22d6f312-b0f6-11d0-94ab-0080c74c7e95}</Chemin>
-                    <Intitule>Lecteur Window Media</Intitule>
-                    <Composant>config</Composant>
-                    <Variable type="REG_EXPAND_SZ">StubPath</Variable>
-                    <ValeurSiCoche>C:\WINDOWS\inf\unregmp2.exe /ShowWMP</ValeurSiCoche>
-                    <ValeurSiDecoche></ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>2000,XP,Vista,Seven</OS>
                     <Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\{22d6f312-b0f6-11d0-94ab-0080c74c7e95}</Chemin>
                     <Intitule>Lecteur Window Media</Intitule>
                     <Composant>config</Composant>
@@ -151,36 +141,6 @@
                     <Variable type="REG_EXPAND_SZ">StubPath</Variable>
                     <ValeurSiCoche>rundll32.exe advpack.dll,LaunchINFSection C:\WINDOWS\INF\wmp11.inf,PerUserStub</ValeurSiCoche>
                     <ValeurSiDecoche></ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>2000,XP</OS>
-                    <Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{60B49E34-C7CC-11D0-8953-00A0C90347FF}MICROS</Chemin>
-                    <Intitule>Personnalisation du navigateur web</Intitule>
-                    <Composant>restrict</Composant>
-                    <Variable type="REG_EXPAND_SZ">StubPath</Variable>
-                    <ValeurSiCoche></ValeurSiCoche>
-                    <ValeurSiDecoche>RunDLL32 IEDKCS32.DLL,BrandIE4 SIGNUP</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>2000,XP,Vista,Seven</OS>
-                    <Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{26923b43-4d38-484f-9b9e-de460746276c}</Chemin>
-                    <Intitule>Internet Explorer (cle2)</Intitule>
-                    <Composant>restrict</Composant>
-                    <Variable type="REG_EXPAND_SZ">StubPath</Variable>
-                    <ValeurSiCoche></ValeurSiCoche>
-                    <ValeurSiDecoche>C:\WINDOWS\system32\ie4uinit.exe -UserIconConfig</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>2000,XP,Vista,Seven</OS>
-                    <Chemin>reg:///HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\>{60B49E34-C7CC-11D0-8953-00A0C90347FF}</Chemin>
-                    <Intitule>Browser customisation</Intitule>
-                    <Composant>restrict</Composant>
-                    <Variable type="REG_EXPAND_SZ">StubPath</Variable>
-                    <ValeurSiCoche></ValeurSiCoche>
-                    <ValeurSiDecoche>"C:\WINDOWS\system32\rundll32.exe" "C:\WINDOWS\system32\iedkcs32.dll",BrandIEActiveSetup SIGNUP</ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
             </regles>
@@ -518,7 +478,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">LowRiskFileTypes</Variable>
                     <ValeurSiCoche>.exe</ValeurSiCoche>
-                    <ValeurSiDecoche>.exe</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -612,7 +572,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">use search asst</Variable>
                     <ValeurSiCoche>no</ValeurSiCoche>
-                    <ValeurSiDecoche>no</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -718,7 +678,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">personal</Variable>
                     <ValeurSiCoche>K:\Docs</ValeurSiCoche>
-                    <ValeurSiDecoche>K:\Docs</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -728,7 +688,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">appdata</Variable>
                     <ValeurSiCoche>K:\profil\appdata</ValeurSiCoche>
-                    <ValeurSiDecoche>K:\profil\appdata</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -738,7 +698,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">Desktop</Variable>
                     <ValeurSiCoche>K:\profil\Bureau</ValeurSiCoche>
-                    <ValeurSiDecoche>K:\profil\Bureau</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -748,7 +708,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">Start Menu</Variable>
                     <ValeurSiCoche>K:\profil\Demarrer</ValeurSiCoche>
-                    <ValeurSiDecoche>K:\profil\Demarrer</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -758,7 +718,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">Programs</Variable>
                     <ValeurSiCoche>K:\profil\Demarrer\Programmes</ValeurSiCoche>
-                    <ValeurSiDecoche>K:\profil\Demarrer\Programmes</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -768,7 +728,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">Startup</Variable>
                     <ValeurSiCoche>K:\profil\Demarrer\Programmes\Demarrage</ValeurSiCoche>
-                    <ValeurSiDecoche>K:\profil\Demarrer\Programmes\Demarrage</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -911,16 +871,6 @@
                     <ValeurSiDecoche>0</ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>TOUS</OS>
-                    <Chemin>reg:///HKEY_CURRENT_USER \SOFTWARE \Microsoft \Windows \CurrentVersion \InternetSettings</Chemin>
-                    <Intitule>Désactiver la mémorisation des mots de passe par internet explorer</Intitule>
-                    <Composant>restrict</Composant>
-                    <Variable type="REG_DWORD">DisablePasswordCaching</Variable>
-                    <ValeurSiCoche>1</ValeurSiCoche>
-                    <ValeurSiDecoche>0</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
                 <Regle ClasseObjet="INFO">
                     <OS>252</OS>
                     <Intitule>"configuration du proxy"</Intitule>
@@ -956,7 +906,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">AutoConfigURL</Variable>
                     <ValeurSiCoche>http://wpad.diderot.org/wpad.dat</ValeurSiCoche>
-                    <ValeurSiDecoche>http://172.17.254.252/cgi-bin/slis.pac</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -1025,46 +975,6 @@
                     <Variable type="REG_DWORD">NoBandCustomize</Variable>
                     <ValeurSiCoche>2</ValeurSiCoche>
                     <ValeurSiDecoche>0</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>TOUS</OS>
-                    <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions</Chemin>
-                    <Intitule>Désactiver la possibilité d'afficher  certaines barres d'outils</Intitule>
-                    <Composant>restrict</Composant>
-                    <Variable type="REG_DWORD">NoToolbarOptions</Variable>
-                    <ValeurSiCoche>2</ValeurSiCoche>
-                    <ValeurSiDecoche>SUPPR</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>TOUS</OS>
-                    <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions</Chemin>
-                    <Intitule>Désactiver la barre des boutons</Intitule>
-                    <Composant>restrict</Composant>
-                    <Variable type="REG_DWORD">NoToolBar</Variable>
-                    <ValeurSiCoche>2</ValeurSiCoche>
-                    <ValeurSiDecoche>SUPPR</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>TOUS</OS>
-                    <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions</Chemin>
-                    <Intitule>Désactiver la barre d'adresse</Intitule>
-                    <Composant>restrict</Composant>
-                    <Variable type="REG_DWORD">NoAddressBar</Variable>
-                    <ValeurSiCoche>2</ValeurSiCoche>
-                    <ValeurSiDecoche>SUPPR</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>TOUS</OS>
-                    <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Toolbars\Restrictions</Chemin>
-                    <Intitule>Désactiver la barre de liens</Intitule>
-                    <Composant>restrict</Composant>
-                    <Variable type="REG_DWORD">NoLinksBar</Variable>
-                    <ValeurSiCoche>2</ValeurSiCoche>
-                    <ValeurSiDecoche>SUPPR</ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -1523,52 +1433,12 @@
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
                     <OS>TOUS</OS>
-                    <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Cache</Chemin>
-                    <Intitule>Vider le dossier Tempory Internet Files à la fermeture du navigateur</Intitule>
-                    <Composant>config</Composant>
-                    <Variable type="REG_DWORD">Persistent</Variable>
-                    <ValeurSiCoche>0</ValeurSiCoche>
-                    <ValeurSiDecoche>0</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>TOUS</OS>
-                    <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Infodelivery\Restrictions</Chemin>
-                    <Intitule>désactiver l'affichage des chaînes</Intitule>
-                    <Composant>config</Composant>
-                    <Variable type="REG_DWORD">NoChannelUI</Variable>
-                    <ValeurSiCoche>1</ValeurSiCoche>
-                    <ValeurSiDecoche>1</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>TOUS</OS>
-                    <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
-                    <Intitule>désactiver la saisie semi-automatique dans les formulaires</Intitule>
-                    <Composant>config</Composant>
-                    <Variable type="REG_DWORD">FormSuggest</Variable>
-                    <ValeurSiCoche>1</ValeurSiCoche>
-                    <ValeurSiDecoche>1</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>TOUS</OS>
-                    <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
-                    <Intitule>ne pas autoriser la saisie semi-automatique à enregistrer des mots de passe</Intitule>
-                    <Composant>config</Composant>
-                    <Variable type="REG_DWORD">FormSuggest Passwords</Variable>
-                    <ValeurSiCoche>1</ValeurSiCoche>
-                    <ValeurSiDecoche>1</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>TOUS</OS>
                     <Chemin>reg:///HKEY_CURRENT_USER\Software\Microsoft\Ftp</Chemin>
                     <Intitule>Activer le mode FTP passif (fonctionnement compatible avec les Para-feux)</Intitule>
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">Use PASV</Variable>
                     <ValeurSiCoche>yes</ValeurSiCoche>
-                    <ValeurSiDecoche>yes</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -1588,7 +1458,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">Error Dlg Displayed On Every Error</Variable>
                     <ValeurSiCoche>no</ValeurSiCoche>
-                    <ValeurSiDecoche>no</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -1598,7 +1468,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">Disable Script Debugger</Variable>
                     <ValeurSiCoche>yes</ValeurSiCoche>
-                    <ValeurSiDecoche>yes</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -1608,7 +1478,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">Use Web Based FTP</Variable>
                     <ValeurSiCoche>yes</ValeurSiCoche>
-                    <ValeurSiDecoche>yes</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -1649,16 +1519,6 @@
                     <Variable type="REG_DWORD">Autoconfig</Variable>
                     <ValeurSiCoche>1</ValeurSiCoche>
                     <ValeurSiDecoche>0</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>TOUS</OS>
-                    <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
-                    <Intitule>désactiver la modification du navigateur par défaut</Intitule>
-                    <Composant>restrict</Composant>
-                    <Variable type="REG_DWORD">CheckIfDefault</Variable>
-                    <ValeurSiCoche>1</ValeurSiCoche>
-                    <ValeurSiDecoche>SUPPR</ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -1882,7 +1742,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">Start Page</Variable>
                     <ValeurSiCoche>http://wawadeb.crdp.ac-caen.fr</ValeurSiCoche>
-                    <ValeurSiDecoche>http://wawadeb.crdp.ac-caen.fr</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -1985,26 +1845,6 @@
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
                     <OS>TOUS</OS>
-                    <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
-                    <Intitule>désactiver la fonctionnalité rétablir les paramètres web</Intitule>
-                    <Composant>restrict</Composant>
-                    <Variable type="REG_DWORD">ResetWebSettings</Variable>
-                    <ValeurSiCoche>1</ValeurSiCoche>
-                    <ValeurSiDecoche>SUPPR</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>TOUS</OS>
-                    <Chemin>reg:///HKEY_CURRENT_USER\software\policies\microsoft\windows\currentversion\internet settings</Chemin>
-                    <Intitule>désactiver la modification des paramètres de la messagerie</Intitule>
-                    <Composant>restrict</Composant>
-                    <Variable type="REG_DWORD">Messaging</Variable>
-                    <ValeurSiCoche>1</ValeurSiCoche>
-                    <ValeurSiDecoche>SUPPR</ValeurSiDecoche>
-                    <commentaire></commentaire>
-                </Regle>
-                <Regle ClasseObjet="REGISTRE">
-                    <OS>TOUS</OS>
                     <Chemin>reg:///HKEY_CURRENT_USER\Software\Policies\Microsoft\Internet Explorer\Control Panel</Chemin>
                     <Intitule>désactiver la modification des paramètres du calendrier et des contacts</Intitule>
                     <Composant>restrict</Composant>
@@ -2052,7 +1892,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_DWORD">NoDrives</Variable>
                     <ValeurSiCoche>63961095</ValeurSiCoche>
-                    <ValeurSiDecoche>63961095</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -2094,7 +1934,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">overfill</Variable>
                     <ValeurSiCoche>iexplore http://annuaire.diderot.org:909</ValeurSiCoche>
-                    <ValeurSiDecoche>iexplore http://se3:909</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire>programme lancé à l'ouverture de session en cas d'overfill</commentaire>
                 </Regle>
                 <Regle ClasseObjet="INFO">
@@ -2848,7 +2688,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_EXPAND_SZ">Local AppData</Variable>
                     <ValeurSiCoche>%USERPROFILE%\Application Data</ValeurSiCoche>
-                    <ValeurSiDecoche>%USERPROFILE%\Application Data</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -2858,7 +2698,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_EXPAND_SZ">Local Settings</Variable>
                     <ValeurSiCoche>%USERPROFILE%\Local Settings</ValeurSiCoche>
-                    <ValeurSiDecoche>%USERPROFILE%\Local Settings</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
@@ -2868,7 +2708,7 @@
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">ExcludeProfileDirs</Variable>
                     <ValeurSiCoche>Local Settings;Temporary Internet Files;Historique;Temp;Application Data</ValeurSiCoche>
-                    <ValeurSiDecoche>Local Settings;Temporary Internet Files;Historique;Temp;Application Data</ValeurSiDecoche>
+                    <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>
                 <Regle ClasseObjet="REGISTRE">
