@@ -127,7 +127,7 @@ if [ ! "$SMBVERSION" = "samba3" ]; then
 fi
 
 # slapd doit etre demarre pour les ldapmodify et ldapdelete
-/etc/init.d/slapd start > /dev/null
+service slapd start > /dev/null
 
 MYSQLDOMAINSID=`echo "SELECT value FROM params WHERE name='domainsid'" | mysql -h $dbhost $dbname -u $dbuser -p$dbpass -N`
 OLDDOMAINSID=`net getlocalsid  |cut -d : -f 2 |sed -e "s/ //g"`
@@ -375,7 +375,7 @@ if [ "$CORRECTADMINPWSAMBA" == "1" ]; then
     POURSUIVRE
   fi
   smbpasswd -w $ADMINPW > /dev/null
-  /etc/init.d/samba restart
+  service samba restart
   echo "Effectue."
 fi
 
@@ -388,12 +388,12 @@ if [ "$VIDECACHE" == "1" ]; then
 		POURSUIVRE
 	fi
 	echo "Arret de samba"
-	/etc/init.d/samba stop > /dev/null
+	service samba stop > /dev/null
 	echo "On vide les tdb en cache."
 	rm -f /var/cache/samba/*.tdb	
 	rm -f /var/cache/samba/printing/*.tdb
 	echo "Demarrage de samba"
-	/etc/init.d/samba start > /dev/null
+	service samba start > /dev/null
 	echo "Effectue."
 fi
 # faut il lancer une correction de mdp root dans samba ?

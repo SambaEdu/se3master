@@ -29,7 +29,7 @@ RSYNC_ENABLE=true
 RSYNC_CONFIG_FILE=/etc/rsyncd.conf
 RSYNC_OPTS='' " > /etc/default/rsync
 
-/etc/init.d/rsync start 2>/dev/null
+service rsync start 2>/dev/null
 
 fi
 
@@ -40,7 +40,7 @@ RSYNC_ENABLE=false
 RSYNC_CONFIG_FILE=/etc/rsyncd.conf
 RSYNC_OPTS='' " > /etc/default/rsync
 
-/etc/init.d/rsync stop 2>/dev/null
+service rsync stop 2>/dev/null
 fi
 
 if [ "$1" = "restart" ]
@@ -50,6 +50,6 @@ RSYNC_ENABLE=true
 RSYNC_CONFIG_FILE=/etc/rsyncd.conf
 RSYNC_OPTS='' " > /etc/default/rsync
 
-/etc/init.d/rsync restart 2>/dev/null
+service rsync restart 2>/dev/null
 fi
 

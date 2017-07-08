@@ -4,7 +4,7 @@
 #
 
 
-/etc/init.d/nut stop
+service nut stop
 sleep 5
 
 # Pour tout stopper
@@ -46,7 +46,7 @@ then
   echo "START_UPSD=YES" > /etc/default/nut
   echo "START_UPSMON=YES" >> /etc/default/nut
 
-  /etc/init.d/nut start
+  service nut start
 fi
 
 if [ ! -f /etc/nut/ups.conf -a -f /etc/nut/upsmon.conf ]
@@ -55,6 +55,6 @@ then
   echo "START_UPSD=NO" > /etc/default/nut
   echo "START_UPSMON=YES" >> /etc/default/nut
 
-  /etc/init.d/nut start
+  service nut start
 fi
 

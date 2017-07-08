@@ -466,7 +466,7 @@ chown openldap:openldap /var/run/slapd
 
 [ "$1" != "installinit" ] && service slapd start
 sleep 1
-[ "$1" != "installinit" ] && /etc/init.d/samba reload
+[ "$1" != "installinit" ] && service samba reload
 
 # Supprime le lock
 rm -f /var/lock/syncrepl.lock

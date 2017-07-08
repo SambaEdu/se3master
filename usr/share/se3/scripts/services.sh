@@ -7,4 +7,4 @@
 #
 
 [ $# -ne 2 ] && exit 1
-/etc/init.d/$1 $2
+service $1 $2

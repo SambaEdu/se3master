@@ -105,7 +105,7 @@ if [ "$USE_SPACE" -le 90 ]; then
         #upgrade samba et relancement si maj
 # 	TST_SMBMAJ=$(apt-get -s install samba $option | grep "la plus récente version disponible")
 	apt-get install samba $option | tee -a $REPORT_FILE
-# 	[ -z "$TST_SMBMAJ" ] && /etc/init.d/samba restart | tee -a $REPORT_FILE
+# 	[ -z "$TST_SMBMAJ" ] && service samba restart | tee -a $REPORT_FILE
 	
 #upgrade reste du système
 	apt-get dist-upgrade $option | tee -a $REPORT_FILE
@@ -116,7 +116,7 @@ if [ "$USE_SPACE" -le 90 ]; then
         # teste si apache a besoin d'etre relancé
 	if [ -z "$(ps aux | grep "apache2se" | grep -v grep)" ]; then
                 echo "Redémarrage d'Apachese" | tee -a $REPORT_FILE
-                /etc/init.d/apache2se start | tee -a $REPORT_FILE
+                service apache2se start | tee -a $REPORT_FILE
                 
         fi
 
@@ -125,14 +125,14 @@ if [ "$USE_SPACE" -le 90 ]; then
 	# teste si samba a besoin d'etre relancé
        if [ -z "$(ps aux | grep "smbd" | grep -v grep)" ]; then
                echo "Redémarrage de Samba" | tee -a $REPORT_FILE
-               /etc/init.d/samba start | tee -a $REPORT_FILE
+               service samba start | tee -a $REPORT_FILE
 
        fi
 
    	# teste si mysql a besoin d'etre relancé
        if [ -z "$(ps aux | grep "mysqld" | grep -v grep)" ]; then
                echo "Redémarrage de MySQL" | tee -a $REPORT_FILE
-               /etc/init.d/mysql start | tee -a $REPORT_FILE
+               service mysql start | tee -a $REPORT_FILE
 
        fi 
 

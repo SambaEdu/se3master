@@ -4,4 +4,4 @@
 ## $Id$ ##
 
 
-/etc/init.d/samba reload
+service samba reload
