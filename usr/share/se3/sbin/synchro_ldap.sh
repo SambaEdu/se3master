@@ -161,7 +161,7 @@ else
 	echo -e "$COLTXT"
 	echo -e "Arrêt du serveur LDAP..."
 	echo -e "$COLCMD"
-	/etc/init.d/slapd stop
+	service slapd stop
 	STOPLDAPOK=`ps aux | grep slapd | sed -e '/grep slapd/d'`
 	if [ ! -z "$STOPLDAPOK" ]; then
 		ERREUR "Le serveur Ldap n'a pas été arrêté correctement, arrêtez-le et relancez le script."
@@ -276,7 +276,7 @@ if [ "$LDAPSTOP" != "yes" ]; then
 	echo -e "$COLTXT"
 	echo "Arrêt du serveur LDAP du SE3:"
 	echo -e "${COLCMD}"
-	/etc/init.d/slapd stop
+	service slapd stop
 
 	STOPLDAPOK=`ps aux | grep slapd | sed -e '/grep slapd/d'`
 	if [ ! -z "$STOPLDAPOK" ]; then
@@ -317,7 +317,7 @@ echo -e "$COLTXT"
 
 echo "Arrêt du serveur Samba de SE3:"
 echo -e "${COLCMD}\c"
-/etc/init.d/samba stop
+service samba stop
 
 echo -e "$COLTXT"
 echo -e "Mise à jour des fichiers de configuration Ldap et Samba..."
@@ -364,7 +364,7 @@ chmod 644 /etc/samba/smb.conf
 echo -e "$COLTXT"
 echo "Démarrage des serveurs LDAP et Samba de SE3:"
 echo -e "${COLCMD}"
-/etc/init.d/slapd start
+service slapd start
 STARTLDAPOK=`ps aux | grep slapd | sed -e '/grep slapd/d'`
 if [ -z "$STARTLDAPOK" ]; then
 	ERREUR "Le serveur Ldap n'a pas été relancé correctement."
@@ -373,7 +373,7 @@ else
 fi
 
 echo -e "${COLCMD}"
-/etc/init.d/samba start
+service samba start
 STARTSMBOK=`ps aux | grep slapd | sed -e '/grep smbd/d'`
 if [ -z "$STARTSMBOK" ]; then
 	ERREUR "Le serveur Samba n'a pas été relancé correctement."

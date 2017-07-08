@@ -305,7 +305,7 @@ fi
 echo -e "$COLTXT"
 echo "Sauvegarde de MySQL"
 echo -e "$COLCMD\c"
-#/etc/init.d/mysql stop
+#service mysql stop
 #ls /var/lib/mysql | while read A
 #do
 #       if [ -d "/var/lib/mysql/$A" ]; then
@@ -316,7 +316,7 @@ echo -e "$COLCMD\c"
 #                tar -czf "$dossier_svg/mysql/$base.$jour.tar.gz" /var/lib/mysql/$base
 #        fi
 #done
-#/etc/init.d/mysql start
+#service mysql start
 if [ -e /root/.my.cnf ]; then
 	#ls /var/lib/mysql | while read A
 	for base in se3db mysql
@@ -370,12 +370,12 @@ fi
 cp -f /var/lib/ldap/DB_CONFIG $dossier_svg/ldap/DB_CONFIG.$jour
 rm -f $dossier_svg/ldap/DB_CONFIG.$jour.
 #if [ "$(du -sm /var/lib/ldap | tr '\t' ' ' | cut -d' ' -f1)" -lt $volume_ldap_max ]; then
-#	/etc/init.d/slapd stop
+#	service slapd stop
 #	if [ -e "$dossier_svg/ldap/var_lib_ldap.$jour.tar.gz" ]; then
 #		rm -f "$dossier_svg/ldap/var_lib_ldap.$jour.tar.gz"
 #	fi
 #	tar -czf "$dossier_svg/ldap/var_lib_ldap.$jour.tar.gz" /var/lib/ldap
-#	/etc/init.d/slapd start
+#	service slapd start
 #fi
 # Au cas où, on archive le LDAP vierge:
 if [ ! -e "$dossier_svg/ldap/ldap.se3sav.tar.gz" -a -e /var/lib/ldap.se3sav ]; then

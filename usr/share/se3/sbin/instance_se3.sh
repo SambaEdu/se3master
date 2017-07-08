@@ -6,7 +6,9 @@
 
 . /usr/share/se3/includes/config.inc.sh -cml
 . /usr/share/se3/includes/functions.inc.sh
-debian_vers=$(cat /etc/debian_version)
+debian_vers="$(cat /etc/debian_version)"
+debian_distrib="$(lsb_release -cs)"
+
 [ -z "$netbios_name" ] && netbios_name=$(grep "netbios name" /etc/samba/smb.conf|cut -d '=' -f2|sed -e 's/ //g')
 [ -z "$se3ip" ] && se3ip="$(LC_ALL=C grep address /etc/network/interfaces | sort | head -n1 | cut -d" " -f2)"
 [ -z "$ecard" ] &&  ecard="$(grep iface /etc/network/interfaces | grep static | sort | head -n1 | awk '{print $2}')"
@@ -28,9 +30,14 @@ touch /etc/nologon
 
 
 # nscd sucks !
-if [ -e /etc/init.d/nscd  ]; then
-	insserv -r nscd
-	/etc/init.d/nscd stop 2>/dev/null
+if [ -n "$(apt-cache policy nscd | grep Installed | grep -v none)" ]; then
+	# quelle distrib ?
+	if [ "$debian_distrib" = "wheezy" ];then
+		update-rc.d nscd disable
+		service nscd stop 2>/dev/null
+	else
+		systemctl disable nscd
+	fi
 fi
 
 
@@ -74,24 +81,24 @@ make
 make install
 cd -
 ) >/dev/null
-(
-# Apache2se
-update-rc.d -f apache2se remove .
-update-rc.d apache2se defaults 91 91
 
-# Admind
-/etc/init.d/admind stop
-update-rc.d -f admind remove .
-update-rc.d admind defaults 99 99
-/etc/init.d/admind start
+if [ "$debian_distrib" = "wheezy" ];then
+	# Apache2se
+	update-rc.d -f apache2se remove .
+	update-rc.d apache2se defaults 91 91
 
-# SSH
-update-rc.d -f ssh remove .
-update-rc.d ssh defaults 16 16
-) >/dev/null
+	# Admind
+	service admind stop
+	update-rc.d -f admind remove .
+	update-rc.d admind defaults 99 99
+	service admind start
 
+	# SSH
+	update-rc.d -f ssh remove .
+	update-rc.d ssh defaults 16 16
+fi
 # Cron
-#/etc/init.d/cron restart ---> plus bas
+#service cron restart ---> plus bas
 
 # Logs
 touch /var/log/se3/auth.log
@@ -109,10 +116,10 @@ fi
 #sed -i "s/#MYSQLIP#/$MYSQLIP/g;s/#SE3DBPASS#/$SE3PW/g" /usr/share/se3/sbin/mkslurpd
 
 # Syslog
-if [ -e /etc/init.d/sysklogd ]; then
-	/etc/init.d/sysklogd restart 
+if [ -e service sysklogd ]; then
+	service sysklogd restart 
 else
-	/etc/init.d/rsyslog restart
+	service rsyslog restart
 fi
 
 echo "update de la configuration samba"
@@ -147,7 +154,7 @@ if [ ! -e /etc/skel/user/profil/appdata/Mozilla/Firefox/Profiles/default/prefs.j
 
 fi
 
-/etc/init.d/cron reload
+service cron reload
 
 echo "Maj droits sudoers..."
 chmod 440 /etc/sudoers.d/sudoers*
@@ -155,7 +162,7 @@ chmod 440 /etc/sudoers.d/sudoers*
 
 service apache2 reload
 service apache2se reload
-#/etc/init.d/slapd restart
+#service slapd restart
 /var/cache/se3_install/depmaj/install_supervision_rouen.sh 
 
 # Corrige icone reparer son compte si L: toujours utilise pour Progs

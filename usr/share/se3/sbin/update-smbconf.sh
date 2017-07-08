@@ -81,7 +81,7 @@ else
 fi
 chmod 644 /etc/samba/smb_*
 
-/etc/init.d/samba reload >/dev/null 2>&1
+service samba reload >/dev/null 2>&1
 
 echo "Test de la compatibilité ldapsam:trusted"
 smbclient -L localhost -U adminse3%$xppass >/dev/null 
@@ -91,6 +91,6 @@ else
 	echo 'Test KO !!!'
 	echo "Passage à off du paramètre ldapsam:trusted"
 	sed -i 's/ldapsam:trusted = Yes/ldapsam:trusted = No/' /etc/samba/smb.conf 
-	/etc/init.d/samba reload 
+	service samba reload 
 fi
 

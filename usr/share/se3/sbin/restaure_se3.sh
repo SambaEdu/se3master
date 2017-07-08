@@ -148,17 +148,17 @@ mise_a_jour()
 arret_des_serveurs()
 {
     echo -e "${jaune}`date +%R` ${neutre}Arrêt du serveur ldap${neutre}" 2>&1 | tee -a $COURRIEL
-    /etc/init.d/slapd stop
+    service slapd stop
     echo -e "${jaune}`date +%R` ${neutre}Arrêt du serveur samba" 2>&1 | tee -a $COURRIEL
-    /etc/init.d/samba stop
+    service samba stop
 }
 
 lancement_des_serveurs()
 {
     echo -e "${jaune}`date +%R` ${neutre}Démarrage du serveur ldap" 2>&1 | tee -a $COURRIEL
-    /etc/init.d/slapd start
+    service slapd start
     echo -e "${jaune}`date +%R` ${neutre}Démarrage du serveur samba" 2>&1 | tee -a $COURRIEL
-    /etc/init.d/samba start
+    service samba start
 }
 
 restaure_varse3home()
@@ -268,7 +268,7 @@ restaure_mysql()
     echo -e "${jaune}`date +%R` ${neutre}Restauration se3db"  2>&1 | tee -a $COURRIEL
     mysql --database se3db < $SAUVEGARDE/mysql/se3db.$JOUR.sql
     echo -e "${jaune}`date +%R` ${neutre}Redémarrage du serveur mysql" 2>&1 | tee -a $COURRIEL
-    /etc/init.d/mysql restart
+    service mysql restart
 }
 
 restaure_samba()

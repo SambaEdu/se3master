@@ -125,7 +125,7 @@ ldapsearch -xLLL -D "$ROOTDN" -w "$(cat /etc/ldap.secret)" > $tmp/ldapsearch_${l
 echo -e "$COLTXT"
 echo "Arrêt du serveur LDAP..."
 echo -e "$COLCMD\c"
-/etc/init.d/slapd stop
+service slapd stop
 sleep 5
 if ps aux | grep slapd | grep -v grep > /dev/null ;then
 	echo -e "$COLERREUR"
@@ -149,7 +149,7 @@ slapcat > $tmp/slapcat_${ladate}.ldif
 echo -e "$COLTXT"
 echo "Redémarrage du serveur LDAP..."
 echo -e "$COLCMD\c"
-/etc/init.d/slapd start
+service slapd start
 sleep 5
 
 if ps aux | grep slapd | grep -v grep > /dev/null ;then

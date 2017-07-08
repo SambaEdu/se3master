@@ -94,7 +94,7 @@ echo -e "/var/se3/"
 
 echo -e "$COLTXT"
 echo "Arret du serveur samba..."
-/etc/init.d/samba stop
+service samba stop
 sleep 2
 test=$(ps aux | grep smbd | grep -v grep)
 if [ ! -z "$test" ]; then
@@ -146,7 +146,7 @@ echo -e "Redémarrage du serveur samba"
 
 
 echo -e "$COLCMD\c"
-/etc/init.d/samba start
+service samba start
 test=$(ps aux | grep smbd | grep -v grep)
 if [ -z "$test" ]; then
 	echo -e "$COLERREUR"
@@ -155,7 +155,7 @@ if [ -z "$test" ]; then
 	echo -e "$COLTXT"
 	echo "Vous devrez redémarrer manuellement le service par:"
 	echo -e "$COLCMD\c"
-	echo "   /etc/init.d/samba start"
+	echo "   service samba start"
 else
 	echo -e "$COLTXT"
 	echo "Rédémarrage du service samba réussi."

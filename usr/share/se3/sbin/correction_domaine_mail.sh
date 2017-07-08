@@ -55,7 +55,7 @@ BASE=$(cat /etc/ldap/ldap.conf | grep '^BASE' | tr "\n" " " | sed -e "s/ \{2,\}/
 
 ldapsearch -xLLL -D "$ROOTDN" -w "$(cat /etc/ldap.secret)" > $tmp/ldapsearch_${ladate}.ldif
 
-/etc/init.d/slapd stop
+service slapd stop
 sleep 5
 if ps aux | grep slapd | grep -v grep > /dev/null ;then
 	echo "ERREUR: Le serveur LDAP n'est semble-t-il pas arrêté."
@@ -67,7 +67,7 @@ fi
 # Le /var/lib/ldap a tendance à être trop gros pour faire une sauvegarde tar
 #tar -czf $tmp/var_lib_ldap_${ladate}.tar.gz /var/lib/ldap
 slapcat > $tmp/slapcat_${ladate}.ldif
-/etc/init.d/slapd start
+service slapd start
 sleep 5
 
 if ps aux | grep slapd | grep -v grep > /dev/null ;then
@@ -79,7 +79,7 @@ else
 fi
 
 echo "#!/bin/bash" > $tmp/restaure_ldap.sh
-echo "/etc/init.d/slapd stop
+echo "service slapd stop
 sleep 5
 if ps aux | grep slapd | grep -v grep > /dev/null ;then
 	echo \"ERREUR: Le serveur LDAP n'est semble-t-il pas arrêté.\"
@@ -90,7 +90,7 @@ else
 fi
 cd /
 tar -xzf $tmp/var_lib_ldap_${ladate}.tar.gz
-/etc/init.d/slapd start
+service slapd start
 if ps aux | grep slapd | grep -v grep > /dev/null ;then
 	echo \"LDAP redémarré.\"
 else

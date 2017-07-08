@@ -178,7 +178,7 @@ while [ -z "$REP" ]
 do
 	echo -e "$COLTXT"
 	echo "Arrêt du serveur d'annuaire..."
-	/etc/init.d/slapd stop
+	service slapd stop
 	sleep 2
 	test=$(ps aux | grep slapd | grep -v grep)
 	if [ ! -z "$test" ]; then
@@ -227,7 +227,7 @@ if [ "$?" = "0" ]; then
 	echo -e "$COLTXT"
 	echo -e "Redémarrage du serveur d'annuaire LDAP"
 	echo -e "$COLCMD\c"
-	/etc/init.d/slapd start
+	service slapd start
 	test=$(ps aux | grep slapd | grep -v grep)
 	if [ -z "$test" ]; then
 		echo -e "$COLERREUR"
@@ -236,7 +236,7 @@ if [ "$?" = "0" ]; then
 		echo -e "$COLTXT"
 		echo "Vous devrez redémarrer manuellement le service par:"
 		echo -e "$COLCMD\c"
-		echo "   /etc/init.d/slapd start"
+		echo "   service slapd start"
 	else
 		echo -e "$COLTXT"
 		echo "Rédémarrage du service slapd réussi."
@@ -268,7 +268,7 @@ else
 		echo -e "$COLTXT"
 		echo -e "Redémarrage du serveur d'annuaire LDAP"
 		echo -e "$COLCMD\c"
-		/etc/init.d/slapd start
+		service slapd start
 		test=$(ps aux | grep slapd | grep -v grep)
 		if [ -z "$test" ]; then
 			echo -e "$COLERREUR"
@@ -277,7 +277,7 @@ else
 			echo -e "$COLTXT"
 			echo "Vous devrez redémarrer manuellement le service par:"
 			echo -e "$COLCMD\c"
-			echo "   /etc/init.d/slapd start"
+			echo "   service slapd start"
 		else
 			echo -e "$COLTXT"
 			echo "Rédémarrage du service slapd réussi."

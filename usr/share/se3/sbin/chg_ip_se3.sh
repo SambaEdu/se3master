@@ -93,10 +93,10 @@ echo -e "$COLCMD\c"
 echo -e "$COLTXT"
 echo "Arrêt des services..."
 echo -e "$COLCMD\c"
-/etc/init.d/samba stop
-/etc/init.d/slapd stop
-/etc/init.d/apache2 stop
-/etc/init.d/apache2se stop
+service samba stop
+service slapd stop
+service apache2 stop
+service apache2se stop
 
 echo -e "$COLTXT"
 echo "Récupération des valeurs actuelles de IP, MASQUE et GATEWAY..."
@@ -386,8 +386,8 @@ mysql -u$dbuser -p$dbpass $dbname < /tmp/maj_chgt_ip_se3.sql
 echo -e "$COLTXT"
 echo "Redémarrage de l'interface réseau..."
 echo -e "$COLCMD\c"
-/etc/init.d/networking stop
-/etc/init.d/networking start
+service networking stop
+service networking start
 ifup $ecard
 
 #
@@ -396,10 +396,10 @@ ifup $ecard
 echo -e "$COLTXT"
 echo "Redémarrage des services..."
 echo -e "$COLCMD\c"
-/etc/init.d/slapd start
-/etc/init.d/samba start
-/etc/init.d/apache2 start
-/etc/init.d/apache2se start
+service slapd start
+service samba start
+service apache2 start
+service apache2se start
 
 
 #
@@ -463,10 +463,10 @@ echo -e "$COLTXT\c"
 echo "Création d'un script de retour à l'état initial:"
 echo "retablissement_config_initiale.sh"
 echo -e "$COLCMD\c"
-echo "/etc/init.d/samba stop
-/etc/init.d/slapd stop
-/etc/init.d/apache2 stop
-/etc/init.d/apache2se stop
+echo "service samba stop
+service slapd stop
+service apache2 stop
+service apache2se stop
 cp -f /etc/network/interfaces.ori /etc/network/interfaces
 cp -f /etc/ldap/ldap.conf.ori /etc/ldap/ldap.conf
 # cp -f /etc/ldap/slapd.conf.ori /etc/ldap/slapd.conf
@@ -502,14 +502,14 @@ echo \"replace: ipHostNumber\" >> /tmp/retablissement_chgt_ip_se3.ldif
 echo \"ipHostNumber: $OLD_IP\" >> /tmp/retablissement_chgt_ip_se3.ldif
 echo \"\" >> /tmp/retablissement_chgt_ip_se3.ldif
 
-/etc/init.d/networking stop
-/etc/init.d/networking start
+service networking stop
+service networking start
 ifup $ecard
 
-/etc/init.d/slapd start
-/etc/init.d/samba start
-/etc/init.d/apache2 start
-/etc/init.d/apache2se start
+service slapd start
+service samba start
+service apache2 start
+service apache2se start
 
 ldapmodify -x -D \"$ADMIN_DN\" -w $(cat /etc/ldap.secret) -f /tmp/retablissement_chgt_ip_se3.ldif
 [ -e /usr/share/se3/scripts/wpkg_initvars.sh ] &&  /usr/share/se3/scripts/wpkg_initvars.sh

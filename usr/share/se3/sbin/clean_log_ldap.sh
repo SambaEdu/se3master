@@ -16,9 +16,9 @@ echo "Usage : aucune option"
 fi
 
 ## On relance ldap pour créer un checkpoint
-# /etc/init.d/slapd stop
+# service slapd stop
 # sleep 3
-# /etc/init.d/slapd start
+# service slapd start
 # sleep 2
 # /usr/bin/db4.8_archive -d -h /var/lib/ldap
 #  

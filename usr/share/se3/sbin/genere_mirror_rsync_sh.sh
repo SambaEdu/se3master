@@ -124,9 +124,9 @@ fi
 echo '' | tee -a \$FICHIERLOG
 
 echo 'Arret de ldap, mysql et cron' | tee -a \$FICHIERLOG
-/etc/init.d/slapd stop
-/etc/init.d/mysql stop
-/etc/init.d/cron stop
+service slapd stop
+service mysql stop
+service cron stop
 echo '' | tee -a \$FICHIERLOG
 
 echo 'rsync de la partition /var' | tee -a \$FICHIERLOG
@@ -136,9 +136,9 @@ umount \$PARTVAR_CIBLE
 
 echo '' | tee -a \$FICHIERLOG
 echo 'Redemarrage  de ldap, mysql et cron' | tee -a \$FICHIERLOG
-/etc/init.d/slapd start
-/etc/init.d/mysql start
-/etc/init.d/cron start
+service slapd start
+service mysql start
+service cron start
 echo '' | tee -a \$FICHIERLOG
 
 t2=\$(date +%s)

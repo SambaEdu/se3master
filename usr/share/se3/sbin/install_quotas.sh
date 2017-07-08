@@ -60,7 +60,7 @@ mv $FSTAB_TMP $FSTAB_ORI
 FSTAB_SAUV=${FSTAB_ORI}.sauve_$LADATE
 LADATE=$(date +%D_%Hh%M | sed -e "s!/!_!g")
 FICHIERLOG=/root/init_quota.log 
-/etc/init.d/samba stop
+service samba stop
 sleep 2
 umount /home
 umount /var/se3
@@ -72,4 +72,4 @@ mount -a
 else
 echo "** Mise en place des quotas sur le serveur avec succes**"  | tee -a $FICHIERLOG 
 fi
-/etc/init.d/samba start
+service samba start
