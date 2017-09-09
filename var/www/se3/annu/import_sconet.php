@@ -253,7 +253,7 @@
 				echo "<h4>Fichier professeurs et emploi du temps</h4>\n";
 
 				echo "<p>Veuillez fournir le fichier XML <i>(STS_emp_RNE_ANNEE.xml)</i>:<br />\n";
-				echo "<span style='background-color: lightblue; border: 1px solid black;'>XML:</span> ";
+				echo "<span style='background-color: lightblue; border: 1px solid black;'>XML&nbsp;:</span> ";
 				echo "<input type=\"file\" size=\"80\" name=\"sts_xml_file\" id=\"sts_xml_file\" />\n";
 				echo "&nbsp;&nbsp;";
 			        echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('<b>Le cheminement pour effectuer cet export depuis Sconet est:</b><br />STS-web/Mise &#224; jour/Exports/Emplois du temps')")."\"><img name=\"action_image1\"  src=\"$helpinfo\"></u>\n";
@@ -272,12 +272,31 @@
 				echo "<h4>Fichier optionnel de logins</h4>\n";
 
 				echo "<p>Vous pouvez fournir, si vous le souhaitez, un fichier de correspondances 'employeeNumber;login' pour imposer des logins aux nouveaux utilisateurs <i>(f_uid.txt)</i>:<br />\n";
-				echo "<span id='id_csv' style='background-color: lightgreen; border: 1px solid black;'>CSV:</span> ";
+				echo "<span id='id_csv' style='background-color: lightgreen; border: 1px solid black;'>CSV&nbsp;:</span> ";
 				echo "<input type=\"file\" size=\"80\" name=\"f_uid_file\" id=\"f_uid_file\" />\n";
 				echo "&nbsp;&nbsp;";
 			        echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('<b>Le fichier doit &#234;tre format&#233; ainsi:</b><br />P1234;zebest<br />P2345;zeone<br />3456;toto<br />Avec le pr&#233;fixe P sur les employeeNumber des Profs et pas de pr&#233;fixe pour les Eleves.')")."\"><img name=\"action_image1\"  src=\"$helpinfo\"></u>\n";
 				echo "</p>\n";
 				echo "<br />\n";
+
+				//======================================================
+				// 20170902
+				// Pouvoir gérer les formats de divers ENT
+				// INSERT INTO params SET name='import_sconet_csv_ENT', value='kosmos';
+				if(crob_getParam('import_sconet_csv_ENT')=="kosmos") {
+					echo "<h4>Fichier CSV ENT</h4>\n";
+
+					echo "<p>Vous pouvez fournir, si vous le souhaitez, un fichier CSV de votre ENT pour imposer des logins aux nouveaux utilisateurs <i>(ENT-Identifiants-&lt;RNE&gt;.csv)</i>:<br />\n";
+					echo "<span id='id_csv_ent' style='background-color: lightgreen; border: 1px solid black;'>CSV ENT&nbsp;:</span> ";
+					echo "<input type=\"file\" size=\"80\" name=\"csv_ent_file\" id=\"csv_ent_file\" />\n";
+					echo "&nbsp;&nbsp;";
+					  echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gettext("('<b>Le fichier doit... Kosmos...')")."\"><img name=\"action_image1\"  src=\"$helpinfo\"></u><br />";
+					//echo "<input type='checkbox' name='ne_pas_creer_compte_si_login_trop_long' id='ne_pas_creer_compte_si_login_trop_long' value='y' /><label for='ne_pas_creer_compte_si_login_trop_long'> Ne pas créer le compte si le login ENT identifi&eacute; dépasse 19 caract&egrave;res <em>(le probl&egrave;me sera signal&eacute; en fin d'import)</em>.</label>\n";
+					echo "<input type='checkbox' name='ne_pas_creer_compte_si_non_trouve_ENT' id='ne_pas_creer_compte_si_non_trouve_ENT' value='y' ".((crob_getParam("csvENT_indispensable")=="y") ? " checked" : "")."/><label for='ne_pas_creer_compte_si_non_trouve_ENT'> Ne pas créer un compte &eacute;l&egrave;ve s'il n'est pas trouv&eacute; dans le CSV ENT <em>(l'&eacute;chec sera signal&eacute; dans le rapport de fin d'import)</em>.</label>\n";
+					echo "</p>\n";
+					echo "<br />\n";
+				}
+				//======================================================
 
 				echo "<h3>Configuration de l'import</h3>";
 
@@ -312,7 +331,6 @@
 
 
 				// ===========================================================
-				// AJOUTS: 20070914 boireaus
 				echo "<h4>Param&#232;tres de l'import</h4>\n";
 				echo "<ul>\n";
 				echo "<li>\n";
@@ -670,6 +688,26 @@
 				$temoin_f_uid="y";
 			}
 
+			//==========================================
+			// 20170902
+			// Fichier optionnel csv_ent_file
+			$tmp_csv_ent_file=$_FILES['csv_ent_file']['tmp_name'];
+			$csv_ent_file=$_FILES['csv_ent_file']['name'];
+			$size_csv_ent_file=$_FILES['csv_ent_file']['size'];
+
+			$dest_file="$dossier_tmp_import_comptes/csv_ent.csv";
+			if(file_exists($dest_file)){
+				unlink($dest_file);
+			}
+
+			$temoin_csv_ent="n";
+			if(is_uploaded_file($tmp_csv_ent_file)){
+				$source_file=stripslashes("$tmp_csv_ent_file");
+				$res_copy=copy("$source_file" , "$dest_file");
+
+				$temoin_csv_ent="y";
+			}
+			//==========================================
 
 			//$timestamp=preg_replace("/ /","_",microtime());
 			$echo_file="$racine_www/Admin/result.$timestamp.html";
@@ -744,7 +782,10 @@ decompte(cpt);
 			$corriger_gecos_si_diff=isset($_POST['corriger_gecos_si_diff']) ? $_POST['corriger_gecos_si_diff'] : 'n';
 			$alimenter_groupe_pp=isset($_POST['alimenter_groupe_pp']) ? $_POST['alimenter_groupe_pp'] : 'n';
 			$rafraichir_classes=isset($_POST['rafraichir_classes']) ? $_POST['rafraichir_classes'] : 'n';
-
+			// 20170902
+			//$ne_pas_creer_compte_si_login_trop_long=isset($_POST['ne_pas_creer_compte_si_login_trop_long']) ? $_POST['ne_pas_creer_compte_si_login_trop_long'] : 'n';
+			$ne_pas_creer_compte_si_non_trouve_ENT=isset($_POST['ne_pas_creer_compte_si_non_trouve_ENT']) ? $_POST['ne_pas_creer_compte_si_non_trouve_ENT'] : 'n';
+			crob_setParam("csvENT_indispensable",$ne_pas_creer_compte_si_non_trouve_ENT,"Interdire les creations de comptes eleves non trouves dans le CSV ENT fourni.");
 
 			// Dossier pour les CSV
 
@@ -806,21 +847,11 @@ decompte(cpt);
 */
 
 			$fich=fopen("$dossier_tmp_import_comptes/import_comptes.sh","w+");
-			//fwrite($fich,"#!/bin/bash\n/usr/bin/sudo $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers'\n");
-
 			// ===========================================================
-			// AJOUTS: 20070914 boireaus
-			//fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono'\n");
-
-			//fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres'\n");
-
-			//fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff'\n");
-
-			fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff' '$temoin_f_uid' '$alimenter_groupe_pp' '$rafraichir_classes'\n");
-
-			//echo "<p>#!/bin/bash<br />\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff'</p>\n";
+			// 20170902
+			fwrite($fich,"#!/bin/bash\n/usr/bin/php $chemin/import_comptes.php '$type_fichier_eleves' '$chemin_fich/fichier_eleves' '$chemin_fich/fichier_sts' '$prefix' '$annuelle' '$simulation' '$timestamp' '$randval' '$temoin_creation_fichiers' '$chrono' '$creer_equipes_vides' '$creer_cours' '$creer_matieres' '$corriger_gecos_si_diff' '$temoin_f_uid' '$alimenter_groupe_pp' '$rafraichir_classes' '$temoin_csv_ent' '$ne_pas_creer_compte_si_non_trouve_ENT'\n");
+			// '$si_csv_ent_bloquer_login_plus_de_19_caracteres'
 			// ===========================================================
-
 
 
 			fclose($fich);

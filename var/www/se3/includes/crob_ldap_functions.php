@@ -1783,6 +1783,45 @@ function get_uid_from_f_uid_file($employeeNumber) {
 }
 
 
+function get_uid_from_csv_ent_file($nom, $prenom, $classe) {
+	global $dossier_tmp_import_comptes;
+
+	// Format Kosmos
+	//rne;uid;classe;profil;prenom;nom;login;mot de passe;cle de jointure;uid pere;uid mere;uid tuteur1;uid tuteur2;prenom enfant;nom enfant;adresse;code postal;ville;pays
+
+	if(!file_exists("$dossier_tmp_import_comptes/csv_ent.csv")) {
+		return array();
+	}
+	else {
+		$ftmp=fopen("$dossier_tmp_import_comptes/csv_ent.csv","r");
+		while(!feof($ftmp)) {
+			$ligne=trim(fgets($ftmp,4096));
+
+			if($tab=explode(";",$ligne)) {
+
+				// Mot de passe >>>> Mot de passe déjà modifié par utilisateur >>>>
+
+				if(("$tab[2]"=="$classe")&&("$tab[3]"=="Eleve")&&("$tab[4]"=="$prenom")&&("$tab[5]"=="$nom")) {
+					// On controle le login
+					if(strlen(preg_replace("/[A-Za-z0-9._\-]/","",$tab[1]))==0) {
+						$uid=$tab[6];
+						$pass="";
+						if(!preg_match("/>>>> Mot de passe d/", $tab[7])) {
+							$pass=$tab[7];
+						}
+						return array($uid,$pass);
+					}
+					else {
+						return array();
+					}
+					break;
+				}
+			}
+		}
+	}
+}
+
+
 /**
 * Recherche les compte dans la branche Trash
 * @Parametres $filter filtre ldap de recherche
