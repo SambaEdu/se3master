@@ -37,8 +37,7 @@ textdomain ('se3-core');
 $_SESSION["pageaide"]="L\'interface_web_administrateur#Configuration_g.C3.A9n.C3.A9rale";
 
 if (ldap_get_right("se3_is_admin",$login)!="Y")
-        die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BO
-DY></HTML>");
+        die (gettext("Vous n'avez pas les droits suffisants pour acc&#233;der &#224; cette fonction")."</BODY></HTML>");
 
 $action = $_GET['action'];
 
@@ -48,11 +47,14 @@ if ($action == "change") {
 	if ($_GET['varb'] == "proxy") {
 		system("/usr/bin/sudo /usr/share/se3/scripts/modifProxy.sh ".$_GET['valeur']);
 	} else {
-                //$resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$default_page_dem', '$name_params', 'homepage $userGroups', '1')");
-                    
-		$resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('".$_GET['valeur']."','".$_GET['varb']."','".$_GET['descr']."','".$_GET['cat']."')");
+		//$resultat=mysql_query("INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('$default_page_dem', '$name_params', 'homepage $userGroups', '1')");
+		$sql="INSERT into params (`value`, `name`, `descr`, `cat`) VALUES ('".$_GET['valeur']."','".$_GET['varb']."','".$_GET['descr']."','".$_GET['cat']."')";
+		//echo "$sql<br />";
+		$resultat=mysql_query($sql);
 		if ($resultat == FALSE) {
-			mysql_query("UPDATE params set value='$_GET[valeur]' where name='".$_GET['varb']."';");
+			$sql="UPDATE params set value='$_GET[valeur]' where name='".$_GET['varb']."';";
+			//echo "$sql<br />";
+			mysql_query($sql);
 		}
 	}
 	if ($_GET['varb'] == "corbeille") {
@@ -207,7 +209,7 @@ if ($action=="modif_uidP") {
 	if ($uidPolicy=="3") { $uidP=gettext("pnom (tronqu&#233; &#224; 8)"); }
 	if ($uidPolicy=="4") { $uidP=gettext("nomp (tronqu&#233; &#224; 8)"); }
 	if ($uidPolicy=="5") { $uidP=gettext("nomprenom (tronqu&#233; &#224; 18)"); }
-	echo "<u onmouseover=\"return escape".gettext("('Permet de modifier le format de login.<br> Ce changement ne modifie pas les comptes d&#233;j&#224; cr&#233;&#233;s.<br><br>Les types disponibles sont :<br>prenom.nom<br>prenom.nom (tronqu&#233; &#224; 19)<br>pnom (tronqu&#233; &#224; 19)<br>pnom (tronqu&#233; &#224; 8)<br>nomp (troqu&#233; &#224; 8).<br>nomprenom (tronqu&#233; &#224; 18).<br><br>Si vous avez un Slis, vous devez choisir nomp (troqu&#233; &#224; 8). ')")."\">";
+	echo "<u onmouseover=\"return escape".gettext("('Permet de modifier le format de login.<br> Ce changement ne modifie pas les comptes d&#233;j&#224; cr&#233;&#233;s.<br><br>Les types disponibles sont :<br>prenom.nom<br>prenom.nom (tronqu&#233; &#224; 19)<br>pnom (tronqu&#233; &#224; 19)<br>pnom (tronqu&#233; &#224; 8)<br>nomp (tronqu&#233; &#224; 8).<br>nomprenom (tronqu&#233; &#224; 18).<br><br>Si vous avez un Slis, vous devez choisir nomp (troqu&#233; &#224; 8). ')")."\">";
 	echo "<a href=conf_params.php?action=modif_uidP>$uidP</a>";
 	echo "</u>";
 }	
@@ -234,6 +236,31 @@ if ($action=="modif_pwdP") {
 	if ($pwdPolicy=="2") { $pwdP=gettext("al&#233;atoire (8 car.)"); }
 	echo "<u onmouseover=\"return escape".gettext("('Permet de choisir le format des mots de passe. ')")."\">";
 	echo "<a href=conf_params.php?action=modif_pwdP>$pwdP</a>";
+	echo "</u>";
+}	
+echo "</td></tr>\n";
+
+// import_sconet_csv_ENT
+echo "<TR><TD>".gettext("Utiliser un CSV ENT pour la cr&#233;ation des comptes &#233;l&#232;ves")."</TD><TD align=\"center\">";
+if ($action=="modif_import_sconet_csv_ENT") {
+	echo "<form method=\"get\" action=\"conf_params.php\">";
+	echo "<input type=\"hidden\" name=\"action\" value=\"change\">";
+	echo "<input type=\"hidden\" name=\"varb\" value=\"import_sconet_csv_ENT\">";
+	echo "<select name =\"valeur\" ONCHANGE=\"this.form.submit();\">";
+	echo "<option"; if ($import_sconet_csv_ENT=="aucun") { echo " selected"; } echo " value=\"aucun\">".gettext("Pas de CSV ENT")."</option>";
+	echo "<option"; if ($import_sconet_csv_ENT=="kosmos") { echo " selected"; } echo " value=\"kosmos\">".gettext("CSV ENT Kosmos")."</option>";
+	echo "</select>\n";
+	echo "<u onmouseover=\"return escape".gettext("('Permet de fournir un CSV ENT pour l import des comptes &#233;l&#232;ves.')")."\">";
+	echo "<img name=\"action_image2\"  src=\"../elements/images/system-help.png\" alt=\"Help\">";
+	echo "</u></form>";
+} else {
+	if($import_sconet_csv_ENT=="") {
+		$import_sconet_csv_ENT="aucun";
+	}
+	if ($import_sconet_csv_ENT=="aucun") { $import_sconet_csv_ENT=gettext("Pas de CSV ENT"); }
+	if ($import_sconet_csv_ENT=="kosmos") { $pwdP=gettext("CSV ENT Kosmos"); }
+	echo "<u onmouseover=\"return escape".gettext("('Permet de fournir un CSV ENT pour l import des comptes &#233;l&#232;ves.')")."\">";
+	echo "<a href=conf_params.php?action=modif_import_sconet_csv_ENT>$import_sconet_csv_ENT</a>";
 	echo "</u>";
 }	
 echo "</td></tr>\n";

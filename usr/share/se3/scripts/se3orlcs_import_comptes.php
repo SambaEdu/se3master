@@ -11,7 +11,8 @@
 	// AJOUTS: 20070914 boireaus
 	//if($argc < 11 || in_array($argv[1], array('--help', '-help', '-h', '-?'))){
 	//if($argc < 15 || in_array($argv[1], array('--help', '-help', '-h', '-?'))){
-	if($argc < 17 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
+	// $argc = count($argv) mais $argv[0] contient le nom du script php (il faut donc compter un de plus)
+	if($argc < 20 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
 	// ===========================================================
 		$chaine="USAGE: Vous devez passer en paramétres (dans l'ordre):\n";
 		$chaine.="       . Le type du fichier 'csv' ou 'xml';\n";
@@ -36,6 +37,11 @@
 		$chaine.="                    gecos, cn, sn et givenName si des différences sont trouvées.\n";
 		$chaine.="       . 'y' ou 'n' selon qu'il faut utiliser ou non un fichier F_UID.txt\n";
 		$chaine.="       . 'y' ou 'n' selon qu'il faut alimenter un groupe Professeurs Principaux\n";
+		$chaine.="       . 'y' ou 'n' selon qu'il faut Rafraichir les classes en fin d'import\n";
+		// 20170902
+		$chaine.="       . 'y' ou 'n' selon qu'il faut utiliser un export CSV ENT\n";
+		//$chaine.="       . 'y' ou 'n' selon que dans le cas de l'utilisation d'un export CSV ENT, il faut ou non bloquer les creations dont le login depasse 19 caracteres.\n";
+		$chaine.="       . 'y' ou 'n' selon que dans le cas de l'absence d'un élève dans l'export CSV ENT doit bloquer la création du compte élève ou non.\n";
 		// ===========================================================
 
 
@@ -108,6 +114,12 @@
 	$temoin_f_uid=$argv[15];
 	// ===========================================================
 	$alimenter_groupe_pp=$argv[16];
+	// ===========================================================
+	// 20170902
+	//$rafraichir_classes=$argv[17]; // Plus bas
+	$utiliser_csv_ent=$argv[18];
+	//$si_csv_ent_bloquer_login_plus_de_19_caracteres=$argv[19];
+	$ne_pas_creer_compte_si_non_trouve_ENT=$argv[19];
 	// ===========================================================
 
 	// Pour effectuer des affichages de debug:

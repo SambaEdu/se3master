@@ -86,6 +86,11 @@
 	// listing pour l'impression des comptes
 	$listing = array(array());  // une ligne par compte ; le deuxieme parametre est, dans l'ordre nom, prenom, classe (ou 'prof'), uid, password
 
+	// 20170902
+	$logins_trop_longs_f_uid="";
+	$logins_trop_longs_csv_ent="";
+	$logins_non_trouves_csv_ent="";
+
 	if(file_exists($pathscripts."/creation_branche_Trash.sh")) {
 		exec("/bin/bash ".$pathscripts."/creation_branche_Trash.sh > /dev/null",$retour);
 	}
@@ -2468,11 +2473,20 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 									$uid="";
 								}
 								else {
-									my_echo("Ajout du professeur $prenom $nom (<i style='color:magenta;'>$uid</i>): ");
+									// 20170902
+									if(mb_strlen($uid)>19) {
+										my_echo("Le login <span style='color:red;'>$uid</span>, trouvé de le fichier f_uid.txt, est trop long.<br />Avec plus de 19 caractères, la connexion sur un Window$ 7 n'est pas possible.<br />\n");
+										$logins_trop_longs_f_uid.="Le login <span style='color:red;'>$uid</span>, trouvé de le fichier f_uid.txt, est trop long.<br />\n";
+										$uid="";
+										$temoin_erreur_prof="o";
+									}
+									else {
+										my_echo("Ajout du professeur $prenom $nom (<i style='color:magenta;'>$uid</i>): ");
+									}
 								}
 							}
 	
-							if($uid=='') {
+							if(($uid=='')&&($temoin_erreur_prof!="o")) {
 								// Creation d'un uid:
 								if(!$uid=creer_uid($nom,$prenom)) {
 									$temoin_erreur_prof="o";
@@ -2983,22 +2997,112 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							$uid="";
 						}
 						else {
-							my_echo("Ajout de l'élève $prenom $nom (<i style='color:magenta;'>$uid</i>): ");
+							// 20170902
+							if(mb_strlen($uid)>19) {
+								my_echo("Le login <span style='color:red;'>$uid</span>, trouvé de le fichier f_uid.txt, est trop long.<br />Avec plus de 19 caractères, la connexion sur un Window$ 7 n'est pas possible.<br />\n");
+								$logins_trop_longs_f_uid.="Le login <span style='color:red;'>$uid</span>, trouvé de le fichier f_uid.txt, est trop long.<br />\n";
+								$uid="";
+								$temoin_erreur_eleve="o";
+							}
+							else {
+								my_echo("Ajout de l'élève $prenom $nom (<i style='color:magenta;'>$uid</i>): ");
+							}
+						}
+					}
+
+					// 20170908
+					if(($uid=="")&&($temoin_erreur_eleve!="o")&&(isset($utiliser_csv_ent))&&($utiliser_csv_ent=="y")&&($ne_pas_creer_compte_si_non_trouve_ENT=="y")) {
+						$tab_uid_pass=get_uid_from_csv_ent_file($eleve[$numero]["nom"], $eleve[$numero]["prenom"], $eleve[$numero]["division"]);
+						if(count($tab_uid_pass)>0) {
+							$uid=$tab_uid_pass[0];
+							my_echo("Le login <span style='color:blue;'>$uid</span> a été trouvé de le fichier CSV de l'ENT.<br />\n");
+
+							// Faire en sorte de pouvoir utiliser le mot de passe ENT dans le futur avec $pass=$tab_uid_pass[1]
+							//my_echo("Le mode passe (dans le futur) serait <span style='color:blue;'>".$tab_uid_pass[1]."</span>.<br />\n");
+
+							if(mb_strlen($uid)>19) {
+								my_echo("Le login <span style='color:red;'>$uid</span>, trouvé de le fichier CSV de l'ENT, est trop long.<br />Avec plus de 19 caractères, la connexion sur un Window$ 7 n'est pas possible.<br />\n");
+								$logins_trop_longs_csv_ent.="Le login <span style='color:red;'>$uid</span>, trouvé de le fichier CSV de l'ENT, est trop long.<br />\n";
+								$uid="";
+								$temoin_erreur_eleve="o";
+							}
+							else {
+								$attribut=array("uid");
+								$verif1=get_tab_attribut("people", "uid=$uid", $attribut);
+								$verif2=get_tab_attribut("trash", "uid=$uid", $attribut);
+								//if((count($verif1)>0)||(count($verif2)>0)) {
+								if(count($verif1)>0) {
+									// Le login propose est deja dans l'annuaire
+									my_echo("Le login proposé <span style='color:red;'>$uid</span> est déjà dans l'annuaire (<i>branche People</i>).<br />\n");
+									$uid="";
+								}
+								elseif(count($verif2)>0) {
+									// Le login propose est deja dans l'annuaire
+									my_echo("Le login proposé <span style='color:red;'>$uid</span> est déjà dans l'annuaire (<i>branche Trash</i>).<br />\n");
+									$uid="";
+								}
+								else {
+									my_echo("Ajout de l'élève $prenom $nom (<i style='color:magenta;'>$uid</i>): ");
+								}
+							}
+						}
+						else {
+							$logins_non_trouves_csv_ent.="$prenom $nom non trouvé dans le CSV ENT.<br />";
+							$temoin_erreur_eleve="o";
+						}
+					}
+					// 20170902
+					elseif(($uid=="")&&($temoin_erreur_eleve!="o")&&(isset($utiliser_csv_ent))&&($utiliser_csv_ent=="y")) {
+						$tab_uid_pass=get_uid_from_csv_ent_file($eleve[$numero]["nom"], $eleve[$numero]["prenom"], $eleve[$numero]["division"]);
+						if(count($tab_uid_pass)>0) {
+							$uid=$tab_uid_pass[0];
+							my_echo("Le login <span style='color:blue;'>$uid</span> a été trouvé de le fichier CSV de l'ENT.<br />\n");
+
+							// Faire en sorte de pouvoir utiliser le mot de passe ENT dans le futur avec $pass=$tab_uid_pass[1]
+							//my_echo("Le mode passe (dans le futur) serait <span style='color:blue;'>".$tab_uid_pass[1]."</span>.<br />\n");
+
+							if(mb_strlen($uid)>19) {
+								my_echo("Le login <span style='color:red;'>$uid</span>, trouvé de le fichier CSV de l'ENT, est trop long.<br />Avec plus de 19 caractères, la connexion sur un Window$ 7 n'est pas possible.<br />\n");
+								$logins_trop_longs_csv_ent.="Le login <span style='color:red;'>$uid</span>, trouvé de le fichier CSV de l'ENT, est trop long.<br />\n";
+								$uid="";
+								$temoin_erreur_eleve="o";
+							}
+							else {
+								$attribut=array("uid");
+								$verif1=get_tab_attribut("people", "uid=$uid", $attribut);
+								$verif2=get_tab_attribut("trash", "uid=$uid", $attribut);
+								//if((count($verif1)>0)||(count($verif2)>0)) {
+								if(count($verif1)>0) {
+									// Le login propose est deja dans l'annuaire
+									my_echo("Le login proposé <span style='color:red;'>$uid</span> est déjà dans l'annuaire (<i>branche People</i>).<br />\n");
+									$uid="";
+								}
+								elseif(count($verif2)>0) {
+									// Le login propose est deja dans l'annuaire
+									my_echo("Le login proposé <span style='color:red;'>$uid</span> est déjà dans l'annuaire (<i>branche Trash</i>).<br />\n");
+									$uid="";
+								}
+								else {
+									my_echo("Ajout de l'élève $prenom $nom (<i style='color:magenta;'>$uid</i>): ");
+								}
+							}
 						}
 					}
 
 					if($uid=='') {
-						// Creation d'un uid:
-						if(!$uid=creer_uid($nom,$prenom)) {
-							$temoin_erreur_eleve="o";
-							my_echo("<font color='red'>ECHEC: Problème lors de la création de l'uid...</font><br />\n");
-							if("$error"!="") {
-								my_echo("<font color='red'>$error</font><br />\n");
+						if($temoin_erreur_eleve!="o") {
+							// Creation d'un uid:
+							if(!$uid=creer_uid($nom,$prenom)) {
+								$temoin_erreur_eleve="o";
+								my_echo("<font color='red'>ECHEC: Problème lors de la création de l'uid...</font><br />\n");
+								if("$error"!="") {
+									my_echo("<font color='red'>$error</font><br />\n");
+								}
+								$nb_echecs++;
 							}
-							$nb_echecs++;
-						}
-						else {
-							my_echo("Ajout de l'élève $prenom $nom (<i>$uid</i>): ");
+							else {
+								my_echo("Ajout de l'élève $prenom $nom (<i>$uid</i>): ");
+							}
 						}
 					}
 
@@ -3052,6 +3156,85 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				else {
 					// Pas de F_UID.TXT fourni pour imposer des logins.
 
+					// 20170908
+					if(($uid=="")&&($temoin_erreur_eleve!="o")&&(isset($utiliser_csv_ent))&&($utiliser_csv_ent=="y")&&($ne_pas_creer_compte_si_non_trouve_ENT=="y")) {
+						$tab_uid_pass=get_uid_from_csv_ent_file($eleve[$numero]["nom"], $eleve[$numero]["prenom"], $eleve[$numero]["division"]);
+						if(count($tab_uid_pass)>0) {
+							$uid=$tab_uid_pass[0];
+							my_echo("Le login <span style='color:blue;'>$uid</span> a été trouvé de le fichier CSV de l'ENT.<br />\n");
+
+							// Faire en sorte de pouvoir utiliser le mot de passe ENT dans le futur avec $pass=$tab_uid_pass[1]
+							//my_echo("Le mode passe (dans le futur) serait <span style='color:blue;'>".$tab_uid_pass[1]."</span>.<br />\n");
+
+							if(mb_strlen($uid)>19) {
+								my_echo("Le login <span style='color:red;'>$uid</span>, trouvé de le fichier CSV de l'ENT, est trop long.<br />Avec plus de 19 caractères, la connexion sur un Window$ 7 n'est pas possible.<br />\n");
+								$logins_trop_longs_csv_ent.="Le login <span style='color:red;'>$uid</span>, trouvé de le fichier CSV de l'ENT, est trop long.<br />\n";
+								$uid="";
+								$temoin_erreur_eleve="o";
+							}
+							else {
+								$attribut=array("uid");
+								$verif1=get_tab_attribut("people", "uid=$uid", $attribut);
+								$verif2=get_tab_attribut("trash", "uid=$uid", $attribut);
+								//if((count($verif1)>0)||(count($verif2)>0)) {
+								if(count($verif1)>0) {
+									// Le login propose est deja dans l'annuaire
+									my_echo("Le login proposé <span style='color:red;'>$uid</span> est déjà dans l'annuaire (<i>branche People</i>).<br />\n");
+									$uid="";
+								}
+								elseif(count($verif2)>0) {
+									// Le login propose est deja dans l'annuaire
+									my_echo("Le login proposé <span style='color:red;'>$uid</span> est déjà dans l'annuaire (<i>branche Trash</i>).<br />\n");
+									$uid="";
+								}
+								else {
+									my_echo("Ajout de l'élève $prenom $nom (<i style='color:magenta;'>$uid</i>): ");
+								}
+							}
+						}
+						else {
+							$logins_non_trouves_csv_ent.="$prenom $nom non trouvé dans le CSV ENT.<br />";
+							$temoin_erreur_eleve="o";
+						}
+					}
+					// 20170902
+					elseif(($uid=="")&&(isset($utiliser_csv_ent))&&($utiliser_csv_ent=="y")) {
+						$tab_uid_pass=get_uid_from_csv_ent_file($eleve[$numero]["nom"], $eleve[$numero]["prenom"], $eleve[$numero]["division"]);
+						if(count($tab_uid_pass)>0) {
+							$uid=$tab_uid_pass[0];
+							my_echo("Le login <span style='color:blue;'>$uid</span> a été trouvé de le fichier CSV de l'ENT.<br />\n");
+
+							// Faire en sorte de pouvoir utiliser le mot de passe ENT dans le futur avec $pass=$tab_uid_pass[1]
+							//my_echo("Le mode passe (dans le futur) serait <span style='color:blue;'>".$tab_uid_pass[1]."</span>.<br />\n");
+
+							if(mb_strlen($uid)>19) {
+								my_echo("Le login <span style='color:red;'>$uid</span>, trouvé de le fichier CSV de l'ENT, est trop long.<br />Avec plus de 19 caractères, la connexion sur un Window$ 7 n'est pas possible.<br />\n");
+								$logins_trop_longs_csv_ent.="Le login <span style='color:red;'>$uid</span>, trouvé de le fichier CSV de l'ENT, est trop long.<br />\n";
+								$uid="";
+								$temoin_erreur_eleve="o";
+							}
+							else {
+								$attribut=array("uid");
+								$verif1=get_tab_attribut("people", "uid=$uid", $attribut);
+								$verif2=get_tab_attribut("trash", "uid=$uid", $attribut);
+								//if((count($verif1)>0)||(count($verif2)>0)) {
+								if(count($verif1)>0) {
+									// Le login propose est deja dans l'annuaire
+									my_echo("Le login proposé <span style='color:red;'>$uid</span> est déjà dans l'annuaire (<i>branche People</i>).<br />\n");
+									$uid="";
+								}
+								elseif(count($verif2)>0) {
+									// Le login propose est deja dans l'annuaire
+									my_echo("Le login proposé <span style='color:red;'>$uid</span> est déjà dans l'annuaire (<i>branche Trash</i>).<br />\n");
+									$uid="";
+								}
+								else {
+									my_echo("Ajout de l'élève $prenom $nom (<i style='color:magenta;'>$uid</i>): ");
+								}
+							}
+						}
+					}
+
 					/*
 					if(strtolower($nom)=="andro") {
 					$f_tmp=fopen("/tmp/debug_accents.txt","a+");
@@ -3061,7 +3244,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					*/
 
 					// Creation d'un uid:
-					if(!$uid=creer_uid($nom,$prenom)) {
+					if((!$uid=creer_uid($nom,$prenom))||($temoin_erreur_eleve=="o")) {
 						$temoin_erreur_eleve="o";
 						my_echo("<font color='red'>ECHEC: Problème lors de la création de l'uid...</font><br />\n");
 						if("$error"!="") {
@@ -3382,6 +3565,18 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			$chaine.="</p>\n";
 		}
 
+
+		if($logins_trop_longs_f_uid!="") {
+			$chaine.="<p>Un ou des comptes trouvés dans le fichier f_uid.txt étaient trop longs <em>(avec plus de 19 caractères, ils n'auraient pas pu se connecter sous Window$ 7)</em>.<br />".$logins_trop_longs_f_uid."</p>\n";
+		}
+
+		if($logins_trop_longs_csv_ent!="") {
+			$chaine.="<p>Un ou des comptes trouvés dans le CSV ENT étaient trop longs <em>(avec plus de 19 caractères, ils n'auraient pas pu se connecter sous Window$ 7)</em>.<br />Ils ne seraient pas été créés.<br />".$logins_trop_longs_csv_ent."</p>\n";
+		}
+
+		if($logins_non_trouves_csv_ent!="") {
+			$chaine.="<p><span style='color:red'>Un ou des comptes élèves n'ont pas été trouvés dans le CSV ENT et n'ont donc pas été créés&nbsp;:</span><br />".$logins_non_trouves_csv_ent."</p>\n";
+		}
 
 		$chaine.="<p>On ne simule pas la création des groupes... pour le moment.</p>\n";
 
@@ -5340,6 +5535,18 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 			$chaine.=", $tab_nouveaux_comptes[$i]";
 		}
 		$chaine.="</p>\n";
+	}
+
+	if($logins_trop_longs_f_uid!="") {
+		$chaine.="<p>Un ou des comptes trouvés dans le fichier f_uid.txt étaient trop longs <em>(avec plus de 19 caractères, ils n'auraient pas pu se connecter sous Window$ 7)</em>.<br />".$logins_trop_longs_f_uid."</p>\n";
+	}
+
+	if($logins_trop_longs_csv_ent!="") {
+		$chaine.="<p>Un ou des comptes trouvés dans le CSV ENT étaient trop longs <em>(avec plus de 19 caractères, ils n'auraient pas pu se connecter sous Window$ 7)</em>.<br />Ils n'ont pas été créés.<br />".$logins_trop_longs_csv_ent."</p>\n";
+	}
+
+	if($logins_non_trouves_csv_ent!="") {
+		$chaine.="<p><span style='color:red'>Un ou des comptes élèves n'ont pas été trouvés dans le CSV ENT et n'ont donc pas été créés&nbsp;:</span><br />".$logins_non_trouves_csv_ent."</p>\n";
 	}
 
 	if($rafraichir_classes=="y") {
