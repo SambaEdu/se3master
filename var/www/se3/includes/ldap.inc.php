@@ -414,6 +414,9 @@ function search_uids($filter) {
                             $result1 = @ldap_read($ds, "cn=Profs," . $dn["groups"], $filtre1);
                             $ret[$init]["prof"] = @ldap_count_entries($ds, $result1);
                             @ldap_free_result($result1);
+                            $result1 = @ldap_read($ds, "cn=Eleves," . $dn["groups"], $filtre1);
+                            $ret[$init]["eleve"] = @ldap_count_entries($ds, $result1);
+                            @ldap_free_result($result1);
                             // fin patch a wawa
                             $ret[$init]["uid"] = $info[$loop]["memberuid"][$i];
                             $ret[$init]["group"] = $group[1];
@@ -581,6 +584,7 @@ function search_people_groups($uids, $filter, $order) {
                             "cat" => $uids[$loop]["cat"],
                             "gecos" => $gecos,
                             "prof" => $uids[$loop]["prof"],
+                            "eleve" => $uids[$loop]["eleve"],
                             "employeeNumber" => $info[0]["employeenumber"][0]
                         );
 
@@ -900,6 +904,55 @@ function gof_members($gof, $branch, $extract) {
                             $ret[$loop] = extract_login($info[0]["member"][$loop]);
                         else
                             $ret[$loop] = $info[0]["member"][$loop];
+                    }
+                }
+
+                @ldap_free_result($result);
+            }
+        } else {
+            $error = gettext("Echec du bind anonyme");
+        }
+
+        @ldap_close($ds);
+    } else {
+        $error = gettext("Erreur de connection au serveur LDAP");
+    }
+    return $ret;
+}
+
+function posixGroup_members($posixGroup, $branch) {
+
+    /**
+     * Liste les membres du posixGroup $posixGroup
+
+     * @Parametres $posixGroup - $posixGroup est le groupe posix dans lequel on recherche un objet
+     * @Parametres $branche - L'ou ou se fait la recherche
+
+     * @Return  Retourne un tableau avec les membres du GroupOfNames repondant a la recherche
+     */
+    global $ldap_server, $ldap_port, $dn;
+    global $error;
+    $error = "";
+
+    // Initialisation:
+    $ret=array();
+
+    // LDAP attributs: Il ne faut pas respecter la casse memberUid, mais mettre memberuid pour que ca passe
+    $members_attr = array(
+        "memberuid"   // Membres du groupe
+    );
+    $ds = @ldap_connect($ldap_server, $ldap_port);
+    if ($ds) {
+        $r = @ldap_bind($ds); // Bind anonyme
+        if ($r) {
+            //echo "Recherche de cn=$posixGroup,".$dn[$branch]."<br />";
+            $result = @ldap_read($ds, "cn=$posixGroup," . $dn[$branch], "cn=*", $members_attr);
+            if ($result) {
+                $info = @ldap_get_entries($ds, $result);
+                if ($info["count"] == 1) {
+                    $init = 0;
+                    for ($loop = 0; $loop < $info[0]["memberuid"]["count"]; $loop++) {
+                      $ret[$loop] = $info[0]["memberuid"][$loop];
                     }
                 }
 
@@ -1605,5 +1658,58 @@ function search_doublons_sambasid()
 	{
         echo "<p>ERREUR: La connexion au LDAP a &#233;chou&#233;.<p/>\n";
     }
+}
+
+function get_tab_uid_eleves_du_prof($login_prof) {
+	$tab_uid_eleves=array();
+
+	if(are_you_in_group($login_prof, "Profs")) {
+		$mes_infos=people_get_variables($login_prof, true);
+
+		//echo "Infos sur le prof $login_prof<pre>";
+		//print_r($mes_infos);
+		//echo "</pre>";
+
+		if((isset($mes_infos[1]))&&(count($mes_infos[1])>0)) {
+			for($loop=0;$loop<count($mes_infos[1]);$loop++) {
+				if(isset($mes_infos[1][$loop]["cn"])) {
+					if(preg_match("/^Equipe_/", $mes_infos[1][$loop]["cn"])) {
+						// Recuperer la liste des eleves
+						$nom_classe=preg_replace("/^Equipe_/", "Classe_", $mes_infos[1][$loop]["cn"]);
+						//echo "On va chercher sur la classe $nom_classe<br />";
+
+						$membres=posixGroup_members($nom_classe, "groups");
+						//echo "Membres<pre>";
+						//print_r($membres);
+						//echo "</pre>";
+						if(is_array($membres)) {
+							for($loop_m=0;$loop_m<count($membres);$loop_m++) {
+								if(!in_array($membres[$loop_m], $tab_uid_eleves)) {
+									$tab_uid_eleves[]=$membres[$loop_m];
+								}
+							}
+						}
+					}
+					elseif(preg_match("/^Cours_/", $mes_infos[1][$loop]["cn"])) {
+						// Recuperer la liste des eleves
+						//echo "On va chercher sur le cours ".$mes_infos[1][$loop]["cn"]."<br />";
+
+						$membres=posixGroup_members($mes_infos[1][$loop]["cn"], "groups");
+						if(is_array($membres)) {
+							for($loop_m=0;$loop_m<count($membres);$loop_m++) {
+								if(!in_array($membres[$loop_m], $tab_uid_eleves)) {
+									if(are_you_in_group($membres[$loop_m], "Eleves")) {
+										$tab_uid_eleves[]=$membres[$loop_m];
+									}
+								}
+							}
+						}
+
+					}
+				}
+			}
+		}
+	}
+	return $tab_uid_eleves;
 }
 ?>
