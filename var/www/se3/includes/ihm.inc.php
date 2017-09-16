@@ -381,45 +381,110 @@ function is_admin ($droit,$login)
 
 function  aff_mnu_search($user_type)
 {
-  if ($user_type=="Y") {
+	// Personne connectee:
+	global $login;
+
+	if ($user_type=="Y") {
 
 
-    // keyser modif MC marques 02/06
-       // Affichage menu admin
-    echo"
+		// keyser modif MC marques 02/06
+		// Affichage menu admin
+		echo"
+<ul>
+	<li>
+		<b>".gettext("Rechercher :")."</b>
+		<ul>
+			<li><a href=\"search.php\">".gettext("Effectuer une recherche...")."</a>(".gettext("pour d'eventuelles modifications").")</li>
+		</ul>
+		<br />
+	</li>
 
-     <ul>
-       <li><b>".gettext("Rechercher :")."</b>
-			<ul>
-				<li><a href=\"search.php\">".gettext("Effectuer une recherche...")."</a>(".gettext("pour d'eventuelles modifications").")</li>
-			</ul>
-			<br />
-		</li>
-
-       <li><b>".gettext("Ajouter")." :</b>
-         <ul>
-           <li><a href=\"add_user.php\">".gettext("un utilisateur...")."</a></li>
-           <li><a href=\"add_group.php\">".gettext("un groupe...")."</a></li>
-           <li><a href=\"groupetpe.php\">".gettext("un regroupement...")."</a></li>
-           </ul>
-           <br />
-		</li>
-        <li><b>".gettext("Import / Export")." :</b>
-          <ul>
-            <li><a href=\"../gepcgi/index.php\">".gettext("Importer les comptes en masse...")."</a></li>
-            <li><a href=\"export_csv.php\">".gettext("Exporter les comptes en format CSV...")." </a></li>
-          </ul>
-		</li>
-     </ul>\n";
+	<li>
+		<b>".gettext("Ajouter")." :</b>
+		<ul>
+			<li><a href=\"add_user.php\">".gettext("un utilisateur...")."</a></li>
+			<li><a href=\"add_group.php\">".gettext("un groupe...")."</a></li>
+			<li><a href=\"groupetpe.php\">".gettext("un regroupement...")."</a></li>
+		</ul>
+		<br />
+	</li>
+	<li>
+		<b>".gettext("Import / Export")." :</b>
+		<ul>
+			<li><a href=\"../gepcgi/index.php\">".gettext("Importer les comptes en masse...")."</a></li>
+			<li><a href=\"export_csv.php\">".gettext("Exporter les comptes en format CSV...")." </a></li>
+		</ul>
+	</li>
+</ul>\n";
 
 
-  } else {
-    // Affichage menu user
-    echo "
-     <ul>
-       <li><a href=\"search.php\">".gettext("Effectuer une recherche...")."</a></li>
-     </ul>\n";
-  }
+	} else {
+		// Affichage menu user
+		echo "
+<ul>
+	<li><a href=\"search.php\">".gettext("Effectuer une recherche...")."</a></li>";
+		if(are_you_in_group($login, "Profs")) {
+			$tab_mes_groupes=array();
+			$tab_mes_classes=array();
+			$tab_mes_equipes=array();
+			$tab_mes_matieres=array();
+			$tab_mes_cours=array();
+			$mes_infos=people_get_variables($login, true);
+
+			/*
+			echo "<pre>";
+			print_r($mes_infos);
+			echo "</pre>";
+			*/
+
+			if((isset($mes_infos[1]))&&(count($mes_infos[1])>0)) {
+				for($loop=0;$loop<count($mes_infos[1]);$loop++) {
+					if(isset($mes_infos[1][$loop]["cn"])) {
+						if(preg_match("/^Equipe_/", $mes_infos[1][$loop]["cn"])) {
+							$nom_grp=preg_replace("/^Equipe_/", "Classe_", $mes_infos[1][$loop]["cn"]);
+							$tab_mes_groupes[]=$nom_grp;
+							$tab_mes_classes[]=$nom_grp;
+							$tab_mes_equipes[]=$mes_infos[1][$loop]["cn"];
+						}
+						elseif(preg_match("/^Cours_/", $mes_infos[1][$loop]["cn"])) {
+							$nom_grp=$mes_infos[1][$loop]["cn"];
+							$tab_mes_groupes[]=$nom_grp;
+							$tab_mes_cours[]=$nom_grp;
+						}
+						elseif(preg_match("/^Matiere_/", $mes_infos[1][$loop]["cn"])) {
+							$nom_grp=$mes_infos[1][$loop]["cn"];
+							$tab_mes_groupes[]=$nom_grp;
+							$tab_mes_matieres[]=$nom_grp;
+						}
+					}
+				}
+			}
+
+			echo "
+	<li>".((count($tab_mes_classes)>0) ? "
+		<a href=\"groups_list.php?group=Classe_&priority_group=commence&mes_groupes=y\">".gettext("Mes classes...")."</a>
+		 ou " : "")."
+		<a href=\"groups_list.php?group=Classe_&priority_group=commence\">".gettext("toutes les classes.")."</a>
+	</li>
+	<li>".((count($tab_mes_cours)>0) ? "
+		<a href=\"groups_list.php?group=Cours_&priority_group=commence&mes_groupes=y\">".gettext("Mes cours...")."</a>
+		 ou " : "")."
+		<a href=\"groups_list.php?group=Cours_&priority_group=commence\">".gettext("tous les cours.")."</a>
+	</li>
+	<li>".((count($tab_mes_equipes)>0) ? "
+		<a href=\"groups_list.php?group=Equipe_&priority_group=commence&mes_groupes=y\">".gettext("Mes &eacute;quipes.")."</a>
+		 ou " : "")."
+		<a href=\"groups_list.php?group=Equipe_&priority_group=commence\">".gettext("toutes les &eacute;quipes.")."</a>
+	</li>
+	<li>".((count($tab_mes_matieres)>0) ? "
+		<a href=\"groups_list.php?group=Matiere_&priority_group=commence&mes_groupes=y\">".gettext("Mes mati&egrave;res.")."</a>
+		 ou " : "")."
+		<a href=\"groups_list.php?group=Matiere_&priority_group=commence\">".gettext("toutes les mati&egrave;res.")."</a>
+	</li>";
+		}
+		echo "
+</ul>\n";
+	}
 }
 
 
