@@ -13,7 +13,7 @@
 
 if [ -e /var/se3/unattended/install/wpkg/packages.xml ]; then
   # on teste la presence du paquet italc pour se3 (officiel)
-  TESTITALC="$(cat /var/se3/unattended/install/wpkg/packages.xml | grep "Italc SE3: surveillance, diffusion..." )"
+  TESTITALC="$(cat /var/se3/unattended/install/wpkg/packages.xml | grep "Italc" )"
   if [ "$TESTITALC" == "" ]; then
     echo "Le paquet italc n est pas installe : dans le menu applications windows, choisir ajouter une application, sur le forum : italc"
     exit 0
