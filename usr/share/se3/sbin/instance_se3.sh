@@ -175,3 +175,16 @@ if getfacl /var/se3/Docs/public/ 2>/dev/null | grep -q "^other::rwx" ;then
 else
 	SETMYSQL  autoriser_part_pub "n" "Autoriser partage public" 1
 fi
+
+# desactivation avahi-daemon
+
+/usr/sbin/update-rc.d avahi-daemon remove
+/usr/sbin/service avahi-daemon stop
+
+
+# Modif table params et corresp
+
+echo "ALTER TABLE params CHANGE descr descr VARCHAR( 100 )" | mysql $dbname -u $dbuser -p$dbpass
+echo "ALTER TABLE params CHANGE name name VARCHAR( 30 )" | mysql $dbname -u $dbuser -p$dbpass
+echo "ALTER TABLE corresp modify valeur varchar(150)" | mysql $dbname -u $dbuser -p$dbpass
+
