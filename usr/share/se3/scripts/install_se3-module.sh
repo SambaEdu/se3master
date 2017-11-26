@@ -326,6 +326,12 @@ se3-domain)
 install_module
 ;;
 
+
+se3-clientwin)
+SE3MODULE="sambaedu-client-windows"
+install_module
+;;
+
 se3-logonpy)
 install_module
 ;;
