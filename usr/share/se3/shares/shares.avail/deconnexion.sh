@@ -4,6 +4,7 @@
 #shares_WinXP: homes
 #shares_Vista: homes
 #shares_Seven: homes
+#shares_Ten: homes
 #shares_CIFSFS: homes
 #action: stop
 #level: 10

@@ -4,6 +4,7 @@
 #shares_WinXP: prof
 #shares_Vista: prof
 #shares_Seven: prof
+#shares_Ten: prof
 #action: start
 #level: 01
 

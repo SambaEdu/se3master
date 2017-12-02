@@ -4,6 +4,7 @@
 #shares_WinXP: homes
 #shares_Vista: homes
 #shares_Seven: homes
+#shares_Ten: homes
 #action: start
 #level: 99
 #

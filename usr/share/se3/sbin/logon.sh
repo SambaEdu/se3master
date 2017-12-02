@@ -83,15 +83,26 @@ then
        exit 0
 elif [ "$user" == "adminse3" ]
 then
-     [ "$1" != "install" ] &&  exit 0
+      [ "$1" != "install" ] &&  exit 0
 fi      
 
+#On vérifie le système d'exploitation car le %a de samba ne fonctionne plus après Vista
+type=$5
+if [ "$type" == "Vista" ]; then
+   build=$(echo quit|smbclient //"$4"/ADMIN$ -A /home/netlogon/machine/$3/gpoPASSWD 2>&1 | sed 's/\(^.*OS=\[Windows \(Server\)*[ 0-9]\+ \(R2\)*[ a-zA-Z]\+ \([0-9]\+\).*\].*$\)/\4/g')
+   if [ "$build" -le "7601" ] && [ "$build" -gt "6002" ]; then
+		type=Seven
+   elif [ "$build" -gt "9600" ]; then
+	   type=Ten
+   fi
+fi
 # ok, on transmet les infos sans transformation
 if [ "$LOGON" == "1" ]
 then
-        rc_logon $1 $2 $3 $4 $5
+        rc_logon $1 $2 $3 $4 $type
 elif [  "$LOGOUT" == "1" ]
 then
-        rc_logout $1 $2 $3 $4 $5
+        rc_logout $1 $2 $3 $4 $type
 fi
 exit $?
+

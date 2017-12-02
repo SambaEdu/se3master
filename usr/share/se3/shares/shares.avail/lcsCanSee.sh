@@ -4,6 +4,7 @@
 #shares_WinXP: drivers, Progs
 #shares_Vista: drivers, Progs
 #shares_Seven: drivers, Progs
+#shares_Ten: drivers, Progs
 #action: start
 #level: 01
 if [ "$2" == "lcs" ]
