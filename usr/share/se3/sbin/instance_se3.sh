@@ -23,7 +23,7 @@ fi
 
 
 # noroot noway 
-touch /etc/nologon
+touch /etc/nologin
 
 
 
