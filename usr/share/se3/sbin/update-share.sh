@@ -224,3 +224,4 @@ then
 else 
 	usage 1
 fi
+exit 0
