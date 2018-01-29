@@ -294,6 +294,23 @@ if ($_GET['action'] == "change") {
 			}
 			break;
 
+                // Installation de  sambaedu-client-windows
+		case "clientwin":
+			$valeur_clientwin=($_GET['valeur']==1) ? 1 : 0;
+
+
+			if ($valeur_clientwin == 1) {
+				system("/usr/bin/sudo -H bash -x /usr/share/se3/scripts/install_se3-module.sh -i sambaedu-client-windows",$return);
+				if($return==0) {
+				echo "Module $module mis &#224; jour.<br>\n";
+				}
+				else{
+				echo "Un probl&#232;me est survenu lors de l'installation de $module.<br>\n";
+				}
+
+			}
+			break;
+
 
 		// Installation de WPKG (se3-wpkg)
 		case "wpkg":
@@ -431,6 +448,9 @@ for ($i=0; $i< count($files); $i++) {
 	} elseif ($files[$i] == "/var/lock/se3-domain.lck") {
 		$domain_lock="yes";
 		echo "<br><center>".gettext("Attention : installation du paquet se3-domain en cours.")."</center>";
+        }elseif ($files[$i] == "/var/lock/sambaedu-client-windows.lck") {
+		$clientwin_lock="yes";
+		echo "<br><center>".gettext("Attention : installation du paquet sambaedu-client-windows en cours.")."</center>";
 	} elseif ($files[$i] == "/var/lock/se3-internet.lck") {
 		$internet_lock="yes";
 		echo "<br><center>".gettext("Attention : installation du paquet se3-internet en cours.")."</center>";
@@ -501,10 +521,47 @@ if ($domain_actif!="1") {
 	echo "<a href=conf_modules.php?action=change&varb=domain&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" \"$domain_alert\"></a>";
 	echo "</u>";
 } else {
-	echo "<u onmouseover=\"return escape".gettext("('<b>Module install�')")."\">";
+	echo "<u onmouseover=\"return escape".gettext("('<b>Module install&#233;')")."\">";
 	echo "<IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" >";
 	echo "</u>";
 }
+
+
+// Module sambaedu-client-windows
+$module="sambaedu-client-windows";
+$module_actif = exec("dpkg -s $module | grep \"Status: install ok\"> /dev/null && echo 1");
+echo "<TR><TD>".gettext("Nouveaux scripts de jonction au domaine utilisant sysprep ($module)")."</TD>";
+
+// On teste si on a bien la derniere version
+$module_version_install = exec("apt-cache policy $module | grep \"Install\" | cut -d\":\" -f2");
+$module_version_dispo = exec("apt-cache policy $module | grep \"Candidat\" | cut -d\":\" -f2");
+echo "<TD align=\"center\">$module_version_install</TD>";
+if ("$module_version_install" == "$module_version_dispo") {
+	echo "<TD align=\"center\">";
+	echo "<u onmouseover=\"return escape".gettext("('Pas de nouvelle version de ce module')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\"></u>";
+	echo "</TD>";
+} else {
+	echo "<TD align=\"center\">";
+	echo "<u onmouseover=\"return escape".gettext("('Mise &#224; jour version $module_version_dispo disponible.<br>Cliquer ici pour lancer la mise &#224; jour de ce module.')")."\"><a href=conf_modules.php?action=update&varb=clientwin&valeur=1><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/warning.png\"></a></u>";
+	echo "</TD>";
+}
+
+echo "<TD align=\"center\">";
+if ($module_actif!="1") {
+	$module_message=gettext("<b>Attention : </b>Le paquet n\'est pas install&#233; sur ce serveur. Cliquez pour l\'installer.");
+	$module_alert="onClick=\"alert('Installation du packet se3-domain. Cela peut prendre un peu de temps. Vous devez avoir une connexion internet active')\"";
+
+	echo "<u onmouseover=\"return escape('".$module_message."')\">";
+	echo "<a href=conf_modules.php?action=change&varb=domain&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" \"$module_alert\"></a>";
+	echo "</u>";
+} else {
+	echo "<u onmouseover=\"return escape".gettext("('<b>Module install$#233;')")."\">";
+	echo "<IMG style=\"border: 0px solid;\" SRC=\"elements/images/enabled.png\" >";
+	echo "</u>";
+}
+
+
+
 
 // Module se3-logonpy
 $logonpy_actif = exec("dpkg -s se3-logonpy | grep \"Status: install ok\"> /dev/null && echo 1");

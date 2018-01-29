@@ -75,15 +75,11 @@ echo "Ajout de assist au group admins pour cnx TS sur les clients windows"
 /usr/share/$SRV/sbin/groupAddUser.pl assist admins
 
 if [ -e "/home/assist" ]; then
-      if [ "$SRV" == "lcs" ]; then
-      ### On adapte les droit pour LCS 2
-      chown root\:lcs-users /home/assist
-      chmod 750 /home/assist
-      else
       chown -R assist\:lcs-users /home/assist
-      [ -e /home/profile/assist ]  chown -R assist\:lcs-users /home/profile/assist
-      fi
 fi
+rm -rf /home/profiles/assist
+rm -rf /home/profiles/assist.V?
+
 
 
 

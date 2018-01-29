@@ -40,12 +40,14 @@ rm -f /usr/share/se3/sbin/restore_droits.sh
 ln -s /usr/share/se3/scripts/restore_droits /usr/share/se3/sbin/restore_droits.sh 
 fi
 
+rm -f /home/templates/base/Bureau/.Reparer\ son* || true
+rm -f /home/templates/base/Bureau/Reparer\ son* || true
 
 
 
-#if [ -e  ]; then
-#rm -f 
-#fi
+if [ -e /var/se3/Progs/ro/del_hive.bat ]; then
+rm -f  /var/se3/Progs/ro/del_hive.bat
+fi
 
 # Nettoyage scripts
 

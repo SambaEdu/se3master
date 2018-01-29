@@ -197,12 +197,12 @@ function start_poste($action, $name)
                 if (search_samba($name)) {
                     // machine windows
                     system ("/usr/bin/net rpc shutdown -t 2 -f -r -C 'Reboot demande par le serveur sambaEdu3' -I ".$ip." -U \"".$name."\adminse3%".$xppass."\"");
-                    system ( "/usr/bin/ssh -o StrictHostKeyChecking=no ConnectTimeout=1 root@".$ip." reboot");
+                    system ( "/usr/bin/ssh -o StrictHostKeyChecking=no -o ConnectTimeout=1 root@".$ip." reboot");
                     echo "<br><br>";
                 }
                 else {
                     // poste linux : ssh...
-                    system ( "/usr/bin/ssh -o StrictHostKeyChecking=no ConnectTimeout=1 root@".$ip." reboot");
+                    system ( "/usr/bin/ssh -o StrictHostKeyChecking=no -o ConnectTimeout=1 root@".$ip." reboot");
                     echo "<br><br>";
                 }
             }
@@ -221,12 +221,12 @@ function start_poste($action, $name)
                 if (search_samba($name)) {
                     // machine windows
                      $ret.=system ("/usr/bin/net rpc shutdown -t 30 -f -C 'Arret demande par le serveur sambaEdu3' -I ".$ip." -U \"".$name."\adminse3%".$xppass."\"");
-		             system ( "/usr/bin/ssh -o StrictHostKeyChecking=no ConnectTimeout=1 root@".$ip." poweroff");
+		             system ( "/usr/bin/ssh -o StrictHostKeyChecking=no -o ConnectTimeout=1 root@".$ip." poweroff");
                      echo "<br><br>";
                 }
                 else {
                      // poste linux : ssh...
-                     system ( "/usr/bin/ssh -o StrictHostKeyChecking=no ConnectTimeout=1 root@".$ip." poweroff");
+                     system ( "/usr/bin/ssh -o StrictHostKeyChecking=no -o ConnectTimeout=1 root@".$ip." poweroff");
                      echo "<br><br>";
                 }
             }

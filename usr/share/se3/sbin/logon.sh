@@ -83,7 +83,7 @@ then
        exit 0
 elif [ "$user" == "adminse3" ]
 then
-       exit 0
+     [ "$1" != "install" ] &&  exit 0
 fi      
 
 # ok, on transmet les infos sans transformation
