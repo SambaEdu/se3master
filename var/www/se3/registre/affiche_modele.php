@@ -429,7 +429,7 @@ switch ($action) {
         $handle = opendir('/home/templates');
         while ($file = readdir($handle)) {
             if ($file <> '.' and $file <> '..' and $file <> 'registre.vbs' and $file <> 'skeluser') {
-                echo "<div  alt=\"$file\" title=\" $file\"><input type=\"checkbox\" name=\"template$i\" value=\"$file\" />$file</div>";
+                echo "<div  alt=\"$file\" title=\" $file\"><input type=\"checkbox\" name=\"template$i\" id='checkbox_template$i' value=\"$file\" /><label for='checkbox_template$i'>$file</label></div>";
             }
             $i++;
         }
