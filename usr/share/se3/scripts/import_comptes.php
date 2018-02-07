@@ -4683,7 +4683,8 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 		//$groupes[$i]["code_matiere"]			-> 070800
 		//$groupes[$i]["enseignant"][$m]["id"]	-> 38101
 
-		$nom_groupe_a_debugger="3 ALIG3";
+		//$nom_groupe_a_debugger="3 ALIG3";
+		$nom_groupe_a_debugger="";
 		function my_echo_double_sortie($chaine, $balise="p") {
 			$debug="n";
 			if($debug=="y") {
@@ -4748,7 +4749,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					}
 
 
-					if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+					if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 						my_echo_double_sortie("\$groupes[$i][\"code\"]=".$groupes[$i]["code"]);
 					}
 
@@ -4762,7 +4763,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						$div=apostrophes_espaces_2_underscore(remplace_accents($div));
 
 
-							if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+							if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 								my_echo_double_sortie("Classe associee ".$div);
 							}
 
@@ -4780,7 +4781,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 								if(apostrophes_espaces_2_underscore(remplace_accents($tab_division[$k]["nom"]))==$div) {
 									$ind_div=$k;
 
-									if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+									if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 										my_echo_double_sortie("\$ind_div=".$ind_div);
 									}
 
@@ -4803,7 +4804,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 								//           Cas d'un aligment 3 ALIG2 concernant FRANC, EDMUS, AGL1, A-PLA
 								//           L'AGL1 est une option, pas les autres.
 
-								if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+								if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 									my_echo_double_sortie("\$tab_division[$ind_div][\"option\"][$k][\"code_matiere\"]=".$tab_division[$ind_div]["option"][$k]["code_matiere"]." et \$grp_id_mat=$grp_id_mat");
 								}
 
@@ -4814,7 +4815,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 									$temoin_matiere_optionnelle="oui";
 									$ind_mat=$k;
 
-									if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+									if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 										my_echo_double_sortie("Matière optionnelle apparaissant dans ElevesSansAdresses avec \$ind_mat=$ind_mat");
 									}
 
@@ -4824,7 +4825,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 									$temoin_matiere_optionnelle="oui";
 									$ind_mat=$k;
 
-									if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+									if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 										my_echo_double_sortie("Matière optionnelle avec \$ind_mat=$ind_mat");
 									}
 
@@ -4844,7 +4845,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							$chaine_div.=" / ".$div;
 						}
 
-						if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+						if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 							my_echo_double_sortie("\$temoin_matiere_optionnelle=".$temoin_matiere_optionnelle);
 						}
 
@@ -4864,7 +4865,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						}
 						else {
 
-							if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+							if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 								my_echo_double_sortie("\$temoin_groupe_apparaissant_dans_Eleves_xml=".$temoin_groupe_apparaissant_dans_Eleves_xml);
 							}
 
@@ -4885,13 +4886,13 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 								}
 							}
 							else {
-								if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+								if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 									my_echo_double_sortie("Recherche des membres de des groupes du tableau \$tab_groups_member[".apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))."])");
 								}
 
 								for($k=0;$k<count($tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))]);$k++) {
 
-									if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+									if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 										my_echo_double_sortie("employeeNumber=(0)".$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))][$k]." indice k=$k");
 									}
 
@@ -4900,15 +4901,19 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 									$tabtmp=get_tab_attribut("people", "(|(employeenumber=".$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))][$k].")(employeenumber=".sprintf("%05d",$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))][$k])."))", $attribut);
 
-									if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+									if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 										if(isset($tabtmp[0])) {
 											//my_echo_double_sortie("Elèves trouvés : ");
-											//echo "<pre>";
-											//print_r($tabtmp[0]);
-											//echo "</pre>";
+											/*
+											echo "\$groupes[$i][\"code\"]=".$groupes[$i]["code"]."<br />\n";
+											echo "\$tabtmp[0]<pre>";
+											print_r($tabtmp[0]);
+											echo "</pre>";
 											foreach($tabtmp[0] as $key => $current_uid) {
 												my_echo_double_sortie($current_uid." ");
 											}
+											*/
+											my_echo_double_sortie($tabtmp[0]." dans le groupe ".$groupes[$i]["code"]."<br />");
 										}
 										else {
 											my_echo_double_sortie("Aucun élève trouvé.");
@@ -4921,7 +4926,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 								}
 							}
 
-							if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+							if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 								my_echo_double_sortie("print_r(\$tab_eleve_uid)=");
 								my_echo_double_sortie(print_r($tab_eleve_uid),"pre");
 							}
@@ -5062,7 +5067,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 				// Faute de section SERVICE, on ne recupere pas le grp_id_mat
 				// On n'a pas de $grp_id_mat faute de section SERVICE donc pas moyen d'identifier la matiere associee au groupe et de chercher si cette matiere a ete reperee comme optionnelle
 
-				if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+				if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 					my_echo_double_sortie("\$groupes[$i][\"code\"]=".$groupes[$i]["code"]);
 				}
 
@@ -5086,7 +5091,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 
 					//$tab_division[$ind_div]["option"][$k]["code_matiere"]
 
-					if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+					if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 						my_echo_double_sortie("Classe associee ".$div);
 					}
 
@@ -5100,7 +5105,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							if(apostrophes_espaces_2_underscore(remplace_accents($tab_division[$k]["nom"]))==$div) {
 								$ind_div=$k;
 
-								if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+								if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 									my_echo_double_sortie("\$ind_div=".$ind_div);
 								}
 
@@ -5125,7 +5130,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							$temoin_matiere_optionnelle="oui";
 							$ind_mat=$k;
 
-							if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+							if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 								my_echo_double_sortie("Matiere optionnelle apparaissant dans ElevesSansAdresses avec \$ind_mat=$ind_mat");
 							}
 						}
@@ -5140,7 +5145,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						$chaine_div.=" / ".$div;
 					}
 
-					if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+					if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 						my_echo_double_sortie("\$temoin_matiere_optionnelle=".$temoin_matiere_optionnelle);
 					}
 
@@ -5159,7 +5164,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 					}
 					else{
 
-						if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+						if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 							my_echo_double_sortie("\$temoin_groupe_apparaissant_dans_Eleves_xml=".$temoin_groupe_apparaissant_dans_Eleves_xml);
 						}
 
@@ -5180,7 +5185,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 						}
 						else {
 
-							if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+							if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 								my_echo_double_sortie("count(\$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents(\$groupes[$i]['code']))])=count(\$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents(".$groupes[$i]['code']."))])=count(\$tab_groups_member[".apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))."])=".count($tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))]));
 							}
 
@@ -5188,14 +5193,14 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 								// Recuperer l'uid correspondant a l'elenoet/employeeNumber stocke
 								//$tabtmp=search_people("employeeNumber=".$tab_groups_member[$groupes[$i]["code"]][$k]);
 
-								if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+								if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 									my_echo_double_sortie("\$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents(\$groupes[$i]['code']))][$k]=\$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents(".$groupes[$i]['code']."))][$k]=\$tab_groups_member[".apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]['code']))."][$k]=".$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]['code']))][$k]);
 								}
 
 								$attribut=array("uid");
 								$tabtmp=get_tab_attribut("people", "(|(employeenumber=".$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))][$k].")(employeenumber=".sprintf("%05d",$tab_groups_member[apostrophes_espaces_2_underscore(remplace_accents($groupes[$i]["code"]))][$k])."))", $attribut);
 
-								if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+								if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 									my_echo_double_sortie(print_r($tabtmp),"pre");
 								}
 
@@ -5205,7 +5210,7 @@ rm -f /tmp/erreur_svg_prealable_ldap_${date}.txt
 							}
 						}
 
-						if($groupes[$i]["code"]==$nom_groupe_a_debugger) {
+						if(($nom_groupe_a_debugger!='')&&($groupes[$i]["code"]==$nom_groupe_a_debugger)) {
 							my_echo_double_sortie(print_r($tab_eleve_uid),"pre");
 						}
 
