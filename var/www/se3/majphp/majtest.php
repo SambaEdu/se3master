@@ -211,18 +211,18 @@ else {
         
     }
     
-    // Module unattended
+    // Module sambaedu-client-windows
     
-    $unattended_actif = exec("dpkg -s se3-unattended | grep \"Status: install ok\" > /dev/null && echo 1");
+    $client_windows_actif = exec("dpkg -s sambaedu-client-windows | grep \"Status: install ok\" > /dev/null && echo 1");
     
-    if($unattended_actif == "1") {
-        $unattended_version_install = exec("apt-cache policy se3-unattended | grep \"Install\" | cut -d\":\" -f2");
-        $unattended_version_dispo = exec("apt-cache policy se3-unattended | grep \"Candidat\" | cut -d\":\" -f2");
+    if($client_windows_actif == "1") {
+        $client_windows_version_install = exec("apt-cache policy sambaedu-client-windows | grep \"Install\" | cut -d\":\" -f2");
+        $client_windows_version_dispo = exec("apt-cache policy sambaedu-client-windows | grep \"Candidat\" | cut -d\":\" -f2");
         // On teste si on a bien la derniere version
-        if ("$unattended_version_install" != "$unattended_version_dispo") {
-            echo "<TR><TD>".gettext("Installation de stations (se3-unattended)")."</TD>";
-            echo "<TD align=\"center\">$unattended_version_install</TD>";
-            echo "<TD align=\"center\"><b>$unattended_version_dispo</b></TD>";
+        if ("$client_windows_version_install" != "$client_windows_version_dispo") {
+            echo "<TR><TD>".gettext("Scripts de jonction au domaine utilisant sysprep (sambaedu-client-windows)")."</TD>";
+            echo "<TD align=\"center\">$client_windows_version_install</TD>";
+            echo "<TD align=\"center\"><b>$client_windows_version_dispo</b></TD>";
             echo "</TR>";
         }
         

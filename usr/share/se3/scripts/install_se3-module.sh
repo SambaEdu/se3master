@@ -213,7 +213,7 @@ install_module
 
 # UPDATE PARTIE MODULES 
 (
-dpkg -l|grep se3-|cut -d ' ' -f3|while read package
+dpkg -l|grep "se3-\|sambaedu" |cut -d ' ' -f3|while read package
 do
 LC_ALL=C apt-get -s install $package|grep newest >/dev/null|| echo $package
 done
