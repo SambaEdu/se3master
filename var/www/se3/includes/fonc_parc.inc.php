@@ -1033,7 +1033,7 @@ function smbstatus() {
 				}
 			}
 		}
-		ksort($data);
+		if (!(empty($data))) { ksort($data); }
 		apc_add('smb_login', $data, 120);
 		apc_delete('smb_lock');
 	}
