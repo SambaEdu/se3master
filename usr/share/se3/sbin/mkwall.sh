@@ -113,7 +113,7 @@ else
     fi
 
 
-    if [ -z "$temoin" ]; then
+    if [ -z "$temoin" ] || [ "$temoin" = "overfill" ]; then
         # Utilisateur non prof... -> eleves ou administratifs?
         test_membre_eleve=$(ldapsearch -xLLL "(&(memberuid=$1)(cn=Eleves))" cn | grep "^cn: ")
         #echo "test_membre_eleve=$test_membre_eleve"
