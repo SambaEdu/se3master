@@ -168,17 +168,14 @@ function remote_ip()
 
 function decode_pass($string_auth) {
         global  $MaxLifeTime,$path_to_wwwse3;
-        $fpdebug=fopen("/var/log/se3/debug.log","a");
-	fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$string_auth: ".$string_auth."\n");
-	//$argument=explode("\n", $string_auth);
-	//fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$argument: ".$argument[0]."\n");
-	//fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$argument: ".$argument[1]."\n");
+     //   $fpdebug=fopen("/var/log/se3/debug.log","a");
+	//fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$string_auth: ".$string_auth."\n");
 	$string_auth_clean=str_replace(CHR(13).CHR(10),"",$string_auth);
 	fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$string_auth_clean: ".$string_auth_clean."\n");
         // Decodage de la chaine d'authentification cote serveur avec une cle privee
         //$commande="/usr/bin/python ".$path_to_wwwse3."/includes/decode.py $string_auth";
         $commande="(/usr/bin/python $path_to_wwwse3/includes/decode.py '$string_auth_clean')";
-        fputs($fpdebug,date("j/m/y:H:i")." : function decode_pass() : \$commande : ".$commande."\n");
+        //fputs($fpdebug,date("j/m/y:H:i")." : function decode_pass() : \$commande : ".$commande."\n");
         unset($AllOutPut);
         exec ($commande,$AllOutPut,$ReturnValue);
         // Extraction des parametres
@@ -189,21 +186,21 @@ function decode_pass($string_auth) {
         $timestamp = $tmp[2];
         //$timestamp=time();
         $timewait = $tmp[3];
-        fputs($fpdebug,date("j/m/y:H:i").":function decode_pass(".$string_auth_clean."):\n\$passwd : ".$passwd." | \$ip_src : ".$ip_src." | \$timestamp : ".$timestamp." | \$timewait :  ".$timewait."\n");
+        //fputs($fpdebug,date("j/m/y:H:i").":function decode_pass(".$string_auth_clean."):\n\$passwd : ".$passwd." | \$ip_src : ".$ip_src." | \$timestamp : ".$timestamp." | \$timewait :  ".$timewait."\n");
         $timetotal= $timewait+$timestamp+$MaxLifeTime;
-        fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$timetotal : ".$timetotal."\n");
+        //fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$timetotal : ".$timetotal."\n");
         // Interpretation des resultats
                 if ( $ip_src != remote_ip() && time() <  $timetotal ) {
-			fputs($fpdebug,date("j/m/y:H:i").":function decode_pass(): ips differentes | ".time()." < timetotal => error=1\n");
+			//fputs($fpdebug,date("j/m/y:H:i").":function decode_pass(): ips differentes | ".time()." < timetotal => error=1\n");
                         $error = 1;
                 } elseif   ( time() >  $timetotal && $ip_src == remote_ip() ) {
-			fputs($fpdebug,date("j/m/y:H:i").":function decode_pass(): ips identiques | ".time()." > timetotal => error=2\n");
+			//fputs($fpdebug,date("j/m/y:H:i").":function decode_pass(): ips identiques | ".time()." > timetotal => error=2\n");
                         $error = 2;
                 }  elseif ( $ip_src != remote_ip()   &&   time() >  $timetotal ) {
-			fputs($fpdebug,date("j/m/y:H:i").":function decode_pass(): ips differentes | ".time()." > timetotal => error=3\n");
+			//fputs($fpdebug,date("j/m/y:H:i").":function decode_pass(): ips differentes | ".time()." > timetotal => error=3\n");
                         $error = 3;
                 }
-        fclose($fpdebug);
+        //fclose($fpdebug);
         return array ($passwd, $error,$ip_src,$timetotal);
 }
 
