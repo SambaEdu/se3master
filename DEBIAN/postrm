@@ -38,10 +38,10 @@ case "$1" in
 	dpkg-divert --package se3 --rename --remove  /usr/share/se3/scripts/start_poste.sh
 
 
-	dpkg-divert --package se3 --divert --remove  /etc/ldap/ldap.conf 
-	dpkg-divert --package se3 --divert --remove  /etc/nsswitch.conf 
-	dpkg-divert --package se3 --divert --remove  /etc/pam_ldap.conf 
-	dpkg-divert --package se3 --divert --remove  /etc/libnss-ldap.conf 
+#	dpkg-divert --package se3 --divert --remove  /etc/ldap/ldap.conf 
+#	dpkg-divert --package se3 --divert --remove  /etc/nsswitch.conf 
+#	dpkg-divert --package se3 --divert --remove  /etc/pam_ldap.conf 
+#	dpkg-divert --package se3 --divert --remove  /etc/libnss-ldap.conf 
 	) >/dev/null
         ;;
 
