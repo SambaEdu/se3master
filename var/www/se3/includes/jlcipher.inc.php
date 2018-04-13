@@ -171,7 +171,7 @@ function decode_pass($string_auth) {
      //   $fpdebug=fopen("/var/log/se3/debug.log","a");
 	//fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$string_auth: ".$string_auth."\n");
 	$string_auth_clean=str_replace(CHR(13).CHR(10),"",$string_auth);
-	fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$string_auth_clean: ".$string_auth_clean."\n");
+	//fputs($fpdebug,date("j/m/y:H:i").":function decode_pass():\$string_auth_clean: ".$string_auth_clean."\n");
         // Decodage de la chaine d'authentification cote serveur avec une cle privee
         //$commande="/usr/bin/python ".$path_to_wwwse3."/includes/decode.py $string_auth";
         $commande="(/usr/bin/python $path_to_wwwse3/includes/decode.py '$string_auth_clean')";
