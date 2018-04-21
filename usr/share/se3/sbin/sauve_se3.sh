@@ -383,6 +383,26 @@ envoi_courriel()
     cat $COURRIEL | mail $MAIL -s "$OBJET" -a "Content-type: text/plain; charset=UTF-8"
 }
 
+sauver_reservations_ip()
+{
+BASE=$(grep "^BASE" /etc/ldap/ldap.conf | cut -d" " -f2 )
+
+#suppression de l'ancien fichier
+rm -f $DESTINATION\export_dhcp.csv
+ldapsearch -xLLL -b ou=computers,$BASE cn | grep ^cn | cut -d" " -f2 | while read nom
+do
+        if [ ! -z $(echo ${nom:0:1} | sed -e "s/[0-9]//g") ]; then
+                ip=$(ldapsearch -xLLL -b ou=computers,$BASE cn=$nom ipHostNumber | grep ipHostNumber | cut -d" " -f2)
+                mac=$(ldapsearch -xLLL -b ou=computers,$BASE cn=$nom macAddress | grep macAddress | cut -d" " -f2| tr '[:upper:]' '[:lower:]')
+                if [ ! -z "$ip" -a ! -z "$mac" ]; then
+                        echo "$ip;$nom;$mac" >> $DESTINATION\export_dhcp.csv
+
+                fi
+        fi
+done
+}
+
+
 sauver_droits()
 {
     # droits pour /home (pour mémoire)
@@ -474,6 +494,7 @@ case $test in
         # on lance la sauvegarde
         synchro_archivage            # Synchronisation des fichiers
         sauver_droits                # Sauvegarde des droits sur les fichiers
+        sauver_reservations_ip       # Sauvegarde des réservations d'ip
         sauver_imprimantes           # Les fichiers concernant les imprimantes
         rediger_compte_rendu         # Rédaction du compte-rendu de la sauvegarde
     ;;
