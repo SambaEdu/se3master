@@ -465,7 +465,7 @@ for ($i=0; $i< count($files); $i++) {
 		echo "<br><center>".gettext("Attention : installation du paquet se3-synchro en cours.")."</center>";
     } elseif ($files[$i] == "/var/lock/se3-radius.lck") {
         $radius_lock="yes";
-        echo "<br><center>".gettext("Attention : installation du paquet se3-synchro en cours.")."</center>";
+        echo "<br><center>".gettext("Attention : installation du paquet se3-radius en cours.")."</center>";
 	}
 
 }
@@ -549,7 +549,7 @@ if ("$module_version_install" == "$module_version_dispo") {
 echo "<TD align=\"center\">";
 if ($module_actif!="1") {
 	$module_message=gettext("<b>Attention : </b>Le paquet n\'est pas install&#233; sur ce serveur. Cliquez pour l\'installer.");
-	$module_alert="onClick=\"alert('Installation du packet se3-domain. Cela peut prendre un peu de temps. Vous devez avoir une connexion internet active')\"";
+	$module_alert="onClick=\"alert('Installation du packet sambaedu-client-windows. Cela peut prendre un peu de temps. Vous devez avoir une connexion internet active')\"";
 
 	echo "<u onmouseover=\"return escape('".$module_message."')\">";
 	echo "<a href=conf_modules.php?action=change&varb=domain&valeur=1><IMG style=\"border: 0px solid;\" SRC=\"elements/images/disabled.png\" \"$module_alert\"></a>";
