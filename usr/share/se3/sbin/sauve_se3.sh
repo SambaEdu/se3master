@@ -402,7 +402,7 @@ mv /var/se3/save/export_dhcp/export_dhcp.csv  /var/se3/save/export_dhcp/export_d
                 echo "$ip;$nom;$mac" >> /var/se3/save/export_dhcp/export_dhcp.csv
             fi
         fi
-
+done
 }
 
 
