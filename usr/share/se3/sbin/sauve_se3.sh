@@ -386,10 +386,11 @@ envoi_courriel()
 
 sauver_reservations_ip()
 {
-    BASE=$(grep "^BASE" /etc/ldap/ldap.conf | cut -d" " -f2 )
-    
+     BASE=$(grep "^BASE" /etc/ldap/ldap.conf | cut -d" " -f2 )
+
     # suppression de l'ancien fichier
-    rm -f $DESTINATION\export_dhcp.csv
+mkdir -p /var/se3/save/export_dhcp/
+mv /var/se3/save/export_dhcp/export_dhcp.csv  /var/se3/save/export_dhcp/export_dhcp.sav
     ldapsearch -xLLL -b ou=computers,$BASE cn | grep ^cn | cut -d" " -f2 | while read nom
     do
         if [ ! -z $(echo ${nom:0:1} | sed -e "s/[0-9]//g") ]
@@ -398,10 +399,10 @@ sauver_reservations_ip()
             mac=$(ldapsearch -xLLL -b ou=computers,$BASE cn=$nom macAddress | grep macAddress | cut -d" " -f2| tr '[:upper:]' '[:lower:]')
             if [ ! -z "$ip" -a ! -z "$mac" ]
             then
-                echo "$ip;$nom;$mac" >> $DESTINATION\export_dhcp.csv
+                echo "$ip;$nom;$mac" >> /var/se3/save/export_dhcp/export_dhcp.csv
             fi
         fi
-    done
+
 }
 
 
@@ -494,9 +495,9 @@ presence_repertoire_se3                     # présence d'un répertoire de sauv
 case $test in
     0)
         # on lance la sauvegarde
+        sauver_reservations_ip       # Sauvegarde des réservations d'ip
         synchro_archivage            # Synchronisation des fichiers
         sauver_droits                # Sauvegarde des droits sur les fichiers
-        sauver_reservations_ip       # Sauvegarde des réservations d'ip
         sauver_imprimantes           # Les fichiers concernant les imprimantes
         rediger_compte_rendu         # Rédaction du compte-rendu de la sauvegarde
     ;;
