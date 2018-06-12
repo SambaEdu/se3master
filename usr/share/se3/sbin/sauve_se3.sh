@@ -5,7 +5,7 @@
 ##### Script permettant de sauvegarder les données importantes
 ##### pour une restauration du serveur SE3
 ##### version du 16/04/2014
-##### modifiée le 21/04/2018
+##### modifiée le 12/06/2018
 #
 # Auteurs :      Louis-Maurice De Sousa louis.de.sousa@crdp.ac-versailles.fr
 #                François-Xavier Vial Francois.Xavier.Vial@crdp.ac-versailles.fr
@@ -387,9 +387,10 @@ envoi_courriel()
 sauver_reservations_ip()
 {
      BASE=$(grep "^BASE" /etc/ldap/ldap.conf | cut -d" " -f2 )
-
-    # suppression de l'ancien fichier
+#dans le cas d'une première sauvegarde on crée le répertoire d'export avec un fichier vide.
 mkdir -p /var/se3/save/export_dhcp/
+touch /var/se3/save/export_dhcp/export_dhcp.csv
+
 mv /var/se3/save/export_dhcp/export_dhcp.csv  /var/se3/save/export_dhcp/export_dhcp.sav
     ldapsearch -xLLL -b ou=computers,$BASE cn | grep ^cn | cut -d" " -f2 | while read nom
     do
