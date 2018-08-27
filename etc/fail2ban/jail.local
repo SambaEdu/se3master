@@ -1,0 +1,7 @@
+[interface-se3]
+
+enabled =       true
+port =  909
+filter =        interface-se3
+logpath =       /var/log/se3/auth.log
+maxretry  =     3
