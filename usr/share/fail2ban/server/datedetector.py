@@ -143,10 +143,10 @@ class DateDetector:
 			self.__templates.append(template)
 			# JJ/MM/AA:HH:MM
 			template = DateStrptime()
-            template.setName("Day/Month/Year:Hour:Minute")
-            template.setRegex("\d{2}/\d{2}/\d{2}:\d{2}:\d{2}")
-            template.setPattern("%d/%m/%y:%H:%M")
-            self.__templates.append(template)
+			template.setName("Day/Month/Year:Hour:Minute")
+			template.setRegex("\d{2}/\d{2}/\d{2}:\d{2}:\d{2}")
+			template.setPattern("%d/%m/%y:%H:%M")
+			self.__templates.append(template)
 		finally:
 			self.__lock.release()
 	
