@@ -20,6 +20,7 @@
 # Author: Cyril Jaquier
 # 
 # $Revision$
+# Version du 9/9/18 par Marc Bansse pour prise en compte du format d'heure des logs du se3 
 
 __author__ = "Cyril Jaquier"
 __version__ = "$Revision$"
@@ -141,7 +142,15 @@ class DateDetector:
 			template.setRegex("^<\d{2}/\d{2}/\d{2}@\d{2}:\d{2}:\d{2}>")
 			template.setPattern("<%m/%d/%y@%H:%M:%S>")
 			self.__templates.append(template)
+			# J/MM/AA:HH:MM
+			# format d'heure log se3 avec jour <10
+			template = DateStrptime()
+			template.setName("Day1/Month/Year:Hour:Minute")
+			template.setRegex("\d{1}/\d{2}/\d{2}:\d{2}:\d{2}")
+			template.setPattern("%d/%m/%y:%H:%M")
+			self.__templates.append(template)
 			# JJ/MM/AA:HH:MM
+			# format d'heure log se3 avec jour <10
 			template = DateStrptime()
 			template.setName("Day/Month/Year:Hour:Minute")
 			template.setRegex("\d{2}/\d{2}/\d{2}:\d{2}:\d{2}")
