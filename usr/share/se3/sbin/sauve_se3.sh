@@ -5,13 +5,14 @@
 ##### Script permettant de sauvegarder les données importantes
 ##### pour une restauration du serveur SE3
 ##### version du 16/04/2014
-##### modifiée le 29/06/2016
+##### modifiée le 12/06/2018
 #
 # Auteurs :      Louis-Maurice De Sousa louis.de.sousa@crdp.ac-versailles.fr
 #                François-Xavier Vial Francois.Xavier.Vial@crdp.ac-versailles.fr
 #                Rémy Barroso remy.barroso@crdp.ac-versailles.fr
 #
 # Modifié par :  Michel Suquet Michel-Emi.Suquet@ac-versailles.fr
+#                Marc Bansse Marc.Bansse@ac-versailles.fr
 # 
 # Ce programme est un logiciel libre : vous pouvez le redistribuer ou
 #    le modifier selon les termes de la GNU General Public Licence tels
@@ -383,6 +384,29 @@ envoi_courriel()
     cat $COURRIEL | mail $MAIL -s "$OBJET" -a "Content-type: text/plain; charset=UTF-8"
 }
 
+sauver_reservations_ip()
+{
+     BASE=$(grep "^BASE" /etc/ldap/ldap.conf | cut -d" " -f2 )
+#dans le cas d'une première sauvegarde on crée le répertoire d'export avec un fichier vide.
+mkdir -p /var/se3/save/export_dhcp/
+touch /var/se3/save/export_dhcp/export_dhcp.csv
+
+mv /var/se3/save/export_dhcp/export_dhcp.csv  /var/se3/save/export_dhcp/export_dhcp.sav
+    ldapsearch -xLLL -b ou=computers,$BASE cn | grep ^cn | cut -d" " -f2 | while read nom
+    do
+        if [ ! -z $(echo ${nom:0:1} | sed -e "s/[0-9]//g") ]
+        then
+            ip=$(ldapsearch -xLLL -b ou=computers,$BASE cn=$nom ipHostNumber | grep ipHostNumber | cut -d" " -f2)
+            mac=$(ldapsearch -xLLL -b ou=computers,$BASE cn=$nom macAddress | grep macAddress | cut -d" " -f2| tr '[:upper:]' '[:lower:]')
+            if [ ! -z "$ip" -a ! -z "$mac" ]
+            then
+                echo "$ip;$nom;$mac" >> /var/se3/save/export_dhcp/export_dhcp.csv
+            fi
+        fi
+done
+}
+
+
 sauver_droits()
 {
     # droits pour /home (pour mémoire)
@@ -472,6 +496,7 @@ presence_repertoire_se3                     # présence d'un répertoire de sauv
 case $test in
     0)
         # on lance la sauvegarde
+        sauver_reservations_ip       # Sauvegarde des réservations d'ip
         synchro_archivage            # Synchronisation des fichiers
         sauver_droits                # Sauvegarde des droits sur les fichiers
         sauver_imprimantes           # Les fichiers concernant les imprimantes
