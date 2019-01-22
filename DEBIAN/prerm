@@ -1,9 +1,7 @@
 #!/bin/bash -e
 # Automatically added by dh_installdocs
 if [ "$1" = "remove" ]; then
-	rm -f /usr/doc/se3
-	rm -f /usr/share/doc/se3
-	cd /var/cache/se3_install/
-	./uninstall.sh
+	rm -f /usr/doc/se3 || true
+	rm -f /usr/share/doc/se3 || true
 fi
 # End automatically added section
