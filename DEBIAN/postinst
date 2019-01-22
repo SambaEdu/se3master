@@ -50,6 +50,8 @@ esac
 	fi
     	cd /var/cache/se3_install/
 	if [ -f /etc/SeConfig.ph ]; then
+		exit 0
+
 		echo "Voulez-vous faire la mise a jour de SambaEdu3 ? O/n"
 		read -t 20 rep || rep="o"
 		if [ "$rep" = "n" -o "$rep" = "N" ]; then

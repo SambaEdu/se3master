@@ -1,9 +1,9 @@
 Package: se3
-Version: 3.2.0~0
+Version: 3.2.0~1
 Section: contrib
 Priority: optional
 Architecture: all
-Depends: ssmtp, ftp, libcgi-pm-perl, patch, liblocale-gettext-perl, libnet-ldap-perl, libtalloc2, samba (>= 2:4.4.2), krb5-user, samba-common-bin, samba-dsdb-modules, samba-vfs-modules, mysql-server|default-mysql-server, mysql-client|mariadb-client, apache2, apache2-suexec-custom, php5-cgi, libapache2-mod-fcgid, php5, php5-mysql, php5-ldap, slapd, ldap-utils, libpam-ldap, libnss-ldap, libunicode-string-perl, libunicode-maputf8-perl, gawk, mrtg, acl, attr, libattr1, xfsprogs, python, libtext-unaccent-perl, libcrypt-smbhash-perl, libtext-iconv-perl, wget, xfsdump, make, ssh, ntpdate, cups, cups-client, sudo, hp-ppd, less, nut, nut-server, nut-snmp, smbclient, lpr, quota-se3|quota, host, libfile-rsyncp-perl, par2, bzip2, unzip, openssl, libapache2-mod-perl2, php5-gd, gcc, libnet-ssleay-perl, fping, php5-cli, memtester, procinfo, tofrodos, at, man, rsync, wakeonlan, mailx, cifs-utils, nfs-common, makepasswd, php5-recode, php-apc
+Depends: ssh
 Conflicts: nscd
 Installed-Size: 1024
 Maintainer: Denis Bonnenfant <denis.bonnenfant@diderot.org>
