@@ -69,7 +69,7 @@ if [ ! -z "$(hostname -d | grep -i "ac-rouen.fr")" ]; then
 
 	paraminst=`echo "SELECT count(*) FROM params WHERE name='supervision_md5';" | $mysql_cnx -N`
 	if [ "$paraminst" = "0" ]; then
-		$mysql_cnx -e "INSERT INTO params VALUES ('','supervision_md5','http://wawadeb.crdp.ac-caen.fr/se3/md5',0,'url somme md5 supervision',4);"
+		$mysql_cnx -e "INSERT INTO params VALUES ('','supervision_md5','http://deb.sambaedu.org/se3/md5',0,'url somme md5 supervision',4);"
 	fi
 	GENSUPERVISION
 

@@ -3,10 +3,10 @@
 
    /**
    
-   * Test la connexion au serveur web wawadeb
+   * Test la connexion au serveur web deb.sambaedu.org
    * @Version $Id$ 
    * @Projet LCS / SambaEdu 
-   * @auteurs Philippe Chadefaux  MrT
+   * @auteurs Philippe Chadefaux  MrT - modif keyser 03/2019
    * @Licence Distribue selon les termes de la licence GPL
    * @note
    * Modifications proposees par Sebastien Tack (MrT)
@@ -50,7 +50,7 @@ if ($ligne_internet != "0%") { // on teste sur un autre serveur
 }
 // leb 30sept2007
 if ($ligne_internet != "0%") { // test acces http
-   $http=exec("cd /tmp; wget -q ---tries=1 --timeout=2 http://wawadeb.crdp.ac-caen.fr && echo \$? | rm -f /tmp/index.html.1*",$out,$retour);
+   $http=exec("cd /tmp; wget -q ---tries=1 --timeout=2 http://deb.sambaedu.org && echo \$? | rm -f /tmp/index.html.1*",$out,$retour);
    if ($retour=="0") {
        $ligne_internet = "0%";
    }

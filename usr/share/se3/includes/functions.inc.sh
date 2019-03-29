@@ -73,7 +73,7 @@ fi
 
 LINE_TEST()
 {
-if ( ! wget -q --output-document=/dev/null 'http://wawadeb.crdp.ac-caen.fr/index.html') ; then
+if ( ! wget -q --output-document=/dev/null 'http://deb.sambaedu.org') ; then
 	ERREUR "Votre connexion internet ne semble pas fonctionnelle !!" 
 	exit 1
 else

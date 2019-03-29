@@ -51,12 +51,12 @@ if (isset ($register)) {
 	        	preg_match("/http:\/\/(.*)\"/i",$proxy,$rest);
 		        putenv("http_proxy=$rest[1]");
 		}
-   		$http=exec("wget -q -T 10 -O - http://wawadeb.crdp.ac-caen.fr && echo \$? ",$out,$retour);
+   		$http=exec("wget -q -T 10 -O - http://deb.sambaedu.org && echo \$? ",$out,$retour);
       		if ($retour=="0") {
 			require ("config.inc.php");
 			require ("functions.inc.php");
 			setparam("registred",3);
-			header("location:http://wawadeb.crdp.ac-caen.fr/majse3/register.php?usage=".$usage."&srvcomm=".$srvcomm."&typetab=".$typetab."&dept=".$dept."&vernbr=".$vernbr."&rne=".$rne."");
+			header("location:http://deb.sambaedu.org/majse3/register.php?usage=".$usage."&srvcomm=".$srvcomm."&typetab=".$typetab."&dept=".$dept."&vernbr=".$vernbr."&rne=".$rne."");
             	} else {
 			require ("entete.inc.php");
 			echo "<h1>".gettext("Recensement du serveur")."</h1>";

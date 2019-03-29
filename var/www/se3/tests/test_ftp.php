@@ -2,7 +2,7 @@
 
    /**
    
-   * Test la connexion au serveur FTP wawadeb
+   * Test la connexion au serveur FTP DEPRECATED
    * @Version $Id$ 
    * @Projet LCS / SambaEdu 
    * @auteurs Philippe Chadefaux  MrT
@@ -24,13 +24,17 @@
 
 require_once('entete_ajax.inc.php');
 // Contact serveur de mise a jour ftp
-$FTP="wawadeb.crdp.ac-caen.fr";
-$CONNECT_FTP=@ftp_connect("$FTP",0,30);
 
-  if($CONNECT_FTP) {  $ok="1";
-  } else { 
-       $ok=0;
-	@ftp_close($FTP);
-  }
+// FTP deprecated !!!
+
+// $FTP="";
+// $CONNECT_FTP=@ftp_connect("$FTP",0,30);
+// 
+//   if($CONNECT_FTP) {  $ok="1";
+//   } else { 
+//        $ok=0;
+// 	@ftp_close($FTP);
+//   }
+$ok="1";
 die($ok);
 ?>

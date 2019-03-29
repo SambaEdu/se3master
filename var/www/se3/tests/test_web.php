@@ -2,7 +2,7 @@
 
    /**
    
-   * Test une requete sur le web wawadeb 
+   * Test une requete sur le web  deb.sambaedu.org
    * @Version $Id$ 
    * @Projet LCS / SambaEdu 
    * @auteurs Philippe Chadefaux  MrT
@@ -23,7 +23,7 @@
 
 
 require_once('entete_ajax.inc.php');
-   $http=exec("cd /tmp; wget -q --tries=1 --timeout=2 http://wawadeb.crdp.ac-caen.fr && echo \$? | rm -f /tmp/index.html.1*",$out,$retour);
+   $http=exec("cd /tmp; wget -q --tries=1 --timeout=2 http://deb.sambaedu.org && echo \$? | rm -f /tmp/index.html.1*",$out,$retour);
    
    if ($retour=="0") {
    	$ok="1";

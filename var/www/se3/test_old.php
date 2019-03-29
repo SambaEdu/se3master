@@ -135,7 +135,7 @@ if ($ligne_internet != "0%") { // on teste sur un autre serveur
 }
 // leb 30sept2007
 if ($ligne_internet != "0%") { // test acces http
-   $http=exec("cd /tmp; wget -q ---tries=1 --connect-timeout=1 http://wawadeb.crdp.ac-caen.fr && echo \$? | rm -f /tmp/index.html.1*",$out,$retour);
+   $http=exec("cd /tmp; wget -q ---tries=1 --connect-timeout=1 http://deb.sambaedu.org && echo \$? | rm -f /tmp/index.html.1*",$out,$retour);
    if ($retour=="0") {
        $ligne_internet = "0%";
    }
@@ -210,7 +210,7 @@ echo "</TD><TD align=\"center\">";
 if($ligne_internet != "0%") { //si pas de connexion a internet
 	echo "<u onmouseover=\"return escape".gettext("('Impossible de v&#233;rifier les mises &#224; jour, sans connexion &#224; internet')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/info.png\"></u>\n";
 } else {
-   system("cd /tmp; wget -q --tries=1 --connect-timeout=1 http://wawadeb.crdp.ac-caen.fr/majse3/test.php?majnbr=".$majnbr."\&testver=1");
+   system("cd /tmp; wget -q --tries=1 --connect-timeout=1 http://deb.sambaedu.org/majse3/test.php?majnbr=".$majnbr."\&testver=1");
    if (file_exists("/tmp/test.php?majnbr=".$majnbr."&testver=1")) {
      $lines = file("/tmp/test.php?majnbr=".$majnbr."&testver=1");
         foreach ($lines as $line_num => $line) {
@@ -223,7 +223,7 @@ if($ligne_internet != "0%") { //si pas de connexion a internet
    }
    else
    {
-   echo "<u onmouseover=\"return escape".gettext("('Impossible de v&#233;rifier l'&#233;tat des mises &#224; jour sur http://wawadeb.crdp.ac-caen.fr')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/info.png\"></u>\n";
+   echo "<u onmouseover=\"return escape".gettext("('Impossible de v&#233;rifier l'&#233;tat des mises &#224; jour sur http://deb.sambaedu.org')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/info.png\"></u>\n";
    }
    if ($ok=="1") {
 	echo "<u onmouseover=\"this.T_WIDTH=140;return escape".gettext("('Etat : serveur &#224; jour')")."\"><IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\" ></u>\n";
@@ -331,8 +331,8 @@ echo "<TR><TD>";
 echo gettext("V&#233;rification de la r&#233;solution de nom (DNS)");
 echo "</TD><TD align=\"center\">";
 if($ligne_internet == "0%") {
-   $IP_WAWA=@gethostbyname('wawadeb.crdp.ac-caen.fr');
-   if ($IP_WAWA=="193.49.66.139") {
+   $IP_WAWA=@gethostbyname('deb.sambaedu.org');
+   if ($IP_WAWA=="80.14.56.134") {
    	echo "<IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\">";
    } else {
    	echo "<IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/critical.png\">";
@@ -370,7 +370,7 @@ echo "<u onmouseover=\"this.T_SHADOWWIDTH=5;this.T_STICKY=1;return escape".gette
 echo "</TD></TR>\n";
 
 // Contact serveur de mise a jour ftp
-$FTP="wawadeb.crdp.ac-caen.fr";
+$FTP="deb.sambaedu.org";
 echo "<TR><TD>";
 echo gettext("Connexion au serveur FTP de mises &#224; jour")." <I>($FTP)</I>";
 echo "</TD><TD align=\"center\">";
@@ -395,7 +395,7 @@ echo "<TR><TD>";
 echo gettext("V&#233;rifie l'acc&#232;s au web");
 echo "</TD><TD align=\"center\">";
 if($ligne_internet == "0%") {
-   $http=exec("cd /tmp; wget -q --tries=1 --connect-timeout=1 http://wawadeb.crdp.ac-caen.fr && echo \$? | rm -f /tmp/index.html.1*",$out,$retour);
+   $http=exec("cd /tmp; wget -q --tries=1 --connect-timeout=1 http://deb.sambaedu.org && echo \$? | rm -f /tmp/index.html.1*",$out,$retour);
    if ($retour=="0") {
    	echo "<IMG style=\"border: 0px solid ;\" SRC=\"../elements/images/recovery.png\">";
    } else {

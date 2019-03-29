@@ -1741,7 +1741,7 @@
                     <Intitule>url de la page de démarrage de ie</Intitule>
                     <Composant>config</Composant>
                     <Variable type="REG_SZ">Start Page</Variable>
-                    <ValeurSiCoche>http://wawadeb.crdp.ac-caen.fr</ValeurSiCoche>
+                    <ValeurSiCoche>http://sambaedu.org</ValeurSiCoche>
                     <ValeurSiDecoche></ValeurSiDecoche>
                     <commentaire></commentaire>
                 </Regle>

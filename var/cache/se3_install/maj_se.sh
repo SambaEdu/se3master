@@ -102,8 +102,8 @@ echo "Mise a jour vers la version $VERSION achevee."
 
 # Mise a jour des infos statistiques de version
 if [ "$registred" = "1" ]; then
-	wget http://wawadeb.crdp.ac-caen.fr/majse3/regmaj.php?old=$MAJNBRORI
-	wget http://wawadeb.crdp.ac-caen.fr/majse3/regmaj.php?newv=$MAJNBR
+	wget http://deb.sambaedu.org/majse3/regmaj.php?old=$MAJNBRORI
+	wget http://deb.sambaedu.org/majse3/regmaj.php?newv=$MAJNBR
 	/bin/rm regmaj.php*
 fi
 echo ""

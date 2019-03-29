@@ -2,7 +2,7 @@
 
 # $Id: se3_verif_dispo_clonage.sh 8836 2015-06-06 22:40:14Z keyser $
 # Auteur:Franck Molle
-# Dernière modification: 02/2014
+# Dernière modification: 03/2019 - modif depots
 
 ##### Permet de vérifier sur les dispositifs clonage sont à jour #####
 ###
@@ -49,7 +49,7 @@ cd $tmp
 
 if [ -n "$udpcast_noyo_version" ]; then
 	
-	src_udpcast="http://wawadeb.crdp.ac-caen.fr/iso/udpcast"
+	src_udpcast="http://deb.sambaedu.org/se3/udpcast"
 	
 	# Valeurs des versions en place recuperees de se3db.params:
 	version_noyo_udpcast_en_place="$udpcast_noyo_version"
@@ -87,7 +87,7 @@ fi
 ## Partie Slitaz ##
 
 if [ -n "$slitaz_noyo_version" ]; then
-	src_slitaz="http://wawadeb.crdp.ac-caen.fr/iso/slitaz"
+	src_slitaz="http://deb.sambaedu.org/se3/slitaz"
 	
 	# Valeurs des versions en place recuperees de se3db.params:
 	version_noyo_slitaz_en_place="$slitaz_noyo_version"
@@ -122,7 +122,7 @@ fi
 
 if [ -n "$srcd_version" ]; then
 
-	src_sysresccd="http://wawadeb.crdp.ac-caen.fr/iso/sysresccd"
+	src_sysresccd="http://deb.sambaedu.org/se3/sysresccd"
 	version_srcd_en_place="$srcd_version"
 	version_autorun2_en_place="$srcd_autorun2_vers"
 	version_scripts_en_place="$srcd_scripts_vers"
@@ -158,7 +158,7 @@ if [ -n "$VarchPxeClientLin" ]; then
 	VscriptPxeClientLin_en_place="$VscriptPxeClientLin"
 	VarchPxeClientLin_en_place="$VarchPxeClientLin"
 	
-	src_client_linux="http://wawadeb.crdp.ac-caen.fr/iso/client_linux"
+	src_client_linux="http://deb.sambaedu.org/se3/client_linux"
 	
 	if [ -n "$SrcPxeClientLin" ]; then
 		src_client_linux="$SrcPxeClientLin"
@@ -193,7 +193,7 @@ fi
 ## Partie CloneZilla ##
 
 if [ -n "$clonezilla_version" ]; then
-	src_clonezilla="http://wawadeb.crdp.ac-caen.fr/iso/clonezilla"
+	src_clonezilla="http://deb.sambaedu.org/se3/clonezilla"
 	
 	# Valeurs des versions en place recuperees de se3db.params:
 	version_clonezilla_en_place="$clonezilla_version"

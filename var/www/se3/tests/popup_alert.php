@@ -3,7 +3,7 @@
 
    /**
    
-   * Ouvre un popup d'alert (message se trouvant sur wawadeb)
+   * Ouvre un popup d'alert (message se trouvant sur wwdeb)
    * @Version $Id$ 
    * 
    * @Projet LCS / SambaEdu 
