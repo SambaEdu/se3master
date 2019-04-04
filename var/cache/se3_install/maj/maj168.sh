@@ -28,12 +28,22 @@ echo "Mise a jour 168 :
  mysql -u root -p$PASS_SQL -D se3db -e "update params set valeur = '' where Name = 'ftpmaj' ;"
  
 
+# Nouvelles sources SE3 
 cat >/etc/apt/sources.list.d/se3.list <<END
 #sources pour se3
 deb http://deb.sambaedu.org/debian wheezy se3
 
 # testing désactivé par défaut
 #deb http://deb.sambaedu.org/debian wheezy se3testing
+END
+
+# Nouvelles sources wheezy
+cat >/etc/apt/sources.list <<END
+# Sources standard:
+deb http://archive.debian.org/debian/ wheezy main non-free contrib
+
+# Security Updates:
+deb http://security.debian.org/ wheezy/updates main contrib non-free
 END
  
 exit 0
