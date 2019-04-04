@@ -23,9 +23,9 @@ echo "Mise a jour 168 :
 - Modification de la bdd pour utilisation de deb.sambaedu.org à la place de wawadeb
 
 ">> $HISTORIQUE_MAJ
- mysql -u root -p$PASS_SQL -D se3db -e "update params set valeur = 'http://deb.sambaedu.org/se3/client_linux_xenial' where Name = 'SrcPxeClientLin' ;"
- mysql -u root -p$PASS_SQL -D se3db -e "update params set valeur = '' where Name = 'urlmaj' ;"
- mysql -u root -p$PASS_SQL -D se3db -e "update params set valeur = '' where Name = 'ftpmaj' ;"
+ mysql -u root -p$PASS_SQL -D se3db -e "update params set value = 'http://deb.sambaedu.org/se3/client_linux_xenial' where Name = 'SrcPxeClientLin' ;"
+ mysql -u root -p$PASS_SQL -D se3db -e "update params set value = '' where Name = 'urlmaj' ;"
+ mysql -u root -p$PASS_SQL -D se3db -e "update params set value = '' where Name = 'ftpmaj' ;"
  
 
 # Nouvelles sources SE3 
@@ -45,5 +45,5 @@ deb http://archive.debian.org/debian/ wheezy main non-free contrib
 # Security Updates:
 deb http://security.debian.org/ wheezy/updates main contrib non-free
 END
- 
+
 exit 0
