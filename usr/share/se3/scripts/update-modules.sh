@@ -12,7 +12,7 @@ then
 fi
 
 apt-get -s install se3-domain 2>/dev/null | grep 'Inst' && MAJ=0
-apt-get -s dist-upgrade 2>/dev/null | grep 'se3\|sambaedu' && MAJ=0
+apt-get -s dist-upgrade 2>/dev/null | grep 'se3\|sambaedu-' && MAJ=0
 if [ "$MAJ" = "0" ]
 then
     echo "0"
