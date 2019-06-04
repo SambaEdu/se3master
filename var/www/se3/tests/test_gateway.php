@@ -41,7 +41,9 @@ if ($phpv>=4.2) {
 // Ping passerelle
 //$PING_ROUTEUR=`cat /etc/network/interfaces | grep gateway | grep -v broadcast | cut -d" " -f 2`;
 //$PING_ROUTEUR=trim($PING_ROUTEUR);
-$PING_DNS_EXT = "193.49.64.5";
+
+// modif ip de test pour DNS FDN - keyser 05 - 2019
+$PING_DNS_EXT = "80.67.169.12";
 if ($phpv>=4.2) {
 	$PING="ping -c 1 -w 1 $PING_DNS_EXT | awk '/packet/ {print $6}'";
 } else {
