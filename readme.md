@@ -1,1 +1,1 @@
-Ceci est le nouveau dépôt GIT du projet SE3
+Ceci l'ancien dépôt GIT du projet SE. Voir https://gitlab.sambaedu.org/sambaedu/se4
